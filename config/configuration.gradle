@@ -1,0 +1,23 @@
+allprojects {
+    repositories {
+        jcenter()
+        google()
+    }
+}
+
+ext {
+    // Android
+    androidBuildToolsVersion = "27.0.3"
+    androidMinSdkVersion = 19
+    androidTargetSdkVersion = 28
+    androidCompileSdkVersion = 28
+
+    // Application
+    androidApplicationId = 'com.pixelplex.echolib'
+    androidVersionCode = 1
+    androidVersionName = "1.0"
+
+    // Test
+    testApplicationId = 'com.pixelplex.echolib.test'
+    testRunner = 'android.support.test.runner.AndroidJUnitRunner'
+}
