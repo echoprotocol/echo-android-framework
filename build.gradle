@@ -1,0 +1,42 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    ext.kotlin_version = '1.2.51'
+
+    repositories {
+        google()
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.1.3'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+plugins {
+    id "io.gitlab.arturbosch.detekt" version "1.0.0.RC7-3"
+}
+
+apply from: 'config/dependencies.gradle'
+apply from: 'config/configuration.gradle'
+
+detekt {
+    version = "1.0.0.RC7-3"
+    profile("main") {
+        input = "$projectDir/app/src/"
+        output = "${project.buildDir}/reports"
+        outputName = "detekt-report"
+        config = "$projectDir/config/detekt-ruleset.yml"
+        filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
+        parallel = true
+        disableDefaultRuleSets = false
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

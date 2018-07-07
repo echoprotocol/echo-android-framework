@@ -1,0 +1,1 @@
+# Library for work with Graphene Blockchain API `http://docs.bitshares.org/api/`

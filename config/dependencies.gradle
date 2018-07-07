@@ -1,0 +1,19 @@
+ext {
+
+    kotlinVersion = "1.2.51"
+
+    //Libraries
+    googleGsonVersion = '2.8.5'
+
+    //Tests
+    jUnitVersion = '4.12'
+    testRunnerVersion = '1.0.2'
+
+    libraryDependencies = [
+            kotlin    : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion",
+            jUnit     : "junit:junit:$jUnitVersion",
+            testRunner: "com.android.support.test:runner:$testRunnerVersion",
+            googleGson: "com.google.code.gson:gson:$googleGsonVersion"
+    ]
+
+}
