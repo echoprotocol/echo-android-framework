@@ -12,7 +12,7 @@ import com.pixelplex.echolib.model.Balance
 interface InformationFacade {
 
     /**
-     * Describes account search logic contract
+     * Find and returns account with required [nameOrId] if exists
      *
      * @param nameOrId Required account name or id
      * @param callback Listener of operation results.
@@ -21,7 +21,7 @@ interface InformationFacade {
     fun getAccount(nameOrId: String, callback: Callback<Account>)
 
     /**
-     * Describes account availability checking contract
+     * Checks whether account with [nameOrId] already exists
      *
      * @param nameOrId Required account name or id
      * @param callback Listener of operation results.
@@ -30,7 +30,7 @@ interface InformationFacade {
     fun checkAccountIsUnavailable(nameOrId: String, callback: Callback<Boolean>)
 
     /**
-     * Describes account balance retrieving logic contract
+     * Gets balance for account with defined [nameOrId] and specific asset type
      *
      * @param nameOrId Required account name or id
      * @param asset    Specific asset type id

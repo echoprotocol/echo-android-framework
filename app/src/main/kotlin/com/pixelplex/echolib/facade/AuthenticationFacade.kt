@@ -11,7 +11,7 @@ import com.pixelplex.echolib.model.Account
 interface AuthenticationFacade {
 
     /**
-     * Describes user authentication contract based on defined [name] and [password] parameters
+     * Authenticate user with defined [name] and [password] parameters. Returns account if exists
      *
      * @param name Account name
      * @param password Required account's password

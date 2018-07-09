@@ -11,7 +11,7 @@ import com.pixelplex.echolib.model.HistoryResponse
 interface TransactionsFacade {
 
     /**
-     * Describes transfer operation logic contract
+     * Submits transaction to blockchain
      *
      * @param nameOrId   Source account name or id
      * @param password   Source account password for retrieving access to funds
@@ -31,7 +31,7 @@ interface TransactionsFacade {
     )
 
     /**
-     * Describes account history retrieving logic contract
+     * Retrieves account history with defining setting parameters
      *
      * @param nameOrId             Source account name or id
      * @param transactionStartId   ID of the most recent operation to retrieve
