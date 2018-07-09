@@ -39,4 +39,5 @@ dependencies {
 
     //Libraries
     implementation libraryDependencies.googleGson
+    implementation libraryDependencies.bitcoinj
 }

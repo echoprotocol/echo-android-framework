@@ -21,7 +21,7 @@ class AuthenticationFacadeImpl(private val accountHistoryApiService: AccountHist
     }
 
     override fun changePassword(
-        name: String,
+        nameOrId: String,
         oldPassword: String,
         newPassword: String,
         callback: Callback<Account>
