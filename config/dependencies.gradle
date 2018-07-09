@@ -4,6 +4,7 @@ ext {
 
     //Libraries
     googleGsonVersion = '2.8.5'
+    bitcoinjVersion = '0.14.3'
 
     //Tests
     jUnitVersion = '4.12'
@@ -13,7 +14,8 @@ ext {
             kotlin    : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion",
             jUnit     : "junit:junit:$jUnitVersion",
             testRunner: "com.android.support.test:runner:$testRunnerVersion",
-            googleGson: "com.google.code.gson:gson:$googleGsonVersion"
+            googleGson: "com.google.code.gson:gson:$googleGsonVersion",
+            bitcoinj  : "org.bitcoinj:bitcoinj-core:$bitcoinjVersion"
     ]
 
 }

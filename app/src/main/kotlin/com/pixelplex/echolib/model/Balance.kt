@@ -10,8 +10,8 @@ import java.math.BigInteger
  * @author Dmitriy Bushuev
  */
 data class Balance(
-    @SerializedName("id") @Expose var id: String,
-    @SerializedName("owner") @Expose var owner: String,
+    @Expose var id: String,
+    @Expose var owner: String,
     @SerializedName("asset_type") @Expose var assetType: String,
-    @SerializedName("balance") @Expose var balance: BigInteger
+    @Expose var balance: BigInteger
 )
