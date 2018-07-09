@@ -1,8 +1,8 @@
 package com.pixelplex.echolib.model
 
 /**
- * Represents account history model in Graphene blockchain
+ * This class encapsulates batch of history
  *
  * @author Dmitriy Bushuev
  */
-class HistoryResponse
+data class HistoryResponse(val transactions: List<History>, val hasMore: Boolean)
