@@ -4,7 +4,7 @@ ext {
 
     //Libraries
     googleGsonVersion = '2.8.5'
-    bitcoinjVersion = '0.14.3'
+    bitcoinjVersion = '0.14.7'
 
     //Tests
     jUnitVersion = '4.12'
