@@ -11,7 +11,7 @@ import com.pixelplex.echolib.Callback
 interface SubscriptionFacade {
 
     /**
-     * Describes account subscription contract
+     * Subscribe [listener] on account changing events
      *
      * @param nameOrId Required account name or id
      * @param listener Listener of events, associated with required account
@@ -19,7 +19,7 @@ interface SubscriptionFacade {
     fun subscribeOnAccount(nameOrId: String, listener: AccountListener)
 
     /**
-     * Describes account unsubscribing contract
+     * Unsubscribe listeners from observing account event changes
      *
      * @param nameOrId Required account name or id to unsubscribe from
      * @param callback Listener of unsubscribing process state
@@ -28,7 +28,7 @@ interface SubscriptionFacade {
     fun unsubscribeFromAccount(nameOrId: String, callback: Callback<Boolean>)
 
     /**
-     * Describes unsubscribing from all subscriptions contract
+     * Unsubscribe all listeners from observing all account changing events
      *
      * @param callback Listener of unsubscribing process state
      *                 Receives true if unsubscribing succeed, otherwise false\error (if occurred)

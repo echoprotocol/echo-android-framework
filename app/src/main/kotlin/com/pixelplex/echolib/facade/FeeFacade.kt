@@ -10,7 +10,7 @@ import com.pixelplex.echolib.Callback
 interface FeeFacade {
 
     /**
-     * Describes defining transfer's operation fee contract
+     * Counts required fee for defined transaction settings
      *
      * @param fromNameOrId Source account name or id
      * @param toNameOrId Target account name or id

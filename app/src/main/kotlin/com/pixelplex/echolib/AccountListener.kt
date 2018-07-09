@@ -10,7 +10,7 @@ import com.pixelplex.echolib.model.Account
 interface AccountListener {
 
     /**
-     * Calls when observing account change
+     * Calls when observing account changed
      *
      * @param updatedAccount Updated account with all changes
      */
