@@ -1,12 +1,12 @@
 package com.pixelplex.echolib.exception
 
 /**
- * Represents errors associated with operations over different entities
+ * Represents errors associated with illegal Transaction state
+ * (@see com.pixelplex.echolib.model.Transaction)
  *
- * @author Dmitriy Bushuev
  * @author Daria Pechkovskaya
  */
-class IncompatibleOperationException : RuntimeException {
+class MalformedTransactionException: RuntimeException {
 
     constructor() : super()
     constructor(message: String?) : super(message)

@@ -5,7 +5,7 @@ package com.pixelplex.echolib.exception
  * (@see com.pixelplex.echolib.model.Address)
  *
  * @author Dmitriy Bushuev
- * @author Darya
+ * @author Daria Pechkovskaya
  */
 class MalformedAddressException : RuntimeException {
 

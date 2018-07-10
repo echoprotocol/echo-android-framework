@@ -12,8 +12,8 @@ import java.math.RoundingMode
  * @author Dasha
  */
 class AssetAmount(
-    private var amount: UnsignedLong,
-    private val asset: Asset
+    var amount: UnsignedLong,
+    val asset: Asset
 ) {
 
     /**
@@ -78,12 +78,50 @@ class AssetAmount(
 
         return this
     }
+    
+    /**
+     * Multiplies the current amount by a factor, using the {@link RoundingMode#HALF_DOWN} constant.
+     *
+     * @param factor: The multiplying factor
+     * @return The same AssetAmount instance, but with the changed amount value.
+     */
+    fun multiplyBy(factor: Double): AssetAmount =
+        multiplyBy(factor, RoundingMode.HALF_DOWN)
+
+    /**
+     * Divides the current amount by a divisor provided as the first parameter. The second parameter
+     * specifies the rounding method to be used.
+     *
+     * @param divisor: The divisor
+     * @return: The same AssetAMount instance, but with the divided amount value
+     */
+    fun divideBy(divisor: Double, roundingMode: RoundingMode): AssetAmount {
+        this.amount = UnsignedLong.valueOf(
+            DoubleMath.roundToLong(
+                this.amount.toLong() / divisor,
+                roundingMode
+            )
+        )
+        return this
+    }
+
+
+    /**
+     * Divides the current amount by a divisor provided as the first parameter, using
+     * the [RoundingMode.HALF_DOWN] constant
+     *
+     * @param divisor: The divisor
+     * @return: The same AssetAMount instance, but with the divided amount value
+     *
+     *
+     */
+    fun divideBy(divisor: Double): AssetAmount =
+        divideBy(divisor, RoundingMode.HALF_DOWN)
+
 
     private fun checkAssetCompatible(other: AssetAmount) {
         if (asset.getObjectId() != other.asset.getObjectId()) {
-            throw IncompatibleOperationException(
-                "Cannot add two AssetAmount instances that refer to different assets"
-            )
+            throw IncompatibleOperationException("Cannot add two AssetAmount instances that refer to different assets")
         }
     }
 
