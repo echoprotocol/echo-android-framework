@@ -1,7 +1,13 @@
 package com.pixelplex.echolib.model
 
 /**
- *Created by Dasha on 09.07.2018
+ * Represents account history
+ *
+ * <p>
+ *     Contains required information about user operations
+ * </p>
+ *
+ * Created by Dasha on 09.07.2018
  */
 class History(
     val id: String,
