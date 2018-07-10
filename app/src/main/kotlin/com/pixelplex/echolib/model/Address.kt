@@ -9,7 +9,7 @@ import org.spongycastle.crypto.digests.RIPEMD160Digest
  * Represents account model in Graphene blockchain
  * (@see https://bitshares.org/doxygen/classgraphene_1_1chain_1_1address.html)
  *
- * Created by Dasha on 09.07.2018
+ * @author Daria Pechkovskaya
  */
 class Address {
 

@@ -5,4 +5,4 @@ package com.pixelplex.echolib.model
  *
  * @author Dmitriy Bushuev
  */
-data class HistoryResponse(val transactions: List<History>, val hasMore: Boolean)
+data class HistoryResponse(val transactions: List<HistoricalTransfer>, val hasMore: Boolean)

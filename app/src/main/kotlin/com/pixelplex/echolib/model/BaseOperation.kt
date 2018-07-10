@@ -6,7 +6,7 @@ import com.google.gson.JsonElement
 /**
  * Represents base operation model in Graphene blockchain
  *
- * Created by Dasha on 09.07.2018
+ *Created by Daria Pechkovskaya
  */
 abstract class BaseOperation(protected var type: OperationType) : ByteSerializable,
     JsonSerializable {
