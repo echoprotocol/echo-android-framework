@@ -2,13 +2,14 @@ package com.pixelplex.echolib.model
 
 import com.google.common.math.DoubleMath
 import com.google.common.primitives.UnsignedLong
-import com.pixelplex.echolib.exception.IncompatibleOperation
+import com.pixelplex.echolib.exception.IncompatibleOperationException
 import java.math.RoundingMode
 
 /**
  * Class used to represent a specific amount of a certain asset
  *
  * @author Dmitriy Bushuev
+ * @author Dasha
  */
 class AssetAmount(
     private var amount: UnsignedLong,
@@ -21,7 +22,7 @@ class AssetAmount(
      * @param other: The other AssetAmount to add to this.
      * @return: A new instance of the AssetAmount class with the combined amount.
      */
-    fun add(other: AssetAmount): AssetAmount {
+    operator fun plus(other: AssetAmount): AssetAmount {
         checkAssetCompatible(other)
 
         val combined = amount.plus(other.amount)
@@ -34,7 +35,7 @@ class AssetAmount(
      * @param additional: The amount to add.
      * @return: A new instance of the AssetAmount class with the added aditional.
      */
-    fun add(additional: Long): AssetAmount {
+    operator fun plus(additional: Long): AssetAmount {
         val combined = amount.plus(UnsignedLong.valueOf(additional))
         return AssetAmount(combined, asset)
     }
@@ -46,7 +47,7 @@ class AssetAmount(
      * @param other: The other asset amount to subtract from this.
      * @return: The absolute value of the subtraction of the other minus this asset amount.
      */
-    fun substract(other: AssetAmount): AssetAmount {
+    operator fun minus(other: AssetAmount): AssetAmount {
         checkAssetCompatible(other)
 
         val result = if (amount < other.amount) {
@@ -74,13 +75,15 @@ class AssetAmount(
                 roundingMode
             )
         )
+
         return this
     }
 
-
     private fun checkAssetCompatible(other: AssetAmount) {
         if (asset.getObjectId() != other.asset.getObjectId()) {
-            throw IncompatibleOperation()
+            throw IncompatibleOperationException(
+                "Cannot add two AssetAmount instances that refer to different assets"
+            )
         }
     }
 

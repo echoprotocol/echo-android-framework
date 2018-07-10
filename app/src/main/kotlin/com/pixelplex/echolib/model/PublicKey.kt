@@ -1,8 +1,8 @@
 package com.pixelplex.echolib.model
 
+import com.pixelplex.echolib.support.checkFalse
 import org.bitcoinj.core.ECKey
 import java.io.Serializable
-
 
 /**
  * Encapsulates logic of working with account key/address
@@ -23,13 +23,8 @@ class PublicKey(key: ECKey) : Serializable, ByteSerializable {
         }
 
     init {
-        if (key.hasPrivKey()) {
-            throw IllegalStateException("Passing a private key to PublicKey constructor")
-        }
+        checkFalse(key.hasPrivKey(), "Passing a private key to PublicKey constructor")
     }
-
-    override fun toBytes(): ByteArray =
-        getCompressedKey(key).pubKey
 
     private fun getCompressedKey(key: ECKey): ECKey {
         if (key.isCompressed) return key
@@ -37,6 +32,8 @@ class PublicKey(key: ECKey) : Serializable, ByteSerializable {
         val compressPoint = ECKey.compressPoint(key.pubKeyPoint)
         return ECKey.fromPublicOnly(compressPoint)
     }
+
+    override fun toBytes(): ByteArray = getCompressedKey(key).pubKey
 
     override fun hashCode(): Int = key.hashCode()
 

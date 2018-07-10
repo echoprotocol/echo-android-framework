@@ -31,8 +31,18 @@ fun checkTrue(target: Boolean, errorMessage: String) {
     if (!target) {
         throw IllegalArgumentException(errorMessage)
     }
-
 }
 
+/**
+ * Throws [IllegalArgumentException] if input value is not false
+ *
+ * @param target Value for false assertion
+ * @param errorMessage Exception message
+ */
+fun checkFalse(target: Boolean, errorMessage: String) {
+    if (target) {
+        throw IllegalArgumentException(errorMessage)
+    }
+}
 
 
