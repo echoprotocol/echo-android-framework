@@ -9,13 +9,12 @@ package com.pixelplex.echolib.model
  */
 enum class AuthorityType {
     /**
-     * The key that is authorized to change owner, active, and voting keys
+     * Key that is authorized to change owner, active, and voting keys
      */
     OWNER,
 
     /**
-     *
-    the key that is able to perform normal operations
+     * Hey that is able to perform normal operations
      */
     ACTIVE,
 

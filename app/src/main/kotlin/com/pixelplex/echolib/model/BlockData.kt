@@ -13,14 +13,15 @@ class BlockData : ByteSerializable {
 
     /**
      * Block data constructor
-     * @param refBlockNum: Least significant 16 bits from the reference block number.
-     *                     If "relative_expiration" is zero, this field must be zero as well.
-     * @param refBlockPrefix: The first non-block-number 32-bits of the reference block ID.
-     *                        Recall that block IDs have 32 bits of block number followed by the
-     *                        actual block hash, so this field should be set using the second 32 bits
-     *                        in the block_id_type
+     *
+     * @param refBlockNum:        Least significant 16 bits from the reference block number.
+     *                            If "relative_expiration" is zero, this field must be zero as well.
+     * @param refBlockPrefix:     The first non-block-number 32-bits of the reference block ID.
+     *                            Recall that block IDs have 32 bits of block number followed by the
+     *                            actual block hash, so this field should be set using the second 32 bits
+     *                            in the block_id_type
      * @param relativeExpiration: Expiration time specified as a POSIX or
-     *                           <a href="https://en.wikipedia.org/wiki/Unix_time">Unix time</a>
+     *                            <a href="https://en.wikipedia.org/wiki/Unix_time">Unix time</a>
      */
     constructor(refBlockNum: Int, refBlockPrefix: Long, relativeExpiration: Long) {
         this.refBlockNum = refBlockNum
@@ -37,17 +38,19 @@ class BlockData : ByteSerializable {
     /**
      * Converter that receives the block number, and takes the 16 lower bits of it to obtain the
      * 'refBlockNum' value.
+     *
      * @param blockNumber: The block number.
      */
-    fun blockNumberToRefBlockNum(blockNumber: Long) =
+    private fun blockNumberToRefBlockNum(blockNumber: Long) =
         blockNumber.toInt() and REF_BLOCK_NUM_BITS
 
     /**
      * Converter that receives the head block id, and turns it into the little format required for the
      * 'refBlockPrefix' field.
+     *
      * @param headBlockId: The head block id as obtained from the network updates.
      */
-    fun headBlockIdToRefBlockPrefix(headBlockId: String): Long {
+    private fun headBlockIdToRefBlockPrefix(headBlockId: String): Long {
         val hashData = headBlockId.substring(HEAD_HASH_START, HEAD_HASH_END)
         var prefixData = ""
         for (i in 0 until HEAD_HASH_BYTES step HEAD_HASH_STEP) {
@@ -58,7 +61,6 @@ class BlockData : ByteSerializable {
         }
         return prefixData.toLong(REF_BLOCK_PREFIX_RADIX)
     }
-
 
     /** Allocating a fixed length byte array, since we will always need
      * 2 bytes for the ref_block_num value

@@ -9,7 +9,7 @@ import java.math.RoundingMode
  * Class used to represent a specific amount of a certain asset
  *
  * @author Dmitriy Bushuev
- * @author Dasha
+ * @author Dasha Pechkovskaya
  */
 class AssetAmount(
     var amount: UnsignedLong,
@@ -20,7 +20,7 @@ class AssetAmount(
      * Adds two asset amounts. They must refer to the same Asset type.
      *
      * @param other: The other AssetAmount to add to this.
-     * @return: A new instance of the AssetAmount class with the combined amount.
+     * @return:      A new instance of the AssetAmount class with the combined amount.
      */
     operator fun plus(other: AssetAmount): AssetAmount {
         checkAssetCompatible(other)
@@ -33,7 +33,7 @@ class AssetAmount(
      * Adds an aditional amount of base units to this AssetAmount.
      *
      * @param additional: The amount to add.
-     * @return: A new instance of the AssetAmount class with the added aditional.
+     * @return:           A new instance of the AssetAmount class with the added aditional.
      */
     operator fun plus(additional: Long): AssetAmount {
         val combined = amount.plus(UnsignedLong.valueOf(additional))
@@ -45,7 +45,7 @@ class AssetAmount(
      * return absolute values.
      *
      * @param other: The other asset amount to subtract from this.
-     * @return: The absolute value of the subtraction of the other minus this asset amount.
+     * @return:      The absolute value of the subtraction of the other minus this asset amount.
      */
     operator fun minus(other: AssetAmount): AssetAmount {
         checkAssetCompatible(other)
@@ -59,6 +59,14 @@ class AssetAmount(
         return AssetAmount(result, asset)
     }
 
+    /**
+     * Divides the current amount by a divisor provided as the first parameter, using
+     * the [RoundingMode.HALF_DOWN] constant
+     *
+     * @param divisor: The divisor
+     * @return:        The same AssetAMount instance, but with the divided amount value
+     */
+    operator fun div(divisor: Double): AssetAmount = divideBy(divisor, RoundingMode.HALF_DOWN)
 
     /**
      * Multiplies the current amount by a factor provided as the first parameter. The second parameter
@@ -66,7 +74,7 @@ class AssetAmount(
      *
      * @param factor:       The multiplying factor
      * @param roundingMode: The rounding mode as an instance of the {@link RoundingMode} class
-     * @return The same AssetAmount instance, but with the changed amount value.
+     * @return              The same AssetAmount instance, but with the changed amount value.
      */
     fun multiplyBy(factor: Double, roundingMode: RoundingMode): AssetAmount {
         this.amount = UnsignedLong.valueOf(
@@ -78,12 +86,12 @@ class AssetAmount(
 
         return this
     }
-    
+
     /**
      * Multiplies the current amount by a factor, using the {@link RoundingMode#HALF_DOWN} constant.
      *
      * @param factor: The multiplying factor
-     * @return The same AssetAmount instance, but with the changed amount value.
+     * @return        The same AssetAmount instance, but with the changed amount value.
      */
     fun multiplyBy(factor: Double): AssetAmount =
         multiplyBy(factor, RoundingMode.HALF_DOWN)
@@ -93,7 +101,7 @@ class AssetAmount(
      * specifies the rounding method to be used.
      *
      * @param divisor: The divisor
-     * @return: The same AssetAMount instance, but with the divided amount value
+     * @return:        The same AssetAMount instance, but with the divided amount value
      */
     fun divideBy(divisor: Double, roundingMode: RoundingMode): AssetAmount {
         this.amount = UnsignedLong.valueOf(
@@ -105,23 +113,11 @@ class AssetAmount(
         return this
     }
 
-
-    /**
-     * Divides the current amount by a divisor provided as the first parameter, using
-     * the [RoundingMode.HALF_DOWN] constant
-     *
-     * @param divisor: The divisor
-     * @return: The same AssetAMount instance, but with the divided amount value
-     *
-     *
-     */
-    fun divideBy(divisor: Double): AssetAmount =
-        divideBy(divisor, RoundingMode.HALF_DOWN)
-
-
     private fun checkAssetCompatible(other: AssetAmount) {
         if (asset.getObjectId() != other.asset.getObjectId()) {
-            throw IncompatibleOperationException("Cannot add two AssetAmount instances that refer to different assets")
+            throw IncompatibleOperationException(
+                "Cannot add two AssetAmount instances that refer to different assets"
+            )
         }
     }
 
