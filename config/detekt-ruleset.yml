@@ -299,7 +299,7 @@ style:
     ignoreCompanionObjectPropertyDeclaration: true
     ignoreAnnotation: false
     ignoreNamedArgument: true
-    ignoreEnums: false
+    ignoreEnums: true
   MandatoryBracesIfStatements:
     active: false
   MaxLineLength:

@@ -34,6 +34,12 @@ open class GrapheneObject(
      */
     fun getObjectId(): String = "$space.$type.$instance"
 
+    /**
+     * Returns the type of this object.
+     * @return: Instance of the ObjectType enum.
+     */
+    fun getObjectType(): ObjectType? = ObjectType.get(space, type)
+
     companion object {
         const val KEY_ID = "id"
         private const val OBJECT_ID_DELIMITER = "."
