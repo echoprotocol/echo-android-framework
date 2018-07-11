@@ -34,7 +34,10 @@ object Signature {
      * ecdsa signatures, we are slightly modifying the expiration time of the transaction while
      * we look for a signature that will be accepted by the graphene network.
      *
-     * This should then be called before any other serialization method.
+     * <p>
+     *     This should then be called before any other serialization method.
+     * </p>
+     *
      * @return: A valid signature of the transaction.
      */
     fun signTransaction(transaction: Transaction): ByteArray {
@@ -112,4 +115,5 @@ object Signature {
                 || signData[R_BYTES].toInt() and CHECKING_BYTE != 0
                 || signData[S_BYTES].toInt() == 0
                 || signData[S_BYTES_POS].toInt() and CHECKING_BYTE != 0
+
 }

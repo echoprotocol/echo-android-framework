@@ -30,9 +30,7 @@ class Vote {
         return parts
     }
 
-    override fun toString(): String {
-        return "$type:$instance"
-    }
+    override fun toString(): String = "$type:$instance"
 
     companion object {
         private const val VOTE_DELIMITER = ":"

@@ -1,3 +1,5 @@
+@file:JvmName("Extensions")
+
 package com.pixelplex.echolib.support
 
 import com.pixelplex.echolib.TIME_DATE_FORMAT
@@ -12,12 +14,14 @@ import java.util.*
 
 /**
  * Format date to default date format
+ *
  * @return formatted date text
  */
 fun Date.format(): String = this.format(TIME_DATE_FORMAT)
 
 /**
  * Format date to time format
+ *
  * @param dateFormat: new date format
  * @return formatted date text
  */

@@ -1,3 +1,5 @@
+@file:JvmName("Constants")
+
 package com.pixelplex.echolib
 
 /**

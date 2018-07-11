@@ -2,7 +2,6 @@
 
 package com.pixelplex.echolib.support
 
-
 /**
  * Contains all base precondition functions
  *
