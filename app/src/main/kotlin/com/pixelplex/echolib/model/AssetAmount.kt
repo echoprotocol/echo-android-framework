@@ -3,6 +3,7 @@ package com.pixelplex.echolib.model
 import com.google.common.math.DoubleMath
 import com.google.common.primitives.UnsignedLong
 import com.pixelplex.echolib.exception.IncompatibleOperationException
+import java.math.BigDecimal
 import java.math.RoundingMode
 
 /**
@@ -69,6 +70,14 @@ class AssetAmount(
     operator fun div(divisor: Double): AssetAmount = divideBy(divisor, RoundingMode.HALF_DOWN)
 
     /**
+     * Multiplies the current amount by a factor, using the {@link RoundingMode#HALF_DOWN} constant.
+     *
+     * @param factor: The multiplying factor
+     * @return        The same AssetAmount instance, but with the changed amount value.
+     */
+    operator fun times(factor: Double): AssetAmount = multiplyBy(factor, RoundingMode.HALF_DOWN)
+
+    /**
      * Multiplies the current amount by a factor provided as the first parameter. The second parameter
      * specifies the rounding method to be used.
      *
@@ -77,24 +86,17 @@ class AssetAmount(
      * @return              The same AssetAmount instance, but with the changed amount value.
      */
     fun multiplyBy(factor: Double, roundingMode: RoundingMode): AssetAmount {
-        this.amount = UnsignedLong.valueOf(
-            DoubleMath.roundToLong(
-                this.amount.toLong() * factor,
+        val originalAmount = BigDecimal(amount.bigIntegerValue())
+        val decimalResult = originalAmount.multiply(BigDecimal(factor))
+        val resultingAmount = UnsignedLong.valueOf(
+            DoubleMath.roundToBigInteger(
+                decimalResult.toDouble(),
                 roundingMode
             )
         )
 
-        return this
+        return AssetAmount(resultingAmount, Asset(asset))
     }
-
-    /**
-     * Multiplies the current amount by a factor, using the {@link RoundingMode#HALF_DOWN} constant.
-     *
-     * @param factor: The multiplying factor
-     * @return        The same AssetAmount instance, but with the changed amount value.
-     */
-    fun multiplyBy(factor: Double): AssetAmount =
-        multiplyBy(factor, RoundingMode.HALF_DOWN)
 
     /**
      * Divides the current amount by a divisor provided as the first parameter. The second parameter
@@ -104,13 +106,16 @@ class AssetAmount(
      * @return:        The same AssetAMount instance, but with the divided amount value
      */
     fun divideBy(divisor: Double, roundingMode: RoundingMode): AssetAmount {
-        this.amount = UnsignedLong.valueOf(
-            DoubleMath.roundToLong(
-                this.amount.toLong() / divisor,
+        val originalAmount = BigDecimal(amount.bigIntegerValue())
+        val decimalAmount =
+            originalAmount.divide(BigDecimal(divisor), DEFAULT_SCALE, RoundingMode.HALF_UP)
+        val resultingAmount = UnsignedLong.valueOf(
+            DoubleMath.roundToBigInteger(
+                decimalAmount.toDouble(),
                 roundingMode
             )
         )
-        return this
+        return AssetAmount(resultingAmount, Asset(asset))
     }
 
     private fun checkAssetCompatible(other: AssetAmount) {
@@ -119,6 +124,10 @@ class AssetAmount(
                 "Cannot add two AssetAmount instances that refer to different assets"
             )
         }
+    }
+
+    companion object {
+        private const val DEFAULT_SCALE = 18
     }
 
 }
