@@ -22,7 +22,7 @@ class GrapheneObjectTest {
     private lateinit var nonexistentGrapheneObject: GrapheneObject
 
     @Before
-    fun setup() {
+    fun setUp() {
         baseGrapheneObject = GrapheneObject("1.1.0")
         accountGrapheneObject = GrapheneObject("1.2.0")
         forceSettlementGrapheneObject = GrapheneObject("1.4.0")
