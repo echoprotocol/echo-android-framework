@@ -1,10 +1,11 @@
 package com.pixelplex.echolib.support
 
+import com.pixelplex.bitcoinj.ECDSASignature
+import com.pixelplex.bitcoinj.ECKey
+import com.pixelplex.bitcoinj.Sha256Hash
+import com.pixelplex.bitcoinj.bigIntegerToBytes
 import com.pixelplex.echolib.exception.MalformedTransactionException
 import com.pixelplex.echolib.model.Transaction
-import org.bitcoinj.core.ECKey
-import org.bitcoinj.core.Sha256Hash
-import org.bitcoinj.core.Utils
 
 /**
  * Object used to transaction signing
@@ -72,7 +73,7 @@ object Signature {
             throw MalformedTransactionException("Transaction must have private key for signing.")
     }
 
-    private fun getRecId(sign: ECKey.ECDSASignature, hash: Sha256Hash, privateKey: ECKey): Int {
+    private fun getRecId(sign: ECDSASignature, hash: Sha256Hash, privateKey: ECKey): Int {
         for (i in 0..MAX_REC_ID_INDEX) {
             val key = ECKey.recoverFromSignature(i, sign, hash, privateKey.isCompressed)
             if (key != null && key.pubKeyPoint == privateKey.pubKeyPoint) {
@@ -85,21 +86,21 @@ object Signature {
     private fun createSignData(
         privateKey: ECKey,
         recId: Int,
-        sign: ECKey.ECDSASignature
+        sign: ECDSASignature
     ): ByteArray {
         val signData = ByteArray(SIGN_DATA_BYTES)
         val compressionBytes = if (privateKey.isCompressed) COMPRESSION_SIZE else 0
         val headerByte = (recId + COMPACT_HEADER_SIZE + compressionBytes).toByte()
         signData[HEADER_POS] = headerByte
         System.arraycopy(
-            Utils.bigIntegerToBytes(sign.r, R_BYTES),
+            sign.r.bigIntegerToBytes(R_BYTES),
             0,
             signData,
             R_BYTES_POS,
             R_BYTES
         )
         System.arraycopy(
-            Utils.bigIntegerToBytes(sign.s, S_BYTES),
+            sign.s.bigIntegerToBytes(S_BYTES),
             0,
             signData,
             S_BYTES_POS,

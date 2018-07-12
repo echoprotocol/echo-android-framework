@@ -41,8 +41,9 @@ dependencies {
 
     //Libraries
     implementation libraryDependencies.googleGson
-    implementation libraryDependencies.bitcoinj
     implementation libraryDependencies.socket
+    implementation libraryDependencies.guava
+    implementation libraryDependencies.spongycastle
 
     //Code analysis
     detekt libraryDependencies.detekt
