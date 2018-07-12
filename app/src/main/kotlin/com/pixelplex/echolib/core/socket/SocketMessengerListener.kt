@@ -24,6 +24,11 @@ interface SocketMessengerListener {
     /**
      * Signals socket connection succeed
      */
-    fun onConnect()
+    fun onConnected()
+
+    /**
+     * Signals socket connection was closed
+     */
+    fun onDisconnected()
 
 }
