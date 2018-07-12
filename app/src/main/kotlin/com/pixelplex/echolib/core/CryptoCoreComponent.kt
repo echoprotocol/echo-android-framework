@@ -5,4 +5,4 @@ package com.pixelplex.echolib.core
  *
  * @author Dmitriy Bushuev
  */
-interface CryptoCore
+interface CryptoCoreComponent
