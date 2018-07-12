@@ -1,7 +1,7 @@
 package com.pixelplex.echolib
 
-import com.pixelplex.echolib.core.CryptoCore
-import com.pixelplex.echolib.core.SocketCore
+import com.pixelplex.echolib.core.CryptoCoreComponent
+import com.pixelplex.echolib.core.socket.SocketCoreComponent
 import com.pixelplex.echolib.facade.*
 import com.pixelplex.echolib.facade.internal.*
 import com.pixelplex.echolib.model.Account
@@ -21,7 +21,7 @@ import com.pixelplex.echolib.service.internal.NetworkNodesApiServiceImpl
  *
  * @author Dmitriy Bushuev
  */
-class EchoLibImpl(socketCore: SocketCore, cryptoCore: CryptoCore) : EchoLib {
+class EchoLibImpl(socketCoreComponent: SocketCoreComponent, cryptoCoreComponent: CryptoCoreComponent) : EchoLib {
 
     private val authenticationFacade: AuthenticationFacade
     private val feeFacade: FeeFacade
@@ -33,10 +33,10 @@ class EchoLibImpl(socketCore: SocketCore, cryptoCore: CryptoCore) : EchoLib {
      * Initializes and setups all facades with required dependencies
      */
     init {
-        val accountHistoryApiService = AccountHistoryApiServiceImpl(socketCore, cryptoCore)
-        val databaseApiService = DatabaseApiServiceImpl(socketCore)
-        val networkBroadcastApiService = NetworkBroadcastApiServiceImpl(socketCore)
-        val networkNodesApiService = NetworkNodesApiServiceImpl(socketCore)
+        val accountHistoryApiService = AccountHistoryApiServiceImpl(socketCoreComponent, cryptoCoreComponent)
+        val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent)
+        val networkBroadcastApiService = NetworkBroadcastApiServiceImpl(socketCoreComponent)
+        val networkNodesApiService = NetworkNodesApiServiceImpl(socketCoreComponent)
 
         authenticationFacade = AuthenticationFacadeImpl(accountHistoryApiService)
         feeFacade = FeeFacadeImpl(databaseApiService)

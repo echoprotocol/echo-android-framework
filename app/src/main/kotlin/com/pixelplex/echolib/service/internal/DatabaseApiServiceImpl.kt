@@ -1,6 +1,6 @@
 package com.pixelplex.echolib.service.internal
 
-import com.pixelplex.echolib.core.SocketCore
+import com.pixelplex.echolib.core.socket.SocketCoreComponent
 import com.pixelplex.echolib.service.DatabaseApiService
 
 /**
@@ -12,4 +12,4 @@ import com.pixelplex.echolib.service.DatabaseApiService
  *
  * @author Dmitriy Bushuev
  */
-class DatabaseApiServiceImpl(private val socketCore: SocketCore) : DatabaseApiService
+class DatabaseApiServiceImpl(private val socketCoreComponent: SocketCoreComponent) : DatabaseApiService
