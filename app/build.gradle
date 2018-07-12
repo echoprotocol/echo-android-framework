@@ -1,8 +1,11 @@
+plugins {
+    id "io.gitlab.arturbosch.detekt" version "1.0.0.RC7-3"
+}
+
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-
     def globalConfiguration = rootProject.extensions.getByName("ext")
 
     compileSdkVersion globalConfiguration["androidCompileSdkVersion"]
@@ -26,7 +29,6 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
         test.java.srcDirs += 'src/test/kotlin'
     }
-
 }
 
 dependencies {
@@ -40,4 +42,26 @@ dependencies {
     //Libraries
     implementation libraryDependencies.googleGson
     implementation libraryDependencies.bitcoinj
+
+    //Code analysis
+    detekt libraryDependencies.detekt
 }
+
+configurations {
+    detekt
+}
+
+//detekt task
+task analyzeCode(type: JavaExec) {
+    main = "io.gitlab.arturbosch.detekt.cli.Main"
+    classpath = configurations.detekt
+    def input = "$projectDir\\src"
+    def config = "$rootDir\\config\\detekt-ruleset.yml"
+    def filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
+    def output = "$buildDir\\reports\\detekt"
+    def outputName = "detekt-report"
+    def params = ['-i', input, '-c', config, '-f', filters, '-o', output, '-on', outputName]
+    args(params)
+}
+
+check.dependsOn(analyzeCode)
