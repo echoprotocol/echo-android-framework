@@ -16,4 +16,4 @@ const val TIME_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss"
 /**
  * Default url for socket connection
  */
-const val DEFAULT_URL = "wss://bitshares.openledger.info/ws"
+const val DEFAULT_URL = "wss://node.testnet.bitshares.eu/"

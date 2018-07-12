@@ -1,7 +1,7 @@
 package com.pixelplex.echolib.support.model
 
 /**
- * Enum of apis, needed for connection to blockchain
+ * Apis, needed for connection to blockchain
  *
  * @author Daria Pechkovskaya
  */
