@@ -25,3 +25,13 @@ interface SocketConnection {
     fun disconnect()
 
 }
+
+/**
+ * State of socket connection
+ *
+ * @author Daria Pechkovskaya
+ */
+enum class SocketState {
+    CONNECTED,
+    DISCONNECTED
+}
