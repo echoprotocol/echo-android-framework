@@ -30,8 +30,8 @@ class BlockData : ByteSerializable {
     }
 
     constructor(headBlockNumber: Long, headBlockId: String, relativeExpiration: Long) {
-        this.refBlockNum = blockNumberToRefBlockNum(headBlockNumber)
-        this.refBlockPrefix = headBlockIdToRefBlockPrefix(headBlockId)
+        this.refBlockNum = toRefBlockNum(headBlockNumber)
+        this.refBlockPrefix = toRefBlockPrefix(headBlockId)
         this.relativeExpiration = relativeExpiration
     }
 
@@ -41,7 +41,7 @@ class BlockData : ByteSerializable {
      *
      * @param blockNumber: The block number.
      */
-    private fun blockNumberToRefBlockNum(blockNumber: Long) =
+    private fun toRefBlockNum(blockNumber: Long) =
         blockNumber.toInt() and REF_BLOCK_NUM_BITS
 
     /**
@@ -50,7 +50,7 @@ class BlockData : ByteSerializable {
      *
      * @param headBlockId: The head block id as obtained from the network updates.
      */
-    private fun headBlockIdToRefBlockPrefix(headBlockId: String): Long {
+    private fun toRefBlockPrefix(headBlockId: String): Long {
         val hashData = headBlockId.substring(HEAD_HASH_START, HEAD_HASH_END)
         var prefixData = ""
         for (i in 0 until HEAD_HASH_BYTES step HEAD_HASH_STEP) {
