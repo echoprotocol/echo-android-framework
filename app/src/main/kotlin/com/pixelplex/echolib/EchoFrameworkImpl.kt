@@ -1,7 +1,6 @@
 package com.pixelplex.echolib
 
-import com.pixelplex.echolib.core.CryptoCoreComponent
-import com.pixelplex.echolib.core.socket.SocketCoreComponent
+import com.pixelplex.echolib.core.socket.internal.SocketCoreComponentImpl
 import com.pixelplex.echolib.facade.*
 import com.pixelplex.echolib.facade.internal.*
 import com.pixelplex.echolib.model.Account
@@ -11,9 +10,10 @@ import com.pixelplex.echolib.service.internal.AccountHistoryApiServiceImpl
 import com.pixelplex.echolib.service.internal.DatabaseApiServiceImpl
 import com.pixelplex.echolib.service.internal.NetworkBroadcastApiServiceImpl
 import com.pixelplex.echolib.service.internal.NetworkNodesApiServiceImpl
+import com.pixelplex.echolib.support.model.Settings
 
 /**
- * Implementation of [EchoLib] base library API
+ * Implementation of [EchoFramework] base library API
  *
  * <p>
  *     Delegates all logic to specific facades
@@ -21,7 +21,7 @@ import com.pixelplex.echolib.service.internal.NetworkNodesApiServiceImpl
  *
  * @author Dmitriy Bushuev
  */
-class EchoLibImpl(socketCoreComponent: SocketCoreComponent, cryptoCoreComponent: CryptoCoreComponent) : EchoLib {
+class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework {
 
     private val authenticationFacade: AuthenticationFacade
     private val feeFacade: FeeFacade
@@ -33,7 +33,10 @@ class EchoLibImpl(socketCoreComponent: SocketCoreComponent, cryptoCoreComponent:
      * Initializes and setups all facades with required dependencies
      */
     init {
-        val accountHistoryApiService = AccountHistoryApiServiceImpl(socketCoreComponent, cryptoCoreComponent)
+        val socketCoreComponent = SocketCoreComponentImpl(settings.socketMessenger, settings.apis)
+
+        val accountHistoryApiService =
+            AccountHistoryApiServiceImpl(socketCoreComponent, settings.cryptoComponent)
         val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent)
         val networkBroadcastApiService = NetworkBroadcastApiServiceImpl(socketCoreComponent)
         val networkNodesApiService = NetworkNodesApiServiceImpl(socketCoreComponent)
