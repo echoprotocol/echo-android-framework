@@ -291,7 +291,7 @@ style:
     active: false
     maxJumpCount: 1
   MagicNumber:
-    active: true
+    active: false
     ignoreNumbers: '-1,0,1,2'
     ignoreHashCodeFunction: false
     ignorePropertyDeclaration: false
@@ -304,7 +304,7 @@ style:
     active: false
   MaxLineLength:
     active: true
-    maxLineLength: 120
+    maxLineLength: 130
     excludePackageStatements: false
     excludeImportStatements: false
     excludeCommentStatements: false
@@ -332,7 +332,7 @@ style:
     active: false
   ReturnCount:
     active: true
-    max: 2
+    max: 3
     excludedFunctions: "equals"
   SafeCast:
     active: true
