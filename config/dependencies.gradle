@@ -7,19 +7,23 @@ ext {
     bitcoinjVersion = '0.14.7'
     detektVersion = '1.0.0.RC6-4'
     socketVersion = '1.30'
+    guavaVersion = '24.0-android'
+    spongycastleVersion = '1.58.0.0'
 
     //Tests
     jUnitVersion = '4.12'
     testRunnerVersion = '1.0.2'
 
     libraryDependencies = [
-            kotlin    : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion",
-            jUnit     : "junit:junit:$jUnitVersion",
-            testRunner: "com.android.support.test:runner:$testRunnerVersion",
-            googleGson: "com.google.code.gson:gson:$googleGsonVersion",
-            bitcoinj  : "org.bitcoinj:bitcoinj-core:$bitcoinjVersion",
-            detekt    : "io.gitlab.arturbosch.detekt:detekt-cli:$detektVersion",
-            socket    : "com.neovisionaries:nv-websocket-client:$socketVersion"
+            kotlin      : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion",
+            jUnit       : "junit:junit:$jUnitVersion",
+            testRunner  : "com.android.support.test:runner:$testRunnerVersion",
+            googleGson  : "com.google.code.gson:gson:$googleGsonVersion",
+            bitcoinj    : "org.bitcoinj:bitcoinj-core:$bitcoinjVersion",
+            detekt      : "io.gitlab.arturbosch.detekt:detekt-cli:$detektVersion",
+            socket      : "com.neovisionaries:nv-websocket-client:$socketVersion",
+            guava       : "com.google.guava:guava:$guavaVersion",
+            spongycastle: "com.madgag.spongycastle:core:$spongycastleVersion"
     ]
 
 }

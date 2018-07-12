@@ -3,9 +3,9 @@ package com.pixelplex.echolib.model
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
+import com.pixelplex.bitcoinj.ECKey
 import com.pixelplex.echolib.support.Signature
 import com.pixelplex.echolib.support.format
-import org.bitcoinj.core.ECKey
 import org.spongycastle.util.encoders.Hex
 import java.util.*
 import java.util.concurrent.TimeUnit

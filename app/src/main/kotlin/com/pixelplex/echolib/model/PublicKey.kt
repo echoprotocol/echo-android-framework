@@ -1,7 +1,7 @@
 package com.pixelplex.echolib.model
 
+import com.pixelplex.bitcoinj.ECKey
 import com.pixelplex.echolib.support.checkFalse
-import org.bitcoinj.core.ECKey
 import java.io.Serializable
 
 /**

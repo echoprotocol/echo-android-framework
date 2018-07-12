@@ -1,8 +1,8 @@
 package com.pixelplex.echolib.model
 
+import com.pixelplex.bitcoinj.Base58
+import com.pixelplex.bitcoinj.ECKey
 import com.pixelplex.echolib.exception.MalformedAddressException
-import org.bitcoinj.core.Base58
-import org.bitcoinj.core.ECKey
 import org.spongycastle.crypto.digests.RIPEMD160Digest
 
 /**
