@@ -1,6 +1,6 @@
 package com.pixelplex.echolib.service.internal
 
-import com.pixelplex.echolib.core.SocketCore
+import com.pixelplex.echolib.core.socket.SocketCoreComponent
 import com.pixelplex.echolib.service.CryptoApiService
 
 /**
@@ -12,4 +12,4 @@ import com.pixelplex.echolib.service.CryptoApiService
  *
  * @author Dmitriy Bushuev
  */
-class CryptoApiServiceImpl(private val socketCore: SocketCore) : CryptoApiService
+class CryptoApiServiceImpl(private val socketCoreComponent: SocketCoreComponent) : CryptoApiService

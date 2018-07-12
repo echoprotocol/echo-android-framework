@@ -1,7 +1,7 @@
 package com.pixelplex.echolib.service.internal
 
-import com.pixelplex.echolib.core.CryptoCore
-import com.pixelplex.echolib.core.SocketCore
+import com.pixelplex.echolib.core.CryptoCoreComponent
+import com.pixelplex.echolib.core.socket.SocketCoreComponent
 import com.pixelplex.echolib.service.AccountHistoryApiService
 
 /**
@@ -14,6 +14,6 @@ import com.pixelplex.echolib.service.AccountHistoryApiService
  * @author Dmitriy Bushuev
  */
 class AccountHistoryApiServiceImpl(
-    private val socketCore: SocketCore,
-    private val cryptoCore: CryptoCore
+    private val socketCoreComponent: SocketCoreComponent,
+    private val cryptoCoreComponent: CryptoCoreComponent
 ) : AccountHistoryApiService

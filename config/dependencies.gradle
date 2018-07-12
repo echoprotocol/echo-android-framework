@@ -6,6 +6,7 @@ ext {
     googleGsonVersion = '2.8.5'
     bitcoinjVersion = '0.14.7'
     detektVersion = '1.0.0.RC6-4'
+    socketVersion = '1.30'
 
     //Tests
     jUnitVersion = '4.12'
@@ -17,7 +18,8 @@ ext {
             testRunner: "com.android.support.test:runner:$testRunnerVersion",
             googleGson: "com.google.code.gson:gson:$googleGsonVersion",
             bitcoinj  : "org.bitcoinj:bitcoinj-core:$bitcoinjVersion",
-            detekt    : "io.gitlab.arturbosch.detekt:detekt-cli:$detektVersion"
+            detekt    : "io.gitlab.arturbosch.detekt:detekt-cli:$detektVersion",
+            socket    : "com.neovisionaries:nv-websocket-client:$socketVersion"
     ]
 
 }

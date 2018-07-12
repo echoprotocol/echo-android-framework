@@ -1,6 +1,6 @@
 package com.pixelplex.echolib.service.internal
 
-import com.pixelplex.echolib.core.SocketCore
+import com.pixelplex.echolib.core.socket.SocketCoreComponent
 import com.pixelplex.echolib.service.NetworkNodesApiService
 
 /**
@@ -12,4 +12,4 @@ import com.pixelplex.echolib.service.NetworkNodesApiService
  *
  * @author Dmitriy Bushuev
  */
-class NetworkNodesApiServiceImpl(private val socketCore: SocketCore) : NetworkNodesApiService
+class NetworkNodesApiServiceImpl(private val socketCoreComponent: SocketCoreComponent) : NetworkNodesApiService
