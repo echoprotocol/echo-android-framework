@@ -5,7 +5,7 @@ import org.spongycastle.crypto.digests.RIPEMD160Digest
 /**
  * Contains logic of checksum calculation
  *
- * @author Dmitry Bushuev
+ * @author Dmitriy Bushuev
  */
 object Checksum {
 
