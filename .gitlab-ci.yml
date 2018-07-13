@@ -1,5 +1,9 @@
 image: openjdk:8-jdk
 
+stages:
+  - build
+  - test
+
 .build_template: &build_template_def
   stage: build
   artifacts:
@@ -28,15 +32,10 @@ image: openjdk:8-jdk
    - export PATH=$PATH:$PWD/android-sdk-linux/platform-tools/
    - chmod +x ./gradlew
 
-stages:
-  - build
-  - test
-
 build_debug:
   <<: *build_template_def
   only:
     - develop
-
   script:
     - ./gradlew assembleDebug
 
