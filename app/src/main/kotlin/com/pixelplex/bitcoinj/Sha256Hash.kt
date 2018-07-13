@@ -115,7 +115,7 @@ class Sha256Hash : Serializable, Comparable<Sha256Hash> {
 
     companion object {
         const val LENGTH = 32 // bytes
-        private val ZERO_HASH =
+        val ZERO_HASH =
             wrap(ByteArray(LENGTH))
 
         /**

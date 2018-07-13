@@ -19,13 +19,19 @@
 package com.pixelplex.bitcoinj
 
 import com.google.common.annotations.VisibleForTesting
+import com.google.common.base.Objects
 import com.google.common.base.Preconditions
+import com.google.common.base.Preconditions.checkArgument
 import com.google.common.base.Preconditions.checkNotNull
+import org.spongycastle.asn1.pkcs.EncryptedData
 import org.spongycastle.asn1.x9.X9IntegerConverter
 import org.spongycastle.crypto.digests.SHA256Digest
 import org.spongycastle.crypto.ec.CustomNamedCurves
+import org.spongycastle.crypto.generators.ECKeyPairGenerator
 import org.spongycastle.crypto.params.ECDomainParameters
+import org.spongycastle.crypto.params.ECKeyGenerationParameters
 import org.spongycastle.crypto.params.ECPrivateKeyParameters
+import org.spongycastle.crypto.params.ECPublicKeyParameters
 import org.spongycastle.crypto.signers.ECDSASigner
 import org.spongycastle.crypto.signers.HMacDSAKCalculator
 import org.spongycastle.math.ec.ECAlgorithms
@@ -34,6 +40,8 @@ import org.spongycastle.math.ec.FixedPointCombMultiplier
 import org.spongycastle.math.ec.FixedPointUtil
 import org.spongycastle.math.ec.custom.sec.SecP256K1Curve
 import java.math.BigInteger
+import java.security.SecureRandom
+
 
 /**
  * <p>Represents an elliptic curve public and (optionally) private key, usable for digital signatures but not encryption.
@@ -69,16 +77,83 @@ class ECKey {
     private val priv: BigInteger?
     private val pub: LazyECPoint
 
-    constructor(priv: BigInteger?, pub: ECPoint) {
+    constructor(priv: BigInteger?, pub: ECPoint) : this(
+        priv,
+        LazyECPoint(checkNotNull(pub))
+    )
+
+    constructor(priv: BigInteger?, pub: LazyECPoint) {
         if (priv != null) {
+            checkArgument(
+                priv.bitLength() <= 32 * 8,
+                "private key exceeds 32 bytes: %s bits",
+                priv.bitLength()
+            )
             // Try and catch buggy callers or bad key imports, etc. Zero and one are special because these are often
             // used as sentinel values and because scripting languages have a habit of auto-casting true and false to
             // 1 and 0 or vice-versa. Type confusion bugs could therefore result in private keys with these values.
-            check(priv != BigInteger.ZERO)
-            check(priv != BigInteger.ONE)
+            checkArgument(priv != BigInteger.ZERO)
+            checkArgument(priv != BigInteger.ONE)
         }
         this.priv = priv
-        this.pub = LazyECPoint(checkNotNull(pub))
+        checkNotNull(pub)
+        this.pub = pub
+    }
+
+    // Creation time of the key in seconds since the epoch, or zero if the key was deserialized from a version that did
+    // not have this field.
+    protected var creationTimeSeconds: Long = 0
+
+    protected var encryptedPrivateKey: EncryptedData? = null
+
+    private val pubKeyHash: ByteArray? = null
+
+    /**
+     * Generates an entirely new keypair. Point compression is used so the resulting public key will be 33 bytes
+     * (32 for the co-ordinate and 1 byte to represent the y bit).
+     */
+    constructor() : this(secureRandom)
+
+    /**
+     * Generates an entirely new keypair with the given [SecureRandom] object. Point compression is used so the
+     * resulting public key will be 33 bytes (32 for the co-ordinate and 1 byte to represent the y bit).
+     */
+    constructor(secureRandom: SecureRandom) {
+        val generator = ECKeyPairGenerator()
+        val keygenParams = ECKeyGenerationParameters(curve, secureRandom)
+        generator.init(keygenParams)
+        val keypair = generator.generateKeyPair()
+        val privParams = keypair.private as ECPrivateKeyParameters
+        val pubParams = keypair.public as ECPublicKeyParameters
+        priv = privParams.d
+        pub = LazyECPoint(curve.curve, pubParams.q.getEncoded(true))
+    }
+
+    /**
+     * Returns a copy of this key, but with the public point represented in uncompressed form. Normally you would
+     * never need this: it's for specialised scenarios or when backwards compatibility in encoded form is necessary.
+     */
+    fun decompress(): ECKey {
+        return if (!pub.isCompressed)
+            this
+        else
+            ECKey(priv, decompressPoint(pub.get()))
+    }
+
+    /**
+     * Utility for decompressing an elliptic curve point. Returns the same point if it's already compressed.
+     * See the ECKey class docs for a discussion of point compression.
+     */
+    fun decompressPoint(point: ECPoint): ECPoint {
+        return getPointWithCompression(point, false)
+    }
+
+    /**
+     * Utility for decompressing an elliptic curve point. Returns the same point if it's already compressed.
+     * See the ECKey class docs for a discussion of point compression.
+     */
+    fun decompressPoint(point: LazyECPoint): LazyECPoint {
+        return if (!point.isCompressed) point else LazyECPoint(decompressPoint(point.get()))
     }
 
     /**
@@ -89,10 +164,56 @@ class ECKey {
         return priv != null
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other == null || other !is ECKey) return false
+        return (Objects.equal(this.priv, other.priv)
+                && Objects.equal(this.pub, other.pub)
+                && Objects.equal(this.creationTimeSeconds, other.creationTimeSeconds)
+                && Objects.equal(this.encryptedPrivateKey, other.encryptedPrivateKey))
+    }
+
+    override fun hashCode() = pub.hashCode()
+
+    /**
+     * Returns the recovery ID, a byte with value between 0 and 3, inclusive, that specifies which of 4 possible
+     * curve points was used to sign a message. This value is also referred to as "v".
+     *
+     * @throws RuntimeException if no recovery ID can be found.
+     */
+    fun findRecoveryId(hash: Sha256Hash, sig: ECDSASignature): Byte {
+        var recId: Byte = -1
+        for (i in 0..3) {
+            val k = ECKey.recoverFromSignature(i, sig, hash, isCompressed)
+            if (k != null && k.pub == pub) {
+                recId = i.toByte()
+                break
+            }
+        }
+        if (recId.toInt() == -1)
+            throw RuntimeException("Could not construct a recoverable key. This should never happen.")
+        return recId
+    }
+
+    /**
+     * Returns hex representation of private key
+     */
+    fun getPrivateKeyAsHex(): String {
+        return HEX.encode(getPrivKeyBytes())
+    }
+
+    /**
+     * Returns a 32 byte array containing the private key.
+     *
+     * @throws org.bitcoinj.core.ECKey.MissingPrivateKeyException if the private key bytes are missing/encrypted.
+     */
+    fun getPrivKeyBytes(): ByteArray =
+        priv?.bigIntegerToBytes(32) ?: throw MissingPrivateKeyException()
+
     companion object {
 
         @JvmField
-        val curve: ECDomainParameters
+        var curve: ECDomainParameters
         private val curveParams = CustomNamedCurves.getByName("secp256k1")
 
         /**
@@ -112,8 +233,12 @@ class ECKey {
 
         private const val CURVE_MIN_WIDTH = 12
 
-        init {
+        // The parameters of the secp256k1 curve that Bitcoin uses.
+        private val CURVE_PARAMS = CustomNamedCurves.getByName("secp256k1")
 
+        private var secureRandom: SecureRandom
+
+        init {
             // Init proper random number generator, as some old Android installations have bugs that make it unsecure.
             if (isAndroidRuntime)
                 LinuxSecureRandom()
@@ -127,6 +252,20 @@ class ECKey {
                 curveParams.h
             )
             HALF_CURVE_ORDER = curveParams.n.shiftRight(1)
+
+            // Init proper random number generator, as some old Android installations have bugs that make it unsecure.
+            if (isAndroidRuntime)
+                LinuxSecureRandom()
+
+            // Tell Bouncy Castle to precompute data that's needed during secp256k1 calculations. Increasing the width
+            // number makes calculations faster, but at a cost of extra memory usage and with decreasing returns. 12 was
+            // picked after consulting with the BC team.
+            FixedPointUtil.precompute(CURVE_PARAMS.g, 12)
+            curve = ECDomainParameters(
+                CURVE_PARAMS.curve, CURVE_PARAMS.g, CURVE_PARAMS.n,
+                CURVE_PARAMS.h
+            )
+            secureRandom = SecureRandom()
         }
 
         /**
@@ -161,6 +300,27 @@ class ECKey {
         }
 
         /**
+         * Returns true if the given pubkey is canonical, i.e. the correct length taking into account compression.
+         */
+        @JvmStatic
+        @SuppressWarnings("ReturnCount")
+        fun isPubKeyCanonical(pubkey: ByteArray): Boolean {
+            if (pubkey.size < 33)
+                return false
+            if (pubkey[0].toInt() == 0x04) {
+                // Uncompressed pubkey
+                if (pubkey.size != 65)
+                    return false
+            } else if (pubkey[0].toInt() == 0x02 || pubkey[0].toInt() == 0x03) {
+                // Compressed pubkey
+                if (pubkey.size != 33)
+                    return false
+            } else
+                return false
+            return true
+        }
+
+        /**
          * Creates an ECKey that cannot be used for signing, only verifying signatures, from the given point. The
          * compression state of pub will be preserved.
          */
@@ -187,12 +347,11 @@ class ECKey {
          */
         @JvmStatic
         fun publicPointFromPrivate(privKey: BigInteger): ECPoint {
-            val newPrivKey = if (privKey.bitLength() > curve.n.bitLength()) {
-                privKey.mod(curve.n)
-            } else {
-                privKey
+            var key = privKey
+            if (privKey.bitLength() > curve.n.bitLength()) {
+                key = privKey.mod(curve.n)
             }
-            return FixedPointCombMultiplier().multiply(curve.g, newPrivKey)
+            return FixedPointCombMultiplier().multiply(curve.g, key)
         }
 
         private fun getPointWithCompression(point: ECPoint, compressed: Boolean): ECPoint {
