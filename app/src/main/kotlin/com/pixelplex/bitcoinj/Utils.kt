@@ -21,6 +21,7 @@
 package com.pixelplex.bitcoinj
 
 import com.google.common.base.Preconditions
+import com.google.common.io.BaseEncoding
 import java.math.BigInteger
 
 /**
@@ -39,6 +40,8 @@ val isAndroidRuntime: Boolean
         }
         return isAndroid == 1
     }
+
+val HEX: BaseEncoding = BaseEncoding.base16().lowerCase()
 
 /**
  * The regular [BigInteger.toByteArray] includes the sign bit of the number and
