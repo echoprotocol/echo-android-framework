@@ -46,7 +46,7 @@ class Sha256Hash : Serializable, Comparable<Sha256Hash> {
      * Returns a reversed copy of the internal byte array.
      */
     val reversedBytes: ByteArray
-        get() = bytes.reverse()
+        get() = bytes.reverseBytes()
 
     /**
      * Use [.wrap] instead.
