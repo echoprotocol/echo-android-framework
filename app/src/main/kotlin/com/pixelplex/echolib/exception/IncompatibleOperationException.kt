@@ -6,7 +6,7 @@ package com.pixelplex.echolib.exception
  * @author Dmitriy Bushuev
  * @author Daria Pechkovskaya
  */
-class IncompatibleOperationException : RuntimeException {
+class IncompatibleOperationException : LocalException {
 
     constructor() : super()
     constructor(message: String?) : super(message)

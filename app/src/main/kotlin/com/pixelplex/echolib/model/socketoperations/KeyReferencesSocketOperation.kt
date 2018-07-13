@@ -2,6 +2,10 @@ package com.pixelplex.echolib.model.socketoperations
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
+import com.pixelplex.echolib.Callback
+import com.pixelplex.echolib.model.Account
+import com.pixelplex.echolib.support.model.Api
+import com.pixelplex.echolib.support.model.getId
 
 /**
  * Get all account references
@@ -11,12 +15,19 @@ import com.google.gson.JsonElement
  * @author Daria Pechkovskaya
  */
 class KeyReferencesSocketOperation(
+    val api: Api,
+    val publicKey: String,
     method: SocketMethodType = SocketMethodType.CALL,
     callId: Int,
-    apiId: Int,
-    result: OperationResult<*>,
-    val publicKey: String
-) : SocketOperation(method, callId, apiId, result) {
+    callback: Callback<List<Account>>
+
+) : SocketOperation<List<Account>>(
+    method,
+    callId,
+    listOf<Account>().javaClass,
+    callback
+) {
+
 
     override fun createParameters(): JsonElement =
         JsonArray().apply {
@@ -27,4 +38,6 @@ class KeyReferencesSocketOperation(
             add(JsonArray().apply { add(publicKeyJson) })
         }
 
+    override val apiId: Int
+        get() = api.getId()
 }

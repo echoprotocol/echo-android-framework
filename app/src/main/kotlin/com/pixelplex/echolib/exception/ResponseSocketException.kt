@@ -1,13 +1,11 @@
 package com.pixelplex.echolib.exception
 
 /**
- * Represents errors associated with illegal Address state
- * (@see com.pixelplex.echolib.model.Address)
+ * Represents errors associated with error response from socket
  *
- * @author Dmitriy Bushuev
  * @author Daria Pechkovskaya
  */
-class MalformedAddressException : LocalException {
+class ResponseSocketException : LocalException {
 
     constructor() : super()
     constructor(message: String?) : super(message)

@@ -1,5 +1,7 @@
 package com.pixelplex.echolib
 
+import com.pixelplex.echolib.exception.LocalException
+
 /**
  * Generic callback handler
  *
@@ -19,6 +21,6 @@ interface Callback<T> {
      *
      * @param error Error occurred during operation process
      */
-    fun onError(error: Throwable)
+    fun onError(error: LocalException)
 
 }

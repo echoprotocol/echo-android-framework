@@ -3,7 +3,11 @@ package com.pixelplex.echolib.model.socketoperations
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.pixelplex.echolib.Callback
+import com.pixelplex.echolib.exception.LocalException
 import com.pixelplex.echolib.model.JsonSerializable
+import com.pixelplex.echolib.support.model.Api
+import java.io.Serializable
+import java.lang.reflect.Type
 
 /**
  * Includes classes for working with blockchain calls
@@ -40,11 +44,6 @@ enum class SocketOperationKeys(val key: String) {
 }
 
 /**
- * Represents result of blockchain call
- */
-data class OperationResult<T>(val operation: SocketOperation, val callback: Callback<T>)
-
-/**
  * Keys for json creation of blockchain call
  */
 enum class OperationCodingKeys(val key: String) {
@@ -55,13 +54,13 @@ enum class OperationCodingKeys(val key: String) {
 
 /**
  * Represents blockchain call
- * <a href="http://docs.bitshares.org/api/websocket.html">Source</a>
+ * <a href="http://docs.bitshares.org/api/rpc.html">Source</a>
  */
-abstract class SocketOperation(
+abstract class SocketOperation<T>(
     val method: SocketMethodType,
-    val callId: Int,
-    val apiId: Int,
-    val result: OperationResult<*>
+    var callId: Int,
+    val type: Class<T>,
+    val callback: Callback<T>
 ) : JsonSerializable {
 
     /**
@@ -69,6 +68,11 @@ abstract class SocketOperation(
      * @return JsonObject representation
      */
     abstract fun createParameters(): JsonElement
+
+    /**
+     * Blockchain api id, which contains operation
+     */
+    abstract val apiId: Int
 
     override fun toJsonString(): String? =
         toJsonObject().toString()

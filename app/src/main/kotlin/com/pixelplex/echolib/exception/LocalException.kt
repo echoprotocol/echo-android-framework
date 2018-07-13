@@ -1,13 +1,11 @@
 package com.pixelplex.echolib.exception
 
 /**
- * Represents errors associated with illegal Address state
- * (@see com.pixelplex.echolib.model.Address)
+ * Represents exception for local library usage
  *
- * @author Dmitriy Bushuev
  * @author Daria Pechkovskaya
  */
-class MalformedAddressException : LocalException {
+open class LocalException : RuntimeException {
 
     constructor() : super()
     constructor(message: String?) : super(message)

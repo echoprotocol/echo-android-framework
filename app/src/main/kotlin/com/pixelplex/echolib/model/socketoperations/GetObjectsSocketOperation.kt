@@ -2,6 +2,10 @@ package com.pixelplex.echolib.model.socketoperations
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
+import com.pixelplex.echolib.Callback
+import com.pixelplex.echolib.model.GrapheneObject
+import com.pixelplex.echolib.support.model.Api
+import com.pixelplex.echolib.support.model.getId
 
 /**
  * Get the objects corresponding to the provided IDs.
@@ -13,12 +17,18 @@ import com.google.gson.JsonElement
  * @author Daria Pechkovskaya
  */
 class GetObjectsSocketOperation(
+    val api: Api,
+    val ids: Array<String>,
     method: SocketMethodType = SocketMethodType.CALL,
     callId: Int,
-    apiId: Int,
-    result: OperationResult<*>,
-    val ids: Array<String>
-) : SocketOperation(method, callId, apiId, result) {
+    callback: Callback<List<GrapheneObject>>
+
+) : SocketOperation<List<GrapheneObject>>(
+    method,
+    callId,
+    listOf<GrapheneObject>().javaClass,
+    callback
+) {
 
     @Suppress("UNUSED_EXPRESSION")
     override fun createParameters(): JsonElement =
@@ -32,4 +42,6 @@ class GetObjectsSocketOperation(
             add(JsonArray().apply { identifiersJson })
         }
 
+    override val apiId: Int
+        get() = api.getId()
 }

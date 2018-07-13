@@ -28,4 +28,9 @@ interface SocketProxy {
      */
     fun off(listener: SocketMessengerListener)
 
+    /**
+     * Unsubscribes all listeners from socket events
+     */
+    fun offAll()
+
 }

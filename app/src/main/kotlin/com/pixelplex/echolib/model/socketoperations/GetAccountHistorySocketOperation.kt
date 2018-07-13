@@ -2,7 +2,10 @@ package com.pixelplex.echolib.model.socketoperations
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
+import com.pixelplex.echolib.Callback
 import com.pixelplex.echolib.model.HistoricalTransfer
+import com.pixelplex.echolib.support.model.Api
+import com.pixelplex.echolib.support.model.getId
 
 /**
  * Get operations relevant to the specified account.
@@ -18,16 +21,16 @@ import com.pixelplex.echolib.model.HistoricalTransfer
  * @author Daria Pechkovskaya
  */
 class GetAccountHistorySocketOperation(
-    method: SocketMethodType = SocketMethodType.CALL,
-    callId: Int,
-    apiId: Int,
-    result: OperationResult<List<HistoricalTransfer>>,
+    val api: Api,
     val accountId: String,
     val stopId: String = DEFAULT_HISTORY_ID,
     val limit: Int = DEFAULT_LIMIT,
-    val startId: String = DEFAULT_HISTORY_ID
+    val startId: String = DEFAULT_HISTORY_ID,
+    method: SocketMethodType = SocketMethodType.CALL,
+    callId: Int,
+    callback: Callback<List<HistoricalTransfer>>
 
-) : SocketOperation(method, callId, apiId, result) {
+) : SocketOperation<List<HistoricalTransfer>>(method, callId, listOf<HistoricalTransfer>().javaClass, callback) {
 
     override fun createParameters(): JsonElement =
         JsonArray().apply {
@@ -41,9 +44,12 @@ class GetAccountHistorySocketOperation(
             })
         }
 
+    override val apiId: Int
+        get() = api.getId()
 
     companion object {
         const val DEFAULT_HISTORY_ID = "1.11.0"
         const val DEFAULT_LIMIT = 100
     }
+
 }

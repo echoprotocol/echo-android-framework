@@ -1,5 +1,6 @@
 package com.pixelplex.echolib
 
+import com.pixelplex.echolib.core.internal.MapperCoreComponentImpl
 import com.pixelplex.echolib.core.socket.internal.SocketCoreComponentImpl
 import com.pixelplex.echolib.facade.*
 import com.pixelplex.echolib.facade.internal.*
@@ -23,6 +24,7 @@ import com.pixelplex.echolib.support.model.Settings
  */
 class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework {
 
+    private val initializerFacade: InitializerFacade
     private val authenticationFacade: AuthenticationFacade
     private val feeFacade: FeeFacade
     private val informationFacade: InformationFacade
@@ -33,7 +35,9 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
      * Initializes and setups all facades with required dependencies
      */
     init {
-        val socketCoreComponent = SocketCoreComponentImpl(settings.socketMessenger, settings.apis)
+        val mapperCoreComponent = MapperCoreComponentImpl()
+        val socketCoreComponent =
+            SocketCoreComponentImpl(settings.socketMessenger, mapperCoreComponent)
 
         val accountHistoryApiService =
             AccountHistoryApiServiceImpl(socketCoreComponent, settings.cryptoComponent)
@@ -41,6 +45,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         val networkBroadcastApiService = NetworkBroadcastApiServiceImpl(socketCoreComponent)
         val networkNodesApiService = NetworkNodesApiServiceImpl(socketCoreComponent)
 
+        initializerFacade = InitializerFacadeImpl(socketCoreComponent, settings.apis)
         authenticationFacade = AuthenticationFacadeImpl(accountHistoryApiService)
         feeFacade = FeeFacadeImpl(databaseApiService)
         informationFacade = InformationFacadeImpl(databaseApiService)

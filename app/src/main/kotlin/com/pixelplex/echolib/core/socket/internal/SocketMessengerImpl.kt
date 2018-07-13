@@ -64,6 +64,10 @@ class SocketMessengerImpl : SocketMessenger {
         listeners.remove(listener)
     }
 
+    override fun offAll() {
+        listeners.clear()
+    }
+
     private inner class SocketEventsCallback : WebSocketAdapter() {
 
         override fun onConnected(
