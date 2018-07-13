@@ -50,6 +50,8 @@ import java.util.*
  */
 object Base58 {
 
+    private const val EMPTY_STRING = ""
+
     private val alphabet =
         "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz".toCharArray()
     private val ENCODED_ZERO = alphabet[0]
@@ -57,10 +59,6 @@ object Base58 {
     private const val INDEXES_ARRAY_SIZE = 128
     private val indexes = IntArray(INDEXES_ARRAY_SIZE)
 
-    private const val DIVISION_BASE = 256
-    private const val DIVISOR = 58
-
-    private const val ELEMENT_MASK = 0xFF
 
     init {
         indexes.fill(-1)
@@ -78,7 +76,7 @@ object Base58 {
     fun encode(inputByte: ByteArray): String {
         var input = inputByte
         if (input.isEmpty()) {
-            return ""
+            return EMPTY_STRING
         }
         // Count leading zeros.
         var zeros = 0
@@ -90,19 +88,23 @@ object Base58 {
         val encoded = CharArray(input.size * 2) // upper bound
         var outputStart = encoded.size
         var inputStart = zeros
+
         while (inputStart < input.size) {
             encoded[--outputStart] = alphabet[divmod(input, inputStart, 256, 58).toInt()]
             if (input[inputStart].toInt() == 0) {
                 ++inputStart // optimization - skip leading zeros
             }
         }
+
         // Preserve exactly as many leading encoded zeros in output as there were leading zeros in input.
         while (outputStart < encoded.size && encoded[outputStart] == ENCODED_ZERO) {
             ++outputStart
         }
+
         while (--zeros >= 0) {
             encoded[--outputStart] = ENCODED_ZERO
         }
+
         // Return encoded string (including encoded leading zeros).
         return String(encoded, outputStart, encoded.size - outputStart)
     }
@@ -218,7 +220,7 @@ object Base58 {
         // this is just long division which accounts for the base of the input digits
         var remainder = 0
         for (i in firstDigit until number.size) {
-            val digit = number[i].toInt() and ELEMENT_MASK
+            val digit = number[i].toInt() and 0xFF
             val temp = remainder * base + digit
             number[i] = (temp / divisor).toByte()
             remainder = temp % divisor

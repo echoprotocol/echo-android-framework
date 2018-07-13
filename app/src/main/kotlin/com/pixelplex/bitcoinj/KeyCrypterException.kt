@@ -18,19 +18,21 @@
 package com.pixelplex.bitcoinj
 
 /**
- *
  * Exception to provide the following:
  *
  * Provision of encryption / decryption exception
  *
- *
  * This base exception acts as a general failure mode not attributable to a specific cause (other than
  * that reported in the exception message). Since this is in English, it may not be worth reporting directly
  * to the user other than as part of a "general failure to parse" response.
+ *
+ * @author Dasha Pechkovskaya
+ * @author Bushuev Dmitriy
  */
 class KeyCrypterException : RuntimeException {
 
-    constructor(s: String) : super(s)
-    constructor(s: String, throwable: Throwable) : super(s, throwable)
+    constructor() : super()
+    constructor(message: String?) : super(message)
+    constructor(message: String?, cause: Throwable?) : super(message, cause)
 
 }
