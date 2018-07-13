@@ -1,6 +1,6 @@
 package com.pixelplex.echolib
 
-import com.pixelplex.echolib.core.internal.MapperCoreComponentImpl
+import com.pixelplex.echolib.core.mapper.internal.MapperCoreComponentImpl
 import com.pixelplex.echolib.core.socket.internal.SocketCoreComponentImpl
 import com.pixelplex.echolib.facade.*
 import com.pixelplex.echolib.facade.internal.*
@@ -11,7 +11,7 @@ import com.pixelplex.echolib.service.internal.AccountHistoryApiServiceImpl
 import com.pixelplex.echolib.service.internal.DatabaseApiServiceImpl
 import com.pixelplex.echolib.service.internal.NetworkBroadcastApiServiceImpl
 import com.pixelplex.echolib.service.internal.NetworkNodesApiServiceImpl
-import com.pixelplex.echolib.support.model.Settings
+import com.pixelplex.echolib.support.Settings
 
 /**
  * Implementation of [EchoFramework] base library API
@@ -35,7 +35,8 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
      * Initializes and setups all facades with required dependencies
      */
     init {
-        val mapperCoreComponent = MapperCoreComponentImpl()
+        val mapperCoreComponent =
+            MapperCoreComponentImpl()
         val socketCoreComponent =
             SocketCoreComponentImpl(settings.socketMessenger, mapperCoreComponent)
 
@@ -45,7 +46,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         val networkBroadcastApiService = NetworkBroadcastApiServiceImpl(socketCoreComponent)
         val networkNodesApiService = NetworkNodesApiServiceImpl(socketCoreComponent)
 
-        initializerFacade = InitializerFacadeImpl(socketCoreComponent, settings.apis)
+        initializerFacade = InitializerFacadeImpl(socketCoreComponent, settings.url, settings.apis)
         authenticationFacade = AuthenticationFacadeImpl(accountHistoryApiService)
         feeFacade = FeeFacadeImpl(databaseApiService)
         informationFacade = InformationFacadeImpl(databaseApiService)
@@ -53,6 +54,14 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
                 SubscriptionFacadeImpl(networkBroadcastApiService, networkNodesApiService)
         transactionsFacade =
                 TransactionsFacadeImpl(networkBroadcastApiService, accountHistoryApiService)
+    }
+
+    override fun start(callback: Callback<Any>) {
+        initializerFacade.connect(callback)
+    }
+
+    override fun stop() {
+
     }
 
     override fun login(name: String, password: String, callback: Callback<Account>) =

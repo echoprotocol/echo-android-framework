@@ -30,9 +30,9 @@ import java.util.*
  * @author Daria Pechkovskaya
  */
 class LazyECPoint {
+
     // If curve is set, bits is also set. If curve is unset, point is set and bits is unset. Point can be set along
     // with curve and bits when the cached form has been accessed and thus must have been converted.
-
     private val curve: ECCurve?
     private val bits: ByteArray?
 
@@ -114,96 +114,71 @@ class LazyECPoint {
     /**
      * Doubles current point
      */
-    fun timesPow2(e: Int): ECPoint {
-        return get().timesPow2(e)
-    }
+    fun timesPow2(e: Int): ECPoint = get().timesPow2(e)
 
     /**
      * Multiplies current point by [k]
      */
-    fun multiply(k: BigInteger): ECPoint {
-        return get().multiply(k)
-    }
+    fun multiply(k: BigInteger): ECPoint = get().multiply(k)
 
     /**
      * Subtracts [b] from current point
      */
-    fun subtract(b: ECPoint): ECPoint {
-        return get().subtract(b)
-    }
+    fun subtract(b: ECPoint): ECPoint = get().subtract(b)
 
     /**
      * Scales y part of point with [scale]
      */
-    fun scaleY(scale: ECFieldElement): ECPoint {
-        return get().scaleY(scale)
-    }
+    fun scaleY(scale: ECFieldElement): ECPoint = get().scaleY(scale)
 
     /**
      * Scales x part of point with [scale]
      */
-    fun scaleX(scale: ECFieldElement): ECPoint {
-        return get().scaleX(scale)
-    }
+    fun scaleX(scale: ECFieldElement): ECPoint = get().scaleX(scale)
 
     /**
      * Check equality of two point
      */
-    fun equals(other: ECPoint): Boolean {
-        return get().equals(other)
-    }
+    fun equals(other: ECPoint) = get().equals(other)
 
     /**
      * Denies current EcPint
      */
-    fun negate(): ECPoint {
-        return get().negate()
-    }
+    fun negate(): ECPoint = get().negate()
 
     /**
      * Multiply current point by three
      */
-    fun threeTimes(): ECPoint {
-        return get().threeTimes()
-    }
+    fun threeTimes(): ECPoint = get().threeTimes()
 
     /**
      * Returns z coordinate of current point
      */
-    fun getZCoord(index: Int): ECFieldElement {
-        return get().getZCoord(index)
-    }
+    fun getZCoord(index: Int): ECFieldElement = get().getZCoord(index)
 
     /**
      * Returns the field element encoded with point compression
      */
-    fun getEncoded(compressed: Boolean): ByteArray {
-        return if (compressed == isCompressed && bits != null)
+    fun getEncoded(compressed: Boolean): ByteArray =
+        if (compressed == isCompressed && bits != null)
             Arrays.copyOf(bits, bits.size)
         else
             get().getEncoded(compressed)
-    }
 
     /**
      * Add [b] to current point
      */
-    fun add(b: ECPoint): ECPoint {
-        return get().add(b)
-    }
+    fun add(b: ECPoint): ECPoint = get().add(b)
 
     /**
      * Doubles current point and add [b]
      */
-    fun twicePlus(b: ECPoint): ECPoint {
-        return get().twicePlus(b)
-    }
+    fun twicePlus(b: ECPoint): ECPoint = get().twicePlus(b)
 
     /**
      * Returns curve associated with current point
      */
-    fun getCurve(): ECCurve {
-        return get().curve
-    }
+    fun getCurve(): ECCurve = get().curve
 
     /**
      * Normalization ensures that any projective coordinate is 1, and therefore that the x, y
@@ -211,27 +186,23 @@ class LazyECPoint {
      *
      * @return a new ECPoint instance representing the same point, but with normalized coordinates
      */
-    fun normalize(): ECPoint {
-        return get().normalize()
-    }
+    fun normalize(): ECPoint = get().normalize()
 
     /**
      * Doubles current point
      */
-    fun twice(): ECPoint {
-        return get().twice()
-    }
+    fun twice(): ECPoint = get().twice()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        return if (other == null || javaClass != other.javaClass) false else Arrays.equals(
+        return if (other == null || javaClass != other.javaClass)
+            false
+        else Arrays.equals(
             canonicalEncoding,
             (other as LazyECPoint).canonicalEncoding
         )
     }
 
-    override fun hashCode(): Int {
-        return Arrays.hashCode(canonicalEncoding)
-    }
+    override fun hashCode() = Arrays.hashCode(canonicalEncoding)
 
 }

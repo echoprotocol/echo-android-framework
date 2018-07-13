@@ -1,8 +1,14 @@
-package com.pixelplex.echolib.support.model
+package com.pixelplex.echolib.support
 
 import com.pixelplex.echolib.DEFAULT_URL
+
+<<<<<<< HEAD
 import com.pixelplex.echolib.core.CryptoCoreComponent
 import com.pixelplex.echolib.core.internal.CryptoCoreComponentImpl
+=======
+import com.pixelplex.echolib.core.crypto.CryptoCoreComponent
+import com.pixelplex.echolib.core.crypto.internal.CryptoCoreComponentImpl
+>>>>>>> bf599e22a2af7feceb117c100ef4e0ac08331044
 import com.pixelplex.echolib.core.socket.SocketMessenger
 import com.pixelplex.echolib.core.socket.internal.SocketMessengerImpl
 
@@ -74,12 +80,19 @@ class Settings private constructor(
          */
         fun configure(): Settings {
             val url = this.url ?: DEFAULT_URL
-            val socketMessenger = this.socketMessenger ?: SocketMessengerImpl()
-            socketMessenger.setUrl(url)
+            val socketMessenger = (this.socketMessenger ?: SocketMessengerImpl())
+                .apply {
+                    setUrl(url)
+                }
             val cryptoComponent = this.cryptoComponent ?: CryptoCoreComponentImpl()
             val apis = apis ?: Api.values().toSet()
 
-            return Settings(url, socketMessenger, cryptoComponent, apis)
+            return Settings(
+                url,
+                socketMessenger,
+                cryptoComponent,
+                apis
+            )
         }
     }
 

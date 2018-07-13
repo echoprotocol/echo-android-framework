@@ -1,4 +1,4 @@
-package com.pixelplex.echolib.core
+package com.pixelplex.echolib.core.mapper
 
 /**
  * Parsed objects from json

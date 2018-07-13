@@ -1,6 +1,6 @@
 package com.pixelplex.echolib.service.internal
 
-import com.pixelplex.echolib.core.CryptoCoreComponent
+import com.pixelplex.echolib.core.crypto.CryptoCoreComponent
 import com.pixelplex.echolib.core.socket.SocketCoreComponent
 import com.pixelplex.echolib.service.AccountHistoryApiService
 

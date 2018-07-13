@@ -3,7 +3,7 @@ package com.pixelplex.echolib.model
 /**
  * This class encapsulates all block-related information needed in order to build a valid transaction.
  *
- * Created by Daria Pechkovskaya
+ * @author Daria Pechkovskaya
  */
 class BlockData : ByteSerializable {
 

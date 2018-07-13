@@ -1,4 +1,4 @@
-package com.pixelplex.echolib.support.model
+package com.pixelplex.echolib.support
 
 import com.pixelplex.echolib.facade.InitializerFacade
 

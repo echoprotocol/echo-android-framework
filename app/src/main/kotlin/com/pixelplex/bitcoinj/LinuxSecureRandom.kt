@@ -27,6 +27,9 @@ import java.security.Security
  * serves random numbers by reading /dev/urandom. That is, it delegates to the kernel on UNIX systems and is unusable on
  * other platforms. Attempts to manually set the seed are ignored. There is no difference between seed bytes and
  * non-seed bytes, they are all from the same source.
+ *
+ * @author Bushuev Dmitriy
+ * @author Dasha Pechkovskaya
  */
 class LinuxSecureRandom : SecureRandomSpi() {
 
@@ -44,21 +47,19 @@ class LinuxSecureRandom : SecureRandomSpi() {
 
     init {
         // DataInputStream is not thread safe, so each random object has its own.
-        dis = DataInputStream(urandom)
+        dis = DataInputStream(uRandom)
     }
 
     override fun engineSetSeed(bytes: ByteArray) {
         // Ignore.
     }
 
-    override fun engineNextBytes(bytes: ByteArray) {
+    override fun engineNextBytes(bytes: ByteArray) =
         try {
             dis.readFully(bytes) // This will block until all the bytes can be read.
         } catch (e: IOException) {
             throw RuntimeException(e) // Fatal error. Do not attempt to recover from this.
         }
-
-    }
 
     override fun engineGenerateSeed(i: Int): ByteArray {
         val bits = ByteArray(i)
@@ -67,34 +68,32 @@ class LinuxSecureRandom : SecureRandomSpi() {
     }
 
     companion object {
-        private val urandom: FileInputStream
+        private const val U_RANDOM_FILE_NAME = "/dev/urandom"
+
+        private val uRandom: FileInputStream
 
         //    private static final Logger log = LoggerFactory.getLogger(LinuxSecureRandom.class);
 
         init {
             try {
-                val file = File("/dev/urandom")
+                val file = File(U_RANDOM_FILE_NAME)
                 // This stream is deliberately leaked.
-                urandom = FileInputStream(file)
-                if (urandom.read() == -1)
-                    throw RuntimeException("/dev/urandom not readable?")
+                uRandom = FileInputStream(file)
+
+                if (uRandom.read() == -1)
+                    throw RuntimeException("$U_RANDOM_FILE_NAME not readable?")
+
                 // Now override the default SecureRandom implementation with this one.
                 Security.insertProviderAt(LinuxSecureRandomProvider(), 1)
-
-                //            if (position != -1)
-                //                log.info("Secure randomness will be read from {} only.", file);
-                //            else
-                //                log.info("Randomness is already secure.");
             } catch (e: FileNotFoundException) {
                 // Should never happen.
-                //            log.error("/dev/urandom does not appear to exist or is not openable");
                 throw RuntimeException(e)
             } catch (e: IOException) {
-                //            log.error("/dev/urandom does not appear to be readable");
                 throw RuntimeException(e)
             }
 
         }
     }
+
 }
 

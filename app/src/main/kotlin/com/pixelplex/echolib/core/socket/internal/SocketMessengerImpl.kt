@@ -15,9 +15,9 @@ class SocketMessengerImpl : SocketMessenger {
     private var isOpen = false
     private var webSocket: WebSocket? = null
 
-    private var url: String? = null
+    private lateinit var url: String
 
-    private val listeners: MutableList<SocketMessengerListener> = mutableListOf()
+    private val listeners = mutableListOf<SocketMessengerListener>()
 
     override fun setUrl(url: String) {
         this.url = url

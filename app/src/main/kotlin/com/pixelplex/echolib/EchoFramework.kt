@@ -1,7 +1,7 @@
 package com.pixelplex.echolib
 
 import com.pixelplex.echolib.facade.*
-import com.pixelplex.echolib.support.model.Settings
+import com.pixelplex.echolib.support.Settings
 
 /**
  * Describes base library functionality
@@ -15,6 +15,16 @@ import com.pixelplex.echolib.support.model.Settings
  */
 interface EchoFramework : AuthenticationFacade, FeeFacade, InformationFacade, SubscriptionFacade,
     TransactionsFacade {
+
+    /**
+     * Starts socket connection, connects to blockchain apis
+     */
+    fun start(callback: Callback<Any>)
+
+    /**
+     * Stops socket connection, unsubscribe all listeners
+     */
+    fun stop()
 
     companion object {
 

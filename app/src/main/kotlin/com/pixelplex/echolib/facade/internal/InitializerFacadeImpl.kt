@@ -9,26 +9,27 @@ import com.pixelplex.echolib.facade.InitializerFacade
 import com.pixelplex.echolib.model.socketoperations.AccessSocketOperation
 import com.pixelplex.echolib.model.socketoperations.AccessSocketOperationType
 import com.pixelplex.echolib.model.socketoperations.SocketOperation
-import com.pixelplex.echolib.support.model.Api
+import com.pixelplex.echolib.support.Api
 
 /**
  * Implementation of [InitializerFacade]
  *
  * @author Daria Pechkovskaya
  */
-class InitializerFacadeImpl(private val socketCoreComponent: SocketCoreComponent) :
-    InitializerFacade {
+class InitializerFacadeImpl(
+    private val socketCoreComponent: SocketCoreComponent,
+    private val url: String,
+    private val apis: Set<Api>
+) : InitializerFacade {
 
     private val initializeSocketListener by lazy { InitializeSocketListener() }
 
     private var connectingCallback: Callback<Any>? = null
 
-    private var apis: Set<Api> = setOf()
     private var apisCount: Int = 0
         get() = apis.size
 
-    override fun connect(url: String, apis: Set<Api>, callback: Callback<Any>) {
-        this.apis = apis
+    override fun connect(callback: Callback<Any>) {
         this.connectingCallback = callback
 
         socketCoreComponent.on(initializeSocketListener)

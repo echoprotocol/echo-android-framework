@@ -1,7 +1,7 @@
 package com.pixelplex.echolib.facade
 
 import com.pixelplex.echolib.Callback
-import com.pixelplex.echolib.support.model.Api
+import com.pixelplex.echolib.support.Api
 
 /**
  * Encapsulates logic, associated with socket and blockchain apis connection
@@ -13,7 +13,7 @@ interface InitializerFacade {
     /**
      * Connects to socket and blockchain apis
      */
-    fun connect(url: String, apis: Set<Api>, callback: Callback<Any>)
+    fun connect(callback: Callback<Any>)
 
     companion object {
         const val INITIALIZER_API_ID = 1
