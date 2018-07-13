@@ -1,8 +1,8 @@
 package com.pixelplex.echolib.support.model
 
 import com.pixelplex.echolib.DEFAULT_URL
-import com.pixelplex.echolib.core.CryptoCoreComponent
-import com.pixelplex.echolib.core.CryptoCoreComponentImpl
+import com.pixelplex.echolib.core.crypto.CryptoCoreComponent
+import com.pixelplex.echolib.core.crypto.internal.CryptoCoreComponentImpl
 import com.pixelplex.echolib.core.socket.SocketMessenger
 import com.pixelplex.echolib.core.socket.internal.SocketMessengerImpl
 

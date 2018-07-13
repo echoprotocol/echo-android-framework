@@ -3,7 +3,8 @@ package com.pixelplex.echolib.model
 import com.pixelplex.bitcoinj.Base58
 import com.pixelplex.bitcoinj.ECKey
 import com.pixelplex.echolib.exception.MalformedAddressException
-import org.spongycastle.crypto.digests.RIPEMD160Digest
+import com.pixelplex.echolib.support.Checksum.CHECKSUM_SIZE
+import com.pixelplex.echolib.support.Checksum.calculateChecksum
 
 /**
  * Represents account model in Graphene blockchain
@@ -41,23 +42,9 @@ class Address {
         }
     }
 
-    private fun calculateChecksum(data: ByteArray): ByteArray {
-        val checksum = ByteArray(CHECKSUM_SIZE)
-        RIPEMD160Digest().apply {
-            update(data, 0, data.size)
-            doFinal(checksum, 0)
-        }
-
-        return checksum.copyOfRange(0, CHECKSUM_SIZE)
-    }
-
     companion object {
-        private const val HASH_LENGTH = 160
-        private const val BYTES = 8
-
         const val BITSHARES_PREFIX = "GPH"
         const val PREFIX_SIZE = 3
-        const val CHECKSUM_SIZE = HASH_LENGTH / BYTES
     }
 
 }
