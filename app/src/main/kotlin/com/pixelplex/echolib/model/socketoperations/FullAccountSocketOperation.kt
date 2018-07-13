@@ -2,7 +2,10 @@ package com.pixelplex.echolib.model.socketoperations
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
+import com.pixelplex.echolib.Callback
 import com.pixelplex.echolib.model.FullUserAccount
+import com.pixelplex.echolib.support.model.Api
+import com.pixelplex.echolib.support.model.getId
 
 /**
  * This function fetches all relevant [FullUserAccount] objects for the given accounts, and
@@ -16,13 +19,18 @@ import com.pixelplex.echolib.model.FullUserAccount
  * @author Daria Pechkovskaya
  */
 class FullAccountSocketOperation(
+    val api: Api,
+    val namesOrIds: Array<String>,
+    val shouldSubscribe: Boolean,
     method: SocketMethodType = SocketMethodType.CALL,
     callId: Int,
-    apiId: Int,
-    result: OperationResult<FullUserAccount>,
-    val namesOrIds: Array<String>,
-    val shouldSubscribe: Boolean
-) : SocketOperation(method, callId, apiId, result) {
+    callback: Callback<List<FullUserAccount>>
+) : SocketOperation<List<FullUserAccount>>(
+    method,
+    callId,
+    listOf<FullUserAccount>().javaClass,
+    callback
+) {
 
     @Suppress("UNUSED_EXPRESSION")
     override fun createParameters(): JsonElement =
@@ -40,4 +48,6 @@ class FullAccountSocketOperation(
             add(JsonArray().apply { dataJson })
         }
 
+    override val apiId: Int
+        get() = api.getId()
 }

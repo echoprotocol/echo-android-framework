@@ -6,7 +6,7 @@ package com.pixelplex.echolib.exception
  *
  * @author Daria Pechkovskaya
  */
-class MalformedTransactionException: RuntimeException {
+class MalformedTransactionException: LocalException {
 
     constructor() : super()
     constructor(message: String?) : super(message)

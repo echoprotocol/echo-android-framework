@@ -12,9 +12,29 @@ interface SocketCoreComponent {
     val socketState: SocketState
 
     /**
-     * Send operation to blockchain
-     * @param operation Operation to send to blockchain
+     * Connects to socket by url
+     * @param url Url for socket connection
      */
-    fun send(operation: SocketOperation)
+    fun connect(url: String)
 
+    /**
+     * Disconnects from socket, removes all listeners
+     */
+    fun disconnect()
+
+    /**
+     * Send operation to blockchain
+     * @param operation Operation to emit to blockchain
+     */
+    fun emit(operation: SocketOperation<*>)
+
+    /**
+     * Adds listener to socket messenger
+     */
+    fun on(listener: SocketMessengerListener)
+
+    /**
+     * Removes listener from socket messenger
+     */
+    fun off(listener: SocketMessengerListener)
 }

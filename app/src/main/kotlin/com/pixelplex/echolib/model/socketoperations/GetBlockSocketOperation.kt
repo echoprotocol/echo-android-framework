@@ -2,7 +2,10 @@ package com.pixelplex.echolib.model.socketoperations
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
+import com.pixelplex.echolib.Callback
 import com.pixelplex.echolib.model.Block
+import com.pixelplex.echolib.support.model.Api
+import com.pixelplex.echolib.support.model.getId
 
 /**
  * Retrieve a full, signed block.
@@ -13,12 +16,13 @@ import com.pixelplex.echolib.model.Block
  * @author Daria Pechkovskaya
  */
 class GetBlockSocketOperation(
+    val api: Api,
+    val blockNumber: String,
     method: SocketMethodType = SocketMethodType.CALL,
     callId: Int,
-    apiId: Int,
-    result: OperationResult<Block>,
-    val blockNumber: String
-) : SocketOperation(method, callId, apiId, result) {
+    callback: Callback<Block>
+
+) : SocketOperation<Block>(method, callId, Block::class.java, callback) {
 
     override fun createParameters(): JsonElement =
         JsonArray().apply {
@@ -27,4 +31,6 @@ class GetBlockSocketOperation(
             add(JsonArray().apply { blockNumber })
         }
 
+    override val apiId: Int
+        get() = api.getId()
 }

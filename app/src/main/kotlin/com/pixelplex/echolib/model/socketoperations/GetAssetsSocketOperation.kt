@@ -2,7 +2,10 @@ package com.pixelplex.echolib.model.socketoperations
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
+import com.pixelplex.echolib.Callback
 import com.pixelplex.echolib.model.Asset
+import com.pixelplex.echolib.support.model.Api
+import com.pixelplex.echolib.support.model.getId
 
 /**
  * Get a list of assets by id.
@@ -13,12 +16,13 @@ import com.pixelplex.echolib.model.Asset
  * @author Daria Pechkovskaya
  */
 class GetAssetsSocketOperation(
+    val api: Api,
+    val assetIds: Array<String>,
     method: SocketMethodType = SocketMethodType.CALL,
     callId: Int,
-    apiId: Int,
-    result: OperationResult<List<Asset>>,
-    val assetIds: Array<String>
-) : SocketOperation(method, callId, apiId, result) {
+    callback: Callback<List<Asset>>
+
+) : SocketOperation<List<Asset>>(method, callId, listOf<Asset>().javaClass, callback) {
 
     @Suppress("UNUSED_EXPRESSION")
     override fun createParameters(): JsonElement =
@@ -30,4 +34,7 @@ class GetAssetsSocketOperation(
             assetIds.forEach { item -> assetsJson.add(item) }
             add(JsonArray().apply { assetsJson })
         }
+
+    override val apiId: Int
+        get() = api.getId()
 }
