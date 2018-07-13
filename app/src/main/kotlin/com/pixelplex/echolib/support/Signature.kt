@@ -41,6 +41,7 @@ object Signature {
      *
      * @return: A valid signature of the transaction.
      */
+    @JvmStatic
     fun signTransaction(transaction: Transaction): ByteArray {
         checkPrivateKey(transaction)
 
