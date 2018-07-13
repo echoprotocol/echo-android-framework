@@ -74,8 +74,10 @@ class Settings private constructor(
          */
         fun configure(): Settings {
             val url = this.url ?: DEFAULT_URL
-            val socketMessenger = this.socketMessenger ?: SocketMessengerImpl()
-            socketMessenger.setUrl(url)
+            val socketMessenger = (this.socketMessenger ?: SocketMessengerImpl())
+                .apply {
+                    setUrl(url)
+                }
             val cryptoComponent = this.cryptoComponent ?: CryptoCoreComponentImpl()
             val apis = apis ?: Api.values().toSet()
 
