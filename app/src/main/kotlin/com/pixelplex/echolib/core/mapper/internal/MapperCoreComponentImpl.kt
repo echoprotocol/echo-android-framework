@@ -1,7 +1,7 @@
-package com.pixelplex.echolib.core.internal
+package com.pixelplex.echolib.core.mapper.internal
 
 import com.google.gson.Gson
-import com.pixelplex.echolib.core.MapperCoreComponent
+import com.pixelplex.echolib.core.mapper.MapperCoreComponent
 
 /**
  * Implementation of [MapperCoreComponent]

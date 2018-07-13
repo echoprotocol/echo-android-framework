@@ -4,8 +4,8 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.pixelplex.echolib.Callback
 import com.pixelplex.echolib.model.Account
-import com.pixelplex.echolib.support.model.Api
-import com.pixelplex.echolib.support.model.getId
+import com.pixelplex.echolib.support.Api
+import com.pixelplex.echolib.support.getId
 
 /**
  * Get all account references

@@ -21,6 +21,7 @@
 package com.pixelplex.bitcoinj
 
 import com.google.common.base.Preconditions
+import com.google.common.io.BaseEncoding
 import java.math.BigInteger
 
 /**
@@ -40,13 +41,11 @@ val isAndroidRuntime: Boolean
         return isAndroid == 1
     }
 
+val HEX: BaseEncoding = BaseEncoding.base16().lowerCase()
+
 /**
- *
- *
  * The regular [BigInteger.toByteArray] includes the sign bit of the number and
  * might result in an extra byte addition. This method removes this extra byte.
- *
- *
  *
  * Assuming only positive numbers, it's possible to discriminate if an extra byte
  * is added by checking if the first element of the array is 0 (0000_0000).
@@ -54,7 +53,6 @@ val isAndroidRuntime: Boolean
  * is the least significant bit 0000_000**0** .
  * Otherwise the representation is not minimal.
  * For example, if the sign bit is 0000_00**0**0, then the representation is not minimal due to the rightmost zero.
- *
  *
  * @param numBytes the desired size of the resulting byte array
  */
@@ -78,7 +76,7 @@ fun BigInteger.bigIntegerToBytes(numBytes: Int): ByteArray {
 /**
  * Returns a copy of the given byte array in reverse order.
  */
-fun ByteArray.reverse(): ByteArray {
+fun ByteArray.reverseBytes(): ByteArray {
     // We could use the XOR trick here but it's easier to understand if we don't. If we find this is really a
     // performance issue the matter can be revisited.
     val buf = ByteArray(this.size)

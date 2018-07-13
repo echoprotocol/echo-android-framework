@@ -1,6 +1,6 @@
 package com.pixelplex.echolib.core.socket.internal
 
-import com.pixelplex.echolib.core.MapperCoreComponent
+import com.pixelplex.echolib.core.mapper.MapperCoreComponent
 import com.pixelplex.echolib.core.socket.SocketCoreComponent
 import com.pixelplex.echolib.core.socket.SocketMessenger
 import com.pixelplex.echolib.core.socket.SocketMessengerListener

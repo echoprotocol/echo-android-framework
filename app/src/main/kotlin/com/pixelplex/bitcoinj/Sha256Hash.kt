@@ -46,21 +46,15 @@ class Sha256Hash : Serializable, Comparable<Sha256Hash> {
      * Returns a reversed copy of the internal byte array.
      */
     val reversedBytes: ByteArray
-        get() = bytes.reverse()
+        get() = bytes.reverseBytes()
 
-    /**
-     * Use [.wrap] instead.
-     */
-    @Deprecated("")
+    @Deprecated("Use [.wrap] instead")
     constructor(rawHashBytes: ByteArray) {
         checkArgument(rawHashBytes.size == LENGTH)
         this.bytes = rawHashBytes
     }
 
-    /**
-     * Use [.wrap] instead.
-     */
-    @Deprecated("")
+    @Deprecated("Use [.wrap] instead")
     constructor(hexString: String) {
         checkArgument(hexString.length == LENGTH * 2)
         this.bytes = Hex.decode(hexString)
@@ -79,26 +73,21 @@ class Sha256Hash : Serializable, Comparable<Sha256Hash> {
      * blocks, where the goal is to try and get the first bytes to be zeros (i.e. the value as a big integer lower
      * than the target value).
      */
-    override fun hashCode(): Int {
-        // Use the last 4 bytes, not the first 4 which are often zeros in Bitcoin.
-        return Ints.fromBytes(
+    override fun hashCode(): Int =
+    // Use the last 4 bytes, not the first 4 which are often zeros in Bitcoin.
+        Ints.fromBytes(
             bytes[LENGTH - 4],
             bytes[LENGTH - 3],
             bytes[LENGTH - 2],
             bytes[LENGTH - 1]
         )
-    }
 
-    override fun toString(): String {
-        return Hex.toHexString(bytes)
-    }
+    override fun toString(): String = Hex.toHexString(bytes)
 
     /**
      * Returns the bytes interpreted as a positive integer.
      */
-    fun toBigInteger(): BigInteger {
-        return BigInteger(1, bytes)
-    }
+    fun toBigInteger() = BigInteger(1, bytes)
 
     override fun compareTo(other: Sha256Hash): Int {
         for (i in LENGTH - 1 downTo 0) {
@@ -115,7 +104,7 @@ class Sha256Hash : Serializable, Comparable<Sha256Hash> {
 
     companion object {
         const val LENGTH = 32 // bytes
-        private val ZERO_HASH =
+        val ZERO_HASH =
             wrap(ByteArray(LENGTH))
 
         /**
@@ -126,9 +115,8 @@ class Sha256Hash : Serializable, Comparable<Sha256Hash> {
          * @throws IllegalArgumentException if the given array length is not exactly 32
          */
         // the constructor will be made private in the future
-        fun wrap(rawHashBytes: ByteArray): Sha256Hash {
-            return Sha256Hash(rawHashBytes)
-        }
+        @JvmStatic
+        fun wrap(rawHashBytes: ByteArray) = Sha256Hash(rawHashBytes)
 
         /**
          * Creates a new instance that wraps the given hash value (represented as a hex string).
@@ -138,17 +126,8 @@ class Sha256Hash : Serializable, Comparable<Sha256Hash> {
          * @throws IllegalArgumentException if the given string is not a valid
          * hex string, or if it does not represent exactly 32 bytes
          */
-        fun wrap(hexString: String): Sha256Hash {
-            return wrap(Hex.decode(hexString))
-        }
-
-        /**
-         * Use [.of] instead: this old name is ambiguous.
-         */
-        @Deprecated("", replaceWith = ReplaceWith("[of]"))
-        fun create(contents: ByteArray): Sha256Hash {
-            return of(contents)
-        }
+        @JvmStatic
+        fun wrap(hexString: String) = wrap(Hex.decode(hexString))
 
         /**
          * Creates a new instance containing the calculated (one-time) hash of the given bytes.
@@ -156,21 +135,12 @@ class Sha256Hash : Serializable, Comparable<Sha256Hash> {
          * @param contents the bytes on which the hash value is calculated
          * @return a new instance containing the calculated (one-time) hash
          */
-        fun of(contents: ByteArray): Sha256Hash {
-            return wrap(
-                hash(
-                    contents
-                )
+        @JvmStatic
+        fun of(contents: ByteArray): Sha256Hash = wrap(
+            hash(
+                contents
             )
-        }
-
-        /**
-         * Use [.twiceOf] instead: this old name is ambiguous.
-         */
-        @Deprecated("", replaceWith = ReplaceWith("[twiceOf]"))
-        fun createDouble(contents: ByteArray): Sha256Hash {
-            return twiceOf(contents)
-        }
+        )
 
         /**
          * Creates a new instance containing the hash of the calculated hash of the given bytes.
@@ -178,13 +148,12 @@ class Sha256Hash : Serializable, Comparable<Sha256Hash> {
          * @param contents the bytes on which the hash value is calculated
          * @return a new instance containing the calculated (two-time) hash
          */
-        fun twiceOf(contents: ByteArray): Sha256Hash {
-            return wrap(
-                hashTwice(
-                    contents
-                )
+        @JvmStatic
+        fun twiceOf(contents: ByteArray): Sha256Hash = wrap(
+            hashTwice(
+                contents
             )
-        }
+        )
 
         /**
          * Creates a new instance containing the calculated (one-time) hash of the given file's contents.
@@ -196,17 +165,16 @@ class Sha256Hash : Serializable, Comparable<Sha256Hash> {
          * @return a new instance containing the calculated (one-time) hash
          * @throws IOException if an error occurs while reading the file
          */
+        @JvmStatic
         @Throws(IOException::class)
-        fun of(file: File): Sha256Hash {
-            val input = FileInputStream(file)
-            input.use { inStream ->
+        fun of(file: File): Sha256Hash =
+            FileInputStream(file).use { inStream ->
                 return of(
                     ByteStreams.toByteArray(
                         inStream
                     )
                 )
             }
-        }
 
         /**
          * Returns a new SHA-256 MessageDigest instance.
@@ -217,14 +185,13 @@ class Sha256Hash : Serializable, Comparable<Sha256Hash> {
          *
          * @return a new SHA-256 MessageDigest instance
          */
-        fun newDigest(): MessageDigest {
+        @JvmStatic
+        fun newDigest(): MessageDigest =
             try {
-                return MessageDigest.getInstance("SHA-256")
+                MessageDigest.getInstance("SHA-256")
             } catch (e: NoSuchAlgorithmException) {
                 throw RuntimeException(e)  // Can't happen.
             }
-
-        }
 
         /**
          * Calculates the SHA-256 hash of the given byte range.
@@ -234,12 +201,13 @@ class Sha256Hash : Serializable, Comparable<Sha256Hash> {
          * @param length the number of bytes to hash
          * @return the hash (in big-endian order)
          */
+        @JvmStatic
         @JvmOverloads
-        fun hash(input: ByteArray, offset: Int = 0, length: Int = input.size): ByteArray {
-            val digest = newDigest()
-            digest.update(input, offset, length)
-            return digest.digest()
-        }
+        fun hash(input: ByteArray, offset: Int = 0, length: Int = input.size): ByteArray =
+            with(newDigest()) {
+                update(input, offset, length)
+                digest()
+            }
 
         /**
          * Calculates the SHA-256 hash of the given byte range,
@@ -250,26 +218,28 @@ class Sha256Hash : Serializable, Comparable<Sha256Hash> {
          * @param length the number of bytes to hash
          * @return the double-hash (in big-endian order)
          */
+        @JvmStatic
         @JvmOverloads
-        fun hashTwice(input: ByteArray, offset: Int = 0, length: Int = input.size): ByteArray {
-            val digest = newDigest()
-            digest.update(input, offset, length)
-            return digest.digest(digest.digest())
-        }
+        fun hashTwice(input: ByteArray, offset: Int = 0, length: Int = input.size): ByteArray =
+            with(newDigest()) {
+                update(input, offset, length)
+                digest(digest())
+            }
 
         /**
          * Calculates the hash of hash on the given byte ranges. This is equivalent to
          * concatenating the two ranges and then passing the result to [.hashTwice].
          */
+        @JvmStatic
         fun hashTwice(
             input1: ByteArray, offset1: Int, length1: Int,
             input2: ByteArray, offset2: Int, length2: Int
-        ): ByteArray {
-            val digest = newDigest()
-            digest.update(input1, offset1, length1)
-            digest.update(input2, offset2, length2)
-            return digest.digest(digest.digest())
-        }
+        ): ByteArray =
+            with(newDigest()) {
+                update(input1, offset1, length1)
+                update(input2, offset2, length2)
+                digest(digest())
+            }
     }
 
 }

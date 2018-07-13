@@ -3,11 +3,7 @@ package com.pixelplex.echolib.model.socketoperations
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.pixelplex.echolib.Callback
-import com.pixelplex.echolib.exception.LocalException
 import com.pixelplex.echolib.model.JsonSerializable
-import com.pixelplex.echolib.support.model.Api
-import java.io.Serializable
-import java.lang.reflect.Type
 
 /**
  * Includes classes for working with blockchain calls

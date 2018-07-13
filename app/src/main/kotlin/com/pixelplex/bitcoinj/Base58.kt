@@ -18,6 +18,7 @@
 
 package com.pixelplex.bitcoinj
 
+import java.math.BigInteger
 import java.util.*
 
 /**
@@ -49,6 +50,8 @@ import java.util.*
  */
 object Base58 {
 
+    private const val EMPTY_STRING = ""
+
     private val alphabet =
         "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz".toCharArray()
     private val ENCODED_ZERO = alphabet[0]
@@ -56,10 +59,6 @@ object Base58 {
     private const val INDEXES_ARRAY_SIZE = 128
     private val indexes = IntArray(INDEXES_ARRAY_SIZE)
 
-    private const val DIVISION_BASE = 256
-    private const val DIVISOR = 58
-
-    private const val ELEMENT_MASK = 0xFF
 
     init {
         indexes.fill(-1)
@@ -71,41 +70,64 @@ object Base58 {
     /**
      * Encodes the given bytes as a base58 string (no checksum is appended).
      *
-     * @param input the bytes to encode
+     * @param inputByte the bytes to encode
      * @return the base58-encoded string
      */
-    fun encode(input: ByteArray): String {
-        if (input.isEmpty()) return ""
-
+    fun encode(inputByte: ByteArray): String {
+        var input = inputByte
+        if (input.isEmpty()) {
+            return EMPTY_STRING
+        }
         // Count leading zeros.
-        val firstZero = input.indexOfFirst { item -> item.toInt() == 0 }
-        var zeros = if (firstZero == -1) 0 else firstZero
-
+        var zeros = 0
+        while (zeros < input.size && input[zeros].toInt() == 0) {
+            ++zeros
+        }
         // Convert base-256 digits to base-58 digits (plus conversion to ASCII characters)
-        val mutableInput = input.copyOf() // since we modify it in-place
-        val encoded = CharArray(mutableInput.size * 2) // upper bound
+        input = Arrays.copyOf(input, input.size) // since we modify it in-place
+        val encoded = CharArray(input.size * 2) // upper bound
         var outputStart = encoded.size
         var inputStart = zeros
-        while (inputStart < mutableInput.size) {
-            encoded[--outputStart] = alphabet[divmod(
-                mutableInput,
-                inputStart,
-                DIVISION_BASE,
-                DIVISOR
-            ).toInt()]
-            if (mutableInput[inputStart].toInt() == 0) {
+
+        while (inputStart < input.size) {
+            encoded[--outputStart] = alphabet[divmod(input, inputStart, 256, 58).toInt()]
+            if (input[inputStart].toInt() == 0) {
                 ++inputStart // optimization - skip leading zeros
             }
         }
+
         // Preserve exactly as many leading encoded zeros in output as there were leading zeros in input.
         while (outputStart < encoded.size && encoded[outputStart] == ENCODED_ZERO) {
             ++outputStart
         }
+
         while (--zeros >= 0) {
             encoded[--outputStart] = ENCODED_ZERO
         }
+
         // Return encoded string (including encoded leading zeros).
         return String(encoded, outputStart, encoded.size - outputStart)
+    }
+
+    /**
+     * Encodes the given version and bytes as a base58 string. A checksum is appended.
+     *
+     * @param version the version to encode
+     * @param payload the bytes to encode, e.g. pubkey hash
+     * @return the base58-encoded string
+     */
+    fun encodeChecked(version: Int, payload: ByteArray): String {
+        if (version < 0 || version > 255)
+            throw IllegalArgumentException("Version not in range.")
+
+        // A stringified buffer is:
+        // 1 byte version + data bytes + 4 bytes check code (a truncated hash)
+        val addressBytes = ByteArray(1 + payload.size + 4)
+        addressBytes[0] = version.toByte()
+        System.arraycopy(payload, 0, addressBytes, 1, payload.size)
+        val checksum = Sha256Hash.hashTwice(addressBytes, 0, payload.size + 1)
+        System.arraycopy(checksum, 0, addressBytes, payload.size + 1, 4)
+        return Base58.encode(addressBytes)
     }
 
     /**
@@ -154,6 +176,35 @@ object Base58 {
     }
 
     /**
+     * Decodes the given base58 string into the original data bytes, using the checksum in the
+     * last 4 bytes of the decoded data to verify that the rest are correct. The checksum is
+     * removed from the returned data.
+     *
+     * @param input the base58-encoded string to decode (which should include the checksum)
+     * @throws AddressFormatException if the input is not base 58 or the checksum does not validate.
+     */
+    @Throws(AddressFormatException::class)
+    fun decodeChecked(input: String): ByteArray {
+        val decoded = decode(input)
+        if (decoded.size < 4)
+            throw AddressFormatException("Input too short")
+        val data = Arrays.copyOfRange(decoded, 0, decoded.size - 4)
+        val checksum = Arrays.copyOfRange(decoded, decoded.size - 4, decoded.size)
+        val actualChecksum = Arrays.copyOfRange(Sha256Hash.hashTwice(data), 0, 4)
+        if (!Arrays.equals(checksum, actualChecksum))
+            throw AddressFormatException("Checksum does not validate")
+        return data
+    }
+
+    /**
+     * Decodes the given base58 string into BigInteger representation
+     */
+    @Throws(AddressFormatException::class)
+    fun decodeToBigInteger(input: String): BigInteger {
+        return BigInteger(1, decode(input))
+    }
+
+    /**
      * Divides a number, represented as an array of bytes each containing a single digit
      * in the specified base, by the given divisor. The given number is modified in-place
      * to contain the quotient, and the return value is the remainder.
@@ -169,7 +220,7 @@ object Base58 {
         // this is just long division which accounts for the base of the input digits
         var remainder = 0
         for (i in firstDigit until number.size) {
-            val digit = number[i].toInt() and ELEMENT_MASK
+            val digit = number[i].toInt() and 0xFF
             val temp = remainder * base + digit
             number[i] = (temp / divisor).toByte()
             remainder = temp % divisor

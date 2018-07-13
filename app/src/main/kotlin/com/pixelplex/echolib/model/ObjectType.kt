@@ -51,14 +51,12 @@ enum class ObjectType(private val space: Int, private val type: Int) {
      * @return: The generic object type
      */
     val genericObjectId: String
-        get() = String.format(OBJECT_TYPE_ID_FORMAT, space, type)
+        get() = "$space.$type.0"
 
     companion object {
 
         const val PROTOCOL_SPACE = 1
         const val IMPLEMENTATION_SPACE = 2
-
-        private const val OBJECT_TYPE_ID_FORMAT = "%d.%d.0"
 
         /**
          * Finds specific object type by [space] and [type]
@@ -68,7 +66,7 @@ enum class ObjectType(private val space: Int, private val type: Int) {
         @JvmStatic
         fun get(space: Int, type: Int) =
             ObjectType.values().firstOrNull { objectType ->
-                objectType.type == type && objectType.space == space
+                objectType.space == space && objectType.type == type
             }
 
     }

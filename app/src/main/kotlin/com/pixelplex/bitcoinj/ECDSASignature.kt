@@ -50,21 +50,17 @@ constructor(val r: BigInteger, val s: BigInteger) {
      * been signed, as that violates various assumed invariants. Thus in future only one of those forms will be
      * considered legal and the other will be banned.
      */
-    fun toCanonicalised(): ECDSASignature {
-        return if (!isCanonical) {
+    fun toCanonicalised(): ECDSASignature =
+        if (!isCanonical) {
             // The order of the curve is the number of valid points that exist on that curve. If S is in the upper
             // half of the number of valid points, then bring it back to the lower half. Otherwise, imagine that
             //    N = 10
             //    s = 8, so (-8 % 10 == 2) thus both (r, 8) and (r, 2) are valid solutions.
             //    10 - 8 == 2, giving us always the latter solution, which is canonical.
-            ECDSASignature(
-                r,
-                ECKey.curve.n.subtract(s)
-            )
+            ECDSASignature(r, ECKey.curve.n.subtract(s))
         } else {
             this
         }
-    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -74,8 +70,7 @@ constructor(val r: BigInteger, val s: BigInteger) {
         return false
     }
 
-    override fun hashCode(): Int {
-        return Objects.hashCode(r, s)
-    }
+    override fun hashCode(): Int =
+        Objects.hashCode(r, s)
 
 }
