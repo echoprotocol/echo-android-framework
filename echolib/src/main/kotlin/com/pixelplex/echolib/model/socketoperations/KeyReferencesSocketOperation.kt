@@ -3,6 +3,7 @@ package com.pixelplex.echolib.model.socketoperations
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.pixelplex.echolib.Callback
+import com.pixelplex.echolib.ILLEGAL_ID
 import com.pixelplex.echolib.model.Account
 import com.pixelplex.echolib.support.Api
 import com.pixelplex.echolib.support.getId
@@ -18,12 +19,11 @@ class KeyReferencesSocketOperation(
     val api: Api,
     val publicKey: String,
     method: SocketMethodType = SocketMethodType.CALL,
-    callId: Int,
     callback: Callback<List<Account>>
 
 ) : SocketOperation<List<Account>>(
     method,
-    callId,
+    ILLEGAL_ID,
     listOf<Account>().javaClass,
     callback
 ) {

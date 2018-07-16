@@ -12,6 +12,7 @@ import com.pixelplex.echolib.model.socketoperations.LoginSocketOperation
 import com.pixelplex.echolib.model.socketoperations.SocketOperation
 import com.pixelplex.echolib.support.Api
 import com.pixelplex.echolib.support.Converter
+import com.pixelplex.echolib.support.updateId
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -30,7 +31,6 @@ class InitializerFacadeImpl(
 
     private var connectingCallback: Callback<Any>? = null
 
-    private var apisResult = ConcurrentHashMap<Api, Int>()
     private var apisCount = AtomicInteger(apis.size)
 
     override fun connect(callback: Callback<Any>) {
@@ -83,7 +83,8 @@ class InitializerFacadeImpl(
     }
 
     private fun updateCallback(api: Api, result: Int) {
-        apisResult[api] = result
+        api.updateId(result)
+
         val apisLeft = apisCount.decrementAndGet()
         if (apisLeft == 0) {
             synchronized(this) {

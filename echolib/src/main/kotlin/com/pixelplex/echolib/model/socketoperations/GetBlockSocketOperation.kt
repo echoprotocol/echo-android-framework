@@ -3,6 +3,7 @@ package com.pixelplex.echolib.model.socketoperations
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.pixelplex.echolib.Callback
+import com.pixelplex.echolib.ILLEGAL_ID
 import com.pixelplex.echolib.model.Block
 import com.pixelplex.echolib.support.Api
 import com.pixelplex.echolib.support.getId
@@ -19,10 +20,9 @@ class GetBlockSocketOperation(
     val api: Api,
     val blockNumber: String,
     method: SocketMethodType = SocketMethodType.CALL,
-    callId: Int,
     callback: Callback<Block>
 
-) : SocketOperation<Block>(method, callId, Block::class.java, callback) {
+) : SocketOperation<Block>(method, ILLEGAL_ID, Block::class.java, callback) {
 
     override fun createParameters(): JsonElement =
         JsonArray().apply {
