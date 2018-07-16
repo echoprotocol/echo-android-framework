@@ -15,4 +15,6 @@ interface MapperCoreComponent {
      */
     fun <T> map(json: String, type: Class<T>): T
 
+    fun <T> mapSocketResponseResult(json: String, type: Class<T>): T
+
 }

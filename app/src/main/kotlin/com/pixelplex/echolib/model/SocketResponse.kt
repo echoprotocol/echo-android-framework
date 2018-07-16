@@ -13,10 +13,19 @@ import java.io.Serializable
 /**
  * Represents response from blockchain
  */
-data class SocketResponse(
+open class SocketResponse(
     @Expose val id: Int,
     @Expose val error: Error?
 )
+
+/**
+ * Represents typed response with result from blockchain
+ */
+class SocketResponseResult<T>(
+    id: Int,
+    error: Error?,
+    @Expose val result: T
+) : SocketResponse(id, error)
 
 /**
  * Represents error from blockchain response

@@ -1,6 +1,7 @@
 package com.pixelplex.echolib.support.concurrent
 
 import android.os.Handler
+import android.os.Looper
 import java.util.concurrent.Executor
 
 /**
@@ -8,12 +9,12 @@ import java.util.concurrent.Executor
  *
  * @author Dmitriy Bushuev
  */
-class OriginalThreadExecutor : Executor {
+class MainThreadExecutor : Executor {
 
-    private val originalThreadHandler = Handler()
+    private val mainThreadHandler = Handler(Looper.getMainLooper())
 
     override fun execute(job: Runnable) {
-        originalThreadHandler.post(job)
+        mainThreadHandler.post(job)
     }
 
 }

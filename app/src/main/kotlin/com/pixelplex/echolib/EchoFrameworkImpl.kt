@@ -14,7 +14,7 @@ import com.pixelplex.echolib.service.internal.NetworkNodesApiServiceImpl
 import com.pixelplex.echolib.support.Settings
 import com.pixelplex.echolib.support.concurrent.Dispatcher
 import com.pixelplex.echolib.support.concurrent.ExecutorServiceDispatcher
-import com.pixelplex.echolib.support.concurrent.OriginalThreadCallback
+import com.pixelplex.echolib.support.concurrent.MainThreadCallback
 
 /**
  * Implementation of [EchoFramework] base library API
@@ -36,11 +36,14 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
 
     // move calls dispatching logic on another layer?
     private val dispatcher: Dispatcher by lazy { ExecutorServiceDispatcher() }
+    private var returnOnMainThread = false
 
     /**
      * Initializes and setups all facades with required dependencies
      */
     init {
+        returnOnMainThread = settings.returnOnMainThread
+
         val mapperCoreComponent =
             MapperCoreComponentImpl()
         val socketCoreComponent =
@@ -189,8 +192,12 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         })
     }
 
-    private fun <T> Callback<T>.wrapOriginal() =
-        OriginalThreadCallback(this)
+    private fun <T> Callback<T>.wrapOriginal(): Callback<T> {
+        if (!returnOnMainThread) {
+            returnOnMainThread
+        }
+        return MainThreadCallback(this)
+    }
 
     private fun dispatch(job: Runnable) = dispatcher.dispatch(job)
 

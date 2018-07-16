@@ -5,6 +5,7 @@ import com.pixelplex.echolib.core.socket.SocketCoreComponent
 import com.pixelplex.echolib.core.socket.SocketMessenger
 import com.pixelplex.echolib.core.socket.SocketMessengerListener
 import com.pixelplex.echolib.core.socket.SocketState
+import com.pixelplex.echolib.exception.LocalException
 import com.pixelplex.echolib.exception.ResponseSocketException
 import com.pixelplex.echolib.model.SocketResponse
 import com.pixelplex.echolib.model.socketoperations.SocketOperation
@@ -59,6 +60,8 @@ class SocketCoreComponentImpl(
 
     private inner class SocketCoreMessengerListener : SocketMessengerListener {
 
+        private var wasReconnect = false
+
         override fun onEvent(event: String) {
             val response = mapper.map(event, SocketResponse::class.java)
             val operation = operationsMap.remove(response.id)
@@ -69,9 +72,17 @@ class SocketCoreComponentImpl(
                     val localError = ResponseSocketException(error.data.message)
                     op.callback.onError(localError)
                 } else {
-                    val mapObj = mapper.map(event, op.type)
-                    op.callback.onSuccess(mapObj)
+                    mapData(event, operation)
                 }
+            }
+        }
+
+        private fun mapData(event: String, operation: SocketOperation<Any>) {
+            try {
+                val mapObj = mapper.mapSocketResponseResult(event, operation.type)
+                operation.callback.onSuccess(mapObj)
+            } catch (ex: Exception) {
+                operation.callback.onError(LocalException(ex.message))
             }
         }
 
@@ -83,7 +94,13 @@ class SocketCoreComponentImpl(
         override fun onConnected() {
             socketState = SocketState.CONNECTED
 
-            operationsMap.forEach { _, operation -> emit(operation) }
+            if (wasReconnect) {
+                operationsMap.forEach { _, operation ->
+                    socketMessenger.emit(
+                        operation.toJsonString() ?: ""
+                    )
+                }
+            }
         }
 
         override fun onDisconnected() {
