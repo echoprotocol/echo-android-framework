@@ -194,7 +194,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
 
     private fun <T> Callback<T>.wrapOriginal(): Callback<T> {
         if (!returnOnMainThread) {
-            returnOnMainThread
+            return this
         }
         return MainThreadCallback(this)
     }
