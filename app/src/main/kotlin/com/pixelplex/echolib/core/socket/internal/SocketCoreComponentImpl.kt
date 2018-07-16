@@ -8,7 +8,8 @@ import com.pixelplex.echolib.core.socket.SocketState
 import com.pixelplex.echolib.exception.ResponseSocketException
 import com.pixelplex.echolib.model.SocketResponse
 import com.pixelplex.echolib.model.socketoperations.SocketOperation
-import kotlin.properties.Delegates
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * Implementation of [SocketCoreComponent]
@@ -20,16 +21,10 @@ class SocketCoreComponentImpl(
     private val mapper: MapperCoreComponent
 ) : SocketCoreComponent {
 
-    @Volatile
-    private var callIndex = 1
+    private var callIdx = AtomicInteger(1)
 
     //add map locking
-    private val operationsMap: HashMap<Int, SocketOperation<Any>>
-            by Delegates.observable(hashMapOf()) { _, oldValue, newValue ->
-                if (oldValue.size < newValue.size) {
-                    ++callIndex
-                }
-            }
+    private val operationsMap: ConcurrentHashMap<Int, SocketOperation<Any>> = ConcurrentHashMap()
 
     private val globalSocketListener = SocketCoreMessengerListener()
 
@@ -47,9 +42,9 @@ class SocketCoreComponentImpl(
 
     @Suppress("unchecked_cast")
     override fun emit(operation: SocketOperation<*>) {
-        operation.callId = callIndex
+        operation.callId = callIdx.getAndIncrement()
 
-        operationsMap[callIndex] = operation as SocketOperation<Any>
+        operationsMap.putIfAbsent(operation.callId, operation as SocketOperation<Any>)
 
         socketMessenger.emit(operation.toJsonString() ?: "")
     }
