@@ -8,6 +8,7 @@ import com.pixelplex.echolib.exception.SocketException
 import com.pixelplex.echolib.facade.InitializerFacade
 import com.pixelplex.echolib.model.socketoperations.AccessSocketOperation
 import com.pixelplex.echolib.model.socketoperations.AccessSocketOperationType
+import com.pixelplex.echolib.model.socketoperations.LoginSocketOperation
 import com.pixelplex.echolib.model.socketoperations.SocketOperation
 import com.pixelplex.echolib.support.Api
 import com.pixelplex.echolib.support.Converter
@@ -43,8 +44,8 @@ class InitializerFacadeImpl(
             return
         }
 
-        login(object : Callback<Int> {
-            override fun onSuccess(result: Int) {
+        login(object : Callback<Boolean> {
+            override fun onSuccess(result: Boolean) {
                 val apisOperations = createApiOperations(apis)
                 apisOperations.forEach { operation -> socketCoreComponent.emit(operation) }
             }
@@ -55,9 +56,8 @@ class InitializerFacadeImpl(
         })
     }
 
-    private fun login(callback: Callback<Int>) {
-        val loginOperation = AccessSocketOperation(
-            accessSocketType = AccessSocketOperationType.LOGIN,
+    private fun login(callback: Callback<Boolean>) {
+        val loginOperation = LoginSocketOperation(
             api = InitializerFacade.INITIALIZER_API_ID,
             callback = callback
         )
