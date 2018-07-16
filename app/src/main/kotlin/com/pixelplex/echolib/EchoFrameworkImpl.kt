@@ -12,6 +12,9 @@ import com.pixelplex.echolib.service.internal.DatabaseApiServiceImpl
 import com.pixelplex.echolib.service.internal.NetworkBroadcastApiServiceImpl
 import com.pixelplex.echolib.service.internal.NetworkNodesApiServiceImpl
 import com.pixelplex.echolib.support.Settings
+import com.pixelplex.echolib.support.concurrent.Dispatcher
+import com.pixelplex.echolib.support.concurrent.ExecutorServiceDispatcher
+import com.pixelplex.echolib.support.concurrent.OriginalThreadCallback
 
 /**
  * Implementation of [EchoFramework] base library API
@@ -30,6 +33,9 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
     private val informationFacade: InformationFacade
     private val subscriptionFacade: SubscriptionFacade
     private val transactionsFacade: TransactionsFacade
+
+    // move calls dispatching logic on another layer?
+    private val dispatcher: Dispatcher by lazy { ExecutorServiceDispatcher() }
 
     /**
      * Initializes and setups all facades with required dependencies
@@ -57,41 +63,83 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
     }
 
     override fun start(callback: Callback<Any>) {
-        initializerFacade.connect(callback)
+        val threadKeepCallback = callback.wrapOriginal()
+        dispatch(Runnable { initializerFacade.connect(threadKeepCallback) })
     }
 
     override fun stop() {
 
     }
 
-    override fun login(name: String, password: String, callback: Callback<Account>) =
-        authenticationFacade.login(name, password, callback)
+    override fun login(name: String, password: String, callback: Callback<Account>) {
+        val threadKeepCallback = callback.wrapOriginal()
+        dispatch(Runnable {
+            authenticationFacade.login(
+                name,
+                password,
+                threadKeepCallback
+            )
+        })
+    }
 
     override fun changePassword(
         nameOrId: String,
         oldPassword: String,
         newPassword: String,
         callback: Callback<Account>
-    ) = authenticationFacade.changePassword(nameOrId, oldPassword, newPassword, callback)
+    ) {
+        val threadKeepCallback = callback.wrapOriginal()
+        dispatch(Runnable {
+            authenticationFacade.changePassword(
+                nameOrId,
+                oldPassword,
+                newPassword,
+                threadKeepCallback
+            )
+        })
+    }
 
     override fun getFeeForTransferOperation(
         fromNameOrId: String,
         toNameOrId: String,
         asset: String,
         callback: Callback<String>
-    ) = feeFacade.getFeeForTransferOperation(fromNameOrId, toNameOrId, asset, callback)
+    ) {
+        val threadKeepCallback = callback.wrapOriginal()
+        dispatch(Runnable {
+            feeFacade.getFeeForTransferOperation(
+                fromNameOrId,
+                toNameOrId,
+                asset,
+                threadKeepCallback
+            )
+        })
+    }
 
-    override fun getAccount(nameOrId: String, callback: Callback<Account>) =
-        informationFacade.getAccount(nameOrId, callback)
+    override fun getAccount(nameOrId: String, callback: Callback<Account>) {
+        val threadKeepCallback = callback.wrapOriginal()
+        dispatch(Runnable {
+            informationFacade.getAccount(nameOrId, threadKeepCallback)
+        })
+    }
 
-    override fun checkAccountIsUnavailable(nameOrId: String, callback: Callback<Boolean>) =
-        informationFacade.checkAccountIsUnavailable(nameOrId, callback)
+    override fun checkAccountIsUnavailable(nameOrId: String, callback: Callback<Boolean>) {
+        val threadKeepCallback = callback.wrapOriginal()
+        dispatch(Runnable {
+            informationFacade.checkAccountIsUnavailable(nameOrId, threadKeepCallback)
+        })
+    }
 
-    override fun getBalance(nameOrId: String, asset: String, callback: Callback<Balance>) =
-        informationFacade.getBalance(nameOrId, asset, callback)
+    override fun getBalance(nameOrId: String, asset: String, callback: Callback<Balance>) {
+        val threadKeepCallback = callback.wrapOriginal()
+        dispatch(Runnable {
+            informationFacade.getBalance(nameOrId, asset, threadKeepCallback)
+        })
+    }
 
-    override fun subscribeOnAccount(nameOrId: String, listener: AccountListener) =
+    override fun subscribeOnAccount(nameOrId: String, listener: AccountListener) {
         subscriptionFacade.subscribeOnAccount(nameOrId, listener)
+    }
 
     override fun unsubscribeFromAccount(nameOrId: String, callback: Callback<Boolean>) =
         subscriptionFacade.unsubscribeFromAccount(nameOrId, callback)
@@ -106,14 +154,19 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         amount: String,
         asset: String,
         callback: Callback<String>
-    ) = transactionsFacade.sendTransferOperation(
-        nameOrId,
-        password,
-        toNameOrId,
-        amount,
-        asset,
-        callback
-    )
+    ) {
+        val threadKeepCallback = callback.wrapOriginal()
+        dispatch(Runnable {
+            transactionsFacade.sendTransferOperation(
+                nameOrId,
+                password,
+                toNameOrId,
+                amount,
+                asset,
+                threadKeepCallback
+            )
+        })
+    }
 
     override fun getAccountHistory(
         nameOrId: String,
@@ -122,13 +175,23 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         limit: Int,
         asset: String,
         callback: Callback<HistoryResponse>
-    ) = transactionsFacade.getAccountHistory(
-        nameOrId,
-        transactionStartId,
-        transactionStopId,
-        limit,
-        asset,
-        callback
-    )
+    ) {
+        val threadKeepCallback = callback.wrapOriginal()
+        dispatch(Runnable {
+            transactionsFacade.getAccountHistory(
+                nameOrId,
+                transactionStartId,
+                transactionStopId,
+                limit,
+                asset,
+                threadKeepCallback
+            )
+        })
+    }
+
+    private fun <T> Callback<T>.wrapOriginal() =
+        OriginalThreadCallback(this)
+
+    private fun dispatch(job: Runnable) = dispatcher.dispatch(job)
 
 }
