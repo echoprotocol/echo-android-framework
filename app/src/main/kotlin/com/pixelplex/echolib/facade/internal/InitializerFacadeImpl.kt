@@ -10,6 +10,7 @@ import com.pixelplex.echolib.model.socketoperations.AccessSocketOperation
 import com.pixelplex.echolib.model.socketoperations.AccessSocketOperationType
 import com.pixelplex.echolib.model.socketoperations.SocketOperation
 import com.pixelplex.echolib.support.Api
+import com.pixelplex.echolib.support.Converter
 
 /**
  * Implementation of [InitializerFacade]
@@ -66,36 +67,15 @@ class InitializerFacadeImpl(
 
     private fun createApiOperations(apis: Set<Api>): List<SocketOperation<*>> {
         val operations = arrayListOf<SocketOperation<*>>()
+        val apiTypeConverter = ApiToOperationTypeConverter()
 
-        apis.forEach { api ->
-            when (api) {
-                Api.DATABASE -> AccessSocketOperation(
-                    accessSocketType = AccessSocketOperationType.DATABASE,
-                    api = InitializerFacade.INITIALIZER_API_ID,
-                    callback = apisCallback
-                )
-                Api.NETWORK_BROADCAST -> AccessSocketOperation(
-                    accessSocketType = AccessSocketOperationType.NETWORK_BROADCAST,
-                    api = InitializerFacade.INITIALIZER_API_ID,
-                    callback = apisCallback
-                )
-                Api.ACCOUNT_HISTORY -> AccessSocketOperation(
-                    accessSocketType = AccessSocketOperationType.HISTORY,
-                    api = InitializerFacade.INITIALIZER_API_ID,
-                    callback = apisCallback
-                )
-                Api.CRYPTO -> AccessSocketOperation(
-                    accessSocketType = AccessSocketOperationType.CRYPTO,
-                    api = InitializerFacade.INITIALIZER_API_ID,
-                    callback = apisCallback
-                )
-                Api.NETWORK_NODES -> AccessSocketOperation(
-                    accessSocketType = AccessSocketOperationType.NETWORK_NODES,
-                    api = InitializerFacade.INITIALIZER_API_ID,
-                    callback = apisCallback
-                )
-            }
-        }
+        operations.addAll(apis.map { api ->
+            AccessSocketOperation(
+                accessSocketType = apiTypeConverter.convert(api),
+                api = InitializerFacade.INITIALIZER_API_ID,
+                callback = apisCallback
+            )
+        })
 
         return operations
     }
@@ -144,6 +124,20 @@ class InitializerFacadeImpl(
         override fun onDisconnected() {
             handleCallbackError(SocketException("Socket is disconnected"))
         }
+    }
+
+    private class ApiToOperationTypeConverter : Converter<Api, AccessSocketOperationType> {
+
+        private val apiToType = hashMapOf(
+            Api.DATABASE to AccessSocketOperationType.DATABASE,
+            Api.NETWORK_BROADCAST to AccessSocketOperationType.NETWORK_BROADCAST,
+            Api.ACCOUNT_HISTORY to AccessSocketOperationType.HISTORY,
+            Api.CRYPTO to AccessSocketOperationType.CRYPTO,
+            Api.NETWORK_NODES to AccessSocketOperationType.NETWORK_NODES
+        )
+
+        override fun convert(source: Api): AccessSocketOperationType =
+            apiToType[source] ?: throw IllegalArgumentException("Unrecognized api type: $source")
     }
 
 }
