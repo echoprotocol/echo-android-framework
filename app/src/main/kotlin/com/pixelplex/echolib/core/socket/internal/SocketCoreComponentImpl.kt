@@ -66,16 +66,13 @@ class SocketCoreComponentImpl(
 
         override fun onEvent(event: String) {
             val response = mapper.map(event, SocketResponse::class.java)
-            val operation = operationsMap[response.id]
+            val operation = operationsMap.remove(response.id)
             val error = response.error
 
             operation?.let { op ->
-                operationsMap.remove(response.id)
-
                 if (error != null) {
                     val localError = ResponseSocketException(error.data.message)
                     op.callback.onError(localError)
-
                 } else {
                     val mapObj = mapper.map(event, op.type)
                     op.callback.onSuccess(mapObj)
