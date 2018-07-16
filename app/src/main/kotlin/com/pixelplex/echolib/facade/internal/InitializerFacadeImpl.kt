@@ -12,6 +12,8 @@ import com.pixelplex.echolib.model.socketoperations.LoginSocketOperation
 import com.pixelplex.echolib.model.socketoperations.SocketOperation
 import com.pixelplex.echolib.support.Api
 import com.pixelplex.echolib.support.Converter
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * Implementation of [InitializerFacade]
@@ -28,8 +30,8 @@ class InitializerFacadeImpl(
 
     private var connectingCallback: Callback<Any>? = null
 
-    private var apisCount: Int = 0
-        get() = apis.size
+    private var apisResult = ConcurrentHashMap<Api, Int>()
+    private var apisCount = AtomicInteger(apis.size)
 
     override fun connect(callback: Callback<Any>) {
         this.connectingCallback = callback
@@ -73,32 +75,24 @@ class InitializerFacadeImpl(
             AccessSocketOperation(
                 accessSocketType = apiTypeConverter.convert(api),
                 api = InitializerFacade.INITIALIZER_API_ID,
-                callback = apisCallback
+                callback = ApiCallback(api)
             )
         })
 
         return operations
     }
 
-    private val apisCallback: Callback<Int> by lazy {
-        object : Callback<Int> {
-
-            override fun onSuccess(result: Int) {
-                updateCallback()
+    private fun updateCallback(api: Api, result: Int) {
+        apisResult[api] = result
+        val apisLeft = apisCount.decrementAndGet()
+        if (apisLeft == 0) {
+            synchronized(this) {
+                if (apisLeft == 0) {
+                    connectingCallback?.onSuccess(Any())
+                    connectingCallback = null
+                    socketCoreComponent.off(initializeSocketListener)
+                }
             }
-
-            override fun onError(error: LocalException) {
-                handleCallbackError(error)
-            }
-        }
-    }
-
-    private fun updateCallback() {
-        --apisCount
-        if (apisCount == 0) {
-            connectingCallback?.onSuccess(Any())
-            connectingCallback = null
-            socketCoreComponent.off(initializeSocketListener)
         }
     }
 
@@ -124,6 +118,18 @@ class InitializerFacadeImpl(
         override fun onDisconnected() {
             handleCallbackError(SocketException("Socket is disconnected"))
         }
+    }
+
+    private inner class ApiCallback(private val api: Api) : Callback<Int> {
+
+        override fun onSuccess(result: Int) {
+            updateCallback(api, result)
+        }
+
+        override fun onError(error: LocalException) {
+            handleCallbackError(error)
+        }
+
     }
 
     private class ApiToOperationTypeConverter : Converter<Api, AccessSocketOperationType> {
