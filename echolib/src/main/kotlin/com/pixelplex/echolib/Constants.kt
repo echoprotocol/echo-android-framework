@@ -17,3 +17,8 @@ const val TIME_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss"
  * Default url for socket connection
  */
 const val DEFAULT_URL = "wss://node.testnet.bitshares.eu/"
+
+/**
+ * Illegal id for all blockchain apis, call id
+ */
+const val ILLEGAL_ID = -1

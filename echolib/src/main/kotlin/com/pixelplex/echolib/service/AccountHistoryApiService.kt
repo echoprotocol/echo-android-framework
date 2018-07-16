@@ -1,5 +1,7 @@
 package com.pixelplex.echolib.service
 
+import com.pixelplex.echolib.ILLEGAL_ID
+
 /**
  * Encapsulates logic, associated with blockchain account history API
  *
@@ -10,4 +12,13 @@ package com.pixelplex.echolib.service
  *
  * @author Dmitriy Bushuev
  */
-interface AccountHistoryApiService
+interface AccountHistoryApiService : ApiService {
+
+    companion object {
+        /**
+         * Actual id for AccountHistoryApi
+         */
+        @Volatile
+        var id: Int = ILLEGAL_ID
+    }
+}

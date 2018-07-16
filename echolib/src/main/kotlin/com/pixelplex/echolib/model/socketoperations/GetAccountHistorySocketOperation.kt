@@ -3,6 +3,7 @@ package com.pixelplex.echolib.model.socketoperations
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.pixelplex.echolib.Callback
+import com.pixelplex.echolib.ILLEGAL_ID
 import com.pixelplex.echolib.model.HistoricalTransfer
 import com.pixelplex.echolib.support.Api
 import com.pixelplex.echolib.support.getId
@@ -27,10 +28,9 @@ class GetAccountHistorySocketOperation(
     val limit: Int = DEFAULT_LIMIT,
     val startId: String = DEFAULT_HISTORY_ID,
     method: SocketMethodType = SocketMethodType.CALL,
-    callId: Int,
     callback: Callback<List<HistoricalTransfer>>
 
-) : SocketOperation<List<HistoricalTransfer>>(method, callId, listOf<HistoricalTransfer>().javaClass, callback) {
+) : SocketOperation<List<HistoricalTransfer>>(method, ILLEGAL_ID, listOf<HistoricalTransfer>().javaClass, callback) {
 
     override fun createParameters(): JsonElement =
         JsonArray().apply {

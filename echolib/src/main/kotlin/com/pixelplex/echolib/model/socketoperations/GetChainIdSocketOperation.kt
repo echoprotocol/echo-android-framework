@@ -3,6 +3,7 @@ package com.pixelplex.echolib.model.socketoperations
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.pixelplex.echolib.Callback
+import com.pixelplex.echolib.ILLEGAL_ID
 import com.pixelplex.echolib.support.Api
 import com.pixelplex.echolib.support.getId
 
@@ -16,10 +17,9 @@ import com.pixelplex.echolib.support.getId
 class GetChainIdSocketOperation(
     val api: Api,
     method: SocketMethodType = SocketMethodType.CALL,
-    callId: Int,
     callback: Callback<String>
 
-) : SocketOperation<String>(method, callId, String::class.java, callback) {
+) : SocketOperation<String>(method, ILLEGAL_ID, String::class.java, callback) {
 
     override fun createParameters(): JsonElement =
         JsonArray().apply {

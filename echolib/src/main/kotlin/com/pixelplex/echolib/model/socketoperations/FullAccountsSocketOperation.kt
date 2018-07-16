@@ -3,6 +3,7 @@ package com.pixelplex.echolib.model.socketoperations
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.pixelplex.echolib.Callback
+import com.pixelplex.echolib.ILLEGAL_ID
 import com.pixelplex.echolib.model.FullUserAccount
 import com.pixelplex.echolib.support.Api
 import com.pixelplex.echolib.support.getId
@@ -18,16 +19,15 @@ import com.pixelplex.echolib.support.getId
  *
  * @author Daria Pechkovskaya
  */
-class FullAccountSocketOperation(
+class FullAccountsSocketOperation(
     val api: Api,
-    val namesOrIds: Array<String>,
+    val namesOrIds: List<String>,
     val shouldSubscribe: Boolean,
     method: SocketMethodType = SocketMethodType.CALL,
-    callId: Int,
     callback: Callback<List<FullUserAccount>>
 ) : SocketOperation<List<FullUserAccount>>(
     method,
-    callId,
+    ILLEGAL_ID,
     listOf<FullUserAccount>().javaClass,
     callback
 ) {

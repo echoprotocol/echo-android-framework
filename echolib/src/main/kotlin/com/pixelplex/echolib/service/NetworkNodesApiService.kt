@@ -1,5 +1,7 @@
 package com.pixelplex.echolib.service
 
+import com.pixelplex.echolib.ILLEGAL_ID
+
 /**
  * Encapsulates logic, associated with blockchain network nodes API
  *
@@ -10,4 +12,13 @@ package com.pixelplex.echolib.service
  *
  * @author Dmitriy Bushuev
  */
-interface NetworkNodesApiService
+interface NetworkNodesApiService : ApiService {
+
+    companion object {
+        /**
+         * Actual id for NetworkNodesApi
+         */
+        @Volatile
+        var id: Int = ILLEGAL_ID
+    }
+}
