@@ -23,6 +23,7 @@ enum class SocketMethodType(val key: String) {
  * Represents blockchain operations by keys
  */
 enum class SocketOperationKeys(val key: String) {
+    LOGIN("login"),
     BLOCK_DATA("get_dynamic_global_properties"),
     FULL_ACCOUNTS("get_full_accounts"),
     ACCOUNT_HISTORY("get_account_history"),

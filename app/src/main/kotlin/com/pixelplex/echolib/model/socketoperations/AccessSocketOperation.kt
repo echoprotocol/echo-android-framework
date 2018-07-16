@@ -21,27 +21,17 @@ class AccessSocketOperation(
         JsonArray().apply {
             add(apiId)
             add(accessSocketType.key)
-            add(getParameters(accessSocketType))
+            add(JsonArray())
         }
 
     override val apiId: Int
         get() = api
-
-    private fun getParameters(type: AccessSocketOperationType): JsonElement =
-        when (type) {
-            AccessSocketOperationType.LOGIN -> JsonArray().apply {
-                add("")
-                add("")
-            }
-            else -> JsonArray()
-        }
 }
 
 /**
  * Type of operation for access to blockchain
  */
 enum class AccessSocketOperationType(val key: String) {
-    LOGIN("login"),
     DATABASE("database"),
     NETWORK_BROADCAST("network_broadcast"),
     HISTORY("history"),
