@@ -12,19 +12,19 @@ import com.pixelplex.echolib.exception.LocalException
  *
  * @author Dmitriy Bushuev
  */
-class OriginalThreadCallback<T>(private val delegate: Callback<T>) : Callback<T> {
+class MainThreadCallback<T>(private val delegate: Callback<T>) : Callback<T> {
 
-    private val originalThreadExecutor =
-        OriginalThreadExecutor()
+    private val mainThreadExecutor =
+        MainThreadExecutor()
 
     override fun onSuccess(result: T) {
-        originalThreadExecutor.execute {
+        mainThreadExecutor.execute {
             delegate.onSuccess(result)
         }
     }
 
     override fun onError(error: LocalException) {
-        originalThreadExecutor.execute {
+        mainThreadExecutor.execute {
             delegate.onError(error)
         }
     }

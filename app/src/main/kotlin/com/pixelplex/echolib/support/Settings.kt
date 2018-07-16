@@ -16,7 +16,8 @@ class Settings private constructor(
     val url: String,
     val socketMessenger: SocketMessenger,
     val cryptoComponent: CryptoCoreComponent,
-    val apis: Set<Api>
+    val apis: Set<Api>,
+    val returnOnMainThread: Boolean
 ) {
 
     /**
@@ -28,6 +29,7 @@ class Settings private constructor(
         private var socketMessenger: SocketMessenger? = null
         private var cryptoComponent: CryptoCoreComponent? = null
         private var apis: Set<Api>? = null
+        private var returnOnMainThread: Boolean = false
 
         /**
          * Defines url for socket connection.
@@ -70,6 +72,17 @@ class Settings private constructor(
         }
 
         /**
+         * Defines whether callback result should return on main thread
+         *
+         * @param returnOnMainThread false - result returns on library background thread,
+         *                                   true - on android main thread
+         */
+        fun setReturnOnMainThread(returnOnMainThread: Boolean): Configurator {
+            this.returnOnMainThread = returnOnMainThread
+            return this
+        }
+
+        /**
          * Create settings with configurations
          * @return settings for library initialization
          */
@@ -86,7 +99,8 @@ class Settings private constructor(
                 url,
                 socketMessenger,
                 cryptoComponent,
-                apis
+                apis,
+                returnOnMainThread
             )
         }
     }

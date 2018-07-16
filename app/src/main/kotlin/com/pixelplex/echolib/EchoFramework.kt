@@ -29,9 +29,9 @@ interface EchoFramework : AuthenticationFacade, FeeFacade, InformationFacade, Su
     companion object {
 
         /**
-         * Initialize library with settings
+         * Creates library with settings
          * @param settings Settings for initialization
          */
-        fun initialize(settings: Settings): EchoFramework = EchoFrameworkImpl(settings)
+        fun create(settings: Settings): EchoFramework = EchoFrameworkImpl(settings)
     }
 }
