@@ -2,13 +2,8 @@ package com.pixelplex.echolib.support
 
 import com.pixelplex.echolib.DEFAULT_URL
 
-<<<<<<< HEAD
-import com.pixelplex.echolib.core.CryptoCoreComponent
-import com.pixelplex.echolib.core.internal.CryptoCoreComponentImpl
-=======
 import com.pixelplex.echolib.core.crypto.CryptoCoreComponent
 import com.pixelplex.echolib.core.crypto.internal.CryptoCoreComponentImpl
->>>>>>> bf599e22a2af7feceb117c100ef4e0ac08331044
 import com.pixelplex.echolib.core.socket.SocketMessenger
 import com.pixelplex.echolib.core.socket.internal.SocketMessengerImpl
 
