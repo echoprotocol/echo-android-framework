@@ -59,6 +59,29 @@ class Account : GrapheneObject {
         this.name = name
     }
 
+    /**
+     * Check account equals by [address] from role [authorityType]
+     *
+     * @param address Public address from role
+     * @param authorityType Role for equals operation
+     */
+    fun isEqualsByAddress(address: String, authorityType: AuthorityType): Boolean =
+        when (authorityType) {
+            AuthorityType.OWNER -> isKeyExist(address, owner)
+            AuthorityType.ACTIVE -> isKeyExist(address, active)
+            AuthorityType.KEY -> {
+                options.memoKey?.address == address
+            }
+        }
+
+
+    private fun isKeyExist(address: String, authority: Authority): Boolean {
+        val foundKey = authority.keyAuthorities.keys.find { pubKey ->
+            pubKey.address == address
+        }
+        return foundKey != null
+    }
+
     companion object {
         const val PROXY_TO_SELF = "1.2.5"
     }

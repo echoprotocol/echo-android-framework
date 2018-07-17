@@ -33,4 +33,8 @@ class GetBlockSocketOperation(
 
     override val apiId: Int
         get() = api.getId()
+
+    override fun fromJson(json: String): Block? {
+        return null
+    }
 }

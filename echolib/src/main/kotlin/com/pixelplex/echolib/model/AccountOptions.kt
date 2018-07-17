@@ -1,5 +1,7 @@
 package com.pixelplex.echolib.model
 
+import java.util.ArrayList
+
 /**
  * Contains user account additional information
  *
@@ -23,7 +25,7 @@ class AccountOptions {
 
     var votes: Array<Vote> = arrayOf()
 
-    private val extensions = Extensions()
+    private val extensions = ArrayList<JsonSerializable>()
 
     constructor()
 

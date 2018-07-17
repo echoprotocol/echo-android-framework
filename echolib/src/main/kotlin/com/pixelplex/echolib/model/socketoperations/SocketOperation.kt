@@ -3,6 +3,7 @@ package com.pixelplex.echolib.model.socketoperations
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.pixelplex.echolib.Callback
+import com.pixelplex.echolib.model.JsonDeserializable
 import com.pixelplex.echolib.model.JsonSerializable
 
 /**
@@ -58,7 +59,7 @@ abstract class SocketOperation<T>(
     var callId: Int,
     val type: Class<T>,
     val callback: Callback<T>
-) : JsonSerializable {
+) : JsonSerializable, JsonDeserializable<T> {
 
     /**
      * Creates json of call parameters

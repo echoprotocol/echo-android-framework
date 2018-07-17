@@ -2,10 +2,12 @@ package com.pixelplex.echolib.service.internal
 
 import com.pixelplex.echolib.Callback
 import com.pixelplex.echolib.core.socket.SocketCoreComponent
-import com.pixelplex.echolib.model.FullUserAccount
+import com.pixelplex.echolib.exception.LocalException
+import com.pixelplex.echolib.model.Account
 import com.pixelplex.echolib.model.socketoperations.FullAccountsSocketOperation
 import com.pixelplex.echolib.service.DatabaseApiService
 import com.pixelplex.echolib.support.Api
+import com.pixelplex.echolib.support.concurrent.future.FutureTask
 
 /**
  * Implementation of [DatabaseApiService]
@@ -24,7 +26,7 @@ class DatabaseApiServiceImpl(private val socketCoreComponent: SocketCoreComponen
     override fun getFullAccounts(
         namesOrIds: List<String>,
         subscribe: Boolean,
-        callback: Callback<List<FullUserAccount>>
+        callback: Callback<Map<String, Account>>
     ) {
         val fullAccountsOperation = FullAccountsSocketOperation(
             api,
@@ -33,5 +35,30 @@ class DatabaseApiServiceImpl(private val socketCoreComponent: SocketCoreComponen
             callback = callback
         )
         socketCoreComponent.emit(fullAccountsOperation)
+    }
+
+    override fun getFullAccounts(
+        namesOrIds: List<String>,
+        subscribe: Boolean
+    ): Map<String, Account> {
+
+        val future = FutureTask<Map<String, Account>>()
+        val fullAccountsOperation = FullAccountsSocketOperation(
+            api,
+            namesOrIds,
+            subscribe,
+            callback = object : Callback<Map<String, Account>> {
+                override fun onSuccess(result: Map<String, Account>) {
+                    future.setComplete(result)
+                }
+
+                override fun onError(error: LocalException) {
+                    future.setComplete(error)
+                }
+            }
+        )
+        socketCoreComponent.emit(fullAccountsOperation)
+
+        return future.tryGet() ?: mapOf()
     }
 }

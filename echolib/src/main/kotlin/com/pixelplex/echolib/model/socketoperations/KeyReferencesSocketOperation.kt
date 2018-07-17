@@ -40,4 +40,8 @@ class KeyReferencesSocketOperation(
 
     override val apiId: Int
         get() = api.getId()
+
+    override fun fromJson(json: String): List<Account>? {
+        return null
+    }
 }

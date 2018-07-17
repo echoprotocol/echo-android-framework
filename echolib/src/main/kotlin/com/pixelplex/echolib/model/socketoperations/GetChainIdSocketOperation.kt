@@ -31,4 +31,7 @@ class GetChainIdSocketOperation(
     override val apiId: Int
         get() = api.getId()
 
+    override fun fromJson(json: String): String? {
+        return null
+    }
 }

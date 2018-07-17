@@ -4,7 +4,6 @@ import com.pixelplex.echolib.AccountListener
 import com.pixelplex.echolib.Callback
 import com.pixelplex.echolib.facade.SubscriptionFacade
 import com.pixelplex.echolib.service.NetworkBroadcastApiService
-import com.pixelplex.echolib.service.NetworkNodesApiService
 
 /**
  * Implementation of [SubscriptionFacade]
@@ -16,8 +15,7 @@ import com.pixelplex.echolib.service.NetworkNodesApiService
  * @author Dmitriy Bushuev
  */
 class SubscriptionFacadeImpl(
-    private val networkBroadcastApiService: NetworkBroadcastApiService,
-    private val networkNodesApiService: NetworkNodesApiService
+    private val networkBroadcastApiService: NetworkBroadcastApiService
 ) : SubscriptionFacade {
 
     override fun subscribeOnAccount(nameOrId: String, listener: AccountListener) {

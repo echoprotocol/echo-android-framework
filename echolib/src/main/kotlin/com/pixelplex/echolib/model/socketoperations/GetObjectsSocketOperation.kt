@@ -44,4 +44,8 @@ class GetObjectsSocketOperation(
 
     override val apiId: Int
         get() = api.getId()
+
+    override fun fromJson(json: String): List<GrapheneObject>? {
+        return null
+    }
 }
