@@ -16,7 +16,7 @@ class ChecksumTest {
     fun checksumLengthTest() {
         val bytes = Base58.decode("JxF12TrwUP45BMd")
 
-        val hashSizeInBytes = 20
+        val hashSizeInBytes = Checksum.CHECKSUM_SIZE
         val hash = Checksum.calculateChecksum(bytes)
 
         assertTrue(hash.size == hashSizeInBytes)
