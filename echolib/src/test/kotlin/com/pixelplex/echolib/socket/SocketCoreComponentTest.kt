@@ -156,7 +156,7 @@ class SocketCoreComponentTest {
 
         override fun createParameters(): JsonElement = JsonObject()
 
-        override fun fromJson(json: String): String? = null
+        override fun fromJson(json: String): String? = json
 
         override fun toJsonString(): String? {
             return callId.toString()
@@ -168,7 +168,7 @@ class SocketCoreComponentTest {
 
         override fun createParameters(): JsonElement = JsonObject()
 
-        override fun fromJson(json: String): String? = null
+        override fun fromJson(json: String): String? = json
 
         override fun toJsonString(): String? {
             return "error"
