@@ -1,7 +1,9 @@
 package com.pixelplex.echolib.model
 
+import com.google.common.primitives.Bytes
 import com.pixelplex.bitcoinj.Base58
 import com.pixelplex.bitcoinj.ECKey
+import com.pixelplex.echolib.BuildConfig
 import com.pixelplex.echolib.exception.MalformedAddressException
 import com.pixelplex.echolib.support.Checksum.CHECKSUM_SIZE
 import com.pixelplex.echolib.support.Checksum.calculateChecksum
@@ -20,15 +22,19 @@ class Address {
     private val prefix: String
 
     @JvmOverloads
-    constructor(pubKey: PublicKey, prefix: String = BITSHARES_PREFIX) {
+    constructor(
+        pubKey: PublicKey,
+        prefix: String = if (BuildConfig.DEBUG) TESTNET_PREFIX else BITSHARES_PREFIX
+    ) {
         this.pubKey = pubKey
         this.prefix = prefix
     }
 
     constructor(address: String) {
-        this.prefix = address.substring(0..PREFIX_SIZE)
+        val prefixSize = if (BuildConfig.DEBUG) TESTNET_PREFIX.length else BITSHARES_PREFIX.length
+        this.prefix = address.substring(0..prefixSize)
 
-        val decoded = Base58.decode(address.substring(PREFIX_SIZE))
+        val decoded = Base58.decode(address.substring(prefixSize))
         val pubKey = decoded.copyOfRange(0, decoded.size - CHECKSUM_SIZE)
         this.pubKey = PublicKey(ECKey.fromPublicOnly(pubKey))
 
@@ -42,9 +48,16 @@ class Address {
         }
     }
 
+    override fun toString(): String {
+        val pubKey = pubKey.toBytes()
+        val checksum = calculateChecksum(pubKey)
+        val pubKeyChecksummed = Bytes.concat(pubKey, checksum)
+        return this.prefix + Base58.encode(pubKeyChecksummed)
+    }
+
     companion object {
         const val BITSHARES_PREFIX = "GPH"
-        const val PREFIX_SIZE = 3
+        const val TESTNET_PREFIX = "TEST"
     }
 
 }

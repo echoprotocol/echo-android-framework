@@ -52,6 +52,7 @@ class SocketMessengerImpl : SocketMessenger {
 
     override fun emit(message: String) {
         if (isOpen) {
+            println(">>>> $message" )
             webSocket?.sendText(message)
         }
     }
@@ -80,6 +81,7 @@ class SocketMessengerImpl : SocketMessenger {
         }
 
         override fun onTextFrame(websocket: WebSocket?, frame: WebSocketFrame) {
+            println("<<<< ${frame.payloadText}" )
             listeners.forEach { listener -> listener.onEvent(frame.payloadText) }
         }
 

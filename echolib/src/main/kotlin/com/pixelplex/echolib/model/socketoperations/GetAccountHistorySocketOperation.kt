@@ -47,6 +47,10 @@ class GetAccountHistorySocketOperation(
     override val apiId: Int
         get() = api.getId()
 
+    override fun fromJson(json: String): List<HistoricalTransfer> {
+        return emptyList()
+    }
+
     companion object {
         const val DEFAULT_HISTORY_ID = "1.11.0"
         const val DEFAULT_LIMIT = 100

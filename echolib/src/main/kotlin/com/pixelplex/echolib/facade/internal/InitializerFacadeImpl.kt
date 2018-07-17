@@ -13,7 +13,6 @@ import com.pixelplex.echolib.model.socketoperations.SocketOperation
 import com.pixelplex.echolib.support.Api
 import com.pixelplex.echolib.support.Converter
 import com.pixelplex.echolib.support.updateId
-import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
@@ -139,8 +138,7 @@ class InitializerFacadeImpl(
             Api.DATABASE to AccessSocketOperationType.DATABASE,
             Api.NETWORK_BROADCAST to AccessSocketOperationType.NETWORK_BROADCAST,
             Api.ACCOUNT_HISTORY to AccessSocketOperationType.HISTORY,
-            Api.CRYPTO to AccessSocketOperationType.CRYPTO,
-            Api.NETWORK_NODES to AccessSocketOperationType.NETWORK_NODES
+            Api.CRYPTO to AccessSocketOperationType.CRYPTO
         )
 
         override fun convert(source: Api): AccessSocketOperationType =

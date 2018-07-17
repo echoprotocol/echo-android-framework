@@ -2,6 +2,7 @@ package com.pixelplex.echolib.model.socketoperations
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
+import com.google.gson.JsonParser
 import com.pixelplex.echolib.Callback
 import com.pixelplex.echolib.ILLEGAL_ID
 
@@ -31,4 +32,15 @@ class LoginSocketOperation(
             add("")
             add("")
         }
+
+    override fun fromJson(json: String): Boolean? {
+        val parser = JsonParser()
+        val jsonTree = parser.parse(json)
+
+        if (!jsonTree.isJsonObject || jsonTree.asJsonObject.get("result") == null) {
+            return null
+        }
+
+        return jsonTree.asJsonObject.get("result")?.asJsonPrimitive?.asBoolean
+    }
 }

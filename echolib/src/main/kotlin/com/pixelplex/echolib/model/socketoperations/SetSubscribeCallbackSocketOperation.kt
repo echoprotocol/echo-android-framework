@@ -38,5 +38,7 @@ class SetSubscribeCallbackSocketOperation(
     override val apiId: Int
         get() = api.getId()
 
-
+    override fun fromJson(json: String): Any? {
+        return null
+    }
 }

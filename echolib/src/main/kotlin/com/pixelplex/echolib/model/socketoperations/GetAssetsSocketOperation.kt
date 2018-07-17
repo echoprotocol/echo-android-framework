@@ -37,4 +37,8 @@ class GetAssetsSocketOperation(
 
     override val apiId: Int
         get() = api.getId()
+
+    override fun fromJson(json: String): List<Asset> {
+        return emptyList()
+    }
 }

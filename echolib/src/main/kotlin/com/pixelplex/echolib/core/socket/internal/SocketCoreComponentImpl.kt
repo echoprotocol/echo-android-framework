@@ -79,10 +79,10 @@ class SocketCoreComponentImpl(
 
         private fun mapData(event: String, operation: SocketOperation<Any>) {
             try {
-                val mapObj = mapper.mapSocketResponseResult(event, operation.type)
-                operation.callback.onSuccess(mapObj)
+                val obj = operation.fromJson(event)!!
+                operation.callback.onSuccess(obj)
             } catch (ex: Exception) {
-                operation.callback.onError(LocalException(ex.message))
+                operation.callback.onError(LocalException(ex.message, ex))
             }
         }
 

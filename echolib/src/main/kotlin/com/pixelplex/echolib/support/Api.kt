@@ -11,8 +11,7 @@ enum class Api {
     ACCOUNT_HISTORY,
     CRYPTO,
     DATABASE,
-    NETWORK_BROADCAST,
-    NETWORK_NODES
+    NETWORK_BROADCAST
 }
 
 /**
@@ -24,7 +23,6 @@ fun Api.getId(): Int =
         Api.CRYPTO -> CryptoApiService.id
         Api.DATABASE -> DatabaseApiService.id
         Api.NETWORK_BROADCAST -> NetworkBroadcastApiService.id
-        Api.NETWORK_NODES -> NetworkNodesApiService.id
     }
 
 /**
@@ -36,6 +34,5 @@ fun Api.updateId(id: Int) {
         Api.CRYPTO -> CryptoApiService.id
         Api.DATABASE -> DatabaseApiService.id = id
         Api.NETWORK_BROADCAST -> NetworkBroadcastApiService.id = id
-        Api.NETWORK_NODES -> NetworkNodesApiService.id = id
     }
 }

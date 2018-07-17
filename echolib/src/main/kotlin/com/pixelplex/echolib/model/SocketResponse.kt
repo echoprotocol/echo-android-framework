@@ -41,6 +41,5 @@ data class Error(
 data class ErrorData(
     @Expose val code: Int,
     @Expose val name: String,
-    @Expose val message: String,
-    @Expose val stack: List<Serializable>
+    @Expose val message: String
 )

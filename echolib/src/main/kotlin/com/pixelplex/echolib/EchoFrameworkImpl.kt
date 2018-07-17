@@ -1,5 +1,6 @@
 package com.pixelplex.echolib
 
+import com.pixelplex.echolib.core.crypto.internal.CryptoCoreComponentImpl
 import com.pixelplex.echolib.core.mapper.internal.MapperCoreComponentImpl
 import com.pixelplex.echolib.core.socket.internal.SocketCoreComponentImpl
 import com.pixelplex.echolib.facade.*
@@ -10,7 +11,6 @@ import com.pixelplex.echolib.model.HistoryResponse
 import com.pixelplex.echolib.service.internal.AccountHistoryApiServiceImpl
 import com.pixelplex.echolib.service.internal.DatabaseApiServiceImpl
 import com.pixelplex.echolib.service.internal.NetworkBroadcastApiServiceImpl
-import com.pixelplex.echolib.service.internal.NetworkNodesApiServiceImpl
 import com.pixelplex.echolib.support.Settings
 import com.pixelplex.echolib.support.concurrent.Dispatcher
 import com.pixelplex.echolib.support.concurrent.ExecutorServiceDispatcher
@@ -46,6 +46,8 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
 
         val mapperCoreComponent =
             MapperCoreComponentImpl()
+        val cryptoCoreComponent =
+            CryptoCoreComponentImpl()
         val socketCoreComponent =
             SocketCoreComponentImpl(settings.socketMessenger, mapperCoreComponent)
 
@@ -53,14 +55,13 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             AccountHistoryApiServiceImpl(socketCoreComponent, settings.cryptoComponent)
         val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent)
         val networkBroadcastApiService = NetworkBroadcastApiServiceImpl(socketCoreComponent)
-        val networkNodesApiService = NetworkNodesApiServiceImpl(socketCoreComponent)
 
         initializerFacade = InitializerFacadeImpl(socketCoreComponent, settings.url, settings.apis)
-        authenticationFacade = AuthenticationFacadeImpl(accountHistoryApiService)
+        authenticationFacade = AuthenticationFacadeImpl(databaseApiService, cryptoCoreComponent)
         feeFacade = FeeFacadeImpl(databaseApiService)
         informationFacade = InformationFacadeImpl(databaseApiService)
         subscriptionFacade =
-                SubscriptionFacadeImpl(networkBroadcastApiService, networkNodesApiService)
+                SubscriptionFacadeImpl(networkBroadcastApiService)
         transactionsFacade =
                 TransactionsFacadeImpl(networkBroadcastApiService, accountHistoryApiService)
     }
