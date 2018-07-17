@@ -10,23 +10,20 @@ stages:
     - app/build/outputs/
     - .android/
 
-before_script:
-    - chmod +x ./gradlew
-
 build_debug:
   <<: *build_template_def
   only:
     - develop
 
   script:
-    - ./gradlew assembleDebug
+    - gradlew assembleDebug
 
 build_release:
   <<: *build_template_def
   only:
     - master
   script:
-    - ./gradlew assembleRelease
+    - gradlew assembleRelease
 
 unit_test:
   stage: test
@@ -35,4 +32,4 @@ unit_test:
     - develop
 
   script:
-    - ./gradlew test
+    - gradlew test
