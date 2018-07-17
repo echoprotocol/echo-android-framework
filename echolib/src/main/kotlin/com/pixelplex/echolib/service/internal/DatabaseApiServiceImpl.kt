@@ -59,6 +59,6 @@ class DatabaseApiServiceImpl(private val socketCoreComponent: SocketCoreComponen
         )
         socketCoreComponent.emit(fullAccountsOperation)
 
-        return future.tryGet() ?: mapOf()
+        return future.get() ?: mapOf()
     }
 }

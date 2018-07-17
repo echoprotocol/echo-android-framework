@@ -24,29 +24,22 @@ class AuthenticationFacadeImpl(
 ) : AuthenticationFacade {
 
     override fun login(name: String, password: String, callback: Callback<Account>) {
-        databaseApiService.getFullAccounts(
-            listOf(name),
-            false,
-            object : Callback<Map<String, Account>> {
-                override fun onSuccess(result: Map<String, Account>) {
-                    if (result.isNotEmpty()) {
-                        val foundAccount = result[name]
+        try {
+            val result = databaseApiService.getFullAccounts(listOf(name), false)
 
-                        val address = cryptoCoreComponent.getAddress(name, password)
-                        if (foundAccount != null && isAddressSame(foundAccount, address)) {
-                            callback.onSuccess(foundAccount)
-                            return
-                        }
-                    }
+            val foundAccount = result[name]
+            val address = cryptoCoreComponent.getAddress(name, password)
+            if (foundAccount != null && isAddressSame(foundAccount, address)) {
+                callback.onSuccess(foundAccount)
+                return
+            }
 
-                    callback.onError(NotFoundException("Account not found."))
-                }
-
-                override fun onError(error: LocalException) {
-                    callback.onError(error)
-                }
-            })
-
+            callback.onError(NotFoundException("Account not found."))
+        } catch (ex: Exception) {
+            callback.onError(LocalException(ex.message, ex))
+        } catch (ex: LocalException) {
+            callback.onError(ex)
+        }
     }
 
     private fun isAddressSame(account: Account, address: String): Boolean {
@@ -60,6 +53,8 @@ class AuthenticationFacadeImpl(
         newPassword: String,
         callback: Callback<Account>
     ) {
+
+
     }
 
 }

@@ -19,7 +19,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        lib = EchoFramework.create(Settings.Configurator().setApis(Api.DATABASE).configure())
+        lib = EchoFramework.create(
+            Settings.Configurator()
+                .setReturnOnMainThread(true)
+                .setApis(Api.DATABASE)
+                .configure()
+        )
 
         startLib()
 
@@ -30,20 +35,16 @@ class MainActivity : AppCompatActivity() {
                 etPassword.text.toString(),
                 object : Callback<Account> {
                     override fun onSuccess(result: Account) {
-                        runOnUiThread {
-                            toggleProgress(false)
-                            etName.text.clear()
-                            etPassword.text.clear()
-                            updateStatus("Login success!")
-                        }
+                        toggleProgress(false)
+                        etName.text.clear()
+                        etPassword.text.clear()
+                        updateStatus("Login success!")
                     }
 
                     override fun onError(error: LocalException) {
-                        runOnUiThread {
-                            toggleProgress(false)
-                            error.printStackTrace()
-                            updateStatus("Error ${error.message ?: "empty"}")
-                        }
+                        toggleProgress(false)
+                        error.printStackTrace()
+                        updateStatus("Error ${error.message ?: "empty"}")
                     }
                 })
         }
@@ -54,22 +55,18 @@ class MainActivity : AppCompatActivity() {
         lib.start(object : Callback<Any> {
 
             override fun onSuccess(result: Any) {
-                runOnUiThread {
-                    toggleProgress(false)
-                    btnLogin.visibility = View.VISIBLE
-                    updateStatus("Success initializing")
-                }
+                toggleProgress(false)
+                btnLogin.visibility = View.VISIBLE
+                updateStatus("Success initializing")
+
             }
 
             override fun onError(error: LocalException) {
-                runOnUiThread {
-                    toggleProgress(false)
-                    btnLogin.visibility = View.INVISIBLE
-                    error.printStackTrace()
-                    updateStatus("Error occurred during initialization.")
-                }
+                toggleProgress(false)
+                btnLogin.visibility = View.INVISIBLE
+                error.printStackTrace()
+                updateStatus("Error occurred during initialization.")
             }
-
         })
     }
 
