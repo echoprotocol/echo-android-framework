@@ -17,7 +17,8 @@ class Settings private constructor(
     val socketMessenger: SocketMessenger,
     val cryptoComponent: CryptoCoreComponent,
     val apis: Set<Api>,
-    val returnOnMainThread: Boolean
+    val returnOnMainThread: Boolean,
+    val networkType: NetworkType
 ) {
 
     /**
@@ -30,6 +31,7 @@ class Settings private constructor(
         private var cryptoComponent: CryptoCoreComponent? = null
         private var apis: Set<Api>? = null
         private var returnOnMainThread: Boolean = false
+        private var networkType: NetworkType = NetworkType.TEST_NET
 
         /**
          * Defines url for socket connection.
@@ -83,6 +85,16 @@ class Settings private constructor(
         }
 
         /**
+         * Defines blockchain network for connection
+         *
+         * @param networkType type of blockchain network
+         */
+        fun setNetworkType(networkType: NetworkType): Configurator {
+            this.networkType = networkType
+            return this
+        }
+
+        /**
          * Create settings with configurations
          * @return settings for library initialization
          */
@@ -92,7 +104,8 @@ class Settings private constructor(
                 .apply {
                     setUrl(url)
                 }
-            val cryptoComponent = this.cryptoComponent ?: CryptoCoreComponentImpl()
+            val prefix = networkType.getAddressPrefix()
+            val cryptoComponent = this.cryptoComponent ?: CryptoCoreComponentImpl(prefix)
             val apis = apis ?: Api.values().toSet()
 
             return Settings(
@@ -100,7 +113,8 @@ class Settings private constructor(
                 socketMessenger,
                 cryptoComponent,
                 apis,
-                returnOnMainThread
+                returnOnMainThread,
+                networkType
             )
         }
     }

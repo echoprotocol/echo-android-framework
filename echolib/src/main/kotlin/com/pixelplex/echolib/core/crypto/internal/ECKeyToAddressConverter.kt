@@ -2,8 +2,6 @@ package com.pixelplex.echolib.core.crypto.internal
 
 import com.pixelplex.bitcoinj.Base58
 import com.pixelplex.bitcoinj.ECKey
-import com.pixelplex.echolib.BuildConfig
-import com.pixelplex.echolib.model.Address
 import com.pixelplex.echolib.support.Checksum
 import com.pixelplex.echolib.support.Converter
 
@@ -13,7 +11,7 @@ import com.pixelplex.echolib.support.Converter
  *
  * @author Dmitriy Bushuev
  */
-class ECKeyToAddressConverter : Converter<ECKey, String> {
+class ECKeyToAddressConverter(private val prefix: String) : Converter<ECKey, String> {
 
     override fun convert(source: ECKey) = source.toAddress()
 
@@ -21,7 +19,6 @@ class ECKeyToAddressConverter : Converter<ECKey, String> {
         val pubKey = getPubKey(this)
         val checksum = Checksum.calculateChecksum(pubKey)
         val pubKeyWithChecksum = pubKey + checksum
-        val prefix = if (BuildConfig.DEBUG) Address.TESTNET_PREFIX else Address.BITSHARES_PREFIX
         return prefix + Base58.encode(pubKeyWithChecksum)
     }
 

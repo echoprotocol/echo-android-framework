@@ -11,10 +11,10 @@ import com.pixelplex.echolib.model.AuthorityType
  * @author Daria Pechkovskaya
  * @author Dmitriy Bushuev
  */
-class CryptoCoreComponentImpl : CryptoCoreComponent {
+class CryptoCoreComponentImpl(private val prefix: String) : CryptoCoreComponent {
 
     private val seedProvider = RoleDependentSeedProvider(AuthorityType.ACTIVE)
-    private val ecKeyConverter = ECKeyToAddressConverter()
+    private val ecKeyConverter = ECKeyToAddressConverter(prefix)
 
     override fun getAddress(userName: String, password: String): String {
         return ecKeyConverter.convert(getPrivateKey(userName, password))
