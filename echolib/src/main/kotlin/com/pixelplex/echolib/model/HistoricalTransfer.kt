@@ -15,7 +15,7 @@ import com.google.gson.annotations.SerializedName
 data class HistoricalTransfer(
     @Expose val id: String,
     @SerializedName("op") @Expose val operation: BaseOperation,
-    @Expose val result: Result,
+    @SerializedName("result") @Expose val result: HistoryResult,
     @SerializedName("block_num") @Expose val blockNum: Long,
     @SerializedName("trx_in_block") @Expose val trxInBlock: Long,
     @SerializedName("op_in_trx") @Expose val opInTrx: Long,

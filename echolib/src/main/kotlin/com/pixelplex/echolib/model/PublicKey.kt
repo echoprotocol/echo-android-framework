@@ -1,6 +1,8 @@
 package com.pixelplex.echolib.model
 
 import com.pixelplex.bitcoinj.ECKey
+import com.pixelplex.echolib.model.network.Network
+import com.pixelplex.echolib.model.network.Testnet
 import com.pixelplex.echolib.support.checkFalse
 import java.io.Serializable
 
@@ -9,7 +11,10 @@ import java.io.Serializable
  *
  * @author Dmitriy Bushuev
  */
-class PublicKey(key: ECKey) : Serializable, ByteSerializable {
+class PublicKey @JvmOverloads constructor(
+    key: ECKey,
+    var network: Network = Testnet()
+) : Serializable, ByteSerializable {
 
     var key: ECKey = key
         private set
@@ -18,7 +23,7 @@ class PublicKey(key: ECKey) : Serializable, ByteSerializable {
         get() {
             var pubKey = ECKey.fromPublicOnly(key.pubKey)
             pubKey = getCompressedKey(pubKey)
-            val publicKey = PublicKey(pubKey)
+            val publicKey = PublicKey(pubKey, network)
             return Address(publicKey).toString()
         }
 

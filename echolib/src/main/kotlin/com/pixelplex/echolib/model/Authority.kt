@@ -4,6 +4,7 @@ import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import com.pixelplex.echolib.exception.MalformedAddressException
+import com.pixelplex.echolib.model.network.Network
 import java.lang.reflect.Type
 import java.util.*
 
@@ -65,7 +66,7 @@ class Authority {
      *   "address_auths": []
      * }
      */
-    class Deserializer : JsonDeserializer<Authority> {
+    class Deserializer(val network: Network) : JsonDeserializer<Authority> {
 
         override fun deserialize(
             json: JsonElement?,
@@ -89,7 +90,7 @@ class Authority {
                 val addr = subArray.get(0).asString
                 val weight = subArray.get(1).asLong
                 try {
-                    keyAuthMap[Address(addr).pubKey] = weight
+                    keyAuthMap[Address(addr, network).pubKey] = weight
                 } catch (e: MalformedAddressException) {
                     System.out.println("MalformedAddressException. Msg: " + e.message)
                 }
