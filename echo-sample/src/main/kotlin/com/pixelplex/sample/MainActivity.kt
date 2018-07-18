@@ -48,6 +48,26 @@ class MainActivity : AppCompatActivity() {
                     }
                 })
         }
+
+        btnFind.setOnClickListener {
+            toggleProgress(true)
+            lib.getAccount(
+                etName.text.toString(),
+                object : Callback<Account> {
+                    override fun onSuccess(result: Account) {
+                        toggleProgress(false)
+                        etName.text.clear()
+                        etPassword.text.clear()
+                        updateStatus("Login success!")
+                    }
+
+                    override fun onError(error: LocalException) {
+                        toggleProgress(false)
+                        error.printStackTrace()
+                        updateStatus("Error ${error.message ?: "empty"}")
+                    }
+                })
+        }
     }
 
     private fun startLib() {
@@ -57,6 +77,7 @@ class MainActivity : AppCompatActivity() {
             override fun onSuccess(result: Any) {
                 toggleProgress(false)
                 btnLogin.visibility = View.VISIBLE
+                btnFind.visibility = View.VISIBLE
                 updateStatus("Success initializing")
 
             }

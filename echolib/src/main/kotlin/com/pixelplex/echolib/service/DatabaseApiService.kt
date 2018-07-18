@@ -3,6 +3,7 @@ package com.pixelplex.echolib.service
 import com.pixelplex.echolib.Callback
 import com.pixelplex.echolib.ILLEGAL_ID
 import com.pixelplex.echolib.model.Account
+import com.pixelplex.echolib.support.Result
 
 /**
  * Encapsulates logic, associated with blockchain database API
@@ -55,5 +56,6 @@ interface AccountsService {
     fun getFullAccounts(
         namesOrIds: List<String>,
         subscribe: Boolean
-    ): Map<String, Account>
+    ): Result<Map<String, Account>, Exception>
+
 }

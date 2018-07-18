@@ -8,6 +8,7 @@ import com.pixelplex.echolib.facade.AuthenticationFacade
 import com.pixelplex.echolib.model.Account
 import com.pixelplex.echolib.model.AuthorityType
 import com.pixelplex.echolib.service.DatabaseApiService
+import com.pixelplex.echolib.support.fold
 
 /**
  * Implementation of [AuthenticationFacade]
@@ -24,22 +25,19 @@ class AuthenticationFacadeImpl(
 ) : AuthenticationFacade {
 
     override fun login(name: String, password: String, callback: Callback<Account>) {
-        try {
-            val result = databaseApiService.getFullAccounts(listOf(name), false)
+        val result = databaseApiService.getFullAccounts(listOf(name), false)
 
-            val foundAccount = result[name]
+        result.fold({ accountsMap ->
+            val foundAccount = accountsMap[name]
             val address = cryptoCoreComponent.getAddress(name, password)
             if (foundAccount != null && isAddressSame(foundAccount, address)) {
                 callback.onSuccess(foundAccount)
-                return
+            } else {
+                callback.onError(NotFoundException("Account not found."))
             }
-
-            callback.onError(NotFoundException("Account not found."))
-        } catch (ex: Exception) {
-            callback.onError(LocalException(ex.message, ex))
-        } catch (ex: LocalException) {
-            callback.onError(ex)
-        }
+        }, { error ->
+            callback.onError(LocalException(error.message, error))
+        })
     }
 
     private fun isAddressSame(account: Account, address: String): Boolean {
