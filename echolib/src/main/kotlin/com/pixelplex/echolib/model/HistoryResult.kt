@@ -6,7 +6,7 @@ package com.pixelplex.echolib.model
  *
  * @author Daria Pechkovskaya
  */
-class Result(
+class HistoryResult(
     val type: Int,
     val objectId: String
 )

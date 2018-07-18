@@ -3,8 +3,8 @@ package com.pixelplex.echolib.model
 import com.google.common.primitives.Bytes
 import com.pixelplex.bitcoinj.Base58
 import com.pixelplex.bitcoinj.ECKey
-import com.pixelplex.echolib.BuildConfig
 import com.pixelplex.echolib.exception.MalformedAddressException
+import com.pixelplex.echolib.model.network.Network
 import com.pixelplex.echolib.support.Checksum.CHECKSUM_SIZE
 import com.pixelplex.echolib.support.Checksum.calculateChecksum
 
@@ -21,17 +21,13 @@ class Address {
 
     private val prefix: String
 
-    @JvmOverloads
-    constructor(
-        pubKey: PublicKey,
-        prefix: String = if (BuildConfig.DEBUG) TESTNET_PREFIX else BITSHARES_PREFIX
-    ) {
+    constructor(pubKey: PublicKey) {
         this.pubKey = pubKey
-        this.prefix = prefix
+        this.prefix = pubKey.network.addressPrefix
     }
 
-    constructor(address: String) {
-        val prefixSize = if (BuildConfig.DEBUG) TESTNET_PREFIX.length else BITSHARES_PREFIX.length
+    constructor(address: String, network: Network) {
+        val prefixSize = network.addressPrefix.length
         this.prefix = address.substring(0..prefixSize)
 
         val decoded = Base58.decode(address.substring(prefixSize))
