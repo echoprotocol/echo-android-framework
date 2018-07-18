@@ -11,6 +11,7 @@ import com.pixelplex.echolib.model.Authority
 import com.pixelplex.echolib.model.FullAccount
 import com.pixelplex.echolib.support.Api
 import com.pixelplex.echolib.support.getId
+import com.pixelplex.echolib.model.network.Network
 
 /**
  * This function fetches all relevant [Account] objects for the given accounts, and
@@ -27,6 +28,7 @@ class FullAccountsSocketOperation(
     val api: Api,
     val namesOrIds: List<String>,
     val shouldSubscribe: Boolean,
+    val network: Network,
     method: SocketMethodType = SocketMethodType.CALL,
     callback: Callback<Map<String, Account>>
 ) : SocketOperation<Map<String, Account>>(
@@ -70,7 +72,7 @@ class FullAccountsSocketOperation(
             val size = result?.size() ?: 0
 
             val gson = GsonBuilder()
-                .registerTypeAdapter(Authority::class.java, Authority.Deserializer())
+                .registerTypeAdapter(Authority::class.java, Authority.Deserializer(network))
                 .create()
 
             for (i in 0 until size) {

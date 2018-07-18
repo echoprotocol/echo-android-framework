@@ -1,11 +1,12 @@
 package com.pixelplex.echolib.support
 
 import com.pixelplex.echolib.DEFAULT_URL
-
 import com.pixelplex.echolib.core.crypto.CryptoCoreComponent
 import com.pixelplex.echolib.core.crypto.internal.CryptoCoreComponentImpl
 import com.pixelplex.echolib.core.socket.SocketMessenger
 import com.pixelplex.echolib.core.socket.internal.SocketMessengerImpl
+import com.pixelplex.echolib.model.network.Network
+import com.pixelplex.echolib.model.network.Testnet
 
 /**
  *  Settings for library initialization
@@ -18,7 +19,7 @@ class Settings private constructor(
     val cryptoComponent: CryptoCoreComponent,
     val apis: Set<Api>,
     val returnOnMainThread: Boolean,
-    val networkType: NetworkType
+    val network: Network
 ) {
 
     /**
@@ -31,7 +32,7 @@ class Settings private constructor(
         private var cryptoComponent: CryptoCoreComponent? = null
         private var apis: Set<Api>? = null
         private var returnOnMainThread: Boolean = false
-        private var networkType: NetworkType = NetworkType.TEST_NET
+        private var network: Network? = null
 
         /**
          * Defines url for socket connection.
@@ -87,10 +88,10 @@ class Settings private constructor(
         /**
          * Defines blockchain network for connection
          *
-         * @param networkType type of blockchain network
+         * @param network Type of blockchain network
          */
-        fun setNetworkType(networkType: NetworkType): Configurator {
-            this.networkType = networkType
+        fun setNetworkType(network: Network): Configurator {
+            this.network = network
             return this
         }
 
@@ -104,8 +105,8 @@ class Settings private constructor(
                 .apply {
                     setUrl(url)
                 }
-            val prefix = networkType.getAddressPrefix()
-            val cryptoComponent = this.cryptoComponent ?: CryptoCoreComponentImpl(prefix)
+            val network = network ?: Testnet()
+            val cryptoComponent = this.cryptoComponent ?: CryptoCoreComponentImpl(network)
             val apis = apis ?: Api.values().toSet()
 
             return Settings(
@@ -114,7 +115,7 @@ class Settings private constructor(
                 cryptoComponent,
                 apis,
                 returnOnMainThread,
-                networkType
+                network
             )
         }
     }

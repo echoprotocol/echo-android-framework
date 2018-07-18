@@ -4,6 +4,7 @@ import com.pixelplex.bitcoinj.ECKey
 import com.pixelplex.bitcoinj.Sha256Hash
 import com.pixelplex.echolib.core.crypto.CryptoCoreComponent
 import com.pixelplex.echolib.model.AuthorityType
+import com.pixelplex.echolib.model.network.Network
 
 /**
  * Implementation of [CryptoCoreComponent]
@@ -11,10 +12,10 @@ import com.pixelplex.echolib.model.AuthorityType
  * @author Daria Pechkovskaya
  * @author Dmitriy Bushuev
  */
-class CryptoCoreComponentImpl(private val prefix: String) : CryptoCoreComponent {
+class CryptoCoreComponentImpl(private val network: Network) : CryptoCoreComponent {
 
     private val seedProvider = RoleDependentSeedProvider(AuthorityType.ACTIVE)
-    private val ecKeyConverter = ECKeyToAddressConverter(prefix)
+    private val ecKeyConverter = ECKeyToAddressConverter(network.addressPrefix)
 
     override fun getAddress(userName: String, password: String): String {
         return ecKeyConverter.convert(getPrivateKey(userName, password))
