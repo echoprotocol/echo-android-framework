@@ -33,11 +33,22 @@
         android:maxLines="1"
         android:singleLine="true" />
 
+    <EditText
+        android:id="@+id/etAsset"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etPassword"
+        android:layout_marginTop="15dp"
+        android:hint="@string/password"
+        android:inputType="text"
+        android:maxLines="1"
+        android:singleLine="true" />
+
     <Button
         android:id="@+id/btnLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/etPassword"
+        android:layout_below="@+id/etAsset"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
         android:text="@string/login"
@@ -63,11 +74,21 @@
         android:text="@string/check_account_availability"
         android:visibility="invisible" />
 
+    <Button
+        android:id="@+id/btnBalances"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnCheck"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:text="@string/get_balances"
+        android:visibility="invisible" />
+
     <TextView
         android:id="@+id/txtStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/btnCheck"
+        android:layout_below="@+id/btnBalances"
         android:layout_marginTop="10dp"
         tools:text="Status: " />
 

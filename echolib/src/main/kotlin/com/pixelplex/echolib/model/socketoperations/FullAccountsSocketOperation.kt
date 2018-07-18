@@ -9,9 +9,9 @@ import com.pixelplex.echolib.ILLEGAL_ID
 import com.pixelplex.echolib.model.Account
 import com.pixelplex.echolib.model.Authority
 import com.pixelplex.echolib.model.FullAccount
+import com.pixelplex.echolib.model.network.Network
 import com.pixelplex.echolib.support.Api
 import com.pixelplex.echolib.support.getId
-import com.pixelplex.echolib.model.network.Network
 
 /**
  * This function fetches all relevant [Account] objects for the given accounts, and
@@ -30,11 +30,11 @@ class FullAccountsSocketOperation(
     val shouldSubscribe: Boolean,
     val network: Network,
     method: SocketMethodType = SocketMethodType.CALL,
-    callback: Callback<Map<String, Account>>
-) : SocketOperation<Map<String, Account>>(
+    callback: Callback<Map<String, FullAccount>>
+) : SocketOperation<Map<String, FullAccount>>(
     method,
     ILLEGAL_ID,
-    mapOf<String, Account>().javaClass,
+    mapOf<String, FullAccount>().javaClass,
     callback
 ) {
 
@@ -57,11 +57,11 @@ class FullAccountsSocketOperation(
     override val apiId: Int
         get() = api.getId()
 
-    override fun fromJson(json: String): Map<String, Account> {
+    override fun fromJson(json: String): Map<String, FullAccount> {
         val parser = JsonParser()
         val jsonTree = parser.parse(json)
 
-        val accountsMap = hashMapOf<String, Account>()
+        val accountsMap = hashMapOf<String, FullAccount>()
 
         if (!jsonTree.isJsonObject || jsonTree.asJsonObject.get("result") == null) {
             return accountsMap
@@ -80,7 +80,7 @@ class FullAccountsSocketOperation(
                 val id = subArray.get(0).asString
                 val accObj = subArray.get(1).asJsonObject
                 val fullAccount = gson.fromJson<FullAccount>(accObj, FullAccount::class.java)
-                fullAccount.account?.let { acc ->
+                fullAccount?.let { acc ->
                     accountsMap[id] = acc
                 }
             }

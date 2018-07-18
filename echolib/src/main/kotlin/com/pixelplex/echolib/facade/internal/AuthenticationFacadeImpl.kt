@@ -30,10 +30,12 @@ class AuthenticationFacadeImpl(
         result.fold({ accountsMap ->
             val foundAccount = accountsMap[name]
             val address = cryptoCoreComponent.getAddress(name, password)
-            if (foundAccount != null && isAddressSame(foundAccount, address)) {
-                callback.onSuccess(foundAccount)
-            } else {
-                callback.onError(NotFoundException("Account not found."))
+            foundAccount?.account?.let { account ->
+                if (isAddressSame(account, address)) {
+                    callback.onSuccess(account)
+                } else {
+                    callback.onError(NotFoundException("Account not found."))
+                }
             }
         }, { error ->
             callback.onError(LocalException(error.message, error))

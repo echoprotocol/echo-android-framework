@@ -27,7 +27,7 @@ class InformationFacadeImpl(private val databaseApiService: DatabaseApiService) 
         result.fold({ accountMap ->
             val requiredAccount = accountMap[nameOrId]
 
-            requiredAccount?.let { account ->
+            requiredAccount?.account?.let { account ->
                 callback.onSuccess(account)
             } ?: callback.onError(NotFoundException("Account not found."))
         }, { error ->
@@ -50,6 +50,28 @@ class InformationFacadeImpl(private val databaseApiService: DatabaseApiService) 
     }
 
     override fun getBalance(nameOrId: String, asset: String, callback: Callback<Balance>) {
+        val result = databaseApiService.getFullAccounts(listOf(nameOrId), false)
+
+        result.fold({ accountMap ->
+            val requiredAccount = accountMap[nameOrId]
+
+            requiredAccount?.let { account ->
+                val accountBalances = account.balances
+                if (accountBalances?.isEmpty() == false) {
+                    accountBalances.firstOrNull { balance -> balance.assetType == asset }
+                        ?.let { balance ->
+                            callback.onSuccess(balance)
+                        }
+                            ?: callback.onError(
+                                NotFoundException("Account balance with asset type = $asset is not found")
+                            )
+                } else {
+                    callback.onError(LocalException("Account balances are empty."))
+                }
+            } ?: callback.onError(NotFoundException("Account not found."))
+        }, { error ->
+            callback.onError(LocalException(error.message, error))
+        })
     }
 
 }
