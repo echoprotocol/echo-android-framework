@@ -125,10 +125,10 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         })
     }
 
-    override fun checkAccountIsUnavailable(nameOrId: String, callback: Callback<Boolean>) {
+    override fun checkAccountReserved(nameOrId: String, callback: Callback<Boolean>) {
         val threadKeepCallback = callback.wrapOriginal()
         dispatch(Runnable {
-            informationFacade.checkAccountIsUnavailable(nameOrId, threadKeepCallback)
+            informationFacade.checkAccountReserved(nameOrId, threadKeepCallback)
         })
     }
 

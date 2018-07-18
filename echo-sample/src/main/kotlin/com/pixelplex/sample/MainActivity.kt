@@ -58,7 +58,27 @@ class MainActivity : AppCompatActivity() {
                         toggleProgress(false)
                         etName.text.clear()
                         etPassword.text.clear()
-                        updateStatus("Login success!")
+                        updateStatus("Account found!")
+                    }
+
+                    override fun onError(error: LocalException) {
+                        toggleProgress(false)
+                        error.printStackTrace()
+                        updateStatus("Error ${error.message ?: "empty"}")
+                    }
+                })
+        }
+
+        btnCheck.setOnClickListener {
+            toggleProgress(true)
+            lib.checkAccountReserved(
+                etName.text.toString(),
+                object : Callback<Boolean> {
+                    override fun onSuccess(result: Boolean) {
+                        toggleProgress(false)
+                        etName.text.clear()
+                        etPassword.text.clear()
+                        updateStatus(if (result) "Account reserved!" else "Account available!")
                     }
 
                     override fun onError(error: LocalException) {
@@ -78,6 +98,7 @@ class MainActivity : AppCompatActivity() {
                 toggleProgress(false)
                 btnLogin.visibility = View.VISIBLE
                 btnFind.visibility = View.VISIBLE
+                btnCheck.visibility = View.VISIBLE
                 updateStatus("Success initializing")
 
             }
@@ -85,6 +106,8 @@ class MainActivity : AppCompatActivity() {
             override fun onError(error: LocalException) {
                 toggleProgress(false)
                 btnLogin.visibility = View.INVISIBLE
+                btnFind.visibility = View.INVISIBLE
+                btnCheck.visibility = View.INVISIBLE
                 error.printStackTrace()
                 updateStatus("Error occurred during initialization.")
             }
