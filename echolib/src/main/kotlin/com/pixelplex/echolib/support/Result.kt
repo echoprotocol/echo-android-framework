@@ -1,5 +1,3 @@
-@file:JvmName("FutureExtensions")
-
 package com.pixelplex.echolib.support
 
 /**

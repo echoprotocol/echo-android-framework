@@ -27,7 +27,7 @@ interface InformationFacade {
      * @param callback Listener of operation results.
      *                 Retrieves true, if account is available, otherwise false
      */
-    fun checkAccountIsUnavailable(nameOrId: String, callback: Callback<Boolean>)
+    fun checkAccountReserved(nameOrId: String, callback: Callback<Boolean>)
 
     /**
      * Gets balance for account with defined [nameOrId] and specific asset type

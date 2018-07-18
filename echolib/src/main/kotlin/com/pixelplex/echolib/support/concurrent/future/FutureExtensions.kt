@@ -1,3 +1,5 @@
+@file:JvmName("FutureExtensions")
+
 package com.pixelplex.echolib.support.concurrent.future
 
 import com.pixelplex.echolib.support.Failure
