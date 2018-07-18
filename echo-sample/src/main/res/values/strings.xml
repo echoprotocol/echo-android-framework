@@ -4,5 +4,6 @@
     <string name="name">Name</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
+    <string name="find_account">Find account</string>
     <string name="status">Status: %s</string>
 </resources>

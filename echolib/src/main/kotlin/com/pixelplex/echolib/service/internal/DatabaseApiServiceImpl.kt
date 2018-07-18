@@ -7,7 +7,9 @@ import com.pixelplex.echolib.model.Account
 import com.pixelplex.echolib.model.socketoperations.FullAccountsSocketOperation
 import com.pixelplex.echolib.service.DatabaseApiService
 import com.pixelplex.echolib.support.Api
+import com.pixelplex.echolib.support.Result
 import com.pixelplex.echolib.support.concurrent.future.FutureTask
+import com.pixelplex.echolib.support.concurrent.future.wrapResult
 
 /**
  * Implementation of [DatabaseApiService]
@@ -40,7 +42,7 @@ class DatabaseApiServiceImpl(private val socketCoreComponent: SocketCoreComponen
     override fun getFullAccounts(
         namesOrIds: List<String>,
         subscribe: Boolean
-    ): Map<String, Account> {
+    ): Result<Map<String, Account>, Exception> {
 
         val future = FutureTask<Map<String, Account>>()
         val fullAccountsOperation = FullAccountsSocketOperation(
@@ -59,6 +61,7 @@ class DatabaseApiServiceImpl(private val socketCoreComponent: SocketCoreComponen
         )
         socketCoreComponent.emit(fullAccountsOperation)
 
-        return future.get() ?: mapOf()
+        return future.wrapResult(mapOf())
     }
+
 }
