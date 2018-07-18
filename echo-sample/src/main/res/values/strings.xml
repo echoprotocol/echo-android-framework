@@ -6,5 +6,6 @@
     <string name="login">Login</string>
     <string name="find_account">Find account</string>
     <string name="check_account_availability">Check account availability</string>
+    <string name="get_balances">Get balances</string>
     <string name="status">Status: %s</string>
 </resources>

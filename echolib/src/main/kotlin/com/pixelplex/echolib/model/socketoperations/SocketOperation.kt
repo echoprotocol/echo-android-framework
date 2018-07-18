@@ -27,6 +27,7 @@ enum class SocketOperationKeys(val key: String) {
     LOGIN("login"),
     BLOCK_DATA("get_dynamic_global_properties"),
     FULL_ACCOUNTS("get_full_accounts"),
+    ACCOUNT_BALANCES("get_account_balances"),
     ACCOUNT_HISTORY("get_account_history"),
     ASSETS("get_assets"),
     BLOCK("get_block"),

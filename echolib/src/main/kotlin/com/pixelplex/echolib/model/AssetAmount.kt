@@ -2,7 +2,12 @@ package com.pixelplex.echolib.model
 
 import com.google.common.math.DoubleMath
 import com.google.common.primitives.UnsignedLong
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonElement
+import com.google.gson.JsonParseException
 import com.pixelplex.echolib.exception.IncompatibleOperationException
+import java.lang.reflect.Type
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -126,8 +131,28 @@ class AssetAmount(
         }
     }
 
+    /**
+     * Custom deserializer used for this class
+     */
+    class AssetAmountDeserializer : JsonDeserializer<AssetAmount> {
+
+        @Throws(JsonParseException::class)
+        override fun deserialize(
+            json: JsonElement,
+            type: Type,
+            jsonDeserializationContext: JsonDeserializationContext
+        ): AssetAmount {
+            val amount = json.asJsonObject.get(AMOUNT_KEY).asLong
+            val assetId = json.asJsonObject.get(AMOUNT_ID_KEY).asString
+            return AssetAmount(UnsignedLong.valueOf(amount), Asset(assetId))
+        }
+    }
+
     companion object {
         private const val DEFAULT_SCALE = 18
+
+        private const val AMOUNT_KEY = "amount"
+        private const val AMOUNT_ID_KEY = "asset_id"
     }
 
 }

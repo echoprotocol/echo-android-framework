@@ -7,6 +7,7 @@ import com.pixelplex.echolib.Callback
 import com.pixelplex.echolib.EchoFramework
 import com.pixelplex.echolib.exception.LocalException
 import com.pixelplex.echolib.model.Account
+import com.pixelplex.echolib.model.Balance
 import com.pixelplex.echolib.support.Api
 import com.pixelplex.echolib.support.Settings
 import kotlinx.android.synthetic.main.activity_main.*
@@ -88,6 +89,25 @@ class MainActivity : AppCompatActivity() {
                     }
                 })
         }
+
+        btnBalances.setOnClickListener {
+            lib.getBalance(etName.text.toString(),
+                etAsset.text.toString(),
+                object : Callback<Balance> {
+                    override fun onSuccess(result: Balance) {
+                        toggleProgress(false)
+                        etName.text.clear()
+                        etPassword.text.clear()
+                        updateStatus(result.toString())
+                    }
+
+                    override fun onError(error: LocalException) {
+                        toggleProgress(false)
+                        error.printStackTrace()
+                        updateStatus("Error ${error.message ?: "empty"}")
+                    }
+                })
+        }
     }
 
     private fun startLib() {
@@ -99,6 +119,7 @@ class MainActivity : AppCompatActivity() {
                 btnLogin.visibility = View.VISIBLE
                 btnFind.visibility = View.VISIBLE
                 btnCheck.visibility = View.VISIBLE
+                btnBalances.visibility = View.VISIBLE
                 updateStatus("Success initializing")
 
             }
@@ -108,6 +129,7 @@ class MainActivity : AppCompatActivity() {
                 btnLogin.visibility = View.INVISIBLE
                 btnFind.visibility = View.INVISIBLE
                 btnCheck.visibility = View.INVISIBLE
+                btnBalances.visibility = View.INVISIBLE
                 error.printStackTrace()
                 updateStatus("Error occurred during initialization.")
             }

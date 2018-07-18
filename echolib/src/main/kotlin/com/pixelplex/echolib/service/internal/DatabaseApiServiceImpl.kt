@@ -4,6 +4,7 @@ import com.pixelplex.echolib.Callback
 import com.pixelplex.echolib.core.socket.SocketCoreComponent
 import com.pixelplex.echolib.exception.LocalException
 import com.pixelplex.echolib.model.Account
+import com.pixelplex.echolib.model.FullAccount
 import com.pixelplex.echolib.model.network.Network
 import com.pixelplex.echolib.model.socketoperations.FullAccountsSocketOperation
 import com.pixelplex.echolib.service.DatabaseApiService
@@ -31,7 +32,7 @@ class DatabaseApiServiceImpl(
     override fun getFullAccounts(
         namesOrIds: List<String>,
         subscribe: Boolean,
-        callback: Callback<Map<String, Account>>
+        callback: Callback<Map<String, FullAccount>>
     ) {
         val fullAccountsOperation = FullAccountsSocketOperation(
             api,
@@ -46,15 +47,15 @@ class DatabaseApiServiceImpl(
     override fun getFullAccounts(
         namesOrIds: List<String>,
         subscribe: Boolean
-    ): Result<Map<String, Account>, Exception> {
+    ): Result<Map<String, FullAccount>, Exception> {
 
-        val future = FutureTask<Map<String, Account>>()
+        val future = FutureTask<Map<String, FullAccount>>()
         val fullAccountsOperation = FullAccountsSocketOperation(
             api,
             namesOrIds,
             subscribe,
-            callback = object : Callback<Map<String, Account>> {
-                override fun onSuccess(result: Map<String, Account>) {
+            callback = object : Callback<Map<String, FullAccount>> {
+                override fun onSuccess(result: Map<String, FullAccount>) {
                     future.setComplete(result)
                 }
 

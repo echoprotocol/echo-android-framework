@@ -3,6 +3,7 @@ package com.pixelplex.echolib.service
 import com.pixelplex.echolib.Callback
 import com.pixelplex.echolib.ILLEGAL_ID
 import com.pixelplex.echolib.model.Account
+import com.pixelplex.echolib.model.FullAccount
 import com.pixelplex.echolib.support.Result
 
 /**
@@ -43,7 +44,7 @@ interface AccountsService {
     fun getFullAccounts(
         namesOrIds: List<String>,
         subscribe: Boolean,
-        callback: Callback<Map<String, Account>>
+        callback: Callback<Map<String, FullAccount>>
     )
 
     /**
@@ -56,6 +57,6 @@ interface AccountsService {
     fun getFullAccounts(
         namesOrIds: List<String>,
         subscribe: Boolean
-    ): Result<Map<String, Account>, Exception>
+    ): Result<Map<String, FullAccount>, Exception>
 
 }
