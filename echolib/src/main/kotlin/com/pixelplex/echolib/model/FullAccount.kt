@@ -11,5 +11,5 @@ class FullAccount(
     @SerializedName("registrar_name") @Expose var registrarName: String? = null,
     @SerializedName("referrer_name") @Expose var referrerName: String? = null,
     @Expose var balances: List<Balance>? = null,
-    @Expose var assets: List<Asset>? = null
+    @Expose var assets: List<String>? = null
 )
