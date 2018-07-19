@@ -10,5 +10,8 @@
     <string name="check_account_availability">Check account availability</string>
     <string name="get_balances">Get balances</string>
     <string name="change_password">Change password</string>
+    <string name="subscribe">Subscribe</string>
+    <string name="unsubscribe">Unsubscribe</string>
+    <string name="unsubscribe_all">Unsubscribe all</string>
     <string name="status">Status: %s</string>
 </resources>

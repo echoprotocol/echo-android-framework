@@ -3,6 +3,7 @@ package com.pixelplex.sample
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import com.pixelplex.echolib.AccountListener
 import com.pixelplex.echolib.Callback
 import com.pixelplex.echolib.EchoFramework
 import com.pixelplex.echolib.exception.LocalException
@@ -130,6 +131,41 @@ class MainActivity : AppCompatActivity() {
                     }
                 })
         }
+        btnSubscribe.setOnClickListener {
+            lib.subscribeOnAccount(etName.text.toString(), object : AccountListener {
+                override fun onChange(updatedAccount: Account) {
+                    updateStatus(updatedAccount.toString())
+                }
+
+            })
+        }
+
+        btnUnsubscribe.setOnClickListener {
+            lib.unsubscribeFromAccount(etName.text.toString(), object : Callback<Boolean> {
+                override fun onSuccess(result: Boolean) {
+                    updateStatus("Unsubscribe succeed")
+                }
+
+                override fun onError(error: LocalException) {
+                    updateStatus("Unsubscribe failed")
+                }
+
+            })
+        }
+
+        btnUnsubscribeAll.setOnClickListener {
+            lib.unsubscribeAll(object : Callback<Boolean> {
+                override fun onSuccess(result: Boolean) {
+                    updateStatus("Unsubscribe all succeed")
+                }
+
+                override fun onError(error: LocalException) {
+                    updateStatus("Unsubscribe all failed")
+                }
+
+            })
+
+        }
     }
 
     private fun startLib() {
@@ -143,8 +179,10 @@ class MainActivity : AppCompatActivity() {
                 btnCheck.visibility = View.VISIBLE
                 btnBalances.visibility = View.VISIBLE
                 btnChangePassword.visibility = View.VISIBLE
+                btnSubscribe.visibility = View.VISIBLE
+                btnUnsubscribe.visibility = View.VISIBLE
+                btnUnsubscribeAll.visibility = View.VISIBLE
                 updateStatus("Success initializing")
-
             }
 
             override fun onError(error: LocalException) {
@@ -154,6 +192,9 @@ class MainActivity : AppCompatActivity() {
                 btnCheck.visibility = View.INVISIBLE
                 btnBalances.visibility = View.INVISIBLE
                 btnChangePassword.visibility = View.INVISIBLE
+                btnSubscribe.visibility = View.INVISIBLE
+                btnUnsubscribe.visibility = View.INVISIBLE
+                btnUnsubscribeAll.visibility = View.INVISIBLE
                 error.printStackTrace()
                 updateStatus("Error occurred during initialization.")
             }

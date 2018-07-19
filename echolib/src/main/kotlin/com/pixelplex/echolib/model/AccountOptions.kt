@@ -27,7 +27,7 @@ class AccountOptions : GrapheneSerializable {
 
     var committeeCount: Int = 0
 
-    var votes: Array<Vote> = arrayOf()
+    var votes: Array<String> = arrayOf()
 
     private val extensions = Extensions()
 
@@ -57,7 +57,7 @@ class AccountOptions : GrapheneSerializable {
             // Vote's array length
             bytes += votes.size.toByte()
             votes.forEach { vote ->
-                bytes += vote.toBytes()
+                bytes += vote.toByteArray()
             }
 
             // Account options's extensions

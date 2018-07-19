@@ -4,11 +4,7 @@ import com.pixelplex.echolib.Callback
 import com.pixelplex.echolib.exception.LocalException
 
 /**
- * Executes callback events on thread, where this callback was originally created
- *
- * <p>
- *     Should be initialized before starting asynchronous request
- * </p>
+ * Executes callback events on main (UI) thread
  *
  * @author Dmitriy Bushuev
  */
