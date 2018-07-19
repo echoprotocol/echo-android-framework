@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         lib = EchoFramework.create(
             Settings.Configurator()
                 .setReturnOnMainThread(true)
-                .setApis(Api.DATABASE)
+                .setApis(Api.DATABASE, Api.NETWORK_BROADCAST)
                 .configure()
         )
 
@@ -108,6 +108,28 @@ class MainActivity : AppCompatActivity() {
                     }
                 })
         }
+
+        btnChangePassword.setOnClickListener {
+            toggleProgress(true)
+            lib.changePassword(etName.text.toString(),
+                etPassword.text.toString(),
+                etNewPassword.text.toString(),
+                object : Callback<Any> {
+                    override fun onSuccess(result: Any) {
+                        toggleProgress(false)
+                        etName.text.clear()
+                        etPassword.text.clear()
+                        etNewPassword.text.clear()
+                        updateStatus("Password changed successfully")
+                    }
+
+                    override fun onError(error: LocalException) {
+                        toggleProgress(false)
+                        error.printStackTrace()
+                        updateStatus("Error ${error.message ?: "empty"}")
+                    }
+                })
+        }
     }
 
     private fun startLib() {
@@ -120,6 +142,7 @@ class MainActivity : AppCompatActivity() {
                 btnFind.visibility = View.VISIBLE
                 btnCheck.visibility = View.VISIBLE
                 btnBalances.visibility = View.VISIBLE
+                btnChangePassword.visibility = View.VISIBLE
                 updateStatus("Success initializing")
 
             }
@@ -130,6 +153,7 @@ class MainActivity : AppCompatActivity() {
                 btnFind.visibility = View.INVISIBLE
                 btnCheck.visibility = View.INVISIBLE
                 btnBalances.visibility = View.INVISIBLE
+                btnChangePassword.visibility = View.INVISIBLE
                 error.printStackTrace()
                 updateStatus("Error occurred during initialization.")
             }

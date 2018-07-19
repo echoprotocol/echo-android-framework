@@ -2,14 +2,16 @@ package com.pixelplex.echolib.model
 
 import com.google.common.math.DoubleMath
 import com.google.common.primitives.UnsignedLong
-import com.google.gson.JsonDeserializationContext
-import com.google.gson.JsonDeserializer
-import com.google.gson.JsonElement
-import com.google.gson.JsonParseException
+import com.google.gson.*
+import com.pixelplex.bitcoinj.revert
 import com.pixelplex.echolib.exception.IncompatibleOperationException
+import com.pixelplex.echolib.support.Varint
+import java.io.ByteArrayOutputStream
+import java.io.DataOutputStream
 import java.lang.reflect.Type
 import java.math.BigDecimal
 import java.math.RoundingMode
+import com.pixelplex.echolib.BITSHARES_ASSET_ID
 
 /**
  * Class used to represent a specific amount of a certain asset
@@ -17,10 +19,10 @@ import java.math.RoundingMode
  * @author Dmitriy Bushuev
  * @author Dasha Pechkovskaya
  */
-class AssetAmount(
+class AssetAmount @JvmOverloads constructor(
     var amount: UnsignedLong,
-    val asset: Asset
-) {
+    val asset: Asset = Asset(BITSHARES_ASSET_ID)
+) : GrapheneSerializable {
 
     /**
      * Adds two asset amounts. They must refer to the same Asset type.
@@ -131,10 +133,46 @@ class AssetAmount(
         }
     }
 
+    override fun toBytes(): ByteArray {
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        DataOutputStream(byteArrayOutputStream).use { out ->
+            Varint.writeUnsignedVarLong(asset.instance, out)
+        }
+        // Getting asset id
+        val assetId = byteArrayOutputStream.toByteArray()
+        val value = this.amount.toLong().revert()
+
+        // Concatenating and returning value + asset id
+        return value + assetId
+    }
+
+    override fun toJsonString(): String? {
+        val gsonBuilder = GsonBuilder()
+        gsonBuilder.registerTypeAdapter(AssetAmount::class.java, Serializer())
+        return gsonBuilder.create().toJson(this)
+    }
+
+    override fun toJsonObject(): JsonElement? = JsonObject().apply {
+        addProperty(KEY_AMOUNT, amount)
+        addProperty(KEY_ASSET_ID, asset.getObjectId())
+    }
+
+    /**
+     * Custom serializer used to translate this object into the JSON-formatted entry we need for a transaction.
+     */
+    class Serializer : JsonSerializer<AssetAmount> {
+
+        override fun serialize(
+            assetAmount: AssetAmount?,
+            type: Type?,
+            jsonSerializationContext: JsonSerializationContext?
+        ): JsonElement? = assetAmount?.toJsonObject()
+    }
+
     /**
      * Custom deserializer used for this class
      */
-    class AssetAmountDeserializer : JsonDeserializer<AssetAmount> {
+    class Deserializer : JsonDeserializer<AssetAmount> {
 
         @Throws(JsonParseException::class)
         override fun deserialize(
@@ -142,8 +180,8 @@ class AssetAmount(
             type: Type,
             jsonDeserializationContext: JsonDeserializationContext
         ): AssetAmount {
-            val amount = json.asJsonObject.get(AMOUNT_KEY).asLong
-            val assetId = json.asJsonObject.get(AMOUNT_ID_KEY).asString
+            val amount = json.asJsonObject.get(KEY_AMOUNT).asLong
+            val assetId = json.asJsonObject.get(KEY_ASSET_ID).asString
             return AssetAmount(UnsignedLong.valueOf(amount), Asset(assetId))
         }
     }
@@ -151,8 +189,8 @@ class AssetAmount(
     companion object {
         private const val DEFAULT_SCALE = 18
 
-        private const val AMOUNT_KEY = "amount"
-        private const val AMOUNT_ID_KEY = "asset_id"
+        private const val KEY_AMOUNT = "amount"
+        private const val KEY_ASSET_ID = "asset_id"
     }
 
 }

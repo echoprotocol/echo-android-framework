@@ -3,6 +3,7 @@ package com.pixelplex.echolib.crypto
 import com.pixelplex.echolib.core.crypto.CryptoCoreComponent
 import com.pixelplex.echolib.core.crypto.internal.CryptoCoreComponentImpl
 import com.pixelplex.echolib.model.Address
+import com.pixelplex.echolib.model.AuthorityType
 import com.pixelplex.echolib.model.network.Network
 import com.pixelplex.echolib.model.network.Testnet
 import org.junit.Assert.*
@@ -21,6 +22,7 @@ class CryptoCoreComponentTest {
     private val name = "testName"
     private val password = "testPassword"
     private lateinit var network: Network
+    private val authorityType = AuthorityType.ACTIVE
 
     @Before
     fun setUp() {
@@ -30,15 +32,15 @@ class CryptoCoreComponentTest {
 
     @Test
     fun addressEqualityTest() {
-        val firstAddress = cryptoCoreComponent.getAddress(name, password)
-        val secondAddress = cryptoCoreComponent.getAddress(name, password)
+        val firstAddress = cryptoCoreComponent.getAddress(name, password, authorityType)
+        val secondAddress = cryptoCoreComponent.getAddress(name, password, authorityType)
 
         assertEquals(firstAddress, secondAddress)
 
         val secondName = "secondTestName"
         val secondPassword = "secondTestPassword"
 
-        val thirdAddress = cryptoCoreComponent.getAddress(secondName, secondPassword)
+        val thirdAddress = cryptoCoreComponent.getAddress(secondName, secondPassword, authorityType)
 
         assertNotEquals(firstAddress, thirdAddress)
 
@@ -50,7 +52,7 @@ class CryptoCoreComponentTest {
 
     @Test
     fun privateKeyTest() {
-        val privateKey = cryptoCoreComponent.getPrivateKey(name, password)
+        val privateKey = cryptoCoreComponent.getPrivateKey(name, password, authorityType)
 
         assertTrue(privateKey.hasPrivKey())
     }

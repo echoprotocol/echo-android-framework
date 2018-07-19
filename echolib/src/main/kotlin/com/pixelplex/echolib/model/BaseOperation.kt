@@ -22,8 +22,8 @@ abstract class BaseOperation(protected var type: OperationType) : ByteSerializab
         }
 
     /**
-     * Apply required amount of fee [assetAmount] to operation
+     * Required amount of fee [AssetAmount] to operation
      */
-    abstract fun setFee(assetAmount: AssetAmount)
+    abstract var fee: AssetAmount
 
 }

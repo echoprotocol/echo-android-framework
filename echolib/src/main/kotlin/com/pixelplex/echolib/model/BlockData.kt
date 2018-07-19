@@ -71,13 +71,13 @@ class BlockData : ByteSerializable {
         val result =
             ByteArray(REF_BLOCK_NUM_BYTES + REF_BLOCK_PREFIX_BYTES + REF_BLOCK_EXPIRATION_BYTES)
 
-        result.mapIndexed { i, _ ->
+        for (i in 0 until result.size) {
             when (i) {
-                in 0 until REF_BLOCK_NUM_BYTES -> (refBlockNum shr OFFSET * i).toByte()
-                in REF_BLOCK_NUM_BYTES until REF_BLOCK_PREFIX_END ->
-                    (refBlockPrefix shr OFFSET * (i - REF_BLOCK_NUM_BYTES)).toByte()
-                else ->
-                    (relativeExpiration shr OFFSET * (i - REF_BLOCK_PREFIX_END)).toByte()
+                in 0 until REF_BLOCK_NUM_BYTES -> result[i] = (refBlockNum shr OFFSET * i).toByte()
+                in REF_BLOCK_NUM_BYTES until REF_BLOCK_PREFIX_END -> result[i] =
+                        (refBlockPrefix shr OFFSET * (i - REF_BLOCK_NUM_BYTES)).toByte()
+                else -> result[i] =
+                        (relativeExpiration shr OFFSET * (i - REF_BLOCK_PREFIX_END)).toByte()
             }
         }
         return result

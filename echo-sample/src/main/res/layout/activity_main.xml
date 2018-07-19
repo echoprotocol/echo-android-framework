@@ -1,48 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="50dp">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="30dp"
+                android:paddingEnd="50dp"
+                android:paddingStart="50dp"
+                android:paddingTop="30dp">
+
+    <TextView
+        android:id="@+id/txtStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        tools:text="Status: "/>
 
     <ProgressBar
         android:id="@+id/progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
     <EditText
         android:id="@+id/etName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/txtStatus"
         android:layout_centerHorizontal="true"
         android:hint="@string/name"
+        android:layout_marginTop="10dp"
         android:inputType="text"
         android:maxLines="1"
-        android:singleLine="true" />
+        android:singleLine="true"/>
 
     <EditText
         android:id="@+id/etPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/etName"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:hint="@string/password"
         android:inputType="textPassword"
         android:maxLines="1"
-        android:singleLine="true" />
+        android:singleLine="true"/>
+
+    <EditText
+        android:id="@+id/etNewPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etPassword"
+        android:layout_marginTop="10dp"
+        android:hint="@string/new_password"
+        android:inputType="textPassword"
+        android:maxLines="1"
+        android:singleLine="true"/>
 
     <EditText
         android:id="@+id/etAsset"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/etPassword"
+        android:layout_below="@+id/etNewPassword"
         android:layout_marginTop="15dp"
-        android:hint="@string/password"
+        android:hint="@string/asset_id"
         android:inputType="text"
         android:maxLines="1"
-        android:singleLine="true" />
+        android:singleLine="true"/>
 
     <Button
         android:id="@+id/btnLogin"
@@ -50,9 +73,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/etAsset"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:text="@string/login"
-        android:visibility="invisible" />
+        android:visibility="invisible"/>
 
     <Button
         android:id="@+id/btnFind"
@@ -60,9 +83,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/btnLogin"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:text="@string/find_account"
-        android:visibility="invisible" />
+        android:visibility="invisible"/>
 
     <Button
         android:id="@+id/btnCheck"
@@ -70,9 +93,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/btnFind"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:text="@string/check_account_availability"
-        android:visibility="invisible" />
+        android:visibility="invisible"/>
 
     <Button
         android:id="@+id/btnBalances"
@@ -80,16 +103,19 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/btnCheck"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:text="@string/get_balances"
-        android:visibility="invisible" />
+        android:visibility="invisible"/>
 
-    <TextView
-        android:id="@+id/txtStatus"
+    <Button
+        android:id="@+id/btnChangePassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/btnBalances"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        tools:text="Status: " />
+        android:text="@string/change_password"
+        android:visibility="invisible"/>
+
 
 </RelativeLayout>

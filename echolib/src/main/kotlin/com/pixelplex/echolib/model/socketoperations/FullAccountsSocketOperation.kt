@@ -7,6 +7,7 @@ import com.google.gson.JsonParser
 import com.pixelplex.echolib.Callback
 import com.pixelplex.echolib.ILLEGAL_ID
 import com.pixelplex.echolib.model.Account
+import com.pixelplex.echolib.model.AccountOptions
 import com.pixelplex.echolib.model.Authority
 import com.pixelplex.echolib.model.FullAccount
 import com.pixelplex.echolib.model.network.Network
@@ -73,6 +74,11 @@ class FullAccountsSocketOperation(
 
             val gson = GsonBuilder()
                 .registerTypeAdapter(Authority::class.java, Authority.Deserializer(network))
+                .registerTypeAdapter(Account::class.java, Account.Deserializer())
+                .registerTypeAdapter(
+                    AccountOptions::class.java,
+                    AccountOptions.Deserializer(network)
+                )
                 .create()
 
             for (i in 0 until size) {

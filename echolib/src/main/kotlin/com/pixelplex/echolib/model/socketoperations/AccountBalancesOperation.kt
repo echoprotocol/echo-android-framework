@@ -63,7 +63,7 @@ class AccountBalancesOperation(
         val gsonBuilder = GsonBuilder()
         gsonBuilder.registerTypeAdapter(
             AssetAmount::class.java,
-            AssetAmount.AssetAmountDeserializer()
+            AssetAmount.Deserializer()
         )
 
         val responseType = object : TypeToken<AssetAmount>() {

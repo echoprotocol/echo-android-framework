@@ -1,8 +1,15 @@
 package com.pixelplex.echolib.service.internal
 
+import com.pixelplex.echolib.Callback
 import com.pixelplex.echolib.core.socket.SocketCoreComponent
+import com.pixelplex.echolib.exception.LocalException
+import com.pixelplex.echolib.model.Transaction
+import com.pixelplex.echolib.model.socketoperations.TransactionSocketOperation
 import com.pixelplex.echolib.service.NetworkBroadcastApiService
 import com.pixelplex.echolib.support.Api
+import com.pixelplex.echolib.support.Result
+import com.pixelplex.echolib.support.concurrent.future.FutureTask
+import com.pixelplex.echolib.support.concurrent.future.wrapResult
 
 /**
  * Implementation of [NetworkBroadcastApiService]
@@ -14,7 +21,27 @@ import com.pixelplex.echolib.support.Api
  * @author Dmitriy Bushuev
  */
 class NetworkBroadcastApiServiceImpl(private val socketCoreComponent: SocketCoreComponent) :
-    NetworkBroadcastApiService{
+    NetworkBroadcastApiService {
 
     override val api: Api = Api.NETWORK_BROADCAST
+
+    override fun broadcastTransactionWithCallback(transaction: Transaction): Result<Exception, String> {
+        val future = FutureTask<String>()
+        val transactionSocketOperation = TransactionSocketOperation(
+            api,
+            transaction,
+            callback = object : Callback<String> {
+                override fun onSuccess(result: String) {
+                    future.setComplete(result)
+                }
+
+                override fun onError(error: LocalException) {
+                    future.setComplete(error)
+                }
+            }
+        )
+        socketCoreComponent.emit(transactionSocketOperation)
+
+        return future.wrapResult()
+    }
 }
