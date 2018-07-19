@@ -23,6 +23,7 @@ package com.pixelplex.bitcoinj
 import com.google.common.base.Preconditions
 import com.google.common.io.BaseEncoding
 import java.math.BigInteger
+import java.nio.ByteBuffer
 
 /**
  * A collection of various utility methods that are helpful for working with the Bitcoin protocol.
@@ -83,5 +84,34 @@ fun ByteArray.reverseBytes(): ByteArray {
     for (i in this.indices)
         buf[i] = this[this.size - 1 - i]
     return buf
-
 }
+
+/**
+ * Returns an array of bytes with the underlying data used to represent an integer in the reverse form.
+ * This is useful for endianess switches, meaning that if you give this function a big-endian integer
+ * it will return it's little-endian bytes.
+ * @param input An Integer value.
+ * @return The array of bytes that represent this value in the reverse format.
+ */
+fun Int.revert(): ByteArray =
+    ByteBuffer.allocate(Integer.SIZE / 8).putInt(Integer.reverseBytes(this)).array()
+
+/**
+ * Same operation as in the revertInteger function, but in this case for a short (2 bytes) value.
+ * @param input A Short value
+ * @return The array of bytes that represent this value in the reverse format.
+ */
+fun Short.revert(): ByteArray =
+    ByteBuffer.allocate(java.lang.Short.SIZE / 8)
+        .putShort(java.lang.Short.reverseBytes(this)).array()
+
+
+/**
+ * Same operation as in the revertInteger function, but in this case for a long (8 bytes) value.
+ * @param input A Long value
+ * @return The array of bytes that represent this value in the reverse format.
+ */
+fun Long.revert(): ByteArray =
+    ByteBuffer.allocate(java.lang.Long.SIZE / 8)
+        .putLong(java.lang.Long.reverseBytes(this)).array()
+

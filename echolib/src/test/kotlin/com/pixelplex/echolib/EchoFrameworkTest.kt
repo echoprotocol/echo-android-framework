@@ -178,7 +178,7 @@ class EchoFrameworkTest {
 
         var balance: Balance? = null
 
-        futureBalanceNonexistent.wrapResult<Balance, Exception>().fold({ foundBalance ->
+        futureBalanceNonexistent.wrapResult<Exception, Balance>().fold({ foundBalance ->
             balance = foundBalance
         }, {
         })

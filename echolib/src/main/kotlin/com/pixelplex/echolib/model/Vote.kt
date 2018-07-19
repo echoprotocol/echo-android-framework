@@ -7,7 +7,7 @@ import com.pixelplex.echolib.support.checkTrue
  *
  * @author Dmitriy Bushuev
  */
-class Vote {
+class Vote : ByteSerializable {
 
     private var type: Int = 0
     private var instance: Int = 0
@@ -31,6 +31,10 @@ class Vote {
     }
 
     override fun toString(): String = "$type:$instance"
+
+    override fun toBytes(): ByteArray {
+        return byteArrayOf(instance.toByte(), type.toByte())
+    }
 
     companion object {
         private const val VOTE_DELIMITER = ":"

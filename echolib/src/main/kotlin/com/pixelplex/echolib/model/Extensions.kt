@@ -30,7 +30,7 @@ class Extensions : GrapheneSerializable {
     fun size() = extensions.size
 
     companion object {
-        val KEY_EXTENSIONS = "extensions"
+        const val KEY_EXTENSIONS = "extensions"
     }
 
 }

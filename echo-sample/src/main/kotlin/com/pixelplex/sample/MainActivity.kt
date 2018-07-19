@@ -110,6 +110,27 @@ class MainActivity : AppCompatActivity() {
                 })
         }
 
+        btnChangePassword.setOnClickListener {
+            toggleProgress(true)
+            lib.changePassword(etName.text.toString(),
+                etPassword.text.toString(),
+                etNewPassword.text.toString(),
+                object : Callback<Any> {
+                    override fun onSuccess(result: Any) {
+                        toggleProgress(false)
+                        etName.text.clear()
+                        etPassword.text.clear()
+                        etNewPassword.text.clear()
+                        updateStatus("Password changed successfully")
+                    }
+
+                    override fun onError(error: LocalException) {
+                        toggleProgress(false)
+                        error.printStackTrace()
+                        updateStatus("Error ${error.message ?: "empty"}")
+                    }
+                })
+        }
         btnSubscribe.setOnClickListener {
             lib.subscribeOnAccount(etName.text.toString(), object : AccountListener {
                 override fun onChange(updatedAccount: Account) {
@@ -143,6 +164,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
             })
+
         }
     }
 
@@ -156,6 +178,7 @@ class MainActivity : AppCompatActivity() {
                 btnFind.visibility = View.VISIBLE
                 btnCheck.visibility = View.VISIBLE
                 btnBalances.visibility = View.VISIBLE
+                btnChangePassword.visibility = View.VISIBLE
                 btnSubscribe.visibility = View.VISIBLE
                 btnUnsubscribe.visibility = View.VISIBLE
                 btnUnsubscribeAll.visibility = View.VISIBLE
@@ -168,6 +191,7 @@ class MainActivity : AppCompatActivity() {
                 btnFind.visibility = View.INVISIBLE
                 btnCheck.visibility = View.INVISIBLE
                 btnBalances.visibility = View.INVISIBLE
+                btnChangePassword.visibility = View.INVISIBLE
                 btnSubscribe.visibility = View.INVISIBLE
                 btnUnsubscribe.visibility = View.INVISIBLE
                 btnUnsubscribeAll.visibility = View.INVISIBLE
