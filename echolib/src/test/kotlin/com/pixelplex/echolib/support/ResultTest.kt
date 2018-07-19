@@ -1,7 +1,6 @@
 package com.pixelplex.echolib.support
 
-import org.junit.Assert.assertTrue
-import org.junit.Assert.fail
+import org.junit.Assert.*
 import org.junit.Test
 
 /**
@@ -13,7 +12,7 @@ class ResultTest {
 
     @Test
     fun foldTest() {
-        val successResult = Success<Boolean, Exception>(true)
+        val successResult = Result.Value(true)
 
         successResult.fold({ result ->
             assertTrue(result)
@@ -21,12 +20,13 @@ class ResultTest {
             fail()
         })
 
-        val failureResult = Failure<Boolean, Exception>(IllegalArgumentException())
+        val errorResult = IllegalArgumentException()
+        val failureResult = Result.Error(errorResult)
 
         failureResult.fold({
             fail()
         }, { error ->
-            assertTrue(error is IllegalArgumentException)
+            assertEquals(errorResult, error)
         })
 
     }

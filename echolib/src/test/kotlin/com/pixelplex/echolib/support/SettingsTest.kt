@@ -7,6 +7,7 @@ import com.pixelplex.echolib.core.crypto.internal.CryptoCoreComponentImpl
 import com.pixelplex.echolib.core.socket.SocketMessenger
 import com.pixelplex.echolib.core.socket.SocketMessengerListener
 import com.pixelplex.echolib.core.socket.internal.SocketMessengerImpl
+import com.pixelplex.echolib.model.AuthorityType
 import com.pixelplex.echolib.model.network.Mainnet
 import com.pixelplex.echolib.model.network.Testnet
 import org.junit.Assert.*
@@ -79,12 +80,19 @@ class SettingsTest {
 
     private class TestCryptoComponent : CryptoCoreComponent {
 
-        override fun getAddress(userName: String, password: String): String = "test"
+        override fun getAddress(
+            userName: String,
+            password: String,
+            authorityType: AuthorityType
+        ): String = "test"
 
-        override fun getPrivateKey(userName: String, password: String): ECKey =
-            ECKey.fromPrivate(
-                BigInteger("0")
-            )
+        override fun getPrivateKey(
+            userName: String,
+            password: String,
+            authorityType: AuthorityType
+        ): ECKey = ECKey.fromPrivate(
+            BigInteger("0")
+        )
 
     }
 

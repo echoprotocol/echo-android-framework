@@ -113,7 +113,7 @@ class FutureTest {
             future.setComplete(result)
         }
 
-        future.wrapResult<Int, Exception>().fold({ received ->
+        future.wrapResult<Exception, Int>().fold({ received ->
             assertEquals(received, result)
         }, {
             fail()
@@ -129,7 +129,7 @@ class FutureTest {
             future.setComplete(IllegalStateException())
         }
 
-        future.wrapResult<Int, Exception>().fold({
+        future.wrapResult<Exception, Int>().fold({
             fail()
         }, { error ->
             assertTrue(error is ExecutionException)
