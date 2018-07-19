@@ -39,7 +39,7 @@ class GetObjectsSocketOperation(
             val identifiersJson = JsonArray()
             ids.forEach { item -> identifiersJson.add(item) }
 
-            add(JsonArray().apply { identifiersJson })
+            add(JsonArray().apply { add(identifiersJson) })
         }
 
     override val apiId: Int

@@ -23,7 +23,7 @@ class AccountOptions {
 
     var committeeCount: Int = 0
 
-    var votes: Array<Vote> = arrayOf()
+    var votes: Array<String> = arrayOf()
 
     private val extensions = ArrayList<JsonSerializable>()
 
