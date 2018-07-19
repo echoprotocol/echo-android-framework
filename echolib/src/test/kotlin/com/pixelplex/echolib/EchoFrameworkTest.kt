@@ -74,7 +74,7 @@ class EchoFrameworkTest {
 
         var accountFail: Account? = null
 
-        futureLoginFailure.wrapResult<Account, Exception>().fold({ foundAccount ->
+        futureLoginFailure.wrapResult<Exception, Account>().fold({ foundAccount ->
             accountFail = foundAccount
         }, {
         })
