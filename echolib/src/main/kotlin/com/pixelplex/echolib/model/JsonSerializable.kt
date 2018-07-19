@@ -24,6 +24,6 @@ interface JsonSerializable : Serializable {
      *
      * @return JsonObject representation
      */
-    fun toJsonObject(): JsonElement
+    fun toJsonObject(): JsonElement?
 
 }

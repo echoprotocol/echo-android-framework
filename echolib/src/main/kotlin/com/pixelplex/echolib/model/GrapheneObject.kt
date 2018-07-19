@@ -19,7 +19,7 @@ open class GrapheneObject(
 
     protected var space: Int = 0
     protected var type: Int = 0
-    protected var instance: Long = 0
+    var instance: Long = 0
 
     init {
         id.split(OBJECT_ID_DELIMITER).takeIf { it.size == OBJECT_ID_PARTS_SIZE }?.let { parts ->

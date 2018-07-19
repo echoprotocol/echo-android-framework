@@ -1,15 +1,15 @@
 package com.pixelplex.echolib.exception
 
 /**
- * Represents errors indicating a account requested from client was not found on server.
+ *  Represents errors associated with illegal AccountUpdateOperation state
+ * @see com.pixelplex.echolib.model.operations.AccountUpdateOperation
  *
  * @author Daria Pechkovskaya
  */
-class NotFoundException : LocalException {
+class MalformedOperationException: LocalException {
 
     constructor() : super()
     constructor(message: String?) : super(message)
     constructor(message: String?, cause: Throwable?) : super(message, cause)
 
 }
-

@@ -6,7 +6,6 @@ import com.google.gson.JsonParser
 import com.pixelplex.echolib.Callback
 import com.pixelplex.echolib.ILLEGAL_ID
 
-
 /**
  * Represents blockchain call for access to blockchain apis
  *

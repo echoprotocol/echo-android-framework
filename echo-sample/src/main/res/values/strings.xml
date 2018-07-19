@@ -3,9 +3,12 @@
 
     <string name="name">Name</string>
     <string name="password">Password</string>
+    <string name="new_password">New password</string>
+    <string name="asset_id">Asset id: 1.3.x</string>
     <string name="login">Login</string>
     <string name="find_account">Find account</string>
     <string name="check_account_availability">Check account availability</string>
     <string name="get_balances">Get balances</string>
+    <string name="change_password">Change password</string>
     <string name="status">Status: %s</string>
 </resources>

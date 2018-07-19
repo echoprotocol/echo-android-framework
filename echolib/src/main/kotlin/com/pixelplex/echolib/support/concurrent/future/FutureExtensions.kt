@@ -2,9 +2,9 @@
 
 package com.pixelplex.echolib.support.concurrent.future
 
-import com.pixelplex.echolib.support.Failure
 import com.pixelplex.echolib.support.Result
-import com.pixelplex.echolib.support.Success
+import com.pixelplex.echolib.support.toError
+import com.pixelplex.echolib.support.toValue
 
 /**
  * Wraps future task result in [Result]
@@ -13,21 +13,22 @@ import com.pixelplex.echolib.support.Success
  *     Future result must be not null
  * </p>
  */
-fun <T, E : Exception> FutureTask<T>.wrapResult(): Result<T, E> =
+fun <E : Exception, T> FutureTask<T>.wrapResult(): Result<E, T> =
     try {
         val result = get()
-        Success(result!!)
+        toValue(result!!)
     } catch (exception: Exception) {
-        Failure(exception as E)
+        toError(exception as E)
     }
 
 /**
  * Wraps future task result in [Result] with default value if operation succeeds with null
  */
-fun <T, E : Exception> FutureTask<T>.wrapResult(default: T): Result<T, E> =
+fun <E : Exception, T> FutureTask<T>.wrapResult(default: T): Result<E, T> =
     try {
-        val result = get()
-        Success(result ?: default)
+        val result = get() ?: default
+        toValue(result)
     } catch (exception: Exception) {
-        Failure(exception as E)
+        toError(exception as E)
     }
+

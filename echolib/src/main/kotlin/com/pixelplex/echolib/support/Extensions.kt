@@ -3,6 +3,8 @@
 package com.pixelplex.echolib.support
 
 import com.pixelplex.echolib.TIME_DATE_FORMAT
+import com.pixelplex.echolib.model.Account
+import com.pixelplex.echolib.model.AuthorityType
 import java.text.SimpleDateFormat
 import java.util.*
 

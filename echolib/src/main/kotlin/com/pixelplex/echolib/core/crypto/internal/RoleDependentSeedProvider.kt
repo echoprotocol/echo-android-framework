@@ -12,8 +12,8 @@ import com.pixelplex.echolib.support.checkNotNull
  */
 class RoleDependentSeedProvider(private val role: AuthorityType) : SeedProvider {
 
-    override fun provide(name: String, password: String): String {
-        val roleName = AuthorityTypeToRoleConverter().convert(role)
+    override fun provide(name: String, password: String, authorityType: AuthorityType): String {
+        val roleName = AuthorityTypeToRoleConverter().convert(authorityType)
 
         return name + roleName + password
     }
