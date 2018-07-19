@@ -1,7 +1,5 @@
-package com.pixelplex.echolib.socket
+package com.pixelplex.echolib.core.socket
 
-import com.pixelplex.echolib.core.socket.SocketMessenger
-import com.pixelplex.echolib.core.socket.SocketMessengerListener
 import com.pixelplex.echolib.exception.LocalException
 
 /**

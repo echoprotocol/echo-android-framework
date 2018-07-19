@@ -16,15 +16,12 @@
  * limitations under the License.
  */
 
-package com.pixelplex.echolib.crypto
+package com.pixelplex.bitcoinj
 
 import com.google.common.collect.Lists
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.common.util.concurrent.MoreExecutors
-import com.pixelplex.bitcoinj.ECDSASignature
-import com.pixelplex.bitcoinj.ECKey
-import com.pixelplex.bitcoinj.Sha256Hash
 import org.junit.Assert.*
 import org.junit.Test
 import java.math.BigInteger

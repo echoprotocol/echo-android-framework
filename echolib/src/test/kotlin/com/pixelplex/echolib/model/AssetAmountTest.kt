@@ -1,8 +1,6 @@
-package com.pixelplex.echolib
+package com.pixelplex.echolib.model
 
 import com.google.common.primitives.UnsignedLong
-import com.pixelplex.echolib.model.Asset
-import com.pixelplex.echolib.model.AssetAmount
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test

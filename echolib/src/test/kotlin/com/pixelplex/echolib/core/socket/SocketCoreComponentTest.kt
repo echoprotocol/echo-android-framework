@@ -1,12 +1,9 @@
-package com.pixelplex.echolib.socket
+package com.pixelplex.echolib.core.socket
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.pixelplex.echolib.Callback
 import com.pixelplex.echolib.core.mapper.MapperCoreComponent
-import com.pixelplex.echolib.core.socket.SocketCoreComponent
-import com.pixelplex.echolib.core.socket.SocketMessenger
-import com.pixelplex.echolib.core.socket.SocketMessengerListener
 import com.pixelplex.echolib.core.socket.internal.SocketCoreComponentImpl
 import com.pixelplex.echolib.exception.LocalException
 import com.pixelplex.echolib.model.socketoperations.SocketMethodType
@@ -89,15 +86,19 @@ class SocketCoreComponentTest {
         socketCore.connect("testurl")
 
         var succeed = false
-        socketCore.emit(OperationMock(1, object : Callback<String> {
-            override fun onError(error: LocalException) {
-            }
+        socketCore.emit(
+            OperationMock(
+                1,
+                object : Callback<String> {
+                    override fun onError(error: LocalException) {
+                    }
 
-            override fun onSuccess(result: String) {
-                succeed = true
-            }
+                    override fun onSuccess(result: String) {
+                        succeed = true
+                    }
 
-        }))
+                })
+        )
 
         assertTrue(succeed)
     }
@@ -108,15 +109,19 @@ class SocketCoreComponentTest {
         socketCore.connect("testurl")
 
         var notifyCount = 0
-        socketCore.emit(OperationMock(1, object : Callback<String> {
-            override fun onError(error: LocalException) {
-            }
+        socketCore.emit(
+            OperationMock(
+                1,
+                object : Callback<String> {
+                    override fun onError(error: LocalException) {
+                    }
 
-            override fun onSuccess(result: String) {
-                notifyCount++
-            }
+                    override fun onSuccess(result: String) {
+                        notifyCount++
+                    }
 
-        }))
+                })
+        )
 
         socketMock.emit("1")
 

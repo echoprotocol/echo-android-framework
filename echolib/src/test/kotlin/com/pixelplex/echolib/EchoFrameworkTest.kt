@@ -1,7 +1,5 @@
-package com.pixelplex.echolib.framework
+package com.pixelplex.echolib
 
-import com.pixelplex.echolib.Callback
-import com.pixelplex.echolib.EchoFramework
 import com.pixelplex.echolib.exception.LocalException
 import com.pixelplex.echolib.model.Account
 import com.pixelplex.echolib.model.Balance
@@ -60,7 +58,28 @@ class EchoFrameworkTest {
         val account = futureLogin.get()
         assertTrue(account != null)
 
-        println(account.toString())
+        val futureLoginFailure = FutureTask<Account>()
+
+        framework.login("dimaty123", "WrongPassword",
+            object : Callback<Account> {
+                override fun onSuccess(result: Account) {
+                    futureLoginFailure.setComplete(result)
+                }
+
+                override fun onError(error: LocalException) {
+                    futureLoginFailure.setComplete(error)
+                }
+
+            })
+
+        var accountFail: Account? = null
+
+        futureLoginFailure.wrapResult<Account, Exception>().fold({ foundAccount ->
+            accountFail = foundAccount
+        }, {
+        })
+
+        assertTrue(accountFail == null)
     }
 
     @Test

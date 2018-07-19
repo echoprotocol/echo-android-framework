@@ -1,7 +1,6 @@
-package com.pixelplex.echolib
+package com.pixelplex.echolib.support
 
 import com.pixelplex.bitcoinj.Base58
-import com.pixelplex.echolib.support.Checksum
 import org.junit.Assert.assertTrue
 import org.junit.Test
 

@@ -1,7 +1,5 @@
-package com.pixelplex.echolib
+package com.pixelplex.echolib.model
 
-import com.pixelplex.echolib.model.GrapheneObject
-import com.pixelplex.echolib.model.ObjectType
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Before
