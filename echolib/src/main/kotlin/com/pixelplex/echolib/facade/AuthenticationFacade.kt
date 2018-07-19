@@ -22,16 +22,16 @@ interface AuthenticationFacade {
     /**
      * Describes password changing logic contract
      *
-     * @param nameOrId Account name or id
+     * @param name Account name
      * @param oldPassword Current account's password
      * @param newPassword New password that user wants to apply
      * @param callback Listener of operation results
      */
     fun changePassword(
-        nameOrId: String,
+        name: String,
         oldPassword: String,
         newPassword: String,
-        callback: Callback<Account>
+        callback: Callback<Any>
     )
 
 }

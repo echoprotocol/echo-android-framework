@@ -6,6 +6,7 @@ import com.google.gson.JsonObject
 import com.pixelplex.bitcoinj.ECKey
 import com.pixelplex.echolib.support.Signature
 import com.pixelplex.echolib.support.format
+
 import org.spongycastle.util.encoders.Hex
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -24,7 +25,8 @@ class Transaction : ByteSerializable, JsonSerializable {
     var operations: List<BaseOperation>
         private set
     private val extensions: Extensions = Extensions()
-    var chain: Chains = Chains.BITSHARES
+//    var chain: Chains = Chains.BITSHARES
+    var chainId: String
 
     /**
      * Constructor used to build a Transaction object without a private key. This kind of object
@@ -34,9 +36,10 @@ class Transaction : ByteSerializable, JsonSerializable {
      *                    transaction in the blockchain.
      * @param operations: The list of operations included in this transaction.
      */
-    constructor(blockData: BlockData, operations: List<BaseOperation>) {
+    constructor(blockData: BlockData, operations: List<BaseOperation>, chainId: String) {
         this.blockData = blockData
         this.operations = operations
+        this.chainId = chainId
     }
 
     /**
@@ -47,8 +50,8 @@ class Transaction : ByteSerializable, JsonSerializable {
      * @param blockData :  Block data containing important information used to sign a transaction.
      * @param operations : List of operations to include in the transaction.
      */
-    constructor(privateKey: ECKey, blockData: BlockData, operations: List<BaseOperation>) :
-            this(blockData, operations) {
+    constructor(privateKey: ECKey, blockData: BlockData, operations: List<BaseOperation>, chainId: String) :
+            this(blockData, operations, chainId) {
         this.privateKey = privateKey
     }
 
@@ -66,7 +69,7 @@ class Transaction : ByteSerializable, JsonSerializable {
      */
     fun setFees(fees: List<AssetAmount>) {
         operations.forEachIndexed { i, operation ->
-            operation.setFee(fees[i])
+            operation.fee = fees[i]
         }
     }
 
@@ -77,12 +80,13 @@ class Transaction : ByteSerializable, JsonSerializable {
      * @return byte array with serialized information about this transaction.
      */
     override fun toBytes(): ByteArray {
-        val chainBytes = Hex.decode(chain.id)
+        val chainBytes = Hex.decode(chainId)
         val blockDataBytes = blockData.toBytes()
         val operationsSizeBytes = operations.size.toByte()
 
         var operationBytes = byteArrayOf()
         operations.forEach { operation ->
+            operationBytes += operation.id
             operationBytes += operation.toBytes()
         }
 
@@ -121,9 +125,11 @@ class Transaction : ByteSerializable, JsonSerializable {
         const val KEY_EXPIRATION = "expiration"
         const val KEY_SIGNATURES = "signatures"
         const val KEY_OPERATIONS = "operations"
-        const val KEY_EXTENSIONS = "extensions"
+        const val KEY_EXTENSIONS = Extensions.KEY_EXTENSIONS
         const val KEY_REF_BLOCK_NUM = "ref_block_num"
         const val KEY_REF_BLOCK_PREFIX = "ref_block_prefix"
+
+        const val DEFAULT_EXPIRATION_TIME = 40
     }
 
 }

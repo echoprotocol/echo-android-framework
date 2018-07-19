@@ -1,7 +1,9 @@
 package com.pixelplex.echolib.model.socketoperations
 
+import com.google.gson.GsonBuilder
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
+import com.google.gson.JsonParser
 import com.pixelplex.echolib.Callback
 import com.pixelplex.echolib.ILLEGAL_ID
 import com.pixelplex.echolib.model.DynamicGlobalProperties
@@ -38,6 +40,29 @@ class BlockDataSocketOperation(
         get() = api.getId()
 
     override fun fromJson(json: String): DynamicGlobalProperties? {
+        val parser = JsonParser()
+        val jsonTree = parser.parse(json)
+
+        try {
+            val result = jsonTree.asJsonObject.get("result")?.asJsonObject
+
+            val gson = GsonBuilder().registerTypeAdapter(
+                DynamicGlobalProperties::
+                class.java,
+                DynamicGlobalProperties.Deserializer()
+            ).create()
+
+            return gson.fromJson<DynamicGlobalProperties>(
+                result,
+                DynamicGlobalProperties::class.java
+            )
+
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+        }
+
         return null
     }
+
+
 }

@@ -22,3 +22,8 @@ const val DEFAULT_URL = "wss://node.testnet.bitshares.eu/"
  * Illegal id for all blockchain apis, call id
  */
 const val ILLEGAL_ID = -1
+
+/**
+ * Id of bitshares asset
+ */
+const val BITSHARES_ASSET_ID = "1.3.0"

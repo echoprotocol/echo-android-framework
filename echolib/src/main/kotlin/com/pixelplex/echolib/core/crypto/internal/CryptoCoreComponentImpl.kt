@@ -6,6 +6,7 @@ import com.pixelplex.echolib.core.crypto.CryptoCoreComponent
 import com.pixelplex.echolib.model.AuthorityType
 import com.pixelplex.echolib.model.network.Network
 
+
 /**
  * Implementation of [CryptoCoreComponent]
  *
@@ -14,24 +15,32 @@ import com.pixelplex.echolib.model.network.Network
  */
 class CryptoCoreComponentImpl(private val network: Network) : CryptoCoreComponent {
 
-    private val seedProvider = RoleDependentSeedProvider(AuthorityType.ACTIVE)
+    private val seedProvider = RoleDependentSeedProvider(AuthorityType.OWNER)
     private val ecKeyConverter = ECKeyToAddressConverter(network.addressPrefix)
 
-    override fun getAddress(userName: String, password: String): String {
-        return ecKeyConverter.convert(getPrivateKey(userName, password))
+
+    override fun getAddress(
+        userName: String,
+        password: String,
+        authorityType: AuthorityType
+    ): String {
+        return ecKeyConverter.convert(getPrivateKey(userName, password, authorityType))
     }
 
-    override fun getPrivateKey(userName: String, password: String): ECKey {
-        val seedString = generateSeed(userName, password)
+    override fun getPrivateKey(
+        userName: String,
+        password: String,
+        authorityType: AuthorityType
+    ): ECKey {
+        val seedString = generateSeed(userName, password, authorityType)
         return ECKey.fromPrivate(createPrivateKey(seedString))
     }
 
-    private fun generateSeed(userName: String, password: String) =
-        seedProvider.provide(userName, password)
+    private fun generateSeed(userName: String, password: String, authorityType: AuthorityType) =
+        seedProvider.provide(userName, password, authorityType)
 
     private fun createPrivateKey(seed: String): ByteArray {
         val seedBytes = seed.toByteArray(Charsets.UTF_8)
         return Sha256Hash.hash(seedBytes)
     }
-
 }

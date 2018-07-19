@@ -5,6 +5,7 @@ import com.pixelplex.echolib.core.socket.internal.SocketCoreComponentImpl
 import com.pixelplex.echolib.facade.*
 import com.pixelplex.echolib.facade.internal.*
 import com.pixelplex.echolib.model.Account
+import com.pixelplex.echolib.model.Asset
 import com.pixelplex.echolib.model.Balance
 import com.pixelplex.echolib.model.HistoryResponse
 import com.pixelplex.echolib.service.internal.AccountHistoryApiServiceImpl
@@ -56,7 +57,12 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
 
         initializerFacade = InitializerFacadeImpl(socketCoreComponent, settings.url, settings.apis)
         authenticationFacade =
-                AuthenticationFacadeImpl(databaseApiService, settings.cryptoComponent)
+                AuthenticationFacadeImpl(
+                    databaseApiService,
+                    networkBroadcastApiService,
+                    settings.cryptoComponent,
+                    settings.network
+                )
         feeFacade = FeeFacadeImpl(databaseApiService)
         informationFacade = InformationFacadeImpl(databaseApiService)
         subscriptionFacade =
@@ -84,14 +90,14 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
     }
 
     override fun changePassword(
-        nameOrId: String,
+        name: String,
         oldPassword: String,
         newPassword: String,
-        callback: Callback<Account>
+        callback: Callback<Any>
     ) {
         dispatch(Runnable {
             authenticationFacade.changePassword(
-                nameOrId,
+                name,
                 oldPassword,
                 newPassword,
                 callback.wrapOriginal()
