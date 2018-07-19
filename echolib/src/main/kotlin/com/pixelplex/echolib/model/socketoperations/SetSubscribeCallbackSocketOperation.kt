@@ -6,6 +6,7 @@ import com.pixelplex.echolib.Callback
 import com.pixelplex.echolib.ILLEGAL_ID
 import com.pixelplex.echolib.support.Api
 import com.pixelplex.echolib.support.getId
+import org.json.JSONObject
 
 /**
  * Register global subscription callback to object.
@@ -22,7 +23,6 @@ class SetSubscribeCallbackSocketOperation(
     val needClearFilter: Boolean,
     method: SocketMethodType = SocketMethodType.CALL,
     callback: Callback<Any>
-
 ) : SocketOperation<Any>(method, ILLEGAL_ID, Any::class.java, callback) {
 
     override fun createParameters(): JsonElement =
@@ -39,6 +39,7 @@ class SetSubscribeCallbackSocketOperation(
         get() = api.getId()
 
     override fun fromJson(json: String): Any? {
-        return null
+        return if (JSONObject(json).has("result")) Any() else null
     }
+
 }

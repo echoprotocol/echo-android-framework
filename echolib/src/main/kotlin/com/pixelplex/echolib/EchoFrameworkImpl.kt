@@ -13,6 +13,7 @@ import com.pixelplex.echolib.service.internal.NetworkBroadcastApiServiceImpl
 import com.pixelplex.echolib.support.Settings
 import com.pixelplex.echolib.support.concurrent.Dispatcher
 import com.pixelplex.echolib.support.concurrent.ExecutorServiceDispatcher
+import com.pixelplex.echolib.support.concurrent.MainThreadAccountListener
 import com.pixelplex.echolib.support.concurrent.MainThreadCallback
 
 /**
@@ -59,14 +60,13 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         feeFacade = FeeFacadeImpl(databaseApiService)
         informationFacade = InformationFacadeImpl(databaseApiService)
         subscriptionFacade =
-                SubscriptionFacadeImpl(networkBroadcastApiService)
+                SubscriptionFacadeImpl(databaseApiService)
         transactionsFacade =
                 TransactionsFacadeImpl(networkBroadcastApiService, accountHistoryApiService)
     }
 
     override fun start(callback: Callback<Any>) {
-        val threadKeepCallback = callback.wrapOriginal()
-        dispatch(Runnable { initializerFacade.connect(threadKeepCallback) })
+        dispatch(Runnable { initializerFacade.connect(callback.wrapOriginal()) })
     }
 
     override fun stop() {
@@ -74,12 +74,11 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
     }
 
     override fun login(name: String, password: String, callback: Callback<Account>) {
-        val threadKeepCallback = callback.wrapOriginal()
         dispatch(Runnable {
             authenticationFacade.login(
                 name,
                 password,
-                threadKeepCallback
+                callback.wrapOriginal()
             )
         })
     }
@@ -90,13 +89,12 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         newPassword: String,
         callback: Callback<Account>
     ) {
-        val threadKeepCallback = callback.wrapOriginal()
         dispatch(Runnable {
             authenticationFacade.changePassword(
                 nameOrId,
                 oldPassword,
                 newPassword,
-                threadKeepCallback
+                callback.wrapOriginal()
             )
         })
     }
@@ -107,13 +105,12 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         asset: String,
         callback: Callback<String>
     ) {
-        val threadKeepCallback = callback.wrapOriginal()
         dispatch(Runnable {
             feeFacade.getFeeForTransferOperation(
                 fromNameOrId,
                 toNameOrId,
                 asset,
-                threadKeepCallback
+                callback.wrapOriginal()
             )
         })
     }
@@ -126,28 +123,34 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
     }
 
     override fun checkAccountReserved(nameOrId: String, callback: Callback<Boolean>) {
-        val threadKeepCallback = callback.wrapOriginal()
         dispatch(Runnable {
-            informationFacade.checkAccountReserved(nameOrId, threadKeepCallback)
+            informationFacade.checkAccountReserved(nameOrId, callback.wrapOriginal())
         })
     }
 
     override fun getBalance(nameOrId: String, asset: String, callback: Callback<Balance>) {
-        val threadKeepCallback = callback.wrapOriginal()
         dispatch(Runnable {
-            informationFacade.getBalance(nameOrId, asset, threadKeepCallback)
+            informationFacade.getBalance(nameOrId, asset, callback.wrapOriginal())
         })
     }
 
-    override fun subscribeOnAccount(nameOrId: String, listener: AccountListener) {
-        subscriptionFacade.subscribeOnAccount(nameOrId, listener)
+    override fun subscribeOnAccount(id: String, listener: AccountListener) {
+        val threadKeepCallback = listener.wrapOriginal()
+
+        dispatch(Runnable {
+            subscriptionFacade.subscribeOnAccount(id, threadKeepCallback)
+        })
     }
 
-    override fun unsubscribeFromAccount(nameOrId: String, callback: Callback<Boolean>) =
-        subscriptionFacade.unsubscribeFromAccount(nameOrId, callback)
+    override fun unsubscribeFromAccount(id: String, callback: Callback<Boolean>) =
+        dispatch(Runnable {
+            subscriptionFacade.unsubscribeFromAccount(id, callback.wrapOriginal())
+        })
 
     override fun unsubscribeAll(callback: Callback<Boolean>) =
-        subscriptionFacade.unsubscribeAll(callback)
+        dispatch(Runnable {
+            subscriptionFacade.unsubscribeAll(callback.wrapOriginal())
+        })
 
     override fun sendTransferOperation(
         nameOrId: String,
@@ -157,7 +160,6 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         asset: String,
         callback: Callback<String>
     ) {
-        val threadKeepCallback = callback.wrapOriginal()
         dispatch(Runnable {
             transactionsFacade.sendTransferOperation(
                 nameOrId,
@@ -165,7 +167,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
                 toNameOrId,
                 amount,
                 asset,
-                threadKeepCallback
+                callback.wrapOriginal()
             )
         })
     }
@@ -178,7 +180,6 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         asset: String,
         callback: Callback<HistoryResponse>
     ) {
-        val threadKeepCallback = callback.wrapOriginal()
         dispatch(Runnable {
             transactionsFacade.getAccountHistory(
                 nameOrId,
@@ -186,7 +187,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
                 transactionStopId,
                 limit,
                 asset,
-                threadKeepCallback
+                callback.wrapOriginal()
             )
         })
     }
@@ -196,6 +197,13 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             return this
         }
         return MainThreadCallback(this)
+    }
+
+    private fun AccountListener.wrapOriginal(): AccountListener {
+        if (!returnOnMainThread) {
+            return this
+        }
+        return MainThreadAccountListener(this)
     }
 
     private fun dispatch(job: Runnable) = dispatcher.dispatch(job)

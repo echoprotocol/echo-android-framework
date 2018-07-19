@@ -101,7 +101,6 @@ class SocketMessengerImpl : SocketMessenger {
             webSocket = null
             isOpen = false
 
-
             listeners.forEach { listener -> listener.onDisconnected() }
         }
 

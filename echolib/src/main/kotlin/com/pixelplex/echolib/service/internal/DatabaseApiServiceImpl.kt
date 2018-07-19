@@ -1,17 +1,23 @@
 package com.pixelplex.echolib.service.internal
 
+import com.pixelplex.echolib.AccountListener
 import com.pixelplex.echolib.Callback
 import com.pixelplex.echolib.core.socket.SocketCoreComponent
+import com.pixelplex.echolib.core.socket.SocketMessengerListener
 import com.pixelplex.echolib.exception.LocalException
-import com.pixelplex.echolib.model.Account
 import com.pixelplex.echolib.model.FullAccount
 import com.pixelplex.echolib.model.network.Network
 import com.pixelplex.echolib.model.socketoperations.FullAccountsSocketOperation
+import com.pixelplex.echolib.model.socketoperations.SetSubscribeCallbackSocketOperation
+import com.pixelplex.echolib.model.socketoperations.SocketMethodType
 import com.pixelplex.echolib.service.DatabaseApiService
 import com.pixelplex.echolib.support.Api
+import com.pixelplex.echolib.support.EmptyCallback
 import com.pixelplex.echolib.support.Result
 import com.pixelplex.echolib.support.concurrent.future.FutureTask
 import com.pixelplex.echolib.support.concurrent.future.wrapResult
+import com.pixelplex.echolib.support.fold
+import org.json.JSONObject
 
 /**
  * Implementation of [DatabaseApiService]
@@ -28,6 +34,15 @@ class DatabaseApiServiceImpl(
 ) : DatabaseApiService {
 
     override val api: Api = Api.DATABASE
+
+    private var socketMessengerListener: SocketMessengerListener = SubscriptionListener()
+
+    @Volatile
+    private var subscribed: Boolean = false
+
+    private val subscriptionManager: AccountSubscriptionManager by lazy {
+        AccountSubscriptionManagerImpl()
+    }
 
     override fun getFullAccounts(
         namesOrIds: List<String>,
@@ -70,4 +85,133 @@ class DatabaseApiServiceImpl(
         return future.wrapResult(mapOf())
     }
 
+    override fun subscribeOnAccount(
+        id: String,
+        listener: AccountListener
+    ) {
+        synchronized(this) {
+            if (!subscribed) {
+                socketCoreComponent.on(socketMessengerListener)
+
+                this.subscribed = subscribeCallBlocking()
+            }
+
+            if (subscriptionManager.registerListener(id, listener)) {
+                getFullAccounts(listOf(id), true, EmptyCallback())
+            }
+        }
+    }
+
+    override fun unsubscribeFromAccount(id: String, callback: Callback<Boolean>) {
+        synchronized(this) {
+            val accountListeners = subscriptionManager.removeListeners(id)
+
+            accountListeners?.let {
+                callback.onSuccess(true)
+            } ?: callback.onError(LocalException("No listeners found for this account"))
+        }
+    }
+
+    override fun unsubscribeAll(callback: Callback<Boolean>) {
+        val unsubscribeOperation = createSubscriptionOperation(true, object : Callback<Any> {
+            override fun onSuccess(result: Any) {
+                subscriptionManager.clear()
+                callback.onSuccess(true)
+            }
+
+            override fun onError(error: LocalException) {
+                callback.onError(error)
+            }
+
+        })
+
+        socketCoreComponent.emit(unsubscribeOperation)
+    }
+
+    private fun subscribeCallBlocking(): Boolean {
+        val futureResult = FutureTask<Boolean>()
+
+        val subscriptionOperation = createSubscriptionOperation(true, object : Callback<Any> {
+            override fun onSuccess(result: Any) {
+                futureResult.setComplete(true)
+            }
+
+            override fun onError(error: LocalException) {
+                futureResult.setComplete(error)
+            }
+
+        })
+
+        socketCoreComponent.emit(subscriptionOperation)
+
+        var result = false
+
+        futureResult.wrapResult<Boolean, Exception>(false).fold({
+            result = it
+        }, {
+            result = false
+        })
+
+        return result
+    }
+
+    private fun createSubscriptionOperation(clearFilter: Boolean, callback: Callback<Any>) =
+        SetSubscribeCallbackSocketOperation(
+            api,
+            clearFilter,
+            SocketMethodType.CALL,
+            callback
+        )
+
+    private inner class SubscriptionListener : SocketMessengerListener {
+
+        override fun onEvent(event: String) {
+            // no need to process other events)
+            if (JSONObject(event).getString(DatabaseApiServiceImpl.METHOD_KEY) !=
+                DatabaseApiServiceImpl.NOTICE_METHOD_KEY
+            ) {
+                return
+            }
+
+            val accountId = subscriptionManager.processEvent(event) ?: return
+
+            getFullAccounts(
+                listOf(accountId),
+                false,
+                FullAccountSubscriptionCallbeck(accountId)
+            )
+        }
+
+        // implement failures
+        override fun onFailure(error: Throwable) {
+        }
+
+        override fun onConnected() {
+        }
+
+        override fun onDisconnected() {
+        }
+
+        private inner class FullAccountSubscriptionCallbeck(private val accountId: String) :
+            Callback<Map<String, FullAccount>> {
+            override fun onSuccess(result: Map<String, FullAccount>) {
+                val account = result[accountId]?.account ?: return
+
+                subscriptionManager.notify(account)
+            }
+
+            override fun onError(error: LocalException) {
+            }
+
+        }
+
+    }
+
+    companion object {
+        const val METHOD_KEY = "method"
+        private const val NOTICE_METHOD_KEY = "notice"
+    }
+
 }
+
+
