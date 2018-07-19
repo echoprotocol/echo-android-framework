@@ -32,7 +32,7 @@ open class GrapheneObject(
     /**
      * Returns a String containing the full object apiId in the form {space}.{type}.{instance}
      */
-    fun getObjectId(): String = "$space.$type.$instance"
+    fun getObjectId(): String = id
 
     /**
      * Returns the type of this object.
