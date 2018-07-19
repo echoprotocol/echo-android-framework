@@ -1,4 +1,4 @@
-package com.pixelplex.echolib.socket
+package com.pixelplex.echolib.core.socket
 
 import com.pixelplex.echolib.core.mapper.MapperCoreComponent
 import com.pixelplex.echolib.model.SocketResponse

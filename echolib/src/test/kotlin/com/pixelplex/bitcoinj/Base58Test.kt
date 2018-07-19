@@ -16,10 +16,8 @@
  * limitations under the License.
  */
 
-package com.pixelplex.echolib.crypto
+package com.pixelplex.bitcoinj
 
-import com.pixelplex.bitcoinj.AddressFormatException
-import com.pixelplex.bitcoinj.Base58
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test

@@ -1,6 +1,5 @@
-package com.pixelplex.echolib
+package com.pixelplex.echolib.model
 
-import com.pixelplex.echolib.model.Vote
 import org.junit.Assert
 import org.junit.Test
 

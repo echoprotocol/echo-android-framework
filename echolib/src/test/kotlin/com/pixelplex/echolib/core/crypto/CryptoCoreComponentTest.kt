@@ -1,6 +1,5 @@
-package com.pixelplex.echolib.crypto
+package com.pixelplex.echolib.core.crypto
 
-import com.pixelplex.echolib.core.crypto.CryptoCoreComponent
 import com.pixelplex.echolib.core.crypto.internal.CryptoCoreComponentImpl
 import com.pixelplex.echolib.model.Address
 import com.pixelplex.echolib.model.network.Network

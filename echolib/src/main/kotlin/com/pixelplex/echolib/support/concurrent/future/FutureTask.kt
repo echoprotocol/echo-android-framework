@@ -70,7 +70,7 @@ class FutureTask<T> : CancellableTask, CancellableFuture<T> {
         // still need to release any pending waiters
         var callback: FutureCallback<T>? = null
         synchronized(this) {
-            exception = CancellationException()
+            this.exception = CancellationException()
             releaseWaiterLocked()
             callback = handleCompleteLocked()
         }
@@ -177,17 +177,12 @@ class FutureTask<T> : CancellableTask, CancellableFuture<T> {
     }
 
     override fun setCallback(callback: FutureCallback<T>): CancellableFuture<T> {
-        val internalCallback: FutureCallback<T>? = callback
-
         // callback can only be changed or read/used inside a sync block
         synchronized(this) {
-            this.callback = if (isDone || isCancelled)
+            this.callback = callback
+            if (isDone || isCancelled)
                 handleCompleteLocked()
-            else
-                null
         }
-
-        handleCallbackUnlocked(internalCallback)
 
         return this
     }

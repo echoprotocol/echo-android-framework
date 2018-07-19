@@ -17,10 +17,8 @@
  * limitations under the License.
  */
 
-package com.pixelplex.echolib.crypto
+package com.pixelplex.bitcoinj
 
-import com.pixelplex.bitcoinj.bigIntegerToBytes
-import com.pixelplex.bitcoinj.reverseBytes
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
