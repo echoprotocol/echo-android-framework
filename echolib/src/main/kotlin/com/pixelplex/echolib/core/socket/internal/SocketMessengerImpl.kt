@@ -37,9 +37,11 @@ class SocketMessengerImpl : SocketMessenger {
         val webSocket = WebSocketFactory().let { factory ->
             factory.connectionTimeout = CONNECTION_TIMEOUT
             factory.createSocket(url)
+        }.apply {
+            pongInterval = HEART_BEAT_INTERVAL
+            addListener(SocketEventsCallback())
         }
 
-        webSocket.addListener(SocketEventsCallback())
         this.webSocket = webSocket
         webSocket.connectAsynchronously()
     }
@@ -52,7 +54,7 @@ class SocketMessengerImpl : SocketMessenger {
 
     override fun emit(message: String) {
         if (isOpen) {
-            println(">>>> $message" )
+            println(">>>> $message")
             webSocket?.sendText(message)
         }
     }
@@ -81,7 +83,7 @@ class SocketMessengerImpl : SocketMessenger {
         }
 
         override fun onTextFrame(websocket: WebSocket?, frame: WebSocketFrame) {
-            println("<<<< ${frame.payloadText}" )
+            println("<<<< ${frame.payloadText}")
             listeners.forEach { listener -> listener.onEvent(frame.payloadText) }
         }
 
@@ -108,6 +110,7 @@ class SocketMessengerImpl : SocketMessenger {
 
     companion object {
         private const val CONNECTION_TIMEOUT = 10000
+        private const val HEART_BEAT_INTERVAL: Long = 20000
     }
 
 }
