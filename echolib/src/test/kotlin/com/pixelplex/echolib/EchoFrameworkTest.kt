@@ -194,22 +194,51 @@ class EchoFrameworkTest {
 //
 //        if (connect(framework) == false) Assert.fail("Connection error")
 //
+//        changePassword(framework, object : Callback<Any> {
+//            override fun onSuccess(result: Any) {
+//                futureChangePassword.setComplete(true)
+//            }
+//
+//            override fun onError(error: LocalException) {
+//                futureChangePassword.setComplete(false)
+//            }
+//
+//        })
+//
+//        assertTrue(futureChangePassword.get() ?: false)
+//    }
+//
+//    @Test
+//    fun subscriptionTest() {
+//        val framework = initFramework()
+//
+//        val futureSubscription = FutureTask<Account>()
+//
+//        if (connect(framework) == false) Assert.fail("Connection error")
+//
+//        framework.subscribeOnAccount("1.2.23215", object : AccountListener {
+//
+//            override fun onChange(updatedAccount: Account) {
+//                futureSubscription.setComplete(updatedAccount)
+//            }
+//
+//        })
+//
+//        thread {
+//            Thread.sleep(3000)
+//            changePassword(framework, EmptyCallback())
+//        }
+//
+//        assertNotNull(futureSubscription.get())
+//    }
+//
+//    private fun changePassword(framework: EchoFramework, callback: Callback<Any>) {
 //        framework.changePassword(
 //            "dimaty123",
 //            "P5JVzpPDitVodHMoj4zZspn7e8EYiDeoarkCEixS5tD4z",
 //            "P5JVzpPDitVodHMoj4zZspn7e8EYiDeoarkCEixS5tD4z",
-//            object : Callback<Any> {
-//                override fun onSuccess(result: Any) {
-//                    futureChangePassword.setComplete(true)
-//                }
-//
-//                override fun onError(error: LocalException) {
-//                    futureChangePassword.setComplete(false)
-//                }
-//
-//            })
-//
-//        assertTrue(futureChangePassword.get() ?: false)
+//            callback
+//        )
 //    }
 
     private fun connect(framework: EchoFramework): Boolean? {
