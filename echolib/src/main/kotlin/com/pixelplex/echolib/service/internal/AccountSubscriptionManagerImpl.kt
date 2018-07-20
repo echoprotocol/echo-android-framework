@@ -1,9 +1,9 @@
 package com.pixelplex.echolib.service.internal
 
+import com.google.gson.JsonArray
 import com.pixelplex.echolib.AccountListener
 import com.pixelplex.echolib.model.Account
-import org.json.JSONArray
-import org.json.JSONObject
+import com.pixelplex.echolib.support.toJsonObject
 import java.util.concurrent.ConcurrentHashMap
 
 /**
@@ -99,38 +99,38 @@ class AccountSubscriptionManagerImpl : AccountSubscriptionManager {
      */
     @SuppressWarnings("ReturnCount")
     override fun processEvent(event: String): String? {
-        val params = JSONObject(event).getJSONArray(PARAMS_KEY)
+        val params = event.toJsonObject().getAsJsonArray(PARAMS_KEY)
 
-        if (params.length() == 0) {
+        if (params.size() == 0) {
             return null
         }
 
-        val firstParam = params.getJSONArray(1)
+        val firstParam = params[1].asJsonArray
 
-        if (firstParam.length() == 0) {
+        if (firstParam.size() == 0) {
             return null
         }
 
-        val statisticArray = firstParam.getJSONArray(0)
+        val statisticArray = firstParam[0].asJsonArray
 
-        if (statisticArray.length() == 0) {
+        if (statisticArray.size() == 0) {
             return null
         }
 
         return parseIdFromStatistic(statisticArray)
     }
 
-    private fun parseIdFromStatistic(statisticArray: JSONArray): String? {
+    private fun parseIdFromStatistic(statisticArray: JsonArray): String? {
         var accountId: String? = null
 
-        for (i in 0..(statisticArray.length() - 1)) {
-            val statisticObject = statisticArray.getJSONObject(i)
+        for (i in 0..(statisticArray.size() - 1)) {
+            val statisticObject = statisticArray[i].asJsonObject
 
-            val objectId = statisticObject?.getString(OBJECT_ID_KEY) ?: continue
+            val objectId = statisticObject?.get(OBJECT_ID_KEY)?.asString ?: continue
 
             if (!objectId.startsWith(ACCOUNT_STATISTIC_OBJECT_ID)) continue
 
-            accountId = statisticObject.getString(ACCOUNT_OWNER_KEY) ?: continue
+            accountId = statisticObject.get(ACCOUNT_OWNER_KEY)?.asString ?: continue
 
             if (listeners[accountId] == null) {
                 continue

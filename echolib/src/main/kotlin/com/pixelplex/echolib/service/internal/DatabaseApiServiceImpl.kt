@@ -9,13 +9,9 @@ import com.pixelplex.echolib.model.*
 import com.pixelplex.echolib.model.network.Network
 import com.pixelplex.echolib.model.socketoperations.*
 import com.pixelplex.echolib.service.DatabaseApiService
-import com.pixelplex.echolib.support.Api
-import com.pixelplex.echolib.support.EmptyCallback
-import com.pixelplex.echolib.support.Result
+import com.pixelplex.echolib.support.*
 import com.pixelplex.echolib.support.concurrent.future.FutureTask
 import com.pixelplex.echolib.support.concurrent.future.wrapResult
-import com.pixelplex.echolib.support.fold
-import org.json.JSONObject
 
 /**
  * Implementation of [DatabaseApiService]
@@ -226,8 +222,9 @@ class DatabaseApiServiceImpl(
     private inner class SubscriptionListener : SocketMessengerListener {
 
         override fun onEvent(event: String) {
+            val jsonObject = event.toJsonObject()
             // no need to process other events)
-            if (JSONObject(event).getString(DatabaseApiServiceImpl.METHOD_KEY) !=
+            if (jsonObject.get(DatabaseApiServiceImpl.METHOD_KEY).asString !=
                 DatabaseApiServiceImpl.NOTICE_METHOD_KEY
             ) {
                 return
