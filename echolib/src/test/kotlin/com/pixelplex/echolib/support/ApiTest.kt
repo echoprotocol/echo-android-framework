@@ -12,7 +12,7 @@ class ApiTest {
 
     @Test
     fun uninitializedIdTest() {
-        Assert.assertTrue(Api.NETWORK_BROADCAST.getId() == -1)
+        Assert.assertTrue(Api.CRYPTO.getId() == -1)
     }
 
     @Test

@@ -238,7 +238,7 @@ class DatabaseApiServiceImpl(
             getFullAccounts(
                 listOf(accountId),
                 false,
-                FullAccountSubscriptionCallbeck(accountId)
+                FullAccountSubscriptionCallback(accountId)
             )
         }
 
@@ -252,7 +252,7 @@ class DatabaseApiServiceImpl(
         override fun onDisconnected() {
         }
 
-        private inner class FullAccountSubscriptionCallbeck(private val accountId: String) :
+        private inner class FullAccountSubscriptionCallback(private val accountId: String) :
             Callback<Map<String, FullAccount>> {
             override fun onSuccess(result: Map<String, FullAccount>) {
                 val account = result[accountId]?.account ?: return

@@ -24,7 +24,7 @@ class EchoFrameworkTest {
         EchoFramework.create(
             Settings.Configurator()
                 .setReturnOnMainThread(false)
-                .setApis(Api.DATABASE)
+                .setApis(Api.DATABASE, Api.NETWORK_BROADCAST)
                 .configure()
         )
 
@@ -185,6 +185,32 @@ class EchoFrameworkTest {
 
         assertTrue(balance == null)
     }
+
+//    @Test
+//    fun changePasswordTest() {
+//        val framework = initFramework()
+//
+//        val futureChangePassword = FutureTask<Boolean>()
+//
+//        if (connect(framework) == false) Assert.fail("Connection error")
+//
+//        framework.changePassword(
+//            "dimaty123",
+//            "P5JVzpPDitVodHMoj4zZspn7e8EYiDeoarkCEixS5tD4z",
+//            "P5JVzpPDitVodHMoj4zZspn7e8EYiDeoarkCEixS5tD4z",
+//            object : Callback<Any> {
+//                override fun onSuccess(result: Any) {
+//                    futureChangePassword.setComplete(true)
+//                }
+//
+//                override fun onError(error: LocalException) {
+//                    futureChangePassword.setComplete(false)
+//                }
+//
+//            })
+//
+//        assertTrue(futureChangePassword.get() ?: false)
+//    }
 
     private fun connect(framework: EchoFramework): Boolean? {
         val futureConnect = FutureTask<Boolean>()
