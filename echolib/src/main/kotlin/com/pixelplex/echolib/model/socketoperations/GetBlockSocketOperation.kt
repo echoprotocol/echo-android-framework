@@ -5,8 +5,6 @@ import com.google.gson.JsonElement
 import com.pixelplex.echolib.Callback
 import com.pixelplex.echolib.ILLEGAL_ID
 import com.pixelplex.echolib.model.Block
-import com.pixelplex.echolib.support.Api
-import com.pixelplex.echolib.support.getId
 
 /**
  * Retrieve a full, signed block.
@@ -17,7 +15,7 @@ import com.pixelplex.echolib.support.getId
  * @author Daria Pechkovskaya
  */
 class GetBlockSocketOperation(
-    val api: Api,
+    override val apiId: Int,
     val blockNumber: String,
     method: SocketMethodType = SocketMethodType.CALL,
     callback: Callback<Block>
@@ -30,9 +28,6 @@ class GetBlockSocketOperation(
             add(SocketOperationKeys.BLOCK.key)
             add(JsonArray().apply { blockNumber })
         }
-
-    override val apiId: Int
-        get() = api.getId()
 
     override fun fromJson(json: String): Block? {
         return null

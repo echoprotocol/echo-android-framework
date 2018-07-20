@@ -1,8 +1,8 @@
 package com.pixelplex.echolib.service.internal
 
+import com.pixelplex.echolib.ILLEGAL_ID
 import com.pixelplex.echolib.core.socket.SocketCoreComponent
 import com.pixelplex.echolib.service.CryptoApiService
-import com.pixelplex.echolib.support.Api
 
 /**
  * Implementation of [CryptoApiService]
@@ -13,7 +13,9 @@ import com.pixelplex.echolib.support.Api
  *
  * @author Dmitriy Bushuev
  */
-class CryptoApiServiceImpl(private val socketCoreComponent: SocketCoreComponent) : CryptoApiService{
+class CryptoApiServiceImpl(private val socketCoreComponent: SocketCoreComponent) :
+    CryptoApiService {
 
-    override val api: Api = Api.CRYPTO
+    override var id: Int = ILLEGAL_ID
+
 }

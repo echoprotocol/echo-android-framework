@@ -5,8 +5,6 @@ import com.google.gson.JsonElement
 import com.pixelplex.echolib.Callback
 import com.pixelplex.echolib.ILLEGAL_ID
 import com.pixelplex.echolib.model.Account
-import com.pixelplex.echolib.support.Api
-import com.pixelplex.echolib.support.getId
 
 /**
  * Get all account references
@@ -16,7 +14,7 @@ import com.pixelplex.echolib.support.getId
  * @author Daria Pechkovskaya
  */
 class KeyReferencesSocketOperation(
-    val api: Api,
+    override val apiId: Int,
     val publicKey: String,
     method: SocketMethodType = SocketMethodType.CALL,
     callback: Callback<List<Account>>
@@ -37,9 +35,6 @@ class KeyReferencesSocketOperation(
             val publicKeyJson = JsonArray().apply { add(publicKey) }
             add(JsonArray().apply { add(publicKeyJson) })
         }
-
-    override val apiId: Int
-        get() = api.getId()
 
     override fun fromJson(json: String): List<Account>? {
         return null

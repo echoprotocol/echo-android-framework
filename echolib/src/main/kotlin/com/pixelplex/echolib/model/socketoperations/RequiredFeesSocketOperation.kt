@@ -10,8 +10,6 @@ import com.pixelplex.echolib.ILLEGAL_ID
 import com.pixelplex.echolib.model.Asset
 import com.pixelplex.echolib.model.AssetAmount
 import com.pixelplex.echolib.model.BaseOperation
-import com.pixelplex.echolib.support.Api
-import com.pixelplex.echolib.support.getId
 
 /**
  * Represents blockchain call. Returns list of [AssetAmount] for [operations]
@@ -19,9 +17,9 @@ import com.pixelplex.echolib.support.getId
  * @author Daria Pechkovskaya
  */
 class RequiredFeesSocketOperation(
+    override val apiId: Int,
     val operations: List<BaseOperation>,
     val asset: Asset,
-    val api: Api,
     method: SocketMethodType = SocketMethodType.CALL,
     callback: Callback<List<AssetAmount>>
 ) : SocketOperation<List<AssetAmount>>(
@@ -45,9 +43,6 @@ class RequiredFeesSocketOperation(
                 add(asset.getObjectId())
             })
         }
-
-    override val apiId: Int
-        get() = api.getId()
 
     override fun fromJson(json: String): List<AssetAmount>? {
         val parser = JsonParser()

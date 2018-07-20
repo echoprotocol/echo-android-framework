@@ -7,8 +7,6 @@ import com.google.gson.JsonParser
 import com.pixelplex.echolib.Callback
 import com.pixelplex.echolib.ILLEGAL_ID
 import com.pixelplex.echolib.model.DynamicGlobalProperties
-import com.pixelplex.echolib.support.Api
-import com.pixelplex.echolib.support.getId
 
 /**
  * Returns the block chain’s rapidly-changing properties. The returned object contains information
@@ -19,7 +17,7 @@ import com.pixelplex.echolib.support.getId
  * @author Daria Pechkovskaya
  */
 class BlockDataSocketOperation(
-    val api: Api,
+    override val apiId: Int,
     method: SocketMethodType = SocketMethodType.CALL,
     callback: Callback<DynamicGlobalProperties>
 ) : SocketOperation<DynamicGlobalProperties>(
@@ -35,9 +33,6 @@ class BlockDataSocketOperation(
             add(SocketOperationKeys.BLOCK_DATA.key)
             add(JsonArray())
         }
-
-    override val apiId: Int
-        get() = api.getId()
 
     override fun fromJson(json: String): DynamicGlobalProperties? {
         val parser = JsonParser()

@@ -17,16 +17,7 @@ import com.pixelplex.echolib.support.Result
  * @author Dmitriy Bushuev
  */
 interface DatabaseApiService : ApiService, AccountsService, GlobalsService,
-    AuthorityAndValidationService {
-
-    companion object {
-        /**
-         * Actual id for DatabaseApi
-         */
-        @Volatile
-        var id: Int = ILLEGAL_ID
-    }
-}
+    AuthorityAndValidationService
 
 /**
  * Encapsulates logic, associated with data from account from blockchain database API

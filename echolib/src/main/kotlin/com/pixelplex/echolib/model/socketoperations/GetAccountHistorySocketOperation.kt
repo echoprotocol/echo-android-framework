@@ -5,8 +5,6 @@ import com.google.gson.JsonElement
 import com.pixelplex.echolib.Callback
 import com.pixelplex.echolib.ILLEGAL_ID
 import com.pixelplex.echolib.model.HistoricalTransfer
-import com.pixelplex.echolib.support.Api
-import com.pixelplex.echolib.support.getId
 
 /**
  * Get operations relevant to the specified account.
@@ -22,7 +20,7 @@ import com.pixelplex.echolib.support.getId
  * @author Daria Pechkovskaya
  */
 class GetAccountHistorySocketOperation(
-    val api: Api,
+    override val apiId: Int,
     val accountId: String,
     val stopId: String = DEFAULT_HISTORY_ID,
     val limit: Int = DEFAULT_LIMIT,
@@ -30,7 +28,12 @@ class GetAccountHistorySocketOperation(
     method: SocketMethodType = SocketMethodType.CALL,
     callback: Callback<List<HistoricalTransfer>>
 
-) : SocketOperation<List<HistoricalTransfer>>(method, ILLEGAL_ID, listOf<HistoricalTransfer>().javaClass, callback) {
+) : SocketOperation<List<HistoricalTransfer>>(
+    method,
+    ILLEGAL_ID,
+    listOf<HistoricalTransfer>().javaClass,
+    callback
+) {
 
     override fun createParameters(): JsonElement =
         JsonArray().apply {
@@ -43,9 +46,6 @@ class GetAccountHistorySocketOperation(
                 add(startId)
             })
         }
-
-    override val apiId: Int
-        get() = api.getId()
 
     override fun fromJson(json: String): List<HistoricalTransfer> {
         return emptyList()

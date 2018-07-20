@@ -11,8 +11,6 @@ import com.pixelplex.echolib.model.AccountOptions
 import com.pixelplex.echolib.model.Authority
 import com.pixelplex.echolib.model.FullAccount
 import com.pixelplex.echolib.model.network.Network
-import com.pixelplex.echolib.support.Api
-import com.pixelplex.echolib.support.getId
 
 /**
  * This function fetches all relevant [Account] objects for the given accounts, and
@@ -26,7 +24,7 @@ import com.pixelplex.echolib.support.getId
  * @author Daria Pechkovskaya
  */
 class FullAccountsSocketOperation(
-    val api: Api,
+    override val apiId: Int,
     val namesOrIds: List<String>,
     val shouldSubscribe: Boolean,
     val network: Network,
@@ -54,9 +52,6 @@ class FullAccountsSocketOperation(
 
             add(JsonArray().apply { addAll(dataJson) })
         }
-
-    override val apiId: Int
-        get() = api.getId()
 
     override fun fromJson(json: String): Map<String, FullAccount> {
         val parser = JsonParser()

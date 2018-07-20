@@ -5,8 +5,6 @@ import com.google.gson.JsonElement
 import com.pixelplex.echolib.Callback
 import com.pixelplex.echolib.ILLEGAL_ID
 import com.pixelplex.echolib.model.Transaction
-import com.pixelplex.echolib.support.Api
-import com.pixelplex.echolib.support.getId
 
 /**
  * Broadcast a transaction to the network.
@@ -18,7 +16,7 @@ import com.pixelplex.echolib.support.getId
  * @author Daria Pechkovskaya
  */
 class TransactionSocketOperation(
-    val api: Api,
+    override val apiId: Int,
     val transaction: Transaction,
     method: SocketMethodType = SocketMethodType.CALL,
     callback: Callback<String>
@@ -33,10 +31,6 @@ class TransactionSocketOperation(
                 add(transaction.toJsonObject())
             })
         }
-
-
-    override val apiId: Int
-        get() = api.getId()
 
     override fun fromJson(json: String): String? {
         return json

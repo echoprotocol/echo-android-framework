@@ -12,7 +12,7 @@ import com.pixelplex.echolib.ILLEGAL_ID
  * @author Daria Pechkovskaya
  */
 class LoginSocketOperation(
-    val api: Int,
+    override val apiId: Int,
     method: SocketMethodType = SocketMethodType.CALL,
     callback: Callback<Boolean>
 ) : SocketOperation<Boolean>(method, ILLEGAL_ID, Boolean::class.java, callback) {
@@ -23,9 +23,6 @@ class LoginSocketOperation(
             add(SocketOperationKeys.LOGIN.key)
             add(getParameters())
         }
-
-    override val apiId: Int
-        get() = api
 
     private fun getParameters(): JsonElement =
         JsonArray().apply {
