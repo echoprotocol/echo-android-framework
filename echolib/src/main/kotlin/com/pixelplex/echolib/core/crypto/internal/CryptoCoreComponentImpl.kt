@@ -13,11 +13,10 @@ import com.pixelplex.echolib.model.network.Network
  * @author Daria Pechkovskaya
  * @author Dmitriy Bushuev
  */
-class CryptoCoreComponentImpl(private val network: Network) : CryptoCoreComponent {
+class CryptoCoreComponentImpl(network: Network) : CryptoCoreComponent {
 
-    private val seedProvider = RoleDependentSeedProvider(AuthorityType.OWNER)
+    private val seedProvider = RoleDependentSeedProvider()
     private val ecKeyConverter = ECKeyToAddressConverter(network.addressPrefix)
-
 
     override fun getAddress(
         userName: String,

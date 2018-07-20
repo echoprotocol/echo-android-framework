@@ -10,7 +10,7 @@ import com.pixelplex.echolib.support.checkNotNull
  *
  * @author Dmitriy Bushuev
  */
-class RoleDependentSeedProvider(private val role: AuthorityType) : SeedProvider {
+class RoleDependentSeedProvider : SeedProvider {
 
     override fun provide(name: String, password: String, authorityType: AuthorityType): String {
         val roleName = AuthorityTypeToRoleConverter().convert(authorityType)
