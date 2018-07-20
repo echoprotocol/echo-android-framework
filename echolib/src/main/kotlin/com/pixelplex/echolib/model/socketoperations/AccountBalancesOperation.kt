@@ -8,8 +8,6 @@ import com.pixelplex.echolib.Callback
 import com.pixelplex.echolib.ILLEGAL_ID
 import com.pixelplex.echolib.model.Account
 import com.pixelplex.echolib.model.AssetAmount
-import com.pixelplex.echolib.support.Api
-import com.pixelplex.echolib.support.getId
 
 /**
  * This function fetches all relevant [Account] objects for the given accounts, and
@@ -24,7 +22,7 @@ import com.pixelplex.echolib.support.getId
  * @author Daria Pechkovskaya
  */
 class AccountBalancesOperation(
-    val api: Api,
+    override val apiId: Int,
     val nameOrId: String,
     val asset: String,
     val shouldSubscribe: Boolean,
@@ -55,9 +53,6 @@ class AccountBalancesOperation(
 
             add(JsonArray().apply { addAll(dataJson) })
         }
-
-    override val apiId: Int
-        get() = api.getId()
 
     override fun fromJson(json: String): AssetAmount? {
         val gsonBuilder = GsonBuilder()

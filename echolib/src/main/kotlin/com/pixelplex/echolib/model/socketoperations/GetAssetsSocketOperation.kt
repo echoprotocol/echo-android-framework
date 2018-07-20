@@ -5,8 +5,6 @@ import com.google.gson.JsonElement
 import com.pixelplex.echolib.Callback
 import com.pixelplex.echolib.ILLEGAL_ID
 import com.pixelplex.echolib.model.Asset
-import com.pixelplex.echolib.support.Api
-import com.pixelplex.echolib.support.getId
 
 /**
  * Get a list of assets by id.
@@ -17,7 +15,7 @@ import com.pixelplex.echolib.support.getId
  * @author Daria Pechkovskaya
  */
 class GetAssetsSocketOperation(
-    val api: Api,
+    override val apiId: Int,
     val assetIds: Array<String>,
     method: SocketMethodType = SocketMethodType.CALL,
     callback: Callback<List<Asset>>
@@ -34,9 +32,6 @@ class GetAssetsSocketOperation(
             assetIds.forEach { item -> assetsJson.add(item) }
             add(JsonArray().apply { assetsJson })
         }
-
-    override val apiId: Int
-        get() = api.getId()
 
     override fun fromJson(json: String): List<Asset> {
         return emptyList()

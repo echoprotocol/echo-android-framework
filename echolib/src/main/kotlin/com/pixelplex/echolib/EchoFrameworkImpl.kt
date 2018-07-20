@@ -5,10 +5,10 @@ import com.pixelplex.echolib.core.socket.internal.SocketCoreComponentImpl
 import com.pixelplex.echolib.facade.*
 import com.pixelplex.echolib.facade.internal.*
 import com.pixelplex.echolib.model.Account
-import com.pixelplex.echolib.model.Asset
 import com.pixelplex.echolib.model.Balance
 import com.pixelplex.echolib.model.HistoryResponse
 import com.pixelplex.echolib.service.internal.AccountHistoryApiServiceImpl
+import com.pixelplex.echolib.service.internal.CryptoApiServiceImpl
 import com.pixelplex.echolib.service.internal.DatabaseApiServiceImpl
 import com.pixelplex.echolib.service.internal.NetworkBroadcastApiServiceImpl
 import com.pixelplex.echolib.support.Settings
@@ -54,8 +54,17 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             AccountHistoryApiServiceImpl(socketCoreComponent, settings.cryptoComponent)
         val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, settings.network)
         val networkBroadcastApiService = NetworkBroadcastApiServiceImpl(socketCoreComponent)
+        val cryptoApiService = CryptoApiServiceImpl(socketCoreComponent)
 
-        initializerFacade = InitializerFacadeImpl(socketCoreComponent, settings.url, settings.apis)
+        initializerFacade = InitializerFacadeImpl(
+            socketCoreComponent,
+            settings.url,
+            settings.apis,
+            databaseApiService,
+            cryptoApiService,
+            accountHistoryApiService,
+            networkBroadcastApiService
+        )
         authenticationFacade =
                 AuthenticationFacadeImpl(
                     databaseApiService,
@@ -141,10 +150,8 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
     }
 
     override fun subscribeOnAccount(id: String, listener: AccountListener) {
-        val threadKeepCallback = listener.wrapOriginal()
-
         dispatch(Runnable {
-            subscriptionFacade.subscribeOnAccount(id, threadKeepCallback)
+            subscriptionFacade.subscribeOnAccount(id, listener.wrapOriginal())
         })
     }
 

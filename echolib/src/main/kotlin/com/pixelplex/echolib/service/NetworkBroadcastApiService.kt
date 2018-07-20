@@ -1,6 +1,5 @@
 package com.pixelplex.echolib.service
 
-import com.pixelplex.echolib.ILLEGAL_ID
 import com.pixelplex.echolib.model.Transaction
 import com.pixelplex.echolib.support.Result
 
@@ -14,21 +13,12 @@ import com.pixelplex.echolib.support.Result
  *
  * @author Dmitriy Bushuev
  */
-interface NetworkBroadcastApiService : ApiService, TransactionsService {
-
-    companion object {
-        /**
-         * Actual id for NetworkBroadcastApi
-         */
-        @Volatile
-        var id: Int = ILLEGAL_ID
-    }
-}
+interface NetworkBroadcastApiService : ApiService, TransactionsService
 
 /**
  * Encapsulates logic, associated with transactions
  */
-interface TransactionsService{
+interface TransactionsService {
 
     /**
      * Broadcast a [transaction]  to the network.

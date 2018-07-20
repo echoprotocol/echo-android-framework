@@ -2,6 +2,7 @@ package com.pixelplex.echolib.service.internal
 
 import com.pixelplex.echolib.AccountListener
 import com.pixelplex.echolib.Callback
+import com.pixelplex.echolib.ILLEGAL_ID
 import com.pixelplex.echolib.core.socket.SocketCoreComponent
 import com.pixelplex.echolib.core.socket.SocketMessengerListener
 import com.pixelplex.echolib.exception.LocalException
@@ -27,7 +28,7 @@ class DatabaseApiServiceImpl(
     private val network: Network
 ) : DatabaseApiService {
 
-    override val api: Api = Api.DATABASE
+    override var id: Int = ILLEGAL_ID
 
     private var socketMessengerListener: SocketMessengerListener = SubscriptionListener()
 
@@ -44,7 +45,7 @@ class DatabaseApiServiceImpl(
         callback: Callback<Map<String, FullAccount>>
     ) {
         val fullAccountsOperation = FullAccountsSocketOperation(
-            api,
+            id,
             namesOrIds,
             subscribe,
             callback = callback,
@@ -60,7 +61,7 @@ class DatabaseApiServiceImpl(
 
         val future = FutureTask<Map<String, FullAccount>>()
         val fullAccountsOperation = FullAccountsSocketOperation(
-            api,
+            id,
             namesOrIds,
             subscribe,
             callback = object : Callback<Map<String, FullAccount>> {
@@ -82,7 +83,7 @@ class DatabaseApiServiceImpl(
     override fun getChainId(): Result<Exception, String> {
         val future = FutureTask<String>()
         val chainIdOperation = GetChainIdSocketOperation(
-            api,
+            id,
             callback = object : Callback<String> {
                 override fun onSuccess(result: String) {
                     future.setComplete(result)
@@ -101,7 +102,7 @@ class DatabaseApiServiceImpl(
     override fun getDynamicGlobalProperties(): Result<Exception, DynamicGlobalProperties> {
         val future = FutureTask<DynamicGlobalProperties>()
         val blockDataOperation = BlockDataSocketOperation(
-            api,
+            id,
             callback = object : Callback<DynamicGlobalProperties> {
                 override fun onSuccess(result: DynamicGlobalProperties) {
                     future.setComplete(result)
@@ -123,9 +124,9 @@ class DatabaseApiServiceImpl(
     ): Result<Exception, List<AssetAmount>> {
         val future = FutureTask<List<AssetAmount>>()
         val requiredFeesOperation = RequiredFeesSocketOperation(
+            id,
             operations,
             asset,
-            api,
             callback = object : Callback<List<AssetAmount>> {
                 override fun onSuccess(result: List<AssetAmount>) {
                     future.setComplete(result)
@@ -213,7 +214,7 @@ class DatabaseApiServiceImpl(
 
     private fun createSubscriptionOperation(clearFilter: Boolean, callback: Callback<Any>) =
         SetSubscribeCallbackSocketOperation(
-            api,
+            id,
             clearFilter,
             SocketMethodType.CALL,
             callback

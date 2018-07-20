@@ -4,8 +4,6 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.pixelplex.echolib.Callback
 import com.pixelplex.echolib.ILLEGAL_ID
-import com.pixelplex.echolib.support.Api
-import com.pixelplex.echolib.support.getId
 import org.json.JSONObject
 
 /**
@@ -19,7 +17,7 @@ import org.json.JSONObject
  * @author Daria Pechkovskaya
  */
 class SetSubscribeCallbackSocketOperation(
-    val api: Api,
+    override val apiId: Int,
     val needClearFilter: Boolean,
     method: SocketMethodType = SocketMethodType.CALL,
     callback: Callback<Any>
@@ -34,9 +32,6 @@ class SetSubscribeCallbackSocketOperation(
                 add(needClearFilter)
             })
         }
-
-    override val apiId: Int
-        get() = api.getId()
 
     override fun fromJson(json: String): Any? {
         return if (JSONObject(json).has("result")) Any() else null

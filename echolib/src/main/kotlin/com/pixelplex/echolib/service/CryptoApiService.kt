@@ -12,13 +12,4 @@ import com.pixelplex.echolib.ILLEGAL_ID
  *
  * @author Dmitriy Bushuev
  */
-interface CryptoApiService : ApiService {
-
-    companion object {
-        /**
-         * Actual id for CryptoApi
-         */
-        @Volatile
-        var id: Int = ILLEGAL_ID
-    }
-}
+interface CryptoApiService : ApiService

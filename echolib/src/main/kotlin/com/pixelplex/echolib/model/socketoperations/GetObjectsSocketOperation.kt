@@ -5,8 +5,6 @@ import com.google.gson.JsonElement
 import com.pixelplex.echolib.Callback
 import com.pixelplex.echolib.ILLEGAL_ID
 import com.pixelplex.echolib.model.GrapheneObject
-import com.pixelplex.echolib.support.Api
-import com.pixelplex.echolib.support.getId
 
 /**
  * Get the objects corresponding to the provided IDs.
@@ -18,7 +16,7 @@ import com.pixelplex.echolib.support.getId
  * @author Daria Pechkovskaya
  */
 class GetObjectsSocketOperation(
-    val api: Api,
+    override val apiId: Int,
     val ids: Array<String>,
     method: SocketMethodType = SocketMethodType.CALL,
     callback: Callback<List<GrapheneObject>>
@@ -41,9 +39,6 @@ class GetObjectsSocketOperation(
 
             add(JsonArray().apply { add(identifiersJson) })
         }
-
-    override val apiId: Int
-        get() = api.getId()
 
     override fun fromJson(json: String): List<GrapheneObject>? {
         return null

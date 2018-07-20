@@ -10,9 +10,12 @@ import com.pixelplex.echolib.model.socketoperations.AccessSocketOperation
 import com.pixelplex.echolib.model.socketoperations.AccessSocketOperationType
 import com.pixelplex.echolib.model.socketoperations.LoginSocketOperation
 import com.pixelplex.echolib.model.socketoperations.SocketOperation
+import com.pixelplex.echolib.service.AccountHistoryApiService
+import com.pixelplex.echolib.service.CryptoApiService
+import com.pixelplex.echolib.service.DatabaseApiService
+import com.pixelplex.echolib.service.NetworkBroadcastApiService
 import com.pixelplex.echolib.support.Api
 import com.pixelplex.echolib.support.Converter
-import com.pixelplex.echolib.support.updateId
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
@@ -23,7 +26,11 @@ import java.util.concurrent.atomic.AtomicInteger
 class InitializerFacadeImpl(
     private val socketCoreComponent: SocketCoreComponent,
     private val url: String,
-    private val apis: Set<Api>
+    private val apis: Set<Api>,
+    private val databaseApiService: DatabaseApiService,
+    private val cryptoApiService: CryptoApiService,
+    private val accountHistoryApiService: AccountHistoryApiService,
+    private val networkBroadcastApiService: NetworkBroadcastApiService
 ) : InitializerFacade {
 
     private val initializeSocketListener by lazy { InitializeSocketListener() }
@@ -59,7 +66,7 @@ class InitializerFacadeImpl(
 
     private fun login(callback: Callback<Boolean>) {
         val loginOperation = LoginSocketOperation(
-            api = InitializerFacade.INITIALIZER_API_ID,
+            InitializerFacade.INITIALIZER_API_ID,
             callback = callback
         )
 
@@ -82,7 +89,7 @@ class InitializerFacadeImpl(
     }
 
     private fun updateCallback(api: Api, result: Int) {
-        api.updateId(result)
+        updateServiceApiId(api, result)
 
         val apisLeft = apisCount.decrementAndGet()
         if (apisLeft == 0) {
@@ -93,6 +100,15 @@ class InitializerFacadeImpl(
                     socketCoreComponent.off(initializeSocketListener)
                 }
             }
+        }
+    }
+
+    private fun updateServiceApiId(api: Api, id: Int) {
+        when (api) {
+            Api.DATABASE -> databaseApiService.id = id
+            Api.ACCOUNT_HISTORY -> accountHistoryApiService.id = id
+            Api.CRYPTO -> cryptoApiService.id = id
+            Api.NETWORK_BROADCAST -> networkBroadcastApiService.id = id
         }
     }
 

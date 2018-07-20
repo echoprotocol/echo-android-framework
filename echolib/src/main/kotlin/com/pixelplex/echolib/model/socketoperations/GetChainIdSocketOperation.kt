@@ -1,13 +1,10 @@
 package com.pixelplex.echolib.model.socketoperations
 
-import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonParser
 import com.pixelplex.echolib.Callback
 import com.pixelplex.echolib.ILLEGAL_ID
-import com.pixelplex.echolib.support.Api
-import com.pixelplex.echolib.support.getId
 
 /**
  * Get the chain id.
@@ -17,7 +14,7 @@ import com.pixelplex.echolib.support.getId
  * @author Daria Pechkovskaya
  */
 class GetChainIdSocketOperation(
-    val api: Api,
+    override val apiId: Int,
     method: SocketMethodType = SocketMethodType.CALL,
     callback: Callback<String>
 
@@ -29,9 +26,6 @@ class GetChainIdSocketOperation(
             add(SocketOperationKeys.CHAIN_ID.key)
             add(JsonArray())
         }
-
-    override val apiId: Int
-        get() = api.getId()
 
     override fun fromJson(json: String): String? {
         val parser = JsonParser()

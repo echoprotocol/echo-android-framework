@@ -1,9 +1,9 @@
 package com.pixelplex.echolib.service.internal
 
+import com.pixelplex.echolib.ILLEGAL_ID
 import com.pixelplex.echolib.core.crypto.CryptoCoreComponent
 import com.pixelplex.echolib.core.socket.SocketCoreComponent
 import com.pixelplex.echolib.service.AccountHistoryApiService
-import com.pixelplex.echolib.support.Api
 
 /**
  * Implementation of [AccountHistoryApiService]
@@ -19,5 +19,6 @@ class AccountHistoryApiServiceImpl(
     private val cryptoCoreComponent: CryptoCoreComponent
 ) : AccountHistoryApiService {
 
-    override val api: Api = Api.ACCOUNT_HISTORY
+    override var id: Int = ILLEGAL_ID
+
 }

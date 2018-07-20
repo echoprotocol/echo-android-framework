@@ -1,7 +1,5 @@
 package com.pixelplex.echolib.service
 
-import com.pixelplex.echolib.support.Api
-
 /**
  * Encapsulates login for services of blockchain API
  *
@@ -10,7 +8,8 @@ import com.pixelplex.echolib.support.Api
 interface ApiService {
 
     /**
-     * Type of api
+     * Actual api id
      */
-    val api: Api
+    var id: Int
+
 }
