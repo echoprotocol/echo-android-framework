@@ -2,7 +2,6 @@ package com.pixelplex.echolib.model
 
 import com.google.common.primitives.Bytes
 import com.pixelplex.bitcoinj.Base58
-import com.pixelplex.bitcoinj.ECKey
 import com.pixelplex.echolib.exception.MalformedAddressException
 import com.pixelplex.echolib.model.network.Network
 import com.pixelplex.echolib.support.Checksum.CHECKSUM_SIZE
@@ -32,7 +31,7 @@ class Address {
 
         val decoded = Base58.decode(address.substring(prefixSize))
         val pubKey = decoded.copyOfRange(0, decoded.size - CHECKSUM_SIZE)
-        this.pubKey = PublicKey(ECKey.fromPublicOnly(pubKey))
+        this.pubKey = PublicKey(pubKey)
 
         val calculatedChecksum = calculateChecksum(pubKey)
         val checksum = decoded.copyOfRange(decoded.size - CHECKSUM_SIZE, decoded.size)
