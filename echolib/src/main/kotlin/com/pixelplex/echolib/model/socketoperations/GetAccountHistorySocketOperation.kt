@@ -1,10 +1,14 @@
 package com.pixelplex.echolib.model.socketoperations
 
+import com.google.gson.GsonBuilder
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
+import com.google.gson.reflect.TypeToken
 import com.pixelplex.echolib.Callback
 import com.pixelplex.echolib.ILLEGAL_ID
-import com.pixelplex.echolib.model.HistoricalTransfer
+import com.pixelplex.echolib.model.*
+import com.pixelplex.echolib.model.network.Network
+import com.pixelplex.echolib.model.operations.AccountUpdateOperation
 
 /**
  * Get operations relevant to the specified account.
@@ -22,16 +26,17 @@ import com.pixelplex.echolib.model.HistoricalTransfer
 class GetAccountHistorySocketOperation(
     override val apiId: Int,
     val accountId: String,
+    val startId: String = DEFAULT_HISTORY_ID,
     val stopId: String = DEFAULT_HISTORY_ID,
     val limit: Int = DEFAULT_LIMIT,
-    val startId: String = DEFAULT_HISTORY_ID,
+    val network: Network,
     method: SocketMethodType = SocketMethodType.CALL,
-    callback: Callback<List<HistoricalTransfer>>
+    callback: Callback<HistoryResponse>
 
-) : SocketOperation<List<HistoricalTransfer>>(
+) : SocketOperation<HistoryResponse>(
     method,
     ILLEGAL_ID,
-    listOf<HistoricalTransfer>().javaClass,
+    HistoryResponse::class.java,
     callback
 ) {
 
@@ -47,9 +52,29 @@ class GetAccountHistorySocketOperation(
             })
         }
 
-    override fun fromJson(json: String): List<HistoricalTransfer> {
-        return emptyList()
+    override fun fromJson(json: String): HistoryResponse? {
+        val gson = configureGson()
+
+        val responseType = object : TypeToken<HistoryResponse>() {
+        }.type
+
+        return gson.fromJson<HistoryResponse>(json, responseType)
     }
+
+    private fun configureGson() = GsonBuilder().apply {
+        registerTypeAdapter(
+            HistoricalTransfer::class.java,
+            HistoricalTransfer.HistoryDeserializer()
+        )
+        registerTypeAdapter(AssetAmount::class.java, AssetAmount.Deserializer())
+        registerTypeAdapter(Authority::class.java, Authority.Deserializer(network))
+        registerTypeAdapter(Account::class.java, Account.Deserializer())
+        registerTypeAdapter(AccountOptions::class.java, AccountOptions.Deserializer(network))
+        registerTypeAdapter(
+            AccountUpdateOperation::class.java,
+            AccountUpdateOperation.Deserializer()
+        )
+    }.create()
 
     companion object {
         const val DEFAULT_HISTORY_ID = "1.11.0"

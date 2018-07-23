@@ -1,11 +1,9 @@
 package com.pixelplex.echolib.model.operations
 
 import com.google.common.primitives.UnsignedLong
-import com.google.gson.Gson
-import com.google.gson.JsonArray
-import com.google.gson.JsonElement
-import com.google.gson.JsonObject
+import com.google.gson.*
 import com.pixelplex.echolib.model.*
+import java.lang.reflect.Type
 
 /**
  * Represents blockchain operation for updating an existing account.
@@ -79,6 +77,74 @@ class AccountUpdateOperation @JvmOverloads constructor(
             add(accountUpdate)
         }
 
+    /**
+     * Deserializer used to build a [Account] instance from the full JSON-formatted response obtained
+     * by the 'get_objects' API call.
+     */
+    class Deserializer : JsonDeserializer<AccountUpdateOperation> {
+
+        override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?
+        ): AccountUpdateOperation? {
+
+            if (json == null || !json.isJsonObject) return null
+
+            val operationObject = json.asJsonObject
+
+            val account = createAccount(operationObject)
+            val owner = parseOwner(operationObject, context)
+            val active = parseActive(operationObject, context)
+            val newOptions = parseNewOptions(operationObject, context)
+            val fee = parseFee(operationObject, context)
+
+            return AccountUpdateOperation(
+                account,
+                owner,
+                active,
+                newOptions,
+                fee ?: AssetAmount(UnsignedLong.ZERO)
+            )
+        }
+
+        private fun createAccount(operationObject: JsonObject) =
+            Account(operationObject.get(KEY_ACCOUNT).asString)
+
+        private fun parseOwner(
+            operationObject: JsonObject,
+            deserializer: JsonDeserializationContext?
+        ) = deserializer?.deserialize<Authority>(
+            operationObject.get(KEY_OWNER),
+            Authority::class.java
+        )
+
+        private fun parseActive(
+            operationObject: JsonObject,
+            deserializer: JsonDeserializationContext?
+        ) = deserializer?.deserialize<Authority>(
+            operationObject.get(KEY_ACTIVE),
+            Authority::class.java
+        )
+
+        private fun parseNewOptions(
+            operationObject: JsonObject,
+            deserializer: JsonDeserializationContext?
+        ) = deserializer?.deserialize<AccountOptions>(
+            operationObject.get(KEY_NEW_OPTIONS),
+            AccountOptions::class.java
+        )
+
+        private fun parseFee(
+            operationObject: JsonObject,
+            deserializer: JsonDeserializationContext?
+        ) = deserializer?.deserialize<AssetAmount>(
+            operationObject.get(KEY_FEE),
+            AssetAmount::class.java
+        )
+
+    }
+
     companion object {
         const val KEY_ACCOUNT = "account"
         const val KEY_OWNER = "owner"
@@ -87,4 +153,5 @@ class AccountUpdateOperation @JvmOverloads constructor(
         const val KEY_NEW_OPTIONS = "new_options"
         const val KEY_EXTENSIONS = "extensions"
     }
+
 }
