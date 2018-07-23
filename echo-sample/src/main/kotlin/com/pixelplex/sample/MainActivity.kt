@@ -9,6 +9,7 @@ import com.pixelplex.echolib.EchoFramework
 import com.pixelplex.echolib.exception.LocalException
 import com.pixelplex.echolib.model.Account
 import com.pixelplex.echolib.model.Balance
+import com.pixelplex.echolib.model.HistoryResponse
 import com.pixelplex.echolib.support.Api
 import com.pixelplex.echolib.support.Settings
 import kotlinx.android.synthetic.main.activity_main.*
@@ -24,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         lib = EchoFramework.create(
             Settings.Configurator()
                 .setReturnOnMainThread(true)
-                .setApis(Api.DATABASE, Api.NETWORK_BROADCAST)
+                .setApis(Api.DATABASE, Api.NETWORK_BROADCAST, Api.ACCOUNT_HISTORY)
                 .configure()
         )
 
@@ -164,6 +165,25 @@ class MainActivity : AppCompatActivity() {
                 }
 
             })
+        }
+
+        btnHistory.setOnClickListener {
+            lib.getAccountHistory(
+                etName.text.toString(),
+                "1.11.37878780",
+                "1.11.37878741",
+                10,
+                "1.3.0",
+                object : Callback<HistoryResponse> {
+                    override fun onSuccess(result: HistoryResponse) {
+                        updateStatus("Unsubscribe all succeed")
+                    }
+
+                    override fun onError(error: LocalException) {
+                        updateStatus(error.message ?: "")
+                    }
+
+                })
 
         }
     }
@@ -182,6 +202,7 @@ class MainActivity : AppCompatActivity() {
                 btnSubscribe.visibility = View.VISIBLE
                 btnUnsubscribe.visibility = View.VISIBLE
                 btnUnsubscribeAll.visibility = View.VISIBLE
+                btnHistory.visibility = View.VISIBLE
                 updateStatus("Success initializing")
             }
 
@@ -195,6 +216,7 @@ class MainActivity : AppCompatActivity() {
                 btnSubscribe.visibility = View.INVISIBLE
                 btnUnsubscribe.visibility = View.INVISIBLE
                 btnUnsubscribeAll.visibility = View.INVISIBLE
+                btnHistory.visibility = View.INVISIBLE
                 error.printStackTrace()
                 updateStatus("Error occurred during initialization.")
             }

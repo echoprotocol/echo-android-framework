@@ -38,6 +38,13 @@ class TransactionsFacadeImpl(
         asset: String,
         callback: Callback<HistoryResponse>
     ) {
+        accountHistoryApiService.getAccountHistory(
+            nameOrId,
+            transactionStartId,
+            transactionStopId,
+            limit,
+            callback
+        )
     }
 
 }

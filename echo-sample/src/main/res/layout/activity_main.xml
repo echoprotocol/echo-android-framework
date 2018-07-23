@@ -155,6 +155,16 @@
             android:text="@string/change_password"
             android:visibility="invisible"/>
 
+        <Button
+            android:id="@+id/btnHistory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btnChangePassword"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:text="@string/history"
+            android:visibility="invisible"/>
+
     </RelativeLayout>
 
 </ScrollView>
