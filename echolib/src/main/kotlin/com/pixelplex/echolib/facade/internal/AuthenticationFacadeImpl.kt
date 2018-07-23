@@ -51,6 +51,28 @@ class AuthenticationFacadeImpl(
         })
     }
 
+    /**
+     * Check account equals by [key] from role [authorityType]
+     *
+     * @param key Public key from role
+     * @param authorityType Role for equals operation
+     */
+    private fun Account.isEqualsByKey(key: String, authorityType: AuthorityType): Boolean =
+        when (authorityType) {
+            AuthorityType.OWNER -> isKeyExist(key, owner)
+            AuthorityType.ACTIVE -> isKeyExist(key, active)
+            AuthorityType.KEY -> {
+                options.memoKey?.address == key
+            }
+        }
+
+    private fun isKeyExist(address: String, authority: Authority): Boolean {
+        val foundKey = authority.keyAuthorities.keys.find { pubKey ->
+            pubKey.address == address
+        }
+        return foundKey != null
+    }
+
     override fun changePassword(
         name: String,
         oldPassword: String,

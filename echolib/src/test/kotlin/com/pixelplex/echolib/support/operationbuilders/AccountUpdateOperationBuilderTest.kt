@@ -32,7 +32,7 @@ class AccountUpdateOperationBuilderTest {
         val account = Account("1.2.23215")
         val owner = Authority(2)
         val active = Authority(3)
-        val options = AccountOptions(PublicKey(ECKey.fromPublicOnly(ECKey().pubKeyPoint)))
+        val options = AccountOptions(PublicKey(ECKey.fromPublicOnly(ECKey().pubKeyPoint).pubKey))
 
         return AccountUpdateOperationBuilder()
             .setFee(fee)
