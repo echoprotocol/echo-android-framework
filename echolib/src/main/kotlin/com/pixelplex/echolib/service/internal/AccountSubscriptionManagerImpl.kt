@@ -89,8 +89,8 @@ class AccountSubscriptionManagerImpl : AccountSubscriptionManager {
      *
      *  Steps:
      *      1) Find not empty array with depth = 3 in params array.
-     *         To receive result all events should be in example form
-     *      2) Go through all elements of array and find account statistic object whit id starting from 2.6
+     *         To receive result all events should be in example's form
+     *      2) Go through all elements of array and find account statistic object with id starting from 2.6
      *         (@see http://docs.bitshares.org/development/blockchain/objects.html)
      *      3) Parse from statistic object account id with key "owner"
      *      4) Check, whether there are listeners for this account id.
