@@ -8,6 +8,7 @@ import com.pixelplex.echolib.core.socket.SocketMessenger
 import com.pixelplex.echolib.core.socket.SocketMessengerListener
 import com.pixelplex.echolib.core.socket.internal.SocketMessengerImpl
 import com.pixelplex.echolib.model.AuthorityType
+import com.pixelplex.echolib.model.Transaction
 import com.pixelplex.echolib.model.network.Mainnet
 import com.pixelplex.echolib.model.network.Testnet
 import org.junit.Assert.*
@@ -90,9 +91,11 @@ class SettingsTest {
             userName: String,
             password: String,
             authorityType: AuthorityType
-        ): ECKey = ECKey.fromPrivate(
+        ): ByteArray = ECKey.fromPrivate(
             BigInteger("0")
-        )
+        ).getPrivKeyBytes()
+
+        override fun signTransaction(transaction: Transaction): ByteArray = ByteArray(1)
 
     }
 

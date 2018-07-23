@@ -53,7 +53,8 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         val accountHistoryApiService =
             AccountHistoryApiServiceImpl(socketCoreComponent, settings.cryptoComponent)
         val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, settings.network)
-        val networkBroadcastApiService = NetworkBroadcastApiServiceImpl(socketCoreComponent)
+        val networkBroadcastApiService =
+            NetworkBroadcastApiServiceImpl(socketCoreComponent, settings.cryptoComponent)
         val cryptoApiService = CryptoApiServiceImpl(socketCoreComponent)
 
         initializerFacade = InitializerFacadeImpl(

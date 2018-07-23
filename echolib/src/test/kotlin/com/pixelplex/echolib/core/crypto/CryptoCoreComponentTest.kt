@@ -1,5 +1,6 @@
 package com.pixelplex.echolib.core.crypto
 
+import com.pixelplex.bitcoinj.ECKey
 import com.pixelplex.echolib.core.crypto.internal.CryptoCoreComponentImpl
 import com.pixelplex.echolib.model.Address
 import com.pixelplex.echolib.model.AuthorityType
@@ -53,7 +54,7 @@ class CryptoCoreComponentTest {
     fun privateKeyTest() {
         val privateKey = cryptoCoreComponent.getPrivateKey(name, password, authorityType)
 
-        assertTrue(privateKey.hasPrivKey())
+        assertTrue(ECKey.fromPrivate(privateKey).hasPrivKey())
     }
 
 }
