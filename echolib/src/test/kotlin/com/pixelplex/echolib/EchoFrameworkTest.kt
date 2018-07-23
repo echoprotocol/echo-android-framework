@@ -4,14 +4,15 @@ import com.pixelplex.echolib.exception.LocalException
 import com.pixelplex.echolib.model.Account
 import com.pixelplex.echolib.model.Balance
 import com.pixelplex.echolib.support.Api
+import com.pixelplex.echolib.support.EmptyCallback
 import com.pixelplex.echolib.support.Settings
 import com.pixelplex.echolib.support.concurrent.future.FutureTask
 import com.pixelplex.echolib.support.concurrent.future.wrapResult
 import com.pixelplex.echolib.support.fold
 import org.junit.Assert
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import org.junit.Assert.*
 import org.junit.Test
+import kotlin.concurrent.thread
 
 /**
  * Test cases for [EchoFramework]
@@ -24,7 +25,10 @@ class EchoFrameworkTest {
         EchoFramework.create(
             Settings.Configurator()
                 .setReturnOnMainThread(false)
-                .setApis(Api.DATABASE, Api.NETWORK_BROADCAST)
+                .setApis(
+                    Api.DATABASE,
+                    Api.NETWORK_BROADCAST
+                )
                 .configure()
         )
 
@@ -39,11 +43,12 @@ class EchoFrameworkTest {
     fun loginTest() {
         val framework = initFramework()
 
-        val futureLogin = FutureTask<Account>()
+        val futureLogin =
+            FutureTask<Account>()
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
-        framework.login("dimaty123", "P5JVzpPDitVodHMoj4zZspn7e8EYiDeoarkCEixS5tD4z",
+        framework.login("dimaty123", "P5JVzpPDitVodHMoj4zZspn7e8EYiDeoarkCEixS5tD5z",
             object : Callback<Account> {
                 override fun onSuccess(result: Account) {
                     futureLogin.setComplete(result)
@@ -58,7 +63,8 @@ class EchoFrameworkTest {
         val account = futureLogin.get()
         assertTrue(account != null)
 
-        val futureLoginFailure = FutureTask<Account>()
+        val futureLoginFailure =
+            FutureTask<Account>()
 
         framework.login("dimaty123", "WrongPassword",
             object : Callback<Account> {
@@ -86,11 +92,13 @@ class EchoFrameworkTest {
     fun getAccountTest() {
         val framework = initFramework()
 
-        val futureAccount = FutureTask<Account>()
+        val futureAccount =
+            FutureTask<Account>()
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
-        framework.getAccount("dimaty123", object : Callback<Account> {
+        framework.getAccount("dimaty123", object :
+            Callback<Account> {
             override fun onSuccess(result: Account) {
                 futureAccount.setComplete(result)
             }
@@ -109,11 +117,13 @@ class EchoFrameworkTest {
     fun checkAccountReservedTest() {
         val framework = initFramework()
 
-        val futureCheckReserved = FutureTask<Boolean>()
+        val futureCheckReserved =
+            FutureTask<Boolean>()
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
-        framework.checkAccountReserved("dimaty123", object : Callback<Boolean> {
+        framework.checkAccountReserved("dimaty123", object :
+            Callback<Boolean> {
             override fun onSuccess(result: Boolean) {
                 futureCheckReserved.setComplete(result)
             }
@@ -126,9 +136,11 @@ class EchoFrameworkTest {
 
         assertTrue(futureCheckReserved.get() ?: false)
 
-        val futureCheckAvailable = FutureTask<Boolean>()
+        val futureCheckAvailable =
+            FutureTask<Boolean>()
 
-        framework.checkAccountReserved("edgewruferjd", object : Callback<Boolean> {
+        framework.checkAccountReserved("edgewruferjd", object :
+            Callback<Boolean> {
             override fun onSuccess(result: Boolean) {
                 futureCheckAvailable.setComplete(result)
             }
@@ -146,11 +158,13 @@ class EchoFrameworkTest {
     fun getBalanceTest() {
         val framework = initFramework()
 
-        val futureBalanceExistent = FutureTask<Balance>()
+        val futureBalanceExistent =
+            FutureTask<Balance>()
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
-        framework.getBalance("dimaty123", "1.3.0", object : Callback<Balance> {
+        framework.getBalance("dimaty123", "1.3.0", object :
+            Callback<Balance> {
             override fun onSuccess(result: Balance) {
                 futureBalanceExistent.setComplete(result)
             }
@@ -163,9 +177,11 @@ class EchoFrameworkTest {
 
         assertTrue(futureBalanceExistent.get() != null)
 
-        val futureBalanceNonexistent = FutureTask<Balance>()
+        val futureBalanceNonexistent =
+            FutureTask<Balance>()
 
-        framework.getBalance("dimaty123", "ergergger", object : Callback<Balance> {
+        framework.getBalance("dimaty123", "ergergger", object :
+            Callback<Balance> {
             override fun onSuccess(result: Balance) {
                 futureBalanceNonexistent.setComplete(result)
             }
@@ -186,60 +202,61 @@ class EchoFrameworkTest {
         assertTrue(balance == null)
     }
 
-//    @Test
-//    fun changePasswordTest() {
-//        val framework = initFramework()
-//
-//        val futureChangePassword = FutureTask<Boolean>()
-//
-//        if (connect(framework) == false) Assert.fail("Connection error")
-//
-//        changePassword(framework, object : Callback<Any> {
-//            override fun onSuccess(result: Any) {
-//                futureChangePassword.setComplete(true)
-//            }
-//
-//            override fun onError(error: LocalException) {
-//                futureChangePassword.setComplete(false)
-//            }
-//
-//        })
-//
-//        assertTrue(futureChangePassword.get() ?: false)
-//    }
-//
-//    @Test
-//    fun subscriptionTest() {
-//        val framework = initFramework()
-//
-//        val futureSubscription = FutureTask<Account>()
-//
-//        if (connect(framework) == false) Assert.fail("Connection error")
-//
-//        framework.subscribeOnAccount("1.2.23215", object : AccountListener {
-//
-//            override fun onChange(updatedAccount: Account) {
-//                futureSubscription.setComplete(updatedAccount)
-//            }
-//
-//        })
-//
-//        thread {
-//            Thread.sleep(3000)
-//            changePassword(framework, EmptyCallback())
-//        }
-//
-//        assertNotNull(futureSubscription.get())
-//    }
-//
-//    private fun changePassword(framework: EchoFramework, callback: Callback<Any>) {
-//        framework.changePassword(
-//            "dimaty123",
-//            "P5JVzpPDitVodHMoj4zZspn7e8EYiDeoarkCEixS5tD4z",
-//            "P5JVzpPDitVodHMoj4zZspn7e8EYiDeoarkCEixS5tD4z",
-//            callback
-//        )
-//    }
+    @Test
+    fun changePasswordTest() {
+        val framework = initFramework()
+
+        val futureChangePassword =
+            FutureTask<Boolean>()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        changePassword(framework, object : Callback<Any> {
+            override fun onSuccess(result: Any) {
+                futureChangePassword.setComplete(true)
+            }
+
+            override fun onError(error: LocalException) {
+                futureChangePassword.setComplete(false)
+            }
+
+        })
+
+        assertTrue(futureChangePassword.get() ?: false)
+    }
+
+    @Test
+    fun subscriptionTest() {
+        val framework = initFramework()
+
+        val futureSubscription = FutureTask<Account>()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        framework.subscribeOnAccount("1.2.23215", object : AccountListener {
+
+            override fun onChange(updatedAccount: Account) {
+                futureSubscription.setComplete(updatedAccount)
+            }
+
+        })
+
+        thread {
+            Thread.sleep(3000)
+            changePassword(framework, EmptyCallback())
+        }
+
+        assertNotNull(futureSubscription.get())
+    }
+
+    private fun changePassword(framework: EchoFramework, callback: Callback<Any>) {
+        framework.changePassword(
+            "dimaty123",
+            "P5JVzpPDitVodHMoj4zZspn7e8EYiDeoarkCEixS5tD5z",
+            "P5JVzpPDitVodHMoj4zZspn7e8EYiDeoarkCEixS5tD5z",
+            callback
+        )
+    }
 
     private fun connect(framework: EchoFramework): Boolean? {
         val futureConnect = FutureTask<Boolean>()

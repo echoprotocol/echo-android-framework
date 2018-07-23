@@ -3,10 +3,7 @@ package com.pixelplex.echolib.model
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
-import com.pixelplex.bitcoinj.ECKey
-import com.pixelplex.echolib.support.Signature
 import com.pixelplex.echolib.support.format
-
 import org.spongycastle.util.encoders.Hex
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -19,13 +16,13 @@ import java.util.concurrent.TimeUnit
  */
 class Transaction : ByteSerializable, JsonSerializable {
 
-    var privateKey: ECKey? = null
+    var privateKey: ByteArray? = null
         private set
     var blockData: BlockData
     var operations: List<BaseOperation>
         private set
     private val extensions: Extensions = Extensions()
-//    var chain: Chains = Chains.BITSHARES
+    //    var chain: Chains = Chains.BITSHARES
     var chainId: String
 
     /**
@@ -50,7 +47,12 @@ class Transaction : ByteSerializable, JsonSerializable {
      * @param blockData :  Block data containing important information used to sign a transaction.
      * @param operations : List of operations to include in the transaction.
      */
-    constructor(privateKey: ECKey, blockData: BlockData, operations: List<BaseOperation>, chainId: String) :
+    constructor(
+        privateKey: ByteArray,
+        blockData: BlockData,
+        operations: List<BaseOperation>,
+        chainId: String
+    ) :
             this(blockData, operations, chainId) {
         this.privateKey = privateKey
     }
@@ -104,10 +106,6 @@ class Transaction : ByteSerializable, JsonSerializable {
             val expirationTimeMillis = TimeUnit.SECONDS.toMillis(blockData.relativeExpiration)
             val dateJson = Date(expirationTimeMillis).format()
             addProperty(KEY_EXPIRATION, dateJson)
-
-            val signature = Signature.signTransaction(this@Transaction)
-            val signaturesJson = JsonArray().apply { add(Hex.toHexString(signature)) }
-            add(KEY_SIGNATURES, signaturesJson)
 
             val operationsJson = JsonArray()
             operations.forEach { operation ->

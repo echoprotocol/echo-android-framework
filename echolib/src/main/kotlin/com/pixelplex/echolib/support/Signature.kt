@@ -53,10 +53,11 @@ object Signature {
         while (!isGrapheneCanonical) {
             val serializedTransaction = transaction.toBytes()
             val hash = Sha256Hash.wrap(Sha256Hash.hash(serializedTransaction))
-            val sign = nonNullPrivateKey.sign(hash)
-            val recId = getRecId(sign, hash, nonNullPrivateKey)
+            val key = ECKey.fromPrivate(nonNullPrivateKey)
+            val sign = key.sign(hash)
+            val recId = getRecId(sign, hash, key)
 
-            signData = createSignData(nonNullPrivateKey, recId, sign)
+            signData = createSignData(key, recId, sign)
 
             if (isSignatureNotValid(signData)) {
                 ++transaction.blockData.relativeExpiration

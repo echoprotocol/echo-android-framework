@@ -1,7 +1,7 @@
 package com.pixelplex.echolib.core.crypto
 
-import com.pixelplex.bitcoinj.ECKey
 import com.pixelplex.echolib.model.AuthorityType
+import com.pixelplex.echolib.model.Transaction
 
 /**
  * Encapsulates logic, associated with keys generation and encryption/decryption processes
@@ -18,6 +18,11 @@ interface CryptoCoreComponent {
     /**
      * Generates private elliptic curve key for transaction signing
      */
-    fun getPrivateKey(userName: String, password: String, authorityType: AuthorityType): ECKey
+    fun getPrivateKey(userName: String, password: String, authorityType: AuthorityType): ByteArray
+
+    /**
+     * Generates transaction signature
+     */
+    fun signTransaction(transaction: Transaction): ByteArray
 
 }

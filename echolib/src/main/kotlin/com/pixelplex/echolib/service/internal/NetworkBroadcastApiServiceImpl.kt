@@ -2,6 +2,7 @@ package com.pixelplex.echolib.service.internal
 
 import com.pixelplex.echolib.Callback
 import com.pixelplex.echolib.ILLEGAL_ID
+import com.pixelplex.echolib.core.crypto.CryptoCoreComponent
 import com.pixelplex.echolib.core.socket.SocketCoreComponent
 import com.pixelplex.echolib.exception.LocalException
 import com.pixelplex.echolib.model.Transaction
@@ -20,7 +21,10 @@ import com.pixelplex.echolib.support.concurrent.future.wrapResult
  *
  * @author Dmitriy Bushuev
  */
-class NetworkBroadcastApiServiceImpl(private val socketCoreComponent: SocketCoreComponent) :
+class NetworkBroadcastApiServiceImpl(
+    private val socketCoreComponent: SocketCoreComponent,
+    private val cryptoCoreComponent: CryptoCoreComponent
+) :
     NetworkBroadcastApiService {
 
     override var id: Int = ILLEGAL_ID
@@ -30,6 +34,7 @@ class NetworkBroadcastApiServiceImpl(private val socketCoreComponent: SocketCore
         val transactionSocketOperation = TransactionSocketOperation(
             id,
             transaction,
+            cryptoCoreComponent.signTransaction(transaction),
             callback = object : Callback<String> {
                 override fun onSuccess(result: String) {
                     future.setComplete(result)
