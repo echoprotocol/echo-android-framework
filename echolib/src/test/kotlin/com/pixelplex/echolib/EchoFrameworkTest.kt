@@ -3,6 +3,7 @@ package com.pixelplex.echolib
 import com.pixelplex.echolib.exception.LocalException
 import com.pixelplex.echolib.model.Account
 import com.pixelplex.echolib.model.Balance
+import com.pixelplex.echolib.model.HistoryResponse
 import com.pixelplex.echolib.support.Api
 import com.pixelplex.echolib.support.EmptyCallback
 import com.pixelplex.echolib.support.Settings
@@ -27,7 +28,8 @@ class EchoFrameworkTest {
                 .setReturnOnMainThread(false)
                 .setApis(
                     Api.DATABASE,
-                    Api.NETWORK_BROADCAST
+                    Api.NETWORK_BROADCAST,
+                    Api.ACCOUNT_HISTORY
                 )
                 .configure()
         )
@@ -200,6 +202,32 @@ class EchoFrameworkTest {
         })
 
         assertTrue(balance == null)
+    }
+
+    @Test
+    fun accountHistoryTest() {
+        val framework = initFramework()
+
+        val futureAccountHistory =
+            FutureTask<HistoryResponse>()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        framework.getAccountHistory("1.2.23215", "1.11.37878780",
+            "1.11.37878741",
+            10,
+            "1.3.0", object : Callback<HistoryResponse> {
+                override fun onSuccess(result: HistoryResponse) {
+                    futureAccountHistory.setComplete(result)
+                }
+
+                override fun onError(error: LocalException) {
+                    futureAccountHistory.setComplete(error)
+                }
+
+            })
+
+        assertNotNull(futureAccountHistory.get())
     }
 
     @Test
