@@ -1,1 +1,1 @@
-include ':echolib', ':echo-sample'
+include ':echoframework', ':echo-sample'

@@ -1,0 +1,71 @@
+plugins {
+    id "io.gitlab.arturbosch.detekt" version "1.0.0.RC7-3"
+}
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+android {
+    def globalConfiguration = rootProject.extensions.getByName("ext")
+
+    compileSdkVersion globalConfiguration["androidCompileSdkVersion"]
+    buildToolsVersion globalConfiguration["androidBuildToolsVersion"]
+
+    defaultConfig {
+        minSdkVersion globalConfiguration["androidMinSdkVersion"]
+        targetSdkVersion globalConfiguration["androidTargetSdkVersion"]
+        versionCode globalConfiguration["androidVersionCode"]
+        testInstrumentationRunner globalConfiguration["testRunner"]
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+        test.java.srcDirs += 'src/test/kotlin'
+    }
+}
+
+dependencies {
+    //Tests
+    testImplementation libraryDependencies.jUnit
+    androidTestImplementation libraryDependencies.testRunner
+
+    //Kotlin
+    implementation libraryDependencies.kotlin
+
+    //Libraries
+    implementation libraryDependencies.googleGson
+    implementation libraryDependencies.socket
+    implementation libraryDependencies.guava
+    implementation libraryDependencies.spongycastle
+
+    //Code analysis
+    detekt libraryDependencies.detekt
+}
+
+configurations {
+    detekt
+}
+
+//detekt task
+task analyzeCode(type: JavaExec) {
+    main = "io.gitlab.arturbosch.detekt.cli.Main"
+    classpath = configurations.detekt
+    def input = "$projectDir\\src"
+    def config = "$rootDir\\config\\detekt-ruleset.yml"
+    def filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
+    def output = "$buildDir\\reports\\detekt"
+    def outputName = "detekt-report"
+    def params = ['-i', input, '-c', config, '-f', filters, '-o', output, '-on', outputName]
+    args(params)
+}
+
+check.dependsOn(analyzeCode)
+
+apply from: "$rootDir/config/publish.gradle"

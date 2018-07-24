@@ -3,15 +3,15 @@ package com.pixelplex.sample
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-import com.pixelplex.echolib.AccountListener
-import com.pixelplex.echolib.Callback
-import com.pixelplex.echolib.EchoFramework
-import com.pixelplex.echolib.exception.LocalException
-import com.pixelplex.echolib.model.Account
-import com.pixelplex.echolib.model.Balance
-import com.pixelplex.echolib.model.HistoryResponse
-import com.pixelplex.echolib.support.Api
-import com.pixelplex.echolib.support.Settings
+import com.pixelplex.echoframework.AccountListener
+import com.pixelplex.echoframework.Callback
+import com.pixelplex.echoframework.EchoFramework
+import com.pixelplex.echoframework.exception.LocalException
+import com.pixelplex.echoframework.model.Account
+import com.pixelplex.echoframework.model.Balance
+import com.pixelplex.echoframework.model.HistoryResponse
+import com.pixelplex.echoframework.support.Api
+import com.pixelplex.echoframework.support.Settings
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
