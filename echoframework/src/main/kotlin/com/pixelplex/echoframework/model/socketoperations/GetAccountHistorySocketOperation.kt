@@ -66,14 +66,18 @@ class GetAccountHistorySocketOperation(
             HistoricalTransfer::class.java,
             HistoricalTransfer.HistoryDeserializer()
         )
-        registerTypeAdapter(AssetAmount::class.java, AssetAmount.Deserializer())
-        registerTypeAdapter(Authority::class.java, Authority.Deserializer(network))
-        registerTypeAdapter(Account::class.java, Account.Deserializer())
-        registerTypeAdapter(AccountOptions::class.java, AccountOptions.Deserializer(network))
         registerTypeAdapter(
             AccountUpdateOperation::class.java,
             AccountUpdateOperation.Deserializer()
         )
+        registerTypeAdapter(
+            TransferOperation::class.java,
+            TransferOperation.TransferDeserializer()
+        )
+        registerTypeAdapter(AssetAmount::class.java, AssetAmount.Deserializer())
+        registerTypeAdapter(Authority::class.java, Authority.Deserializer(network))
+        registerTypeAdapter(Account::class.java, Account.Deserializer())
+        registerTypeAdapter(AccountOptions::class.java, AccountOptions.Deserializer(network))
     }.create()
 
     companion object {

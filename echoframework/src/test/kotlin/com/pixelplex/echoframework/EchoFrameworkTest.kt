@@ -213,8 +213,8 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
-        framework.getAccountHistory("1.2.23215", "1.11.37878951",
-            "1.11.37878741",
+        framework.getAccountHistory("1.2.23215", "1.11.37890700",
+            "1.11.37879387",
             10,
             "1.3.0", object : Callback<HistoryResponse> {
                 override fun onSuccess(result: HistoryResponse) {
