@@ -286,31 +286,31 @@ class EchoFrameworkTest {
         )
     }
 
-//    @Test
-//    fun transferTest() {
-//        val framework = initFramework()
-//
-//        val futureTransfer = FutureTask<String>()
-//
-//        if (connect(framework) == false) Assert.fail("Connection error")
-//
-//        framework.sendTransferOperation(
-//            "dimaty123",
-//            "P5JVzpPDitVodHMoj4zZspn7e8EYiDeoarkCEixS5tD6z",
-//            "dariatest2",
-//            "100", "1.3.0", object : Callback<String> {
-//                override fun onSuccess(result: String) {
-//                    futureTransfer.setComplete(result)
-//                }
-//
-//                override fun onError(error: LocalException) {
-//                    futureTransfer.setComplete(error)
-//                }
-//
-//            })
-//
-//        assertNotNull(futureTransfer.get())
-//    }
+    @Test
+    fun transferTest() {
+        val framework = initFramework()
+
+        val futureTransfer = FutureTask<String>()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        framework.sendTransferOperation(
+            "dimaty123",
+            "P5JVzpPDitVodHMoj4zZspn7e8EYiDeoarkCEixS5tD6z",
+            "dariatest2",
+            "10", "1.3.0", object : Callback<String> {
+                override fun onSuccess(result: String) {
+                    futureTransfer.setComplete(result)
+                }
+
+                override fun onError(error: LocalException) {
+                    futureTransfer.setComplete(error)
+                }
+
+            })
+
+        assertNotNull(futureTransfer.get())
+    }
 
     private fun connect(framework: EchoFramework): Boolean? {
         val futureConnect = FutureTask<Boolean>()
