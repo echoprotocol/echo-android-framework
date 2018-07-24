@@ -31,7 +31,7 @@ android {
 }
 
 dependencies {
-    implementation project(':echolib')
+    implementation project(':echoframework')
 
     implementation sampleDependencies.kotlin
     implementation sampleDependencies.appCompat
