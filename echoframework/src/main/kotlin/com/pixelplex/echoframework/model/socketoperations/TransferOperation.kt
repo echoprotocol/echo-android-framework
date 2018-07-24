@@ -6,8 +6,6 @@ import com.pixelplex.echoframework.model.Account
 import com.pixelplex.echoframework.model.AssetAmount
 import com.pixelplex.echoframework.model.BaseOperation
 import com.pixelplex.echoframework.model.OperationType
-import com.pixelplex.echoframework.model.operations.AccountUpdateOperation.Companion.KEY_EXTENSIONS
-import com.pixelplex.echoframework.model.operations.AccountUpdateOperation.Companion.KEY_FEE
 import java.lang.reflect.Type
 
 
@@ -165,9 +163,10 @@ class TransferOperation : BaseOperation {
     }
 
     companion object {
-
-        val KEY_AMOUNT = "amount"
-        val KEY_FROM = "from"
-        val KEY_TO = "to"
+        private const val KEY_AMOUNT = "amount"
+        private const val KEY_FROM = "from"
+        private const val KEY_TO = "to"
+        private const val KEY_FEE = "fee"
+        private const val KEY_EXTENSIONS = "extensions"
     }
 }
