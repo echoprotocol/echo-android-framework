@@ -48,8 +48,11 @@ class TransferOperation : BaseOperation {
         val fromBytes = from!!.toBytes()
         val toBytes = to!!.toBytes()
         val amountBytes = assetAmount!!.toBytes()
-        val extensions = this.extensions.toBytes()
-        return feeBytes + fromBytes + toBytes + amountBytes + extensions
+        // important to add zero byte in any case!!
+        // implement memo
+        val memoBytes = 0.toByte()
+        val extensions = extensions.toBytes()
+        return feeBytes + fromBytes + toBytes + amountBytes + memoBytes + extensions
     }
 
     override fun toJsonString(): String {
@@ -116,49 +119,28 @@ class TransferOperation : BaseOperation {
 
         @Throws(JsonParseException::class)
         override fun deserialize(
-            json: JsonElement,
+            json: JsonElement?,
             typeOfT: Type,
             context: JsonDeserializationContext
         ): TransferOperation? {
-            if (json.isJsonArray) {
-                // This block is used just to check if we are in the first step of the deserialization
-                // when we are dealing with an array.
-                val serializedTransfer = json.asJsonArray
-                return if (serializedTransfer.get(0).asInt != OperationType.TRANSFER_OPERATION.ordinal) {
-                    // If the operation type does not correspond to a transfer operation, we return null
-                    null
-                } else {
-                    // Calling itself recursively, this is only done once, so there will be no problems.
-                    context.deserialize<TransferOperation>(
-                        serializedTransfer.get(1),
-                        TransferOperation::class.java
-                    )
-                }
-            } else {
-                // This block is called in the second recursion and takes care of deserializing the
-                // transfer data itself.
-                val jsonObject = json.asJsonObject
 
-                /* GsonBuilder builder = new GsonBuilder();
-                builder.registerTypeAdapter(AssetAmount.class, new AssetAmount.AssetAmountDeserializer());
-                Gson gson = builder.create();*/
+            if (json == null || !json.isJsonObject) return null
 
-                // Deserializing AssetAmount objects
-                val amount = context.deserialize<AssetAmount>(
-                    jsonObject.get(KEY_AMOUNT),
-                    AssetAmount::class.java
-                )
-                val fee = context.deserialize<AssetAmount>(
-                    jsonObject.get(KEY_FEE),
-                    AssetAmount::class.java
-                )
+            val jsonObject = json.asJsonObject
 
-                // Deserializing UserAccount objects
-                val from = Account(jsonObject.get(KEY_FROM).asString)
-                val to = Account(jsonObject.get(KEY_TO).asString)
+            val amount = context.deserialize<AssetAmount>(
+                jsonObject.get(KEY_AMOUNT),
+                AssetAmount::class.java
+            )
+            val fee = context.deserialize<AssetAmount>(
+                jsonObject.get(KEY_FEE),
+                AssetAmount::class.java
+            )
 
-                return TransferOperation(from, to, amount, fee)
-            }
+            val from = Account(jsonObject.get(KEY_FROM).asString)
+            val to = Account(jsonObject.get(KEY_TO).asString)
+
+            return TransferOperation(from, to, amount, fee)
         }
     }
 
