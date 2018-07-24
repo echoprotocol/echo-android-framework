@@ -10,9 +10,13 @@ import com.pixelplex.echolib.model.*
 import com.pixelplex.echolib.model.network.Network
 import com.pixelplex.echolib.model.socketoperations.*
 import com.pixelplex.echolib.service.DatabaseApiService
-import com.pixelplex.echolib.support.*
+import com.pixelplex.echolib.support.EmptyCallback
+import com.pixelplex.echolib.support.Result
 import com.pixelplex.echolib.support.concurrent.future.FutureTask
 import com.pixelplex.echolib.support.concurrent.future.wrapResult
+import com.pixelplex.echolib.support.fold
+import com.pixelplex.echolib.support.toJsonObject
+import java.util.concurrent.TimeUnit
 
 /**
  * Implementation of [DatabaseApiService]
@@ -97,6 +101,20 @@ class DatabaseApiServiceImpl(
         socketCoreComponent.emit(chainIdOperation)
 
         return future.wrapResult()
+    }
+
+    override fun getBlockData(): BlockData {
+        val globalPropertiesResult = getDynamicGlobalProperties()
+        val dynamicProperties = if (globalPropertiesResult is Result.Value) {
+            globalPropertiesResult.value
+        } else {
+            throw (globalPropertiesResult as Result.Error).error
+        }
+        val expirationTime = TimeUnit.MILLISECONDS.toSeconds(dynamicProperties.date!!.time) +
+                Transaction.DEFAULT_EXPIRATION_TIME
+        val headBlockId = dynamicProperties.headBlockId
+        val headBlockNumber = dynamicProperties.headBlockNumber
+        return BlockData(headBlockNumber, headBlockId, expirationTime)
     }
 
     override fun getDynamicGlobalProperties(): Result<Exception, DynamicGlobalProperties> {

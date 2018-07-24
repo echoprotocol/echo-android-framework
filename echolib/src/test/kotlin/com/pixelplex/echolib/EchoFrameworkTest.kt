@@ -50,7 +50,7 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
-        framework.login("dimaty123", "P5JVzpPDitVodHMoj4zZspn7e8EYiDeoarkCEixS5tD5z",
+        framework.login("dimaty123", "P5JVzpPDitVodHMoj4zZspn7e8EYiDeoarkCEixS5tD6z",
             object : Callback<Account> {
                 override fun onSuccess(result: Account) {
                     futureLogin.setComplete(result)
@@ -213,7 +213,7 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
-        framework.getAccountHistory("1.2.23215", "1.11.37878780",
+        framework.getAccountHistory("1.2.23215", "1.11.37878951",
             "1.11.37878741",
             10,
             "1.3.0", object : Callback<HistoryResponse> {
@@ -280,11 +280,37 @@ class EchoFrameworkTest {
     private fun changePassword(framework: EchoFramework, callback: Callback<Any>) {
         framework.changePassword(
             "dimaty123",
-            "P5JVzpPDitVodHMoj4zZspn7e8EYiDeoarkCEixS5tD5z",
-            "P5JVzpPDitVodHMoj4zZspn7e8EYiDeoarkCEixS5tD5z",
+            "P5JVzpPDitVodHMoj4zZspn7e8EYiDeoarkCEixS5tD6z",
+            "P5JVzpPDitVodHMoj4zZspn7e8EYiDeoarkCEixS5tD6z",
             callback
         )
     }
+
+//    @Test
+//    fun transferTest() {
+//        val framework = initFramework()
+//
+//        val futureTransfer = FutureTask<String>()
+//
+//        if (connect(framework) == false) Assert.fail("Connection error")
+//
+//        framework.sendTransferOperation(
+//            "dimaty123",
+//            "P5JVzpPDitVodHMoj4zZspn7e8EYiDeoarkCEixS5tD6z",
+//            "dariatest2",
+//            "100", "1.3.0", object : Callback<String> {
+//                override fun onSuccess(result: String) {
+//                    futureTransfer.setComplete(result)
+//                }
+//
+//                override fun onError(error: LocalException) {
+//                    futureTransfer.setComplete(error)
+//                }
+//
+//            })
+//
+//        assertNotNull(futureTransfer.get())
+//    }
 
     private fun connect(framework: EchoFramework): Boolean? {
         val futureConnect = FutureTask<Boolean>()

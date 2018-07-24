@@ -5,6 +5,9 @@ package com.pixelplex.echolib.support
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.pixelplex.echolib.TIME_DATE_FORMAT
+import com.pixelplex.echolib.model.Account
+import com.pixelplex.echolib.model.Authority
+import com.pixelplex.echolib.model.AuthorityType
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -38,3 +41,25 @@ fun Date.format(dateFormat: String): String {
  */
 fun String.toJsonObject(): JsonObject =
     JsonParser().parse(this).asJsonObject
+
+/**
+ * Check account equals by [key] from role [authorityType]
+ *
+ * @param key Public key from role
+ * @param authorityType Role for equals operation
+ */
+fun Account.isEqualsByKey(key: String, authorityType: AuthorityType): Boolean =
+    when (authorityType) {
+        AuthorityType.OWNER -> isKeyExist(key, owner)
+        AuthorityType.ACTIVE -> isKeyExist(key, active)
+        AuthorityType.KEY -> {
+            options.memoKey?.address == key
+        }
+    }
+
+private fun isKeyExist(address: String, authority: Authority): Boolean {
+    val foundKey = authority.keyAuthorities.keys.find { pubKey ->
+        pubKey.address == address
+    }
+    return foundKey != null
+}
