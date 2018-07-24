@@ -2,8 +2,8 @@ package com.pixelplex.echolib.facade.internal
 
 import com.pixelplex.echolib.Callback
 import com.pixelplex.echolib.core.crypto.CryptoCoreComponent
-import com.pixelplex.echolib.exception.NotFoundException
 import com.pixelplex.echolib.exception.LocalException
+import com.pixelplex.echolib.exception.NotFoundException
 import com.pixelplex.echolib.facade.AuthenticationFacade
 import com.pixelplex.echolib.model.*
 import com.pixelplex.echolib.model.network.Network
@@ -12,8 +12,8 @@ import com.pixelplex.echolib.service.DatabaseApiService
 import com.pixelplex.echolib.service.NetworkBroadcastApiService
 import com.pixelplex.echolib.support.Result
 import com.pixelplex.echolib.support.fold
+import com.pixelplex.echolib.support.isEqualsByKey
 import com.pixelplex.echolib.support.operationbuilders.AccountUpdateOperationBuilder
-import java.util.concurrent.TimeUnit
 
 /**
  * Implementation of [AuthenticationFacade]
@@ -51,28 +51,6 @@ class AuthenticationFacadeImpl(
         })
     }
 
-    /**
-     * Check account equals by [key] from role [authorityType]
-     *
-     * @param key Public key from role
-     * @param authorityType Role for equals operation
-     */
-    private fun Account.isEqualsByKey(key: String, authorityType: AuthorityType): Boolean =
-        when (authorityType) {
-            AuthorityType.OWNER -> isKeyExist(key, owner)
-            AuthorityType.ACTIVE -> isKeyExist(key, active)
-            AuthorityType.KEY -> {
-                options.memoKey?.address == key
-            }
-        }
-
-    private fun isKeyExist(address: String, authority: Authority): Boolean {
-        val foundKey = authority.keyAuthorities.keys.find { pubKey ->
-            pubKey.address == address
-        }
-        return foundKey != null
-    }
-
     override fun changePassword(
         name: String,
         oldPassword: String,
@@ -84,7 +62,7 @@ class AuthenticationFacadeImpl(
             val operation: AccountUpdateOperation =
                 buildAccountUpdateOperation(accountId, name, newPassword)
 
-            val blockData = getBlockData()
+            val blockData = databaseApiService.getBlockData()
             val chainId = getChainId()
 
             val privateKey =
@@ -129,20 +107,6 @@ class AuthenticationFacadeImpl(
         } else {
             throw NotFoundException("Account not found.")
         }
-    }
-
-    private fun getBlockData(): BlockData {
-        val globalPropertiesResult = databaseApiService.getDynamicGlobalProperties()
-        val dynamicProperties = if (globalPropertiesResult is Result.Value) {
-            globalPropertiesResult.value
-        } else {
-            throw (globalPropertiesResult as Result.Error).error
-        }
-        val expirationTime = TimeUnit.MILLISECONDS.toSeconds(dynamicProperties.date!!.time) +
-                Transaction.DEFAULT_EXPIRATION_TIME
-        val headBlockId = dynamicProperties.headBlockId
-        val headBlockNumber = dynamicProperties.headBlockNumber
-        return BlockData(headBlockNumber, headBlockId, expirationTime)
     }
 
     private fun getChainId(): String {

@@ -82,7 +82,12 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         subscriptionFacade =
                 SubscriptionFacadeImpl(databaseApiService)
         transactionsFacade =
-                TransactionsFacadeImpl(networkBroadcastApiService, accountHistoryApiService)
+                TransactionsFacadeImpl(
+                    databaseApiService,
+                    networkBroadcastApiService,
+                    settings.cryptoComponent,
+                    accountHistoryApiService
+                )
     }
 
     override fun start(callback: Callback<Any>) {

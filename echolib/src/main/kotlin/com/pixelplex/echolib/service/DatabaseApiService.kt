@@ -2,7 +2,6 @@ package com.pixelplex.echolib.service
 
 import com.pixelplex.echolib.AccountListener
 import com.pixelplex.echolib.Callback
-import com.pixelplex.echolib.ILLEGAL_ID
 import com.pixelplex.echolib.model.*
 import com.pixelplex.echolib.support.Result
 
@@ -62,6 +61,13 @@ interface GlobalsService {
      * @return chain id string
      */
     fun getChainId(): Result<Exception, String>
+
+    /**
+     * Retrieves block information
+     *
+     * @return chain id string
+     */
+    fun getBlockData(): BlockData
 
     /**
      * Retrieves current blockchain block data
