@@ -2,6 +2,7 @@ package com.pixelplex.echoframework.service
 
 import com.pixelplex.echoframework.AccountListener
 import com.pixelplex.echoframework.Callback
+import com.pixelplex.echoframework.exception.LocalException
 import com.pixelplex.echoframework.model.*
 import com.pixelplex.echoframework.support.Result
 
@@ -16,7 +17,7 @@ import com.pixelplex.echoframework.support.Result
  * @author Dmitriy Bushuev
  */
 interface DatabaseApiService : ApiService, AccountsService, GlobalsService,
-    AuthorityAndValidationService
+    AuthorityAndValidationService, BlocksAndTransactionsService
 
 /**
  * Encapsulates logic, associated with data from account from blockchain database API
@@ -61,13 +62,6 @@ interface GlobalsService {
      * @return chain id string
      */
     fun getChainId(): Result<Exception, String>
-
-    /**
-     * Retrieves block information
-     *
-     * @return chain id string
-     */
-    fun getBlockData(): BlockData
 
     /**
      * Retrieves current blockchain block data
@@ -120,4 +114,34 @@ interface AuthorityAndValidationService {
         operations: List<BaseOperation>,
         asset: Asset
     ): Result<Exception, List<AssetAmount>>
+}
+
+/**
+ * Encapsulates logic, associated with blocks and transactions information from Database API
+ */
+interface BlocksAndTransactionsService {
+
+    /**
+     * Retrieves base block information
+     *
+     * @return chain id string
+     */
+    fun getBlockData(): BlockData
+
+    /**
+     * Retrieves full signed block
+     *
+     * @param blockNumber Height of the block to be returned
+     * @param callback Listener for notifying
+     */
+    fun getBlock(blockNumber: String, callback: Callback<Block>)
+
+    /**
+     * Retrieves full signed block synchronously
+     *
+     * @param blockNumber Height of the block to be returned
+     * @param callback Listener for notifying
+     */
+    fun getBlock(blockNumber: String): Result<LocalException, Block>
+
 }

@@ -6,11 +6,9 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonParseException
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import com.pixelplex.echoframework.model.operations.AccountUpdateOperation
 import com.pixelplex.echoframework.model.socketoperations.OperationCodingKeys
-import com.pixelplex.echoframework.model.socketoperations.TransferOperation
-import com.pixelplex.echoframework.support.Converter
 import java.lang.reflect.Type
+import java.util.*
 
 /**
  * Represents account history
@@ -20,12 +18,14 @@ import java.lang.reflect.Type
  * </p>
  *
  * @author Daria Pechkovskaya
+ * @author Dmitriy Bushuev
  */
 data class HistoricalTransfer(
     val id: String,
     @SerializedName("op")
     @Expose
-    val operation: BaseOperation?
+    val operation: BaseOperation?,
+    var timestamp: Date? = null
 ) {
 
     @SerializedName("block_num")
@@ -65,26 +65,31 @@ data class HistoricalTransfer(
             val virtualOpNum = jsonObject.get(VIRTUAL_OPERATION_KEY).asLong
 
             // Parsing operation list
-            var operation: BaseOperation? = null
-
-            val jsonOperation = jsonObject.get(OPERATIONS_KEY).asJsonArray
-            val operationId = jsonOperation.asJsonArray.get(0).asInt
-            val operationBody = jsonOperation[1]
-
-            val resultType = OperationTypeToResultTypeConverter().convert(operationId)
-
-            resultType?.let { type ->
-                operation = context.deserialize(
-                    operationBody,
-                    type
-                )
-            }
+            val operation = parseOperation(jsonObject.get(OPERATIONS_KEY), context)
 
             return HistoricalTransfer(id, operation).apply {
                 blockNum = blockNumber
                 trxInBlock = trxNumInBlock
                 opInTrx = opNumInTrx
                 virtualOp = virtualOpNum
+            }
+        }
+
+        private fun parseOperation(
+            operationJson: JsonElement,
+            context: JsonDeserializationContext
+        ): BaseOperation? {
+            val jsonOperation = operationJson.asJsonArray
+            val operationId = jsonOperation.asJsonArray.get(0).asInt
+            val operationBody = jsonOperation[1]
+
+            val resultType = OperationTypeToResultTypeConverter().convert(operationId)
+
+            return resultType?.let { type ->
+                context.deserialize(
+                    operationBody,
+                    type
+                )
             }
         }
     }
@@ -100,18 +105,3 @@ data class HistoricalTransfer(
 
 }
 
-/**
- * Maps operation id to required result class type
- */
-class OperationTypeToResultTypeConverter : Converter<Int, Class<*>?> {
-
-    override fun convert(source: Int): Class<*>? = OPERATION_TYPE_REGISTRY[source]
-
-    companion object {
-        private val OPERATION_TYPE_REGISTRY = hashMapOf(
-            OperationType.ACCOUNT_UPDATE_OPERATION.ordinal to AccountUpdateOperation::class.java,
-            OperationType.TRANSFER_OPERATION.ordinal to TransferOperation::class.java
-        )
-    }
-
-}
