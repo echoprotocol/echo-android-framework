@@ -1,6 +1,7 @@
 package com.pixelplex.echoframework.facade.internal
 
 import com.pixelplex.echoframework.Callback
+import com.pixelplex.echoframework.TIME_DATE_FORMAT
 import com.pixelplex.echoframework.exception.LocalException
 import com.pixelplex.echoframework.exception.NotFoundException
 import com.pixelplex.echoframework.facade.InformationFacade
@@ -12,6 +13,9 @@ import com.pixelplex.echoframework.service.DatabaseApiService
 import com.pixelplex.echoframework.support.*
 import com.pixelplex.echoframework.support.Result.Error
 import com.pixelplex.echoframework.support.Result.Value
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Implementation of [InformationFacade]
@@ -108,7 +112,7 @@ class InformationFacadeImpl(
             transactionStopId,
             limit
         ).map { history ->
-            fillAccounts(history)
+            fillTransactionInformation(history)
         }.value { fullAccountHistory ->
             callback.onSuccess(fullAccountHistory)
         }.error { error ->
@@ -116,10 +120,27 @@ class InformationFacadeImpl(
         }
     }
 
-    private fun fillAccounts(history: HistoryResponse): HistoryResponse {
+    private fun fillTransactionInformation(history: HistoryResponse): HistoryResponse {
         val fullAccountTransactions = mutableListOf<HistoricalTransfer>()
+        val blocks = mutableMapOf<Long, Block>()
 
         for (transaction in history.transactions) {
+            if (!blocks.containsKey(transaction.blockNum)) {
+                databaseApiService.getBlock(transaction.blockNum.toString())
+                    .value { block ->
+                        blocks[transaction.blockNum] = block
+                    }
+            }
+
+            val dateFormat = SimpleDateFormat(TIME_DATE_FORMAT, Locale.getDefault()).apply {
+                timeZone = TimeZone.getTimeZone("UTC")
+            }
+            transaction.timestamp = try {
+                dateFormat.parse(blocks[transaction.blockNum]?.timestamp)
+            } catch (e: ParseException) {
+                Date()
+            }
+
             val operation = transaction.operation
 
             if (operation == null) {
@@ -149,10 +170,7 @@ class InformationFacadeImpl(
 
         databaseApiService.getFullAccounts(listOf(accountId), false)
             .map { accountsMap ->
-                accountsMap[accountId]?.account
-            }
-            .map { account ->
-                account?.let { notNullAccount ->
+                accountsMap[accountId]?.account?.let { notNullAccount ->
                     operation.account = notNullAccount
                 }
             }
@@ -164,15 +182,10 @@ class InformationFacadeImpl(
 
         databaseApiService.getFullAccounts(listOf(fromAccountId, toAccountId), false)
             .map { accountsMap ->
-                val fromAccount = accountsMap[fromAccountId]?.account
-                val toAccount = accountsMap[toAccountId]?.account
-                Pair(fromAccount, toAccount)
-            }
-            .map { accounts ->
-                accounts.first?.let { notNullFromAccount ->
+                accountsMap[fromAccountId]?.account?.let { notNullFromAccount ->
                     operation.from = notNullFromAccount
                 }
-                accounts.second?.let { notNullToAccount ->
+                accountsMap[toAccountId]?.account?.let { notNullToAccount ->
                     operation.to = notNullToAccount
                 }
             }

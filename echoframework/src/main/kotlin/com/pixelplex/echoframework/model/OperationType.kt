@@ -1,5 +1,9 @@
 package com.pixelplex.echoframework.model
 
+import com.pixelplex.echoframework.model.operations.AccountUpdateOperation
+import com.pixelplex.echoframework.model.socketoperations.TransferOperation
+import com.pixelplex.echoframework.support.Converter
+
 /**
  * Represents all blockchain operation types
  *
@@ -57,4 +61,20 @@ enum class OperationType {
     EXECUTE_BID_OPERATION,          //VIRTUAL
     ASSET_CLAIM_POOL_OPERATION,
     ASSET_UPDATE_ISSUER_OPERATION
+}
+
+/**
+ * Maps operation id to required result class type
+ */
+class OperationTypeToResultTypeConverter : Converter<Int, Class<*>?> {
+
+    override fun convert(source: Int): Class<*>? = OPERATION_TYPE_REGISTRY[source]
+
+    companion object {
+        private val OPERATION_TYPE_REGISTRY = hashMapOf(
+            OperationType.ACCOUNT_UPDATE_OPERATION.ordinal to AccountUpdateOperation::class.java,
+            OperationType.TRANSFER_OPERATION.ordinal to TransferOperation::class.java
+        )
+    }
+
 }

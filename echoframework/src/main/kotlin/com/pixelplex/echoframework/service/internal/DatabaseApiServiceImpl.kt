@@ -136,6 +136,31 @@ class DatabaseApiServiceImpl(
         return future.wrapResult()
     }
 
+    override fun getBlock(blockNumber: String): Result<LocalException, Block> {
+        val blockFuture = FutureTask<Block>()
+
+        getBlock(blockNumber, object : Callback<Block> {
+
+            override fun onSuccess(result: Block) {
+                blockFuture.setComplete(result)
+            }
+
+            override fun onError(error: LocalException) {
+                blockFuture.setComplete(error)
+            }
+
+        })
+
+        return blockFuture.wrapResult()
+    }
+
+    override fun getBlock(blockNumber: String, callback: Callback<Block>) {
+        val blockOperation =
+            GetBlockSocketOperation(id, blockNumber, callback = callback, network = network)
+
+        socketCoreComponent.emit(blockOperation)
+    }
+
     override fun getRequiredFees(
         operations: List<BaseOperation>,
         asset: Asset

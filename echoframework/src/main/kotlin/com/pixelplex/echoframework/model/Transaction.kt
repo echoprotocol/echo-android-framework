@@ -1,10 +1,12 @@
 package com.pixelplex.echoframework.model
 
-import com.google.gson.JsonArray
-import com.google.gson.JsonElement
-import com.google.gson.JsonObject
+import com.google.gson.*
+import com.pixelplex.echoframework.TIME_DATE_FORMAT
 import com.pixelplex.echoframework.support.format
 import org.spongycastle.util.encoders.Hex
+import java.lang.reflect.Type
+import java.text.ParseException
+import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -17,12 +19,9 @@ import java.util.concurrent.TimeUnit
 class Transaction : ByteSerializable, JsonSerializable {
 
     var privateKey: ByteArray? = null
-        private set
     var blockData: BlockData
     var operations: List<BaseOperation>
-        private set
     private val extensions: Extensions = Extensions()
-    //    var chain: Chains = Chains.BITSHARES
     var chainId: String
 
     /**
@@ -118,6 +117,62 @@ class Transaction : ByteSerializable, JsonSerializable {
             addProperty(KEY_REF_BLOCK_NUM, blockData.refBlockNum)
             addProperty(KEY_REF_BLOCK_PREFIX, blockData.refBlockPrefix)
         }
+
+    /**
+     * Json deserializer for [Transaction] class
+     */
+    class TransactionDeserializer : JsonDeserializer<Transaction> {
+
+        @Throws(JsonParseException::class)
+        override fun deserialize(
+            json: JsonElement,
+            typeOfT: Type,
+            context: JsonDeserializationContext
+        ): Transaction {
+            val jsonObject = json.asJsonObject
+
+            // Parsing block data information
+            val refBlockNum = jsonObject.get(KEY_REF_BLOCK_NUM).asInt
+            val refBlockPrefix = jsonObject.get(KEY_REF_BLOCK_PREFIX).asLong
+            val dateFormat = SimpleDateFormat(TIME_DATE_FORMAT, Locale.getDefault())
+            dateFormat.timeZone = TimeZone.getTimeZone("UTC")
+            val expiration = jsonObject.get(KEY_EXPIRATION).asString
+
+            val timeMs = try {
+                dateFormat.parse(expiration).time
+            } catch (e: ParseException) {
+                -1L
+            }
+
+            val blockData = BlockData(refBlockNum, refBlockPrefix, timeMs)
+
+            val jsonOperations = jsonObject.get(KEY_OPERATIONS).asJsonArray
+
+            // Parsing operation list
+            val operations = parseOperations(jsonOperations, context)
+
+            return Transaction(blockData, operations, "")
+        }
+
+        private fun parseOperations(
+            operationsJson: JsonArray,
+            context: JsonDeserializationContext
+        ) = mutableListOf<BaseOperation>().apply {
+            for (i in 0 until operationsJson.size()) {
+                val operationJson = operationsJson[i].asJsonArray
+
+                val operationId = operationJson[0].asInt
+                val operationBody = operationJson[1]
+
+                val resultType = OperationTypeToResultTypeConverter().convert(operationId)
+
+                resultType?.let { type ->
+                    add(context.deserialize(operationBody, type))
+                }
+            }
+        }
+
+    }
 
     companion object {
         const val KEY_EXPIRATION = "expiration"
