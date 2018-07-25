@@ -15,21 +15,18 @@ class AccountSubscriptionManagerImpl : AccountSubscriptionManager {
 
     private val listeners = ConcurrentHashMap<String, MutableList<AccountListener>>()
 
-    override fun registerListener(id: String, listener: AccountListener): Boolean {
-        var needAccountRequest = false
-
+    override fun registerListener(id: String, listener: AccountListener) {
         val accountListeners = listeners[id]
 
         if (accountListeners == null) {
             val listenersByName = mutableListOf(listener)
             listeners[id] = listenersByName
-            needAccountRequest = true
         } else {
             accountListeners += listener
         }
-
-        return needAccountRequest
     }
+
+    override fun registered(id: String): Boolean = listeners.containsKey(id)
 
     override fun removeListeners(id: String): MutableList<AccountListener>? = listeners.remove(id)
 

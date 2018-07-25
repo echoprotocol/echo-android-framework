@@ -258,17 +258,17 @@ class EchoFrameworkTest {
     }
 
     @Test
-    fun subscriptionTest() {
+    fun subscriptionByIdTest() {
         val framework = initFramework()
 
-        val futureSubscription = FutureTask<Account>()
-
         if (connect(framework) == false) Assert.fail("Connection error")
+
+        val futureSubscriptionById = FutureTask<Account>()
 
         framework.subscribeOnAccount("1.2.23215", object : AccountListener {
 
             override fun onChange(updatedAccount: Account) {
-                futureSubscription.setComplete(updatedAccount)
+                futureSubscriptionById.setComplete(updatedAccount)
             }
 
         })
@@ -278,7 +278,31 @@ class EchoFrameworkTest {
             changePassword(framework, EmptyCallback())
         }
 
-        assertNotNull(futureSubscription.get())
+        assertNotNull(futureSubscriptionById.get())
+    }
+
+    @Test
+    fun subscriptionByNameTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val futureSubscriptionByName = FutureTask<Account>()
+
+        framework.subscribeOnAccount("dimaty123", object : AccountListener {
+
+            override fun onChange(updatedAccount: Account) {
+                futureSubscriptionByName.setComplete(updatedAccount)
+            }
+
+        })
+
+        thread {
+            Thread.sleep(3000)
+            changePassword(framework, EmptyCallback())
+        }
+
+        assertNotNull(futureSubscriptionByName.get())
     }
 
     private fun changePassword(framework: EchoFramework, callback: Callback<Any>) {
