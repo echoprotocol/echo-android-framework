@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
 
         btnLogin.setOnClickListener {
             toggleProgress(true)
-            lib.login(
+            lib.isOwnedBy(
                 etName.text.toString(),
                 etPassword.text.toString(),
                 object : Callback<Account> {

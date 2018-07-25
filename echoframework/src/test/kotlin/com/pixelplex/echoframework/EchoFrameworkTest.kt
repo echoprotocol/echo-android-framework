@@ -50,7 +50,7 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
-        framework.login("dimaty123", "P5JVzpPDitVodHMoj4zZspn7e8EYiDeoarkCEixS5tD6z",
+        framework.isOwnedBy("dimaty123", "P5JVzpPDitVodHMoj4zZspn7e8EYiDeoarkCEixS5tD6z",
             object : Callback<Account> {
                 override fun onSuccess(result: Account) {
                     futureLogin.setComplete(result)
@@ -68,7 +68,7 @@ class EchoFrameworkTest {
         val futureLoginFailure =
             FutureTask<Account>()
 
-        framework.login("dimaty123", "WrongPassword",
+        framework.isOwnedBy("dimaty123", "WrongPassword",
             object : Callback<Account> {
                 override fun onSuccess(result: Account) {
                     futureLoginFailure.setComplete(result)
