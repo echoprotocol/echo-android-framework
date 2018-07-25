@@ -227,7 +227,11 @@ class EchoFrameworkTest {
 
             })
 
-        assertNotNull(futureAccountHistory.get())
+        val history = futureAccountHistory.get()
+
+        assertNotNull(history)
+        assertTrue(history?.transactions?.isNotEmpty() ?: false)
+        assertNotNull(history?.transactions?.get(0)?.timestamp)
     }
 
     @Test

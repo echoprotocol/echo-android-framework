@@ -8,6 +8,7 @@ import com.pixelplex.echoframework.TIME_DATE_FORMAT
 import com.pixelplex.echoframework.model.Account
 import com.pixelplex.echoframework.model.Authority
 import com.pixelplex.echoframework.model.AuthorityType
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -34,6 +35,24 @@ fun Date.format(dateFormat: String): String {
     val dateFormatter = SimpleDateFormat(dateFormat, Locale.getDefault())
     dateFormatter.timeZone = TimeZone.getTimeZone("GMT")
     return dateFormatter.format(this)
+}
+
+/**
+ * Parse string to [Date] according to required configuration
+ */
+@JvmOverloads
+fun String.parse(
+    format: String = TIME_DATE_FORMAT,
+    timeZone: TimeZone = TimeZone.getTimeZone("UTC"),
+    locale: Locale = Locale.getDefault(),
+    default: Date? = null
+): Date? = try {
+    val dateFormat = SimpleDateFormat(format, locale).apply {
+        this.timeZone = timeZone
+    }
+    dateFormat.parse(this)
+} catch (e: ParseException) {
+    default
 }
 
 /**
