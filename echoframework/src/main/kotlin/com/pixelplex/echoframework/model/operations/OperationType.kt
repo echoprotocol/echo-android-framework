@@ -1,7 +1,5 @@
-package com.pixelplex.echoframework.model
+package com.pixelplex.echoframework.model.operations
 
-import com.pixelplex.echoframework.model.operations.AccountUpdateOperation
-import com.pixelplex.echoframework.model.socketoperations.TransferOperation
 import com.pixelplex.echoframework.support.Converter
 
 /**

@@ -1,11 +1,10 @@
-package com.pixelplex.echoframework.model.socketoperations
+package com.pixelplex.echoframework.model.operations
 
 import com.google.common.primitives.UnsignedLong
 import com.google.gson.*
 import com.pixelplex.echoframework.model.Account
 import com.pixelplex.echoframework.model.AssetAmount
 import com.pixelplex.echoframework.model.BaseOperation
-import com.pixelplex.echoframework.model.OperationType
 import java.lang.reflect.Type
 
 
@@ -57,7 +56,10 @@ class TransferOperation : BaseOperation {
 
     override fun toJsonString(): String {
         val gsonBuilder = GsonBuilder()
-        gsonBuilder.registerTypeAdapter(TransferOperation::class.java, TransferSerializer())
+        gsonBuilder.registerTypeAdapter(
+            TransferOperation::class.java,
+            TransferSerializer()
+        )
         return gsonBuilder.create().toJson(this)
     }
 
@@ -140,7 +142,12 @@ class TransferOperation : BaseOperation {
             val from = Account(jsonObject.get(KEY_FROM).asString)
             val to = Account(jsonObject.get(KEY_TO).asString)
 
-            return TransferOperation(from, to, amount, fee)
+            return TransferOperation(
+                from,
+                to,
+                amount,
+                fee
+            )
         }
     }
 

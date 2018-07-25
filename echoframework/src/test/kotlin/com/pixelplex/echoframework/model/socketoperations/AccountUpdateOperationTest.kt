@@ -4,6 +4,7 @@ import com.google.common.primitives.UnsignedLong
 import com.pixelplex.bitcoinj.ECKey
 import com.pixelplex.echoframework.model.*
 import com.pixelplex.echoframework.model.operations.AccountUpdateOperation
+import com.pixelplex.echoframework.model.operations.OperationType
 import com.pixelplex.echoframework.support.operationbuilders.AccountUpdateOperationBuilder
 import org.junit.Assert
 import org.junit.Assert.assertNotNull

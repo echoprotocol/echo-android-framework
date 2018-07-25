@@ -2,6 +2,7 @@ package com.pixelplex.echoframework.model
 
 import com.google.gson.*
 import com.pixelplex.echoframework.TIME_DATE_FORMAT
+import com.pixelplex.echoframework.model.operations.OperationTypeToResultTypeConverter
 import com.pixelplex.echoframework.support.format
 import org.spongycastle.util.encoders.Hex
 import java.lang.reflect.Type
@@ -164,7 +165,8 @@ class Transaction : ByteSerializable, JsonSerializable {
                 val operationId = operationJson[0].asInt
                 val operationBody = operationJson[1]
 
-                val resultType = OperationTypeToResultTypeConverter().convert(operationId)
+                val resultType = OperationTypeToResultTypeConverter()
+                    .convert(operationId)
 
                 resultType?.let { type ->
                     add(context.deserialize(operationBody, type))

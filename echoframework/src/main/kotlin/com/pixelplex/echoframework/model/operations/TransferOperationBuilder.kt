@@ -1,4 +1,4 @@
-package com.pixelplex.echoframework.model.socketoperations
+package com.pixelplex.echoframework.model.operations
 
 import com.pixelplex.echoframework.exception.MalformedOperationException
 import com.pixelplex.echoframework.model.Account
@@ -50,9 +50,18 @@ class TransferOperationBuilder : OperationBuilder<TransferOperation>() {
 
     override fun build(): TransferOperation {
         val transferOperation: TransferOperation = if (fee != null) {
-            TransferOperation(from!!, to!!, transferAmount!!, fee!!)
+            TransferOperation(
+                from!!,
+                to!!,
+                transferAmount!!,
+                fee!!
+            )
         } else {
-            TransferOperation(from!!, to!!, transferAmount!!)
+            TransferOperation(
+                from!!,
+                to!!,
+                transferAmount!!
+            )
         }
 
         when {
