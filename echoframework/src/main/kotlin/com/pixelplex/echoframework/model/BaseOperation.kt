@@ -2,6 +2,7 @@ package com.pixelplex.echoframework.model
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
+import com.pixelplex.echoframework.model.operations.OperationType
 
 /**
  * Represents base operation model in Graphene blockchain

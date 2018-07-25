@@ -7,7 +7,8 @@ import com.pixelplex.echoframework.exception.NotFoundException
 import com.pixelplex.echoframework.facade.InformationFacade
 import com.pixelplex.echoframework.model.*
 import com.pixelplex.echoframework.model.operations.AccountUpdateOperation
-import com.pixelplex.echoframework.model.socketoperations.TransferOperation
+import com.pixelplex.echoframework.model.operations.OperationType
+import com.pixelplex.echoframework.model.operations.TransferOperation
 import com.pixelplex.echoframework.service.AccountHistoryApiService
 import com.pixelplex.echoframework.service.DatabaseApiService
 import com.pixelplex.echoframework.support.*

@@ -9,6 +9,7 @@ import com.pixelplex.echoframework.ILLEGAL_ID
 import com.pixelplex.echoframework.model.*
 import com.pixelplex.echoframework.model.network.Network
 import com.pixelplex.echoframework.model.operations.AccountUpdateOperation
+import com.pixelplex.echoframework.model.operations.TransferOperation
 
 /**
  * Get operations relevant to the specified account.

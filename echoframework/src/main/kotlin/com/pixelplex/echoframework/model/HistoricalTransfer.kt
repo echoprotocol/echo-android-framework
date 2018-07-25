@@ -6,6 +6,7 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonParseException
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import com.pixelplex.echoframework.model.operations.OperationTypeToResultTypeConverter
 import com.pixelplex.echoframework.model.socketoperations.OperationCodingKeys
 import java.lang.reflect.Type
 import java.util.*
@@ -83,7 +84,8 @@ data class HistoricalTransfer(
             val operationId = jsonOperation.asJsonArray.get(0).asInt
             val operationBody = jsonOperation[1]
 
-            val resultType = OperationTypeToResultTypeConverter().convert(operationId)
+            val resultType = OperationTypeToResultTypeConverter()
+                .convert(operationId)
 
             return resultType?.let { type ->
                 context.deserialize(

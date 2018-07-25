@@ -35,7 +35,6 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
     private val subscriptionFacade: SubscriptionFacade
     private val transactionsFacade: TransactionsFacade
 
-    // move calls dispatching logic on another layer?
     private val dispatcher: Dispatcher by lazy { ExecutorServiceDispatcher() }
     private var returnOnMainThread = false
 

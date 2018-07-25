@@ -9,6 +9,7 @@ import java.lang.reflect.Type
  * Represents blockchain operation for updating an existing account.
  *
  * @author Daria Pechkovskaya
+ * @author Dmitriy Bushuev
  */
 class AccountUpdateOperation @JvmOverloads constructor(
     var account: Account,
@@ -78,8 +79,7 @@ class AccountUpdateOperation @JvmOverloads constructor(
         }
 
     /**
-     * Deserializer used to build a [Account] instance from the full JSON-formatted response obtained
-     * by the 'get_objects' API call.
+     * Deserializer used to build a [AccountUpdateOperation] instance from JSON
      */
     class Deserializer : JsonDeserializer<AccountUpdateOperation> {
 
