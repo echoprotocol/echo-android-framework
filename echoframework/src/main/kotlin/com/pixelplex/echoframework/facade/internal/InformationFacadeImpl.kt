@@ -1,7 +1,6 @@
 package com.pixelplex.echoframework.facade.internal
 
 import com.pixelplex.echoframework.Callback
-import com.pixelplex.echoframework.TIME_DATE_FORMAT
 import com.pixelplex.echoframework.exception.LocalException
 import com.pixelplex.echoframework.exception.NotFoundException
 import com.pixelplex.echoframework.facade.InformationFacade
@@ -14,9 +13,6 @@ import com.pixelplex.echoframework.service.DatabaseApiService
 import com.pixelplex.echoframework.support.*
 import com.pixelplex.echoframework.support.Result.Error
 import com.pixelplex.echoframework.support.Result.Value
-import java.text.ParseException
-import java.text.SimpleDateFormat
-import java.util.*
 
 /**
  * Implementation of [InformationFacade]
@@ -133,14 +129,7 @@ class InformationFacadeImpl(
                     }
             }
 
-            val dateFormat = SimpleDateFormat(TIME_DATE_FORMAT, Locale.getDefault()).apply {
-                timeZone = TimeZone.getTimeZone("UTC")
-            }
-            transaction.timestamp = try {
-                dateFormat.parse(blocks[transaction.blockNum]?.timestamp)
-            } catch (e: ParseException) {
-                Date()
-            }
+            transaction.timestamp = blocks[transaction.blockNum]?.timestamp?.parse(default = null)
 
             val operation = transaction.operation
 
