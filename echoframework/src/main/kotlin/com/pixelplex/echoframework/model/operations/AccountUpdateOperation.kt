@@ -11,7 +11,7 @@ import java.lang.reflect.Type
  * @author Daria Pechkovskaya
  */
 class AccountUpdateOperation @JvmOverloads constructor(
-    private val account: Account,
+    var account: Account,
     owner: Authority?,
     active: Authority?,
     newOptions: AccountOptions?,

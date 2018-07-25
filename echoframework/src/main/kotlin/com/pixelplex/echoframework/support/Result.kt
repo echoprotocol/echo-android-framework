@@ -48,6 +48,28 @@ inline fun <E : Exception, V, A> Result<E, V>.fold(v: (V) -> A, e: (E) -> A): A 
 }
 
 /**
+ * Apply function over result success value
+ */
+inline fun <E : Exception, V> Result<E, V>.value(v: (V) -> Unit): Result<E, V> = when (this) {
+    is Result.Error -> this
+    is Result.Value -> {
+        v(this.value)
+        this
+    }
+}
+
+/**
+ * Apply function over result error value
+ */
+inline fun <E : Exception, V> Result<E, V>.error(e: (E) -> Unit): Result<E, V> = when (this) {
+    is Result.Error -> {
+        e(this.error)
+        this
+    }
+    is Result.Value -> this
+}
+
+/**
  * Maps error to another type of error by function
  * @param f Function to map
  */

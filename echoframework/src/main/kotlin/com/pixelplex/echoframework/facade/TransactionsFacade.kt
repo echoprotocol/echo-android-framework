@@ -1,7 +1,6 @@
 package com.pixelplex.echoframework.facade
 
 import com.pixelplex.echoframework.Callback
-import com.pixelplex.echoframework.model.HistoryResponse
 
 /**
  * Encapsulates logic, associated with various blockchain transactions processes
@@ -28,25 +27,6 @@ interface TransactionsFacade {
         amount: String,
         asset: String,
         callback: Callback<String>
-    )
-
-    /**
-     * Retrieves account history with defining setting parameters
-     *
-     * @param nameOrId             Source account name or id
-     * @param transactionStartId   ID of the most recent operation to retrieve
-     * @param transactionStopId    ID of the earliest operation to retrieve
-     * @param limit                Maximum number of operations to retrieve
-     * @param asset                Specific asset type id
-     * @param callback             Listener of operation results
-     */
-    fun getAccountHistory(
-        nameOrId: String,
-        transactionStartId: String,
-        transactionStopId: String,
-        limit: Int,
-        asset: String,
-        callback: Callback<HistoryResponse>
     )
 
 }

@@ -4,10 +4,14 @@ import com.pixelplex.echoframework.Callback
 import com.pixelplex.echoframework.ILLEGAL_ID
 import com.pixelplex.echoframework.core.crypto.CryptoCoreComponent
 import com.pixelplex.echoframework.core.socket.SocketCoreComponent
+import com.pixelplex.echoframework.exception.LocalException
 import com.pixelplex.echoframework.model.HistoryResponse
 import com.pixelplex.echoframework.model.network.Network
 import com.pixelplex.echoframework.model.socketoperations.GetAccountHistorySocketOperation
 import com.pixelplex.echoframework.service.AccountHistoryApiService
+import com.pixelplex.echoframework.support.Result
+import com.pixelplex.echoframework.support.concurrent.future.FutureTask
+import com.pixelplex.echoframework.support.concurrent.future.wrapResult
 
 /**
  * Implementation of [AccountHistoryApiService]
@@ -35,6 +39,29 @@ class AccountHistoryApiServiceImpl(
         )
 
         socketCoreComponent.emit(historyCall)
+    }
+
+    override fun getAccountHistory(
+        accountId: String,
+        start: String,
+        stop: String,
+        limit: Int
+    ): Result<Exception, HistoryResponse> {
+        val historyFuture = FutureTask<HistoryResponse>()
+
+        getAccountHistory(accountId, start, stop, limit, object : Callback<HistoryResponse> {
+
+            override fun onSuccess(result: HistoryResponse) {
+                historyFuture.setComplete(result)
+            }
+
+            override fun onError(error: LocalException) {
+                historyFuture.setComplete(error)
+            }
+
+        })
+
+        return historyFuture.wrapResult(HistoryResponse(listOf(), false))
     }
 
 }

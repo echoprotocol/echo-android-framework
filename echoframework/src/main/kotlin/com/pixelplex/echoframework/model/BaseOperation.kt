@@ -8,7 +8,7 @@ import com.google.gson.JsonElement
  *
  * @author Daria Pechkovskaya
  */
-abstract class BaseOperation(protected var type: OperationType) : ByteSerializable,
+abstract class BaseOperation(var type: OperationType) : ByteSerializable,
     JsonSerializable {
 
     protected var extensions: Extensions = Extensions()
