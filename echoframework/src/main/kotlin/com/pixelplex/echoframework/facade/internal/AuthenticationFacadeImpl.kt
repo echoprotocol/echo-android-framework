@@ -31,7 +31,7 @@ class AuthenticationFacadeImpl(
     private val network: Network
 ) : AuthenticationFacade {
 
-    override fun login(name: String, password: String, callback: Callback<Account>) {
+    override fun isOwnedBy(name: String, password: String, callback: Callback<Account>) {
         val result = databaseApiService.getFullAccounts(listOf(name), false)
 
         result.fold({ accountsMap ->

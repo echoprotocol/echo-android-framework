@@ -17,7 +17,7 @@ interface AuthenticationFacade {
      * @param password Required account's password
      * @param callback Listener of login operation results
      */
-    fun login(name: String, password: String, callback: Callback<Account>)
+    fun isOwnedBy(name: String, password: String, callback: Callback<Account>)
 
     /**
      * Describes password changing logic contract

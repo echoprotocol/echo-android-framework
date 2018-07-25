@@ -9,9 +9,7 @@ import com.pixelplex.echoframework.model.*
 import com.pixelplex.echoframework.model.socketoperations.TransferOperationBuilder
 import com.pixelplex.echoframework.service.DatabaseApiService
 import com.pixelplex.echoframework.service.NetworkBroadcastApiService
-import com.pixelplex.echoframework.support.Result
-import com.pixelplex.echoframework.support.fold
-import com.pixelplex.echoframework.support.isEqualsByKey
+import com.pixelplex.echoframework.support.*
 
 /**
  * Implementation of [TransactionsFacade]
@@ -42,15 +40,17 @@ class TransactionsFacadeImpl(
             var toAccount: Account? = null
             var fromAccount: Account? = null
 
-            accounts.fold({ accountsMap ->
-                toAccount = accountsMap[toNameOrId]?.account
-                fromAccount = accountsMap[nameOrId]?.account
-            }, {
-                throw LocalException(it.message, it)
-            })
+            accounts
+                .value { accountsMap ->
+                    toAccount = accountsMap[toNameOrId]?.account
+                    fromAccount = accountsMap[nameOrId]?.account
+                }
+                .error { accountsError ->
+                    throw LocalException("Error occurred during accounts request", accountsError)
+                }
 
             if (toAccount == null || fromAccount == null) {
-                throw LocalException("Unable to find required accounts")
+                throw LocalException("Unable to find required accounts: source = $nameOrId, target = $toNameOrId")
             }
 
             checkOwnerAccount(nameOrId, password, fromAccount!!)

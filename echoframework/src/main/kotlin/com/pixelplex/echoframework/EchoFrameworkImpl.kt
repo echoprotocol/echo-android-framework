@@ -97,9 +97,9 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
 
     }
 
-    override fun login(name: String, password: String, callback: Callback<Account>) {
+    override fun isOwnedBy(name: String, password: String, callback: Callback<Account>) {
         dispatch(Runnable {
-            authenticationFacade.login(
+            authenticationFacade.isOwnedBy(
                 name,
                 password,
                 callback.wrapOriginal()
