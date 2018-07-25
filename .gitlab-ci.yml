@@ -10,8 +10,7 @@ stages:
   artifacts:
     expire_in: 4 hours
     paths:
-    - app/build/outputs/
-    - .android/
+    - app/echoframework/build/outputs/aar
 
 build_debug:
   <<: *build_template_def
