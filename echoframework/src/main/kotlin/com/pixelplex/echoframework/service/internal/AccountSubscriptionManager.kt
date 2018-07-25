@@ -13,7 +13,12 @@ interface AccountSubscriptionManager {
     /**
      * Registers required listener by account id
      */
-    fun registerListener(id: String, listener: AccountListener): Boolean
+    fun registerListener(id: String, listener: AccountListener)
+
+    /**
+     * Check, whether listeners already registered by this id
+     */
+    fun registered(id: String): Boolean
 
     /**
      * Removes listener by id

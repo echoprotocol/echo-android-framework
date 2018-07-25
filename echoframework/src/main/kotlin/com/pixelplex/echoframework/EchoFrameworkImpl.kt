@@ -157,15 +157,15 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         })
     }
 
-    override fun subscribeOnAccount(id: String, listener: AccountListener) {
+    override fun subscribeOnAccount(nameOrId: String, listener: AccountListener) {
         dispatch(Runnable {
-            subscriptionFacade.subscribeOnAccount(id, listener.wrapOriginal())
+            subscriptionFacade.subscribeOnAccount(nameOrId, listener.wrapOriginal())
         })
     }
 
-    override fun unsubscribeFromAccount(id: String, callback: Callback<Boolean>) =
+    override fun unsubscribeFromAccount(nameOrId: String, callback: Callback<Boolean>) =
         dispatch(Runnable {
-            subscriptionFacade.unsubscribeFromAccount(id, callback.wrapOriginal())
+            subscriptionFacade.unsubscribeFromAccount(nameOrId, callback.wrapOriginal())
         })
 
     override fun unsubscribeAll(callback: Callback<Boolean>) =

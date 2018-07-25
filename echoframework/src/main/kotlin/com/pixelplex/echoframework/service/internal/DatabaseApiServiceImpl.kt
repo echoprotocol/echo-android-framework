@@ -10,12 +10,9 @@ import com.pixelplex.echoframework.model.*
 import com.pixelplex.echoframework.model.network.Network
 import com.pixelplex.echoframework.model.socketoperations.*
 import com.pixelplex.echoframework.service.DatabaseApiService
-import com.pixelplex.echoframework.support.EmptyCallback
-import com.pixelplex.echoframework.support.Result
+import com.pixelplex.echoframework.support.*
 import com.pixelplex.echoframework.support.concurrent.future.FutureTask
 import com.pixelplex.echoframework.support.concurrent.future.wrapResult
-import com.pixelplex.echoframework.support.fold
-import com.pixelplex.echoframework.support.toJsonObject
 import java.util.concurrent.TimeUnit
 
 /**
@@ -186,7 +183,7 @@ class DatabaseApiServiceImpl(
     }
 
     override fun subscribeOnAccount(
-        id: String,
+        nameOrId: String,
         listener: AccountListener
     ) {
         synchronized(this) {
@@ -196,37 +193,56 @@ class DatabaseApiServiceImpl(
                 this.subscribed = subscribeCallBlocking()
             }
 
-            if (subscriptionManager.registerListener(id, listener)) {
-                getFullAccounts(listOf(id), true, EmptyCallback())
+            if (!subscriptionManager.registered(nameOrId)) {
+                getFullAccounts(listOf(nameOrId), true)
+                    .value { accountsMap ->
+                        accountsMap[nameOrId]?.account?.getObjectId()?.let { requiredAccountId ->
+                            subscriptionManager.registerListener(requiredAccountId, listener)
+                        }
+                    }
+            } else {
+                subscriptionManager.registerListener(nameOrId, listener)
             }
         }
     }
 
-    override fun unsubscribeFromAccount(id: String, callback: Callback<Boolean>) {
+    override fun unsubscribeFromAccount(nameOrId: String, callback: Callback<Boolean>) {
+        // if there are listeners registered with [nameOrId] - remove them
+        // else - request account by [nameOrId] and try remove listeners by account's id
+        if (!subscriptionManager.registered(nameOrId)) {
+            synchronized(this) {
+                if (!subscriptionManager.registered(nameOrId)) {
+                    getAccountId(nameOrId)
+                        .value { id ->
+                            subscriptionManager.removeListeners(id)?.let {
+                                callback.onSuccess(true)
+                            }
+                                    ?: callback.onError(LocalException("No listeners found for this account"))
+                        }
+                        .error { error ->
+                            callback.onError(error)
+                        }
+                }
+            }
+        } else {
+            subscriptionManager.removeListeners(nameOrId)
+        }
+    }
+
+    private fun getAccountId(nameOrId: String): Result<LocalException, String> =
+        getFullAccounts(listOf(nameOrId), false)
+            .flatMap { accountsMap ->
+                accountsMap[nameOrId]?.account?.getObjectId()?.let { Result.Value(it) }
+                        ?: Result.Error(LocalException())
+            }
+            .mapError {
+                LocalException("Unable to find required account id for identifier = $nameOrId")
+            }
+
+    override fun unsubscribeAll(callback: Callback<Boolean>) =
         synchronized(this) {
-            val accountListeners = subscriptionManager.removeListeners(id)
-
-            accountListeners?.let {
-                callback.onSuccess(true)
-            } ?: callback.onError(LocalException("No listeners found for this account"))
+            subscriptionManager.clear()
         }
-    }
-
-    override fun unsubscribeAll(callback: Callback<Boolean>) {
-        val unsubscribeOperation = createSubscriptionOperation(true, object : Callback<Any> {
-            override fun onSuccess(result: Any) {
-                subscriptionManager.clear()
-                callback.onSuccess(true)
-            }
-
-            override fun onError(error: LocalException) {
-                callback.onError(error)
-            }
-
-        })
-
-        socketCoreComponent.emit(unsubscribeOperation)
-    }
 
     private fun subscribeCallBlocking(): Boolean {
         val futureResult = FutureTask<Boolean>()
@@ -246,11 +262,13 @@ class DatabaseApiServiceImpl(
 
         var result = false
 
-        futureResult.wrapResult<Exception, Boolean>(false).fold({
-            result = it
-        }, {
-            result = false
-        })
+        futureResult.wrapResult<Exception, Boolean>(false)
+            .value {
+                result = it
+            }
+            .error {
+                result = false
+            }
 
         return result
     }
@@ -312,6 +330,7 @@ class DatabaseApiServiceImpl(
         const val METHOD_KEY = "method"
         private const val NOTICE_METHOD_KEY = "notice"
     }
+
 }
 
 
