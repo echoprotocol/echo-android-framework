@@ -78,15 +78,14 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
                     settings.network
                 )
         feeFacade = FeeFacadeImpl(databaseApiService)
-        informationFacade = InformationFacadeImpl(databaseApiService)
+        informationFacade = InformationFacadeImpl(databaseApiService, accountHistoryApiService)
         subscriptionFacade =
                 SubscriptionFacadeImpl(databaseApiService)
         transactionsFacade =
                 TransactionsFacadeImpl(
                     databaseApiService,
                     networkBroadcastApiService,
-                    settings.cryptoComponent,
-                    accountHistoryApiService
+                    settings.cryptoComponent
                 )
     }
 
@@ -204,7 +203,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         callback: Callback<HistoryResponse>
     ) {
         dispatch(Runnable {
-            transactionsFacade.getAccountHistory(
+            informationFacade.getAccountHistory(
                 nameOrId,
                 transactionStartId,
                 transactionStopId,

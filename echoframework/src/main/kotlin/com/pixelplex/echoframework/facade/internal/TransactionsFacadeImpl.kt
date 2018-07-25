@@ -6,9 +6,7 @@ import com.pixelplex.echoframework.core.crypto.CryptoCoreComponent
 import com.pixelplex.echoframework.exception.LocalException
 import com.pixelplex.echoframework.facade.TransactionsFacade
 import com.pixelplex.echoframework.model.*
-import com.pixelplex.echoframework.model.network.Network
 import com.pixelplex.echoframework.model.socketoperations.TransferOperationBuilder
-import com.pixelplex.echoframework.service.AccountHistoryApiService
 import com.pixelplex.echoframework.service.DatabaseApiService
 import com.pixelplex.echoframework.service.NetworkBroadcastApiService
 import com.pixelplex.echoframework.support.Result
@@ -27,8 +25,7 @@ import com.pixelplex.echoframework.support.isEqualsByKey
 class TransactionsFacadeImpl(
     private val databaseApiService: DatabaseApiService,
     private val networkBroadcastApiService: NetworkBroadcastApiService,
-    private val cryptoCoreComponent: CryptoCoreComponent,
-    private val accountHistoryApiService: AccountHistoryApiService
+    private val cryptoCoreComponent: CryptoCoreComponent
 ) : TransactionsFacade {
 
     override fun sendTransferOperation(
@@ -126,23 +123,6 @@ class TransactionsFacadeImpl(
         } else {
             throw (feesResult as Result.Error).error
         }
-    }
-
-    override fun getAccountHistory(
-        nameOrId: String,
-        transactionStartId: String,
-        transactionStopId: String,
-        limit: Int,
-        asset: String,
-        callback: Callback<HistoryResponse>
-    ) {
-        accountHistoryApiService.getAccountHistory(
-            nameOrId,
-            transactionStartId,
-            transactionStopId,
-            limit,
-            callback
-        )
     }
 
 }

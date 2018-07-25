@@ -298,7 +298,7 @@ class EchoFrameworkTest {
             "dimaty123",
             "P5JVzpPDitVodHMoj4zZspn7e8EYiDeoarkCEixS5tD6z",
             "dariatest2",
-            "10", "1.3.0", object : Callback<String> {
+            "1000000", "1.3.0", object : Callback<String> {
                 override fun onSuccess(result: String) {
                     futureTransfer.setComplete(result)
                 }
