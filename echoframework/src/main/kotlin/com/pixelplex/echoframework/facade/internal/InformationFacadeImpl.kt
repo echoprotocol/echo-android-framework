@@ -1,6 +1,7 @@
 package com.pixelplex.echoframework.facade.internal
 
 import com.pixelplex.echoframework.Callback
+import com.pixelplex.echoframework.core.logger.internal.LoggerCoreComponent
 import com.pixelplex.echoframework.exception.LocalException
 import com.pixelplex.echoframework.exception.NotFoundException
 import com.pixelplex.echoframework.facade.InformationFacade
@@ -68,6 +69,7 @@ class InformationFacadeImpl(
                         callback.onSuccess(balance)
                     }
                     .error { balanceError ->
+                        LOGGER.log("Unable to find account balances for required asset = $asset", balanceError)
                         callback.onError(balanceError)
                     }
             }
@@ -179,6 +181,10 @@ class InformationFacadeImpl(
                     operation.to = notNullToAccount
                 }
             }
+    }
+
+    companion object {
+        private val LOGGER = LoggerCoreComponent.create(InformationFacadeImpl::class.java.name)
     }
 
 }

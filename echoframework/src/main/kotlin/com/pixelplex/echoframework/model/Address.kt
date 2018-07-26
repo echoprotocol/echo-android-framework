@@ -53,6 +53,7 @@ class Address {
     companion object {
         const val BITSHARES_PREFIX = "GPH"
         const val TESTNET_PREFIX = "TEST"
+        const val DEVNET_PREFIX = "ECHO"
     }
 
 }

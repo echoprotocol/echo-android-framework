@@ -30,11 +30,6 @@ open class CancellableTask : Cancellable {
                 return false
             }
 
-            if (isDone()) {
-                // don't allow a Cancellable to complete twice...
-                throw IllegalStateException("Unable to complete Cancellable twice")
-            }
-
             complete = true
         }
         return true

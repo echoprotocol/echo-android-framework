@@ -2,6 +2,7 @@ package com.pixelplex.echoframework.facade.internal
 
 import com.pixelplex.echoframework.Callback
 import com.pixelplex.echoframework.core.crypto.CryptoCoreComponent
+import com.pixelplex.echoframework.core.logger.internal.LoggerCoreComponent
 import com.pixelplex.echoframework.exception.LocalException
 import com.pixelplex.echoframework.exception.NotFoundException
 import com.pixelplex.echoframework.facade.AuthenticationFacade
@@ -45,6 +46,7 @@ class AuthenticationFacadeImpl(
                 return
             }
 
+            LOGGER.log("No account found owned by $name with specified password")
             callback.onError(NotFoundException("Account not found."))
         }, { error ->
             callback.onError(LocalException(error.message, error))
@@ -79,10 +81,8 @@ class AuthenticationFacadeImpl(
             } else {
                 throw (transactionResult as Result.Error).error
             }
-
         } catch (ex: LocalException) {
             return callback.onError(ex)
-
         } catch (ex: Exception) {
             return callback.onError(LocalException(ex.message, ex))
         }
@@ -151,5 +151,8 @@ class AuthenticationFacadeImpl(
             .build()
     }
 
+    companion object {
+        private val LOGGER = LoggerCoreComponent.create(AuthenticationFacadeImpl::class.java.name)
+    }
 
 }

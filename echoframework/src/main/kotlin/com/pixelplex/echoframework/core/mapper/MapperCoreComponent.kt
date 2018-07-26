@@ -13,6 +13,6 @@ interface MapperCoreComponent {
      * @param type Class type for parse
      * @return Parsed class
      */
-    fun <T> map(json: String, type: Class<T>): T
+    fun <T> map(json: String, type: Class<T>): T?
 
 }

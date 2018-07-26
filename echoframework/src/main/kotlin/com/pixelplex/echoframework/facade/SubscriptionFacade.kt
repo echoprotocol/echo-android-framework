@@ -21,7 +21,7 @@ interface SubscriptionFacade {
     /**
      * Unsubscribe listeners from observing account event changes with id = [nameOrId]
      *
-     * @param id       Required account id to unsubscribe from
+     * @param nameOrId       Required account id to unsubscribe from
      * @param callback Listener of unsubscribing process state
      *                 Receives true if unsubscribing succeed, otherwise false\error (if occurred)
      */
