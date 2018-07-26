@@ -25,6 +25,6 @@ interface TransactionsService {
      *
      * @param transaction Transaction to broadcast
      */
-    fun broadcastTransactionWithCallback(transaction: Transaction): Result<Exception, String>
+    fun broadcastTransactionWithCallback(transaction: Transaction): Result<Exception, Boolean>
 
 }

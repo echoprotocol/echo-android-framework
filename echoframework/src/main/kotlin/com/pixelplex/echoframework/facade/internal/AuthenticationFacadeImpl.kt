@@ -13,8 +13,7 @@ import com.pixelplex.echoframework.service.DatabaseApiService
 import com.pixelplex.echoframework.service.NetworkBroadcastApiService
 import com.pixelplex.echoframework.support.Result
 import com.pixelplex.echoframework.support.fold
-import com.pixelplex.echoframework.support.isEqualsByKey
-import com.pixelplex.echoframework.support.operationbuilders.AccountUpdateOperationBuilder
+import com.pixelplex.echoframework.model.operations.AccountUpdateOperationBuilder
 
 /**
  * Implementation of [AuthenticationFacade]

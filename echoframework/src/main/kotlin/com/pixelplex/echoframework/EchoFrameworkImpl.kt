@@ -183,7 +183,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         toNameOrId: String,
         amount: String,
         asset: String,
-        callback: Callback<String>
+        callback: Callback<Boolean>
     ) {
         dispatch(Runnable {
             transactionsFacade.sendTransferOperation(

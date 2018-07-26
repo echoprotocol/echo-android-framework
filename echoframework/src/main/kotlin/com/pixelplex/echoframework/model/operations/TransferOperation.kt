@@ -98,22 +98,19 @@ class TransferOperation : BaseOperation {
      *
      * An example of this serialized form is the following:
      *
-     * [
-     * 0,
      * {
-     * "fee": {
-     * "amount": 264174,
-     * "asset_id": "1.3.0"
-     * },
-     * "from": "1.2.138632",
-     * "to": "1.2.129848",
-     * "amount": {
-     * "amount": 100,
-     * "asset_id": "1.3.0"
-     * },
-     * "extensions": []
+     *      "fee": {
+     *          "amount": 264174,
+     *          "asset_id": "1.3.0"
+     *      },
+     *      "from": "1.2.138632",
+     *      "to": "1.2.129848",
+     *      "amount": {
+     *          "amount": 100,
+     *          "asset_id": "1.3.0"
+     *      },
+     *      "extensions": []
      * }
-     * ]
      *
      * It will convert this data into a nice TransferOperation object.
      */
@@ -152,10 +149,10 @@ class TransferOperation : BaseOperation {
     }
 
     companion object {
-        private const val KEY_AMOUNT = "amount"
-        private const val KEY_FROM = "from"
-        private const val KEY_TO = "to"
-        private const val KEY_FEE = "fee"
-        private const val KEY_EXTENSIONS = "extensions"
+        const val KEY_AMOUNT = "amount"
+        const val KEY_FROM = "from"
+        const val KEY_TO = "to"
+        const val KEY_FEE = "fee"
+        const val KEY_EXTENSIONS = "extensions"
     }
 }

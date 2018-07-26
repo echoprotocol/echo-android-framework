@@ -1,4 +1,4 @@
-package com.pixelplex.echoframework.support.operationbuilders
+package com.pixelplex.echoframework.model.operations
 
 import com.pixelplex.echoframework.model.BaseOperation
 

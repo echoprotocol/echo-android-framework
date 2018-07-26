@@ -319,7 +319,7 @@ class EchoFrameworkTest {
     fun transferTest() {
         val framework = initFramework()
 
-        val futureTransfer = FutureTask<String>()
+        val futureTransfer = FutureTask<Boolean>()
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
@@ -327,8 +327,8 @@ class EchoFrameworkTest {
             "dimaty123",
             "P5JVzpPDitVodHMoj4zZspn7e8EYiDeoarkCEixS5tD6z",
             "dariatest2",
-            "1000000", "1.3.0", object : Callback<String> {
-                override fun onSuccess(result: String) {
+            "1000000", "1.3.0", object : Callback<Boolean> {
+                override fun onSuccess(result: Boolean) {
                     futureTransfer.setComplete(result)
                 }
 
@@ -338,7 +338,7 @@ class EchoFrameworkTest {
 
             })
 
-        assertNotNull(futureTransfer.get())
+        assertTrue(futureTransfer.get() ?: false)
     }
 
     @Test

@@ -29,14 +29,14 @@ class NetworkBroadcastApiServiceImpl(
 
     override var id: Int = ILLEGAL_ID
 
-    override fun broadcastTransactionWithCallback(transaction: Transaction): Result<Exception, String> {
-        val future = FutureTask<String>()
+    override fun broadcastTransactionWithCallback(transaction: Transaction): Result<Exception, Boolean> {
+        val future = FutureTask<Boolean>()
         val transactionSocketOperation = TransactionSocketOperation(
             id,
             transaction,
             cryptoCoreComponent.signTransaction(transaction),
-            callback = object : Callback<String> {
-                override fun onSuccess(result: String) {
+            callback = object : Callback<Boolean> {
+                override fun onSuccess(result: Boolean) {
                     future.setComplete(result)
                 }
 

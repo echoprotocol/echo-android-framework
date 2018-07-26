@@ -64,7 +64,7 @@ enum class OperationType {
 /**
  * Maps operation id to required result class type
  */
-class OperationTypeToResultTypeConverter : Converter<Int, Class<*>?> {
+class OperationTypeToClassConverter : Converter<Int, Class<*>?> {
 
     override fun convert(source: Int): Class<*>? = OPERATION_TYPE_REGISTRY[source]
 

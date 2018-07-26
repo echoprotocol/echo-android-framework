@@ -291,9 +291,8 @@ class DatabaseApiServiceImpl(
     private inner class SubscriptionListener : SocketMessengerListener {
 
         override fun onEvent(event: String) {
-            val jsonObject = event.toJsonObject()
             // no need to process other events)
-            if (jsonObject.get(DatabaseApiServiceImpl.METHOD_KEY).asString !=
+            if (event.toJsonObject()?.get(DatabaseApiServiceImpl.METHOD_KEY)?.asString !=
                 DatabaseApiServiceImpl.NOTICE_METHOD_KEY
             ) {
                 return

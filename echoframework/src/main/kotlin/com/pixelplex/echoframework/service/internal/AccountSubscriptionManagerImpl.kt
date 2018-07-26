@@ -96,7 +96,7 @@ class AccountSubscriptionManagerImpl : AccountSubscriptionManager {
      */
     @SuppressWarnings("ReturnCount")
     override fun processEvent(event: String): String? {
-        val params = event.toJsonObject().getAsJsonArray(PARAMS_KEY)
+        val params = event.toJsonObject()?.getAsJsonArray(PARAMS_KEY) ?: return null
 
         if (params.size() == 0) {
             return null
