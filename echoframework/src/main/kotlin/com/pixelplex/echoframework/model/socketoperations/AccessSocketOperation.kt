@@ -48,5 +48,4 @@ enum class AccessSocketOperationType(val key: String) {
     NETWORK_BROADCAST("network_broadcast"),
     HISTORY("history"),
     CRYPTO("crypto"),
-    NETWORK_NODES("network_nodes")
 }

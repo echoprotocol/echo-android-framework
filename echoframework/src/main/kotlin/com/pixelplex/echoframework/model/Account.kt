@@ -6,6 +6,7 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.annotations.Expose
 import com.pixelplex.echoframework.TIME_DATE_FORMAT
+import com.pixelplex.echoframework.core.logger.internal.LoggerCoreComponent
 import com.pixelplex.echoframework.support.Varint
 import java.io.ByteArrayOutputStream
 import java.io.DataOutputStream
@@ -57,6 +58,8 @@ class Account : GrapheneObject, GrapheneSerializable {
 
     @Expose
     var referrerRewardsPercentage: Long = 0
+
+    private val logger = LoggerCoreComponent.create(Account::class.java.simpleName)
 
     /**
      * Requires a user account in the string representation, that is in the 1.2.x format.
@@ -117,22 +120,22 @@ class Account : GrapheneObject, GrapheneSerializable {
             if (json == null || !json.isJsonObject) return null
 
             val jsonAccount = json.asJsonObject
-            val account = createAccountFromJson(jsonAccount)
 
-            account.registrar = jsonAccount.get(KEY_REGISTRAR).asString
-            account.membershipExpirationDate = getDate(jsonAccount)
-            account.referrer = jsonAccount.get(KEY_REFERRER).asString
-            account.lifetimeReferrer = jsonAccount.get(KEY_LIFETIME_REFERRER).asString
-            account.networkFeePercentage = jsonAccount.get(KEY_NETWORK_FEE_PERCENTAGE).asLong
-            account.lifetimeReferrerFeePercentage =
-                    jsonAccount.get(KEY_LIFETIME_REFERRER_FEE_PERCENTAGE).asLong
-            account.referrerRewardsPercentage =
-                    jsonAccount.get(KEY_REFERRER_REWARD_PERCENTAGE).asLong
-            account.owner = getAuthority(context!!, jsonAccount, KEY_OWNER)
-            account.active = getAuthority(context, jsonAccount, KEY_ACTIVE)
-            account.options = getOptions(context, jsonAccount)
-            account.statistics = jsonAccount.get(KEY_STATISTICS).asString
-            return account
+            return createAccountFromJson(jsonAccount).apply {
+                registrar = jsonAccount.get(KEY_REGISTRAR).asString
+                membershipExpirationDate = getDate(jsonAccount)
+                referrer = jsonAccount.get(KEY_REFERRER).asString
+                lifetimeReferrer = jsonAccount.get(KEY_LIFETIME_REFERRER).asString
+                networkFeePercentage = jsonAccount.get(KEY_NETWORK_FEE_PERCENTAGE).asLong
+                lifetimeReferrerFeePercentage =
+                        jsonAccount.get(KEY_LIFETIME_REFERRER_FEE_PERCENTAGE).asLong
+                referrerRewardsPercentage =
+                        jsonAccount.get(KEY_REFERRER_REWARD_PERCENTAGE).asLong
+                owner = getAuthority(context!!, jsonAccount, KEY_OWNER)
+                active = getAuthority(context, jsonAccount, KEY_ACTIVE)
+                options = getOptions(context, jsonAccount)
+                statistics = jsonAccount.get(KEY_STATISTICS).asString
+            }
         }
 
         private fun createAccountFromJson(jsonAccount: JsonObject): Account {
@@ -162,7 +165,6 @@ class Account : GrapheneObject, GrapheneSerializable {
             return try {
                 dateFormat.parse(jsonAccount.get(KEY_MEMBERSHIP_EXPIRATION_DATE).asString).time
             } catch (e: ParseException) {
-                println("ParseException. Msg: " + e.message)
                 0
             }
         }

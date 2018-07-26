@@ -1,5 +1,6 @@
 package com.pixelplex.echoframework
 
+import com.pixelplex.echoframework.core.logger.internal.LoggerCoreComponent
 import com.pixelplex.echoframework.core.mapper.internal.MapperCoreComponentImpl
 import com.pixelplex.echoframework.core.socket.internal.SocketCoreComponentImpl
 import com.pixelplex.echoframework.facade.*
@@ -42,6 +43,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
      * Initializes and setups all facades with required dependencies
      */
     init {
+        LoggerCoreComponent.logLevel = settings.logLevel
         returnOnMainThread = settings.returnOnMainThread
 
         val mapperCoreComponent =
@@ -125,6 +127,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
     override fun getFeeForTransferOperation(
         fromNameOrId: String,
         toNameOrId: String,
+        amount: String,
         asset: String,
         callback: Callback<String>
     ) {
@@ -132,6 +135,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             feeFacade.getFeeForTransferOperation(
                 fromNameOrId,
                 toNameOrId,
+                amount,
                 asset,
                 callback.wrapOriginal()
             )

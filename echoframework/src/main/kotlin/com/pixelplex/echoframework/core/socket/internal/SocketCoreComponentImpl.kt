@@ -1,5 +1,6 @@
 package com.pixelplex.echoframework.core.socket.internal
 
+import com.pixelplex.echoframework.core.logger.internal.LoggerCoreComponent
 import com.pixelplex.echoframework.core.mapper.MapperCoreComponent
 import com.pixelplex.echoframework.core.socket.SocketCoreComponent
 import com.pixelplex.echoframework.core.socket.SocketMessenger
@@ -24,7 +25,6 @@ class SocketCoreComponentImpl(
 
     private var callIdx = AtomicInteger(1)
 
-    //add map locking
     private val operationsMap: ConcurrentHashMap<Int, SocketOperation<Any>> = ConcurrentHashMap()
 
     private val globalSocketListener = SocketCoreMessengerListener()
@@ -63,7 +63,8 @@ class SocketCoreComponentImpl(
         private var wasReconnect = false
 
         override fun onEvent(event: String) {
-            val response = mapper.map(event, SocketResponse::class.java)
+            val response = mapper.map(event, SocketResponse::class.java) ?: return
+
             val operation = operationsMap.remove(response.id)
             val error = response.error
 
@@ -82,6 +83,7 @@ class SocketCoreComponentImpl(
                 val obj = operation.fromJson(event)!!
                 operation.callback.onSuccess(obj)
             } catch (ex: Exception) {
+                LOGGER.log("Error during response mapping. Response = $event", ex)
                 operation.callback.onError(LocalException(ex.message, ex))
             }
         }
@@ -107,6 +109,10 @@ class SocketCoreComponentImpl(
             socketState = SocketState.DISCONNECTED
             //if was fail - reconnect by delay
         }
+    }
+
+    companion object {
+        private val LOGGER = LoggerCoreComponent.create(SocketCoreComponentImpl::class.java.name)
     }
 
 }

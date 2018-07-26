@@ -3,6 +3,7 @@ package com.pixelplex.echoframework.service.internal
 import com.pixelplex.echoframework.AccountListener
 import com.pixelplex.echoframework.Callback
 import com.pixelplex.echoframework.ILLEGAL_ID
+import com.pixelplex.echoframework.core.logger.internal.LoggerCoreComponent
 import com.pixelplex.echoframework.core.socket.SocketCoreComponent
 import com.pixelplex.echoframework.core.socket.SocketMessengerListener
 import com.pixelplex.echoframework.exception.LocalException
@@ -214,12 +215,17 @@ class DatabaseApiServiceImpl(
                 if (!subscriptionManager.registered(nameOrId)) {
                     getAccountId(nameOrId)
                         .value { id ->
-                            subscriptionManager.removeListeners(id)?.let {
+                            val removed = subscriptionManager.removeListeners(id)
+
+                            if (removed != null) {
                                 callback.onSuccess(true)
+                            } else {
+                                LOGGER.log("No listeners found for this account")
+                                callback.onError(LocalException("No listeners found for this account"))
                             }
-                                    ?: callback.onError(LocalException("No listeners found for this account"))
                         }
                         .error { error ->
+                            LOGGER.log("Account finding error.", error)
                             callback.onError(error)
                         }
                 }
@@ -266,7 +272,8 @@ class DatabaseApiServiceImpl(
             .value {
                 result = it
             }
-            .error {
+            .error { error ->
+                LOGGER.log("Subscription request error", error)
                 result = false
             }
 
@@ -329,6 +336,8 @@ class DatabaseApiServiceImpl(
     companion object {
         const val METHOD_KEY = "method"
         private const val NOTICE_METHOD_KEY = "notice"
+
+        private val LOGGER = LoggerCoreComponent.create(DatabaseApiServiceImpl::class.java.name)
     }
 
 }

@@ -1,6 +1,7 @@
 package com.pixelplex.echoframework.core.socket.internal
 
 import com.neovisionaries.ws.client.*
+import com.pixelplex.echoframework.core.logger.internal.LoggerCoreComponent
 import com.pixelplex.echoframework.core.socket.SocketMessenger
 import com.pixelplex.echoframework.core.socket.SocketMessengerListener
 
@@ -54,7 +55,7 @@ class SocketMessengerImpl : SocketMessenger {
 
     override fun emit(message: String) {
         if (isOpen) {
-            println(">>>> $message")
+            LOGGER.log(">>>> $message")
             webSocket?.sendText(message)
         }
     }
@@ -77,17 +78,21 @@ class SocketMessengerImpl : SocketMessenger {
             websocket: WebSocket?,
             headers: MutableMap<String, MutableList<String>>?
         ) {
+            LOGGER.log("Socket connected")
+
             isOpen = true
 
             listeners.forEach { listener -> listener.onConnected() }
         }
 
         override fun onTextFrame(websocket: WebSocket?, frame: WebSocketFrame) {
-            println("<<<< ${frame.payloadText}")
+            LOGGER.log("<<<< ${frame.payloadText}")
             listeners.forEach { listener -> listener.onEvent(frame.payloadText) }
         }
 
         override fun onError(websocket: WebSocket?, cause: WebSocketException) {
+            LOGGER.log("Socket error", cause)
+
             webSocket = null
             isOpen = false
 
@@ -100,6 +105,12 @@ class SocketMessengerImpl : SocketMessenger {
             clientCloseFrame: WebSocketFrame?,
             closedByServer: Boolean
         ) {
+            LOGGER.log(
+                """"Socket disconnected. Closed by server = $closedByServer.
+                        "Client close message = ${clientCloseFrame?.payloadText}.
+                        "Server close message = ${serverCloseFrame?.payloadText}"""
+            )
+
             webSocket = null
             isOpen = false
 
@@ -111,6 +122,8 @@ class SocketMessengerImpl : SocketMessenger {
     companion object {
         private const val CONNECTION_TIMEOUT = 10000
         private const val HEART_BEAT_INTERVAL: Long = 20000
+
+        private val LOGGER = LoggerCoreComponent.create(SocketMessengerImpl::class.java.name)
     }
 
 }

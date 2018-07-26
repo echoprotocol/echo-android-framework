@@ -3,6 +3,7 @@ package com.pixelplex.echoframework.support
 import com.pixelplex.echoframework.DEFAULT_URL
 import com.pixelplex.echoframework.core.crypto.CryptoCoreComponent
 import com.pixelplex.echoframework.core.crypto.internal.CryptoCoreComponentImpl
+import com.pixelplex.echoframework.core.logger.internal.LoggerCoreComponent.LogLevel
 import com.pixelplex.echoframework.core.socket.SocketMessenger
 import com.pixelplex.echoframework.core.socket.internal.SocketMessengerImpl
 import com.pixelplex.echoframework.model.network.Network
@@ -19,7 +20,8 @@ class Settings private constructor(
     val cryptoComponent: CryptoCoreComponent,
     val apis: Set<Api>,
     val returnOnMainThread: Boolean,
-    val network: Network
+    val network: Network,
+    val logLevel: LogLevel
 ) {
 
     /**
@@ -33,6 +35,7 @@ class Settings private constructor(
         private var apis: Set<Api>? = null
         private var returnOnMainThread: Boolean = false
         private var network: Network? = null
+        private var logLevel: LogLevel = LogLevel.INFO
 
         /**
          * Defines url for socket connection.
@@ -96,6 +99,16 @@ class Settings private constructor(
         }
 
         /**
+         * Defines library log level [LogLevel]
+         *
+         * @param logLevel Library log level
+         */
+        fun setLogLevel(logLevel: LogLevel): Configurator {
+            this.logLevel = logLevel
+            return this
+        }
+
+        /**
          * Create settings with configurations
          * @return settings for library initialization
          */
@@ -115,7 +128,8 @@ class Settings private constructor(
                 cryptoComponent,
                 apis,
                 returnOnMainThread,
-                network
+                network,
+                logLevel
             )
         }
     }

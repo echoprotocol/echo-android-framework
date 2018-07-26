@@ -2,6 +2,7 @@ package com.pixelplex.echoframework.model.socketoperations
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
+import com.google.gson.JsonParser
 import com.pixelplex.echoframework.Callback
 import com.pixelplex.echoframework.ILLEGAL_ID
 import org.json.JSONObject
@@ -34,7 +35,12 @@ class SetSubscribeCallbackSocketOperation(
         }
 
     override fun fromJson(json: String): Any? {
-        return if (JSONObject(json).has("result")) Any() else null
+        val jsonObject = JsonParser().parse(json).asJsonObject
+        return if (jsonObject.has(RESULT_KEY)) Any() else null
+    }
+
+    companion object {
+        private const val RESULT_KEY = "result"
     }
 
 }

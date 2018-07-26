@@ -18,12 +18,12 @@ class SubscriptionFacadeImpl(
     private val databaseApiService: DatabaseApiService
 ) : SubscriptionFacade {
 
-    override fun subscribeOnAccount(id: String, listener: AccountListener) {
-        databaseApiService.subscribeOnAccount(id, listener)
+    override fun subscribeOnAccount(nameOrId: String, listener: AccountListener) {
+        databaseApiService.subscribeOnAccount(nameOrId, listener)
     }
 
-    override fun unsubscribeFromAccount(id: String, callback: Callback<Boolean>) {
-        databaseApiService.unsubscribeFromAccount(id, callback)
+    override fun unsubscribeFromAccount(nameOrId: String, callback: Callback<Boolean>) {
+        databaseApiService.unsubscribeFromAccount(nameOrId, callback)
     }
 
     override fun unsubscribeAll(callback: Callback<Boolean>) {

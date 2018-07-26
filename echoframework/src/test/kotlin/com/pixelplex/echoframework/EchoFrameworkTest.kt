@@ -13,6 +13,7 @@ import com.pixelplex.echoframework.support.fold
 import org.junit.Assert
 import org.junit.Assert.*
 import org.junit.Test
+import java.util.concurrent.ExecutionException
 import kotlin.concurrent.thread
 
 /**
@@ -42,7 +43,7 @@ class EchoFrameworkTest {
     }
 
     @Test
-    fun loginTest() {
+    fun isOwnedByTest() {
         val framework = initFramework()
 
         val futureLogin =
@@ -338,6 +339,60 @@ class EchoFrameworkTest {
             })
 
         assertNotNull(futureTransfer.get())
+    }
+
+    @Test
+    fun getRequiredFeeTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val futureFee = FutureTask<String>()
+
+        framework.getFeeForTransferOperation(
+            "dimaty123",
+            "dariatest2",
+            "10000",
+            "1.3.0",
+            object : Callback<String> {
+                override fun onSuccess(result: String) {
+                    futureFee.setComplete(result)
+                }
+
+                override fun onError(error: LocalException) {
+                    futureFee.setComplete(error)
+                }
+
+            })
+
+        assertNotNull(futureFee.get())
+    }
+
+    @Test(expected = ExecutionException::class)
+    fun getRequiredFeeFailureTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val futureFee = FutureTask<String>()
+
+        framework.getFeeForTransferOperation(
+            "dimaty123",
+            "dariatest2",
+            "10000",
+            "1.3.1234",
+            object : Callback<String> {
+                override fun onSuccess(result: String) {
+                    futureFee.setComplete(result)
+                }
+
+                override fun onError(error: LocalException) {
+                    futureFee.setComplete(error)
+                }
+
+            })
+
+        assertNotNull(futureFee.get())
     }
 
     private fun connect(framework: EchoFramework): Boolean? {
