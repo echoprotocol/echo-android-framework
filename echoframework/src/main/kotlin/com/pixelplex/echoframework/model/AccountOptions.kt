@@ -72,15 +72,17 @@ class AccountOptions : GrapheneSerializable {
     override fun toJsonString(): String? = null
 
     override fun toJsonObject(): JsonElement? =
-       JsonObject().apply {
-           addProperty(KEY_MEMO_KEY, Address(memoKey!!).toString())
-           addProperty(KEY_NUM_COMMITTEE, committeeCount)
-           addProperty(KEY_NUM_WITNESS, witnessCount)
-           addProperty(KEY_VOTING_ACCOUNT, votingAccount.getObjectId())
-           val votesArray = JsonArray()
-           add(KEY_VOTES, votesArray)
-           add(KEY_EXTENSIONS, extensions.toJsonObject())
-       }
+        JsonObject().apply {
+            addProperty(KEY_MEMO_KEY, Address(memoKey!!).toString())
+            addProperty(KEY_NUM_COMMITTEE, committeeCount)
+            addProperty(KEY_NUM_WITNESS, witnessCount)
+            addProperty(KEY_VOTING_ACCOUNT, votingAccount.getObjectId())
+            val votesArray = JsonArray().apply {
+                votes.forEach { vote -> add(vote) }
+            }
+            add(KEY_VOTES, votesArray)
+            add(KEY_EXTENSIONS, extensions.toJsonObject())
+        }
 
     companion object {
         const val KEY_MEMO_KEY = "memo_key"
@@ -95,14 +97,14 @@ class AccountOptions : GrapheneSerializable {
      * Deserializer used to build a [AccountOptions] instance from the full JSON-formatted response
      * obtained by the API call.
      */
-    class Deserializer(val network: Network): JsonDeserializer<AccountOptions>{
+    class Deserializer(val network: Network) : JsonDeserializer<AccountOptions> {
         override fun deserialize(
             json: JsonElement?,
             typeOfT: Type?,
             context: JsonDeserializationContext?
         ): AccountOptions? {
 
-            if(json == null || !json.isJsonObject){
+            if (json == null || !json.isJsonObject) {
                 return null
             }
 
