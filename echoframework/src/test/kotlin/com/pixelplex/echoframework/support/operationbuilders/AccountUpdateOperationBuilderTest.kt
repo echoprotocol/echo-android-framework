@@ -5,6 +5,7 @@ import com.pixelplex.bitcoinj.ECKey
 import com.pixelplex.echoframework.exception.MalformedOperationException
 import com.pixelplex.echoframework.model.*
 import com.pixelplex.echoframework.model.operations.AccountUpdateOperation
+import com.pixelplex.echoframework.model.operations.AccountUpdateOperationBuilder
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

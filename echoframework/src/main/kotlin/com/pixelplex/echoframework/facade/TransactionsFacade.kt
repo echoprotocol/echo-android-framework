@@ -18,7 +18,7 @@ interface TransactionsFacade {
      * @param amount     Value amount of transfer operation
      * @param asset      Specific asset type id
      * @param callback   Listener of operation results.
-     *                   Retrieves transfer operation id if succeed
+     *                   Retrieves true if transfer succeed,  otherwise - false
      */
     fun sendTransferOperation(
         nameOrId: String,
@@ -26,7 +26,7 @@ interface TransactionsFacade {
         toNameOrId: String,
         amount: String,
         asset: String,
-        callback: Callback<String>
+        callback: Callback<Boolean>
     )
 
 }

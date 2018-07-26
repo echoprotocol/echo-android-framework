@@ -32,7 +32,7 @@ class TransactionsFacadeImpl(
         toNameOrId: String,
         amount: String,
         asset: String,
-        callback: Callback<String>
+        callback: Callback<Boolean>
     ) {
         try {
             val accounts = databaseApiService.getFullAccounts(listOf(nameOrId, toNameOrId), false)

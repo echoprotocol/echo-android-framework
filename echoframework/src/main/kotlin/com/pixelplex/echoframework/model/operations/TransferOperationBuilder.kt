@@ -3,7 +3,6 @@ package com.pixelplex.echoframework.model.operations
 import com.pixelplex.echoframework.exception.MalformedOperationException
 import com.pixelplex.echoframework.model.Account
 import com.pixelplex.echoframework.model.AssetAmount
-import com.pixelplex.echoframework.support.operationbuilders.OperationBuilder
 
 /**
  * Builder class for transfer operation [TransferOperation]

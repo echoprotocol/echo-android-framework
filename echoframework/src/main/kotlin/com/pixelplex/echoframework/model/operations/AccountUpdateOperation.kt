@@ -19,9 +19,9 @@ class AccountUpdateOperation @JvmOverloads constructor(
     override var fee: AssetAmount = AssetAmount(UnsignedLong.ZERO)
 ) : BaseOperation(OperationType.ACCOUNT_UPDATE_OPERATION) {
 
-    private var ownerOption = Optional(owner)
-    private var activeOption = Optional(active)
-    private var newOptionsOption = Optional(newOptions)
+    var ownerOption = Optional(owner)
+    var activeOption = Optional(active)
+    var newOptionsOption = Optional(newOptions)
 
     /**
      * Updates owner value

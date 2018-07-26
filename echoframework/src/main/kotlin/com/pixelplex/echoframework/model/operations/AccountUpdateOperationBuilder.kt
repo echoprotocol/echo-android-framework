@@ -1,11 +1,10 @@
-package com.pixelplex.echoframework.support.operationbuilders
+package com.pixelplex.echoframework.model.operations
 
 import com.pixelplex.echoframework.exception.MalformedOperationException
 import com.pixelplex.echoframework.model.Account
 import com.pixelplex.echoframework.model.AccountOptions
 import com.pixelplex.echoframework.model.AssetAmount
 import com.pixelplex.echoframework.model.Authority
-import com.pixelplex.echoframework.model.operations.AccountUpdateOperation
 
 /**
  * Represents builder for [AccountUpdateOperation].

@@ -5,6 +5,7 @@ import com.google.gson.JsonElement
 import com.pixelplex.echoframework.Callback
 import com.pixelplex.echoframework.ILLEGAL_ID
 import com.pixelplex.echoframework.model.Transaction
+import com.pixelplex.echoframework.support.toJsonObject
 import org.spongycastle.util.encoders.Hex
 
 /**
@@ -21,8 +22,8 @@ class TransactionSocketOperation(
     val transaction: Transaction,
     val signature: ByteArray,
     method: SocketMethodType = SocketMethodType.CALL,
-    callback: Callback<String>
-) : SocketOperation<String>(method, ILLEGAL_ID, String::class.java, callback) {
+    callback: Callback<Boolean>
+) : SocketOperation<Boolean>(method, ILLEGAL_ID, Boolean::class.java, callback) {
 
     override fun createParameters(): JsonElement =
         JsonArray().apply {
@@ -42,8 +43,8 @@ class TransactionSocketOperation(
         return transactionJson
     }
 
-    override fun fromJson(json: String): String? {
-        return json
+    override fun fromJson(json: String): Boolean? {
+        return json.toJsonObject()?.has("result") ?: false
     }
 
 }

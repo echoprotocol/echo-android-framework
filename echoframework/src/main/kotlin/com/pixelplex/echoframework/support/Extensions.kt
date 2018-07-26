@@ -5,9 +5,6 @@ package com.pixelplex.echoframework.support
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.pixelplex.echoframework.TIME_DATE_FORMAT
-import com.pixelplex.echoframework.model.Account
-import com.pixelplex.echoframework.model.Authority
-import com.pixelplex.echoframework.model.AuthorityType
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -58,27 +55,10 @@ fun String.parse(
 /**
  * Converts receiver string to json object with google json parser
  */
-fun String.toJsonObject(): JsonObject =
-    JsonParser().parse(this).asJsonObject
-
-/**
- * Check account equals by [key] from role [authorityType]
- *
- * @param key Public key from role
- * @param authorityType Role for equals operation
- */
-fun Account.isEqualsByKey(key: String, authorityType: AuthorityType): Boolean =
-    when (authorityType) {
-        AuthorityType.OWNER -> isKeyExist(key, owner)
-        AuthorityType.ACTIVE -> isKeyExist(key, active)
-        AuthorityType.KEY -> {
-            options.memoKey?.address == key
-        }
+fun String.toJsonObject(): JsonObject? =
+    try {
+        JsonParser().parse(this).asJsonObject
+    } catch (e: Exception) {
+        null
     }
 
-private fun isKeyExist(address: String, authority: Authority): Boolean {
-    val foundKey = authority.keyAuthorities.keys.find { pubKey ->
-        pubKey.address == address
-    }
-    return foundKey != null
-}
