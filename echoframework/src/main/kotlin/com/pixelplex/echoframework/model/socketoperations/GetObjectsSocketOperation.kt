@@ -1,7 +1,10 @@
 package com.pixelplex.echoframework.model.socketoperations
 
+import com.google.gson.GsonBuilder
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
+import com.google.gson.JsonParser
+import com.google.gson.reflect.TypeToken
 import com.pixelplex.echoframework.Callback
 import com.pixelplex.echoframework.ILLEGAL_ID
 import com.pixelplex.echoframework.model.GrapheneObject
@@ -40,7 +43,23 @@ class GetObjectsSocketOperation(
             add(JsonArray().apply { add(identifiersJson) })
         }
 
-    override fun fromJson(json: String): List<GrapheneObject>? {
-        return null
+    override fun fromJson(json: String): List<GrapheneObject> {
+        val parser = JsonParser()
+        val jsonTree = parser.parse(json)
+
+        val result = jsonTree.asJsonObject.get(RESULT_KEY)?.asJsonObject
+                ?: return emptyList()
+
+        val gson = GsonBuilder().create()
+
+        return gson.fromJson<List<GrapheneObject>>(
+            result,
+            object : TypeToken<List<GrapheneObject>>() {}.type
+        )
     }
+
+    companion object {
+        private const val RESULT_KEY = "result"
+    }
+
 }
