@@ -13,13 +13,11 @@ import java.lang.reflect.Type
  *
  * @author Dmitriy Bushuev
  */
-class Authority : GrapheneSerializable {
-
-    var weightThreshold: Long = 1
-
-    var keyAuthorities: HashMap<PublicKey, Long> = hashMapOf()
-
+class Authority @JvmOverloads constructor(
+    var weightThreshold: Long = 1,
+    var keyAuthorities: HashMap<PublicKey, Long> = hashMapOf(),
     var accountAuthorities: HashMap<Account, Long> = hashMapOf()
+) : GrapheneSerializable {
 
     private val extensions: Extensions = Extensions()
 
@@ -34,17 +32,6 @@ class Authority : GrapheneSerializable {
      */
     val accountAuthList: List<Account>
         get() = accountAuthorities.keys.toList()
-
-    @JvmOverloads
-    constructor(
-        weightThreshold: Long = 1,
-        keyAuthorities: HashMap<PublicKey, Long> = hashMapOf(),
-        accountAuthorities: HashMap<Account, Long> = hashMapOf()
-    ) {
-        this.weightThreshold = weightThreshold
-        this.keyAuthorities = keyAuthorities
-        this.accountAuthorities = accountAuthorities
-    }
 
     override fun toBytes(): ByteArray {
         val authsSize = accountAuthorities.size + keyAuthorities.size

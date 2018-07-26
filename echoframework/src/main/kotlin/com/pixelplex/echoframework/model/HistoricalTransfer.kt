@@ -23,25 +23,25 @@ import java.util.*
  */
 data class HistoricalTransfer(
     val id: String,
-    @SerializedName("op")
+    @SerializedName(OPERATIONS_KEY)
     @Expose
     val operation: BaseOperation?,
     var timestamp: Date? = null
 ) {
 
-    @SerializedName("block_num")
+    @SerializedName(BLOCK_NUMBER_KEY)
     @Expose
     var blockNum: Long = -1
 
-    @SerializedName("trx_in_block")
+    @SerializedName(TRX_IN_BLOCK_KEY)
     @Expose
     var trxInBlock: Long = -1
 
-    @SerializedName("op_in_trx")
+    @SerializedName(OPERATIONS_IN_TRX_KEY)
     @Expose
     var opInTrx: Long = -1
 
-    @SerializedName("virtual_op")
+    @SerializedName(VIRTUAL_OPERATION_KEY)
     @Expose
     var virtualOp: Long = -1
 
