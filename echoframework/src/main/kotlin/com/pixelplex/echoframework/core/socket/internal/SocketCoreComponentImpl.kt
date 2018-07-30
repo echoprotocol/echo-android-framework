@@ -38,7 +38,7 @@ class SocketCoreComponentImpl(
     }
 
     override fun disconnect() {
-        socketMessenger.offAll()
+        socketMessenger.disconnect()
     }
 
     @Suppress("unchecked_cast")

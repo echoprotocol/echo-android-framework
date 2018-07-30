@@ -14,6 +14,11 @@ interface InitializerFacade {
      */
     fun connect(callback: Callback<Any>)
 
+    /**
+     * Disconnects socket
+     */
+    fun disconnect()
+
     companion object {
         /**
          * Blockchain api id for initializing another apis
