@@ -43,7 +43,12 @@ class InitializerFacadeImpl(
         this.connectingCallback = callback
 
         socketCoreComponent.on(initializeSocketListener)
-        socketCoreComponent.connect(url)
+
+        try {
+            socketCoreComponent.connect(url)
+        } catch (e: Exception) {
+            callback.onError(LocalException("Error occurred during connection by url = $url", e))
+        }
     }
 
     private fun connectBlockchainApis(apis: Set<Api>) {

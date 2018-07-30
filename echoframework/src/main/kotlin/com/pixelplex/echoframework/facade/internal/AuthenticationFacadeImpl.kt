@@ -9,17 +9,19 @@ import com.pixelplex.echoframework.facade.AuthenticationFacade
 import com.pixelplex.echoframework.model.*
 import com.pixelplex.echoframework.model.network.Network
 import com.pixelplex.echoframework.model.operations.AccountUpdateOperation
+import com.pixelplex.echoframework.model.operations.AccountUpdateOperationBuilder
 import com.pixelplex.echoframework.service.DatabaseApiService
 import com.pixelplex.echoframework.service.NetworkBroadcastApiService
 import com.pixelplex.echoframework.support.Result
-import com.pixelplex.echoframework.support.fold
-import com.pixelplex.echoframework.model.operations.AccountUpdateOperationBuilder
+import com.pixelplex.echoframework.support.error
+import com.pixelplex.echoframework.support.map
+import com.pixelplex.echoframework.support.value
 
 /**
  * Implementation of [AuthenticationFacade]
  *
  * <p>
- *     Delegates API call logic to [AccountHistoryApiService]
+ *     Delegates API call logic to connected services
  * </p>
  *
  * @author Dmitriy Bushuev
@@ -34,22 +36,24 @@ class AuthenticationFacadeImpl(
     override fun isOwnedBy(name: String, password: String, callback: Callback<Account>) {
         val result = databaseApiService.getFullAccounts(listOf(name), false)
 
-        result.fold({ accountsMap ->
-            val foundFullAccount = accountsMap[name]
-            val address = cryptoCoreComponent.getAddress(name, password, AuthorityType.OWNER)
+        result
+            .map { accountsMap -> accountsMap[name] }
+            .value { fullAccount ->
+                val address = cryptoCoreComponent.getAddress(name, password, AuthorityType.OWNER)
 
-            val account = foundFullAccount?.account
-            val isKeySame = account?.isEqualsByKey(address, AuthorityType.OWNER) ?: false
-            if (isKeySame) {
-                callback.onSuccess(account!!)
-                return
+                val account = fullAccount?.account
+                val isKeySame = account?.isEqualsByKey(address, AuthorityType.OWNER) ?: false
+                if (isKeySame) {
+                    callback.onSuccess(account!!)
+                    return
+                }
+
+                LOGGER.log("No account found owned by $name with specified password")
+                callback.onError(NotFoundException("Account not found."))
             }
-
-            LOGGER.log("No account found owned by $name with specified password")
-            callback.onError(NotFoundException("Account not found."))
-        }, { error ->
-            callback.onError(LocalException(error.message, error))
-        })
+            .error { error ->
+                callback.onError(LocalException(error.message, error))
+            }
     }
 
     override fun changePassword(
