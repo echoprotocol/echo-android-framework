@@ -88,23 +88,6 @@ class Account : GrapheneObject, GrapheneSerializable {
 
     override fun toString(): String = toJsonString() ?: ""
 
-    companion object {
-        const val PROXY_TO_SELF = "1.2.5"
-
-        const val KEY_MEMBERSHIP_EXPIRATION_DATE = "membership_expiration_date"
-        const val KEY_REGISTRAR = "registrar"
-        const val KEY_REFERRER = "referrer"
-        const val KEY_LIFETIME_REFERRER = "lifetime_referrer"
-        const val KEY_NETWORK_FEE_PERCENTAGE = "network_fee_percentage"
-        const val KEY_LIFETIME_REFERRER_FEE_PERCENTAGE = "lifetime_referrer_fee_percentage"
-        const val KEY_REFERRER_REWARD_PERCENTAGE = "referrer_rewards_percentage"
-        const val KEY_NAME = "name"
-        const val KEY_OWNER = "owner"
-        const val KEY_ACTIVE = "active"
-        const val KEY_OPTIONS = "options"
-        const val KEY_STATISTICS = "statistics"
-    }
-
     /**
      * Deserializer used to build a [Account] instance from the full JSON-formatted response obtained
      * by the 'get_objects' API call.
@@ -169,6 +152,23 @@ class Account : GrapheneObject, GrapheneSerializable {
             }
         }
 
+    }
+
+    companion object {
+        const val PROXY_TO_SELF = "1.2.5"
+
+        const val KEY_MEMBERSHIP_EXPIRATION_DATE = "membership_expiration_date"
+        const val KEY_REGISTRAR = "registrar"
+        const val KEY_REFERRER = "referrer"
+        const val KEY_LIFETIME_REFERRER = "lifetime_referrer"
+        const val KEY_NETWORK_FEE_PERCENTAGE = "network_fee_percentage"
+        const val KEY_LIFETIME_REFERRER_FEE_PERCENTAGE = "lifetime_referrer_fee_percentage"
+        const val KEY_REFERRER_REWARD_PERCENTAGE = "referrer_rewards_percentage"
+        const val KEY_NAME = "name"
+        const val KEY_OWNER = "owner"
+        const val KEY_ACTIVE = "active"
+        const val KEY_OPTIONS = "options"
+        const val KEY_STATISTICS = "statistics"
     }
 
 }
