@@ -32,11 +32,35 @@ class AccountCreateOperation
     active: Authority,
     options: AccountOptions,
     override var fee: AssetAmount = AssetAmount(UnsignedLong.valueOf(0), Asset("1.3.0"))
-) : BaseOperation(OperationType.ACCOUNT_UPDATE_OPERATION) {
+) : BaseOperation(OperationType.ACCOUNT_CREATE_OPERATION) {
 
     private var owner = Optional(owner)
     private var active = Optional(active)
     private var options = Optional(options)
+
+    /**
+     * Updates owner value
+     * @param owner New owner value
+     */
+    fun setOwner(owner: Authority) {
+        this.owner = Optional(owner)
+    }
+
+    /**
+     * Updates active value
+     * @param active New active value
+     */
+    fun setActive(active: Authority) {
+        this.active = Optional(active)
+    }
+
+    /**
+     * Updates options value
+     * @param options New options value
+     */
+    fun setAccountOptions(options: AccountOptions) {
+        this.options = Optional(options)
+    }
 
     override fun toJsonString(): String {
         val gson = Gson()
