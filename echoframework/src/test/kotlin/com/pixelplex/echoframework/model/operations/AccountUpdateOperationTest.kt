@@ -1,13 +1,10 @@
-package com.pixelplex.echoframework.model.socketoperations
+package com.pixelplex.echoframework.model.operations
 
 import com.google.common.primitives.UnsignedLong
 import com.google.gson.GsonBuilder
 import com.pixelplex.bitcoinj.ECKey
 import com.pixelplex.echoframework.model.*
 import com.pixelplex.echoframework.model.network.Testnet
-import com.pixelplex.echoframework.model.operations.AccountUpdateOperation
-import com.pixelplex.echoframework.model.operations.AccountUpdateOperationBuilder
-import com.pixelplex.echoframework.model.operations.OperationType
 import org.junit.Assert
 import org.junit.Assert.assertNotNull
 import org.junit.Test
