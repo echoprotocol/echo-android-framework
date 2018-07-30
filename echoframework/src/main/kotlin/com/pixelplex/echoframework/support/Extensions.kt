@@ -2,10 +2,10 @@
 
 package com.pixelplex.echoframework.support
 
+import com.google.common.primitives.UnsignedLong
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.pixelplex.echoframework.TIME_DATE_FORMAT
-import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -64,3 +64,7 @@ fun String.toJsonObject(): JsonObject? =
         null
     }
 
+/**
+ * Converts signed long value into unsigned
+ */
+fun Long.toUnsignedLong() = UnsignedLong.valueOf(this)
