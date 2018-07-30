@@ -33,29 +33,32 @@ class InformationFacadeImpl(
     override fun getAccount(nameOrId: String, callback: Callback<Account>) {
         val result = databaseApiService.getFullAccounts(listOf(nameOrId), false)
 
-        result.fold({ accountMap ->
-            val requiredAccount = accountMap[nameOrId]
+        result
+            .value { accountMap ->
+                val requiredAccount = accountMap[nameOrId]
 
-            requiredAccount?.account?.let { account ->
-                callback.onSuccess(account)
-            } ?: callback.onError(NotFoundException("Account not found."))
-        }, { error ->
-            callback.onError(LocalException(error.message, error))
-        })
+                requiredAccount?.account?.let { account ->
+                    callback.onSuccess(account)
+                } ?: callback.onError(NotFoundException("Account not found."))
+            }
+            .error { error ->
+                callback.onError(LocalException(error.message, error))
+            }
     }
 
     override fun checkAccountReserved(nameOrId: String, callback: Callback<Boolean>) {
         val result = databaseApiService.getFullAccounts(listOf(nameOrId), false)
 
-        result.fold({ accountMap ->
-            val requiredAccount = accountMap[nameOrId]
-
-            requiredAccount?.let {
-                callback.onSuccess(true)
-            } ?: callback.onSuccess(false)
-        }, { error ->
-            callback.onError(LocalException(error.message, error))
-        })
+        result
+            .map { accountMap -> accountMap[nameOrId] }
+            .value { requiredAccount ->
+                requiredAccount?.let {
+                    callback.onSuccess(true)
+                } ?: callback.onSuccess(false)
+            }
+            .error { error ->
+                callback.onError(LocalException(error.message, error))
+            }
     }
 
     override fun getBalance(nameOrId: String, asset: String, callback: Callback<Balance>) {
@@ -69,7 +72,10 @@ class InformationFacadeImpl(
                         callback.onSuccess(balance)
                     }
                     .error { balanceError ->
-                        LOGGER.log("Unable to find account balances for required asset = $asset", balanceError)
+                        LOGGER.log(
+                            "Unable to find account balances for required asset = $asset",
+                            balanceError
+                        )
                         callback.onError(balanceError)
                     }
             }

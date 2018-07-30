@@ -137,25 +137,6 @@ class SocketCoreComponentTest {
         socketMock.emit("notInt")
     }
 
-    @Test
-    fun operationErrorTestTest() {
-//        socketCore = SocketCoreComponentImpl(socketMock, mapperMock)
-//        socketCore.connect("testurl")
-//
-//        var failed = false
-//        socketCore.emit(OperationErrorMock(1, object : Callback<String> {
-//            override fun onError(error: LocalException) {
-//                failed = true
-//            }
-//
-//            override fun onSuccess(result: String) {
-//            }
-//
-//        }))
-//
-//        assertTrue(failed)
-    }
-
     private class OperationMock(override val apiId: Int, callback: Callback<String>) :
         SocketOperation<String>(SocketMethodType.CALL, 1, String::class.java, callback) {
 
