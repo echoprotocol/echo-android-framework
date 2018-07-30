@@ -90,15 +90,13 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
                 )
     }
 
-    override fun start(callback: Callback<Any>) {
+    override fun start(callback: Callback<Any>) =
         dispatch(Runnable { initializerFacade.connect(callback.wrapOriginal()) })
-    }
 
-    override fun stop() {
+    override fun stop() =
         dispatch(Runnable { initializerFacade.disconnect() })
-    }
 
-    override fun isOwnedBy(name: String, password: String, callback: Callback<Account>) {
+    override fun isOwnedBy(name: String, password: String, callback: Callback<Account>) =
         dispatch(Runnable {
             authenticationFacade.isOwnedBy(
                 name,
@@ -106,23 +104,22 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
                 callback.wrapOriginal()
             )
         })
-    }
+
 
     override fun changePassword(
         name: String,
         oldPassword: String,
         newPassword: String,
         callback: Callback<Any>
-    ) {
-        dispatch(Runnable {
-            authenticationFacade.changePassword(
-                name,
-                oldPassword,
-                newPassword,
-                callback.wrapOriginal()
-            )
-        })
-    }
+    ) = dispatch(Runnable {
+        authenticationFacade.changePassword(
+            name,
+            oldPassword,
+            newPassword,
+            callback.wrapOriginal()
+        )
+    })
+
 
     override fun getFeeForTransferOperation(
         fromNameOrId: String,
@@ -130,42 +127,40 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         amount: String,
         asset: String,
         callback: Callback<String>
-    ) {
-        dispatch(Runnable {
-            feeFacade.getFeeForTransferOperation(
-                fromNameOrId,
-                toNameOrId,
-                amount,
-                asset,
-                callback.wrapOriginal()
-            )
-        })
-    }
+    ) = dispatch(Runnable {
+        feeFacade.getFeeForTransferOperation(
+            fromNameOrId,
+            toNameOrId,
+            amount,
+            asset,
+            callback.wrapOriginal()
+        )
+    })
 
-    override fun getAccount(nameOrId: String, callback: Callback<Account>) {
-        val threadKeepCallback = callback.wrapOriginal()
-        dispatch(Runnable {
-            informationFacade.getAccount(nameOrId, threadKeepCallback)
-        })
-    }
 
-    override fun checkAccountReserved(nameOrId: String, callback: Callback<Boolean>) {
+    override fun getAccount(nameOrId: String, callback: Callback<Account>) =
+        dispatch(Runnable {
+            informationFacade.getAccount(nameOrId, callback.wrapOriginal())
+        })
+
+
+    override fun checkAccountReserved(nameOrId: String, callback: Callback<Boolean>) =
         dispatch(Runnable {
             informationFacade.checkAccountReserved(nameOrId, callback.wrapOriginal())
         })
-    }
 
-    override fun getBalance(nameOrId: String, asset: String, callback: Callback<Balance>) {
+
+    override fun getBalance(nameOrId: String, asset: String, callback: Callback<Balance>) =
         dispatch(Runnable {
             informationFacade.getBalance(nameOrId, asset, callback.wrapOriginal())
         })
-    }
 
-    override fun subscribeOnAccount(nameOrId: String, listener: AccountListener) {
+
+    override fun subscribeOnAccount(nameOrId: String, listener: AccountListener) =
         dispatch(Runnable {
             subscriptionFacade.subscribeOnAccount(nameOrId, listener.wrapOriginal())
         })
-    }
+
 
     override fun unsubscribeFromAccount(nameOrId: String, callback: Callback<Boolean>) =
         dispatch(Runnable {
@@ -184,18 +179,17 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         amount: String,
         asset: String,
         callback: Callback<Boolean>
-    ) {
-        dispatch(Runnable {
-            transactionsFacade.sendTransferOperation(
-                nameOrId,
-                password,
-                toNameOrId,
-                amount,
-                asset,
-                callback.wrapOriginal()
-            )
-        })
-    }
+    ) = dispatch(Runnable {
+        transactionsFacade.sendTransferOperation(
+            nameOrId,
+            password,
+            toNameOrId,
+            amount,
+            asset,
+            callback.wrapOriginal()
+        )
+    })
+
 
     override fun getAccountHistory(
         nameOrId: String,
@@ -204,18 +198,17 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         limit: Int,
         asset: String,
         callback: Callback<HistoryResponse>
-    ) {
-        dispatch(Runnable {
-            informationFacade.getAccountHistory(
-                nameOrId,
-                transactionStartId,
-                transactionStopId,
-                limit,
-                asset,
-                callback.wrapOriginal()
-            )
-        })
-    }
+    ) = dispatch(Runnable {
+        informationFacade.getAccountHistory(
+            nameOrId,
+            transactionStartId,
+            transactionStopId,
+            limit,
+            asset,
+            callback.wrapOriginal()
+        )
+    })
+
 
     private fun <T> Callback<T>.wrapOriginal(): Callback<T> {
         if (!returnOnMainThread) {
