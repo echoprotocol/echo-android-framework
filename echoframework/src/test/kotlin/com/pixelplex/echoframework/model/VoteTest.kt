@@ -1,6 +1,6 @@
 package com.pixelplex.echoframework.model
 
-import org.junit.Assert
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 /**
@@ -16,7 +16,7 @@ class VoteTest {
 
         val vote = Vote(voteParam)
 
-        Assert.assertEquals(voteParam, vote.toString())
+        assertEquals(voteParam, vote.toString())
     }
 
 }

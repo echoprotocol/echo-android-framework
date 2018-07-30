@@ -43,6 +43,23 @@ class EchoFrameworkTest {
     }
 
     @Test
+    fun connectFailedTest() {
+        val framework = EchoFramework.create(
+            Settings.Configurator()
+                .setUrl("wrongUrl")
+                .setReturnOnMainThread(false)
+                .setApis(
+                    Api.DATABASE,
+                    Api.NETWORK_BROADCAST,
+                    Api.ACCOUNT_HISTORY
+                )
+                .configure()
+        )
+
+        assertFalse(connect(framework) ?: false)
+    }
+
+    @Test
     fun isOwnedByTest() {
         val framework = initFramework()
 
@@ -66,8 +83,7 @@ class EchoFrameworkTest {
         val account = futureLogin.get()
         assertTrue(account != null)
 
-        val futureLoginFailure =
-            FutureTask<Account>()
+        val futureLoginFailure = FutureTask<Account>()
 
         framework.isOwnedBy("dimaty123", "WrongPassword",
             object : Callback<Account> {

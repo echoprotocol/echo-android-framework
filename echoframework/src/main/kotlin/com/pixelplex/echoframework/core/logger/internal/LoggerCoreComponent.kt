@@ -9,7 +9,7 @@ import com.pixelplex.echoframework.core.logger.Logger
  */
 object LoggerCoreComponent {
 
-    var logLevel: LogLevel = LogLevel.INFO
+    internal var logLevel: LogLevel = LogLevel.INFO
 
     /**
      * Creates logger [Logger] with specified [LogLevel]
