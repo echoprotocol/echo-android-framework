@@ -5,7 +5,7 @@ import android.os.Looper
 import java.util.concurrent.Executor
 
 /**
- * Executes runnable jobs on thread, originally created this executor
+ * Executes runnable jobs on main application (UI) thread
  *
  * @author Dmitriy Bushuev
  */

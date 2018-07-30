@@ -95,7 +95,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
     }
 
     override fun stop() {
-
+        dispatch(Runnable { initializerFacade.disconnect() })
     }
 
     override fun isOwnedBy(name: String, password: String, callback: Callback<Account>) {

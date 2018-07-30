@@ -51,6 +51,10 @@ class InitializerFacadeImpl(
         }
     }
 
+    override fun disconnect() {
+        socketCoreComponent.disconnect()
+    }
+
     private fun connectBlockchainApis(apis: Set<Api>) {
         if (apis.isEmpty()) {
             handleCallbackError(SocketException("Cannot find blockchain api for connection")) //?
