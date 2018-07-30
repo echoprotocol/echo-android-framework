@@ -26,7 +26,7 @@ class FutureTest {
         val future = FutureTask<Boolean>()
 
         thread {
-            Thread.sleep(3000)
+            Thread.sleep(100)
             future.setComplete(true)
         }
 
@@ -38,7 +38,7 @@ class FutureTest {
 
         })
 
-        assertTrue(semaphore.tryAcquire(3500, TimeUnit.MILLISECONDS))
+        assertTrue(semaphore.tryAcquire(200, TimeUnit.MILLISECONDS))
     }
 
     @Test
@@ -48,7 +48,7 @@ class FutureTest {
         val future = FutureTask<Boolean>()
 
         thread {
-            Thread.sleep(3000)
+            Thread.sleep(100)
             future.setComplete(true)
         }
 
@@ -63,7 +63,7 @@ class FutureTest {
 
         })
 
-        assertTrue(semaphore.tryAcquire(3500, TimeUnit.MILLISECONDS))
+        assertTrue(semaphore.tryAcquire(200, TimeUnit.MILLISECONDS))
     }
 
     @Test(expected = ExecutionException::class)
@@ -71,7 +71,7 @@ class FutureTest {
         val future = FutureTask<Boolean>()
 
         thread {
-            Thread.sleep(3000)
+            Thread.sleep(100)
             future.cancel()
         }
 
@@ -84,7 +84,7 @@ class FutureTest {
         val future = FutureTask<Int>()
 
         thread {
-            Thread.sleep(3000)
+            Thread.sleep(100)
             future.setComplete(result)
         }
 
@@ -96,11 +96,11 @@ class FutureTest {
         val future = FutureTask<Int>()
 
         thread {
-            Thread.sleep(3000)
+            Thread.sleep(100)
             future.setComplete(1)
         }
 
-        future.get(2000, TimeUnit.MILLISECONDS)
+        future.get(50, TimeUnit.MILLISECONDS)
     }
 
     @Test
@@ -109,7 +109,7 @@ class FutureTest {
         val future = FutureTask<Int>()
 
         thread {
-            Thread.sleep(3000)
+            Thread.sleep(100)
             future.setComplete(result)
         }
 
@@ -125,7 +125,7 @@ class FutureTest {
         val future = FutureTask<Int>()
 
         thread {
-            Thread.sleep(3000)
+            Thread.sleep(100)
             future.setComplete(IllegalStateException())
         }
 
