@@ -66,7 +66,7 @@ class FullAccountsSocketOperationTest {
 
     companion object {
         private var RESULT = """{
-                                            |"id":5,
+                                            |"id":3,
                                             |"jsonrpc":"2.0",
                                             |"result":
                                             |[

@@ -60,7 +60,7 @@ class BlockDataSocketOperationTest {
     }
 
     companion object {
-        private var RESULT = """{"id":6,
+        private var RESULT = """{"id":3,
                                         |"jsonrpc":"2.0",
                                         |"result":
                                             |{"id":"2.1.0",
