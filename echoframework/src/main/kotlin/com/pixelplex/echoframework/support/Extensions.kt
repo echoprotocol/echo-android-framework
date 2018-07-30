@@ -42,13 +42,15 @@ fun String.parse(
     format: String = TIME_DATE_FORMAT,
     timeZone: TimeZone = TimeZone.getTimeZone("UTC"),
     locale: Locale = Locale.getDefault(),
-    default: Date? = null
+    default: Date? = null,
+    catch: (e: Exception) -> Unit = {}
 ): Date? = try {
     val dateFormat = SimpleDateFormat(format, locale).apply {
         this.timeZone = timeZone
     }
     dateFormat.parse(this)
-} catch (e: ParseException) {
+} catch (e: Exception) {
+    catch(e)
     default
 }
 

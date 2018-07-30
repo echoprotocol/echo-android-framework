@@ -1,12 +1,9 @@
-package com.pixelplex.echoframework.model.socketoperations
+package com.pixelplex.echoframework.model.operations
 
 import com.google.common.primitives.UnsignedLong
 import com.google.gson.GsonBuilder
 import com.pixelplex.echoframework.model.*
 import com.pixelplex.echoframework.model.network.Testnet
-import com.pixelplex.echoframework.model.operations.OperationType
-import com.pixelplex.echoframework.model.operations.TransferOperation
-import com.pixelplex.echoframework.model.operations.TransferOperationBuilder
 import org.junit.Assert
 import org.junit.Assert.assertTrue
 import org.junit.Test

@@ -6,11 +6,10 @@ import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import com.pixelplex.echoframework.TIME_DATE_FORMAT
+import com.pixelplex.echoframework.core.logger.internal.LoggerCoreComponent
+import com.pixelplex.echoframework.support.parse
 import java.io.Serializable
 import java.lang.reflect.Type
-import java.text.ParseException
-import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -76,24 +75,25 @@ class DynamicGlobalProperties(
                 DynamicGlobalProperties::class.java
             )
 
-            val dateFormat = SimpleDateFormat(TIME_DATE_FORMAT, Locale.getDefault())
-            dateFormat.timeZone = TimeZone.getTimeZone("UTC")
-            dynamicGlobalProperties.date = try {
-                dateFormat.parse(jsonObject.get(DynamicGlobalProperties.KEY_TIME).asString)
-            } catch (e: ParseException) {
-                println("ParseException. Msg: " + e.message)
-                null
-            }
+            dynamicGlobalProperties.date = jsonObject.get(DynamicGlobalProperties.KEY_TIME)
+                .asString.parse(catch = { LOGGER.log("Error during parsing DGP date", it) })
 
-            dynamicGlobalProperties.nextMaintenanceDate = try {
-                dateFormat.parse(jsonObject.get(DynamicGlobalProperties.KEY_NEXT_MAINTENANCE_TIME).asString)
-            } catch (e: ParseException) {
-                println("ParseException. Msg: " + e.message)
-                null
-            }
+            dynamicGlobalProperties.nextMaintenanceDate =
+                    jsonObject.get(DynamicGlobalProperties.KEY_NEXT_MAINTENANCE_TIME)
+                        .asString.parse {
+                        LOGGER.log(
+                            "Error during parsing DGP next maintenance date", it
+                        )
+                    }
+
 
             return dynamicGlobalProperties
         }
+
+        companion object {
+            private val LOGGER = LoggerCoreComponent.create(Deserializer::class.java.name)
+        }
+
     }
 
 }

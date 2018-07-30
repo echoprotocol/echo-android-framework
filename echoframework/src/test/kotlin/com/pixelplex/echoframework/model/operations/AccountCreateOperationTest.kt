@@ -1,4 +1,4 @@
-package com.pixelplex.echoframework.model.socketoperations
+package com.pixelplex.echoframework.model.operations
 
 import com.google.common.primitives.UnsignedLong
 import com.pixelplex.bitcoinj.ECKey
@@ -6,10 +6,8 @@ import com.pixelplex.echoframework.model.AccountOptions
 import com.pixelplex.echoframework.model.AssetAmount
 import com.pixelplex.echoframework.model.Authority
 import com.pixelplex.echoframework.model.PublicKey
-import com.pixelplex.echoframework.model.operations.AccountCreateOperation
-import com.pixelplex.echoframework.model.operations.AccountCreateOperationBuilder
-import com.pixelplex.echoframework.model.operations.OperationType
 import org.junit.Assert
+import org.junit.Assert.assertNotNull
 import org.junit.Test
 
 /**
@@ -23,7 +21,7 @@ class AccountCreateOperationTest {
     fun bytesSerializationTest() {
         val operation = buildOperation()
 
-        Assert.assertNotNull(operation.toBytes())
+        assertNotNull(operation.toBytes())
     }
 
     @Test
@@ -36,14 +34,14 @@ class AccountCreateOperationTest {
 
         val transferObject = json[1].asJsonObject
 
-        Assert.assertNotNull(transferObject.get(AccountCreateOperation.KEY_FEE))
-        Assert.assertNotNull(transferObject.get(AccountCreateOperation.KEY_REGISTRAR))
-        Assert.assertNotNull(transferObject.get(AccountCreateOperation.KEY_REFERRER))
-        Assert.assertNotNull(transferObject.get(AccountCreateOperation.KEY_REFERRER_PERCENT))
-        Assert.assertNotNull(transferObject.get(AccountCreateOperation.KEY_ACTIVE))
-        Assert.assertNotNull(transferObject.get(AccountCreateOperation.KEY_OWNER))
-        Assert.assertNotNull(transferObject.get(AccountCreateOperation.KEY_OPTIONS))
-        Assert.assertNotNull(transferObject.get(AccountCreateOperation.KEY_EXTENSIONS))
+        assertNotNull(transferObject.get(AccountCreateOperation.KEY_FEE))
+        assertNotNull(transferObject.get(AccountCreateOperation.KEY_REGISTRAR))
+        assertNotNull(transferObject.get(AccountCreateOperation.KEY_REFERRER))
+        assertNotNull(transferObject.get(AccountCreateOperation.KEY_REFERRER_PERCENT))
+        assertNotNull(transferObject.get(AccountCreateOperation.KEY_ACTIVE))
+        assertNotNull(transferObject.get(AccountCreateOperation.KEY_OWNER))
+        assertNotNull(transferObject.get(AccountCreateOperation.KEY_OPTIONS))
+        assertNotNull(transferObject.get(AccountCreateOperation.KEY_EXTENSIONS))
     }
 
     @Test
