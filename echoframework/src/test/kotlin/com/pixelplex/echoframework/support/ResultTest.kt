@@ -31,4 +31,22 @@ class ResultTest {
 
     }
 
+    @Test
+    fun map() {
+        val success = "success".toValue()
+
+        val v1 = success.map { it.count() }
+
+        assertEquals((v1 as Result.Value<Int>).value, 7)
+    }
+
+    @Test
+    fun flatMap() {
+        val success = "success".toValue()
+
+        val v1 = success.flatMap { it.last().toValue() }
+
+        assertEquals((v1 as Result.Value<Char>).value, 's')
+    }
+
 }

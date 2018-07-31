@@ -22,12 +22,12 @@ sealed class Result<out E : Exception, out V> {
 /**
  * Converts [Result] to [Result.Value]
  */
-fun <V> toValue(value: V): Result<Nothing, V> = Result.Value(value)
+fun <V> V.toValue(): Result<Nothing, V> = Result.Value(this)
 
 /**
  * Converts [Result] to [Result.Error]
  */
-fun <E : Exception> toError(value: E): Result<E, Nothing> = Result.Error(value)
+fun <E : Exception> E.toError(): Result<E, Nothing> = Result.Error(this)
 
 /**
  * Maps value to another type of value by function
