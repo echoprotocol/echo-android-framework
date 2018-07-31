@@ -10,12 +10,13 @@ stages:
   artifacts:
     expire_in: 4 hours
     paths:
-    - app/echoframework/build/outputs/aar
+    - echoframework/build/outputs
 
 build_debug:
   <<: *build_template_def
   only:
     - develop
+    - feature/gitlab_configuration
 
   script:
     - gradlew assembleDebug
