@@ -214,10 +214,9 @@ class DatabaseApiServiceImpl(
             synchronized(this) {
                 if (!subscriptionManager.registered(nameOrId)) {
                     getAccountId(nameOrId)
-                        .value { id ->
-                            val removed = subscriptionManager.removeListeners(id)
-
-                            if (removed != null) {
+                        .map { id -> subscriptionManager.removeListeners(id) }
+                        .value { existedListeners ->
+                            if (existedListeners != null) {
                                 callback.onSuccess(true)
                             } else {
                                 LOGGER.log("No listeners found for this account")

@@ -105,7 +105,6 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             )
         })
 
-
     override fun changePassword(
         name: String,
         oldPassword: String,
@@ -119,7 +118,6 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             callback.wrapOriginal()
         )
     })
-
 
     override fun getFeeForTransferOperation(
         fromNameOrId: String,
@@ -137,30 +135,25 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         )
     })
 
-
     override fun getAccount(nameOrId: String, callback: Callback<Account>) =
         dispatch(Runnable {
             informationFacade.getAccount(nameOrId, callback.wrapOriginal())
         })
-
 
     override fun checkAccountReserved(nameOrId: String, callback: Callback<Boolean>) =
         dispatch(Runnable {
             informationFacade.checkAccountReserved(nameOrId, callback.wrapOriginal())
         })
 
-
     override fun getBalance(nameOrId: String, asset: String, callback: Callback<Balance>) =
         dispatch(Runnable {
             informationFacade.getBalance(nameOrId, asset, callback.wrapOriginal())
         })
 
-
     override fun subscribeOnAccount(nameOrId: String, listener: AccountListener) =
         dispatch(Runnable {
             subscriptionFacade.subscribeOnAccount(nameOrId, listener.wrapOriginal())
         })
-
 
     override fun unsubscribeFromAccount(nameOrId: String, callback: Callback<Boolean>) =
         dispatch(Runnable {
@@ -190,7 +183,6 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         )
     })
 
-
     override fun getAccountHistory(
         nameOrId: String,
         transactionStartId: String,
@@ -209,20 +201,19 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         )
     })
 
-
-    private fun <T> Callback<T>.wrapOriginal(): Callback<T> {
+    private fun <T> Callback<T>.wrapOriginal(): Callback<T> =
         if (!returnOnMainThread) {
-            return this
+            this
+        } else {
+            MainThreadCallback(this)
         }
-        return MainThreadCallback(this)
-    }
 
-    private fun AccountListener.wrapOriginal(): AccountListener {
+    private fun AccountListener.wrapOriginal(): AccountListener =
         if (!returnOnMainThread) {
-            return this
+            this
+        } else {
+            MainThreadAccountListener(this)
         }
-        return MainThreadAccountListener(this)
-    }
 
     private fun dispatch(job: Runnable) = dispatcher.dispatch(job)
 
