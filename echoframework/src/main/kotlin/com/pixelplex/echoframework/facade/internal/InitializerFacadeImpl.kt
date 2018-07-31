@@ -102,13 +102,9 @@ class InitializerFacadeImpl(
 
         val apisLeft = apisCount.decrementAndGet()
         if (apisLeft == 0) {
-            synchronized(this) {
-                if (apisLeft == 0) {
-                    connectingCallback?.onSuccess(Any())
-                    connectingCallback = null
-                    socketCoreComponent.off(initializeSocketListener)
-                }
-            }
+            connectingCallback?.onSuccess(Any())
+            connectingCallback = null
+            socketCoreComponent.off(initializeSocketListener)
         }
     }
 

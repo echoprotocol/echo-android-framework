@@ -30,44 +30,32 @@ class InformationFacadeImpl(
 ) :
     InformationFacade {
 
-    override fun getAccount(nameOrId: String, callback: Callback<Account>) {
-        val result = databaseApiService.getFullAccounts(listOf(nameOrId), false)
-
-        result
-            .value { accountMap ->
-                val requiredAccount = accountMap[nameOrId]
-
-                requiredAccount?.account?.let { account ->
-                    callback.onSuccess(account)
+    override fun getAccount(nameOrId: String, callback: Callback<Account>) =
+        findAccount(nameOrId,
+            { fullAccount ->
+                fullAccount?.account?.let { notNullAccount ->
+                    callback.onSuccess(notNullAccount)
                 } ?: callback.onError(NotFoundException("Account not found."))
-            }
-            .error { error ->
+            },
+            { error ->
                 callback.onError(LocalException(error.message, error))
-            }
-    }
+            })
 
-    override fun checkAccountReserved(nameOrId: String, callback: Callback<Boolean>) {
-        val result = databaseApiService.getFullAccounts(listOf(nameOrId), false)
-
-        result
-            .map { accountMap -> accountMap[nameOrId] }
-            .value { requiredAccount ->
-                requiredAccount?.let {
+    override fun checkAccountReserved(nameOrId: String, callback: Callback<Boolean>) =
+        findAccount(nameOrId,
+            { fullAccount ->
+                fullAccount?.let {
                     callback.onSuccess(true)
                 } ?: callback.onSuccess(false)
-            }
-            .error { error ->
+            },
+            { error ->
                 callback.onError(LocalException(error.message, error))
-            }
-    }
+            })
 
-    override fun getBalance(nameOrId: String, asset: String, callback: Callback<Balance>) {
-        val result = databaseApiService.getFullAccounts(listOf(nameOrId), false)
-
-        result
-            .map { accountsMap -> accountsMap[nameOrId] }
-            .value { requiredAccount ->
-                findBalance(requiredAccount, asset)
+    override fun getBalance(nameOrId: String, asset: String, callback: Callback<Balance>) =
+        findAccount(nameOrId,
+            { fullAccount ->
+                findBalance(fullAccount, asset)
                     .value { balance ->
                         callback.onSuccess(balance)
                     }
@@ -78,30 +66,45 @@ class InformationFacadeImpl(
                         )
                         callback.onError(balanceError)
                     }
+            },
+            { error ->
+                callback.onError(LocalException(error.message, error))
+            })
+
+    private fun findAccount(
+        nameOrId: String,
+        success: (FullAccount?) -> Unit,
+        failure: (Exception) -> Unit
+    ) {
+        val result = databaseApiService.getFullAccounts(listOf(nameOrId), false)
+
+        result
+            .map { accountMap -> accountMap[nameOrId] }
+            .value { account ->
+                success(account)
             }
             .error { error ->
-                callback.onError(LocalException(error.message, error))
+                failure(error)
             }
     }
 
     private fun findBalance(
         account: FullAccount?,
         asset: String
-    ): Result<LocalException, Balance> =
-        account?.let { notNullAccount ->
-            val accountBalances = notNullAccount.balances
-            if (accountBalances?.isEmpty() == false) {
-                accountBalances.firstOrNull { balance -> balance.assetType == asset }
-                    ?.let { balance ->
-                        Value(balance)
-                    }
-                        ?: Error(
-                            NotFoundException("Account balance with asset type = $asset is not found")
-                        )
-            } else {
-                Error(LocalException("Account balances are empty."))
-            }
-        } ?: Error(NotFoundException("Account not found."))
+    ): Result<LocalException, Balance> = account?.let { notNullAccount ->
+        val accountBalances = notNullAccount.balances
+        if (accountBalances?.isEmpty() == false) {
+            accountBalances.firstOrNull { balance -> balance.assetType == asset }
+                ?.let { balance ->
+                    Value(balance)
+                }
+                    ?: Error(
+                        NotFoundException("Account balance with asset type = $asset is not found")
+                    )
+        } else {
+            Error(LocalException("Account balances are empty."))
+        }
+    } ?: Error(NotFoundException("Account not found."))
 
     override fun getAccountHistory(
         nameOrId: String,

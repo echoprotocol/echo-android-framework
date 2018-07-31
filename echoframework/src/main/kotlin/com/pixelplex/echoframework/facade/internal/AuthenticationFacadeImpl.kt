@@ -12,7 +12,7 @@ import com.pixelplex.echoframework.model.operations.AccountUpdateOperation
 import com.pixelplex.echoframework.model.operations.AccountUpdateOperationBuilder
 import com.pixelplex.echoframework.service.DatabaseApiService
 import com.pixelplex.echoframework.service.NetworkBroadcastApiService
-import com.pixelplex.echoframework.support.Result
+import com.pixelplex.echoframework.support.dematerialize
 import com.pixelplex.echoframework.support.error
 import com.pixelplex.echoframework.support.map
 import com.pixelplex.echoframework.support.value
@@ -38,10 +38,10 @@ class AuthenticationFacadeImpl(
 
         result
             .map { accountsMap -> accountsMap[name] }
-            .value { fullAccount ->
+            .map { fullAccount -> fullAccount?.account }
+            .value { account ->
                 val address = cryptoCoreComponent.getAddress(name, password, AuthorityType.OWNER)
 
-                val account = fullAccount?.account
                 val isKeySame = account?.isEqualsByKey(address, AuthorityType.OWNER) ?: false
                 if (isKeySame) {
                     callback.onSuccess(account!!)
@@ -49,7 +49,7 @@ class AuthenticationFacadeImpl(
                 }
 
                 LOGGER.log("No account found owned by $name with specified password")
-                callback.onError(NotFoundException("Account not found."))
+                callback.onError(NotFoundException("No account found owned by $name with specified password"))
             }
             .error { error ->
                 callback.onError(LocalException(error.message, error))
@@ -79,32 +79,28 @@ class AuthenticationFacadeImpl(
 
             val transactionResult =
                 networkBroadcastApiService.broadcastTransactionWithCallback(transaction)
-            if (transactionResult is Result.Value) {
-                return callback.onSuccess(Any())
-            } else {
-                throw (transactionResult as Result.Error).error
-            }
+
+            callback.onSuccess(transactionResult.dematerialize())
         } catch (ex: LocalException) {
-            return callback.onError(ex)
+            callback.onError(ex)
         } catch (ex: Exception) {
-            return callback.onError(LocalException(ex.message, ex))
+            callback.onError(LocalException(ex.message, ex))
         }
     }
 
     private fun getAccountId(name: String, password: String): String {
         val accountsResult = databaseApiService.getFullAccounts(listOf(name), false)
 
-        val accountsMap = if (accountsResult is Result.Value) {
-            accountsResult.value
-        } else {
-            throw (accountsResult as Result.Error).error
-        }
-        val foundFullAccount = accountsMap[name]
         val ownerAddress =
             cryptoCoreComponent.getAddress(name, password, AuthorityType.OWNER)
 
-        val account = foundFullAccount?.account
+        val account = accountsResult
+            .map { accountsMap -> accountsMap[name] }
+            .map { fullAccount -> fullAccount?.account }
+            .dematerialize()
+
         val isKeySame = account?.isEqualsByKey(ownerAddress, AuthorityType.OWNER) ?: false
+
         return if (isKeySame) {
             account!!.getObjectId()
         } else {
@@ -112,24 +108,10 @@ class AuthenticationFacadeImpl(
         }
     }
 
-    private fun getChainId(): String {
-        val chainIdResult = databaseApiService.getChainId()
-        return if (chainIdResult is Result.Value) {
-            chainIdResult.value
-        } else {
-            throw (chainIdResult as Result.Error).error
-        }
-    }
+    private fun getChainId(): String = databaseApiService.getChainId().dematerialize()
 
-    private fun getFees(operations: List<BaseOperation>): List<AssetAmount> {
-        val feesResult =
-            databaseApiService.getRequiredFees(operations, Asset("1.3.0"))
-        return if (feesResult is Result.Value) {
-            feesResult.value
-        } else {
-            throw (feesResult as Result.Error).error
-        }
-    }
+    private fun getFees(operations: List<BaseOperation>): List<AssetAmount> =
+        databaseApiService.getRequiredFees(operations, Asset("1.3.0")).dematerialize()
 
     private fun buildAccountUpdateOperation(
         id: String,
