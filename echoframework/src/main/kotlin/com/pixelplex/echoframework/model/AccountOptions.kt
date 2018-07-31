@@ -2,6 +2,7 @@ package com.pixelplex.echoframework.model
 
 import com.google.gson.*
 import com.pixelplex.bitcoinj.revert
+import com.pixelplex.echoframework.core.logger.internal.LoggerCoreComponent
 import com.pixelplex.echoframework.exception.MalformedAddressException
 import com.pixelplex.echoframework.model.network.Network
 import java.lang.reflect.Type
@@ -68,7 +69,6 @@ class AccountOptions : GrapheneSerializable {
             byteArrayOf(0.toByte())
         }
 
-
     override fun toJsonString(): String? = null
 
     override fun toJsonObject(): JsonElement? =
@@ -77,21 +77,14 @@ class AccountOptions : GrapheneSerializable {
             addProperty(KEY_NUM_COMMITTEE, committeeCount)
             addProperty(KEY_NUM_WITNESS, witnessCount)
             addProperty(KEY_VOTING_ACCOUNT, votingAccount.getObjectId())
+
             val votesArray = JsonArray().apply {
                 votes.forEach { vote -> add(vote) }
             }
+
             add(KEY_VOTES, votesArray)
             add(KEY_EXTENSIONS, extensions.toJsonObject())
         }
-
-    companion object {
-        const val KEY_MEMO_KEY = "memo_key"
-        const val KEY_NUM_COMMITTEE = "num_committee"
-        const val KEY_NUM_WITNESS = "num_witness"
-        const val KEY_VOTES = "votes"
-        const val KEY_VOTING_ACCOUNT = "voting_account"
-        const val KEY_EXTENSIONS = Extensions.KEY_EXTENSIONS
-    }
 
     /**
      * Deserializer used to build a [AccountOptions] instance from the full JSON-formatted response
@@ -110,21 +103,30 @@ class AccountOptions : GrapheneSerializable {
 
             val jsonAccountOptions = json.asJsonObject
 
-            val options: AccountOptions = try {
+            return try {
                 val memoKeyString = jsonAccountOptions.get(KEY_MEMO_KEY).asString
                 val address = Address(memoKeyString, network)
                 AccountOptions(address.pubKey)
             } catch (e: MalformedAddressException) {
-                System.out.println("MalformedAddressException. Msg: " + e.message)
+                LOGGER.log("Invalid address deserialization", e)
                 AccountOptions()
+            }.apply {
+                votingAccount = Account(jsonAccountOptions.get(KEY_VOTING_ACCOUNT).asString)
+                witnessCount = jsonAccountOptions.get(KEY_NUM_WITNESS).asInt
+                committeeCount = jsonAccountOptions.get(KEY_NUM_COMMITTEE).asInt
             }
-
-            options.votingAccount = Account(jsonAccountOptions.get(KEY_VOTING_ACCOUNT).asString)
-            options.witnessCount = jsonAccountOptions.get(KEY_NUM_WITNESS).asInt
-            options.committeeCount = jsonAccountOptions.get(KEY_NUM_COMMITTEE).asInt
-
-            return options
         }
+    }
+
+    companion object {
+        private val LOGGER = LoggerCoreComponent.create(AccountOptions::class.java.name)
+
+        const val KEY_MEMO_KEY = "memo_key"
+        const val KEY_NUM_COMMITTEE = "num_committee"
+        const val KEY_NUM_WITNESS = "num_witness"
+        const val KEY_VOTES = "votes"
+        const val KEY_VOTING_ACCOUNT = "voting_account"
+        const val KEY_EXTENSIONS = Extensions.KEY_EXTENSIONS
     }
 
 }
