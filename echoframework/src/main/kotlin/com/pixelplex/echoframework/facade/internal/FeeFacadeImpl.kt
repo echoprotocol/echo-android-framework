@@ -32,13 +32,10 @@ class FeeFacadeImpl(private val databaseApiService: DatabaseApiService) : FeeFac
         callback: Callback<String>
     ) {
         try {
-            val accounts =
-                databaseApiService.getFullAccounts(listOf(fromNameOrId, toNameOrId), false)
-
             var toAccount: Account? = null
             var fromAccount: Account? = null
 
-            accounts
+            databaseApiService.getFullAccounts(listOf(fromNameOrId, toNameOrId), false)
                 .value { accountsMap ->
                     toAccount = accountsMap[toNameOrId]?.account
                     fromAccount = accountsMap[fromNameOrId]?.account
@@ -51,8 +48,8 @@ class FeeFacadeImpl(private val databaseApiService: DatabaseApiService) : FeeFac
                 LOGGER.log(
                     """Unable to find accounts for transfer.
                     |Source = $fromNameOrId
-                    |Source = $toNameOrId
-                """
+                    |Target = $toNameOrId
+                """.trimMargin()
                 )
                 throw LocalException("Unable to find required accounts: source = $fromNameOrId, target = $toNameOrId")
             }

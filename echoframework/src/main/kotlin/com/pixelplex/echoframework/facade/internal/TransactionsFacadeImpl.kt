@@ -9,7 +9,9 @@ import com.pixelplex.echoframework.model.*
 import com.pixelplex.echoframework.model.operations.TransferOperationBuilder
 import com.pixelplex.echoframework.service.DatabaseApiService
 import com.pixelplex.echoframework.service.NetworkBroadcastApiService
-import com.pixelplex.echoframework.support.*
+import com.pixelplex.echoframework.support.dematerialize
+import com.pixelplex.echoframework.support.error
+import com.pixelplex.echoframework.support.value
 
 /**
  * Implementation of [TransactionsFacade]
@@ -35,12 +37,10 @@ class TransactionsFacadeImpl(
         callback: Callback<Boolean>
     ) {
         try {
-            val accounts = databaseApiService.getFullAccounts(listOf(nameOrId, toNameOrId), false)
-
             var toAccount: Account? = null
             var fromAccount: Account? = null
 
-            accounts
+            databaseApiService.getFullAccounts(listOf(nameOrId, toNameOrId), false)
                 .value { accountsMap ->
                     toAccount = accountsMap[toNameOrId]?.account
                     fromAccount = accountsMap[nameOrId]?.account
@@ -82,18 +82,12 @@ class TransactionsFacadeImpl(
             val transactionResult =
                 networkBroadcastApiService.broadcastTransactionWithCallback(transaction)
 
-            transactionResult.fold({
-                callback.onSuccess(it)
-            }, {
-                throw (transactionResult as Result.Error).error
-            })
+            callback.onSuccess(transactionResult.dematerialize())
         } catch (ex: LocalException) {
-            return callback.onError(ex)
-
+            callback.onError(ex)
         } catch (ex: Exception) {
-            return callback.onError(LocalException(ex.message, ex))
+            callback.onError(LocalException(ex.message, ex))
         }
-
     }
 
     private fun checkOwnerAccount(name: String, password: String, account: Account) {
@@ -106,23 +100,9 @@ class TransactionsFacadeImpl(
         }
     }
 
-    private fun getChainId(): String {
-        val chainIdResult = databaseApiService.getChainId()
-        return if (chainIdResult is Result.Value) {
-            chainIdResult.value
-        } else {
-            throw (chainIdResult as Result.Error).error
-        }
-    }
+    private fun getChainId(): String = databaseApiService.getChainId().dematerialize()
 
-    private fun getFees(operations: List<BaseOperation>, asset: String): List<AssetAmount> {
-        val feesResult =
-            databaseApiService.getRequiredFees(operations, Asset(asset))
-        return if (feesResult is Result.Value) {
-            feesResult.value
-        } else {
-            throw (feesResult as Result.Error).error
-        }
-    }
+    private fun getFees(operations: List<BaseOperation>, asset: String): List<AssetAmount> =
+        databaseApiService.getRequiredFees(operations, Asset(asset)).dematerialize()
 
 }

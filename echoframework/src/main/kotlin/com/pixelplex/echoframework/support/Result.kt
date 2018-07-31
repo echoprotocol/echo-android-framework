@@ -98,3 +98,12 @@ infix fun <E : Exception, V, V2> Result<E, (V) -> V2>.apply(f: Result<E, V>): Re
         is Result.Error -> this
         is Result.Value -> f.map(this.value)
     }
+
+/**
+ * Unwraps success result value or throws and error
+ */
+fun <E : Exception, V> Result<E, V>.dematerialize(): V =
+    when (this) {
+        is Result.Error -> throw error
+        is Result.Value -> value
+    }
