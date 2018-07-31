@@ -31,15 +31,13 @@ class SocketCoreComponentImpl(
 
     override var socketState: SocketState = SocketState.DISCONNECTED
 
-    override fun connect(url: String) {
-        socketMessenger.on(globalSocketListener)
-        socketMessenger.setUrl(url)
-        socketMessenger.connect()
+    override fun connect(url: String) = with(socketMessenger) {
+        on(globalSocketListener)
+        setUrl(url)
+        connect()
     }
 
-    override fun disconnect() {
-        socketMessenger.disconnect()
-    }
+    override fun disconnect() = socketMessenger.disconnect()
 
     @Suppress("unchecked_cast")
     override fun emit(operation: SocketOperation<*>) {
@@ -50,13 +48,9 @@ class SocketCoreComponentImpl(
         socketMessenger.emit(operation.toJsonString() ?: "")
     }
 
-    override fun on(listener: SocketMessengerListener) {
-        socketMessenger.on(listener)
-    }
+    override fun on(listener: SocketMessengerListener) = socketMessenger.on(listener)
 
-    override fun off(listener: SocketMessengerListener) {
-        socketMessenger.off(listener)
-    }
+    override fun off(listener: SocketMessengerListener) = socketMessenger.off(listener)
 
     private inner class SocketCoreMessengerListener : SocketMessengerListener {
 
