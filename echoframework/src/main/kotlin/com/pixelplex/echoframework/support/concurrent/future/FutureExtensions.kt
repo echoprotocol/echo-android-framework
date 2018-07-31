@@ -16,9 +16,9 @@ import com.pixelplex.echoframework.support.toValue
 fun <E : Exception, T> FutureTask<T>.wrapResult(): Result<E, T> =
     try {
         val result = get()
-        toValue(result!!)
+        result!!.toValue()
     } catch (exception: Exception) {
-        toError(exception as E)
+        (exception as E).toError()
     }
 
 /**
@@ -27,8 +27,8 @@ fun <E : Exception, T> FutureTask<T>.wrapResult(): Result<E, T> =
 fun <E : Exception, T> FutureTask<T>.wrapResult(default: T): Result<E, T> =
     try {
         val result = get() ?: default
-        toValue(result)
+        result.toValue()
     } catch (exception: Exception) {
-        toError(exception as E)
+        (exception as E).toError()
     }
 
