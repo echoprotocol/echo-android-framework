@@ -31,7 +31,7 @@ class Address {
 
         val decoded = Base58.decode(address.substring(prefixSize))
         val pubKey = decoded.copyOfRange(0, decoded.size - CHECKSUM_SIZE)
-        this.pubKey = PublicKey(pubKey)
+        this.pubKey = PublicKey(pubKey, network)
 
         val calculatedChecksum = calculateChecksum(pubKey)
         val checksum = decoded.copyOfRange(decoded.size - CHECKSUM_SIZE, decoded.size)

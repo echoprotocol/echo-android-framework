@@ -99,7 +99,6 @@ class Account : GrapheneObject, GrapheneSerializable {
             typeOfT: Type?,
             context: JsonDeserializationContext?
         ): Account? {
-
             if (json == null || !json.isJsonObject) return null
 
             val jsonAccount = json.asJsonObject

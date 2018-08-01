@@ -27,8 +27,7 @@ import com.pixelplex.echoframework.support.Result.Value
 class InformationFacadeImpl(
     private val databaseApiService: DatabaseApiService,
     private val accountHistoryApiService: AccountHistoryApiService
-) :
-    InformationFacade {
+) : InformationFacade {
 
     override fun getAccount(nameOrId: String, callback: Callback<Account>) =
         findAccount(nameOrId,
@@ -163,7 +162,7 @@ class InformationFacadeImpl(
             fullAccountTransactions.add(transaction)
         }
 
-        return HistoryResponse(fullAccountTransactions, history.hasMore)
+        return HistoryResponse(fullAccountTransactions)
     }
 
     private fun processAccountUpdateOperation(operation: AccountUpdateOperation) {

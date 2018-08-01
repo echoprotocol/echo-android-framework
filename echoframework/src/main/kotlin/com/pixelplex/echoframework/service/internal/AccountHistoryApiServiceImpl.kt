@@ -3,6 +3,7 @@ package com.pixelplex.echoframework.service.internal
 import com.pixelplex.echoframework.Callback
 import com.pixelplex.echoframework.ILLEGAL_ID
 import com.pixelplex.echoframework.core.crypto.CryptoCoreComponent
+import com.pixelplex.echoframework.core.logger.internal.LoggerCoreComponent
 import com.pixelplex.echoframework.core.socket.SocketCoreComponent
 import com.pixelplex.echoframework.exception.LocalException
 import com.pixelplex.echoframework.model.HistoryResponse
@@ -24,7 +25,6 @@ import com.pixelplex.echoframework.support.concurrent.future.wrapResult
  */
 class AccountHistoryApiServiceImpl(
     private val socketCoreComponent: SocketCoreComponent,
-    private val cryptoCoreComponent: CryptoCoreComponent,
     private val network: Network
 ) : AccountHistoryApiService {
 
@@ -52,6 +52,13 @@ class AccountHistoryApiServiceImpl(
         getAccountHistory(accountId, start, stop, limit, object : Callback<HistoryResponse> {
 
             override fun onSuccess(result: HistoryResponse) {
+                result.takeIf { it.transactions.isEmpty() }
+                    ?.let {
+                        LOGGER.log(
+                            "Empty history received for account $accountId " +
+                                    "with start = $start and stop = $stop"
+                        )
+                    }
                 historyFuture.setComplete(result)
             }
 
@@ -61,7 +68,12 @@ class AccountHistoryApiServiceImpl(
 
         })
 
-        return historyFuture.wrapResult(HistoryResponse(listOf(), false))
+        return historyFuture.wrapResult(HistoryResponse(listOf()))
+    }
+
+    companion object {
+        private val LOGGER =
+            LoggerCoreComponent.create(AccountHistoryApiServiceImpl::class.java.name)
     }
 
 }
