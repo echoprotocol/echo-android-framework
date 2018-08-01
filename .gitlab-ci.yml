@@ -4,6 +4,8 @@ before_script:
 stages:
   - build
   - test
+  - checkstyle
+  - docgen
 
 .build_template: &build_template_def
   stage: build
@@ -20,20 +22,40 @@ build_debug:
     - feature/gitlab_configuration
 
   script:
-    - gradlew dokka assembleDebug
+    - gradlew assembleDebug
 
 build_release:
   <<: *build_template_def
   only:
     - master
   script:
-    - gradlew dokka assembleRelease
+    - gradlew assembleRelease
 
 unit_test:
   stage: test
   only:
     - master
     - develop
-
   script:
     - gradlew test
+  artifacts:
+    expire_in: 4 hours
+    paths:
+      - echoframework/build/reports/tests
+
+code_analysis:
+  stage: checkstyle
+  script:
+    - gradlew lint analyzeCode
+  artifacts:
+    expire_in: 4 hours
+    paths:
+      - echoframework/build/reports/detekt
+
+doc_generation:
+  stage: docgen
+  only:
+    - master
+    - develop
+  script:
+    - gradlew dokka
