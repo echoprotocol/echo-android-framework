@@ -18,7 +18,6 @@ build_debug:
   <<: *build_template_def
   only:
     - develop
-    - feature/gitlab_configuration
 
   script:
     - gradlew assembleDebug
