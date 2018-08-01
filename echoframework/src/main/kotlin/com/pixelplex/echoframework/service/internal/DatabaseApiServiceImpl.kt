@@ -38,7 +38,7 @@ class DatabaseApiServiceImpl(
     private var subscribed: Boolean = false
 
     private val subscriptionManager: AccountSubscriptionManager by lazy {
-        AccountSubscriptionManagerImpl()
+        AccountSubscriptionManagerImpl(network)
     }
 
     override fun getFullAccounts(
@@ -297,13 +297,7 @@ class DatabaseApiServiceImpl(
                 return
             }
 
-            val accountId = subscriptionManager.processEvent(event) ?: return
-
-            getFullAccounts(
-                listOf(accountId),
-                false,
-                FullAccountSubscriptionCallback(accountId)
-            )
+            subscriptionManager.processEvent(event)
         }
 
         // implement failures
@@ -314,19 +308,6 @@ class DatabaseApiServiceImpl(
         }
 
         override fun onDisconnected() {
-        }
-
-        private inner class FullAccountSubscriptionCallback(private val accountId: String) :
-            Callback<Map<String, FullAccount>> {
-            override fun onSuccess(result: Map<String, FullAccount>) {
-                val account = result[accountId]?.account ?: return
-
-                subscriptionManager.notify(account)
-            }
-
-            override fun onError(error: LocalException) {
-            }
-
         }
 
     }

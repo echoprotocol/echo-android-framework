@@ -54,7 +54,6 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         val accountHistoryApiService =
             AccountHistoryApiServiceImpl(
                 socketCoreComponent,
-                settings.cryptoComponent,
                 settings.network
             )
         val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, settings.network)

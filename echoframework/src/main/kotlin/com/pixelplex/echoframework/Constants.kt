@@ -14,9 +14,9 @@ package com.pixelplex.echoframework
 const val TIME_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss"
 
 /**
- * Default url for socket connection
+ * Socket url for echo blockchain
  */
-const val DEFAULT_URL = "wss://node.testnet.bitshares.eu/"
+const val ECHO_URL = "wss://echo-devnet-node.pixelplex.io/"
 
 /**
  * Illegal id for all blockchain apis, call id

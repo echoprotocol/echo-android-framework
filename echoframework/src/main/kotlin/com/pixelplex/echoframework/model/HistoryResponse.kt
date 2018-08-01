@@ -8,6 +8,5 @@ import com.google.gson.annotations.SerializedName
  * @author Dmitriy Bushuev
  */
 data class HistoryResponse(
-    @SerializedName("result") val transactions: List<HistoricalTransfer>,
-    val hasMore: Boolean
+    @SerializedName("result") val transactions: List<HistoricalTransfer>
 )

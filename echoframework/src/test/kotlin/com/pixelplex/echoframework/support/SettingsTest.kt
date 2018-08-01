@@ -1,7 +1,7 @@
 package com.pixelplex.echoframework.support
 
 import com.pixelplex.bitcoinj.ECKey
-import com.pixelplex.echoframework.DEFAULT_URL
+import com.pixelplex.echoframework.ECHO_URL
 import com.pixelplex.echoframework.core.crypto.CryptoCoreComponent
 import com.pixelplex.echoframework.core.crypto.internal.CryptoCoreComponentImpl
 import com.pixelplex.echoframework.core.socket.SocketMessenger
@@ -26,7 +26,7 @@ class SettingsTest {
     fun defaultConfigurationTest() {
         val settings = Settings.Configurator().configure()
 
-        assertEquals(settings.url, DEFAULT_URL)
+        assertEquals(settings.url, ECHO_URL)
         assertTrue(settings.socketMessenger is SocketMessengerImpl)
         assertTrue(settings.cryptoComponent is CryptoCoreComponentImpl)
         assertTrue(settings.apis.size == Api.values().size)

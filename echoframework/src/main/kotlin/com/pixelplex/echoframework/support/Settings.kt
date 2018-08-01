@@ -1,6 +1,6 @@
 package com.pixelplex.echoframework.support
 
-import com.pixelplex.echoframework.DEFAULT_URL
+import com.pixelplex.echoframework.ECHO_URL
 import com.pixelplex.echoframework.core.crypto.CryptoCoreComponent
 import com.pixelplex.echoframework.core.crypto.internal.CryptoCoreComponentImpl
 import com.pixelplex.echoframework.core.logger.internal.LoggerCoreComponent.LogLevel
@@ -113,7 +113,7 @@ class Settings private constructor(
          * @return settings for library initialization
          */
         fun configure(): Settings {
-            val url = this.url ?: DEFAULT_URL
+            val url = this.url ?: ECHO_URL
             val socketMessenger = (this.socketMessenger ?: SocketMessengerImpl())
                 .apply {
                     setUrl(url)

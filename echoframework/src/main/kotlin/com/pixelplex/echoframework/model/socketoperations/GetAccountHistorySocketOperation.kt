@@ -47,9 +47,9 @@ class GetAccountHistorySocketOperation(
             add(SocketOperationKeys.ACCOUNT_HISTORY.key)
             add(JsonArray().apply {
                 add(accountId)
-                add(stopId)
-                add(limit)
                 add(startId)
+                add(limit)
+                add(stopId)
             })
         }
 
