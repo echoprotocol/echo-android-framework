@@ -7,4 +7,4 @@ import com.pixelplex.echoframework.model.Address
  *
  * @author Dmitriy Bushuev
  */
-class Devnet : Network(Address.DEVNET_PREFIX)
+class Echodevnet : Network(Address.DEVNET_PREFIX)
