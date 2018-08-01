@@ -13,7 +13,6 @@ stages:
     expire_in: 4 hours
     paths:
     - echoframework/build/outputs
-    - echoframework/build/javadoc
 
 build_debug:
   <<: *build_template_def
@@ -59,3 +58,7 @@ doc_generation:
     - develop
   script:
     - gradlew dokka
+  artifacts:
+    expire_in: 4 hours
+    paths:
+      - echoframework/build/javadoc
