@@ -1,6 +1,6 @@
 package com.pixelplex.echoframework.model
 
-import com.pixelplex.echoframework.model.network.Devnet
+import com.pixelplex.echoframework.model.network.Echodevnet
 import com.pixelplex.echoframework.model.network.Network
 import java.io.Serializable
 
@@ -11,7 +11,7 @@ import java.io.Serializable
  */
 class PublicKey @JvmOverloads constructor(
     key: ByteArray,
-    var network: Network = Devnet()
+    var network: Network = Echodevnet()
 ) : Serializable, ByteSerializable {
 
     var key: ByteArray = key

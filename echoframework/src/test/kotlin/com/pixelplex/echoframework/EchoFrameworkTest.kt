@@ -4,7 +4,7 @@ import com.pixelplex.echoframework.exception.LocalException
 import com.pixelplex.echoframework.model.Account
 import com.pixelplex.echoframework.model.Balance
 import com.pixelplex.echoframework.model.HistoryResponse
-import com.pixelplex.echoframework.model.network.Devnet
+import com.pixelplex.echoframework.model.network.Echodevnet
 import com.pixelplex.echoframework.support.Api
 import com.pixelplex.echoframework.support.EmptyCallback
 import com.pixelplex.echoframework.support.Settings
@@ -28,7 +28,7 @@ class EchoFrameworkTest {
         EchoFramework.create(
             Settings.Configurator()
                 .setUrl(ECHO_URL)
-                .setNetworkType(Devnet())
+                .setNetworkType(Echodevnet())
                 .setReturnOnMainThread(false)
                 .setApis(
                     Api.DATABASE,
