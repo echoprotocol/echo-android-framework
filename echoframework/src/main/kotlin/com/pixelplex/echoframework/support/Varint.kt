@@ -22,21 +22,22 @@ import java.io.DataOutput
 import java.io.IOException
 
 /**
- * <p>Encodes signed and unsigned values using a common variable-length
+ * Encodes signed and unsigned values using a common variable-length
  * scheme, found for example in
- * <a href="http://code.google.com/apis/protocolbuffers/docs/encoding.html">
+ * [http://code.google.com/apis/protocolbuffers/docs/encoding.html]
  * Google's Protocol Buffers</a>. It uses fewer bytes to encode smaller values,
- * but will use slightly more bytes to encode large values.</p>
- * <p/>
- * <p>Signed values are further encoded using so-called zig-zag encoding
- * in order to make them "compatible" with variable-length encoding.</p>
+ * but will use slightly more bytes to encode large values.
+ *
+ * Signed values are further encoded using so-called zig-zag encoding
+ * in order to make them "compatible" with variable-length encoding.
  */
 object Varint {
 
     /**
      * Encodes a value using the variable-length encoding from
-     * <a href="http://code.google.com/apis/protocolbuffers/docs/encoding.html">
-     * Google Protocol Buffers</a>. It uses zig-zag encoding to efficiently
+     * [http://code.google.com/apis/protocolbuffers/docs/encoding.html]
+     *
+     * Google Protocol Buffers. It uses zig-zag encoding to efficiently
      * encode signed values. If values are known to be nonnegative,
      * @see writeUnsignedVarLong(Long, DataOutput) should be used.
      *
@@ -52,8 +53,9 @@ object Varint {
 
     /**
      * Encodes a value using the variable-length encoding from
-     * <a href="http://code.google.com/apis/protocolbuffers/docs/encoding.html">
-     * Google Protocol Buffers</a>. Zig-zag is not used, so input must not be negative.
+     * [http://code.google.com/apis/protocolbuffers/docs/encoding.html}]
+     * Google Protocol Buffers.
+     * Zig-zag is not used, so input must not be negative.
      * If values can be negative, use
      * @see writeSignedVarLong(long, DataOutput) instead. This method treats negative input
      * as like a large unsigned value.

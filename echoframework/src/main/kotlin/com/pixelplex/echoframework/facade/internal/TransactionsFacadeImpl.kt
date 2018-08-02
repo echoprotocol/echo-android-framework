@@ -17,9 +17,7 @@ import java.math.BigInteger
 /**
  * Implementation of [TransactionsFacade]
  *
- * <p>
- *     Delegates API call logic to [NetworkBroadcastApiService] and [AccountHistoryApiService]
- * </p>
+ * Delegates API call logic to [DatabaseApiService] and [NetworkBroadcastApiService]
  *
  * @author Dmitriy Bushuev
  */

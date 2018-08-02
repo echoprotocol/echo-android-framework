@@ -6,10 +6,8 @@ import com.pixelplex.echoframework.support.Settings
 /**
  * Describes base library functionality
  *
- * <p>
- *     Represents base library facade,
- *     that combines all other facades to provide the only entry point of library
- * </p>
+ * Represents base library facade,
+ * that combines all other facades to provide the only entry point of library
  *
  * @author Dmitriy Bushuev
  */

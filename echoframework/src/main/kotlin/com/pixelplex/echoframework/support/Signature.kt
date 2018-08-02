@@ -35,9 +35,7 @@ object Signature {
      * ecdsa signatures, we are slightly modifying the expiration time of the transaction while
      * we look for a signature that will be accepted by the graphene network.
      *
-     * <p>
-     *     This should then be called before any other serialization method.
-     * </p>
+     * This should then be called before any other serialization method.
      *
      * @return: A valid signature of the transaction.
      */

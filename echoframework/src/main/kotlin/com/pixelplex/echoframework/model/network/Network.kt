@@ -3,7 +3,7 @@ package com.pixelplex.echoframework.model.network
 /**
  * Encapsulates information about blockchain network
  * @param addressPrefix prefix for work with address
- * @see com.pixelplex.echoframework.model.Address
+ * [com.pixelplex.echoframework.model.Address]
  *
  * @author Daria Pechkovskaya
  */

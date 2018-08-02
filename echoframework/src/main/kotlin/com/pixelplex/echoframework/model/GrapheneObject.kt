@@ -5,10 +5,8 @@ import com.google.gson.annotations.Expose
 /**
  * Represents base graphene object model
  *
- * <p>
- *     Encapsulates logic of parsing object id
- *     (@see http://docs.bitshares.org/development/blockchain/objects.html)
- * </p>
+ * Encapsulates logic of parsing object id
+ * [http://docs.bitshares.org/development/blockchain/objects.html]
  *
  * @author Dmitriy Bushuev
  */

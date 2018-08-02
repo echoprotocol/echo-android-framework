@@ -44,32 +44,33 @@ import java.security.SecureRandom
 
 
 /**
- * <p>Represents an elliptic curve public and (optionally) private key, usable for digital signatures but not encryption.
+ * Represents an elliptic curve public and (optionally) private key, usable for digital signatures but not encryption.
  * Creating a new ECKey with the empty constructor will generate a new random keypair. Other static methods can be used
  * when you already have the public or private parts. If you create a key with only the public part, you can check
- * signatures but not create them.</p>
+ * signatures but not create them.
  *
- * <p>ECKey also provides access to Bitcoin Core compatible text message signing, as accessible via the UI or JSON-RPC.
+ * ECKey also provides access to Bitcoin Core compatible text message signing, as accessible via the UI or JSON-RPC.
  * This is slightly different to signing raw bytes - if you want to sign your own data and it won't be exposed as
- * text to people, you don't want to use this. If in doubt, ask on the mailing list.</p>
+ * text to people, you don't want to use this. If in doubt, ask on the mailing list.
  *
- * <p>The ECDSA algorithm supports <i>key recovery</i> in which a signature plus a couple of discriminator bits can
+ * The ECDSA algorithm supports key recovery in which a signature plus a couple of discriminator bits can
  * be reversed to find the public key used to calculate it. This can be convenient when you have a message and a
- * signature and want to find out who signed it, rather than requiring the user to provide the expected identity.</p>
+ * signature and want to find out who signed it, rather than requiring the user to provide the expected identity.
  *
- * <p>This class supports a variety of serialization forms. The methods that accept/return byte arrays serialize
+ * This class supports a variety of serialization forms. The methods that accept/return byte arrays serialize
  * private keys as raw byte arrays and public keys using the SEC standard byte encoding for public keys. Signatures
- * are encoded using ASN.1/DER inside the Bitcoin protocol.</p>
+ * are encoded using ASN.1/DER inside the Bitcoin protocol.
  *
- * <p>A key can be <i>compressed</i> or <i>uncompressed</i>. This refers to whether the public key is represented
+ * A key can be compressed or uncompressed. This refers to whether the public key is represented
  * when encoded into bytes as an (x, y) coordinate on the elliptic curve, or whether it's represented as just an X
  * co-ordinate and an extra byte that carries a sign bit. With the latter form the Y coordinate can be calculated
- * dynamically, however, <b>because the binary serialization is different the address of a key changes if its
- * compression status is changed</b>. If you deviate from the defaults it's important to understand this: money sent
+ * dynamically, however, because the binary serialization is different the address of a key changes if its
+ * compression status is changed.
+ * If you deviate from the defaults it's important to understand this: money sent
  * to a compressed version of the key will have a different address to the same key in uncompressed form. Whether
  * a public key is compressed or not is recorded in the SEC binary serialisation format, and preserved in a flag in
  * this class so round-tripping preserves state. Unless you're working with old software or doing unusual things, you
- * can usually ignore the compressed/uncompressed distinction.</p>
+ * can usually ignore the compressed/uncompressed distinction.
  *
  * @author Daria Pechkovskaya
  */
@@ -205,7 +206,7 @@ class ECKey {
     /**
      * Returns a 32 byte array containing the private key.
      *
-     * @throws org.bitcoinj.core.ECKey.MissingPrivateKeyException if the private key bytes are missing/encrypted.
+     * @throws [com.pixelplex.bitcoinj.MissingPrivateKeyException] if the private key bytes are missing/encrypted.
      */
     fun getPrivKeyBytes(): ByteArray =
         priv?.bigIntegerToBytes(32) ?: throw MissingPrivateKeyException()

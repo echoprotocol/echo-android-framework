@@ -6,9 +6,7 @@ import com.pixelplex.echoframework.exception.LocalException
 /**
  * Empty instance of operation callback
  *
- * <p>
- *     Useful when passing callback is unnecessary
- * </p>
+ * Useful when passing callback is unnecessary
  *
  * @author Dmitriy Bushuev
  */

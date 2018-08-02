@@ -9,10 +9,8 @@ import com.pixelplex.echoframework.support.Result
 /**
  * Encapsulates logic, associated with blockchain database API
  *
- * <p>
- *     Graphene blockchain database API:
- *     http://docs.bitshares.org/api/database.html
- * </p>
+ * Graphene blockchain database API:
+ * [http://docs.bitshares.org/api/database.html]
  *
  * @author Dmitriy Bushuev
  */
@@ -22,7 +20,7 @@ interface DatabaseApiService : ApiService, AccountsService, GlobalsService,
 /**
  * Encapsulates logic, associated with data from account from blockchain database API
  *
- * <a href="http://docs.bitshares.org/api/database.html#accounts">Source</a>
+ * {@see http://docs.bitshares.org/api/database.html#accounts}
  */
 interface AccountsService {
 

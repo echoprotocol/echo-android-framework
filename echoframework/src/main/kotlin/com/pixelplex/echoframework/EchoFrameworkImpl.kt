@@ -21,9 +21,7 @@ import com.pixelplex.echoframework.support.concurrent.MainThreadCallback
 /**
  * Implementation of [EchoFramework] base library API
  *
- * <p>
- *     Delegates all logic to specific facades
- * </p>
+ * Delegates all logic to specific facades
  *
  * @author Dmitriy Bushuev
  */

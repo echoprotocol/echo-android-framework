@@ -8,9 +8,7 @@ import com.pixelplex.echoframework.service.DatabaseApiService
 /**
  * Implementation of [SubscriptionFacade]
  *
- * <p>
- *     Delegates API call logic to [NetworkBroadcastApiService] and [NetworkNodesApiService]
- * </p>
+ * Delegates API call logic to [DatabaseApiService]
  *
  * @author Dmitriy Bushuev
  */

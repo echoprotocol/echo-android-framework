@@ -3,9 +3,7 @@ package com.pixelplex.echoframework.model
 /**
  * Enum type used to list all possible object types in Graphene blockchain
  *
- * <p>
- *      Every element contains information about it's type and space
- * </p>
+ * Every element contains information about it's type and space
  *
  * @author Dmitriy Bushuev
  */

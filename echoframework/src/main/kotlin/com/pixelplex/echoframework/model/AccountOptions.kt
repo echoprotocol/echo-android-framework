@@ -10,11 +10,9 @@ import java.lang.reflect.Type
 /**
  * Contains user account additional information
  *
- * <p>
- *     These are the fields which can be updated by the active authority
- * </p>
+ * These are the fields which can be updated by the active authority
  *
- * (@see https://bitshares.org/doxygen/structgraphene_1_1chain_1_1account__options.html#details)
+ * [Account options details][https://bitshares.org/doxygen/structgraphene_1_1chain_1_1account__options.html#details]
  *
  * @author Dmitriy Bushuev
  */

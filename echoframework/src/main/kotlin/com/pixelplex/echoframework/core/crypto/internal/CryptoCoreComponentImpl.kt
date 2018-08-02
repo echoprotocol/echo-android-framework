@@ -17,10 +17,8 @@ import java.util.*
 /**
  * Implementation of [CryptoCoreComponent]
  *
- * <p>
- *     Provides default implementation of cryptography core component
- *     based on bitcoinj ECKey realization
- * </p>
+ * Provides default implementation of cryptography core component
+ * based on bitcoinj ECKey realization
  *
  * @author Daria Pechkovskaya
  * @author Dmitriy Bushuev

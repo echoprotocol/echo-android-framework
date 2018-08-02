@@ -2,7 +2,7 @@ package com.pixelplex.echoframework.exception
 
 /**
  * Represents errors associated with illegal Address state
- * (@see com.pixelplex.echolib.model.Address)
+ * [com.pixelplex.echoframework.model.Address]
  *
  * @author Dmitriy Bushuev
  * @author Daria Pechkovskaya
