@@ -35,7 +35,7 @@ unit_test:
     - master
     - develop
   script:
-    - gradlew test
+    - gradlew testReleaseUnitTest
   artifacts:
     expire_in: 4 hours
     paths:
