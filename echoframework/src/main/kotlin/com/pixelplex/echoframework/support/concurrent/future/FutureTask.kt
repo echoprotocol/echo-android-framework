@@ -6,28 +6,24 @@ import java.util.concurrent.*
 /**
  * Realization of cancellable future
  *
- * <p>
- *     Adds functionality to set completed value or error in future
- * </p>
+ * Adds functionality to set completed value or error in future
  *
- * <p>
- *     Example:
- *              val future = FutureTask<String>()
- *               lib.start(object : Callback<String> {
+ * Example:
+ *       val future = FutureTask<String>()
+ *       lib.start(object : Callback<String> {
  *
- *                   override fun onSuccess(result: String) {
- *                       future.setComplete(result)
- *                   }
+ *       override fun onSuccess(result: String) {
+ *          future.setComplete(result)
+ *       }
  *
- *                   override fun onError(error: LocalException) {
- *                       future.setComplete(error)
- *                   }
+ *       override fun onError(error: LocalException) {
+ *          future.setComplete(error)
+ *       }
  *
- *               })
+ *       })
  *
- *               // blocking current thread until result or error won't be obtained
- *               val result = future.get()
- * </p>
+ *       // blocking current thread until result or error won't be obtained
+ *       val result = future.get()
  *
  * @author Dmitriy Bushuev
  */

@@ -7,9 +7,7 @@ import java.util.logging.Level
 /**
  * Implementation of [Logger]
  *
- * <p>
- *     Uses standard java logger
- * </p>
+ * Uses standard java logger
  *
  * @author Dmitriy Bushuev
  */

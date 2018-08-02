@@ -16,9 +16,7 @@ import com.pixelplex.echoframework.support.value
 /**
  * Implementation of [FeeFacade]
  *
- * <p>
- *     Delegates API call logic to [DatabaseApiService]
- * </p>
+ * Delegates API call logic to [DatabaseApiService]
  *
  * @author Dmitriy Bushuev
  */

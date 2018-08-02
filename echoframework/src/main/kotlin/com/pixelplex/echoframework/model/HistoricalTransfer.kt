@@ -13,10 +13,9 @@ import java.util.*
 
 /**
  * Represents account history
- * <a href="https://bitshares.org/doxygen/classgraphene_1_1chain_1_1operation__history__object.html">Source</a>
- * <p>
- *     Contains required information about user operations
- * </p>
+ * [https://bitshares.org/doxygen/classgraphene_1_1chain_1_1operation__history__object.html]
+ *
+ * Contains required information about user operations
  *
  * @author Daria Pechkovskaya
  * @author Dmitriy Bushuev

@@ -19,10 +19,8 @@ open class CancellableTask : Cancellable {
     /**
      * Completes current cancellable instance
      *
-     * <p>
-     *     If cancellable is already canceled - return false,
-     *     if already done - throw exception
-     * </p>
+     * If cancellable is already canceled - return false,
+     * if already done - throw exception
      */
     open fun setComplete(): Boolean {
         synchronized(this) {

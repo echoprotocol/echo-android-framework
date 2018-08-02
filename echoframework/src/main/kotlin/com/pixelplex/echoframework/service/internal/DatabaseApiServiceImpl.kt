@@ -19,9 +19,7 @@ import java.util.concurrent.TimeUnit
 /**
  * Implementation of [DatabaseApiService]
  *
- * <p>
- *     Encapsulates logic of preparing API calls to [SocketCode]
- * </p>
+ * Encapsulates logic of preparing API calls to [SocketCoreComponent]
  *
  * @author Dmitriy Bushuev
  */

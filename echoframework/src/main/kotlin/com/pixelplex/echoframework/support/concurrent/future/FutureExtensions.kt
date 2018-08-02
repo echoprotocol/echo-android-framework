@@ -9,9 +9,7 @@ import com.pixelplex.echoframework.support.toValue
 /**
  * Wraps future task result in [Result]
  *
- * <p>
- *     Future result must be not null
- * </p>
+ * Future result must be not null
  */
 fun <E : Exception, T> FutureTask<T>.wrapResult(): Result<E, T> =
     try {

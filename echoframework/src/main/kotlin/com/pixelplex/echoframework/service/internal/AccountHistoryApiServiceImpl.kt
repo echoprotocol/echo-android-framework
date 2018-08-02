@@ -2,7 +2,6 @@ package com.pixelplex.echoframework.service.internal
 
 import com.pixelplex.echoframework.Callback
 import com.pixelplex.echoframework.ILLEGAL_ID
-import com.pixelplex.echoframework.core.crypto.CryptoCoreComponent
 import com.pixelplex.echoframework.core.logger.internal.LoggerCoreComponent
 import com.pixelplex.echoframework.core.socket.SocketCoreComponent
 import com.pixelplex.echoframework.exception.LocalException
@@ -17,9 +16,7 @@ import com.pixelplex.echoframework.support.concurrent.future.wrapResult
 /**
  * Implementation of [AccountHistoryApiService]
  *
- * <p>
- *     Encapsulates logic of preparing API calls to [SocketCode]
- * </p>
+ * Encapsulates logic of preparing API calls to [SocketCoreComponent]
  *
  * @author Dmitriy Bushuev
  */

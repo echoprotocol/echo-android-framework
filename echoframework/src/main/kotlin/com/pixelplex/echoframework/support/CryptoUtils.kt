@@ -21,9 +21,7 @@ private const val SKS_SIZE = 32
 /**
  * Function to encrypt [input] with padded AES algorithm
  *
- * <p>
- *     Creates key seed (first 32 bytes of key) and iv (16 bytes after key seed) bytes from [key]
- * </p>
+ * Creates key seed (first 32 bytes of key) and iv (16 bytes after key seed) bytes from [key]
  *
  * @param input data to encrypt
  * @param key   key for encryption

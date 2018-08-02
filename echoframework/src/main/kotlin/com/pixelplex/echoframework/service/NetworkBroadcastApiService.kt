@@ -6,10 +6,8 @@ import com.pixelplex.echoframework.support.Result
 /**
  * Encapsulates logic, associated with blockchain network broadcast API
  *
- * <p>
- *     Graphene blockchain network broadcast API:
- *     http://docs.bitshares.org/api/network_broadcast.html
- * </p>
+ * Graphene blockchain network broadcast API:
+ * [http://docs.bitshares.org/api/network_broadcast.html]
  *
  * @author Dmitriy Bushuev
  */

@@ -20,9 +20,7 @@ import com.pixelplex.echoframework.support.concurrent.future.wrapResult
 /**
  * Implementation of [InformationFacade]
  *
- * <p>
- *     Delegates API call logic to [DatabaseApiService]
- * </p>
+ * Delegates API call logic to [DatabaseApiService]
  *
  * @author Dmitriy Bushuev
  */

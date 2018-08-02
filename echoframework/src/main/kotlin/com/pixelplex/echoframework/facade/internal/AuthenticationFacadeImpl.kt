@@ -20,9 +20,7 @@ import com.pixelplex.echoframework.support.value
 /**
  * Implementation of [AuthenticationFacade]
  *
- * <p>
- *     Delegates API call logic to connected services
- * </p>
+ * Delegates API call logic to connected services
  *
  * @author Dmitriy Bushuev
  */

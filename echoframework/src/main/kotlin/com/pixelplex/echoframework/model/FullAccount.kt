@@ -4,6 +4,8 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 /**
+ * Represents full information about user account
+ *
  * @author Daria Pechkovskaya
  */
 class FullAccount(

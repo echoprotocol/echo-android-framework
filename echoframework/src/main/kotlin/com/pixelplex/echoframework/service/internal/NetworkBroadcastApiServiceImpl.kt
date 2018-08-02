@@ -15,9 +15,7 @@ import com.pixelplex.echoframework.support.concurrent.future.wrapResult
 /**
  * Implementation of [NetworkBroadcastApiService]
  *
- * <p>
- *     Encapsulates logic of preparing API calls to [SocketCode]
- * </p>
+ * Encapsulates logic of preparing API calls to [SocketCoreComponent]
  *
  * @author Dmitriy Bushuev
  */

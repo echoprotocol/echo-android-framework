@@ -1,8 +1,8 @@
 package com.pixelplex.echoframework.exception
 
 /**
- *  Represents errors associated with illegal AccountUpdateOperation state
- * @see com.pixelplex.echoframework.model.operations.AccountUpdateOperation
+ * Represents errors associated with illegal AccountUpdateOperation state
+ * [com.pixelplex.echoframework.model.operations.AccountUpdateOperation]
  *
  * @author Daria Pechkovskaya
  */

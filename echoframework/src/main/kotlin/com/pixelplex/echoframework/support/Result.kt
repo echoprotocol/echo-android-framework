@@ -3,9 +3,9 @@ package com.pixelplex.echoframework.support
 /**
  * Encapsulates operation results
  *
- * <p>
- *     Provides abstraction over success\failure operation results
- * </p>
+ * Provides abstraction over success\failure operation results
+ *
+ * @author Dmitriy Bushuev
  */
 sealed class Result<out E : Exception, out V> {
     /**

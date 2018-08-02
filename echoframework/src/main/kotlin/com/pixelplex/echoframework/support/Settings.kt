@@ -10,7 +10,7 @@ import com.pixelplex.echoframework.model.network.Network
 import com.pixelplex.echoframework.model.network.Testnet
 
 /**
- *  Settings for library initialization
+ * Settings for library initialization
  *
  * @author Daria Pechkovskaya
  */
@@ -110,6 +110,7 @@ class Settings private constructor(
 
         /**
          * Create settings with configurations
+         *
          * @return settings for library initialization
          */
         fun configure(): Settings {

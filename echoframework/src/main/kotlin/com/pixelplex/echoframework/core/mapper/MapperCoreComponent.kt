@@ -9,6 +9,7 @@ interface MapperCoreComponent {
 
     /**
      * Parse object by type
+     *
      * @param json Json string to parse
      * @param type Class type for parse
      * @return Parsed class
