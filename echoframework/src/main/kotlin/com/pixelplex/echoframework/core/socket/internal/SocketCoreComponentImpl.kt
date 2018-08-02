@@ -62,13 +62,12 @@ class SocketCoreComponentImpl(
             val operation = operationsMap.remove(response.id)
             val error = response.error
 
-            operation?.let { op ->
-                if (error != null) {
-                    val localError = ResponseSocketException(error.data.message)
-                    op.callback.onError(localError)
-                } else {
-                    mapData(event, operation)
-                }
+            operation?.let { notNullOperation ->
+                error?.let { notNullError ->
+                    with(ResponseSocketException(notNullError.data.message)) {
+                        notNullOperation.callback.onError(this)
+                    }
+                } ?: mapData(event, notNullOperation)
             }
         }
 
@@ -106,7 +105,8 @@ class SocketCoreComponentImpl(
     }
 
     companion object {
-        private val LOGGER = LoggerCoreComponent.create(SocketCoreComponentImpl::class.java.name)
+        private val LOGGER =
+            LoggerCoreComponent.create(SocketCoreComponentImpl::class.java.name)
     }
 
 }

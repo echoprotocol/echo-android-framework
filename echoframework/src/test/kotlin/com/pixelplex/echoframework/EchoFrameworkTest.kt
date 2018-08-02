@@ -14,7 +14,6 @@ import com.pixelplex.echoframework.support.fold
 import org.junit.Assert
 import org.junit.Assert.*
 import org.junit.Test
-import java.util.concurrent.ExecutionException
 import kotlin.concurrent.thread
 
 /**
@@ -194,9 +193,15 @@ class EchoFrameworkTest {
         })
 
         assertTrue(futureBalanceExistent.get() != null)
+    }
 
-        val futureBalanceNonexistent =
-            FutureTask<Balance>()
+    @Test(expected = LocalException::class)
+    fun getNonexistentAssetBalanceTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val futureBalanceNonexistent = FutureTask<Balance>()
 
         framework.getBalance("dima2", "ergergger", object :
             Callback<Balance> {
@@ -210,14 +215,7 @@ class EchoFrameworkTest {
 
         })
 
-        var balance: Balance? = null
-
-        futureBalanceNonexistent.wrapResult<Exception, Balance>().fold({ foundBalance ->
-            balance = foundBalance
-        }, {
-        })
-
-        assertTrue(balance == null)
+        assertNotNull(futureBalanceNonexistent.get())
     }
 
     @Test
