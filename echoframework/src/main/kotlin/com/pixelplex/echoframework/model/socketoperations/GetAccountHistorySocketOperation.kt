@@ -75,6 +75,10 @@ class GetAccountHistorySocketOperation(
             TransferOperation::class.java,
             TransferOperation.TransferDeserializer()
         )
+        registerTypeAdapter(
+            Memo::class.java,
+            Memo.MemoDeserializer(network)
+        )
         registerTypeAdapter(AssetAmount::class.java, AssetAmount.Deserializer())
         registerTypeAdapter(Authority::class.java, Authority.Deserializer(network))
         registerTypeAdapter(Account::class.java, Account.Deserializer())

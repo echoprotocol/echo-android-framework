@@ -74,8 +74,8 @@ import java.security.SecureRandom
  * @author Daria Pechkovskaya
  */
 class ECKey {
-    private val priv: BigInteger?
-    private val pub: LazyECPoint
+    val priv: BigInteger?
+    val pub: LazyECPoint
 
     constructor(priv: BigInteger?, pub: ECPoint) : this(
         priv,

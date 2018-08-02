@@ -170,6 +170,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         toNameOrId: String,
         amount: String,
         asset: String,
+        message: String?,
         callback: Callback<Boolean>
     ) = dispatch(Runnable {
         transactionsFacade.sendTransferOperation(
@@ -178,6 +179,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             toNameOrId,
             amount,
             asset,
+            message,
             callback.wrapOriginal()
         )
     })
