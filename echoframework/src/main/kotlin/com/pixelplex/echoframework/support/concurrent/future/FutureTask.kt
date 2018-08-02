@@ -1,5 +1,6 @@
 package com.pixelplex.echoframework.support.concurrent.future
 
+import com.pixelplex.echoframework.exception.LocalException
 import java.util.concurrent.*
 
 /**
@@ -112,7 +113,7 @@ class FutureTask<T> : CancellableTask, CancellableFuture<T> {
 
     private fun getResultOrThrow(): T? {
         if (exception != null)
-            throw ExecutionException(exception)
+            throw LocalException(exception)
         return result
     }
 
