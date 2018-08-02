@@ -14,6 +14,8 @@ import com.pixelplex.echoframework.service.DatabaseApiService
 import com.pixelplex.echoframework.support.*
 import com.pixelplex.echoframework.support.Result.Error
 import com.pixelplex.echoframework.support.Result.Value
+import com.pixelplex.echoframework.support.concurrent.future.FutureTask
+import com.pixelplex.echoframework.support.concurrent.future.wrapResult
 
 /**
  * Implementation of [InformationFacade]
@@ -113,8 +115,18 @@ class InformationFacadeImpl(
         asset: String,
         callback: Callback<HistoryResponse>
     ) {
+        var accountId: String = nameOrId
+
+        getAccount(nameOrId)
+            .value { account -> accountId = account.getObjectId() }
+            .error { error ->
+                LOGGER.log("Unable to find account $nameOrId for history request", error)
+                callback.onError(error)
+                return
+            }
+
         accountHistoryApiService.getAccountHistory(
-            nameOrId,
+            accountId,
             transactionStartId,
             transactionStopId,
             limit
@@ -125,6 +137,24 @@ class InformationFacadeImpl(
         }.error { error ->
             callback.onError(LocalException(error.message, error))
         }
+    }
+
+    private fun getAccount(nameOrId: String): Result<LocalException, Account> {
+        val accountFuture = FutureTask<Account>()
+
+        getAccount(nameOrId, object : Callback<Account> {
+
+            override fun onSuccess(result: Account) {
+                accountFuture.setComplete(result)
+            }
+
+            override fun onError(error: LocalException) {
+                accountFuture.setComplete(error)
+            }
+
+        })
+
+        return accountFuture.wrapResult()
     }
 
     private fun fillTransactionInformation(history: HistoryResponse): HistoryResponse {

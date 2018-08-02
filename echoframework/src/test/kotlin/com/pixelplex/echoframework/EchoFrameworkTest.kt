@@ -221,14 +221,19 @@ class EchoFrameworkTest {
     }
 
     @Test
-    fun accountHistoryTest() {
-        val framework = initFramework()
+    fun accountHistoryByIdTest() = getAccountHistory("1.2.29")
 
-        val futureAccountHistory = FutureTask<HistoryResponse>()
+    @Test
+    fun accountHistoryByNameTest() = getAccountHistory("dima1")
+
+    private fun getAccountHistory(nameOrId: String) {
+        val framework = initFramework()
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
-        framework.getAccountHistory("1.2.29", "1.11.205",
+        val futureAccountHistory = FutureTask<HistoryResponse>()
+
+        framework.getAccountHistory(nameOrId, "1.11.205",
             "1.11.400",
             10,
             "1.3.0", object : Callback<HistoryResponse> {
@@ -381,7 +386,7 @@ class EchoFrameworkTest {
         assertNotNull(futureFee.get())
     }
 
-    @Test(expected = ExecutionException::class)
+    @Test(expected = LocalException::class)
     fun getRequiredFeeFailureTest() {
         val framework = initFramework()
 

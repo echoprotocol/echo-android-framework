@@ -1,5 +1,6 @@
 package com.pixelplex.echoframework.support.concurrent
 
+import com.pixelplex.echoframework.exception.LocalException
 import com.pixelplex.echoframework.support.concurrent.future.FutureCallback
 import com.pixelplex.echoframework.support.concurrent.future.FutureTask
 import com.pixelplex.echoframework.support.concurrent.future.wrapResult
@@ -66,7 +67,7 @@ class FutureTest {
         assertTrue(semaphore.tryAcquire(200, TimeUnit.MILLISECONDS))
     }
 
-    @Test(expected = ExecutionException::class)
+    @Test(expected = LocalException::class)
     fun cancelTest() {
         val future = FutureTask<Boolean>()
 
@@ -132,7 +133,7 @@ class FutureTest {
         future.wrapResult<Exception, Int>().fold({
             fail()
         }, { error ->
-            assertTrue(error is ExecutionException)
+            assertTrue(error is LocalException)
             assertTrue(error.cause is IllegalStateException)
         })
     }
