@@ -17,6 +17,7 @@ interface TransactionsFacade {
      * @param toNameOrId Transfer target account name or id
      * @param amount     Value amount of transfer operation
      * @param asset      Specific asset type id
+     * @param message    Additional payload to transfer operation
      * @param callback   Listener of operation results.
      *                   Retrieves true if transfer succeed,  otherwise - false
      */
@@ -26,6 +27,7 @@ interface TransactionsFacade {
         toNameOrId: String,
         amount: String,
         asset: String,
+        message: String?,
         callback: Callback<Boolean>
     )
 

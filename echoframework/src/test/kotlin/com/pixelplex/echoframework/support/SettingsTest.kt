@@ -80,6 +80,19 @@ class SettingsTest {
     }
 
     private class TestCryptoComponent : CryptoCoreComponent {
+        override fun encryptMessage(
+            privateKey: ByteArray,
+            publicKey: ByteArray,
+            nonce: BigInteger,
+            message: String
+        ): ByteArray? = ByteArray(0)
+
+        override fun decryptMessage(
+            privateKey: ByteArray,
+            publicKey: ByteArray,
+            nonce: BigInteger,
+            message: ByteArray
+        ): String = ""
 
         override fun getAddress(
             userName: String,

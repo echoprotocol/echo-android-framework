@@ -6,6 +6,8 @@ import com.google.common.primitives.UnsignedLong
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.pixelplex.echoframework.TIME_DATE_FORMAT
+import java.nio.ByteBuffer
+import java.security.MessageDigest
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -13,6 +15,7 @@ import java.util.*
  * Contains all project extensions
  *
  * @author Daria Pechkovskaya
+ * @author Bushuev Dmitriy
  */
 
 /**
@@ -67,4 +70,63 @@ fun String.toJsonObject(): JsonObject? =
 /**
  * Converts signed long value into unsigned
  */
-fun Long.toUnsignedLong() = UnsignedLong.valueOf(this)
+fun Long.toUnsignedLong(): UnsignedLong = UnsignedLong.valueOf(this)
+
+private val hexArray = "0123456789abcdef".toCharArray()
+
+/**
+ * Converts an hexadecimal string to its corresponding byte[] value.
+ *
+ * @return: The actual byte array.
+ */
+fun String.hexToBytes(): ByteArray {
+    val result = ByteArray(length / 2)
+
+    for (i in 0 until length step 2) {
+        val firstIndex = hexArray.indexOf(this[i])
+        val secondIndex = hexArray.indexOf(this[i + 1])
+
+        val octet = firstIndex.shl(4).or(secondIndex)
+        result[i.shr(1)] = octet.toByte()
+    }
+
+    return result
+}
+
+/**
+ * Return source byte array in reverse form
+ */
+fun ByteArray.revert(): ByteArray {
+    val reverted = ByteArray(this.size)
+    for (i in reverted.indices) {
+        reverted[i] = this[this.size - i - 1]
+    }
+    return reverted
+}
+
+/**
+ * Decodes an ascii string to a byte array.
+ */
+fun String.hexlify(): ByteArray {
+    val buffer = ByteBuffer.allocate(this.length)
+    for (letter in this.toCharArray()) {
+        buffer.put(letter.toByte())
+    }
+    return buffer.array()
+}
+
+/**
+ * Creates new [MessageDigest] for required [algorithm]
+ */
+private fun newDigest(algorithm: String) = MessageDigest.getInstance(algorithm)
+
+/**
+ * Creates sha256 hash from receiver byte array
+ */
+fun ByteArray.sha256hash(): ByteArray = newDigest("SHA-256").digest(this)
+
+/**
+ * Creates 512 hash from receiver byte array
+ */
+fun ByteArray.sha512hash(): ByteArray = newDigest("SHA-512").digest(this)
+

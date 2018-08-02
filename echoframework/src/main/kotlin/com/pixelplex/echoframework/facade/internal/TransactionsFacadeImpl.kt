@@ -12,6 +12,7 @@ import com.pixelplex.echoframework.service.NetworkBroadcastApiService
 import com.pixelplex.echoframework.support.dematerialize
 import com.pixelplex.echoframework.support.error
 import com.pixelplex.echoframework.support.value
+import java.math.BigInteger
 
 /**
  * Implementation of [TransactionsFacade]
@@ -34,6 +35,7 @@ class TransactionsFacadeImpl(
         toNameOrId: String,
         amount: String,
         asset: String,
+        message: String?,
         callback: Callback<Boolean>
     ) {
         try {
@@ -55,29 +57,32 @@ class TransactionsFacadeImpl(
 
             checkOwnerAccount(nameOrId, password, fromAccount!!)
 
-            val transfer = TransferOperationBuilder().setFrom(
-                fromAccount!!
-            ).setTo(
-                toAccount!!
-            ).setAmount(
-                AssetAmount(
-                    UnsignedLong.valueOf(amount.toLong()), Asset(asset)
-                )
-            ).build()
-
-            val blockData = databaseApiService.getBlockData()
-            val chainId = getChainId()
             val privateKey =
                 cryptoCoreComponent.getPrivateKey(
                     fromAccount!!.name,
                     password,
-                    AuthorityType.OWNER
+                    AuthorityType.ACTIVE
                 )
+
+            val memo = generateMemo(privateKey, fromAccount!!, toAccount!!, message)
+
+            val transfer = TransferOperationBuilder()
+                .setFrom(fromAccount!!)
+                .setTo(toAccount!!)
+                .setAmount(AssetAmount(UnsignedLong.valueOf(amount.toLong()), Asset(asset)))
+                .setMemo(memo)
+                .build()
+
+            val blockData = databaseApiService.getBlockData()
+            val chainId = getChainId()
             val fees = getFees(listOf(transfer), asset)
 
-            val transaction = Transaction(privateKey, blockData, listOf(transfer), chainId)
-
-            transaction.setFees(fees)
+            val transaction = Transaction(
+                privateKey,
+                blockData,
+                listOf(transfer),
+                chainId
+            ).apply { setFees(fees) }
 
             val transactionResult =
                 networkBroadcastApiService.broadcastTransactionWithCallback(transaction)
@@ -98,6 +103,31 @@ class TransactionsFacadeImpl(
         if (!isKeySame) {
             throw LocalException("Owner account checking exception")
         }
+    }
+
+    private fun generateMemo(
+        privateKey: ByteArray,
+        fromAccount: Account,
+        toAccount: Account,
+        message: String?
+    ): Memo {
+        if (message != null) {
+            val encryptedMessage = cryptoCoreComponent.encryptMessage(
+                privateKey,
+                toAccount.options.memoKey!!.key,
+                BigInteger.ZERO,
+                message
+            )
+
+            return Memo(
+                Address(fromAccount.options.memoKey!!),
+                Address(toAccount.options.memoKey!!),
+                BigInteger.ZERO,
+                encryptedMessage ?: ByteArray(0)
+            )
+        }
+
+        return Memo()
     }
 
     private fun getChainId(): String = databaseApiService.getChainId().dematerialize()

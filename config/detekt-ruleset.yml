@@ -36,7 +36,7 @@ complexity:
     threshold: 20
   LongParameterList:
     active: true
-    threshold: 7
+    threshold: 8
     ignoreDefaultParameters: false
   NestedBlockDepth:
     active: true

@@ -5,6 +5,7 @@ import com.google.gson.*
 import com.pixelplex.echoframework.model.Account
 import com.pixelplex.echoframework.model.AssetAmount
 import com.pixelplex.echoframework.model.BaseOperation
+import com.pixelplex.echoframework.model.Memo
 import java.lang.reflect.Type
 
 
@@ -19,6 +20,7 @@ class TransferOperation : BaseOperation {
     var assetAmount: AssetAmount? = null
     var from: Account? = null
     var to: Account? = null
+    var memo = Memo()
 
     constructor(
         from: Account,
@@ -47,9 +49,7 @@ class TransferOperation : BaseOperation {
         val fromBytes = from!!.toBytes()
         val toBytes = to!!.toBytes()
         val amountBytes = assetAmount!!.toBytes()
-        // important to add zero byte in any case!!
-        // implement memo
-        val memoBytes = 0.toByte()
+        val memoBytes = memo.toBytes()
         val extensions = extensions.toBytes()
         return feeBytes + fromBytes + toBytes + amountBytes + memoBytes + extensions
     }
@@ -70,6 +70,8 @@ class TransferOperation : BaseOperation {
             addProperty(KEY_FROM, from!!.toJsonString())
             addProperty(KEY_TO, to!!.toJsonString())
             add(KEY_AMOUNT, assetAmount!!.toJsonObject())
+            if (memo.byteMessage != null)
+                add(KEY_MEMO, memo.toJsonObject())
             add(KEY_EXTENSIONS, extensions.toJsonObject())
         }
         add(jsonObject)
@@ -144,7 +146,12 @@ class TransferOperation : BaseOperation {
                 to,
                 amount,
                 fee
-            )
+            ).apply {
+                if (jsonObject.has(KEY_MEMO)) {
+                    this.memo =
+                            context.deserialize<Memo>(jsonObject.get(KEY_MEMO), Memo::class.java)
+                }
+            }
         }
     }
 
@@ -153,6 +160,7 @@ class TransferOperation : BaseOperation {
         const val KEY_FROM = "from"
         const val KEY_TO = "to"
         const val KEY_FEE = "fee"
+        const val KEY_MEMO = "memo"
         const val KEY_EXTENSIONS = "extensions"
     }
 }

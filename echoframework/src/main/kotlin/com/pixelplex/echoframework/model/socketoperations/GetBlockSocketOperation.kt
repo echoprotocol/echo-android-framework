@@ -42,9 +42,7 @@ class GetBlockSocketOperation(
 
         val result = jsonTree.asJsonObject.get(RESULT_KEY)?.asJsonObject ?: return null
 
-        val gson = configureGson()
-
-        return gson.fromJson<Block>(
+        return configureGson().fromJson<Block>(
             result,
             Block::class.java
         )
@@ -66,6 +64,10 @@ class GetBlockSocketOperation(
         registerTypeAdapter(
             TransferOperation::class.java,
             TransferOperation.TransferDeserializer()
+        )
+        registerTypeAdapter(
+            Memo::class.java,
+            Memo.MemoDeserializer(network)
         )
         registerTypeAdapter(AssetAmount::class.java, AssetAmount.Deserializer())
         registerTypeAdapter(Authority::class.java, Authority.Deserializer(network))
