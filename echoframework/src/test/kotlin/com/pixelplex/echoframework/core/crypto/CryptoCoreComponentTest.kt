@@ -4,15 +4,15 @@ import com.google.common.primitives.UnsignedLong
 import com.pixelplex.bitcoinj.ECKey
 import com.pixelplex.echoframework.core.crypto.internal.CryptoCoreComponentImpl
 import com.pixelplex.echoframework.model.*
+import com.pixelplex.echoframework.model.network.Echodevnet
 import com.pixelplex.echoframework.model.network.Network
-import com.pixelplex.echoframework.model.network.Testnet
 import com.pixelplex.echoframework.model.operations.TransferOperation
 import com.pixelplex.echoframework.model.operations.TransferOperationBuilder
 import com.pixelplex.echoframework.support.Signature.SIGN_DATA_BYTES
-import org.junit.Assert
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
+import java.math.BigInteger
 
 /**
  * Test cases for [CryptoCoreComponentImpl]
@@ -25,12 +25,18 @@ class CryptoCoreComponentTest {
 
     private val name = "testName"
     private val password = "testPassword"
+
+    private val secondName = "secondTestName"
+    private val secondPassword = "secondTestPassword"
+
     private lateinit var network: Network
     private val authorityType = AuthorityType.ACTIVE
 
+    private val message = "testMessage"
+
     @Before
     fun setUp() {
-        network = Testnet()
+        network = Echodevnet()
         cryptoCoreComponent = CryptoCoreComponentImpl(network)
     }
 
@@ -75,7 +81,68 @@ class CryptoCoreComponentTest {
 
         val signature = cryptoCoreComponent.signTransaction(transaction)
 
-        Assert.assertTrue(signature.size == SIGN_DATA_BYTES)
+        assertTrue(signature.size == SIGN_DATA_BYTES)
+    }
+
+    @Test
+    fun encryptMessageTest() {
+        assertNotNull(encrypt())
+    }
+
+    @Test
+    fun decryptMessageTest() {
+        val encrypted = encrypt()
+
+        val privateKey =
+            cryptoCoreComponent.getPrivateKey(secondName, secondPassword, AuthorityType.ACTIVE)
+        val publicKey = Address(
+            cryptoCoreComponent.getAddress(
+                name,
+                password,
+                AuthorityType.ACTIVE
+            ), network
+        ).pubKey.key
+
+        val decrypted =
+            cryptoCoreComponent.decryptMessage(privateKey, publicKey, BigInteger.ZERO, encrypted)
+
+        assertEquals(decrypted, message)
+    }
+
+    @Test
+    fun decryptFailTest() {
+        val encrypted = encrypt()
+
+        val privateKey =
+            cryptoCoreComponent.getPrivateKey("wrongName", "wrongPassword", AuthorityType.ACTIVE)
+        val publicKey = Address(
+            cryptoCoreComponent.getAddress(
+                "wrongName1",
+                "wrongPassword1",
+                AuthorityType.ACTIVE
+            ), network
+        ).pubKey.key
+
+        val decrypted =
+            cryptoCoreComponent.decryptMessage(privateKey, publicKey, BigInteger.ZERO, encrypted)
+
+        assertNotEquals(decrypted, message)
+    }
+
+    private fun encrypt(): ByteArray {
+        val privateKey = cryptoCoreComponent.getPrivateKey(name, password, AuthorityType.ACTIVE)
+        val publicKey = Address(
+            cryptoCoreComponent.getAddress(
+                secondName,
+                secondPassword,
+                AuthorityType.ACTIVE
+            ), network
+        ).pubKey.key
+
+        val encrypted =
+            cryptoCoreComponent.encryptMessage(privateKey, publicKey, BigInteger.ZERO, message)
+
+        return encrypted!!
     }
 
     private fun buildOperation(): TransferOperation {
