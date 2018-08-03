@@ -159,6 +159,8 @@ class InformationFacadeImpl(
         val fullAccountTransactions = mutableListOf<HistoricalTransfer>()
         val blocks = mutableMapOf<Long, Block>()
 
+        val accountsRegistry = mutableMapOf<String, Account>()
+
         for (transaction in history.transactions) {
             if (!blocks.containsKey(transaction.blockNum)) {
                 databaseApiService.getBlock(transaction.blockNum.toString())
@@ -178,10 +180,13 @@ class InformationFacadeImpl(
 
             when (operation.type) {
                 OperationType.ACCOUNT_UPDATE_OPERATION ->
-                    processAccountUpdateOperation(operation as AccountUpdateOperation)
+                    processAccountUpdateOperation(
+                        operation as AccountUpdateOperation,
+                        accountsRegistry
+                    )
 
                 OperationType.TRANSFER_OPERATION ->
-                    processTransferOperation(operation as TransferOperation)
+                    processTransferOperation(operation as TransferOperation, accountsRegistry)
 
                 else -> {
                 }
@@ -193,28 +198,48 @@ class InformationFacadeImpl(
         return HistoryResponse(fullAccountTransactions)
     }
 
-    private fun processAccountUpdateOperation(operation: AccountUpdateOperation) {
+    private fun processAccountUpdateOperation(
+        operation: AccountUpdateOperation,
+        accountRegistry: MutableMap<String, Account>
+    ) {
         val accountId = operation.account.getObjectId()
 
+        accountRegistry[accountId]?.let { account ->
+            operation.account = account
+            return
+        }
+
         databaseApiService.getFullAccounts(listOf(accountId), false)
-            .map { accountsMap ->
+            .value { accountsMap ->
                 accountsMap[accountId]?.account?.let { notNullAccount ->
                     operation.account = notNullAccount
+                    accountRegistry[accountId] = notNullAccount
                 }
             }
     }
 
-    private fun processTransferOperation(operation: TransferOperation) {
+    private fun processTransferOperation(
+        operation: TransferOperation,
+        accountRegistry: MutableMap<String, Account>
+    ) {
         val fromAccountId = operation.from?.getObjectId() ?: ""
         val toAccountId = operation.to?.getObjectId() ?: ""
 
+        if (accountRegistry.containsKey(fromAccountId) && accountRegistry.containsKey(toAccountId)) {
+            operation.from = accountRegistry[fromAccountId]
+            operation.to = accountRegistry[toAccountId]
+            return
+        }
+
         databaseApiService.getFullAccounts(listOf(fromAccountId, toAccountId), false)
-            .map { accountsMap ->
+            .value { accountsMap ->
                 accountsMap[fromAccountId]?.account?.let { notNullFromAccount ->
                     operation.from = notNullFromAccount
+                    accountRegistry[fromAccountId] = notNullFromAccount
                 }
                 accountsMap[toAccountId]?.account?.let { notNullToAccount ->
                     operation.to = notNullToAccount
+                    accountRegistry[toAccountId] = notNullToAccount
                 }
             }
     }
