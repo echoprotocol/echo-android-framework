@@ -9,6 +9,7 @@ import com.pixelplex.echoframework.model.*
 import com.pixelplex.echoframework.model.operations.TransferOperationBuilder
 import com.pixelplex.echoframework.service.DatabaseApiService
 import com.pixelplex.echoframework.service.NetworkBroadcastApiService
+import com.pixelplex.echoframework.support.Result
 import com.pixelplex.echoframework.support.dematerialize
 import com.pixelplex.echoframework.support.error
 import com.pixelplex.echoframework.support.value
@@ -36,7 +37,7 @@ class TransactionsFacadeImpl(
         message: String?,
         callback: Callback<Boolean>
     ) {
-        try {
+        Result {
             var toAccount: Account? = null
             var fromAccount: Account? = null
 
@@ -82,15 +83,10 @@ class TransactionsFacadeImpl(
                 chainId
             ).apply { setFees(fees) }
 
-            val transactionResult =
-                networkBroadcastApiService.broadcastTransactionWithCallback(transaction)
-
-            callback.onSuccess(transactionResult.dematerialize())
-        } catch (ex: LocalException) {
-            callback.onError(ex)
-        } catch (ex: Exception) {
-            callback.onError(LocalException(ex.message, ex))
+            networkBroadcastApiService.broadcastTransactionWithCallback(transaction).dematerialize()
         }
+            .value { transactionResult -> callback.onSuccess(transactionResult) }
+            .error { error -> callback.onError(LocalException(error)) }
     }
 
     private fun checkOwnerAccount(name: String, password: String, account: Account) {

@@ -10,8 +10,7 @@ import com.pixelplex.echoframework.model.Asset
 import com.pixelplex.echoframework.model.AssetAmount
 import com.pixelplex.echoframework.model.operations.TransferOperationBuilder
 import com.pixelplex.echoframework.service.DatabaseApiService
-import com.pixelplex.echoframework.support.error
-import com.pixelplex.echoframework.support.value
+import com.pixelplex.echoframework.support.*
 
 /**
  * Implementation of [FeeFacade]
@@ -29,7 +28,7 @@ class FeeFacadeImpl(private val databaseApiService: DatabaseApiService) : FeeFac
         asset: String,
         callback: Callback<String>
     ) {
-        try {
+        Result {
             var toAccount: Account? = null
             var fromAccount: Account? = null
 
@@ -54,32 +53,29 @@ class FeeFacadeImpl(private val databaseApiService: DatabaseApiService) : FeeFac
 
             val transfer = buildTransaction(fromAccount!!, toAccount!!, amount, asset)
 
-            databaseApiService.getRequiredFees(listOf(transfer), Asset(asset))
-                .value { fees ->
-                    if (fees.isEmpty()) {
-                        LOGGER.log(
-                            """Empty fee list for required operation.
+            databaseApiService.getRequiredFees(listOf(transfer), Asset(asset)).dematerialize()
+        }
+            .map { fees ->
+                if (fees.isEmpty()) {
+                    LOGGER.log(
+                        """Empty fee list for required operation.
                             |Source = $fromNameOrId
                             |Target = $toNameOrId
                             |Amount = $amount
                             |Asset = $asset
                         """
-                        )
-                        callback.onError(LocalException("Unable to get fee for specified operation"))
-                        return
-                    }
-
-                    callback.onSuccess(fees[0].amount.toString())
-                }
-                .error { error ->
-                    callback.onError(LocalException(error.message, error))
+                    )
+                    throw LocalException("Unable to get fee for specified operation")
                 }
 
-        } catch (ex: LocalException) {
-            callback.onError(ex)
-        } catch (ex: Exception) {
-            callback.onError(LocalException(ex.message, ex))
-        }
+                fees[0].amount.toString()
+            }
+            .value { fee ->
+                callback.onSuccess(fee)
+            }
+            .error { error ->
+                callback.onError(LocalException(error.message, error))
+            }
     }
 
     private fun buildTransaction(
