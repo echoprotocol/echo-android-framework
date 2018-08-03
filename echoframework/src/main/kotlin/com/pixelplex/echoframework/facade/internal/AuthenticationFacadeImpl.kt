@@ -70,10 +70,7 @@ class AuthenticationFacadeImpl(
             val fees = getFees(listOf(operation))
             transaction.setFees(fees)
 
-            val transactionResult =
-                networkBroadcastApiService.broadcastTransactionWithCallback(transaction)
-
-            transactionResult.dematerialize()
+            networkBroadcastApiService.broadcastTransactionWithCallback(transaction).dematerialize()
         }
             .value { result -> callback.onSuccess(result) }
             .error { error -> callback.onError(LocalException(error)) }

@@ -75,16 +75,10 @@ class InformationFacadeImpl(
         success: (FullAccount?) -> Unit,
         failure: (Exception) -> Unit
     ) {
-        val result = databaseApiService.getFullAccounts(listOf(nameOrId), false)
-
-        result
+        databaseApiService.getFullAccounts(listOf(nameOrId), false)
             .map { accountMap -> accountMap[nameOrId] }
-            .value { account ->
-                success(account)
-            }
-            .error { error ->
-                failure(error)
-            }
+            .value { account -> success(account) }
+            .error { error -> failure(error) }
     }
 
     private fun findBalance(
@@ -93,13 +87,11 @@ class InformationFacadeImpl(
     ): Result<LocalException, Balance> = account?.let { notNullAccount ->
         val accountBalances = notNullAccount.balances
         if (accountBalances?.isEmpty() == false) {
-            accountBalances.firstOrNull { balance -> balance.assetType == asset }
-                ?.let { balance ->
-                    Value(balance)
-                }
-                    ?: Error(
-                        NotFoundException("Account balance with asset type = $asset is not found")
-                    )
+            accountBalances.firstOrNull { balance -> balance.assetType == asset }?.let { balance ->
+                Value(balance)
+            } ?: Error(
+                NotFoundException("Account balance with asset type = $asset is not found")
+            )
         } else {
             Error(LocalException("Account balances are empty."))
         }
@@ -157,8 +149,9 @@ class InformationFacadeImpl(
 
     private fun fillTransactionInformation(history: HistoryResponse): HistoryResponse {
         val fullAccountTransactions = mutableListOf<HistoricalTransfer>()
-        val blocks = mutableMapOf<Long, Block>()
 
+        // Need to save all requested additional information to avoid unnecessary calls
+        val blocks = mutableMapOf<Long, Block>()
         val accountsRegistry = mutableMapOf<String, Account>()
 
         for (transaction in history.transactions) {

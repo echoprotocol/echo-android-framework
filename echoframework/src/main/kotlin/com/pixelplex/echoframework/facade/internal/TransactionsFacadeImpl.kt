@@ -43,16 +43,14 @@ class TransactionsFacadeImpl(
 
             databaseApiService.getFullAccounts(listOf(nameOrId, toNameOrId), false)
                 .value { accountsMap ->
-                    toAccount = accountsMap[toNameOrId]?.account
                     fromAccount = accountsMap[nameOrId]?.account
+                            ?: throw LocalException("Unable to find required account $nameOrId")
+                    toAccount = accountsMap[toNameOrId]?.account
+                            ?: throw LocalException("Unable to find required account $toNameOrId")
                 }
                 .error { accountsError ->
                     throw LocalException("Error occurred during accounts request", accountsError)
                 }
-
-            if (toAccount == null || fromAccount == null) {
-                throw LocalException("Unable to find required accounts: source = $nameOrId, target = $toNameOrId")
-            }
 
             checkOwnerAccount(nameOrId, password, fromAccount!!)
 

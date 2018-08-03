@@ -343,7 +343,7 @@ class EchoFrameworkTest {
             "dima1",
             "P5KctJPedZ4K9T77KgmqhVNJ5H6FojEN6fRVp9PYyhAb9",
             "dima2",
-            "10", "1.3.0", "Memasik", object : Callback<Boolean> {
+            "1", "1.3.0", "Memasik", object : Callback<Boolean> {
                 override fun onSuccess(result: Boolean) {
                     futureTransfer.setComplete(result)
                 }

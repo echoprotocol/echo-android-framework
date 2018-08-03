@@ -30,10 +30,10 @@ class DatabaseApiServiceImpl(
 
     override var id: Int = ILLEGAL_ID
 
-    private var socketMessengerListener: SocketMessengerListener = SubscriptionListener()
+    private var socketMessengerListener = SubscriptionListener()
 
     @Volatile
-    private var subscribed: Boolean = false
+    private var subscribed = false
 
     private val subscriptionManager: AccountSubscriptionManager by lazy {
         AccountSubscriptionManagerImpl(network)

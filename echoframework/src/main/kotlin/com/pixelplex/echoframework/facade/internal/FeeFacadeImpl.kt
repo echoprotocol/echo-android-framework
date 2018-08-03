@@ -54,28 +54,25 @@ class FeeFacadeImpl(private val databaseApiService: DatabaseApiService) : FeeFac
             val transfer = buildTransaction(fromAccount!!, toAccount!!, amount, asset)
 
             databaseApiService.getRequiredFees(listOf(transfer), Asset(asset)).dematerialize()
-        }
-            .map { fees ->
-                if (fees.isEmpty()) {
-                    LOGGER.log(
-                        """Empty fee list for required operation.
+        }.map { fees ->
+            if (fees.isEmpty()) {
+                LOGGER.log(
+                    """Empty fee list for required operation.
                             |Source = $fromNameOrId
                             |Target = $toNameOrId
                             |Amount = $amount
                             |Asset = $asset
                         """
-                    )
-                    throw LocalException("Unable to get fee for specified operation")
-                }
+                )
+                throw LocalException("Unable to get fee for specified operation")
+            }
 
-                fees[0].amount.toString()
-            }
-            .value { fee ->
-                callback.onSuccess(fee)
-            }
-            .error { error ->
-                callback.onError(LocalException(error.message, error))
-            }
+            fees[0].amount.toString()
+        }.value { fee ->
+            callback.onSuccess(fee)
+        }.error { error ->
+            callback.onError(LocalException(error.message, error))
+        }
     }
 
     private fun buildTransaction(
