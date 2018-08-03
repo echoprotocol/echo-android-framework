@@ -52,15 +52,7 @@ class FeeFacadeImpl(private val databaseApiService: DatabaseApiService) : FeeFac
                 throw LocalException("Unable to find required accounts: source = $fromNameOrId, target = $toNameOrId")
             }
 
-            val transfer = TransferOperationBuilder().setFrom(
-                fromAccount!!
-            ).setTo(
-                toAccount!!
-            ).setAmount(
-                AssetAmount(
-                    UnsignedLong.valueOf(amount.toLong()), Asset(asset)
-                )
-            ).build()
+            val transfer = buildTransaction(fromAccount!!, toAccount!!, amount, asset)
 
             databaseApiService.getRequiredFees(listOf(transfer), Asset(asset))
                 .value { fees ->
@@ -84,11 +76,22 @@ class FeeFacadeImpl(private val databaseApiService: DatabaseApiService) : FeeFac
                 }
 
         } catch (ex: LocalException) {
-            return callback.onError(ex)
+            callback.onError(ex)
         } catch (ex: Exception) {
-            return callback.onError(LocalException(ex.message, ex))
+            callback.onError(LocalException(ex.message, ex))
         }
     }
+
+    private fun buildTransaction(
+        fromAccount: Account,
+        toAccount: Account,
+        amount: String,
+        asset: String
+    ) = TransferOperationBuilder()
+        .setFrom(fromAccount)
+        .setTo(toAccount)
+        .setAmount(AssetAmount(UnsignedLong.valueOf(amount.toLong()), Asset(asset)))
+        .build()
 
     companion object {
         private val LOGGER = LoggerCoreComponent.create(FeeFacadeImpl::class.java.name)
