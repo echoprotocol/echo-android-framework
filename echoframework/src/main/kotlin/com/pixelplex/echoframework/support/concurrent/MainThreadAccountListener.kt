@@ -10,8 +10,7 @@ import com.pixelplex.echoframework.model.Account
  */
 class MainThreadAccountListener(private val delegate: AccountListener) : AccountListener {
 
-    private val mainThreadExecutor =
-        MainThreadExecutor()
+    private val mainThreadExecutor = MainThreadExecutor()
 
     override fun onChange(updatedAccount: Account) {
         mainThreadExecutor.execute {

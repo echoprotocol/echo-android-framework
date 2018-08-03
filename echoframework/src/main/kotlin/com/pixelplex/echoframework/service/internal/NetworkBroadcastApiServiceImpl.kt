@@ -22,8 +22,7 @@ import com.pixelplex.echoframework.support.concurrent.future.wrapResult
 class NetworkBroadcastApiServiceImpl(
     private val socketCoreComponent: SocketCoreComponent,
     private val cryptoCoreComponent: CryptoCoreComponent
-) :
-    NetworkBroadcastApiService {
+) : NetworkBroadcastApiService {
 
     override var id: Int = ILLEGAL_ID
 

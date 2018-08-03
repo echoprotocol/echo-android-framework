@@ -10,8 +10,7 @@ import com.pixelplex.echoframework.exception.LocalException
  */
 class MainThreadCallback<T>(private val delegate: Callback<T>) : Callback<T> {
 
-    private val mainThreadExecutor =
-        MainThreadExecutor()
+    private val mainThreadExecutor = MainThreadExecutor()
 
     override fun onSuccess(result: T) {
         mainThreadExecutor.execute {
