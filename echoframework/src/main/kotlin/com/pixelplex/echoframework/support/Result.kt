@@ -31,12 +31,20 @@ fun <E : Exception> E.toError(): Result<E, Nothing> = Result.Error(this)
 
 /**
  * Maps value to another type of value by function
+ *
+ * Returns [Result.Value<[V2]>] with applied [f] to current value.
+ * [Result.Error<[E], [V2]>] if [f] will throw an exception
+ *
  * @param f Function to map
  */
 inline infix fun <E : Exception, V, V2> Result<E, V>.map(f: (V) -> V2): Result<E, V2> =
     when (this) {
         is Result.Error -> this
-        is Result.Value -> Result.Value(f(this.value))
+        is Result.Value -> try {
+            Result.Value(f(this.value))
+        } catch (e: Exception) {
+            Result.Error(e as E)
+        }
     }
 
 /**
