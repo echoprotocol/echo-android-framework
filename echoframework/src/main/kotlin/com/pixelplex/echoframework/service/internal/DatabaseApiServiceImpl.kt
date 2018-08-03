@@ -100,12 +100,7 @@ class DatabaseApiServiceImpl(
     }
 
     override fun getBlockData(): BlockData {
-        val globalPropertiesResult = getDynamicGlobalProperties()
-        val dynamicProperties = if (globalPropertiesResult is Result.Value) {
-            globalPropertiesResult.value
-        } else {
-            throw (globalPropertiesResult as Result.Error).error
-        }
+        val dynamicProperties = getDynamicGlobalProperties().dematerialize()
         val expirationTime = TimeUnit.MILLISECONDS.toSeconds(dynamicProperties.date!!.time) +
                 Transaction.DEFAULT_EXPIRATION_TIME
         val headBlockId = dynamicProperties.headBlockId
