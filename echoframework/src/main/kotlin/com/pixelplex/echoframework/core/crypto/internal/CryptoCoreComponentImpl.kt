@@ -133,6 +133,14 @@ class CryptoCoreComponentImpl(network: Network) : CryptoCoreComponent {
             plaintext = String(decrypted)
 
             // checksum verification!
+            val checksum = Arrays.copyOfRange(temp, 0, Checksum.CHECKSUM_SIZE)
+            val verificationChecksum =
+                Arrays.copyOfRange(plaintext.toByteArray().sha256hash(), 0, Checksum.CHECKSUM_SIZE)
+
+            checkTrue(
+                Arrays.equals(checksum, verificationChecksum),
+                "Corrupted message. Checksum should be the same."
+            )
         } catch (e: NoSuchAlgorithmException) {
             LOGGER.log("Error occurred during creating digest for nonexistent algorithm", e)
         } catch (e: Exception) {
