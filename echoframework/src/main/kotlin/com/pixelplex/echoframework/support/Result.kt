@@ -17,6 +17,21 @@ sealed class Result<out E : Exception, out V> {
      * Value operation result
      */
     data class Value<out V>(val value: V) : Result<Nothing, V>()
+
+    companion object {
+
+        /**
+         * Creates [Result] instance according to [body] result.
+         * If execution succeeds (no exception thrown) - [Value] returns,
+         * otherwise - [Error] returns
+         */
+        operator fun <T> invoke(body: () -> T): Result<Exception, T> =
+            try {
+                Value(body())
+            } catch (e: Exception) {
+                Error(e)
+            }
+    }
 }
 
 /**

@@ -12,10 +12,7 @@ import com.pixelplex.echoframework.model.operations.AccountUpdateOperation
 import com.pixelplex.echoframework.model.operations.AccountUpdateOperationBuilder
 import com.pixelplex.echoframework.service.DatabaseApiService
 import com.pixelplex.echoframework.service.NetworkBroadcastApiService
-import com.pixelplex.echoframework.support.dematerialize
-import com.pixelplex.echoframework.support.error
-import com.pixelplex.echoframework.support.map
-import com.pixelplex.echoframework.support.value
+import com.pixelplex.echoframework.support.*
 
 /**
  * Implementation of [AuthenticationFacade]
@@ -32,9 +29,7 @@ class AuthenticationFacadeImpl(
 ) : AuthenticationFacade {
 
     override fun isOwnedBy(name: String, password: String, callback: Callback<Account>) {
-        val result = databaseApiService.getFullAccounts(listOf(name), false)
-
-        result
+        databaseApiService.getFullAccounts(listOf(name), false)
             .map { accountsMap -> accountsMap[name] }
             .map { fullAccount -> fullAccount?.account }
             .value { account ->
@@ -60,7 +55,7 @@ class AuthenticationFacadeImpl(
         newPassword: String,
         callback: Callback<Any>
     ) {
-        try {
+        Result {
             val accountId = getAccountId(name, oldPassword)
             val operation: AccountUpdateOperation =
                 buildAccountUpdateOperation(accountId, name, newPassword)
@@ -78,12 +73,10 @@ class AuthenticationFacadeImpl(
             val transactionResult =
                 networkBroadcastApiService.broadcastTransactionWithCallback(transaction)
 
-            callback.onSuccess(transactionResult.dematerialize())
-        } catch (ex: LocalException) {
-            callback.onError(ex)
-        } catch (ex: Exception) {
-            callback.onError(LocalException(ex.message, ex))
+            transactionResult.dematerialize()
         }
+            .value { result -> callback.onSuccess(result) }
+            .error { error -> callback.onError(LocalException(error)) }
     }
 
     private fun getAccountId(name: String, password: String): String {
@@ -102,7 +95,7 @@ class AuthenticationFacadeImpl(
         return if (isKeySame) {
             account!!.getObjectId()
         } else {
-            throw NotFoundException("Account not found.")
+            throw NotFoundException("No account found for specified name and password")
         }
     }
 
