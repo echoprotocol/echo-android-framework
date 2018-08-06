@@ -129,14 +129,14 @@ if (bintrayKey == null && project.hasProperty("bintrayApiKeyVar")) {
 }
 
 task validateBintrayCredentials() {
-    if (bintrayAccount == null || bintrayKey == null) {
-        throw new GradleException("Account name and api key required for bintray publishing")
+    doFirst {
+        if (bintrayAccount == null || bintrayKey == null) {
+            throw new GradleException("Account name and api key required for bintray publishing")
+        }
     }
 }
 
-bintrayUpload.doFirst {
-    validateBintrayCredentials
-}
+bintrayUpload.doFirst {validateBintrayCredentials}
 
 bintray {
     user = bintrayAccount
