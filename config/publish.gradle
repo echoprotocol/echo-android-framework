@@ -15,7 +15,7 @@ ext {
     gitUrl = 'https://gitlab.pixelplex.by/646_echo_mobile_library/android.git'
     siteUrl = 'https://gitlab.pixelplex.by/646_echo_mobile_library/android'
 
-    libraryVersion = '0.0.1-beta'
+    libraryVersion = '1.0.0-alpha'
 
     firstDeveloperId = 'dmitriy'
     firstDeveloperName = 'Dmitriy Bushuev'
