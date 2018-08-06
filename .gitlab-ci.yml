@@ -6,6 +6,7 @@ stages:
   - test
   - checkstyle
   - docgen
+  - publish
 
 .build_template: &build_template_def
   stage: build
@@ -18,7 +19,6 @@ build_debug:
   <<: *build_template_def
   only:
     - develop
-
   script:
     - gradlew assembleDebug
 
@@ -50,14 +50,22 @@ code_analysis:
     paths:
       - echoframework/build/reports/detekt
 
-doc_generation:
+pages:
   stage: docgen
   only:
     - master
     - develop
   script:
-    - gradlew dokka
+    - call gradlew dokka
+    - call mkdir public
+    - call xcopy /s/e/y echoframework\build\javadoc public
   artifacts:
-    expire_in: 4 hours
     paths:
-      - echoframework/build/javadoc
+      - public
+
+maven_publishing:
+  stage: publish
+  only:
+    - master
+  script:
+    - gradlew install bintrayUpload -PbintrayUser = %bintrayUserVar% -PbintrayApiKey = %bintrayApiKeyVar%
