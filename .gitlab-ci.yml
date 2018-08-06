@@ -50,7 +50,7 @@ code_analysis:
     paths:
       - echoframework/build/reports/detekt
 
-doc_generation:
+pages:
   stage: docgen
   only:
     - master
@@ -58,7 +58,6 @@ doc_generation:
   script:
     - gradlew dokka
   artifacts:
-    expire_in: 4 hours
     paths:
       - echoframework/build/javadoc
 
