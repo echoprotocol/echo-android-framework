@@ -58,7 +58,7 @@ pages:
   script:
     - call gradlew dokka
     - call mkdir public
-    - call xcopy echoframework/build/javadoc public /s/e/y
+    - call xcopy /s/e/y echoframework\build\javadoc public
   artifacts:
     paths:
       - public
