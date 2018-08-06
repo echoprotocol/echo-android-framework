@@ -116,9 +116,31 @@ if (project.rootProject.file('local.properties').exists()) {
     properties.load(project.rootProject.file('local.properties').newDataInputStream())
 }
 
+// Bintray account name for library publishing
+def bintrayAccount = properties.getProperty("bintrayUser")
+if (bintrayAccount == null && project.hasProperty("bintrayUser")) {
+    bintrayAccount = project.findProperty("bintrayUser")
+}
+
+// Bintray api key for library publishing
+def bintrayKey = properties.getProperty("bintrayApiKey")
+if (bintrayKey == null && project.hasProperty("bintrayApiKey")) {
+    bintrayKey = project.findProperty("bintrayApiKey")
+}
+
+task validateBintrayCredentials() {
+    if (bintrayAccount == null || bintrayKey == null) {
+        throw new GradleException("Account name and api key required for bintray publishing")
+    }
+}
+
+bintrayUpload.doFirst {
+    validateBintrayCredentials
+}
+
 bintray {
-    user = properties.getProperty("bintray.user")
-    key = properties.getProperty("bintray.apikey")
+    user = bintrayAccount
+    key = bintrayKey
 
     configurations = ['archives']
     pkg {
