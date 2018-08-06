@@ -57,8 +57,8 @@ pages:
     - develop
   script:
     - gradlew dokka
-    - mkdir public
-    - xcopy echoframework/build/javadoc public /s /e /y
+    - call mkdir public
+    - call xcopy echoframework/build/javadoc public /s/e/y
   artifacts:
     paths:
       - public
