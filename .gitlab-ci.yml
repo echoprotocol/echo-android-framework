@@ -57,9 +57,11 @@ pages:
     - develop
   script:
     - gradlew dokka
+    - mkdir public
+    - xcopy echoframework/build/javadoc public /s /e /y
   artifacts:
     paths:
-      - echoframework/build/javadoc
+      - public
 
 maven_publishing:
   stage: publish
