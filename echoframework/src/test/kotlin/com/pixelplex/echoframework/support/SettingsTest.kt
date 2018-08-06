@@ -9,6 +9,7 @@ import com.pixelplex.echoframework.core.socket.SocketMessengerListener
 import com.pixelplex.echoframework.core.socket.internal.SocketMessengerImpl
 import com.pixelplex.echoframework.model.AuthorityType
 import com.pixelplex.echoframework.model.Transaction
+import com.pixelplex.echoframework.model.network.Echodevnet
 import com.pixelplex.echoframework.model.network.Mainnet
 import com.pixelplex.echoframework.model.network.Testnet
 import org.junit.Assert.*
@@ -31,7 +32,7 @@ class SettingsTest {
         assertTrue(settings.cryptoComponent is CryptoCoreComponentImpl)
         assertTrue(settings.apis.size == Api.values().size)
         assertFalse(settings.returnOnMainThread)
-        assertTrue(settings.network is Testnet)
+        assertTrue(settings.network is Echodevnet)
     }
 
     @Test

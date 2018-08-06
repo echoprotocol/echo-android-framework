@@ -33,7 +33,7 @@ class AccountUpdateOperationTest {
 
         val accountUpdateObject = json[1].asJsonObject
 
-        assertNotNull(accountUpdateObject.get(AccountUpdateOperation.KEY_FEE))
+        assertNotNull(accountUpdateObject.get(BaseOperation.KEY_FEE))
         assertNotNull(accountUpdateObject.get(AccountUpdateOperation.KEY_OWNER))
         assertNotNull(accountUpdateObject.get(AccountUpdateOperation.KEY_ACTIVE))
         assertNotNull(accountUpdateObject.get(AccountUpdateOperation.KEY_ACCOUNT))
