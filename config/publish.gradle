@@ -118,14 +118,14 @@ if (project.rootProject.file('local.properties').exists()) {
 
 // Bintray account name for library publishing
 def bintrayAccount = properties.getProperty("bintrayUser")
-if (bintrayAccount == null && project.hasProperty("bintrayUser")) {
-    bintrayAccount = project.findProperty("bintrayUser")
+if (bintrayAccount == null && project.hasProperty("bintrayUserVar")) {
+    bintrayAccount = project.findProperty("bintrayUserVar")
 }
 
 // Bintray api key for library publishing
 def bintrayKey = properties.getProperty("bintrayApiKey")
-if (bintrayKey == null && project.hasProperty("bintrayApiKey")) {
-    bintrayKey = project.findProperty("bintrayApiKey")
+if (bintrayKey == null && project.hasProperty("bintrayApiKeyVar")) {
+    bintrayKey = project.findProperty("bintrayApiKeyVar")
 }
 
 task validateBintrayCredentials() {
