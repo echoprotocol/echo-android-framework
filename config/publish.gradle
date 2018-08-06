@@ -15,7 +15,7 @@ ext {
     gitUrl = 'https://gitlab.pixelplex.by/646_echo_mobile_library/android.git'
     siteUrl = 'https://gitlab.pixelplex.by/646_echo_mobile_library/android'
 
-    libraryVersion = '0.0.1-beta'
+    libraryVersion = '1.0.0-alpha'
 
     firstDeveloperId = 'dmitriy'
     firstDeveloperName = 'Dmitriy Bushuev'
@@ -116,9 +116,31 @@ if (project.rootProject.file('local.properties').exists()) {
     properties.load(project.rootProject.file('local.properties').newDataInputStream())
 }
 
+// Bintray account name for library publishing
+def bintrayAccount = properties.getProperty("bintrayUser")
+if (bintrayAccount == null && project.hasProperty("bintrayUserVar")) {
+    bintrayAccount = project.findProperty("bintrayUserVar")
+}
+
+// Bintray api key for library publishing
+def bintrayKey = properties.getProperty("bintrayApiKey")
+if (bintrayKey == null && project.hasProperty("bintrayApiKeyVar")) {
+    bintrayKey = project.findProperty("bintrayApiKeyVar")
+}
+
+task validateBintrayCredentials() {
+    doFirst {
+        if (bintrayAccount == null || bintrayKey == null) {
+            throw new GradleException("Account name and api key required for bintray publishing")
+        }
+    }
+}
+
+bintrayUpload.doFirst {validateBintrayCredentials}
+
 bintray {
-    user = properties.getProperty("bintray.user")
-    key = properties.getProperty("bintray.apikey")
+    user = bintrayAccount
+    key = bintrayKey
 
     configurations = ['archives']
     pkg {
