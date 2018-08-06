@@ -6,6 +6,7 @@ stages:
   - test
   - checkstyle
   - docgen
+  - publish
 
 .build_template: &build_template_def
   stage: build
@@ -18,7 +19,6 @@ build_debug:
   <<: *build_template_def
   only:
     - develop
-
   script:
     - gradlew assembleDebug
 
@@ -61,3 +61,10 @@ doc_generation:
     expire_in: 4 hours
     paths:
       - echoframework/build/javadoc
+
+maven_publishing:
+  stage: publish
+  only:
+    - master
+  script:
+    - gradlew install bintrayUpload -PbintrayUser = %bintrayUserVar% -PbintrayApiKey = %bintrayApiKeyVar%
