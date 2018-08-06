@@ -122,7 +122,7 @@ interface BlocksAndTransactionsService {
     /**
      * Retrieves base block information
      *
-     * @return chain id string
+     * @return current block data
      */
     fun getBlockData(): BlockData
 

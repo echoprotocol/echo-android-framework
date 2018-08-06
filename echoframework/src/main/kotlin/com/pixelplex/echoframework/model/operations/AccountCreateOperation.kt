@@ -31,7 +31,7 @@ class AccountCreateOperation
     owner: Authority,
     active: Authority,
     options: AccountOptions,
-    override var fee: AssetAmount = AssetAmount(UnsignedLong.valueOf(0), Asset("1.3.0"))
+    override var fee: AssetAmount = AssetAmount(UnsignedLong.ZERO)
 ) : BaseOperation(OperationType.ACCOUNT_CREATE_OPERATION) {
 
     private var owner = Optional(owner)
@@ -160,7 +160,6 @@ class AccountCreateOperation
         const val KEY_REFERRER_PERCENT = "referrer_percent"
         const val KEY_OWNER = "owner"
         const val KEY_ACTIVE = "active"
-        const val KEY_FEE = "fee"
         const val KEY_OPTIONS = "options"
         const val KEY_EXTENSIONS = "extensions"
     }

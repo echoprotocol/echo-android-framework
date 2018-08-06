@@ -6,6 +6,8 @@ import com.google.common.primitives.UnsignedLong
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.pixelplex.echoframework.TIME_DATE_FORMAT
+import java.io.ByteArrayOutputStream
+import java.io.DataOutputStream
 import java.nio.ByteBuffer
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
@@ -71,6 +73,18 @@ fun String.toJsonObject(): JsonObject? =
  * Converts signed long value into unsigned
  */
 fun Long.toUnsignedLong(): UnsignedLong = UnsignedLong.valueOf(this)
+
+/**
+ * Converts signed long value to unsigned and writes to byte array
+ */
+fun Long.toUnsignedByteArray(): ByteArray {
+    val byteArrayOutputStream = ByteArrayOutputStream()
+    DataOutputStream(byteArrayOutputStream).use { out ->
+        Varint.writeUnsignedVarLong(this, out)
+    }
+
+    return byteArrayOutputStream.toByteArray()
+}
 
 private val hexArray = "0123456789abcdef".toCharArray()
 

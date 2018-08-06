@@ -58,27 +58,16 @@ class TransferOperationBuilder : OperationBuilder<TransferOperation>() {
     }
 
     override fun build(): TransferOperation {
-        val transferOperation: TransferOperation = if (fee != null) {
-            TransferOperation(
-                from!!,
-                to!!,
-                transferAmount!!,
-                fee!!
-            )
-        } else {
-            TransferOperation(
-                from!!,
-                to!!,
-                transferAmount!!
-            )
-        }.apply { this.memo = transferMemo ?: Memo() }
-
         when {
             from == null -> throw MalformedOperationException("Missing source account information")
             to == null -> throw MalformedOperationException("Missing destination account information")
             transferAmount == null -> throw MalformedOperationException("Missing transfer amount information")
-            else -> return transferOperation
         }
 
+        return if (fee != null) {
+            TransferOperation(from!!, to!!, transferAmount!!, fee!!)
+        } else {
+            TransferOperation(from!!, to!!, transferAmount!!)
+        }.apply { memo = transferMemo ?: Memo() }
     }
 }

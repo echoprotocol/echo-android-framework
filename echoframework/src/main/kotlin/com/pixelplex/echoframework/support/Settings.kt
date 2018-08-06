@@ -6,6 +6,7 @@ import com.pixelplex.echoframework.core.crypto.internal.CryptoCoreComponentImpl
 import com.pixelplex.echoframework.core.logger.internal.LoggerCoreComponent.LogLevel
 import com.pixelplex.echoframework.core.socket.SocketMessenger
 import com.pixelplex.echoframework.core.socket.internal.SocketMessengerImpl
+import com.pixelplex.echoframework.model.network.Echodevnet
 import com.pixelplex.echoframework.model.network.Network
 import com.pixelplex.echoframework.model.network.Testnet
 
@@ -119,7 +120,7 @@ class Settings private constructor(
                 .apply {
                     setUrl(url)
                 }
-            val network = network ?: Testnet()
+            val network = network ?: Echodevnet()
             val cryptoComponent = this.cryptoComponent ?: CryptoCoreComponentImpl(network)
             val apis = apis ?: Api.values().toSet()
 

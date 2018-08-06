@@ -27,4 +27,8 @@ abstract class BaseOperation(var type: OperationType) : ByteSerializable,
      */
     abstract var fee: AssetAmount
 
+    companion object {
+        const val KEY_FEE = "fee"
+    }
+
 }
