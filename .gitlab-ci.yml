@@ -56,7 +56,7 @@ pages:
     - master
     - develop
   script:
-    - gradlew dokka
+    - call gradlew dokka
     - call mkdir public
     - call xcopy echoframework/build/javadoc public /s/e/y
   artifacts:
