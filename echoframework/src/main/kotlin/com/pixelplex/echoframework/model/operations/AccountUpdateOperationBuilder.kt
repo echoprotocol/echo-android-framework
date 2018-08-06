@@ -71,9 +71,7 @@ class AccountUpdateOperationBuilder : OperationBuilder<AccountUpdateOperation>()
 
         return fee?.let { nullSafeFee ->
             AccountUpdateOperation(account!!, owner, active, newOptions, nullSafeFee)
-        } ?: let {
-            AccountUpdateOperation(account!!, owner, active, newOptions)
-        }
+        } ?: AccountUpdateOperation(account!!, owner, active, newOptions)
     }
 
     private fun checkAccount(account: Account?) {

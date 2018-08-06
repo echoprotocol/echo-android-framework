@@ -30,7 +30,7 @@ class NetworkBroadcastApiServiceTest {
         val transfer = TransferOperationBuilder()
             .setFrom(Account("1.2.18"))
             .setTo(Account("1.2.18"))
-            .setAmount(AssetAmount(UnsignedLong.valueOf(1), Asset("1.3.0")))
+            .setAmount(AssetAmount(UnsignedLong.ONE, Asset("1.3.0")))
             .build()
 
         val blockData = BlockData(1, 1, 1)

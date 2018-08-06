@@ -14,41 +14,22 @@ import java.lang.reflect.Type
  *
  * @author Dmitriy Bushuev
  */
-class TransferOperation : BaseOperation {
-
+class TransferOperation @JvmOverloads constructor(
+    from: Account,
+    to: Account,
+    var transferAmount: AssetAmount,
     override var fee: AssetAmount = AssetAmount(UnsignedLong.ZERO)
-    var assetAmount: AssetAmount? = null
-    var from: Account? = null
-    var to: Account? = null
+) : BaseOperation(OperationType.TRANSFER_OPERATION) {
+
+    var from: Account? = from
+    var to: Account? = to
     var memo = Memo()
-
-    constructor(
-        from: Account,
-        to: Account,
-        transferAmount: AssetAmount,
-        fee: AssetAmount
-    ) : super(OperationType.TRANSFER_OPERATION) {
-        this.from = from
-        this.to = to
-        this.assetAmount = transferAmount
-        this.fee = fee
-    }
-
-    constructor(
-        from: Account, to: Account, transferAmount: AssetAmount
-    ) : super(
-        OperationType.TRANSFER_OPERATION
-    ) {
-        this.from = from
-        this.to = to
-        this.assetAmount = transferAmount
-    }
 
     override fun toBytes(): ByteArray {
         val feeBytes = fee.toBytes()
         val fromBytes = from!!.toBytes()
         val toBytes = to!!.toBytes()
-        val amountBytes = assetAmount!!.toBytes()
+        val amountBytes = transferAmount.toBytes()
         val memoBytes = memo.toBytes()
         val extensions = extensions.toBytes()
         return feeBytes + fromBytes + toBytes + amountBytes + memoBytes + extensions
@@ -69,7 +50,7 @@ class TransferOperation : BaseOperation {
             add(KEY_FEE, fee.toJsonObject())
             addProperty(KEY_FROM, from!!.toJsonString())
             addProperty(KEY_TO, to!!.toJsonString())
-            add(KEY_AMOUNT, assetAmount!!.toJsonObject())
+            add(KEY_AMOUNT, transferAmount.toJsonObject())
             if (memo.byteMessage != null)
                 add(KEY_MEMO, memo.toJsonObject())
             add(KEY_EXTENSIONS, extensions.toJsonObject())
@@ -159,7 +140,6 @@ class TransferOperation : BaseOperation {
         const val KEY_AMOUNT = "amount"
         const val KEY_FROM = "from"
         const val KEY_TO = "to"
-        const val KEY_FEE = "fee"
         const val KEY_MEMO = "memo"
         const val KEY_EXTENSIONS = "extensions"
     }

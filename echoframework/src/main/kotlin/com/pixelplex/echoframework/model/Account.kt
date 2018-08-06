@@ -8,6 +8,7 @@ import com.google.gson.annotations.Expose
 import com.pixelplex.echoframework.TIME_DATE_FORMAT
 import com.pixelplex.echoframework.core.logger.internal.LoggerCoreComponent
 import com.pixelplex.echoframework.support.Varint
+import com.pixelplex.echoframework.support.toUnsignedByteArray
 import java.io.ByteArrayOutputStream
 import java.io.DataOutputStream
 import java.lang.reflect.Type
@@ -74,13 +75,7 @@ class Account : GrapheneObject, GrapheneSerializable {
         this.name = name
     }
 
-    override fun toBytes(): ByteArray {
-        val byteArrayOutputStream = ByteArrayOutputStream()
-        DataOutputStream(byteArrayOutputStream).use { out ->
-            Varint.writeUnsignedVarLong(this.instance, out)
-        }
-        return byteArrayOutputStream.toByteArray()
-    }
+    override fun toBytes(): ByteArray = this.instance.toUnsignedByteArray()
 
     override fun toJsonString(): String? = getObjectId()
 

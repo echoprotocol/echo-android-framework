@@ -149,7 +149,6 @@ class AccountUpdateOperation @JvmOverloads constructor(
         const val KEY_ACCOUNT = "account"
         const val KEY_OWNER = "owner"
         const val KEY_ACTIVE = "active"
-        const val KEY_FEE = "fee"
         const val KEY_NEW_OPTIONS = "new_options"
         const val KEY_EXTENSIONS = "extensions"
     }

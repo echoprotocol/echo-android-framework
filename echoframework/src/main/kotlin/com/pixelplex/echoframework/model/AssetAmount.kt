@@ -4,14 +4,12 @@ import com.google.common.math.DoubleMath
 import com.google.common.primitives.UnsignedLong
 import com.google.gson.*
 import com.pixelplex.bitcoinj.revert
+import com.pixelplex.echoframework.BITSHARES_ASSET_ID
 import com.pixelplex.echoframework.exception.IncompatibleOperationException
-import com.pixelplex.echoframework.support.Varint
-import java.io.ByteArrayOutputStream
-import java.io.DataOutputStream
+import com.pixelplex.echoframework.support.toUnsignedByteArray
 import java.lang.reflect.Type
 import java.math.BigDecimal
 import java.math.RoundingMode
-import com.pixelplex.echoframework.BITSHARES_ASSET_ID
 
 /**
  * Class used to represent a specific amount of a certain asset
@@ -134,12 +132,7 @@ class AssetAmount @JvmOverloads constructor(
     }
 
     override fun toBytes(): ByteArray {
-        val byteArrayOutputStream = ByteArrayOutputStream()
-        DataOutputStream(byteArrayOutputStream).use { out ->
-            Varint.writeUnsignedVarLong(asset.instance, out)
-        }
-        // Getting asset id
-        val assetId = byteArrayOutputStream.toByteArray()
+        val assetId = asset.instance.toUnsignedByteArray()
         val value = this.amount.toLong().revert()
 
         // Concatenating and returning value + asset id

@@ -30,7 +30,7 @@ class AccountHistoryApiServiceTest {
                 HistoricalTransfer(
                     "testId", TransferOperation(
                         Account("1.2.18"), Account("1.2.119"), AssetAmount(
-                            UnsignedLong.valueOf(1), Asset("1.3.0")
+                            UnsignedLong.ONE, Asset("1.3.0")
                         )
                     ), Date()
                 )

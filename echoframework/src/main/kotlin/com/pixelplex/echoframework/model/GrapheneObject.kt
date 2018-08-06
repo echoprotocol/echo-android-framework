@@ -21,9 +21,9 @@ open class GrapheneObject(
 
     init {
         id.split(OBJECT_ID_DELIMITER).takeIf { it.size == OBJECT_ID_PARTS_SIZE }?.let { parts ->
-            this.space = Integer.parseInt(parts[0])
-            this.type = Integer.parseInt(parts[1])
-            this.instance = java.lang.Long.parseLong(parts[2])
+            this.space = parts[0].toInt()
+            this.type = parts[1].toInt()
+            this.instance = parts[2].toLong()
         }
     }
 
