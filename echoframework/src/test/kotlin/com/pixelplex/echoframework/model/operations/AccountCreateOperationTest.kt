@@ -2,10 +2,7 @@ package com.pixelplex.echoframework.model.operations
 
 import com.google.common.primitives.UnsignedLong
 import com.pixelplex.bitcoinj.ECKey
-import com.pixelplex.echoframework.model.AccountOptions
-import com.pixelplex.echoframework.model.AssetAmount
-import com.pixelplex.echoframework.model.Authority
-import com.pixelplex.echoframework.model.PublicKey
+import com.pixelplex.echoframework.model.*
 import org.junit.Assert
 import org.junit.Assert.assertNotNull
 import org.junit.Test
@@ -34,7 +31,7 @@ class AccountCreateOperationTest {
 
         val transferObject = json[1].asJsonObject
 
-        assertNotNull(transferObject.get(AccountCreateOperation.KEY_FEE))
+        assertNotNull(transferObject.get(BaseOperation.KEY_FEE))
         assertNotNull(transferObject.get(AccountCreateOperation.KEY_REGISTRAR))
         assertNotNull(transferObject.get(AccountCreateOperation.KEY_REFERRER))
         assertNotNull(transferObject.get(AccountCreateOperation.KEY_REFERRER_PERCENT))

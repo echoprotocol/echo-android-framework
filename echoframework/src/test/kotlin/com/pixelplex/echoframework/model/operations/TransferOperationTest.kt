@@ -32,7 +32,7 @@ class TransferOperationTest {
 
         val transferObject = json[1].asJsonObject
 
-        Assert.assertNotNull(transferObject.get(TransferOperation.KEY_FEE))
+        Assert.assertNotNull(transferObject.get(BaseOperation.KEY_FEE))
         Assert.assertNotNull(transferObject.get(TransferOperation.KEY_FROM))
         Assert.assertNotNull(transferObject.get(TransferOperation.KEY_TO))
         Assert.assertNotNull(transferObject.get(TransferOperation.KEY_AMOUNT))
