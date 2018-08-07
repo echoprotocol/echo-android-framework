@@ -4,7 +4,7 @@ import com.google.common.primitives.UnsignedLong
 
 /**
  * Contains options available on all assets in the network
- * (@see https://bitshares.org/doxygen/structgraphene_1_1chain_1_1asset__options.html)
+ * [AssetOptions details](https://dev-doc.myecho.app/structgraphene_1_1chain_1_1asset__options.html)
  *
  * @author Dmitriy Bushuev
  */

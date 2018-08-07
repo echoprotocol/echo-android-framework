@@ -21,7 +21,7 @@ class BlockData : ByteSerializable {
      *                            actual block hash, so this field should be set using the second 32 bits
      *                            in the block_id_type
      * @param relativeExpiration: Expiration time specified as a POSIX or
-     *                            <a href="https://en.wikipedia.org/wiki/Unix_time">Unix time</a>
+     *                            [Unix time](https://en.wikipedia.org/wiki/Unix_time)
      */
     constructor(refBlockNum: Int, refBlockPrefix: Long, relativeExpiration: Long) {
         this.refBlockNum = refBlockNum

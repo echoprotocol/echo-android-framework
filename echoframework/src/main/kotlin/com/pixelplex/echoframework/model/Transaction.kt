@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit
 
 /**
  * Class used to represent a generic Graphene transaction.
- * [https://bitshares.org/doxygen/structgraphene_1_1chain_1_1transaction.html]
+ * [Transaction details](https://dev-doc.myecho.app/structgraphene_1_1chain_1_1transaction.html)
  *
  * @author Daria Pechkovskaya
  */

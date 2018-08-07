@@ -2,7 +2,7 @@ package com.pixelplex.echoframework.exception
 
 /**
  * Represents errors associated with illegal Transaction state
- * (@see com.pixelplex.echolib.model.Transaction)
+ * [com.pixelplex.echoframework.model.Transaction]
  *
  * @author Daria Pechkovskaya
  */

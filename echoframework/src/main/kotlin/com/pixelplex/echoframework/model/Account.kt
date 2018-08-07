@@ -18,7 +18,7 @@ import java.util.*
 
 /**
  * Represents account model in Graphene blockchain
- * (@see https://bitshares.org/doxygen/classgraphene_1_1chain_1_1account__object.html)
+ * [Account model documentation](https://dev-doc.myecho.app/classgraphene_1_1chain_1_1account__object.html)
  *
  * @author Dmitriy Bushuev
  */
