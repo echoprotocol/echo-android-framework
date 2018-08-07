@@ -15,4 +15,9 @@ interface AssetsFacade {
      */
     fun listAssets(lowerBound: String, limit: Int, callback: Callback<List<Asset>>)
 
+    /**
+     * Query list of assets by it's ids [assetIds]
+     */
+    fun getAssets(assetIds: List<String>, callback: Callback<List<Asset>>)
+
 }

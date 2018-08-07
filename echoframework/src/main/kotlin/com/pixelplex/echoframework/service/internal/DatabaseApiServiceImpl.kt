@@ -182,6 +182,12 @@ class DatabaseApiServiceImpl(
         socketCoreComponent.emit(operation)
     }
 
+    override fun getAssets(assetIds: List<String>, callback: Callback<List<Asset>>) {
+        val operation = GetAssetsSocketOperation(id, assetIds.toTypedArray(), callback = callback)
+
+        socketCoreComponent.emit(operation)
+    }
+
     override fun subscribeOnAccount(
         nameOrId: String,
         listener: AccountListener
