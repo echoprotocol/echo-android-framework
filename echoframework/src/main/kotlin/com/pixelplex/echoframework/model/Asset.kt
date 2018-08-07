@@ -1,5 +1,7 @@
 package com.pixelplex.echoframework.model
 
+import com.google.gson.annotations.SerializedName
+
 /**
  * Class used to represent a specific asset on the Graphene platform
  *
@@ -15,8 +17,10 @@ class Asset : GrapheneObject {
 
     var description: String? = null
 
+    @SerializedName("dynamic_asset_data_id")
     var dynamicAssetDataId: String? = null
 
+    @SerializedName("options")
     var assetOptions: AssetOptions? = null
 
     var bitAssetId: String? = null

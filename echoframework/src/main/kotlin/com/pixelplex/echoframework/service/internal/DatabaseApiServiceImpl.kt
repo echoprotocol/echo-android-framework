@@ -176,6 +176,12 @@ class DatabaseApiServiceImpl(
         return future.wrapResult()
     }
 
+    override fun listAssets(lowerBound: String, limit: Int, callback: Callback<List<Asset>>) {
+        val operation = ListAssetsSocketOperation(id, lowerBound, limit, callback = callback)
+
+        socketCoreComponent.emit(operation)
+    }
+
     override fun subscribeOnAccount(
         nameOrId: String,
         listener: AccountListener
