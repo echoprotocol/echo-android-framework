@@ -2,6 +2,7 @@ package com.pixelplex.echoframework
 
 import com.pixelplex.echoframework.exception.LocalException
 import com.pixelplex.echoframework.model.Account
+import com.pixelplex.echoframework.model.Asset
 import com.pixelplex.echoframework.model.Balance
 import com.pixelplex.echoframework.model.HistoryResponse
 import com.pixelplex.echoframework.model.network.Echodevnet
@@ -409,6 +410,30 @@ class EchoFrameworkTest {
             })
 
         assertNotNull(futureFee.get())
+    }
+
+    @Test
+    fun listAssetsTestTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val futureAssets = FutureTask<List<Asset>>()
+
+        framework.listAssets(
+            "TESTASSET", 10,
+            object : Callback<List<Asset>> {
+                override fun onSuccess(result: List<Asset>) {
+                    futureAssets.setComplete(result)
+                }
+
+                override fun onError(error: LocalException) {
+                    futureAssets.setComplete(error)
+                }
+
+            })
+
+        assertNotNull(futureAssets.get()?.isNotEmpty() ?: false)
     }
 
     private fun connect(framework: EchoFramework): Boolean? {

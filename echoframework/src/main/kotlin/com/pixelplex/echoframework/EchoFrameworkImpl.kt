@@ -6,6 +6,7 @@ import com.pixelplex.echoframework.core.socket.internal.SocketCoreComponentImpl
 import com.pixelplex.echoframework.facade.*
 import com.pixelplex.echoframework.facade.internal.*
 import com.pixelplex.echoframework.model.Account
+import com.pixelplex.echoframework.model.Asset
 import com.pixelplex.echoframework.model.Balance
 import com.pixelplex.echoframework.model.HistoryResponse
 import com.pixelplex.echoframework.service.internal.AccountHistoryApiServiceImpl
@@ -33,6 +34,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
     private val informationFacade: InformationFacade
     private val subscriptionFacade: SubscriptionFacade
     private val transactionsFacade: TransactionsFacade
+    private val assetsFacade: AssetsFacade
 
     private val dispatcher: Dispatcher by lazy { ExecutorServiceDispatcher() }
     private var returnOnMainThread = false
@@ -85,6 +87,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
                     networkBroadcastApiService,
                     settings.cryptoComponent
                 )
+        assetsFacade = AssetsFacadeImpl(databaseApiService)
     }
 
     override fun start(callback: Callback<Any>) =
@@ -150,6 +153,11 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
     override fun subscribeOnAccount(nameOrId: String, listener: AccountListener) =
         dispatch(Runnable {
             subscriptionFacade.subscribeOnAccount(nameOrId, listener.wrapOriginal())
+        })
+
+    override fun listAssets(lowerBound: String, limit: Int, callback: Callback<List<Asset>>) =
+        dispatch(Runnable {
+            assetsFacade.listAssets(lowerBound, limit, callback)
         })
 
     override fun unsubscribeFromAccount(nameOrId: String, callback: Callback<Boolean>) =

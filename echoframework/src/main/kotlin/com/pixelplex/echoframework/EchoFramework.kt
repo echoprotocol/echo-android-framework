@@ -12,7 +12,7 @@ import com.pixelplex.echoframework.support.Settings
  * @author Dmitriy Bushuev
  */
 interface EchoFramework : AuthenticationFacade, FeeFacade, InformationFacade, SubscriptionFacade,
-    TransactionsFacade {
+    TransactionsFacade, AssetsFacade {
 
     /**
      * Starts socket connection, connects to blockchain apis
@@ -32,4 +32,5 @@ interface EchoFramework : AuthenticationFacade, FeeFacade, InformationFacade, Su
          */
         fun create(settings: Settings): EchoFramework = EchoFrameworkImpl(settings)
     }
+
 }
