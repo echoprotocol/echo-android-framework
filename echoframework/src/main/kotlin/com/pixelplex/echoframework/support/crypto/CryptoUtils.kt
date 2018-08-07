@@ -1,7 +1,8 @@
 @file:JvmName("CryptoUtils")
 
-package com.pixelplex.echoframework.support
+package com.pixelplex.echoframework.support.crypto
 
+import com.pixelplex.echoframework.support.sha512hash
 import org.spongycastle.crypto.engines.AESEngine
 import org.spongycastle.crypto.modes.CBCBlockCipher
 import org.spongycastle.crypto.paddings.PaddedBufferedBlockCipher
@@ -31,7 +32,10 @@ fun encryptAES(input: ByteArray, key: ByteArray): ByteArray? {
     val result = key.sha512hash()
 
     val ivBytes = ByteArray(IV_SIZE)
-    System.arraycopy(result, SKS_SIZE, ivBytes, 0, IV_SIZE)
+    System.arraycopy(result,
+        SKS_SIZE, ivBytes, 0,
+        IV_SIZE
+    )
     val sksBytes = ByteArray(SKS_SIZE)
     System.arraycopy(result, 0, sksBytes, 0, SKS_SIZE)
 
@@ -61,7 +65,10 @@ fun decryptAES(input: ByteArray, key: ByteArray): ByteArray? {
     val result = key.sha512hash()
 
     val ivBytes = ByteArray(IV_SIZE)
-    System.arraycopy(result, SKS_SIZE, ivBytes, 0, IV_SIZE)
+    System.arraycopy(result,
+        SKS_SIZE, ivBytes, 0,
+        IV_SIZE
+    )
     val sksBytes = ByteArray(SKS_SIZE)
     System.arraycopy(result, 0, sksBytes, 0, SKS_SIZE)
 

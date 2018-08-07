@@ -1,6 +1,7 @@
 package com.pixelplex.echoframework.support
 
 import com.pixelplex.bitcoinj.Base58
+import com.pixelplex.echoframework.support.crypto.Checksum
 import org.junit.Assert.assertTrue
 import org.junit.Test
 

@@ -8,6 +8,7 @@ import com.pixelplex.echoframework.facade.internal.*
 import com.pixelplex.echoframework.model.Account
 import com.pixelplex.echoframework.model.Balance
 import com.pixelplex.echoframework.model.HistoryResponse
+import com.pixelplex.echoframework.model.contract.ContractMethodParameter
 import com.pixelplex.echoframework.service.internal.AccountHistoryApiServiceImpl
 import com.pixelplex.echoframework.service.internal.CryptoApiServiceImpl
 import com.pixelplex.echoframework.service.internal.DatabaseApiServiceImpl
@@ -33,6 +34,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
     private val informationFacade: InformationFacade
     private val subscriptionFacade: SubscriptionFacade
     private val transactionsFacade: TransactionsFacade
+    private val contractsFacade: ContractsFacade
 
     private val dispatcher: Dispatcher by lazy { ExecutorServiceDispatcher() }
     private var returnOnMainThread = false
@@ -77,14 +79,17 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
                 )
         feeFacade = FeeFacadeImpl(databaseApiService)
         informationFacade = InformationFacadeImpl(databaseApiService, accountHistoryApiService)
-        subscriptionFacade =
-                SubscriptionFacadeImpl(databaseApiService)
-        transactionsFacade =
-                TransactionsFacadeImpl(
-                    databaseApiService,
-                    networkBroadcastApiService,
-                    settings.cryptoComponent
-                )
+        subscriptionFacade = SubscriptionFacadeImpl(databaseApiService)
+        transactionsFacade = TransactionsFacadeImpl(
+            databaseApiService,
+            networkBroadcastApiService,
+            settings.cryptoComponent
+        )
+        contractsFacade = ContractsFacadeImpl(
+            databaseApiService,
+            networkBroadcastApiService,
+            settings.cryptoComponent
+        )
     }
 
     override fun start(callback: Callback<Any>) =
@@ -199,6 +204,42 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             callback.wrapOriginal()
         )
     })
+
+    override fun createContract(
+        registrarNameOrId: String,
+        password: String,
+        assetId: String,
+        byteCode: String,
+        callback: Callback<Boolean>
+    ) {
+        contractsFacade.createContract(
+            registrarNameOrId,
+            password,
+            assetId,
+            byteCode,
+            callback.wrapOriginal()
+        )
+    }
+
+    override fun callContractMethod(
+        registrarNameOrId: String,
+        password: String,
+        assetId: String,
+        contractId: String,
+        methodName: String,
+        methodParams: List<ContractMethodParameter>,
+        callback: Callback<Boolean>
+    ) {
+        contractsFacade.callContractMethod(
+            registrarNameOrId,
+            password,
+            assetId,
+            contractId,
+            methodName,
+            methodParams,
+            callback.wrapOriginal()
+        )
+    }
 
     private fun <T> Callback<T>.wrapOriginal(): Callback<T> =
         if (!returnOnMainThread) {

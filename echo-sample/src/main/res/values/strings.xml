@@ -14,5 +14,6 @@
     <string name="subscribe">Subscribe</string>
     <string name="unsubscribe">Unsubscribe</string>
     <string name="unsubscribe_all">Unsubscribe all</string>
+    <string name="create_contract">Create contract</string>
     <string name="status">Status: %s</string>
 </resources>

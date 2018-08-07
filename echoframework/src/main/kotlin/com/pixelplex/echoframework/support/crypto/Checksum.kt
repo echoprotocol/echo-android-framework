@@ -1,4 +1,4 @@
-package com.pixelplex.echoframework.support
+package com.pixelplex.echoframework.support.crypto
 
 import org.spongycastle.crypto.digests.RIPEMD160Digest
 
@@ -26,7 +26,9 @@ object Checksum {
             doFinal(checksum, 0)
         }
 
-        return checksum.copyOfRange(0, CHECKSUM_SIZE)
+        return checksum.copyOfRange(0,
+            CHECKSUM_SIZE
+        )
     }
 
 }

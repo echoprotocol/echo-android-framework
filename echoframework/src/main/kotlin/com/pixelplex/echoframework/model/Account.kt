@@ -7,10 +7,7 @@ import com.google.gson.JsonObject
 import com.google.gson.annotations.Expose
 import com.pixelplex.echoframework.TIME_DATE_FORMAT
 import com.pixelplex.echoframework.core.logger.internal.LoggerCoreComponent
-import com.pixelplex.echoframework.support.Varint
 import com.pixelplex.echoframework.support.toUnsignedByteArray
-import java.io.ByteArrayOutputStream
-import java.io.DataOutputStream
 import java.lang.reflect.Type
 import java.text.ParseException
 import java.text.SimpleDateFormat

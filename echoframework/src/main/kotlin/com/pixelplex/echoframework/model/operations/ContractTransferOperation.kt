@@ -5,7 +5,7 @@ import com.google.gson.*
 import com.pixelplex.echoframework.model.Account
 import com.pixelplex.echoframework.model.AssetAmount
 import com.pixelplex.echoframework.model.BaseOperation
-import com.pixelplex.echoframework.model.Contract
+import com.pixelplex.echoframework.model.contract.Contract
 import java.lang.reflect.Type
 
 /**
@@ -19,7 +19,7 @@ class ContractTransferOperation
  *
  *  @param fee          Fee to pay.
  *  @param from         Contract to transfer asset from.
- *  @param to            Account or contract to transfer asset to.
+ *  @param to           Account or contract to transfer asset to.
  *  @param amount       The amount of asset to transfer from from to to.
  */
 @JvmOverloads
@@ -105,7 +105,8 @@ constructor(
                 AssetAmount::class.java
             )
 
-            val from = Contract(jsonObject.get(KEY_FROM).asString)
+            val from =
+                Contract(jsonObject.get(KEY_FROM).asString)
             val to = Account(jsonObject.get(KEY_TO).asString)
 
             return ContractTransferOperation(fee, from, to, amount)

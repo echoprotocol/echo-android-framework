@@ -26,7 +26,7 @@ class TransactionsFacadeImpl(
     private val databaseApiService: DatabaseApiService,
     private val networkBroadcastApiService: NetworkBroadcastApiService,
     private val cryptoCoreComponent: CryptoCoreComponent
-) : TransactionsFacade {
+) : BaseTransactionsFacade(databaseApiService, cryptoCoreComponent), TransactionsFacade {
 
     override fun sendTransferOperation(
         nameOrId: String,
@@ -87,16 +87,6 @@ class TransactionsFacadeImpl(
             .error { error -> callback.onError(LocalException(error)) }
     }
 
-    private fun checkOwnerAccount(name: String, password: String, account: Account) {
-        val ownerAddress =
-            cryptoCoreComponent.getAddress(name, password, AuthorityType.OWNER)
-
-        val isKeySame = account.isEqualsByKey(ownerAddress, AuthorityType.OWNER)
-        if (!isKeySame) {
-            throw LocalException("Owner account checking exception")
-        }
-    }
-
     private fun generateMemo(
         privateKey: ByteArray,
         fromAccount: Account,
@@ -121,10 +111,5 @@ class TransactionsFacadeImpl(
 
         return Memo()
     }
-
-    private fun getChainId(): String = databaseApiService.getChainId().dematerialize()
-
-    private fun getFees(operations: List<BaseOperation>, asset: String): List<AssetAmount> =
-        databaseApiService.getRequiredFees(operations, Asset(asset)).dematerialize()
 
 }

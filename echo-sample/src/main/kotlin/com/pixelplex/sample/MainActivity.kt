@@ -133,6 +133,7 @@ class MainActivity : AppCompatActivity() {
                 })
         }
         btnSubscribe.setOnClickListener {
+            toggleProgress(true)
             lib.subscribeOnAccount(etName.text.toString(), object : AccountListener {
                 override fun onChange(updatedAccount: Account) {
                     updateStatus(updatedAccount.toString())
@@ -142,6 +143,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         btnUnsubscribe.setOnClickListener {
+            toggleProgress(true)
             lib.unsubscribeFromAccount(etName.text.toString(), object : Callback<Boolean> {
                 override fun onSuccess(result: Boolean) {
                     updateStatus("Unsubscribe succeed")
@@ -155,6 +157,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         btnUnsubscribeAll.setOnClickListener {
+            toggleProgress(true)
             lib.unsubscribeAll(object : Callback<Boolean> {
                 override fun onSuccess(result: Boolean) {
                     updateStatus("Unsubscribe all succeed")
@@ -168,15 +171,48 @@ class MainActivity : AppCompatActivity() {
         }
 
         btnHistory.setOnClickListener {
+            toggleProgress(true)
             lib.getAccountHistory(
                 etName.text.toString(),
-                "1.11.37878780",
-                "1.11.37878741",
+                "1.11.0",
+                "1.11.0",
                 10,
                 "1.3.0",
                 object : Callback<HistoryResponse> {
                     override fun onSuccess(result: HistoryResponse) {
-                        updateStatus("Unsubscribe all succeed")
+                        updateStatus(result.transactions.joinToString())
+                    }
+
+                    override fun onError(error: LocalException) {
+                        updateStatus(error.message ?: "")
+                    }
+
+                })
+
+        }
+
+        btnCreateContract.setOnClickListener {
+            toggleProgress(true)
+            lib.createContract(
+                etName.text.toString(),
+                etPassword.text.toString(),
+                "1.3.0",
+                "608060405234801561001057600080fd5b506101a2806100206000396000f30060806040" +
+                        "5260043610610041576000357c01000000000000000000000000000000000000000000000" +
+                        "00000000000900463ffffffff1680630775107014610046575b600080fd5b348015610052" +
+                        "57600080fd5b5061005b61005d565b005b60405180807f312e322e35206c69666574696d6" +
+                        "55f72656665727265725f6665655f7065726381526020017f656e74616765000000000000" +
+                        "0000000000000000000000000000000000000000815250602601905060405180910390bb6" +
+                        "00090805190602001906100ce9291906100d1565b50565b82805460018160011615610100" +
+                        "0203166002900490600052602060002090601f016020900481019282601f1061011257805" +
+                        "160ff1916838001178555610140565b82800160010185558215610140579182015b828111" +
+                        "1561013f578251825591602001919060010190610124565b5b50905061014d91906101515" +
+                        "65b5090565b61017391905b8082111561016f576000816000905550600101610157565b50" +
+                        "90565b905600a165627a7a72305820f15a07ca60484fc3690bf46c388f8330643974e1892" +
+                        "5d812c5a73ba93e5c9e400029",
+                object : Callback<Boolean> {
+                    override fun onSuccess(result: Boolean) {
+                        updateStatus("Contract creation succeed")
                     }
 
                     override fun onError(error: LocalException) {
@@ -203,6 +239,7 @@ class MainActivity : AppCompatActivity() {
                 btnUnsubscribe.visibility = View.VISIBLE
                 btnUnsubscribeAll.visibility = View.VISIBLE
                 btnHistory.visibility = View.VISIBLE
+                btnCreateContract.visibility = View.VISIBLE
                 updateStatus("Success initializing")
             }
 
@@ -217,6 +254,7 @@ class MainActivity : AppCompatActivity() {
                 btnUnsubscribe.visibility = View.INVISIBLE
                 btnUnsubscribeAll.visibility = View.INVISIBLE
                 btnHistory.visibility = View.INVISIBLE
+                btnCreateContract.visibility = View.INVISIBLE
                 error.printStackTrace()
                 updateStatus("Error occurred during initialization.")
             }
@@ -228,6 +266,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateStatus(currStatus: String) {
+        toggleProgress(false)
         txtStatus.text = getString(R.string.status, currStatus)
     }
 }
