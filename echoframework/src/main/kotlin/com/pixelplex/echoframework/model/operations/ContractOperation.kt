@@ -3,32 +3,43 @@ package com.pixelplex.echoframework.model.operations
 import com.google.common.primitives.UnsignedLong
 import com.google.gson.*
 import com.pixelplex.bitcoinj.revert
-import com.pixelplex.echoframework.model.*
+import com.pixelplex.echoframework.model.Account
+import com.pixelplex.echoframework.model.Asset
+import com.pixelplex.echoframework.model.AssetAmount
+import com.pixelplex.echoframework.model.BaseOperation
+import com.pixelplex.echoframework.model.contract.Contract
 import com.pixelplex.echoframework.support.toUnsignedByteArray
 import java.lang.reflect.Type
 
 /**
- * Represents blockchain operation for creating new contract.
+ * Represents blockchain operation for working with contract.
  *
  * @author Daria Pechkovskaya
  */
-class ContractOperation(
-    override var fee: AssetAmount = AssetAmount(UnsignedLong.ZERO),
+class ContractOperation
+@JvmOverloads constructor(
     val registrar: Account,
-    val receiver: Contract,
+    val receiver: Contract? = null,
     val asset: Asset,
     val value: UnsignedLong,
     val gasPrice: UnsignedLong,
     val gas: UnsignedLong,
-    val code: String
+    val code: String,
+    override var fee: AssetAmount = AssetAmount(UnsignedLong.ZERO)
 
 ) : BaseOperation(OperationType.CONTRACT_OPERATION) {
 
     override fun toBytes(): ByteArray {
         val feeBytes = fee.toBytes()
         val registrarBytes = registrar.toBytes()
-        val hasContract = byteArrayOf(1)
-        val contractBytes = receiver.toBytes()
+
+        var hasContract: ByteArray = byteArrayOf(0)
+        var contractBytes: ByteArray? = null
+        receiver?.let { nonNullContract ->
+            hasContract = byteArrayOf(1)
+            contractBytes = nonNullContract.toBytes()
+        }
+
         val assetIdBytes = asset.instance.toUnsignedByteArray()
         val valueBytes = value.toLong().revert()
         val gasPriceBytes = gasPrice.toLong().revert()
@@ -36,8 +47,13 @@ class ContractOperation(
         val codeLengthBytes = code.length.toLong().toUnsignedByteArray()
         val codeBytes = code.toByteArray()
 
-        return feeBytes + registrarBytes + hasContract + contractBytes + assetIdBytes + valueBytes +
-                gasPriceBytes + gasBytes + codeLengthBytes + codeBytes
+        return if (contractBytes != null) {
+            feeBytes + registrarBytes + hasContract + contractBytes!! + assetIdBytes +
+                    valueBytes + gasPriceBytes + gasBytes + codeLengthBytes + codeBytes
+        } else {
+            feeBytes + registrarBytes + hasContract + assetIdBytes + valueBytes +
+                    gasPriceBytes + gasBytes + codeLengthBytes + codeBytes
+        }
     }
 
     override fun toJsonString(): String? {
@@ -53,7 +69,9 @@ class ContractOperation(
             add(JsonObject().apply {
                 add(KEY_FEE, fee.toJsonObject())
                 addProperty(KEY_REGISTRAR, registrar.getObjectId())
-                addProperty(KEY_RECEIVER, receiver.getObjectId())
+                receiver?.let { contract ->
+                    addProperty(KEY_RECEIVER, contract.getObjectId())
+                }
                 addProperty(KEY_ASSET_ID, asset.getObjectId())
                 addProperty(KEY_VALUE, value)
                 addProperty(KEY_GAS_PRICE, gasPrice)
@@ -112,7 +130,8 @@ class ContractOperation(
             )
 
             val registrar = Account(jsonObject.get(KEY_REGISTRAR).asString)
-            val receiver = Contract(jsonObject.get(KEY_RECEIVER).asString)
+            val receiver =
+                Contract(jsonObject.get(KEY_RECEIVER).asString)
             val assetId = Asset(jsonObject.get(KEY_ASSET_ID).asString)
             val value = jsonObject.get(KEY_VALUE).asLong
             val gasPrice = jsonObject.get(KEY_GAS_PRICE).asLong
@@ -120,14 +139,14 @@ class ContractOperation(
             val code = jsonObject.get(KEY_CODE).asString
 
             return ContractOperation(
-                fee,
                 registrar,
                 receiver,
                 assetId,
                 UnsignedLong.valueOf(value),
                 UnsignedLong.valueOf(gasPrice),
                 UnsignedLong.valueOf(gas),
-                code
+                code,
+                fee
             )
         }
     }

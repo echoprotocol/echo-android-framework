@@ -1,5 +1,7 @@
 package com.pixelplex.echoframework.support
 
+import com.pixelplex.echoframework.support.crypto.decryptAES
+import com.pixelplex.echoframework.support.crypto.encryptAES
 import org.junit.Assert
 import org.junit.Test
 import org.spongycastle.crypto.InvalidCipherTextException
@@ -22,21 +24,24 @@ class CryptographicUtilsTest {
 
     @Test
     fun encryptShortAESTest() {
-        val encrypted = encryptAES(shortMessage.toByteArray(), seed)
+        val encrypted =
+            encryptAES(shortMessage.toByteArray(), seed)
 
         Assert.assertNotNull(encrypted)
     }
 
     @Test
     fun encryptLongAESTest() {
-        val encrypted = encryptAES(longMessage.toByteArray(), seed)
+        val encrypted =
+            encryptAES(longMessage.toByteArray(), seed)
 
         Assert.assertNotNull(encrypted)
     }
 
     @Test
     fun decryptShortTest() {
-        val encrypted = encryptAES(shortMessage.toByteArray(), seed)
+        val encrypted =
+            encryptAES(shortMessage.toByteArray(), seed)
 
         val decrypted = decryptAES(encrypted!!, seed)
 
@@ -45,7 +50,8 @@ class CryptographicUtilsTest {
 
     @Test
     fun decryptLongTest() {
-        val encrypted = encryptAES(longMessage.toByteArray(), seed)
+        val encrypted =
+            encryptAES(longMessage.toByteArray(), seed)
 
         val decrypted = decryptAES(encrypted!!, seed)
 
@@ -54,7 +60,10 @@ class CryptographicUtilsTest {
 
     @Test(expected = InvalidCipherTextException::class)
     fun decryptErrorTest() {
-        val encrypted = encryptAES(longMessage.toByteArray(), "wrongSeed".toByteArray())
+        val encrypted = encryptAES(
+            longMessage.toByteArray(),
+            "wrongSeed".toByteArray()
+        )
 
         decryptAES(encrypted!!, seed)
     }

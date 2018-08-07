@@ -1,4 +1,4 @@
-package com.pixelplex.echoframework.support
+package com.pixelplex.echoframework.support.crypto
 
 import com.pixelplex.bitcoinj.ECDSASignature
 import com.pixelplex.bitcoinj.ECKey
@@ -53,9 +53,14 @@ object Signature {
             val hash = Sha256Hash.wrap(Sha256Hash.hash(serializedTransaction))
             val key = ECKey.fromPrivate(nonNullPrivateKey)
             val sign = key.sign(hash)
-            val recId = getRecId(sign, hash, key)
+            val recId =
+                getRecId(sign, hash, key)
 
-            signData = createSignData(key, recId, sign)
+            signData = createSignData(
+                key,
+                recId,
+                sign
+            )
 
             if (isSignatureNotValid(signData)) {
                 ++transaction.blockData.relativeExpiration

@@ -4,13 +4,14 @@ import com.pixelplex.echoframework.exception.MalformedOperationException
 import com.pixelplex.echoframework.model.Account
 import com.pixelplex.echoframework.model.AssetAmount
 import com.pixelplex.echoframework.model.Memo
+import com.pixelplex.echoframework.support.Builder
 
 /**
  * Builder class for transfer operation [TransferOperation]
  *
  * @author Dmitriy Bushuev
  */
-class TransferOperationBuilder : OperationBuilder<TransferOperation>() {
+class TransferOperationBuilder : Builder<TransferOperation> {
     private var from: Account? = null
     private var to: Account? = null
     private var transferAmount: AssetAmount? = null

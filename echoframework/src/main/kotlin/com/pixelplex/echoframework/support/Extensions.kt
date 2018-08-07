@@ -6,6 +6,7 @@ import com.google.common.primitives.UnsignedLong
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.pixelplex.echoframework.TIME_DATE_FORMAT
+import com.pixelplex.echoframework.support.crypto.Varint
 import java.io.ByteArrayOutputStream
 import java.io.DataOutputStream
 import java.nio.ByteBuffer
