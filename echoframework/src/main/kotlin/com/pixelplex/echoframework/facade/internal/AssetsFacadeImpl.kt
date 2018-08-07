@@ -15,4 +15,8 @@ class AssetsFacadeImpl(private val databaseApiService: DatabaseApiService) : Ass
     override fun listAssets(lowerBound: String, limit: Int, callback: Callback<List<Asset>>) =
         databaseApiService.listAssets(lowerBound, limit, callback)
 
+    override fun getAssets(assetIds: List<String>, callback: Callback<List<Asset>>) {
+        databaseApiService.getAssets(assetIds, callback)
+    }
+
 }

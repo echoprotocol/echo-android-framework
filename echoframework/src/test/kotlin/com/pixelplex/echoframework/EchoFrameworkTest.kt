@@ -413,7 +413,7 @@ class EchoFrameworkTest {
     }
 
     @Test
-    fun listAssetsTestTest() {
+    fun listAssetsTest() {
         val framework = initFramework()
 
         if (connect(framework) == false) Assert.fail("Connection error")
@@ -422,6 +422,30 @@ class EchoFrameworkTest {
 
         framework.listAssets(
             "TESTASSET", 10,
+            object : Callback<List<Asset>> {
+                override fun onSuccess(result: List<Asset>) {
+                    futureAssets.setComplete(result)
+                }
+
+                override fun onError(error: LocalException) {
+                    futureAssets.setComplete(error)
+                }
+
+            })
+
+        assertNotNull(futureAssets.get()?.isNotEmpty() ?: false)
+    }
+
+    @Test
+    fun getAssetsTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val futureAssets = FutureTask<List<Asset>>()
+
+        framework.getAssets(
+            listOf("1.3.0", "1.3.2"),
             object : Callback<List<Asset>> {
                 override fun onSuccess(result: List<Asset>) {
                     futureAssets.setComplete(result)

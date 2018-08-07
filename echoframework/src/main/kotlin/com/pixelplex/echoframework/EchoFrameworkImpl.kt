@@ -160,6 +160,11 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             assetsFacade.listAssets(lowerBound, limit, callback)
         })
 
+    override fun getAssets(assetIds: List<String>, callback: Callback<List<Asset>>) =
+        dispatch(Runnable {
+            assetsFacade.getAssets(assetIds, callback)
+        })
+
     override fun unsubscribeFromAccount(nameOrId: String, callback: Callback<Boolean>) =
         dispatch(Runnable {
             subscriptionFacade.unsubscribeFromAccount(nameOrId, callback.wrapOriginal())

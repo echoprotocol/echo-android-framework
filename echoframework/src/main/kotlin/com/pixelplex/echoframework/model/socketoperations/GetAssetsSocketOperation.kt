@@ -8,6 +8,7 @@ import com.google.gson.reflect.TypeToken
 import com.pixelplex.echoframework.Callback
 import com.pixelplex.echoframework.ILLEGAL_ID
 import com.pixelplex.echoframework.model.Asset
+import com.pixelplex.echoframework.model.AssetOptions
 
 /**
  * Get a list of assets by id.
@@ -40,10 +41,13 @@ class GetAssetsSocketOperation(
         val parser = JsonParser()
         val jsonTree = parser.parse(json)
 
-        val result = jsonTree.asJsonObject.get(RESULT_KEY)?.asJsonObject
+        val result = jsonTree.asJsonObject.get(RESULT_KEY)?.asJsonArray
                 ?: return emptyList()
 
-        val gson = GsonBuilder().create()
+        val gson = GsonBuilder().registerTypeAdapter(
+            AssetOptions::class.java,
+            AssetOptions.AssetOptionsDeserializer()
+        ).create()
 
         return gson.fromJson<List<Asset>>(result, object : TypeToken<List<Asset>>() {}.type)
     }
