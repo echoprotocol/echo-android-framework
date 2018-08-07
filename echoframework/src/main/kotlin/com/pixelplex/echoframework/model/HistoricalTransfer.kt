@@ -13,7 +13,7 @@ import java.util.*
 
 /**
  * Represents account history
- * [https://bitshares.org/doxygen/classgraphene_1_1chain_1_1operation__history__object.html]
+ * [History object details](https://dev-doc.myecho.app/classgraphene_1_1chain_1_1operation__history__object.html)
  *
  * Contains required information about user operations
  *

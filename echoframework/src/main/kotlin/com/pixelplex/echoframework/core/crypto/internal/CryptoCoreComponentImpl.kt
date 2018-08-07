@@ -84,18 +84,18 @@ class CryptoCoreComponentImpl(network: Network) : CryptoCoreComponent {
                 ecPublicKey.pubKeyPoint.multiply(ecPrivateKey.priv).normalize().xCoord.encoded
 
             // SHA-512 of shared secret
-            val ss = secret.sha512hash()
-            val seed = Bytes.concat(nonceBytes, Hex.toHexString(ss).hexlify())
+            val sharedSecret = secret.sha512hash()
+            val seed = Bytes.concat(nonceBytes, Hex.toHexString(sharedSecret).hexlify())
 
             // Calculating checksum
             val sha256Msg = message.toByteArray().sha256hash()
             val checksum = Arrays.copyOfRange(sha256Msg, 0, Checksum.CHECKSUM_SIZE)
 
             // Concatenating checksum + message bytes
-            val msgFinal = Bytes.concat(checksum, message.toByteArray())
+            val finalMessage = Bytes.concat(checksum, message.toByteArray())
 
             // Encryption
-            encrypted = encryptAES(msgFinal, seed)
+            encrypted = encryptAES(finalMessage, seed)
         } catch (e: NoSuchAlgorithmException) {
             LOGGER.log("Error occurred during creating digest for nonexistent algorithm", e)
         } catch (e: Exception) {
@@ -124,8 +124,8 @@ class CryptoCoreComponentImpl(network: Network) : CryptoCoreComponent {
                 ecPublicKey.pubKeyPoint.multiply(ecPrivateKey.priv).normalize().xCoord.encoded
 
             // Secret hash
-            val ss = secret.sha512hash()
-            val seed = Bytes.concat(nonceBytes, Hex.toHexString(ss).hexlify())
+            val sharedSecret = secret.sha512hash()
+            val seed = Bytes.concat(nonceBytes, Hex.toHexString(sharedSecret).hexlify())
 
             // Decryption
             val temp = decryptAES(message, seed)
