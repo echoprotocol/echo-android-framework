@@ -1,13 +1,14 @@
 package com.pixelplex.echoframework.model
 
 import com.google.gson.annotations.SerializedName
+import com.pixelplex.bitcoinj.revert
 
 /**
  * Class used to represent a specific asset on the Graphene platform
  *
  * @author Dmitriy Bushuev
  */
-class Asset : GrapheneObject {
+class Asset : GrapheneObject, ByteSerializable {
 
     var symbol: String? = null
 
@@ -52,6 +53,14 @@ class Asset : GrapheneObject {
         this.assetOptions = asset.assetOptions
         this.bitAssetId = asset.bitAssetId
         this.assetType = asset.assetType
+    }
+
+    override fun toBytes(): ByteArray {
+        val issuerBytes = Account(issuer!!).toBytes()
+        val symbolBytes = symbol!!.toByteArray()
+        val precisionBytes = precision.toShort().revert()
+        val optionsBytes = assetOptions!!.toBytes()
+        return issuerBytes + symbolBytes + precisionBytes + optionsBytes
     }
 
     override fun hashCode() = getObjectId().hashCode()

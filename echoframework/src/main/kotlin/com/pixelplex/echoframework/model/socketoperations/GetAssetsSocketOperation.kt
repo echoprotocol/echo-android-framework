@@ -8,7 +8,9 @@ import com.google.gson.reflect.TypeToken
 import com.pixelplex.echoframework.Callback
 import com.pixelplex.echoframework.ILLEGAL_ID
 import com.pixelplex.echoframework.model.Asset
+import com.pixelplex.echoframework.model.AssetAmount
 import com.pixelplex.echoframework.model.AssetOptions
+import com.pixelplex.echoframework.model.Price
 
 /**
  * Get a list of assets by id.
@@ -47,6 +49,12 @@ class GetAssetsSocketOperation(
         val gson = GsonBuilder().registerTypeAdapter(
             AssetOptions::class.java,
             AssetOptions.AssetOptionsDeserializer()
+        ).registerTypeAdapter(
+            AssetAmount::class.java,
+            AssetAmount.Deserializer()
+        ).registerTypeAdapter(
+            Price::class.java,
+            Price.PriceDeserializer()
         ).create()
 
         return gson.fromJson<List<Asset>>(result, object : TypeToken<List<Asset>>() {}.type)
