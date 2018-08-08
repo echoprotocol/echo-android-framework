@@ -7,7 +7,7 @@ import com.pixelplex.echoframework.support.Converter
 
 /**
  * Converts ECKey to address representation
- * (@see com.pixelplex.echolib.model.Address)
+ * [com.pixelplex.echoframework.model.Address]
  *
  * @author Dmitriy Bushuev
  */

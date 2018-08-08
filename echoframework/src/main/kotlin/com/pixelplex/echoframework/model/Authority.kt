@@ -9,7 +9,7 @@ import java.lang.reflect.Type
 /**
  * Class used to represent the weighted set of keys and accounts that must approve operations.
  *
- * {@see [Authority](https://bitshares.org/doxygen/structgraphene_1_1chain_1_1authority.html)}
+ * [Authority details](https://dev-doc.myecho.app/structgraphene_1_1chain_1_1authority.html)
  *
  * @author Dmitriy Bushuev
  */

@@ -8,7 +8,7 @@ import java.lang.reflect.Type
 
 /**
  *  Represents block model in Graphene blockchain
- * (@see https://bitshares.org/doxygen/structgraphene_1_1chain_1_1signed__block.html)
+ * [Block model details](https://dev-doc.myecho.app/structgraphene_1_1chain_1_1signed__block.html)
  *
  * @author Daria Pechkovskaya
  * @author Dmitriy Bushuev

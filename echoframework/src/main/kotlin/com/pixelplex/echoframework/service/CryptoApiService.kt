@@ -3,8 +3,7 @@ package com.pixelplex.echoframework.service
 /**
  * Encapsulates logic, associated with blockchain crypto API
  *
- * Graphene blockchain crypto API:
- * [http://docs.bitshares.org/api/crypto.html]
+ * [Graphene blockchain crypto API](https://dev-doc.myecho.app/classgraphene_1_1app_1_1crypto__api.html)
  *
  * @author Dmitriy Bushuev
  */
