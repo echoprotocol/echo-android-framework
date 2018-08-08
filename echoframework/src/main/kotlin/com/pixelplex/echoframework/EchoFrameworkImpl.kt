@@ -87,7 +87,11 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
                     networkBroadcastApiService,
                     settings.cryptoComponent
                 )
-        assetsFacade = AssetsFacadeImpl(databaseApiService)
+        assetsFacade = AssetsFacadeImpl(
+            databaseApiService,
+            networkBroadcastApiService,
+            settings.cryptoComponent
+        )
     }
 
     override fun start(callback: Callback<Any>) =
@@ -153,6 +157,17 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
     override fun subscribeOnAccount(nameOrId: String, listener: AccountListener) =
         dispatch(Runnable {
             subscriptionFacade.subscribeOnAccount(nameOrId, listener.wrapOriginal())
+        })
+
+    override fun createAsset(
+        name: String,
+        password: String,
+        asset: Asset,
+        predictionMarket: Boolean,
+        callback: Callback<Boolean>
+    ) =
+        dispatch(Runnable {
+            assetsFacade.createAsset(name, password, asset, predictionMarket, callback)
         })
 
     override fun listAssets(lowerBound: String, limit: Int, callback: Callback<List<Asset>>) =

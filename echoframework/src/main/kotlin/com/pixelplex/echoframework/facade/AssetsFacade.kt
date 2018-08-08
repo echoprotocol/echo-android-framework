@@ -11,6 +11,17 @@ import com.pixelplex.echoframework.model.Asset
 interface AssetsFacade {
 
     /**
+     * Creates asset [asset] with required parameters
+     */
+    fun createAsset(
+        name: String,
+        password: String,
+        asset: Asset,
+        predictionMarket: Boolean,
+        callback: Callback<Boolean>
+    )
+
+    /**
      * Query list of assets by required asset symbol [lowerBound] with limit [limit]
      */
     fun listAssets(lowerBound: String, limit: Int, callback: Callback<List<Asset>>)

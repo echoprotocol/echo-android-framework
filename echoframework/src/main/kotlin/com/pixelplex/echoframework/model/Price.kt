@@ -1,5 +1,11 @@
 package com.pixelplex.echoframework.model
 
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonElement
+import com.google.gson.JsonObject
+import java.lang.reflect.Type
+
 /**
  * The price struct stores asset prices in the Graphene system.
  *
@@ -16,7 +22,47 @@ package com.pixelplex.echoframework.model
  *
  * @author Dmitriy Bushuev
  */
-class Price {
+class Price : JsonSerializable, ByteSerializable {
+
     var base: AssetAmount? = null
     var quote: AssetAmount? = null
+
+    override fun toBytes(): ByteArray {
+        return base!!.toBytes() + quote!!.toBytes()
+    }
+
+    override fun toJsonString(): String? = null
+
+    override fun toJsonObject(): JsonElement? = JsonObject().apply {
+        add("base", base?.toJsonObject())
+        add("quote", quote?.toJsonObject())
+    }
+
+    /**
+     * Json deserializer for [Price] model
+     */
+    class PriceDeserializer : JsonDeserializer<Price> {
+
+        override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?
+        ): Price? {
+            if (json == null || !json.isJsonObject) return null
+
+            val jsonPrice = json.asJsonObject
+
+            val basePrice =
+                context?.deserialize<AssetAmount>(jsonPrice.get("base"), AssetAmount::class.java)
+            val quotePrice =
+                context?.deserialize<AssetAmount>(jsonPrice.get("quote"), AssetAmount::class.java)
+
+            return Price().apply {
+                this.base = basePrice
+                this.quote = quotePrice
+            }
+        }
+
+    }
+
 }
