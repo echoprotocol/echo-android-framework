@@ -5,11 +5,14 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.pixelplex.echoframework.AccountListener
 import com.pixelplex.echoframework.Callback
+import com.pixelplex.echoframework.ECHO_ASSET_ID
 import com.pixelplex.echoframework.EchoFramework
 import com.pixelplex.echoframework.exception.LocalException
 import com.pixelplex.echoframework.model.Account
 import com.pixelplex.echoframework.model.Balance
 import com.pixelplex.echoframework.model.HistoryResponse
+import com.pixelplex.echoframework.model.contract.ContractResult
+import com.pixelplex.echoframework.model.contract.ContractStruct
 import com.pixelplex.echoframework.support.Api
 import com.pixelplex.echoframework.support.Settings
 import kotlinx.android.synthetic.main.activity_main.*
@@ -196,7 +199,7 @@ class MainActivity : AppCompatActivity() {
             lib.createContract(
                 etName.text.toString(),
                 etPassword.text.toString(),
-                "1.3.0",
+                ECHO_ASSET_ID,
                 "608060405234801561001057600080fd5b506101a2806100206000396000f30060806040" +
                         "5260043610610041576000357c01000000000000000000000000000000000000000000000" +
                         "00000000000900463ffffffff1680630775107014610046575b600080fd5b348015610052" +
@@ -222,6 +225,79 @@ class MainActivity : AppCompatActivity() {
                 })
 
         }
+
+        btnCallContract.setOnClickListener {
+            toggleProgress(true)
+            lib.callContract(
+                etName.text.toString(),
+                etPassword.text.toString(),
+                ECHO_ASSET_ID,
+                "1.16.33",
+                "incrementCounter",
+                listOf(),
+                object : Callback<Boolean> {
+                    override fun onSuccess(result: Boolean) {
+                        updateStatus("Contract called succeed")
+                    }
+
+                    override fun onError(error: LocalException) {
+                        updateStatus(error.message ?: "")
+                    }
+                }
+            )
+        }
+
+        btnQueryContract.setOnClickListener {
+            toggleProgress(true)
+            lib.queryContract(
+                "1.16.33",
+                etName.text.toString(),
+                ECHO_ASSET_ID,
+                "getCount",
+                listOf(),
+                object : Callback<String> {
+                    override fun onSuccess(result: String) {
+                        updateStatus(result)
+                    }
+
+                    override fun onError(error: LocalException) {
+                        updateStatus(error.message ?: "")
+                    }
+                }
+            )
+        }
+
+        btnContractResult.setOnClickListener {
+            toggleProgress(true)
+            lib.getContractResult(
+                "1.17.177",
+                object : Callback<ContractResult> {
+                    override fun onSuccess(result: ContractResult) {
+                        updateStatus(result.execRes.output)
+                    }
+
+                    override fun onError(error: LocalException) {
+                        updateStatus(error.message ?: "")
+                    }
+                }
+            )
+        }
+
+        btnContracts.setOnClickListener {
+            toggleProgress(true)
+            lib.getContract(
+                "1.16.33",
+                object : Callback<ContractStruct> {
+                    override fun onSuccess(result: ContractStruct) {
+                        updateStatus(result.code)
+                    }
+
+                    override fun onError(error: LocalException) {
+                        updateStatus(error.message ?: "")
+                    }
+                }
+            )
+        }
     }
 
     private fun startLib() {
@@ -240,6 +316,10 @@ class MainActivity : AppCompatActivity() {
                 btnUnsubscribeAll.visibility = View.VISIBLE
                 btnHistory.visibility = View.VISIBLE
                 btnCreateContract.visibility = View.VISIBLE
+                btnCallContract.visibility = View.VISIBLE
+                btnQueryContract.visibility = View.VISIBLE
+                btnContractResult.visibility = View.VISIBLE
+                btnContracts.visibility = View.VISIBLE
                 updateStatus("Success initializing")
             }
 
@@ -255,6 +335,10 @@ class MainActivity : AppCompatActivity() {
                 btnUnsubscribeAll.visibility = View.INVISIBLE
                 btnHistory.visibility = View.INVISIBLE
                 btnCreateContract.visibility = View.INVISIBLE
+                btnCallContract.visibility = View.INVISIBLE
+                btnQueryContract.visibility = View.INVISIBLE
+                btnContractResult.visibility = View.INVISIBLE
+                btnContracts.visibility = View.INVISIBLE
                 error.printStackTrace()
                 updateStatus("Error occurred during initialization.")
             }

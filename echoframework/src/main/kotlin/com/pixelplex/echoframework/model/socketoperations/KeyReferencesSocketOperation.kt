@@ -16,12 +16,12 @@ import com.pixelplex.echoframework.model.Account
 class KeyReferencesSocketOperation(
     override val apiId: Int,
     val publicKey: String,
-    method: SocketMethodType = SocketMethodType.CALL,
+    callId: Int,
     callback: Callback<List<Account>>
 
 ) : SocketOperation<List<Account>>(
-    method,
-    ILLEGAL_ID,
+    SocketMethodType.CALL,
+    callId,
     listOf<Account>().javaClass,
     callback
 ) {

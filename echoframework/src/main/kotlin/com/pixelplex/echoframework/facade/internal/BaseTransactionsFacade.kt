@@ -1,6 +1,6 @@
 package com.pixelplex.echoframework.facade.internal
 
-import com.pixelplex.echoframework.BITSHARES_ASSET_ID
+import com.pixelplex.echoframework.ECHO_ASSET_ID
 import com.pixelplex.echoframework.core.crypto.CryptoCoreComponent
 import com.pixelplex.echoframework.exception.LocalException
 import com.pixelplex.echoframework.model.*
@@ -21,7 +21,7 @@ abstract class BaseTransactionsFacade(
 
     protected fun getFees(
         operations: List<BaseOperation>,
-        asset: Asset = Asset(BITSHARES_ASSET_ID)
+        asset: Asset = Asset(ECHO_ASSET_ID)
     ): List<AssetAmount> = databaseApiService.getRequiredFees(operations, asset).dematerialize()
 
     protected fun getFees(operations: List<BaseOperation>, assetId: String): List<AssetAmount> =

@@ -23,11 +23,11 @@ import com.pixelplex.echoframework.model.operations.TransferOperation
 class GetBlockSocketOperation(
     override val apiId: Int,
     val blockNumber: String,
-    method: SocketMethodType = SocketMethodType.CALL,
+    callId: Int,
     callback: Callback<Block>,
     private val network: Network
 
-) : SocketOperation<Block>(method, ILLEGAL_ID, Block::class.java, callback) {
+) : SocketOperation<Block>(SocketMethodType.CALL, callId, Block::class.java, callback) {
 
     override fun createParameters(): JsonElement =
         JsonArray().apply {
@@ -75,8 +75,5 @@ class GetBlockSocketOperation(
         registerTypeAdapter(AccountOptions::class.java, AccountOptions.Deserializer(network))
     }.create()
 
-    companion object {
-        private const val RESULT_KEY = "result"
-    }
 
 }

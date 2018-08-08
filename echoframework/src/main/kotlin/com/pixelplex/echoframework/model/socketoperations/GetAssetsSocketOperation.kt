@@ -20,10 +20,10 @@ import com.pixelplex.echoframework.model.Asset
 class GetAssetsSocketOperation(
     override val apiId: Int,
     val assetIds: Array<String>,
-    method: SocketMethodType = SocketMethodType.CALL,
+    callId: Int,
     callback: Callback<List<Asset>>
 
-) : SocketOperation<List<Asset>>(method, ILLEGAL_ID, listOf<Asset>().javaClass, callback) {
+) : SocketOperation<List<Asset>>(SocketMethodType.CALL, callId, listOf<Asset>().javaClass, callback) {
 
     @Suppress("UNUSED_EXPRESSION")
     override fun createParameters(): JsonElement =

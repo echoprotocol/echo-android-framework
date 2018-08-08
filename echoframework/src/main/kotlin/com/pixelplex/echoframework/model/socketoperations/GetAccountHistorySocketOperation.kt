@@ -31,12 +31,12 @@ class GetAccountHistorySocketOperation(
     val stopId: String = DEFAULT_HISTORY_ID,
     val limit: Int = DEFAULT_LIMIT,
     val network: Network,
-    method: SocketMethodType = SocketMethodType.CALL,
+    callId: Int,
     callback: Callback<HistoryResponse>
 
 ) : SocketOperation<HistoryResponse>(
-    method,
-    ILLEGAL_ID,
+    SocketMethodType.CALL,
+    callId,
     HistoryResponse::class.java,
     callback
 ) {

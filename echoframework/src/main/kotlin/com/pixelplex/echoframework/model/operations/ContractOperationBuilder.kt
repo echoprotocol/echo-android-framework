@@ -1,7 +1,7 @@
 package com.pixelplex.echoframework.model.operations
 
 import com.google.common.primitives.UnsignedLong
-import com.pixelplex.echoframework.BITSHARES_ASSET_ID
+import com.pixelplex.echoframework.ECHO_ASSET_ID
 import com.pixelplex.echoframework.exception.MalformedOperationException
 import com.pixelplex.echoframework.model.Account
 import com.pixelplex.echoframework.model.Asset
@@ -148,7 +148,7 @@ class ContractOperationBuilder : Builder<ContractOperation> {
         checkRegistrar(registrar)
         checkContractCode(code)
 
-        val asset = this.asset ?: Asset(BITSHARES_ASSET_ID)
+        val asset = this.asset ?: Asset(ECHO_ASSET_ID)
         val value = this.value ?: UnsignedLong.ZERO
         val gasPrice = this.gasPrice ?: UnsignedLong.ZERO
         val gas = this.gas ?: UnsignedLong.ZERO

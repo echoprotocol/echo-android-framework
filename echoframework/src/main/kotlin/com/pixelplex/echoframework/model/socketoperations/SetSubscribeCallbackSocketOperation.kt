@@ -20,9 +20,9 @@ import org.json.JSONObject
 class SetSubscribeCallbackSocketOperation(
     override val apiId: Int,
     val needClearFilter: Boolean,
-    method: SocketMethodType = SocketMethodType.CALL,
+    callId: Int,
     callback: Callback<Any>
-) : SocketOperation<Any>(method, ILLEGAL_ID, Any::class.java, callback) {
+) : SocketOperation<Any>(SocketMethodType.CALL, callId, Any::class.java, callback) {
 
     override fun createParameters(): JsonElement =
         JsonArray().apply {

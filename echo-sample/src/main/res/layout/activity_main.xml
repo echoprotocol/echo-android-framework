@@ -175,6 +175,46 @@
             android:text="@string/create_contract"
             android:visibility="invisible"/>
 
+        <Button
+            android:id="@+id/btnCallContract"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btnCreateContract"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:text="@string/call_contract"
+            android:visibility="invisible"/>
+
+        <Button
+            android:id="@+id/btnQueryContract"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btnCallContract"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:text="@string/query_contract"
+            android:visibility="invisible"/>
+
+        <Button
+            android:id="@+id/btnContractResult"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btnQueryContract"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:text="@string/result_contract"
+            android:visibility="invisible"/>
+
+        <Button
+            android:id="@+id/btnContracts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btnContractResult"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:text="@string/get_contracts"
+            android:visibility="invisible"/>
+
     </RelativeLayout>
 
 </ScrollView>

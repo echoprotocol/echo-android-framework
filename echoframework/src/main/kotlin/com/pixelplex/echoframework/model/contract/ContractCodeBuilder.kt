@@ -3,7 +3,7 @@ package com.pixelplex.echoframework.model.contract
 import com.pixelplex.echoframework.exception.MalformedParameterException
 import com.pixelplex.echoframework.support.Builder
 import com.pixelplex.echoframework.support.crypto.Keccak
-import com.pixelplex.echoframework.support.crypto.Parameters
+import com.pixelplex.echoframework.support.crypto.Parameter
 import org.spongycastle.util.encoders.Hex
 
 /**
@@ -33,7 +33,7 @@ class ContractCodeBuilder : Builder<String> {
      */
     fun setMethodParams(params: List<ContractMethodParameter>): ContractCodeBuilder {
         mMethodParams.clear()
-        mMethodParams.addAll(params as ArrayList)
+        mMethodParams.addAll(params)
         return this
     }
 
@@ -57,7 +57,7 @@ class ContractCodeBuilder : Builder<String> {
         methodName += parameters.joinToString(separator = ",", prefix = "(", postfix = ")")
 
         val methodHex = Hex.toHexString(methodName.toByteArray())
-        val hashMethod = keccak.getHash(methodHex, Parameters.KECCAK_256).substring(0, 8)
+        val hashMethod = keccak.getHash(methodHex, Parameter.KECCAK_256).substring(0, 8)
 
         return hashMethod + abiParams
     }
