@@ -37,7 +37,12 @@ enum class SocketOperationKeys(val key: String) {
     KEY_REFERENCES("get_key_references"),
     REQUIRED_FEES("get_required_fees"),
     SUBSCRIBE_CALLBACK("set_subscribe_callback"),
-    TRANSACTION_WITH_CALLBACK("broadcast_transaction_with_callback");
+    TRANSACTION_WITH_CALLBACK("broadcast_transaction_with_callback"),
+    GET_ALL_CONTRACTS("get_all_contracts"),
+    GET_CONTRACT_RESULT("get_contract_result"),
+    CALL_CONTRACT_NO_CHANGING_STATE("call_contract_no_changing_state"),
+    GET_CONTRACTS("get_contracts"),
+    GET_CONTRACT("get_contract");
 
     override fun toString(): String = this.key
 }
@@ -57,7 +62,7 @@ enum class OperationCodingKeys(val key: String) {
  */
 abstract class SocketOperation<T>(
     val method: SocketMethodType,
-    var callId: Int,
+    val callId: Int,
     val type: Class<T>,
     val callback: Callback<T>
 ) : JsonSerializable, JsonDeserializable<T> {
@@ -82,4 +87,8 @@ abstract class SocketOperation<T>(
             addProperty(OperationCodingKeys.METHOD.key, method.key)
             add(OperationCodingKeys.PARAMS.key, createParameters())
         }
+
+    companion object {
+        const val RESULT_KEY = "result"
+    }
 }

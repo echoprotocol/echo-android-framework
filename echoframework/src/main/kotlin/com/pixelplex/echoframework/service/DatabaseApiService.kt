@@ -4,6 +4,9 @@ import com.pixelplex.echoframework.AccountListener
 import com.pixelplex.echoframework.Callback
 import com.pixelplex.echoframework.exception.LocalException
 import com.pixelplex.echoframework.model.*
+import com.pixelplex.echoframework.model.contract.ContractInfo
+import com.pixelplex.echoframework.model.contract.ContractResult
+import com.pixelplex.echoframework.model.contract.ContractStruct
 import com.pixelplex.echoframework.support.Result
 
 /**
@@ -15,7 +18,7 @@ import com.pixelplex.echoframework.support.Result
  * @author Dmitriy Bushuev
  */
 interface DatabaseApiService : ApiService, AccountsService, GlobalsService,
-    AuthorityAndValidationService, BlocksAndTransactionsService
+    AuthorityAndValidationService, BlocksAndTransactionsService, ContractsService
 
 /**
  * Encapsulates logic, associated with data from account from blockchain database API
@@ -138,8 +141,54 @@ interface BlocksAndTransactionsService {
      * Retrieves full signed block synchronously
      *
      * @param blockNumber Height of the block to be returned
-     * @param callback Listener for notifying
      */
     fun getBlock(blockNumber: String): Result<LocalException, Block>
 
+}
+
+/**
+ * Encapsulates logic, associated with information about contracts from Database API
+ */
+interface ContractsService {
+
+    /**
+     * Calls contract without changing state of blockchain
+     *
+     * @param contractId Id of contract to call
+     * @param registrarNameOrId Name or id of account caller
+     * @param assetId Asset id of contract
+     * @param byteCode Code calling to contract
+     */
+    fun callContractNoChangingState(
+        contractId: String,
+        registrarNameOrId: String,
+        assetId: String,
+        byteCode: String
+    ): Result<LocalException, String>
+
+    /**
+     * Return result of contract operation call
+     *
+     * @param historyId History operation id
+     */
+    fun getContractResult(historyId: String): Result<LocalException, ContractResult>
+
+    /**
+     * Returns all contracts from blockchain
+     */
+    fun getAllContracts(): Result<LocalException, List<ContractInfo>>
+
+    /**
+     * Returns contracts by ids
+     *
+     * @param contractIds List of contracts ids
+     */
+    fun getContracts(contractIds: List<String>): Result<LocalException, List<ContractInfo>>
+
+    /**
+     * Return full information about contract
+     *
+     * @param contractId Id of contract
+     */
+    fun getContract(contractId: String): Result<LocalException, ContractStruct>
 }

@@ -32,7 +32,14 @@ class AccountHistoryApiServiceImpl(
         callback: Callback<HistoryResponse>
     ) {
         val historyCall = GetAccountHistorySocketOperation(
-            id, accountId, start, stop, limit, network, callback = callback
+            id,
+            accountId,
+            start,
+            stop,
+            limit,
+            network,
+            callId = socketCoreComponent.currentId,
+            callback = callback
         )
 
         socketCoreComponent.emit(historyCall)

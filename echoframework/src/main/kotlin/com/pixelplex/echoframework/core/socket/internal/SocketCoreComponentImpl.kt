@@ -31,6 +31,9 @@ class SocketCoreComponentImpl(
 
     override var socketState: SocketState = SocketState.DISCONNECTED
 
+    override val currentId: Int
+        get() = callIdx.getAndIncrement()
+
     override fun connect(url: String) = with(socketMessenger) {
         on(globalSocketListener)
         setUrl(url)
@@ -41,8 +44,6 @@ class SocketCoreComponentImpl(
 
     @Suppress("unchecked_cast")
     override fun emit(operation: SocketOperation<*>) {
-        operation.callId = callIdx.getAndIncrement()
-
         operationsMap.putIfAbsent(operation.callId, operation as SocketOperation<Any>)
 
         socketMessenger.emit(operation.toJsonString() ?: "")

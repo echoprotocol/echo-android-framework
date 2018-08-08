@@ -8,7 +8,10 @@ import com.pixelplex.echoframework.facade.internal.*
 import com.pixelplex.echoframework.model.Account
 import com.pixelplex.echoframework.model.Balance
 import com.pixelplex.echoframework.model.HistoryResponse
+import com.pixelplex.echoframework.model.contract.ContractInfo
 import com.pixelplex.echoframework.model.contract.ContractMethodParameter
+import com.pixelplex.echoframework.model.contract.ContractResult
+import com.pixelplex.echoframework.model.contract.ContractStruct
 import com.pixelplex.echoframework.service.internal.AccountHistoryApiServiceImpl
 import com.pixelplex.echoframework.service.internal.CryptoApiServiceImpl
 import com.pixelplex.echoframework.service.internal.DatabaseApiServiceImpl
@@ -221,7 +224,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         )
     }
 
-    override fun callContractMethod(
+    override fun callContract(
         registrarNameOrId: String,
         password: String,
         assetId: String,
@@ -230,7 +233,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         methodParams: List<ContractMethodParameter>,
         callback: Callback<Boolean>
     ) {
-        contractsFacade.callContractMethod(
+        contractsFacade.callContract(
             registrarNameOrId,
             password,
             assetId,
@@ -239,6 +242,43 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             methodParams,
             callback.wrapOriginal()
         )
+    }
+
+    override fun queryContract(
+        registrarNameOrId: String,
+        assetId: String,
+        contractId: String,
+        methodName: String,
+        methodParams: List<ContractMethodParameter>,
+        callback: Callback<String>
+    ) {
+        contractsFacade.queryContract(
+            registrarNameOrId,
+            assetId,
+            contractId,
+            methodName,
+            methodParams,
+            callback
+        )
+    }
+
+    override fun getContractResult(
+        historyId: String,
+        callback: Callback<ContractResult>
+    ) {
+        contractsFacade.getContractResult(historyId, callback)
+    }
+
+    override fun getContracts(contractIds: List<String>, callback: Callback<List<ContractInfo>>) {
+        contractsFacade.getContracts(contractIds, callback)
+    }
+
+    override fun getAllContracts(callback: Callback<List<ContractInfo>>) {
+        contractsFacade.getAllContracts(callback)
+    }
+
+    override fun getContract(contractId: String, callback: Callback<ContractStruct>) {
+        contractsFacade.getContract(contractId, callback)
     }
 
     private fun <T> Callback<T>.wrapOriginal(): Callback<T> =

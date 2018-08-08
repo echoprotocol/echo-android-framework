@@ -5,7 +5,7 @@ import org.spongycastle.util.encoders.Hex
 import java.math.BigInteger
 
 /**
- * Implementation of the Keccak sponge function family of hash functions.
+ * Keccak encryption implementation.
  *
  * @author Daria Pechkovskaya
  */
@@ -68,11 +68,15 @@ class Keccak {
     }
 
     /**
-     * Creates hash from message by parameter
-     * @param message Message to getting hash
-     * @param parameters Parameter of hash type
+     * Encrypts message by parameter
+     *
+     * @param message Message to encrypting
+     * @param parameter Parameter of encryption
+     *
+     *
+     * @return Encrypted message string
      */
-    fun getHash(message: String, parameters: Parameters): String {
+    fun getHash(message: String, parameter: Parameter): String {
         //		Initialization and padding
         val s = Array<Array<BigInteger?>>(5) { arrayOfNulls(5) }
 
@@ -82,13 +86,13 @@ class Keccak {
             }
         }
 
-        val p = padding(message, parameters)
+        val p = padding(message, parameter)
 
         //	    Absorbing phase
         for (Pi in p) {
             for (i in 0..4) {
                 for (j in 0..4) {
-                    if (i + j * 5 < parameters.rateInBytes / w) {
+                    if (i + j * 5 < parameter.r / w) {
                         s[i][j] = s[i][j]?.xor(Pi!![i + j * 5])
                     }
                 }
@@ -104,7 +108,7 @@ class Keccak {
 
             for (i in 0..4) {
                 for (j in 0..4) {
-                    if (5 * i + j < parameters.rateInBytes / w) {
+                    if (5 * i + j < parameter.r / w) {
                         z += addZero(
                             Hex.toHexString(reverse(s[j][i]?.toByteArray())),
                             16
@@ -114,9 +118,9 @@ class Keccak {
             }
 
             doKeccackf(s)
-        } while (z.length < parameters.outputLengthInBytes * 2)
+        } while (z.length < parameter.outputLength * 2)
 
-        return z.substring(0, parameters.outputLengthInBytes * 2)
+        return z.substring(0, parameter.outputLength * 2)
     }
 
     private fun doKeccackf(A: Array<Array<BigInteger?>>): Array<Array<BigInteger?>> {
@@ -167,12 +171,12 @@ class Keccak {
         return A
     }
 
-    private fun rot(x: BigInteger, n: Int): BigInteger {
-        var newN = n
-        newN %= w
+    private fun rot(x: BigInteger, N: Int): BigInteger {
+        var n = N
+        n %= w
 
-        val leftShift = getShiftLeft64(x, newN)
-        val rightShift = x.shiftRight(w - newN)
+        val leftShift = getShiftLeft64(x, n)
+        val rightShift = x.shiftRight(w - n)
 
         return leftShift.or(rightShift)
     }
@@ -192,16 +196,17 @@ class Keccak {
         return retValue
     }
 
-    private fun padding(message: String, parameters: Parameters): Array<Array<BigInteger?>?> {
-        var newMessage = message + parameters.d
+    private fun padding(message: String, parameters: Parameter): Array<Array<BigInteger?>?> {
+        var newMessage = message
         val size: Int
+        newMessage += parameters.d
 
-        while (newMessage.length / 2 * 8 % parameters.rateInBytes != parameters.rateInBytes - 8) {
+        while (newMessage.length / 2 * 8 % parameters.r != parameters.r - 8) {
             newMessage += "00"
         }
 
         newMessage += "80"
-        size = newMessage.length / 2 * 8 / parameters.rateInBytes
+        size = newMessage.length / 2 * 8 / parameters.r
 
         val arrayM = arrayOfNulls<Array<BigInteger?>>(size)
         arrayM[0] = arrayOfNulls(1600 / w)
@@ -213,7 +218,7 @@ class Keccak {
 
         for (_n in 0 until newMessage.length) {
 
-            if (j > parameters.rateInBytes / w - 1) {
+            if (j > parameters.r / w - 1) {
                 j = 0
                 i++
                 arrayM[i] = arrayOfNulls(1600 / w)

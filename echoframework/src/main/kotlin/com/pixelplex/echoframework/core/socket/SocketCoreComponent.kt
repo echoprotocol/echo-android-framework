@@ -11,6 +11,8 @@ interface SocketCoreComponent {
 
     val socketState: SocketState
 
+    val currentId: Int
+
     /**
      * Connects to socket by url
      * @param url Url for socket connection

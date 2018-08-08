@@ -7,8 +7,7 @@ import com.pixelplex.echoframework.facade.ContractsFacade
 import com.pixelplex.echoframework.model.Account
 import com.pixelplex.echoframework.model.AuthorityType
 import com.pixelplex.echoframework.model.Transaction
-import com.pixelplex.echoframework.model.contract.ContractCodeBuilder
-import com.pixelplex.echoframework.model.contract.ContractMethodParameter
+import com.pixelplex.echoframework.model.contract.*
 import com.pixelplex.echoframework.model.operations.ContractOperationBuilder
 import com.pixelplex.echoframework.service.DatabaseApiService
 import com.pixelplex.echoframework.service.NetworkBroadcastApiService
@@ -79,7 +78,7 @@ class ContractsFacadeImpl(
 
     }
 
-    override fun callContractMethod(
+    override fun callContract(
         registrarNameOrId: String,
         password: String,
         assetId: String,
@@ -118,6 +117,7 @@ class ContractsFacadeImpl(
                 .setAsset(assetId)
                 .setRegistrar(registrar!!)
                 .setGas(1000000)
+                .setReceiver(contractId)
                 .setContractCode(contractCode)
                 .build()
 
@@ -133,5 +133,66 @@ class ContractsFacadeImpl(
             .value { callContractResult -> callback.onSuccess(callContractResult) }
             .error { error -> callback.onError(LocalException(error)) }
 
+    }
+
+    override fun queryContract(
+        registrarNameOrId: String,
+        assetId: String,
+        contractId: String,
+        methodName: String,
+        methodParams: List<ContractMethodParameter>,
+        callback: Callback<String>
+    ) {
+        Result {
+            var registrar: Account? = null
+
+            databaseApiService.getFullAccounts(listOf(registrarNameOrId), false)
+                .value { accountsMap ->
+                    registrar = accountsMap[registrarNameOrId]?.account
+                            ?:
+                            throw LocalException("Unable to find required account $registrarNameOrId")
+                }
+                .error { accountsError ->
+                    throw LocalException("Error occurred during accounts request", accountsError)
+                }
+
+            val contractCode = ContractCodeBuilder()
+                .setMethodName(methodName)
+                .setMethodParams(methodParams)
+                .build()
+
+            databaseApiService.callContractNoChangingState(
+                contractId,
+                registrar!!.getObjectId(),
+                assetId,
+                contractCode
+            ).dematerialize()
+        }
+            .value { callContractResult -> callback.onSuccess(callContractResult) }
+            .error { error -> callback.onError(LocalException(error)) }
+    }
+
+    override fun getContractResult(historyId: String, callback: Callback<ContractResult>) {
+        Result { databaseApiService.getContractResult(historyId).dematerialize() }
+            .value { callContractResult -> callback.onSuccess(callContractResult) }
+            .error { error -> callback.onError(LocalException(error)) }
+    }
+
+    override fun getContracts(contractIds: List<String>, callback: Callback<List<ContractInfo>>) {
+        Result { databaseApiService.getContracts(contractIds).dematerialize() }
+            .value { callContractResult -> callback.onSuccess(callContractResult) }
+            .error { error -> callback.onError(LocalException(error)) }
+    }
+
+    override fun getAllContracts(callback: Callback<List<ContractInfo>>) {
+        Result { databaseApiService.getAllContracts().dematerialize() }
+            .value { callContractResult -> callback.onSuccess(callContractResult) }
+            .error { error -> callback.onError(LocalException(error)) }
+    }
+
+    override fun getContract(contractId: String, callback: Callback<ContractStruct>) {
+        Result { databaseApiService.getContract(contractId).dematerialize() }
+            .value { callContractResult -> callback.onSuccess(callContractResult) }
+            .error { error -> callback.onError(LocalException(error)) }
     }
 }

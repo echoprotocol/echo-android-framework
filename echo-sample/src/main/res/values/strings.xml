@@ -15,5 +15,9 @@
     <string name="unsubscribe">Unsubscribe</string>
     <string name="unsubscribe_all">Unsubscribe all</string>
     <string name="create_contract">Create contract</string>
+    <string name="call_contract">Call contract</string>
+    <string name="query_contract">Query contract</string>
+    <string name="result_contract">Result contract</string>
+    <string name="get_contracts">Get contracts</string>
     <string name="status">Status: %s</string>
 </resources>

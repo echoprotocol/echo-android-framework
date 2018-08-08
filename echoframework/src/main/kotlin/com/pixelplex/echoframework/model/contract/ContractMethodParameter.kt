@@ -10,7 +10,12 @@ import java.io.Serializable
  */
 class ContractMethodParameter
 @JvmOverloads constructor(
-    @Expose var name: String,
-    @Expose var type: String,
+    @Expose
+    var name: String,
+
+    @Expose
+    var type: String,
+
     var value: String = ""
+
 ) : Serializable

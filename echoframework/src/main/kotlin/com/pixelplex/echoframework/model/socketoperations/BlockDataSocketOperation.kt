@@ -18,11 +18,11 @@ import com.pixelplex.echoframework.model.DynamicGlobalProperties
  */
 class BlockDataSocketOperation(
     override val apiId: Int,
-    method: SocketMethodType = SocketMethodType.CALL,
+    callId: Int,
     callback: Callback<DynamicGlobalProperties>
 ) : SocketOperation<DynamicGlobalProperties>(
-    method,
-    ILLEGAL_ID,
+    SocketMethodType.CALL,
+    callId,
     DynamicGlobalProperties::class.java,
     callback
 ) {
@@ -39,15 +39,9 @@ class BlockDataSocketOperation(
         val jsonTree = parser.parse(json)
 
         try {
-            val result = jsonTree.asJsonObject.get("result")?.asJsonObject
+            val result = jsonTree.asJsonObject.get(RESULT_KEY)?.asJsonObject
 
-            val gson = GsonBuilder().registerTypeAdapter(
-                DynamicGlobalProperties::
-                class.java,
-                DynamicGlobalProperties.Deserializer()
-            ).create()
-
-            return gson.fromJson<DynamicGlobalProperties>(
+            return configureGson().fromJson<DynamicGlobalProperties>(
                 result,
                 DynamicGlobalProperties::class.java
             )
@@ -58,6 +52,13 @@ class BlockDataSocketOperation(
 
         return null
     }
+
+    private fun configureGson() = GsonBuilder().apply {
+        registerTypeAdapter(
+            DynamicGlobalProperties::class.java,
+            DynamicGlobalProperties.Deserializer()
+        )
+    }.create()
 
 
 }

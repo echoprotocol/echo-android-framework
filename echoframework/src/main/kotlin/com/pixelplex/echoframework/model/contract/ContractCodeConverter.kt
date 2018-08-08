@@ -16,7 +16,7 @@ class ContractCodeConverter : Converter<ContractMethodParameter, String> {
         private const val TYPE_STRING = "string"
         private const val TYPE_ADDRESS = "address"
         private const val HASH_PATTERN =
-            "0000000000000000000000000000000000000000000000000000000000000000"
+            "0000000000000000000000000000000000000000000000000000000000000000" //64b
         private const val RADIX = 16
     }
 

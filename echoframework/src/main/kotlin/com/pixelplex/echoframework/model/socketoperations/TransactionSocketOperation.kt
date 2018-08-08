@@ -3,7 +3,6 @@ package com.pixelplex.echoframework.model.socketoperations
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.pixelplex.echoframework.Callback
-import com.pixelplex.echoframework.ILLEGAL_ID
 import com.pixelplex.echoframework.model.Transaction
 import com.pixelplex.echoframework.support.toJsonObject
 import org.spongycastle.util.encoders.Hex
@@ -21,9 +20,9 @@ class TransactionSocketOperation(
     override val apiId: Int,
     val transaction: Transaction,
     val signature: ByteArray,
-    method: SocketMethodType = SocketMethodType.CALL,
+    callId: Int,
     callback: Callback<Boolean>
-) : SocketOperation<Boolean>(method, ILLEGAL_ID, Boolean::class.java, callback) {
+) : SocketOperation<Boolean>(SocketMethodType.CALL, callId, Boolean::class.java, callback) {
 
     override fun createParameters(): JsonElement =
         JsonArray().apply {
@@ -44,7 +43,7 @@ class TransactionSocketOperation(
     }
 
     override fun fromJson(json: String): Boolean? {
-        return json.toJsonObject()?.has("result") ?: false
+        return json.toJsonObject()?.has(RESULT_KEY) ?: false
     }
 
 }
