@@ -12,7 +12,7 @@ import java.lang.reflect.Type
  *
  * These are the fields which can be updated by the active authority
  *
- * [Account options details][https://bitshares.org/doxygen/structgraphene_1_1chain_1_1account__options.html#details]
+ * [Account options details][https://dev-doc.myecho.app/structgraphene_1_1chain_1_1account__options.html]
  *
  * @author Dmitriy Bushuev
  */

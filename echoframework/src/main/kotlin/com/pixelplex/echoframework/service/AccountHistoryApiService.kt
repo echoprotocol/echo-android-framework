@@ -7,8 +7,7 @@ import com.pixelplex.echoframework.support.Result
 /**
  * Encapsulates logic, associated with blockchain account history API
  *
- * Graphene blockchain account history API:
- * [http://docs.bitshares.org/api/history.html]
+ * [Graphene blockchain account history API](https://dev-doc.myecho.app/classgraphene_1_1app_1_1history__api.html)
  *
  * @author Dmitriy Bushuev
  */

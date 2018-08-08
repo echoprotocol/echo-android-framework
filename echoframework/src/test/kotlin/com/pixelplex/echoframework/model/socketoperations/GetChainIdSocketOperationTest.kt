@@ -16,16 +16,20 @@ class GetChainIdSocketOperationTest {
 
     @Before
     fun setUp() {
-        operation =
-                GetChainIdSocketOperation(
-                    2,
-                    callback = EmptyCallback()
-                )
+        operation = GetChainIdSocketOperation(
+            2,
+            3,
+            callback = EmptyCallback()
+        )
     }
 
     @Test
     fun serializeTest() {
-        operation.callId = 3
+        operation = GetChainIdSocketOperation(
+            2,
+            3,
+            callback = EmptyCallback()
+        )
         val json = operation.toJsonObject().asJsonObject
 
         Assert.assertEquals(json.get(OperationCodingKeys.ID.key).asInt, 3)

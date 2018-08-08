@@ -12,8 +12,7 @@ import com.pixelplex.echoframework.support.Result
 /**
  * Encapsulates logic, associated with blockchain database API
  *
- * Graphene blockchain database API:
- * [http://docs.bitshares.org/api/database.html]
+ * [Graphene blockchain database API](https://dev-doc.myecho.app/classgraphene_1_1app_1_1database__api.html)
  *
  * @author Dmitriy Bushuev
  */

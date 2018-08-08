@@ -16,12 +16,11 @@ class LoginSocketOperationTest {
 
     @Before
     fun setUp() {
-        operation = LoginSocketOperation(2, callback = EmptyCallback())
+        operation = LoginSocketOperation(2, 3, callback = EmptyCallback())
     }
 
     @Test
     fun serializeTest() {
-        operation.callId = 3
         val json = operation.toJsonObject().asJsonObject
 
         Assert.assertEquals(json.get(OperationCodingKeys.ID.key).asInt, 3)

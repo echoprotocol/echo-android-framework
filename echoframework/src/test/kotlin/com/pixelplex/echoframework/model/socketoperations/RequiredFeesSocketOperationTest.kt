@@ -19,13 +19,13 @@ import org.junit.Test
 class RequiredFeesSocketOperationTest {
 
     private lateinit var operation: RequiredFeesSocketOperation
+    private lateinit var updateOperation: AccountUpdateOperation
 
     @Before
     fun setUp() {
-        val updateOperation: AccountUpdateOperation = buildOperation()
-
+        updateOperation = buildOperation()
         operation = RequiredFeesSocketOperation(
-            2, listOf(updateOperation), Asset("1.3.0"),
+            2, listOf(updateOperation), Asset("1.3.0"), 3,
             callback = EmptyCallback()
         )
     }
@@ -48,7 +48,6 @@ class RequiredFeesSocketOperationTest {
 
     @Test
     fun serializeTest() {
-        operation.callId = 3
         val json = operation.toJsonObject().asJsonObject
 
         assertEquals(json.get(OperationCodingKeys.ID.key).asInt, 3)

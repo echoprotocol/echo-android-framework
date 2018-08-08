@@ -18,6 +18,8 @@ class ServiceSocketCoreComponentMock<T>(private val response: T) : SocketCoreCom
 
     override val socketState: SocketState = SocketState.CONNECTED
 
+    override val currentId: Int = 1
+
     override fun connect(url: String) {
     }
 
@@ -26,9 +28,9 @@ class ServiceSocketCoreComponentMock<T>(private val response: T) : SocketCoreCom
 
     override fun emit(operation: SocketOperation<*>) {
         response?.let { (operation as SocketOperation<T>).callback.onSuccess(response) }
-                ?: operation.callback.onError(
-                    LocalException("Test error. Empty response")
-                )
+            ?: operation.callback.onError(
+                LocalException("Test error. Empty response")
+            )
     }
 
     override fun on(listener: SocketMessengerListener) {

@@ -3,7 +3,6 @@ package com.pixelplex.echoframework.model.socketoperations
 import com.pixelplex.echoframework.support.EmptyCallback
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
-import org.junit.Before
 import org.junit.Test
 
 /**
@@ -15,21 +14,16 @@ class AccountBalancesSocketOperationTest {
 
     private lateinit var operation: AccountBalancesOperation
 
-    @Before
-    fun setUp() {
-        operation =
-                AccountBalancesOperation(
-                    2,
-                    "1.2.23215",
-                    "1.3.0",
-                    false,
-                    callback = EmptyCallback()
-                )
-    }
-
     @Test
     fun serializeTest() {
-        operation.callId = 3
+        operation = AccountBalancesOperation(
+            2,
+            "1.2.23215",
+            "1.3.0",
+            false,
+            3,
+            callback = EmptyCallback()
+        )
         val json = operation.toJsonObject().asJsonObject
 
         assertEquals(json.get(OperationCodingKeys.ID.key).asInt, 3)

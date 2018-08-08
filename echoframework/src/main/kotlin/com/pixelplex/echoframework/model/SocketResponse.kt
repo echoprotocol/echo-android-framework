@@ -5,7 +5,6 @@ import java.io.Serializable
 
 /**
  * Includes classes, represents response with error from blockchain
- * (@see "http://docs.bitshares.org/api/rpc.html")
  *
  * @author Daria Pechkovskaya
  */

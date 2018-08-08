@@ -8,7 +8,6 @@ import com.pixelplex.echoframework.model.BaseOperation
 import com.pixelplex.echoframework.model.Memo
 import java.lang.reflect.Type
 
-
 /**
  * Encapsulates transfer information
  *
