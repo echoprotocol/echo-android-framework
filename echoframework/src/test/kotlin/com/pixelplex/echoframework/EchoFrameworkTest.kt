@@ -1,8 +1,10 @@
 package com.pixelplex.echoframework
 
-import com.google.common.primitives.UnsignedLong
 import com.pixelplex.echoframework.exception.LocalException
-import com.pixelplex.echoframework.model.*
+import com.pixelplex.echoframework.model.Account
+import com.pixelplex.echoframework.model.Asset
+import com.pixelplex.echoframework.model.Balance
+import com.pixelplex.echoframework.model.HistoryResponse
 import com.pixelplex.echoframework.model.network.Echodevnet
 import com.pixelplex.echoframework.support.Api
 import com.pixelplex.echoframework.support.EmptyCallback
@@ -419,7 +421,7 @@ class EchoFrameworkTest {
         val futureAssets = FutureTask<List<Asset>>()
 
         framework.listAssets(
-            "ASSETIC", 10,
+            "DIMASASSET", 10,
             object : Callback<List<Asset>> {
                 override fun onSuccess(result: List<Asset>) {
                     futureAssets.setComplete(result)
@@ -466,14 +468,14 @@ class EchoFrameworkTest {
 //
 //        val futureAsset = FutureTask<Boolean>()
 //
-//        val asset = Asset("", "ASSETTEST", 4, "1.2.18")
+//        val asset = Asset("", "YIUHTGFSADFD", 4, "1.2.18")
 //        val options =
 //            AssetOptions(
-//                UnsignedLong.valueOf(100000), 0.toLong(), UnsignedLong.ZERO, 79, 0,
+//                UnsignedLong.valueOf(100000), 0.toLong(), UnsignedLong.ZERO, 79, 1,
 //                Price().apply {
 //                    this.quote = AssetAmount(UnsignedLong.valueOf(1), Asset("1.3.1"))
 //                    this.base = AssetAmount(UnsignedLong.valueOf(1), Asset("1.3.0"))
-//                }, ""
+//                }, "description"
 //            )
 //
 //        asset.assetOptions = options
@@ -481,6 +483,10 @@ class EchoFrameworkTest {
 //        framework.createAsset(
 //            "dima1", "P5KctJPedZ4K9T77KgmqhVNJ5H6FojEN6fRVp9PYyhAb9",
 //            asset,
+//            BitassetOptions(
+//                86400, 7, 86400,
+//                100, 2000
+//            ),
 //            false,
 //            object : Callback<Boolean> {
 //                override fun onSuccess(result: Boolean) {

@@ -57,8 +57,8 @@ class Asset : GrapheneObject, ByteSerializable {
 
     override fun toBytes(): ByteArray {
         val issuerBytes = Account(issuer!!).toBytes()
-        val symbolBytes = symbol!!.toByteArray()
-        val precisionBytes = precision.toShort().revert()
+        val symbolBytes = byteArrayOf(symbol!!.length.toByte()) + symbol!!.toByteArray()
+        val precisionBytes = precision.toByte()
         val optionsBytes = assetOptions!!.toBytes()
         return issuerBytes + symbolBytes + precisionBytes + optionsBytes
     }

@@ -1,5 +1,6 @@
 package com.pixelplex.echoframework.facade.internal
 
+import com.pixelplex.echoframework.BITSHARES_ASSET_ID
 import com.pixelplex.echoframework.Callback
 import com.pixelplex.echoframework.core.crypto.CryptoCoreComponent
 import com.pixelplex.echoframework.exception.LocalException
@@ -28,15 +29,16 @@ class AssetsFacadeImpl(
         name: String,
         password: String,
         asset: Asset,
+        bitassetOptions: BitassetOptions?,
         predictionMarket: Boolean,
         callback: Callback<Boolean>
     ) {
         Result {
-            val operation = CreateAssetOperation(asset, predictionMarket)
+            val operation = CreateAssetOperation(asset, bitassetOptions, predictionMarket)
 
             val blockData = databaseApiService.getBlockData()
             val chainId = getChainId()
-            val fees = getFees(listOf(operation), "1.3.0")
+            val fees = getFees(listOf(operation), BITSHARES_ASSET_ID)
 
             val privateKey =
                 cryptoCoreComponent.getPrivateKey(

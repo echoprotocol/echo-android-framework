@@ -31,11 +31,11 @@ class Price : JsonSerializable, ByteSerializable {
         return base!!.toBytes() + quote!!.toBytes()
     }
 
-    override fun toJsonString(): String? = null
+    override fun toJsonString(): String? = toJsonObject().toString()
 
     override fun toJsonObject(): JsonElement? = JsonObject().apply {
-        add("base", base?.toJsonObject())
-        add("quote", quote?.toJsonObject())
+        add(BASE_KEY, base?.toJsonObject())
+        add(QUOTE_KEY, quote?.toJsonObject())
     }
 
     /**
@@ -53,16 +53,20 @@ class Price : JsonSerializable, ByteSerializable {
             val jsonPrice = json.asJsonObject
 
             val basePrice =
-                context?.deserialize<AssetAmount>(jsonPrice.get("base"), AssetAmount::class.java)
+                context?.deserialize<AssetAmount>(jsonPrice.get(BASE_KEY), AssetAmount::class.java)
             val quotePrice =
-                context?.deserialize<AssetAmount>(jsonPrice.get("quote"), AssetAmount::class.java)
+                context?.deserialize<AssetAmount>(jsonPrice.get(QUOTE_KEY), AssetAmount::class.java)
 
             return Price().apply {
                 this.base = basePrice
                 this.quote = quotePrice
             }
         }
+    }
 
+    companion object {
+        private const val BASE_KEY = "base"
+        private const val QUOTE_KEY = "quote"
     }
 
 }
