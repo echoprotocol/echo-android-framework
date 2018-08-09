@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.pixelplex.echoframework.support
+package com.pixelplex.echoframework.support.crypto
 
 import java.io.DataOutput
 import java.io.IOException
@@ -48,7 +48,10 @@ object Varint {
     @Throws(IOException::class)
     fun writeSignedVarLong(value: Long, out: DataOutput) {
         // Great trick from http://code.google.com/apis/protocolbuffers/docs/encoding.html#types
-        writeUnsignedVarLong(value shl 1 xor (value shr 63), out)
+        writeUnsignedVarLong(
+            value shl 1 xor (value shr 63),
+            out
+        )
     }
 
     /**

@@ -75,6 +75,7 @@ class InitializerFacadeImpl(
 
     private fun login(callback: Callback<Boolean>) {
         val loginOperation = LoginSocketOperation(
+            socketCoreComponent.currentId,
             InitializerFacade.INITIALIZER_API_ID,
             callback = callback
         )
@@ -90,6 +91,7 @@ class InitializerFacadeImpl(
             AccessSocketOperation(
                 accessSocketType = apiTypeConverter.convert(api),
                 api = InitializerFacade.INITIALIZER_API_ID,
+                callId = socketCoreComponent.currentId,
                 callback = ApiCallback(api)
             )
         })

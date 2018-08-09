@@ -9,8 +9,6 @@ import com.pixelplex.echoframework.ILLEGAL_ID
 import com.pixelplex.echoframework.model.*
 import com.pixelplex.echoframework.model.network.Network
 import com.pixelplex.echoframework.model.operations.AccountUpdateOperation
-import com.pixelplex.echoframework.model.operations.CreateAssetOperation
-import com.pixelplex.echoframework.model.operations.IssueAssetOperation
 import com.pixelplex.echoframework.model.operations.TransferOperation
 
 /**
@@ -33,12 +31,12 @@ class GetAccountHistorySocketOperation(
     val stopId: String = DEFAULT_HISTORY_ID,
     val limit: Int = DEFAULT_LIMIT,
     val network: Network,
-    method: SocketMethodType = SocketMethodType.CALL,
+    callId: Int,
     callback: Callback<HistoryResponse>
 
 ) : SocketOperation<HistoryResponse>(
-    method,
-    ILLEGAL_ID,
+    SocketMethodType.CALL,
+    callId,
     HistoryResponse::class.java,
     callback
 ) {
@@ -76,6 +74,10 @@ class GetAccountHistorySocketOperation(
         registerTypeAdapter(
             TransferOperation::class.java,
             TransferOperation.TransferDeserializer()
+        )
+        registerTypeAdapter(
+            ContractOperation::class.java,
+            ContractOperation.Deserializer()
         )
         registerTypeAdapter(
             CreateAssetOperation::class.java,

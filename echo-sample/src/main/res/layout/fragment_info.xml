@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@android:color/white"
+              android:clickable="true"
+              android:focusable="true"
+              android:orientation="vertical"
+              android:padding="20dp">
+
+    <TextView
+        android:id="@+id/tvFindCheckHistory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:drawableEnd="@drawable/ic_arrow_drop_down"
+        android:focusable="true"
+        android:text="@string/find_check_history"/>
+
+    <LinearLayout
+        android:id="@+id/lytFindCheckHistory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/etName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="@string/name"
+            android:inputType="text"
+            android:maxLines="1"
+            android:singleLine="true"/>
+
+        <Button
+            android:id="@+id/btnFind"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/find_account"/>
+
+        <Button
+            android:id="@+id/btnCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/check_account_availability"/>
+
+        <Button
+            android:id="@+id/btnHistory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/history"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvBalances"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:drawableEnd="@drawable/ic_arrow_drop_down"
+        android:focusable="true"
+        android:text="@string/get_balances"/>
+
+    <LinearLayout
+        android:id="@+id/lytBalances"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/etNameBalances"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="@string/name"
+            android:inputType="text"
+            android:maxLines="1"
+            android:singleLine="true"/>
+
+        <EditText
+            android:id="@+id/etAsset"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="@string/asset_id"
+            android:inputType="text"
+            android:maxLines="1"
+            android:singleLine="true"/>
+
+        <Button
+            android:id="@+id/btnBalances"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/get_balances"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/txtStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Status: "/>
+
+
+</LinearLayout>

@@ -32,6 +32,7 @@ class NetworkBroadcastApiServiceImpl(
             id,
             transaction,
             cryptoCoreComponent.signTransaction(transaction),
+            callId = socketCoreComponent.currentId,
             callback = object : Callback<Boolean> {
                 override fun onSuccess(result: Boolean) {
                     future.setComplete(result)

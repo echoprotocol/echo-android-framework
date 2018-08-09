@@ -4,7 +4,6 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonParser
 import com.pixelplex.echoframework.Callback
-import com.pixelplex.echoframework.ILLEGAL_ID
 
 /**
  * Get the chain id.
@@ -15,10 +14,10 @@ import com.pixelplex.echoframework.ILLEGAL_ID
  */
 class GetChainIdSocketOperation(
     override val apiId: Int,
-    method: SocketMethodType = SocketMethodType.CALL,
+    callId: Int,
     callback: Callback<String>
 
-) : SocketOperation<String>(method, ILLEGAL_ID, String::class.java, callback) {
+) : SocketOperation<String>(SocketMethodType.CALL, callId, String::class.java, callback) {
 
     override fun createParameters(): JsonElement =
         JsonArray().apply {
@@ -32,10 +31,7 @@ class GetChainIdSocketOperation(
         val jsonTree = parser.parse(json)
 
         try {
-            val result = jsonTree.asJsonObject.get("result")?.asJsonPrimitive?.asString
-
-            return result
-
+            return jsonTree.asJsonObject.get(RESULT_KEY)?.asJsonPrimitive?.asString
         } catch (ex: Exception) {
             ex.printStackTrace()
         }

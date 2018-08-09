@@ -4,8 +4,8 @@ import com.google.common.primitives.Bytes
 import com.pixelplex.bitcoinj.Base58
 import com.pixelplex.echoframework.exception.MalformedAddressException
 import com.pixelplex.echoframework.model.network.Network
-import com.pixelplex.echoframework.support.Checksum.CHECKSUM_SIZE
-import com.pixelplex.echoframework.support.Checksum.calculateChecksum
+import com.pixelplex.echoframework.support.crypto.Checksum.CHECKSUM_SIZE
+import com.pixelplex.echoframework.support.crypto.Checksum.calculateChecksum
 
 /**
  * Represents account model in Graphene blockchain

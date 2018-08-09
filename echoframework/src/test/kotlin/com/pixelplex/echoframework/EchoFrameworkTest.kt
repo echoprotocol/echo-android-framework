@@ -5,6 +5,9 @@ import com.pixelplex.echoframework.model.Account
 import com.pixelplex.echoframework.model.Asset
 import com.pixelplex.echoframework.model.Balance
 import com.pixelplex.echoframework.model.HistoryResponse
+import com.pixelplex.echoframework.model.contract.ContractInfo
+import com.pixelplex.echoframework.model.contract.ContractResult
+import com.pixelplex.echoframework.model.contract.ContractStruct
 import com.pixelplex.echoframework.model.network.Echodevnet
 import com.pixelplex.echoframework.support.Api
 import com.pixelplex.echoframework.support.EmptyCallback
@@ -282,6 +285,7 @@ class EchoFrameworkTest {
         if (connect(framework) == false) Assert.fail("Connection error")
 
         val futureSubscriptionById = FutureTask<Account>()
+        val futureSubscriptionResult = FutureTask<Boolean>()
 
         framework.subscribeOnAccount("1.2.18", object : AccountListener {
 
@@ -289,6 +293,14 @@ class EchoFrameworkTest {
                 futureSubscriptionById.setComplete(updatedAccount)
             }
 
+        }, object : Callback<Boolean>{
+            override fun onSuccess(result: Boolean) {
+                futureSubscriptionResult.setComplete(result)
+            }
+
+            override fun onError(error: LocalException) {
+                futureSubscriptionResult.setComplete(error)
+            }
         })
 
         thread {
@@ -297,6 +309,7 @@ class EchoFrameworkTest {
         }
 
         assertNotNull(futureSubscriptionById.get())
+        assertTrue(futureSubscriptionResult.get() ?: false)
     }
 
     @Test
@@ -306,6 +319,7 @@ class EchoFrameworkTest {
         if (connect(framework) == false) Assert.fail("Connection error")
 
         val futureSubscriptionByName = FutureTask<Account>()
+        val futureSubscriptionResult = FutureTask<Boolean>()
 
         framework.subscribeOnAccount("dima1", object : AccountListener {
 
@@ -313,6 +327,14 @@ class EchoFrameworkTest {
                 futureSubscriptionByName.setComplete(updatedAccount)
             }
 
+        }, object : Callback<Boolean> {
+            override fun onSuccess(result: Boolean) {
+                futureSubscriptionResult.setComplete(result)
+            }
+
+            override fun onError(error: LocalException) {
+                futureSubscriptionResult.setComplete(error)
+            }
         })
 
         thread {
@@ -321,6 +343,7 @@ class EchoFrameworkTest {
         }
 
         assertNotNull(futureSubscriptionByName.get())
+        assertTrue(futureSubscriptionResult.get() ?: false)
     }
 
     private fun changePassword(framework: EchoFramework, callback: Callback<Any>) {
@@ -533,6 +556,221 @@ class EchoFrameworkTest {
             })
 
         assertTrue(futureIssue.get() ?: false)
+    }
+
+    @Test
+    fun callContractTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<Boolean>()
+
+        framework.callContract(
+            "dariatest2",
+            "P5HyvBoQJQKXmcJw5CAK8UkzwFMLK3DAecniAHH7BM6Ci",
+            "1.3.0",
+            "1.16.33",
+            "incrementCounter",
+            listOf(),
+            object : Callback<Boolean> {
+                override fun onSuccess(result: Boolean) {
+                    future.setComplete(result)
+                }
+
+                override fun onError(error: LocalException) {
+                    future.setComplete(error)
+                }
+            }
+        )
+
+        assertTrue(future.get() ?: false)
+    }
+
+    @Test
+    fun queryContractTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<String>()
+
+        framework.queryContract(
+            "dariatest2",
+            "1.3.0",
+            "1.16.33",
+            "getCount",
+            listOf(),
+            object : Callback<String> {
+                override fun onSuccess(result: String) {
+                    future.setComplete(result)
+                }
+
+                override fun onError(error: LocalException) {
+                    future.setComplete(error)
+                }
+            }
+        )
+
+        assertNotNull(future.get())
+        assert(future.get()!!.isNotEmpty())
+    }
+
+    @Test(expected = LocalException::class)
+    fun queryContractFailureTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<String>()
+
+        framework.queryContract(
+            "dariatest2",
+            "1.3.0",
+            "1.16.-3",
+            "getCounter()",
+            listOf(),
+            object : Callback<String> {
+                override fun onSuccess(result: String) {
+                    future.setComplete(result)
+                }
+
+                override fun onError(error: LocalException) {
+                    future.setComplete(error)
+                }
+            }
+        )
+
+        assertNotNull(future.get())
+        assert(future.get()!!.isEmpty())
+    }
+
+    @Test
+    fun getContractResultTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<ContractResult>()
+
+        framework.getContractResult(
+            "1.17.178",
+            object : Callback<ContractResult> {
+                override fun onSuccess(result: ContractResult) {
+                    future.setComplete(result)
+                }
+
+                override fun onError(error: LocalException) {
+                    future.setComplete(error)
+                }
+            }
+        )
+
+        val contractResult = future.get()
+        assertNotNull(contractResult)
+        assertEquals(contractResult!!.execRes.excepted, "None")
+    }
+
+    @Test(expected = LocalException::class)
+    fun getContractResultFailureTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<ContractResult>()
+
+        framework.getContractResult(
+            "1.17.-1",
+            object : Callback<ContractResult> {
+                override fun onSuccess(result: ContractResult) {
+                    future.setComplete(result)
+                }
+
+                override fun onError(error: LocalException) {
+                    future.setComplete(error)
+                }
+            }
+        )
+
+        assertNotNull(future.get())
+    }
+
+    @Test
+    fun getAllContractsTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<List<ContractInfo>>()
+
+        framework.getAllContracts(
+            object : Callback<List<ContractInfo>> {
+                override fun onSuccess(result: List<ContractInfo>) {
+                    future.setComplete(result)
+                }
+
+                override fun onError(error: LocalException) {
+                    future.setComplete(error)
+                }
+            }
+        )
+
+        val contractResult = future.get()
+        assertNotNull(contractResult)
+        assert(contractResult!!.isNotEmpty())
+    }
+
+    @Test
+    fun getContractsTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<List<ContractInfo>>()
+
+        framework.getContracts(
+            listOf("1.16.33", "1.16.62"),
+            object : Callback<List<ContractInfo>> {
+                override fun onSuccess(result: List<ContractInfo>) {
+                    future.setComplete(result)
+                }
+
+                override fun onError(error: LocalException) {
+                    future.setComplete(error)
+                }
+            }
+        )
+
+        val contractResult = future.get()
+        assertNotNull(contractResult)
+        assert(contractResult!!.isNotEmpty())
+        assert(contractResult.size == 2)
+    }
+
+    @Test
+    fun getContractTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<ContractStruct>()
+
+        framework.getContract(
+            "1.16.33",
+            object : Callback<ContractStruct> {
+                override fun onSuccess(result: ContractStruct) {
+                    future.setComplete(result)
+                }
+
+                override fun onError(error: LocalException) {
+                    future.setComplete(error)
+                }
+            }
+        )
+
+        val contractResult = future.get()
+        assertNotNull(contractResult)
+        assertEquals(contractResult!!.contractInfo.getObjectId(), "1.16.33")
     }
 
     private fun connect(framework: EchoFramework): Boolean? {

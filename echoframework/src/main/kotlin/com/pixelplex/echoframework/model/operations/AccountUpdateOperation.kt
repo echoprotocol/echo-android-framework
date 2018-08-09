@@ -78,6 +78,8 @@ class AccountUpdateOperation @JvmOverloads constructor(
             add(accountUpdate)
         }
 
+    override fun toString(): String = "${javaClass.simpleName}(${toJsonObject()})"
+
     /**
      * Deserializer used to build a [AccountUpdateOperation] instance from JSON
      */

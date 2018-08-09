@@ -24,6 +24,6 @@ const val ECHO_URL = "wss://echo-devnet-node.pixelplex.io/"
 const val ILLEGAL_ID = -1
 
 /**
- * Id of bitshares asset
+ * Id of ECHO asset
  */
-const val BITSHARES_ASSET_ID = "1.3.0"
+const val ECHO_ASSET_ID = "1.3.0"

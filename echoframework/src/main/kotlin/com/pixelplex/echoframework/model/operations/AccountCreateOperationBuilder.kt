@@ -4,6 +4,7 @@ import com.pixelplex.echoframework.exception.MalformedOperationException
 import com.pixelplex.echoframework.model.AccountOptions
 import com.pixelplex.echoframework.model.AssetAmount
 import com.pixelplex.echoframework.model.Authority
+import com.pixelplex.echoframework.support.Builder
 
 /**
  * Represents builder for [AccountCreateOperation].
@@ -11,7 +12,7 @@ import com.pixelplex.echoframework.model.Authority
  *
  * @author Dmitriy Bushuev
  */
-class AccountCreateOperationBuilder : OperationBuilder<AccountCreateOperation>() {
+class AccountCreateOperationBuilder : Builder<AccountCreateOperation> {
 
     private var name: String? = null
     private var registrar: String? = null

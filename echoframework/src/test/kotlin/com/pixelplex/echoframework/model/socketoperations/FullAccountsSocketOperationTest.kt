@@ -18,19 +18,18 @@ class FullAccountsSocketOperationTest {
 
     @Before
     fun setUp() {
-        operation =
-                FullAccountsSocketOperation(
-                    2,
-                    listOf("1.2.23215"),
-                    false,
-                    Testnet(),
-                    callback = EmptyCallback()
-                )
+        operation = FullAccountsSocketOperation(
+            2,
+            listOf("1.2.23215"),
+            false,
+            Testnet(),
+            3,
+            callback = EmptyCallback()
+        )
     }
 
     @Test
     fun serializeTest() {
-        operation.callId = 3
         val json = operation.toJsonObject().asJsonObject
 
         Assert.assertEquals(json.get(OperationCodingKeys.ID.key).asInt, 3)

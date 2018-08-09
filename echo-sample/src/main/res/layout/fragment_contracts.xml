@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@android:color/white"
+              android:clickable="true"
+              android:focusable="true"
+              android:orientation="vertical"
+              android:padding="15dp">
+
+    <TextView
+        android:id="@+id/txtStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="5"
+        tools:text="Status: "/>
+
+    <TextView
+        android:id="@+id/tvCreateContract"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:drawableEnd="@drawable/ic_arrow_drop_down"
+        android:focusable="true"
+        android:text="@string/contract_creation"/>
+
+    <LinearLayout
+        android:id="@+id/lytContractCreation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/etName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="@string/name"
+            android:inputType="text"
+            android:maxLines="1"
+            android:singleLine="true"/>
+
+        <EditText
+            android:id="@+id/etPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:singleLine="true"/>
+
+        <EditText
+            android:id="@+id/etBytecode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:hint="@string/bytecode"
+            android:minLines="4"/>
+
+        <Button
+            android:id="@+id/btnCreateContract"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:text="@string/create_contract"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvCallContract"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:drawableEnd="@drawable/ic_arrow_drop_down"
+        android:focusable="true"
+        android:text="@string/call_contract"/>
+
+    <LinearLayout
+        android:id="@+id/lytCallContract"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/etNameCall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="@string/name"
+            android:inputType="text"
+            android:maxLines="1"
+            android:singleLine="true"/>
+
+        <EditText
+            android:id="@+id/etPasswordCall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:singleLine="true"/>
+
+        <EditText
+            android:id="@+id/etContractId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="top"
+            android:hint="@string/contract_id"
+            android:maxLines="1"
+            android:singleLine="true"/>
+
+        <EditText
+            android:id="@+id/etMethodName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="top"
+            android:hint="@string/method_name"
+            android:maxLines="1"
+            android:singleLine="true"/>
+
+        <EditText
+            android:id="@+id/etMethodParams"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:hint="@string/method_parameters"
+            android:minLines="2"/>
+
+        <Button
+            android:id="@+id/btnCallContract"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/call_contract"/>
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/tvQueryContract"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:drawableEnd="@drawable/ic_arrow_drop_down"
+        android:focusable="true"
+        android:text="@string/query_contract"/>
+
+    <LinearLayout
+        android:id="@+id/lytQueryContract"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/etNameQuery"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="@string/name"
+            android:inputType="text"
+            android:maxLines="1"
+            android:singleLine="true"/>
+
+        <EditText
+            android:id="@+id/etContractQueryId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="top"
+            android:hint="@string/contract_id"
+            android:maxLines="1"
+            android:singleLine="true"/>
+
+        <EditText
+            android:id="@+id/etMethodNameQuery"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="top"
+            android:hint="@string/method_name"
+            android:maxLines="1"
+            android:singleLine="true"/>
+
+        <EditText
+            android:id="@+id/etMethodParamsQuery"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:hint="@string/method_parameters"
+            android:minLines="2"/>
+
+        <Button
+            android:id="@+id/btnQueryContract"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/query_contract"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvResultContract"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:drawableEnd="@drawable/ic_arrow_drop_down"
+        android:focusable="true"
+        android:text="@string/result_contract"/>
+
+    <LinearLayout
+        android:id="@+id/lytResultContract"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/etOperationId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="top"
+            android:hint="@string/call_operation_id"
+            android:maxLines="1"
+            android:singleLine="true"/>
+
+        <Button
+            android:id="@+id/btnContractResult"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/result_contract"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvContracts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:drawableEnd="@drawable/ic_arrow_drop_down"
+        android:focusable="true"
+        android:text="@string/get_contracts"/>
+
+    <LinearLayout
+        android:id="@+id/lytContracts"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/etContractsIds"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="top"
+            android:hint="@string/contracts_ids"
+            android:maxLines="1"
+            android:singleLine="true"/>
+
+        <Button
+            android:id="@+id/btnContracts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/get_contracts"/>
+
+    </LinearLayout>
+
+</LinearLayout>

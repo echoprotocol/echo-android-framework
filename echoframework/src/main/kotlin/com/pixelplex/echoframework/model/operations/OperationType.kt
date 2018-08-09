@@ -73,7 +73,10 @@ class OperationTypeToClassConverter : Converter<Int, Class<*>?> {
             OperationType.ACCOUNT_UPDATE_OPERATION.ordinal to AccountUpdateOperation::class.java,
             OperationType.TRANSFER_OPERATION.ordinal to TransferOperation::class.java,
             OperationType.ASSET_CREATE_OPERATION.ordinal to CreateAssetOperation::class.java,
-            OperationType.ASSET_ISSUE_OPERATION.ordinal to IssueAssetOperation::class.java
+            OperationType.ASSET_ISSUE_OPERATION.ordinal to IssueAssetOperation::class.java,
+            OperationType.TRANSFER_OPERATION.ordinal to TransferOperation::class.java,
+            OperationType.ACCOUNT_CREATE_OPERATION.ordinal to AccountCreateOperation::class.java,
+            OperationType.CONTRACT_OPERATION.ordinal to ContractOperation::class.java
         )
     }
 

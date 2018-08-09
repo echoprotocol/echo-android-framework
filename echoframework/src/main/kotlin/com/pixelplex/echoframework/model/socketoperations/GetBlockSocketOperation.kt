@@ -11,6 +11,7 @@ import com.pixelplex.echoframework.model.network.Network
 import com.pixelplex.echoframework.model.operations.AccountUpdateOperation
 import com.pixelplex.echoframework.model.operations.CreateAssetOperation
 import com.pixelplex.echoframework.model.operations.IssueAssetOperation
+import com.pixelplex.echoframework.model.operations.ContractOperation
 import com.pixelplex.echoframework.model.operations.TransferOperation
 
 /**
@@ -25,11 +26,11 @@ import com.pixelplex.echoframework.model.operations.TransferOperation
 class GetBlockSocketOperation(
     override val apiId: Int,
     val blockNumber: String,
-    method: SocketMethodType = SocketMethodType.CALL,
+    callId: Int,
     callback: Callback<Block>,
     private val network: Network
 
-) : SocketOperation<Block>(method, ILLEGAL_ID, Block::class.java, callback) {
+) : SocketOperation<Block>(SocketMethodType.CALL, callId, Block::class.java, callback) {
 
     override fun createParameters(): JsonElement =
         JsonArray().apply {
@@ -67,6 +68,10 @@ class GetBlockSocketOperation(
             TransferOperation::class.java,
             TransferOperation.TransferDeserializer()
         )
+        registerTypeAdapter(
+            ContractOperation::class.java,
+            ContractOperation.Deserializer()
+        )
 
         registerTypeAdapter(
             CreateAssetOperation::class.java,
@@ -90,8 +95,5 @@ class GetBlockSocketOperation(
         registerTypeAdapter(AccountOptions::class.java, AccountOptions.Deserializer(network))
     }.create()
 
-    companion object {
-        private const val RESULT_KEY = "result"
-    }
 
 }

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="30dp">
+
+    <TextView
+        android:id="@+id/txtStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:maxLines="2"
+        tools:text="Status: "/>
+
+    <EditText
+        android:id="@+id/etName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtStatus"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:hint="@string/name"
+        android:inputType="text"
+        android:maxLines="1"
+        android:singleLine="true"/>
+
+    <Button
+        android:id="@+id/btnSubscribe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/etName"
+        android:layout_marginTop="10dp"
+        android:textSize="12sp"
+        android:text="@string/subscribe"/>
+
+    <Button
+        android:id="@+id/btnUnsubscribe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etName"
+        android:layout_marginTop="10dp"
+        android:textSize="12sp"
+        android:layout_toEndOf="@+id/btnSubscribe"
+        android:text="@string/unsubscribe"/>
+
+    <Button
+        android:id="@+id/btnUnsubscribeAll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etName"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:textSize="12sp"
+        android:layout_toEndOf="@+id/btnUnsubscribe"
+        android:text="@string/unsubscribe_all"/>
+
+</RelativeLayout>
