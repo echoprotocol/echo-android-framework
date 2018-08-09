@@ -214,7 +214,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         assetId: String,
         byteCode: String,
         callback: Callback<Boolean>
-    ) {
+    ) = dispatch(Runnable {
         contractsFacade.createContract(
             registrarNameOrId,
             password,
@@ -222,7 +222,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             byteCode,
             callback.wrapOriginal()
         )
-    }
+    })
 
     override fun callContract(
         registrarNameOrId: String,
@@ -232,7 +232,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         methodName: String,
         methodParams: List<ContractMethodParameter>,
         callback: Callback<Boolean>
-    ) {
+    ) = dispatch(Runnable {
         contractsFacade.callContract(
             registrarNameOrId,
             password,
@@ -242,7 +242,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             methodParams,
             callback.wrapOriginal()
         )
-    }
+    })
 
     override fun queryContract(
         registrarNameOrId: String,
@@ -251,7 +251,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         methodName: String,
         methodParams: List<ContractMethodParameter>,
         callback: Callback<String>
-    ) {
+    ) = dispatch(Runnable {
         contractsFacade.queryContract(
             registrarNameOrId,
             assetId,
@@ -260,26 +260,29 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             methodParams,
             callback
         )
-    }
+    })
 
     override fun getContractResult(
         historyId: String,
         callback: Callback<ContractResult>
-    ) {
+    ) = dispatch(Runnable {
         contractsFacade.getContractResult(historyId, callback)
-    }
+    })
 
-    override fun getContracts(contractIds: List<String>, callback: Callback<List<ContractInfo>>) {
-        contractsFacade.getContracts(contractIds, callback)
-    }
+    override fun getContracts(contractIds: List<String>, callback: Callback<List<ContractInfo>>) =
+        dispatch(Runnable {
+            contractsFacade.getContracts(contractIds, callback)
+        })
 
-    override fun getAllContracts(callback: Callback<List<ContractInfo>>) {
-        contractsFacade.getAllContracts(callback)
-    }
+    override fun getAllContracts(callback: Callback<List<ContractInfo>>) =
+        dispatch(Runnable {
+            contractsFacade.getAllContracts(callback)
+        })
 
-    override fun getContract(contractId: String, callback: Callback<ContractStruct>) {
-        contractsFacade.getContract(contractId, callback)
-    }
+    override fun getContract(contractId: String, callback: Callback<ContractStruct>) =
+        dispatch(Runnable {
+            contractsFacade.getContract(contractId, callback)
+        })
 
     private fun <T> Callback<T>.wrapOriginal(): Callback<T> =
         if (!returnOnMainThread) {
