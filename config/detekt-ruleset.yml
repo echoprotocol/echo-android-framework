@@ -40,11 +40,11 @@ complexity:
     ignoreDefaultParameters: false
   NestedBlockDepth:
     active: true
-    threshold: 4
+    threshold: 5
   TooManyFunctions:
     active: true
     thresholdInFiles: 20
-    thresholdInClasses: 20
+    thresholdInClasses: 30
     thresholdInInterfaces: 20
     thresholdInObjects: 20
     thresholdInEnums: 20
