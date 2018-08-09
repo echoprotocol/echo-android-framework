@@ -4,7 +4,7 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 import com.pixelplex.bitcoinj.revert
-import com.pixelplex.echoframework.BITSHARES_ASSET_ID
+import com.pixelplex.echoframework.ECHO_ASSET_ID
 import com.pixelplex.echoframework.support.toUnsignedByteArray
 
 /**
@@ -19,7 +19,7 @@ class BitassetOptions @JvmOverloads constructor(
     @SerializedName(FORCE_SETTLEMENT_DELAY_KEY) var forceSettlementDelaySec: Int = -1,
     @SerializedName(FORCE_SETTLEMENT_OFFSET_KEY) var forceSettlementOffsetPercent: Short = -1,
     @SerializedName(MAXIMUM_FORCE_SETTLEMENT_VOLUME_KEY) var maximumForceSettlementVolume: Short = -1,
-    @SerializedName(SHORT_BACKING_ASSET_KEY) var shortBackingAsset: String = BITSHARES_ASSET_ID
+    @SerializedName(SHORT_BACKING_ASSET_KEY) var shortBackingAsset: String = ECHO_ASSET_ID
 ) : GrapheneSerializable {
 
     @Transient

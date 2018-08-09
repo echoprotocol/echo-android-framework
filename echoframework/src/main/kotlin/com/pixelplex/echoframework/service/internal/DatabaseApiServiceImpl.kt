@@ -197,7 +197,12 @@ class DatabaseApiServiceImpl(
     }
 
     override fun getAssets(assetIds: List<String>, callback: Callback<List<Asset>>) {
-        val operation = GetAssetsSocketOperation(id, assetIds.toTypedArray(), callback = callback)
+        val operation = GetAssetsSocketOperation(
+            id,
+            assetIds.toTypedArray(),
+            socketCoreComponent.currentId,
+            callback
+        )
 
         socketCoreComponent.emit(operation)
     }
@@ -267,7 +272,7 @@ class DatabaseApiServiceImpl(
         getFullAccounts(listOf(nameOrId), false)
             .flatMap { accountsMap ->
                 accountsMap[nameOrId]?.account?.getObjectId()?.let { Result.Value(it) }
-                    ?: Result.Error(LocalException())
+                        ?: Result.Error(LocalException())
             }
             .mapError {
                 LocalException("Unable to find required account id for identifier = $nameOrId")

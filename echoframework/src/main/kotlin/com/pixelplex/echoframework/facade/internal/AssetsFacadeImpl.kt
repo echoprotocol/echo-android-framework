@@ -1,7 +1,7 @@
 package com.pixelplex.echoframework.facade.internal
 
 import com.google.common.primitives.UnsignedLong
-import com.pixelplex.echoframework.BITSHARES_ASSET_ID
+import com.pixelplex.echoframework.ECHO_ASSET_ID
 import com.pixelplex.echoframework.Callback
 import com.pixelplex.echoframework.core.crypto.CryptoCoreComponent
 import com.pixelplex.echoframework.exception.LocalException
@@ -39,7 +39,7 @@ class AssetsFacadeImpl(
 
             val blockData = databaseApiService.getBlockData()
             val chainId = getChainId()
-            val fees = getFees(listOf(operation), BITSHARES_ASSET_ID)
+            val fees = getFees(listOf(operation), ECHO_ASSET_ID)
 
             val privateKey =
                 cryptoCoreComponent.getPrivateKey(
@@ -116,7 +116,7 @@ class AssetsFacadeImpl(
 
             operation.memo = generateMemo(privateKey, issuer!!, target!!, message)
 
-            val fees = getFees(listOf(operation), BITSHARES_ASSET_ID)
+            val fees = getFees(listOf(operation), ECHO_ASSET_ID)
 
             val transaction = Transaction(privateKey, blockData, listOf(operation), chainId)
             transaction.setFees(fees)
