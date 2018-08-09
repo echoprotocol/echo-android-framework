@@ -8,6 +8,7 @@ import com.pixelplex.echoframework.core.socket.SocketMessengerListener
 import com.pixelplex.echoframework.core.socket.SocketState
 import com.pixelplex.echoframework.exception.LocalException
 import com.pixelplex.echoframework.exception.ResponseSocketException
+import com.pixelplex.echoframework.exception.SocketConnectionException
 import com.pixelplex.echoframework.model.SocketResponse
 import com.pixelplex.echoframework.model.socketoperations.SocketOperation
 import java.util.concurrent.ConcurrentHashMap
@@ -23,7 +24,7 @@ class SocketCoreComponentImpl(
     private val mapper: MapperCoreComponent
 ) : SocketCoreComponent {
 
-    private var callIdx = AtomicInteger(1)
+    private var callIdx = AtomicInteger(INITIAL_ID)
 
     private val operationsMap: ConcurrentHashMap<Int, SocketOperation<Any>> = ConcurrentHashMap()
 
@@ -83,8 +84,7 @@ class SocketCoreComponentImpl(
         }
 
         override fun onFailure(error: Throwable) {
-            //reconnect
-            //send event to operation with min id (first)
+
         }
 
         override fun onConnected() {
@@ -101,13 +101,24 @@ class SocketCoreComponentImpl(
 
         override fun onDisconnected() {
             socketState = SocketState.DISCONNECTED
-            //if was fail - reconnect by delay
+
+            //event to all active operations about disconnection
+            val error = SocketConnectionException("Socket is disconnected.")
+            operationsMap.forEach { _, operation ->
+                operation.callback.onError(error)
+            }
+            operationsMap.clear()
+            callIdx.set(INITIAL_ID)
+
+            //if has required options - reconnect by delay
         }
     }
 
     companion object {
         private val LOGGER =
             LoggerCoreComponent.create(SocketCoreComponentImpl::class.java.name)
+
+        private const val INITIAL_ID = 1
     }
 
 }

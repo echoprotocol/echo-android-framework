@@ -118,7 +118,7 @@ class AccountCreateOperation
     /**
      * Deserializer used to build a [AccountCreateOperation] instance from JSON
      */
-    class AccountCreateDeserializer : JsonDeserializer<AccountCreateOperation> {
+    class Deserializer : JsonDeserializer<AccountCreateOperation> {
 
         @Throws(JsonParseException::class)
         override fun deserialize(

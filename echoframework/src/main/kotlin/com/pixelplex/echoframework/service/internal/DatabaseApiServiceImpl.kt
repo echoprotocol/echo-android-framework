@@ -206,7 +206,10 @@ class DatabaseApiServiceImpl(
             }
 
             if (!subscriptionManager.registered(nameOrId)) {
-                getFullAccounts(listOf(nameOrId), true)
+                getAccountId(nameOrId)
+                    .flatMap { account ->
+                        getFullAccounts(listOf(account), true)
+                    }
                     .value { accountsMap ->
                         accountsMap[nameOrId]?.account?.getObjectId()?.let { requiredAccountId ->
                             subscriptionManager.registerListener(requiredAccountId, listener)
@@ -214,6 +217,7 @@ class DatabaseApiServiceImpl(
                         }
                     }
                     .error { error ->
+                        LOGGER.log("Account finding error.", error)
                         callback.onError(error)
                     }
             } else {
@@ -288,7 +292,7 @@ class DatabaseApiServiceImpl(
         byteCode: String
     ): Result<LocalException, String> {
         val future = FutureTask<String>()
-        val requiredFeesOperation = QueryContractSocketOperation(
+        val operation = QueryContractSocketOperation(
             id,
             contractId,
             registrarNameOrId,
@@ -305,14 +309,14 @@ class DatabaseApiServiceImpl(
                 }
             }
         )
-        socketCoreComponent.emit(requiredFeesOperation)
+        socketCoreComponent.emit(operation)
 
         return future.wrapResult()
     }
 
     override fun getContractResult(historyId: String): Result<LocalException, ContractResult> {
         val future = FutureTask<ContractResult>()
-        val requiredFeesOperation = GetContractResultSocketOperation(
+        val operation = GetContractResultSocketOperation(
             id,
             historyId,
             callId = socketCoreComponent.currentId,
@@ -326,14 +330,14 @@ class DatabaseApiServiceImpl(
                 }
             }
         )
-        socketCoreComponent.emit(requiredFeesOperation)
+        socketCoreComponent.emit(operation)
 
         return future.wrapResult()
     }
 
     override fun getAllContracts(): Result<LocalException, List<ContractInfo>> {
         val future = FutureTask<List<ContractInfo>>()
-        val requiredFeesOperation = GetAllContractsSocketOperation(
+        val operation = GetAllContractsSocketOperation(
             id,
             callId = socketCoreComponent.currentId,
             callback = object : Callback<List<ContractInfo>> {
@@ -346,14 +350,14 @@ class DatabaseApiServiceImpl(
                 }
             }
         )
-        socketCoreComponent.emit(requiredFeesOperation)
+        socketCoreComponent.emit(operation)
 
         return future.wrapResult()
     }
 
     override fun getContracts(contractIds: List<String>): Result<LocalException, List<ContractInfo>> {
         val future = FutureTask<List<ContractInfo>>()
-        val requiredFeesOperation = GetContractsSocketOperation(
+        val operation = GetContractsSocketOperation(
             id,
             contractIds,
             callId = socketCoreComponent.currentId,
@@ -367,14 +371,14 @@ class DatabaseApiServiceImpl(
                 }
             }
         )
-        socketCoreComponent.emit(requiredFeesOperation)
+        socketCoreComponent.emit(operation)
 
         return future.wrapResult()
     }
 
     override fun getContract(contractId: String): Result<LocalException, ContractStruct> {
         val future = FutureTask<ContractStruct>()
-        val requiredFeesOperation = GetContractSocketOperation(
+        val operation = GetContractSocketOperation(
             id,
             contractId,
             callId = socketCoreComponent.currentId,
@@ -388,7 +392,7 @@ class DatabaseApiServiceImpl(
                 }
             }
         )
-        socketCoreComponent.emit(requiredFeesOperation)
+        socketCoreComponent.emit(operation)
 
         return future.wrapResult()
     }
