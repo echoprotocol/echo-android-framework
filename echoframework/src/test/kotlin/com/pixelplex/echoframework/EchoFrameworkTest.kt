@@ -507,6 +507,34 @@ class EchoFrameworkTest {
 //        assertNotNull(futureAsset.get())
 //    }
 
+    @Test
+    fun issueAssetTest() {
+        val framework = initFramework()
+
+        val futureIssue = FutureTask<Boolean>()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        framework.issueAsset(
+            "dima2",
+            "P5KdaL4usZTknpaBwpi2xVAEPJxtvPRopDY1vG6BJTbr5S3ZLksx",
+            "1.3.1",
+            "1",
+            "dima1", "message",
+            object : Callback<Boolean> {
+                override fun onSuccess(result: Boolean) {
+                    futureIssue.setComplete(result)
+                }
+
+                override fun onError(error: LocalException) {
+                    futureIssue.setComplete(error)
+                }
+
+            })
+
+        assertTrue(futureIssue.get() ?: false)
+    }
+
     private fun connect(framework: EchoFramework): Boolean? {
         val futureConnect = FutureTask<Boolean>()
 

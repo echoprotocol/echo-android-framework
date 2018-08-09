@@ -21,6 +21,19 @@ interface AssetsFacade {
     )
 
     /**
+     * Issues [asset] from [issuerNameOrId] account to [destinationIdOrName] account
+     */
+    fun issueAsset(
+        issuerNameOrId: String,
+        password: String,
+        asset: String,
+        amount: String,
+        destinationIdOrName: String,
+        message: String?,
+        callback: Callback<Boolean>
+    )
+
+    /**
      * Query list of assets by required asset symbol [lowerBound] with limit [limit]
      */
     fun listAssets(lowerBound: String, limit: Int, callback: Callback<List<Asset>>)

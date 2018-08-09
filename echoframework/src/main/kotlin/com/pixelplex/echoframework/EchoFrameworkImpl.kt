@@ -174,6 +174,27 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             )
         })
 
+    override fun issueAsset(
+        issuerNameOrId: String,
+        password: String,
+        asset: String,
+        amount: String,
+        destinationIdOrName: String,
+        message: String?,
+        callback: Callback<Boolean>
+    ) =
+        dispatch(Runnable {
+            assetsFacade.issueAsset(
+                issuerNameOrId,
+                password,
+                asset,
+                amount,
+                destinationIdOrName,
+                message,
+                callback
+            )
+        })
+
     override fun listAssets(lowerBound: String, limit: Int, callback: Callback<List<Asset>>) =
         dispatch(Runnable {
             assetsFacade.listAssets(lowerBound, limit, callback)
