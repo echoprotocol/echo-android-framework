@@ -23,6 +23,8 @@ class SubscriptionFragment : BaseFragment() {
         }
     }
 
+    private lateinit var accountListener: AccountListener
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -30,15 +32,29 @@ class SubscriptionFragment : BaseFragment() {
     ): View? = inflater.inflate(R.layout.fragment_subscription, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        accountListener = object : AccountListener {
+            override fun onChange(updatedAccount: Account) {
+                updateStatus(updatedAccount.toString())
+            }
+        }
+
         btnSubscribe.setOnClickListener {
             progressListener?.toggle(true)
-            lib?.subscribeOnAccount(etName.text.toString(), object : AccountListener {
-                override fun onChange(updatedAccount: Account) {
-                    progressListener?.toggle(false)
-                    updateStatus(updatedAccount.toString())
-                }
+            lib?.subscribeOnAccount(
+                etName.text.toString(),
+                accountListener,
+                object : Callback<Boolean> {
+                    override fun onSuccess(result: Boolean) {
+                        progressListener?.toggle(false)
+                        updateStatus("Subscribe succeed")
+                    }
 
-            })
+                    override fun onError(error: LocalException) {
+                        error.printStackTrace()
+                        progressListener?.toggle(false)
+                        updateStatus("Subscribe failed")
+                    }
+                })
         }
 
         btnUnsubscribe.setOnClickListener {

@@ -81,7 +81,7 @@ class ContractOperation
         }
     }
 
-    override fun toString(): String = "${javaClass.simpleName}(${toJsonString()})"
+    override fun toString(): String = "${javaClass.simpleName}(${toJsonObject()})"
 
     companion object {
         private const val KEY_REGISTRAR = "registrar"

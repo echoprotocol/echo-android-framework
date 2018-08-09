@@ -61,7 +61,7 @@ class DatabaseApiServiceImpl(
     override fun getFullAccounts(
         namesOrIds: List<String>,
         subscribe: Boolean
-    ): Result<Exception, Map<String, FullAccount>> {
+    ): Result<LocalException, Map<String, FullAccount>> {
 
         val future = FutureTask<Map<String, FullAccount>>()
         val fullAccountsOperation = FullAccountsSocketOperation(
@@ -192,13 +192,17 @@ class DatabaseApiServiceImpl(
 
     override fun subscribeOnAccount(
         nameOrId: String,
-        listener: AccountListener
+        listener: AccountListener,
+        callback: Callback<Boolean>
     ) {
         synchronized(this) {
             if (!subscribed) {
                 socketCoreComponent.on(socketMessengerListener)
 
                 this.subscribed = subscribeCallBlocking()
+                if (!subscribed) {
+                    callback.onError(LocalException("Subscription request error"))
+                }
             }
 
             if (!subscriptionManager.registered(nameOrId)) {
@@ -206,10 +210,15 @@ class DatabaseApiServiceImpl(
                     .value { accountsMap ->
                         accountsMap[nameOrId]?.account?.getObjectId()?.let { requiredAccountId ->
                             subscriptionManager.registerListener(requiredAccountId, listener)
+                            callback.onSuccess(subscribed)
                         }
+                    }
+                    .error { error ->
+                        callback.onError(error)
                     }
             } else {
                 subscriptionManager.registerListener(nameOrId, listener)
+                callback.onSuccess(subscribed)
             }
         }
     }
@@ -238,6 +247,7 @@ class DatabaseApiServiceImpl(
             }
         } else {
             subscriptionManager.removeListeners(nameOrId)
+            callback.onSuccess(true)
         }
     }
 
@@ -251,10 +261,25 @@ class DatabaseApiServiceImpl(
                 LocalException("Unable to find required account id for identifier = $nameOrId")
             }
 
-    override fun unsubscribeAll(callback: Callback<Boolean>) =
+    override fun unsubscribeAll(callback: Callback<Boolean>) {
         synchronized(this) {
-            subscriptionManager.clear()
+            if (subscribed) {
+                cancelAllSubscriptions()
+                    .value { result ->
+                        subscribed = !result
+
+                        socketCoreComponent.off(socketMessengerListener)
+                        subscriptionManager.clear()
+                        callback.onSuccess(result)
+                    }
+                    .error { error ->
+                        callback.onError(error)
+                    }
+            } else {
+                callback.onSuccess(true)
+            }
         }
+    }
 
     override fun callContractNoChangingState(
         contractId: String,
@@ -396,6 +421,26 @@ class DatabaseApiServiceImpl(
             }
 
         return result
+    }
+
+    private fun cancelAllSubscriptions(): Result<LocalException, Boolean> {
+        val future = FutureTask<Boolean>()
+        val cancelSubscriptionsOperation = CancelAllSubscriptionsSocketOperation(
+            id,
+            callId = socketCoreComponent.currentId,
+            callback = object : Callback<Any> {
+                override fun onSuccess(result: Any) {
+                    future.setComplete(true)
+                }
+
+                override fun onError(error: LocalException) {
+                    future.setComplete(error)
+                }
+            }
+        )
+        socketCoreComponent.emit(cancelSubscriptionsOperation)
+
+        return future.wrapResult(false)
     }
 
     private fun createSubscriptionOperation(clearFilter: Boolean, callback: Callback<Any>) =

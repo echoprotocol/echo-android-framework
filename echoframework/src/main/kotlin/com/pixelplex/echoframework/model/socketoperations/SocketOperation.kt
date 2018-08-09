@@ -17,7 +17,8 @@ import com.pixelplex.echoframework.model.JsonSerializable
  *
  */
 enum class SocketMethodType(val key: String) {
-    CALL("call")
+    CALL("call"),
+    NOTICE("notice")
 }
 
 /**
@@ -37,6 +38,7 @@ enum class SocketOperationKeys(val key: String) {
     KEY_REFERENCES("get_key_references"),
     REQUIRED_FEES("get_required_fees"),
     SUBSCRIBE_CALLBACK("set_subscribe_callback"),
+    CANCEL_ALL_SUBSCRIPTIONS("cancel_all_subscriptions"),
     TRANSACTION_WITH_CALLBACK("broadcast_transaction_with_callback"),
     GET_ALL_CONTRACTS("get_all_contracts"),
     GET_CONTRACT_RESULT("get_contract_result"),

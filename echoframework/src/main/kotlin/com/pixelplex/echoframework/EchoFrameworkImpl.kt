@@ -155,10 +155,17 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             informationFacade.getBalance(nameOrId, asset, callback.wrapOriginal())
         })
 
-    override fun subscribeOnAccount(nameOrId: String, listener: AccountListener) =
-        dispatch(Runnable {
-            subscriptionFacade.subscribeOnAccount(nameOrId, listener.wrapOriginal())
-        })
+    override fun subscribeOnAccount(
+        nameOrId: String,
+        listener: AccountListener,
+        callback: Callback<Boolean>
+    ) = dispatch(Runnable {
+        subscriptionFacade.subscribeOnAccount(
+            nameOrId,
+            listener.wrapOriginal(),
+            callback.wrapOriginal()
+        )
+    })
 
     override fun unsubscribeFromAccount(nameOrId: String, callback: Callback<Boolean>) =
         dispatch(Runnable {
