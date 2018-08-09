@@ -12,10 +12,10 @@ class ContractStruct(
     val contractInfo: ContractInfo,
 
     @SerializedName(KEY_CODE)
-    val code: String,
+    val code: String = "",
 
     @SerializedName(KEY_STORAGE)
-    val storage: Map<String, String>
+    val storage: Map<String, String> = mapOf()
 ) {
 
     companion object {

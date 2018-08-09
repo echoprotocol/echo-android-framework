@@ -25,25 +25,25 @@ class ContractResult(
  */
 class ExecRes(
     @Expose
-    val excepted: String,
+    val excepted: String = "",
 
     @SerializedName("new_address")
-    val newAddress: String,
+    val newAddress: String = "",
 
     @Expose
-    val output: String,
+    val output: String = "",
 
     @SerializedName("code_deposit")
-    val codeDeposit: String,
+    val codeDeposit: String = "",
 
     @SerializedName("gas_refunded")
-    val gasRefunded: String,
+    val gasRefunded: String = "",
 
     @SerializedName("deposit_size")
-    val depositSize: Long,
+    val depositSize: Long = 0,
 
     @SerializedName("gas_for_deposit")
-    val gasForDeposit: String
+    val gasForDeposit: String = ""
 
 )
 
@@ -52,14 +52,14 @@ class ExecRes(
  */
 class TrReceipt(
     @SerializedName("status_code")
-    val statusCode: String,
+    val statusCode: String = "",
 
     @SerializedName("gas_used")
-    val gasUsed: String,
+    val gasUsed: String = "",
 
     @Expose
-    val bloom: String,
+    val bloom: String = "",
 
     @Expose
-    val log: List<String>
+    val log: List<String> = listOf()
 )
