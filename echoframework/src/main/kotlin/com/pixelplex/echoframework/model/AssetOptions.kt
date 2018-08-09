@@ -1,5 +1,6 @@
 package com.pixelplex.echoframework.model
 
+import com.google.common.primitives.Bytes
 import com.google.common.primitives.UnsignedLong
 import com.google.gson.*
 import com.google.gson.annotations.SerializedName
@@ -12,20 +13,27 @@ import java.lang.reflect.Type
  *
  * @author Dmitriy Bushuev
  */
-class AssetOptions(
-    @SerializedName("max_supply")
+class AssetOptions @JvmOverloads constructor(
+    @SerializedName(MAX_SUPPLY_KEY)
     var maxSupply: UnsignedLong? = null,
-    @SerializedName("market_fee_percent")
+    @SerializedName(MARKET_FEE_PERCENT_KEY)
     var marketFeePercent: Long = 0,
-    @SerializedName("max_market_fee")
+    @SerializedName(MAX_MARKET_FEE_KEY)
     var maxMarketFee: UnsignedLong? = null,
-    @SerializedName("issuer_permissions")
+    @SerializedName(ISSUER_PERMISSION_KEY)
     var issuerPermissions: Long = 0,
     var flags: Int = 0,
-    @SerializedName("core_exchange_rate")
+    @SerializedName(CORE_EXCHANGE_RATE_KEY)
     var coreExchangeRate: Price? = null,
     var description: String? = null
 ) : JsonSerializable, ByteSerializable {
+
+    var whitelistAuthorities: Set<String> = setOf()
+    var blacklistAuthorities: Set<String> = setOf()
+    var whitelistMarkets: Set<String> = setOf()
+    var blacklistMarkets: Set<String> = setOf()
+
+    var extensions = Extensions()
 
     override fun toBytes(): ByteArray {
         val maxSupplyBytes = maxSupply!!.toLong().revert()
@@ -34,15 +42,45 @@ class AssetOptions(
         val issuerPermissionsBytes = issuerPermissions.toShort().revert()
         val flagsBytes = flags.toShort().revert()
         val coreExchangeRateBytes = coreExchangeRate!!.toBytes()
-        val descriptionBytes = description?.toByteArray() ?: ByteArray(0)
-        val extensionsBytes = ByteArray(1)
-        return maxSupplyBytes + marketFeePercentBytes + maxMarketFeeBytes + issuerPermissionsBytes +
-                flagsBytes + coreExchangeRateBytes +
-                byteArrayOf(0) + byteArrayOf(0) +
-                byteArrayOf(0) + byteArrayOf(0) + descriptionBytes + extensionsBytes
+
+        var whitelistAuthoritiesBytes =
+            byteArrayOf(whitelistAuthorities.size.toByte())
+        whitelistAuthorities.forEach { auth -> whitelistAuthoritiesBytes += Account(auth).toBytes() }
+
+        var blacklistAuthoritiesBytes =
+            byteArrayOf(blacklistAuthorities.size.toByte())
+        blacklistAuthorities.forEach { auth -> blacklistAuthoritiesBytes += Account(auth).toBytes() }
+
+        var whitelistMarketsBytes =
+            byteArrayOf(whitelistMarkets.size.toByte())
+        whitelistMarkets.forEach { market -> whitelistMarketsBytes += Account(market).toBytes() }
+
+        var blacklistMarketsBytes =
+            byteArrayOf(blacklistMarkets.size.toByte())
+        blacklistMarkets.forEach { market -> blacklistMarketsBytes += Account(market).toBytes() }
+
+        val descriptionBytes =
+            byteArrayOf((description?.length ?: 0).toByte()) + (description?.toByteArray()
+                    ?: ByteArray(0))
+        val extensionsBytes = extensions.toBytes()
+
+        return Bytes.concat(
+            maxSupplyBytes,
+            marketFeePercentBytes,
+            maxMarketFeeBytes,
+            issuerPermissionsBytes,
+            flagsBytes,
+            coreExchangeRateBytes,
+            whitelistAuthoritiesBytes,
+            blacklistAuthoritiesBytes,
+            whitelistMarketsBytes,
+            blacklistMarketsBytes,
+            descriptionBytes,
+            extensionsBytes
+        )
     }
 
-    override fun toJsonString(): String? = null
+    override fun toJsonString(): String? = toJsonObject().toString()
 
     override fun toJsonObject(): JsonElement? = JsonObject().apply {
         addProperty(MAX_SUPPLY_KEY, maxSupply?.toLong() ?: 0)
@@ -51,12 +89,12 @@ class AssetOptions(
         addProperty(ISSUER_PERMISSION_KEY, issuerPermissions)
         addProperty(FLAGS_KEY, flags)
         add(CORE_EXCHANGE_RATE_KEY, coreExchangeRate?.toJsonObject())
-        add(WHITELIST_KEY, JsonArray())
-        add(BLACKLIST_KEY, JsonArray())
-        add(WHITELIST_MARKETS_KEY, JsonArray())
-        add(BLACKLIST_MARKETS_KEY, JsonArray())
-        add(EXTENSIONS_KEY, JsonArray())
+        add(WHITELIST_KEY, JsonArray().apply { whitelistAuthorities.forEach { add(it) } })
+        add(BLACKLIST_KEY, JsonArray().apply { blacklistAuthorities.forEach { add(it) } })
+        add(WHITELIST_MARKETS_KEY, JsonArray().apply { whitelistMarkets.forEach { add(it) } })
+        add(BLACKLIST_MARKETS_KEY, JsonArray().apply { blacklistMarkets.forEach { add(it) } })
         addProperty(DESCRIPTION_KEY, description ?: "")
+        add(EXTENSIONS_KEY, extensions.toJsonObject())
     }
 
     /**
@@ -110,6 +148,15 @@ class AssetOptions(
         private const val WHITELIST_MARKETS_KEY = "whitelist_markets"
         private const val BLACKLIST_MARKETS_KEY = "blacklist_markets"
 
+        val CHARGE_MARKET_FEE = 0x01
+        val WHITE_LIST = 0x02
+        val OVERRIDE_AUTHORITY = 0x04
+        val TRANSFER_RESTRICTED = 0x08
+        val DISABLE_FORCE_SETTLE = 0x10
+        val GLOBAL_SETTLE = 0x20
+        val DISABLE_CONFIDENTIAL = 0x40
+        val WITNESS_FED_ASSET = 0x80
+        val COMITEE_FED_ASSET = 0x100
     }
 
 }

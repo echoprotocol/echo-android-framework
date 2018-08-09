@@ -8,7 +8,6 @@ import com.pixelplex.echoframework.core.socket.SocketMessenger
 import com.pixelplex.echoframework.core.socket.internal.SocketMessengerImpl
 import com.pixelplex.echoframework.model.network.Echodevnet
 import com.pixelplex.echoframework.model.network.Network
-import com.pixelplex.echoframework.model.network.Testnet
 
 /**
  * Settings for library initialization
