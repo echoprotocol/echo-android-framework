@@ -5,12 +5,13 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonParser
 import com.pixelplex.echoframework.Callback
-import com.pixelplex.echoframework.ILLEGAL_ID
 import com.pixelplex.echoframework.model.*
 import com.pixelplex.echoframework.model.network.Network
 import com.pixelplex.echoframework.model.operations.AccountCreateOperation
 import com.pixelplex.echoframework.model.operations.AccountUpdateOperation
 import com.pixelplex.echoframework.model.operations.ContractOperation
+import com.pixelplex.echoframework.model.operations.CreateAssetOperation
+import com.pixelplex.echoframework.model.operations.IssueAssetOperation
 import com.pixelplex.echoframework.model.operations.TransferOperation
 
 /**
@@ -75,9 +76,22 @@ class GetBlockSocketOperation(
             ContractOperation::class.java,
             ContractOperation.Deserializer()
         )
+
+        registerTypeAdapter(
+            CreateAssetOperation::class.java,
+            CreateAssetOperation.CreateAssetDeserializer()
+        )
+        registerTypeAdapter(
+            AssetOptions::class.java,
+            AssetOptions.AssetOptionsDeserializer()
+        )
         registerTypeAdapter(
             Memo::class.java,
             Memo.MemoDeserializer(network)
+        )
+        registerTypeAdapter(
+            IssueAssetOperation::class.java,
+            IssueAssetOperation.IssueAssetDeserializer()
         )
         registerTypeAdapter(AssetAmount::class.java, AssetAmount.Deserializer())
         registerTypeAdapter(Authority::class.java, Authority.Deserializer(network))

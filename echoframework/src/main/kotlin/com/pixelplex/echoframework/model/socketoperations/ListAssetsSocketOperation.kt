@@ -13,29 +13,33 @@ import com.pixelplex.echoframework.model.AssetOptions
 import com.pixelplex.echoframework.model.Price
 
 /**
- * Get a list of assets by id.
+ * Get a list of assets by symbol
  *
- * @param assetIds of the assets to retrieve
- * @return The assets corresponding to the provided [assetIds]
+ * @param lowerBound Asset symbol
+ * @param limit Assets count limit
+ * @return List of required assets
  *
- * @author Daria Pechkovskaya
+ * @author Bushuev Dmitriy
  */
-class GetAssetsSocketOperation(
+class ListAssetsSocketOperation(
     override val apiId: Int,
-    val assetIds: Array<String>,
-    callId: Int,
+    val lowerBound: String,
+    val limit: Int,
+    method: SocketMethodType = SocketMethodType.CALL,
     callback: Callback<List<Asset>>
-) : SocketOperation<List<Asset>>(SocketMethodType.CALL, callId, listOf<Asset>().javaClass, callback) {
+
+) : SocketOperation<List<Asset>>(method, ILLEGAL_ID, listOf<Asset>().javaClass, callback) {
 
     @Suppress("UNUSED_EXPRESSION")
     override fun createParameters(): JsonElement =
         JsonArray().apply {
             add(apiId)
-            add(SocketOperationKeys.ASSETS.key)
+            add(SocketOperationKeys.LIST_ASSETS.key)
 
-            val assetsJson = JsonArray()
-            assetIds.forEach { item -> assetsJson.add(item) }
-            add(JsonArray().apply { add(assetsJson) })
+            add(JsonArray().apply {
+                add(lowerBound)
+                add(limit)
+            })
         }
 
     override fun fromJson(json: String): List<Asset> {
@@ -45,16 +49,19 @@ class GetAssetsSocketOperation(
         val result = jsonTree.asJsonObject.get(RESULT_KEY)?.asJsonArray
                 ?: return emptyList()
 
-        val gson = GsonBuilder().registerTypeAdapter(
-            AssetOptions::class.java,
-            AssetOptions.AssetOptionsDeserializer()
-        ).registerTypeAdapter(
-            AssetAmount::class.java,
-            AssetAmount.Deserializer()
-        ).registerTypeAdapter(
-            Price::class.java,
-            Price.PriceDeserializer()
-        ).create()
+        val gson = GsonBuilder()
+            .registerTypeAdapter(
+                AssetOptions::class.java,
+                AssetOptions.AssetOptionsDeserializer()
+            )
+            .registerTypeAdapter(
+                AssetAmount::class.java,
+                AssetAmount.Deserializer()
+            )
+            .registerTypeAdapter(
+                Price::class.java,
+                Price.PriceDeserializer()
+            ).create()
 
         return gson.fromJson<List<Asset>>(result, object : TypeToken<List<Asset>>() {}.type)
     }

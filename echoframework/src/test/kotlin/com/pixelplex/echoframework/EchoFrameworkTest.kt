@@ -2,6 +2,7 @@ package com.pixelplex.echoframework
 
 import com.pixelplex.echoframework.exception.LocalException
 import com.pixelplex.echoframework.model.Account
+import com.pixelplex.echoframework.model.Asset
 import com.pixelplex.echoframework.model.Balance
 import com.pixelplex.echoframework.model.HistoryResponse
 import com.pixelplex.echoframework.model.contract.ContractInfo
@@ -45,6 +46,14 @@ class EchoFrameworkTest {
     private val password = "P5HyvBoQJQKXmcJw5CAK8UkzwFMLK3DAecniAHH7BM6Ci"
     private val legalHistoryItemId = "1.17.2"
     private val legalAssetId = "1.3.0"
+    private val legalContractByteCode = "60806040526000805534801561001457600080fd5b5061011480610024" +
+            "6000396000f300608060405260043610605c5763ffffffff7c010000000000000000000000000000000000" +
+            "00000000000000000000006000350416635b34b966811460615780635b9af12b146075578063a87d942c14" +
+            "608a578063f5c5ad831460ae575b600080fd5b348015606c57600080fd5b50607360c0565b005b34801560" +
+            "8057600080fd5b50607360043560cb565b348015609557600080fd5b50609c60d6565b6040805191825251" +
+            "9081900360200190f35b34801560b957600080fd5b50607360dc565b600080546001019055565b60008054" +
+            "9091019055565b60005490565b600080546000190190555600a165627a7a7230582016b3f6673de41336e2" +
+            "c5d4b136b4e67bbf43062b6bc47eaef982648cd3b92a9d0029"
 
     private val illegalContractId = "1.16.-1"
     private val illegalHistoryItemId = "1.17.-1"
@@ -81,7 +90,7 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
-        framework.isOwnedBy("dima1", "P5KctJPedZ4K9T77KgmqhVNJ5H6FojEN6fRVp9PYyhAb9",
+        framework.isOwnedBy("dima1", "P5J8pDyzznMmEdiBCdgB7VKtMBuxw5e4MAJEo3sfUbxcM",
             object : Callback<Account> {
                 override fun onSuccess(result: Account) {
                     futureLogin.setComplete(result)
@@ -244,8 +253,8 @@ class EchoFrameworkTest {
         val futureAccountHistory = FutureTask<HistoryResponse>()
 
         framework.getAccountHistory(nameOrId, "1.11.1",
-            "1.11.200",
-            10,
+            "1.11.20000",
+            100,
             "1.3.0", object : Callback<HistoryResponse> {
                 override fun onSuccess(result: HistoryResponse) {
                     futureAccountHistory.setComplete(result)
@@ -357,8 +366,8 @@ class EchoFrameworkTest {
     private fun changePassword(framework: EchoFramework, callback: Callback<Any>) {
         framework.changePassword(
             "dima1",
-            "P5KctJPedZ4K9T77KgmqhVNJ5H6FojEN6fRVp9PYyhAb9",
-            "P5KctJPedZ4K9T77KgmqhVNJ5H6FojEN6fRVp9PYyhAb9",
+            "P5J8pDyzznMmEdiBCdgB7VKtMBuxw5e4MAJEo3sfUbxcM",
+            "P5J8pDyzznMmEdiBCdgB7VKtMBuxw5e4MAJEo3sfUbxcM",
             callback
         )
     }
@@ -373,7 +382,7 @@ class EchoFrameworkTest {
 
         framework.sendTransferOperation(
             "dima1",
-            "P5KctJPedZ4K9T77KgmqhVNJ5H6FojEN6fRVp9PYyhAb9",
+            "P5J8pDyzznMmEdiBCdgB7VKtMBuxw5e4MAJEo3sfUbxcM",
             "dima2",
             "1", "1.3.0", "Memasik", object : Callback<Boolean> {
                 override fun onSuccess(result: Boolean) {
@@ -426,7 +435,7 @@ class EchoFrameworkTest {
 
         framework.getFeeForTransferOperation(
             "dimaty123",
-            "dariatest2",
+            "dima2",
             "10000",
             "1.3.1234",
             object : Callback<String> {
@@ -441,6 +450,156 @@ class EchoFrameworkTest {
             })
 
         assertNotNull(futureFee.get())
+    }
+
+    @Test
+    fun listAssetsTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val futureAssets = FutureTask<List<Asset>>()
+
+        framework.listAssets(
+            "ECHO", 10,
+            object : Callback<List<Asset>> {
+                override fun onSuccess(result: List<Asset>) {
+                    futureAssets.setComplete(result)
+                }
+
+                override fun onError(error: LocalException) {
+                    futureAssets.setComplete(error)
+                }
+
+            })
+
+        assertNotNull(futureAssets.get()?.isNotEmpty() ?: false)
+    }
+
+    @Test
+    fun getAssetsTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val futureAssets = FutureTask<List<Asset>>()
+
+        framework.getAssets(
+            listOf("1.3.0", "1.3.2"),
+            object : Callback<List<Asset>> {
+                override fun onSuccess(result: List<Asset>) {
+                    futureAssets.setComplete(result)
+                }
+
+                override fun onError(error: LocalException) {
+                    futureAssets.setComplete(error)
+                }
+
+            })
+
+        assertNotNull(futureAssets.get()?.isNotEmpty() ?: false)
+    }
+
+//    @Test
+//    fun createAssetTest() {
+//        val framework = initFramework()
+//
+//        if (connect(framework) == false) Assert.fail("Connection error")
+//
+//        val futureAsset = FutureTask<Boolean>()
+//
+//        val asset = Asset("", "RTJHRTDFS", 4, "1.2.18").apply {
+//            setBtsOptions(
+//                BitassetOptions(
+//                    86400, 7, 86400,
+//                    100, 2000
+//                )
+//            )
+//
+//            predictionMarket = false
+//        }
+//
+//        val options =
+//            AssetOptions(
+//                UnsignedLong.valueOf(100000), 0.toLong(), UnsignedLong.ZERO, 79, 1,
+//                Price().apply {
+//                    this.quote = AssetAmount(UnsignedLong.valueOf(1), Asset("1.3.1"))
+//                    this.base = AssetAmount(UnsignedLong.valueOf(1), Asset("1.3.0"))
+//                }, "description"
+//            )
+//
+//        asset.assetOptions = options
+//
+//        framework.createAsset(
+//            "dima1", "P5KctJPedZ4K9T77KgmqhVNJ5H6FojEN6fRVp9PYyhAb9",
+//            asset,
+//            object : Callback<Boolean> {
+//                override fun onSuccess(result: Boolean) {
+//                    futureAsset.setComplete(result)
+//                }
+//
+//                override fun onError(error: LocalException) {
+//                    futureAsset.setComplete(error)
+//                }
+//
+//            })
+//
+//        assertNotNull(futureAsset.get())
+//    }
+
+    @Test
+    fun issueAssetTest() {
+        val framework = initFramework()
+
+        val futureIssue = FutureTask<Boolean>()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        framework.issueAsset(
+            "dima2",
+            "P5KdaL4usZTknpaBwpi2xVAEPJxtvPRopDY1vG6BJTbr5S3ZLksx",
+            "1.3.1",
+            "1",
+            "dima1", "message",
+            object : Callback<Boolean> {
+                override fun onSuccess(result: Boolean) {
+                    futureIssue.setComplete(result)
+                }
+
+                override fun onError(error: LocalException) {
+                    futureIssue.setComplete(error)
+                }
+
+            })
+
+        assertTrue(futureIssue.get() ?: false)
+    }
+
+    @Test
+    fun createContractTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<Boolean>()
+
+        framework.createContract(
+            login,
+            password,
+            legalAssetId,
+            legalContractByteCode,
+            object : Callback<Boolean> {
+                override fun onSuccess(result: Boolean) {
+                    future.setComplete(result)
+                }
+
+                override fun onError(error: LocalException) {
+                    future.setComplete(error)
+                }
+            }
+        )
+
+        assertTrue(future.get() ?: false)
     }
 
     @Test
@@ -558,6 +717,7 @@ class EchoFrameworkTest {
         assertNotNull(future.get())
         assert(future.get()!!.isEmpty())
     }
+
 
     @Test
     fun getContractResultTest() {
@@ -685,6 +845,7 @@ class EchoFrameworkTest {
 
         assertNull(future.get()?.first())
     }
+
 
     @Test
     fun getContractTest() {

@@ -135,7 +135,6 @@ class AssetAmount @JvmOverloads constructor(
         val assetId = asset.instance.toUnsignedByteArray()
         val value = this.amount.toLong().revert()
 
-        // Concatenating and returning value + asset id
         return value + assetId
     }
 
