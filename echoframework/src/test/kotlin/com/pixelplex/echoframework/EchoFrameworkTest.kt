@@ -70,7 +70,7 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
-        framework.isOwnedBy("dima1", "P5KctJPedZ4K9T77KgmqhVNJ5H6FojEN6fRVp9PYyhAb9",
+        framework.isOwnedBy("dima1", "P5J8pDyzznMmEdiBCdgB7VKtMBuxw5e4MAJEo3sfUbxcM",
             object : Callback<Account> {
                 override fun onSuccess(result: Account) {
                     futureLogin.setComplete(result)
@@ -326,8 +326,8 @@ class EchoFrameworkTest {
     private fun changePassword(framework: EchoFramework, callback: Callback<Any>) {
         framework.changePassword(
             "dima1",
-            "P5KctJPedZ4K9T77KgmqhVNJ5H6FojEN6fRVp9PYyhAb9",
-            "P5KctJPedZ4K9T77KgmqhVNJ5H6FojEN6fRVp9PYyhAb9",
+            "P5J8pDyzznMmEdiBCdgB7VKtMBuxw5e4MAJEo3sfUbxcM",
+            "P5J8pDyzznMmEdiBCdgB7VKtMBuxw5e4MAJEo3sfUbxcM",
             callback
         )
     }
@@ -342,7 +342,7 @@ class EchoFrameworkTest {
 
         framework.sendTransferOperation(
             "dima1",
-            "P5KctJPedZ4K9T77KgmqhVNJ5H6FojEN6fRVp9PYyhAb9",
+            "P5J8pDyzznMmEdiBCdgB7VKtMBuxw5e4MAJEo3sfUbxcM",
             "dima2",
             "1", "1.3.0", "Memasik", object : Callback<Boolean> {
                 override fun onSuccess(result: Boolean) {
@@ -395,7 +395,7 @@ class EchoFrameworkTest {
 
         framework.getFeeForTransferOperation(
             "dimaty123",
-            "dariatest2",
+            "dima2",
             "10000",
             "1.3.1234",
             object : Callback<String> {
@@ -421,7 +421,7 @@ class EchoFrameworkTest {
         val futureAssets = FutureTask<List<Asset>>()
 
         framework.listAssets(
-            "DIMASASSET", 10,
+            "ECHO", 10,
             object : Callback<List<Asset>> {
                 override fun onSuccess(result: List<Asset>) {
                     futureAssets.setComplete(result)
