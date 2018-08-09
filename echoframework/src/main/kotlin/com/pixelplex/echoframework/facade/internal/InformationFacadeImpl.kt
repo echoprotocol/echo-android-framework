@@ -171,7 +171,7 @@ class InformationFacadeImpl(
                 continue
             }
 
-            when (operation.type) {
+           when (operation.type) {
                 OperationType.ACCOUNT_UPDATE_OPERATION ->
                     processAccountUpdateOperation(
                         operation as AccountUpdateOperation,

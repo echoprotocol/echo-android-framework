@@ -55,6 +55,6 @@ class GetContractsSocketOperation(
             ex.printStackTrace()
         }
 
-        return emptyList()
+        return listOf()
     }
 }

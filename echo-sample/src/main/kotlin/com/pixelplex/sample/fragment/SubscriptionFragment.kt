@@ -52,7 +52,7 @@ class SubscriptionFragment : BaseFragment() {
                     override fun onError(error: LocalException) {
                         error.printStackTrace()
                         progressListener?.toggle(false)
-                        updateStatus("Subscribe failed")
+                        updateStatus(error.message ?: "Subscribe failed")
                     }
                 })
         }
@@ -68,7 +68,7 @@ class SubscriptionFragment : BaseFragment() {
                 override fun onError(error: LocalException) {
                     error.printStackTrace()
                     progressListener?.toggle(false)
-                    updateStatus("Unsubscribe failed")
+                    updateStatus(error.message ?: "Unsubscribe failed")
                 }
 
             })
@@ -85,7 +85,7 @@ class SubscriptionFragment : BaseFragment() {
                 override fun onError(error: LocalException) {
                     error.printStackTrace()
                     progressListener?.toggle(false)
-                    updateStatus("Unsubscribe all failed")
+                    updateStatus(error.message ?: "Unsubscribe all failed")
                 }
 
             })

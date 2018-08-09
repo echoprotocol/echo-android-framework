@@ -27,6 +27,9 @@ abstract class BaseOperation(var type: OperationType) : ByteSerializable,
      */
     abstract var fee: AssetAmount
 
+
+    override fun toString(): String = "${javaClass.simpleName}(${toJsonObject()})"
+
     companion object {
         const val KEY_FEE = "fee"
     }

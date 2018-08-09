@@ -8,6 +8,7 @@ import com.pixelplex.echoframework.Callback
 import com.pixelplex.echoframework.ILLEGAL_ID
 import com.pixelplex.echoframework.model.*
 import com.pixelplex.echoframework.model.network.Network
+import com.pixelplex.echoframework.model.operations.AccountCreateOperation
 import com.pixelplex.echoframework.model.operations.AccountUpdateOperation
 import com.pixelplex.echoframework.model.operations.ContractOperation
 import com.pixelplex.echoframework.model.operations.TransferOperation
@@ -61,6 +62,10 @@ class GetBlockSocketOperation(
         registerTypeAdapter(
             AccountUpdateOperation::class.java,
             AccountUpdateOperation.Deserializer()
+        )
+        registerTypeAdapter(
+            AccountCreateOperation::class.java,
+            AccountCreateOperation.Deserializer()
         )
         registerTypeAdapter(
             TransferOperation::class.java,
