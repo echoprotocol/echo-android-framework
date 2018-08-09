@@ -25,7 +25,6 @@ class GetAssetsSocketOperation(
     val assetIds: Array<String>,
     callId: Int,
     callback: Callback<List<Asset>>
-
 ) : SocketOperation<List<Asset>>(SocketMethodType.CALL, callId, listOf<Asset>().javaClass, callback) {
 
     @Suppress("UNUSED_EXPRESSION")

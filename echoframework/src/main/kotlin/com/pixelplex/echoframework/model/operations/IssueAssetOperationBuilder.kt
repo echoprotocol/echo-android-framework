@@ -4,13 +4,14 @@ import com.pixelplex.echoframework.exception.MalformedOperationException
 import com.pixelplex.echoframework.model.Account
 import com.pixelplex.echoframework.model.AssetAmount
 import com.pixelplex.echoframework.model.Memo
+import com.pixelplex.echoframework.support.Builder
 
 /**
  * Builder class for asset issue operation [IssueAssetOperation]
  *
  * @author Dmitriy Bushuev
  */
-class IssueAssetOperationBuilder : OperationBuilder<IssueAssetOperation>() {
+class IssueAssetOperationBuilder : Builder<IssueAssetOperation> {
     private var issuer: Account? = null
     private var destination: Account? = null
     private var issueAmount: AssetAmount? = null

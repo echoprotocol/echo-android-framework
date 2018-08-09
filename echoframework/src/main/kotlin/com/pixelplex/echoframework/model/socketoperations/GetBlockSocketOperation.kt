@@ -5,14 +5,9 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonParser
 import com.pixelplex.echoframework.Callback
-import com.pixelplex.echoframework.ILLEGAL_ID
 import com.pixelplex.echoframework.model.*
 import com.pixelplex.echoframework.model.network.Network
-import com.pixelplex.echoframework.model.operations.AccountUpdateOperation
-import com.pixelplex.echoframework.model.operations.CreateAssetOperation
-import com.pixelplex.echoframework.model.operations.IssueAssetOperation
-import com.pixelplex.echoframework.model.operations.ContractOperation
-import com.pixelplex.echoframework.model.operations.TransferOperation
+import com.pixelplex.echoframework.model.operations.*
 
 /**
  * Retrieve a full, signed block.
@@ -63,6 +58,10 @@ class GetBlockSocketOperation(
         registerTypeAdapter(
             AccountUpdateOperation::class.java,
             AccountUpdateOperation.Deserializer()
+        )
+        registerTypeAdapter(
+            AccountCreateOperation::class.java,
+            AccountCreateOperation.AccountCreateDeserializer()
         )
         registerTypeAdapter(
             TransferOperation::class.java,
