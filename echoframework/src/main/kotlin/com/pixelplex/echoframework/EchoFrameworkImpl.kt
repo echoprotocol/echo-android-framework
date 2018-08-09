@@ -6,6 +6,7 @@ import com.pixelplex.echoframework.core.socket.internal.SocketCoreComponentImpl
 import com.pixelplex.echoframework.facade.*
 import com.pixelplex.echoframework.facade.internal.*
 import com.pixelplex.echoframework.model.Account
+import com.pixelplex.echoframework.model.Asset
 import com.pixelplex.echoframework.model.Balance
 import com.pixelplex.echoframework.model.HistoryResponse
 import com.pixelplex.echoframework.model.contract.ContractInfo
@@ -37,6 +38,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
     private val informationFacade: InformationFacade
     private val subscriptionFacade: SubscriptionFacade
     private val transactionsFacade: TransactionsFacade
+    private val assetsFacade: AssetsFacade
     private val contractsFacade: ContractsFacade
 
     private val dispatcher: Dispatcher by lazy { ExecutorServiceDispatcher() }
@@ -82,8 +84,15 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
                 )
         feeFacade = FeeFacadeImpl(databaseApiService)
         informationFacade = InformationFacadeImpl(databaseApiService, accountHistoryApiService)
-        subscriptionFacade = SubscriptionFacadeImpl(databaseApiService)
-        transactionsFacade = TransactionsFacadeImpl(
+        subscriptionFacade =
+                SubscriptionFacadeImpl(databaseApiService)
+        transactionsFacade =
+                TransactionsFacadeImpl(
+                    databaseApiService,
+                    networkBroadcastApiService,
+                    settings.cryptoComponent
+                )
+        assetsFacade = AssetsFacadeImpl(
             databaseApiService,
             networkBroadcastApiService,
             settings.cryptoComponent
@@ -166,6 +175,52 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             callback.wrapOriginal()
         )
     })
+
+    override fun createAsset(
+        name: String,
+        password: String,
+        asset: Asset,
+        callback: Callback<Boolean>
+    ) =
+        dispatch(Runnable {
+            assetsFacade.createAsset(
+                name,
+                password,
+                asset,
+                callback
+            )
+        })
+
+    override fun issueAsset(
+        issuerNameOrId: String,
+        password: String,
+        asset: String,
+        amount: String,
+        destinationIdOrName: String,
+        message: String?,
+        callback: Callback<Boolean>
+    ) =
+        dispatch(Runnable {
+            assetsFacade.issueAsset(
+                issuerNameOrId,
+                password,
+                asset,
+                amount,
+                destinationIdOrName,
+                message,
+                callback
+            )
+        })
+
+    override fun listAssets(lowerBound: String, limit: Int, callback: Callback<List<Asset>>) =
+        dispatch(Runnable {
+            assetsFacade.listAssets(lowerBound, limit, callback)
+        })
+
+    override fun getAssets(assetIds: List<String>, callback: Callback<List<Asset>>) =
+        dispatch(Runnable {
+            assetsFacade.getAssets(assetIds, callback)
+        })
 
     override fun unsubscribeFromAccount(nameOrId: String, callback: Callback<Boolean>) =
         dispatch(Runnable {

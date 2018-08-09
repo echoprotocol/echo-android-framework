@@ -17,7 +17,7 @@ import com.pixelplex.echoframework.support.Result
  * @author Dmitriy Bushuev
  */
 interface DatabaseApiService : ApiService, AccountsService, GlobalsService,
-    AuthorityAndValidationService, BlocksAndTransactionsService, ContractsService
+    AuthorityAndValidationService, BlocksAndTransactionsService, ContractsService, AssetsService
 
 /**
  * Encapsulates logic, associated with data from account from blockchain database API
@@ -144,6 +144,23 @@ interface BlocksAndTransactionsService {
      * @param blockNumber Height of the block to be returned
      */
     fun getBlock(blockNumber: String): Result<LocalException, Block>
+
+}
+
+/**
+ * Encapsulates logic, associated with assets information from Database API
+ */
+interface AssetsService {
+
+    /**
+     * Query list of assets by required asset symbol [lowerBound] with limit [limit]
+     */
+    fun listAssets(lowerBound: String, limit: Int, callback: Callback<List<Asset>>)
+
+    /**
+     * Query list of assets by it's ids [assetIds]
+     */
+    fun getAssets(assetIds: List<String>, callback: Callback<List<Asset>>)
 
 }
 

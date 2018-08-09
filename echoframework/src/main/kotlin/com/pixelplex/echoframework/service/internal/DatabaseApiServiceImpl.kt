@@ -190,6 +190,23 @@ class DatabaseApiServiceImpl(
         return future.wrapResult()
     }
 
+    override fun listAssets(lowerBound: String, limit: Int, callback: Callback<List<Asset>>) {
+        val operation = ListAssetsSocketOperation(id, lowerBound, limit, callback = callback)
+
+        socketCoreComponent.emit(operation)
+    }
+
+    override fun getAssets(assetIds: List<String>, callback: Callback<List<Asset>>) {
+        val operation = GetAssetsSocketOperation(
+            id,
+            assetIds.toTypedArray(),
+            socketCoreComponent.currentId,
+            callback
+        )
+
+        socketCoreComponent.emit(operation)
+    }
+
     override fun subscribeOnAccount(
         nameOrId: String,
         listener: AccountListener,
@@ -259,7 +276,7 @@ class DatabaseApiServiceImpl(
         getFullAccounts(listOf(nameOrId), false)
             .flatMap { accountsMap ->
                 accountsMap[nameOrId]?.account?.getObjectId()?.let { Result.Value(it) }
-                    ?: Result.Error(LocalException())
+                        ?: Result.Error(LocalException())
             }
             .mapError {
                 LocalException("Unable to find required account id for identifier = $nameOrId")
