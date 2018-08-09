@@ -72,7 +72,8 @@ class OperationTypeToClassConverter : Converter<Int, Class<*>?> {
         private val OPERATION_TYPE_REGISTRY = hashMapOf(
             OperationType.ACCOUNT_UPDATE_OPERATION.ordinal to AccountUpdateOperation::class.java,
             OperationType.TRANSFER_OPERATION.ordinal to TransferOperation::class.java,
-            OperationType.ASSET_CREATE_OPERATION.ordinal to CreateAssetOperation::class.java
+            OperationType.ASSET_CREATE_OPERATION.ordinal to CreateAssetOperation::class.java,
+            OperationType.ASSET_ISSUE_OPERATION.ordinal to IssueAssetOperation::class.java
         )
     }
 

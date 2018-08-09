@@ -70,6 +70,67 @@ class IssueAssetOperation @JvmOverloads constructor(
         }
     }
 
+    /**
+     * This deserializer will work on any transfer operation serialized in the 'array form' used a lot in
+     * the Graphene Blockchain API.
+     *
+     * An example of this serialized form is the following:
+     *
+     * {
+     *      "fee": {
+     *          "amount": 264174,
+     *          "asset_id": "1.3.0"
+     *      },
+     *      "from": "1.2.138632",
+     *      "to": "1.2.129848",
+     *      "amount": {
+     *          "amount": 100,
+     *          "asset_id": "1.3.0"
+     *      },
+     *      "extensions": []
+     * }
+     *
+     * It will convert this data into a nice TransferOperation object.
+     */
+    class IssueAssetDeserializer : JsonDeserializer<IssueAssetOperation> {
+
+        @Throws(JsonParseException::class)
+        override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type,
+            context: JsonDeserializationContext
+        ): IssueAssetOperation? {
+
+            if (json == null || !json.isJsonObject) return null
+
+            val jsonObject = json.asJsonObject
+
+            val amount = context.deserialize<AssetAmount>(
+                jsonObject.get(ASSET_TO_ISSUE_KEY),
+                AssetAmount::class.java
+            )
+            val fee = context.deserialize<AssetAmount>(
+                jsonObject.get(KEY_FEE),
+                AssetAmount::class.java
+            )
+
+            val issuer = Account(jsonObject.get(ISSUER_KEY).asString)
+            val issueTarget = Account(jsonObject.get(ISSUE_TO_ACCOUNT_KEY).asString)
+
+            return IssueAssetOperation(
+                issuer,
+                amount,
+                issueTarget,
+                fee
+            ).apply {
+                if (jsonObject.has(KEY_MEMO)) {
+                    this.memo =
+                            context.deserialize<Memo>(jsonObject.get(KEY_MEMO), Memo::class.java)
+                }
+            }
+        }
+    }
+
     companion object {
         const val ISSUER_KEY = "issuer"
         const val ASSET_TO_ISSUE_KEY = "asset_to_issue"

@@ -10,6 +10,7 @@ import com.pixelplex.echoframework.model.*
 import com.pixelplex.echoframework.model.network.Network
 import com.pixelplex.echoframework.model.operations.AccountUpdateOperation
 import com.pixelplex.echoframework.model.operations.CreateAssetOperation
+import com.pixelplex.echoframework.model.operations.IssueAssetOperation
 import com.pixelplex.echoframework.model.operations.TransferOperation
 
 /**
@@ -87,6 +88,10 @@ class GetAccountHistorySocketOperation(
         registerTypeAdapter(
             Memo::class.java,
             Memo.MemoDeserializer(network)
+        )
+        registerTypeAdapter(
+            IssueAssetOperation::class.java,
+            IssueAssetOperation.IssueAssetDeserializer()
         )
         registerTypeAdapter(AssetAmount::class.java, AssetAmount.Deserializer())
         registerTypeAdapter(Authority::class.java, Authority.Deserializer(network))
