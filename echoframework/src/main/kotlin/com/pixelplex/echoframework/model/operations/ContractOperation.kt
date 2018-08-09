@@ -81,6 +81,8 @@ class ContractOperation
         }
     }
 
+    override fun toString(): String = "${javaClass.simpleName}(${toJsonString()})"
+
     companion object {
         private const val KEY_REGISTRAR = "registrar"
         private const val KEY_RECEIVER = "receiver"
@@ -129,9 +131,11 @@ class ContractOperation
                 AssetAmount::class.java
             )
 
+
             val registrar = Account(jsonObject.get(KEY_REGISTRAR).asString)
-            val receiver =
-                Contract(jsonObject.get(KEY_RECEIVER).asString)
+            val receiver: Contract? = jsonObject.get(KEY_RECEIVER)?.let { element ->
+                Contract(element.asString)
+            }
             val assetId = Asset(jsonObject.get(KEY_ASSET_ID).asString)
             val value = jsonObject.get(KEY_VALUE).asLong
             val gasPrice = jsonObject.get(KEY_GAS_PRICE).asLong

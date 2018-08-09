@@ -9,6 +9,7 @@ import com.pixelplex.echoframework.ILLEGAL_ID
 import com.pixelplex.echoframework.model.*
 import com.pixelplex.echoframework.model.network.Network
 import com.pixelplex.echoframework.model.operations.AccountUpdateOperation
+import com.pixelplex.echoframework.model.operations.ContractOperation
 import com.pixelplex.echoframework.model.operations.TransferOperation
 
 /**
@@ -74,6 +75,10 @@ class GetAccountHistorySocketOperation(
         registerTypeAdapter(
             TransferOperation::class.java,
             TransferOperation.TransferDeserializer()
+        )
+        registerTypeAdapter(
+            ContractOperation::class.java,
+            ContractOperation.Deserializer()
         )
         registerTypeAdapter(
             Memo::class.java,

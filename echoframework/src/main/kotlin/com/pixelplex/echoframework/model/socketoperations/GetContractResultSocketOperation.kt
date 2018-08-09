@@ -1,6 +1,6 @@
 package com.pixelplex.echoframework.model.socketoperations
 
-import com.google.gson.GsonBuilder
+import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonParser
@@ -44,6 +44,6 @@ class GetContractResultSocketOperation(
 
         val result = jsonTree.asJsonObject.get(RESULT_KEY)?.asJsonObject
 
-        return GsonBuilder().create().fromJson<ContractResult>(result, type)
+        return Gson().fromJson<ContractResult>(result, type)
     }
 }

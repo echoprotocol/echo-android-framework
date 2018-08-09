@@ -44,7 +44,7 @@ class GetContractsSocketOperation(
         val jsonTree = parser.parse(json)
 
         try {
-            val result = jsonTree.asJsonObject.get(RESULT_KEY)?.asJsonObject
+            val result = jsonTree.asJsonObject.get(RESULT_KEY)?.asJsonArray
 
             return GsonBuilder().create().fromJson<List<ContractInfo>>(
                 result,

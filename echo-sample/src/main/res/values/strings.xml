@@ -1,23 +1,53 @@
 <resources>
     <string name="app_name">echo-sample</string>
 
+    <!--common-->
     <string name="name">Name</string>
     <string name="password">Password</string>
-    <string name="new_password">New password</string>
-    <string name="asset_id">Asset id: 1.3.x</string>
+    <string name="status">Status: %s</string>
+    <!--common-->
+
+    <!--main-->
+    <string name="auth">Authorization</string>
+    <string name="info">Getting information</string>
+    <string name="contracts">Work with contracts</string>
+    <string name="subscriptions">Subscriptions</string>
+    <!--main-->
+
+    <!--Auth-->
     <string name="login">Login</string>
+    <string name="change_password">Change password</string>
+    <string name="new_password">New password</string>
+    <!--Auth-->
+
+    <!--Info-->
     <string name="find_account">Find account</string>
     <string name="check_account_availability">Check account availability</string>
+    <string name="asset_id">Asset id: 1.3.x</string>
     <string name="get_balances">Get balances</string>
-    <string name="change_password">Change password</string>
-    <string name="history">History</string>
-    <string name="subscribe">Subscribe</string>
-    <string name="unsubscribe">Unsubscribe</string>
-    <string name="unsubscribe_all">Unsubscribe all</string>
+    <string name="history">Last 10 history items</string>
+    <string name="find_check_history">Find and check account, get history</string>
+    <!--Info-->
+
+    <!--Contracts-->
     <string name="create_contract">Create contract</string>
     <string name="call_contract">Call contract</string>
     <string name="query_contract">Query contract</string>
-    <string name="result_contract">Result contract</string>
+    <string name="result_contract">Contract operation result</string>
     <string name="get_contracts">Get contracts</string>
-    <string name="status">Status: %s</string>
+    <string name="bytecode">Contract bytecode</string>
+    <string name="contract_id">Contract id: 1.16.x</string>
+    <string name="method_name">Method name</string>
+    <string name="method_parameters">Params. Example: int count = 5,string message = "new message"</string>
+    <string name="call_operation_id">Call operation id</string>
+    <string name="contracts_ids">Contracts ids. Example: 1.16.33,1.16.10</string>
+    <string name="contract_creation">Contract creation</string>
+    <!--Contracts-->
+
+    <!--Subscription-->
+    <string name="subscribe">Subscribe</string>
+    <string name="unsubscribe">Unsubscribe</string>
+    <string name="unsubscribe_all">Unsubscribe all</string>
+    <!--Subscription-->
+
 </resources>
