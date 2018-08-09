@@ -2,7 +2,9 @@ package com.pixelplex.echoframework.model
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
+import com.google.gson.annotations.SerializedName
 import com.pixelplex.bitcoinj.revert
+import com.pixelplex.echoframework.BITSHARES_ASSET_ID
 import com.pixelplex.echoframework.support.toUnsignedByteArray
 
 /**
@@ -12,14 +14,15 @@ import com.pixelplex.echoframework.support.toUnsignedByteArray
  * @author Dmitriy Bushuev
  */
 class BitassetOptions @JvmOverloads constructor(
-    var feedLifetimeSec: Int = -1,
-    var minimumFeeds: Int = 0,
-    var forceSettlementDelaySec: Int = -1,
-    var forceSettlementOffsetPercent: Short = -1,
-    var maximumForceSettlementVolume: Short = -1,
-    var shortBackingAsset: Asset = Asset("1.3.0")
+    @SerializedName(FEED_LIFETIME_KEY) var feedLifetimeSec: Int = -1,
+    @SerializedName(MINIMUM_FEED_KEY) var minimumFeeds: Int = 0,
+    @SerializedName(FORCE_SETTLEMENT_DELAY_KEY) var forceSettlementDelaySec: Int = -1,
+    @SerializedName(FORCE_SETTLEMENT_OFFSET_KEY) var forceSettlementOffsetPercent: Short = -1,
+    @SerializedName(MAXIMUM_FORCE_SETTLEMENT_VOLUME_KEY) var maximumForceSettlementVolume: Short = -1,
+    @SerializedName(SHORT_BACKING_ASSET_KEY) var shortBackingAsset: String = BITSHARES_ASSET_ID
 ) : GrapheneSerializable {
 
+    @Transient
     val extensions = Extensions()
 
     override fun toBytes(): ByteArray {
@@ -28,7 +31,7 @@ class BitassetOptions @JvmOverloads constructor(
         val forceSettlementDelaySecBytes = forceSettlementDelaySec.revert()
         val forceSettlementOffsetPercentBytes = forceSettlementOffsetPercent.revert()
         val maximumForceSettlementVolumeBytes = maximumForceSettlementVolume.revert()
-        val shortBackingAssetBytes = shortBackingAsset.instance.toUnsignedByteArray()
+        val shortBackingAssetBytes = Asset(shortBackingAsset).instance.toUnsignedByteArray()
         val extensionsBytes = extensions.toBytes()
         return byteArrayOf(1) + feedLifetimeSecBytes + minimumFeedsBytes + forceSettlementDelaySecBytes +
                 forceSettlementOffsetPercentBytes + maximumForceSettlementVolumeBytes +
@@ -45,7 +48,7 @@ class BitassetOptions @JvmOverloads constructor(
             addProperty(FORCE_SETTLEMENT_OFFSET_KEY, forceSettlementOffsetPercent)
             addProperty(MAXIMUM_FORCE_SETTLEMENT_VOLUME_KEY, maximumForceSettlementVolume)
             addProperty(MAXIMUM_FORCE_SETTLEMENT_VOLUME_KEY, maximumForceSettlementVolume)
-            addProperty(SHORT_BACKING_ASSET_KEY, shortBackingAsset.getObjectId())
+            addProperty(SHORT_BACKING_ASSET_KEY, shortBackingAsset)
             add(EXTENSIONS_KEY, extensions.toJsonObject())
         }
 

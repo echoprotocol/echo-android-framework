@@ -233,8 +233,8 @@ class EchoFrameworkTest {
         val futureAccountHistory = FutureTask<HistoryResponse>()
 
         framework.getAccountHistory(nameOrId, "1.11.1",
-            "1.11.200",
-            10,
+            "1.11.20000",
+            100,
             "1.3.0", object : Callback<HistoryResponse> {
                 override fun onSuccess(result: HistoryResponse) {
                     futureAccountHistory.setComplete(result)
@@ -468,7 +468,17 @@ class EchoFrameworkTest {
 //
 //        val futureAsset = FutureTask<Boolean>()
 //
-//        val asset = Asset("", "YIUHTGFSADFD", 4, "1.2.18")
+//        val asset = Asset("", "RTJHRTDFS", 4, "1.2.18").apply {
+//            setBtsOptions(
+//                BitassetOptions(
+//                    86400, 7, 86400,
+//                    100, 2000
+//                )
+//            )
+//
+//            predictionMarket = false
+//        }
+//
 //        val options =
 //            AssetOptions(
 //                UnsignedLong.valueOf(100000), 0.toLong(), UnsignedLong.ZERO, 79, 1,
@@ -483,11 +493,6 @@ class EchoFrameworkTest {
 //        framework.createAsset(
 //            "dima1", "P5KctJPedZ4K9T77KgmqhVNJ5H6FojEN6fRVp9PYyhAb9",
 //            asset,
-//            BitassetOptions(
-//                86400, 7, 86400,
-//                100, 2000
-//            ),
-//            false,
 //            object : Callback<Boolean> {
 //                override fun onSuccess(result: Boolean) {
 //                    futureAsset.setComplete(result)

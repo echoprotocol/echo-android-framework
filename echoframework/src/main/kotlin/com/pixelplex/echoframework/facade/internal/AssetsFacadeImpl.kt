@@ -29,12 +29,10 @@ class AssetsFacadeImpl(
         name: String,
         password: String,
         asset: Asset,
-        bitassetOptions: BitassetOptions?,
-        predictionMarket: Boolean,
         callback: Callback<Boolean>
     ) {
         Result {
-            val operation = CreateAssetOperation(asset, bitassetOptions, predictionMarket)
+            val operation = CreateAssetOperation(asset)
 
             val blockData = databaseApiService.getBlockData()
             val chainId = getChainId()

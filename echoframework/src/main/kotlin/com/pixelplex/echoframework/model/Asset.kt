@@ -1,7 +1,6 @@
 package com.pixelplex.echoframework.model
 
 import com.google.gson.annotations.SerializedName
-import com.pixelplex.bitcoinj.revert
 
 /**
  * Class used to represent a specific asset on the Graphene platform
@@ -16,17 +15,18 @@ class Asset : GrapheneObject, ByteSerializable {
 
     var issuer: String? = null
 
-    var description: String? = null
-
     @SerializedName("dynamic_asset_data_id")
     var dynamicAssetDataId: String? = null
 
     @SerializedName("options")
     var assetOptions: AssetOptions? = null
 
-    var bitAssetId: String? = null
+    var bitassetOptions = Optional<BitassetOptions>(null)
 
-    var assetType: AssetType? = null
+    var predictionMarket = false
+
+    @SerializedName("bitasset_data_id")
+    var bitAssetId: String? = null
 
     constructor(id: String) : super(id)
 
@@ -48,19 +48,33 @@ class Asset : GrapheneObject, ByteSerializable {
         this.symbol = asset.symbol
         this.precision = asset.precision
         this.issuer = asset.issuer
-        this.description = asset.description
         this.dynamicAssetDataId = asset.dynamicAssetDataId
         this.assetOptions = asset.assetOptions
         this.bitAssetId = asset.bitAssetId
-        this.assetType = asset.assetType
     }
+
+    /**
+     * Set optional [bitassetOptions] field
+     */
+    fun setBtsOptions(btsOptions: BitassetOptions?) {
+        bitassetOptions.field = btsOptions
+    }
+
+    /**
+     * Get optional [bitassetOptions] field
+     */
+    fun getBtsOptions() = bitassetOptions.field
 
     override fun toBytes(): ByteArray {
         val issuerBytes = Account(issuer!!).toBytes()
         val symbolBytes = byteArrayOf(symbol!!.length.toByte()) + symbol!!.toByteArray()
         val precisionBytes = precision.toByte()
         val optionsBytes = assetOptions!!.toBytes()
-        return issuerBytes + symbolBytes + precisionBytes + optionsBytes
+        val btsOptionsBytes = bitassetOptions.toBytes()
+        val predictionMarketBytes =
+            if (predictionMarket) byteArrayOf(1.toByte()) else byteArrayOf(0.toByte())
+        return issuerBytes + symbolBytes + precisionBytes + optionsBytes + btsOptionsBytes +
+                predictionMarketBytes
     }
 
     override fun hashCode() = getObjectId().hashCode()
@@ -69,16 +83,6 @@ class Asset : GrapheneObject, ByteSerializable {
         this.getObjectId() == other.getObjectId()
     } else {
         false
-    }
-
-    /**
-     * Enum type used to represent the possible types an asset can be classified into.
-     */
-    enum class AssetType {
-        CORE_ASSET,
-        UIA,
-        SMART_COIN,
-        PREDICTION_MARKET
     }
 
 }

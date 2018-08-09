@@ -14,7 +14,7 @@ import com.google.gson.JsonElement
  *
  * @author Daria Pechkovskaya
  */
-class Optional<T : GrapheneSerializable>(private val field: T?) : GrapheneSerializable {
+class Optional<T : GrapheneSerializable>(var field: T?) : GrapheneSerializable {
 
     val isSet: Boolean
         get() = this.field != null
