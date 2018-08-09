@@ -71,7 +71,9 @@ class OperationTypeToClassConverter : Converter<Int, Class<*>?> {
     companion object {
         private val OPERATION_TYPE_REGISTRY = hashMapOf(
             OperationType.ACCOUNT_UPDATE_OPERATION.ordinal to AccountUpdateOperation::class.java,
-            OperationType.TRANSFER_OPERATION.ordinal to TransferOperation::class.java
+            OperationType.TRANSFER_OPERATION.ordinal to TransferOperation::class.java,
+            OperationType.ACCOUNT_CREATE_OPERATION.ordinal to AccountCreateOperation::class.java,
+            OperationType.CONTRACT_OPERATION.ordinal to ContractOperation::class.java
         )
     }
 

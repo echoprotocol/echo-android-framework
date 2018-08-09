@@ -151,7 +151,7 @@ interface BlocksAndTransactionsService {
 interface ContractsService {
 
     /**
-     * Calls contract without changing state of blockchain
+     * Calls contract without blockchain changing state
      *
      * @param contractId Id of contract to call
      * @param registrarNameOrId Name or id of account caller

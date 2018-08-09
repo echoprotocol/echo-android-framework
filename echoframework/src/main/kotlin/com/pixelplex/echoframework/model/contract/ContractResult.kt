@@ -25,7 +25,7 @@ class ContractResult(
  */
 class ExecRes(
     @Expose
-    val expected: String,
+    val excepted: String,
 
     @SerializedName("new_address")
     val newAddress: String,
