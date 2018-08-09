@@ -11,7 +11,7 @@ import com.pixelplex.echoframework.model.AssetAmount
 
 /**
  * This function fetches all relevant [Account] objects for the given accounts, and
- * subscribes to updates to the given accounts. If any of the strings in [namesOrIds] cannot be
+ * subscribes to updates to the given accounts. If any of the strings in [nameOrId] cannot be
  * tied to an account, that input will be ignored. All other accounts will be retrieved and
  * subscribed.
  *
@@ -26,11 +26,11 @@ class AccountBalancesOperation(
     val nameOrId: String,
     val asset: String,
     val shouldSubscribe: Boolean,
-    method: SocketMethodType = SocketMethodType.CALL,
+    callId: Int,
     callback: Callback<AssetAmount>
 ) : SocketOperation<AssetAmount>(
-    method,
-    ILLEGAL_ID,
+    SocketMethodType.CALL,
+    callId,
     AssetAmount::class.java,
     callback
 ) {
@@ -55,17 +55,14 @@ class AccountBalancesOperation(
         }
 
     override fun fromJson(json: String): AssetAmount? {
-        val gsonBuilder = GsonBuilder()
-        gsonBuilder.registerTypeAdapter(
-            AssetAmount::class.java,
-            AssetAmount.Deserializer()
-        )
+        val responseType = object : TypeToken<AssetAmount>() {}.type
 
-        val responseType = object : TypeToken<AssetAmount>() {
-        }.type
-
-        return gsonBuilder.create()
+        return configureGson()
             .fromJson<AssetAmount>(json, responseType)
     }
+
+    private fun configureGson() = GsonBuilder().apply {
+        registerTypeAdapter(AssetAmount::class.java, AssetAmount.Deserializer())
+    }.create()
 
 }

@@ -14,9 +14,9 @@ import com.pixelplex.echoframework.ILLEGAL_ID
 class AccessSocketOperation(
     val accessSocketType: AccessSocketOperationType,
     val api: Int,
-    method: SocketMethodType = SocketMethodType.CALL,
+    callId: Int,
     callback: Callback<Int>
-) : SocketOperation<Int>(method, ILLEGAL_ID, Int::class.java, callback) {
+) : SocketOperation<Int>(SocketMethodType.CALL, callId, Int::class.java, callback) {
 
     override fun createParameters(): JsonElement =
         JsonArray().apply {
@@ -32,11 +32,11 @@ class AccessSocketOperation(
         val parser = JsonParser()
         val jsonTree = parser.parse(json)
 
-        if (!jsonTree.isJsonObject || jsonTree.asJsonObject.get("result") == null) {
+        if (!jsonTree.isJsonObject || jsonTree.asJsonObject.get(RESULT_KEY) == null) {
             return null
         }
 
-        return jsonTree.asJsonObject.get("result")?.asJsonPrimitive?.asInt
+        return jsonTree.asJsonObject.get(RESULT_KEY)?.asJsonPrimitive?.asInt
     }
 }
 

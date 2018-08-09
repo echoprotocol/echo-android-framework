@@ -28,11 +28,11 @@ class FullAccountsSocketOperation(
     val namesOrIds: List<String>,
     val shouldSubscribe: Boolean,
     val network: Network,
-    method: SocketMethodType = SocketMethodType.CALL,
+    callId: Int,
     callback: Callback<Map<String, FullAccount>>
 ) : SocketOperation<Map<String, FullAccount>>(
-    method,
-    ILLEGAL_ID,
+    SocketMethodType.CALL,
+    callId,
     mapOf<String, FullAccount>().javaClass,
     callback
 ) {
@@ -59,22 +59,15 @@ class FullAccountsSocketOperation(
 
         val accountsMap = hashMapOf<String, FullAccount>()
 
-        if (!jsonTree.isJsonObject || jsonTree.asJsonObject.get("result") == null) {
+        if (!jsonTree.isJsonObject || jsonTree.asJsonObject.get(RESULT_KEY) == null) {
             return accountsMap
         }
 
         try {
-            val result = jsonTree.asJsonObject.get("result")?.asJsonArray
+            val result = jsonTree.asJsonObject.get(RESULT_KEY)?.asJsonArray
             val size = result?.size() ?: 0
 
-            val gson = GsonBuilder()
-                .registerTypeAdapter(Authority::class.java, Authority.Deserializer(network))
-                .registerTypeAdapter(Account::class.java, Account.Deserializer())
-                .registerTypeAdapter(
-                    AccountOptions::class.java,
-                    AccountOptions.Deserializer(network)
-                )
-                .create()
+            val gson = configureGson()
 
             for (i in 0 until size) {
                 val subArray = result!!.get(i).asJsonArray
@@ -91,4 +84,13 @@ class FullAccountsSocketOperation(
 
         return accountsMap
     }
+
+    private fun configureGson() = GsonBuilder().apply {
+        registerTypeAdapter(Authority::class.java, Authority.Deserializer(network))
+        registerTypeAdapter(Account::class.java, Account.Deserializer())
+        registerTypeAdapter(
+            AccountOptions::class.java,
+            AccountOptions.Deserializer(network)
+        )
+    }.create()
 }

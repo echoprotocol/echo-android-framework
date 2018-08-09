@@ -19,16 +19,15 @@ class BlockDataSocketOperationTest {
 
     @Before
     fun setUp() {
-        operation =
-                BlockDataSocketOperation(
-                    2,
-                    callback = EmptyCallback()
-                )
+        operation = BlockDataSocketOperation(
+            2,
+            3,
+            callback = EmptyCallback()
+        )
     }
 
     @Test
     fun serializeTest() {
-        operation.callId = 3
         val json = operation.toJsonObject().asJsonObject
 
         assertEquals(json.get(OperationCodingKeys.ID.key).asInt, 3)

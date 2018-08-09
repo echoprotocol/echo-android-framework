@@ -13,7 +13,7 @@ import java.math.BigInteger
 
 /**
  * Represents additional transfer operation payload
- * [https://dev-doc.myecho.app/structgraphene_1_1chain_1_1memo__data.html]
+ * [Memo model details](https://dev-doc.myecho.app/structgraphene_1_1chain_1_1memo__data.html)
  *
  * @author Dmitriy Bushuev
  */

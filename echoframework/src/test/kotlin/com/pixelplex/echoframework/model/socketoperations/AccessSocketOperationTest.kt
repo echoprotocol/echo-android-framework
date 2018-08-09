@@ -17,17 +17,16 @@ class AccessSocketOperationTest {
 
     @Before
     fun setUp() {
-        operation =
-                AccessSocketOperation(
-                    AccessSocketOperationType.HISTORY,
-                    1,
-                    callback = EmptyCallback()
-                )
+        operation = AccessSocketOperation(
+            AccessSocketOperationType.HISTORY,
+            1,
+            2,
+            callback = EmptyCallback()
+        )
     }
 
     @Test
     fun serializeTest() {
-        operation.callId = 2
         val json = operation.toJsonObject().asJsonObject
 
         assertEquals(json.get(OperationCodingKeys.ID.key).asInt, 2)

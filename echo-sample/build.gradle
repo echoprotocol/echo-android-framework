@@ -10,6 +10,7 @@ android {
 
     defaultConfig {
         applicationId "com.pixelplex.echo_sample"
+        vectorDrawables.useSupportLibrary = true
 
         minSdkVersion globalConfiguration["androidMinSdkVersion"]
         targetSdkVersion globalConfiguration["androidTargetSdkVersion"]

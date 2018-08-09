@@ -26,7 +26,7 @@ class AuthenticationFacadeImpl(
     private val networkBroadcastApiService: NetworkBroadcastApiService,
     private val cryptoCoreComponent: CryptoCoreComponent,
     private val network: Network
-) : AuthenticationFacade {
+) : BaseTransactionsFacade(databaseApiService, cryptoCoreComponent), AuthenticationFacade {
 
     override fun isOwnedBy(name: String, password: String, callback: Callback<Account>) {
         databaseApiService.getFullAccounts(listOf(name), false)
@@ -95,11 +95,6 @@ class AuthenticationFacadeImpl(
             throw NotFoundException("No account found for specified name and password")
         }
     }
-
-    private fun getChainId(): String = databaseApiService.getChainId().dematerialize()
-
-    private fun getFees(operations: List<BaseOperation>): List<AssetAmount> =
-        databaseApiService.getRequiredFees(operations, Asset("1.3.0")).dematerialize()
 
     private fun buildAccountUpdateOperation(
         id: String,

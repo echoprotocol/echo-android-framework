@@ -5,6 +5,7 @@ import com.pixelplex.echoframework.model.Account
 import com.pixelplex.echoframework.model.AccountOptions
 import com.pixelplex.echoframework.model.AssetAmount
 import com.pixelplex.echoframework.model.Authority
+import com.pixelplex.echoframework.support.Builder
 
 /**
  * Represents builder for [AccountUpdateOperation].
@@ -12,7 +13,7 @@ import com.pixelplex.echoframework.model.Authority
  *
  * @author Daria Pechkovskaya
  */
-class AccountUpdateOperationBuilder : OperationBuilder<AccountUpdateOperation>() {
+class AccountUpdateOperationBuilder : Builder<AccountUpdateOperation> {
 
     private var fee: AssetAmount? = null
     private var account: Account? = null

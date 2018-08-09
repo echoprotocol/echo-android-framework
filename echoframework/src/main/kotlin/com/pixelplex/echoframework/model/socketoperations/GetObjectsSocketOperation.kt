@@ -21,12 +21,12 @@ import com.pixelplex.echoframework.model.GrapheneObject
 class GetObjectsSocketOperation(
     override val apiId: Int,
     val ids: Array<String>,
-    method: SocketMethodType = SocketMethodType.CALL,
+    callId: Int,
     callback: Callback<List<GrapheneObject>>
 
 ) : SocketOperation<List<GrapheneObject>>(
-    method,
-    ILLEGAL_ID,
+    SocketMethodType.CALL,
+    callId,
     listOf<GrapheneObject>().javaClass,
     callback
 ) {

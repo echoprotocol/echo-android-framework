@@ -20,11 +20,11 @@ class RequiredFeesSocketOperation(
     override val apiId: Int,
     val operations: List<BaseOperation>,
     val asset: Asset,
-    method: SocketMethodType = SocketMethodType.CALL,
+    callId: Int,
     callback: Callback<List<AssetAmount>>
 ) : SocketOperation<List<AssetAmount>>(
-    method,
-    ILLEGAL_ID,
+    SocketMethodType.CALL,
+    callId,
     listOf<AssetAmount>().javaClass,
     callback
 ) {
@@ -49,14 +49,9 @@ class RequiredFeesSocketOperation(
         val jsonTree = parser.parse(json)
 
         try {
-            val result = jsonTree.asJsonObject.get("result")?.asJsonArray
+            val result = jsonTree.asJsonObject.get(RESULT_KEY)?.asJsonArray
 
-            val gson = GsonBuilder().registerTypeAdapter(
-                AssetAmount::class.java,
-                AssetAmount.Deserializer()
-            ).create()
-
-            return gson.fromJson<List<AssetAmount>>(
+            return configureGson().fromJson<List<AssetAmount>>(
                 result,
                 object : TypeToken<List<AssetAmount>>() {}.type
             )
@@ -67,4 +62,8 @@ class RequiredFeesSocketOperation(
 
         return arrayListOf()
     }
+
+    private fun configureGson() = GsonBuilder().apply {
+        registerTypeAdapter(AssetAmount::class.java, AssetAmount.Deserializer())
+    }.create()
 }

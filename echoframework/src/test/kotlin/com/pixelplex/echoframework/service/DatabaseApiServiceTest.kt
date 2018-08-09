@@ -4,6 +4,7 @@ import com.google.common.primitives.UnsignedLong
 import com.pixelplex.echoframework.Callback
 import com.pixelplex.echoframework.exception.LocalException
 import com.pixelplex.echoframework.model.*
+import com.pixelplex.echoframework.model.contract.*
 import com.pixelplex.echoframework.model.network.Echodevnet
 import com.pixelplex.echoframework.service.internal.DatabaseApiServiceImpl
 import com.pixelplex.echoframework.support.error
@@ -264,4 +265,155 @@ class DatabaseApiServiceTest {
             }
     }
 
+
+    @Test
+    fun callContractNoChangingStateTest() {
+        val response = "0000000000000000000000000000000000000000000000000000000000000004"
+
+        val socketCoreComponent = ServiceSocketCoreComponentMock(response)
+
+        val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, Echodevnet())
+
+        databaseApiService.callContractNoChangingState(
+            "", "", "", ""
+        )
+            .value { result ->
+                assertNotNull(result)
+                assertEquals(result, response)
+            }
+            .error { fail() }
+    }
+
+    @Test
+    fun callContractNoChangingStateErrorTest() {
+        val socketCoreComponent = ServiceSocketCoreComponentMock(null)
+
+        val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, Echodevnet())
+
+        databaseApiService.callContractNoChangingState(
+            "", "", "", ""
+        )
+            .value { fail() }
+            .error { error ->
+                assertNotNull(error)
+            }
+    }
+
+    @Test
+    fun getContractResultTest() {
+        val response = ContractResult(ExecRes(excepted = "Done"), TrReceipt())
+
+        val socketCoreComponent = ServiceSocketCoreComponentMock(response)
+
+        val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, Echodevnet())
+
+        databaseApiService.getContractResult("")
+            .value { result ->
+                assertNotNull(result)
+                assertEquals(result.execRes.excepted, response.execRes.excepted)
+            }
+            .error { fail() }
+    }
+
+    @Test
+    fun getContractResultErrorTest() {
+        val socketCoreComponent = ServiceSocketCoreComponentMock(null)
+
+        val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, Echodevnet())
+
+        databaseApiService.getContractResult("")
+            .value { fail() }
+            .error { error ->
+                assertNotNull(error)
+            }
+    }
+
+    @Test
+    fun getAllContractsTest() {
+        val response = listOf(ContractInfo("1.16.1", "2.20.1", false))
+
+        val socketCoreComponent = ServiceSocketCoreComponentMock(response)
+
+        val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, Echodevnet())
+
+        databaseApiService.getAllContracts()
+            .value { result ->
+                assertNotNull(result)
+                assert(result.isNotEmpty())
+                assertEquals(result.first().getObjectId(), response.first().getObjectId())
+            }
+            .error { fail() }
+    }
+
+    @Test
+    fun getAllContractsErrorTest() {
+        val socketCoreComponent = ServiceSocketCoreComponentMock(null)
+
+        val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, Echodevnet())
+
+        databaseApiService.getAllContracts()
+            .value { fail() }
+            .error { error ->
+                assertNotNull(error)
+            }
+    }
+
+    @Test
+    fun getContractsTest() {
+        val response = listOf(ContractInfo("1.16.1", "2.20.1", false))
+
+        val socketCoreComponent = ServiceSocketCoreComponentMock(response)
+
+        val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, Echodevnet())
+
+        databaseApiService.getContracts(listOf())
+            .value { result ->
+                assertNotNull(result)
+                assert(result.isNotEmpty())
+                assertEquals(result.first().getObjectId(), response.first().getObjectId())
+            }
+            .error { fail() }
+    }
+
+    @Test
+    fun getContractsErrorTest() {
+        val socketCoreComponent = ServiceSocketCoreComponentMock(null)
+
+        val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, Echodevnet())
+
+        databaseApiService.getContracts(listOf())
+            .value { fail() }
+            .error { error ->
+                assertNotNull(error)
+            }
+    }
+
+    @Test
+    fun getContractTest() {
+        val response = ContractStruct(ContractInfo("1.16.1", "2.20.1", false))
+
+        val socketCoreComponent = ServiceSocketCoreComponentMock(response)
+
+        val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, Echodevnet())
+
+        databaseApiService.getContract("")
+            .value { result ->
+                assertNotNull(result)
+                assertEquals(result.contractInfo.getObjectId(), result.contractInfo.getObjectId())
+            }
+            .error { fail() }
+    }
+
+    @Test
+    fun getContractErrorTest() {
+        val socketCoreComponent = ServiceSocketCoreComponentMock(null)
+
+        val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, Echodevnet())
+
+        databaseApiService.getContract("")
+            .value { fail() }
+            .error { error ->
+                assertNotNull(error)
+            }
+    }
 }

@@ -2,7 +2,7 @@ package com.pixelplex.echoframework.core.crypto.internal
 
 import com.pixelplex.bitcoinj.Base58
 import com.pixelplex.bitcoinj.ECKey
-import com.pixelplex.echoframework.support.Checksum
+import com.pixelplex.echoframework.support.crypto.Checksum
 import com.pixelplex.echoframework.support.Converter
 
 /**

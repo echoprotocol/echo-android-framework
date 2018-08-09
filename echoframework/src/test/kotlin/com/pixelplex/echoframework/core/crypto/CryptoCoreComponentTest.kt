@@ -8,7 +8,7 @@ import com.pixelplex.echoframework.model.network.Echodevnet
 import com.pixelplex.echoframework.model.network.Network
 import com.pixelplex.echoframework.model.operations.TransferOperation
 import com.pixelplex.echoframework.model.operations.TransferOperationBuilder
-import com.pixelplex.echoframework.support.Signature.SIGN_DATA_BYTES
+import com.pixelplex.echoframework.support.crypto.Signature.SIGN_DATA_BYTES
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test

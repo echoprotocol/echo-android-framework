@@ -8,6 +8,9 @@ import com.pixelplex.echoframework.core.socket.SocketCoreComponent
 import com.pixelplex.echoframework.core.socket.SocketMessengerListener
 import com.pixelplex.echoframework.exception.LocalException
 import com.pixelplex.echoframework.model.*
+import com.pixelplex.echoframework.model.contract.ContractInfo
+import com.pixelplex.echoframework.model.contract.ContractResult
+import com.pixelplex.echoframework.model.contract.ContractStruct
 import com.pixelplex.echoframework.model.network.Network
 import com.pixelplex.echoframework.model.socketoperations.*
 import com.pixelplex.echoframework.service.DatabaseApiService
@@ -48,6 +51,7 @@ class DatabaseApiServiceImpl(
             id,
             namesOrIds,
             subscribe,
+            callId = socketCoreComponent.currentId,
             callback = callback,
             network = network
         )
@@ -57,13 +61,14 @@ class DatabaseApiServiceImpl(
     override fun getFullAccounts(
         namesOrIds: List<String>,
         subscribe: Boolean
-    ): Result<Exception, Map<String, FullAccount>> {
+    ): Result<LocalException, Map<String, FullAccount>> {
 
         val future = FutureTask<Map<String, FullAccount>>()
         val fullAccountsOperation = FullAccountsSocketOperation(
             id,
             namesOrIds,
             subscribe,
+            callId = socketCoreComponent.currentId,
             callback = object : Callback<Map<String, FullAccount>> {
                 override fun onSuccess(result: Map<String, FullAccount>) {
                     future.setComplete(result)
@@ -84,6 +89,7 @@ class DatabaseApiServiceImpl(
         val future = FutureTask<String>()
         val chainIdOperation = GetChainIdSocketOperation(
             id,
+            callId = socketCoreComponent.currentId,
             callback = object : Callback<String> {
                 override fun onSuccess(result: String) {
                     future.setComplete(result)
@@ -112,6 +118,7 @@ class DatabaseApiServiceImpl(
         val future = FutureTask<DynamicGlobalProperties>()
         val blockDataOperation = BlockDataSocketOperation(
             id,
+            socketCoreComponent.currentId,
             callback = object : Callback<DynamicGlobalProperties> {
                 override fun onSuccess(result: DynamicGlobalProperties) {
                     future.setComplete(result)
@@ -147,7 +154,13 @@ class DatabaseApiServiceImpl(
 
     override fun getBlock(blockNumber: String, callback: Callback<Block>) {
         val blockOperation =
-            GetBlockSocketOperation(id, blockNumber, callback = callback, network = network)
+            GetBlockSocketOperation(
+                id,
+                blockNumber,
+                callId = socketCoreComponent.currentId,
+                callback = callback,
+                network = network
+            )
 
         socketCoreComponent.emit(blockOperation)
     }
@@ -161,6 +174,7 @@ class DatabaseApiServiceImpl(
             id,
             operations,
             asset,
+            callId = socketCoreComponent.currentId,
             callback = object : Callback<List<AssetAmount>> {
                 override fun onSuccess(result: List<AssetAmount>) {
                     future.setComplete(result)
@@ -190,13 +204,17 @@ class DatabaseApiServiceImpl(
 
     override fun subscribeOnAccount(
         nameOrId: String,
-        listener: AccountListener
+        listener: AccountListener,
+        callback: Callback<Boolean>
     ) {
         synchronized(this) {
             if (!subscribed) {
                 socketCoreComponent.on(socketMessengerListener)
 
                 this.subscribed = subscribeCallBlocking()
+                if (!subscribed) {
+                    callback.onError(LocalException("Subscription request error"))
+                }
             }
 
             if (!subscriptionManager.registered(nameOrId)) {
@@ -204,10 +222,15 @@ class DatabaseApiServiceImpl(
                     .value { accountsMap ->
                         accountsMap[nameOrId]?.account?.getObjectId()?.let { requiredAccountId ->
                             subscriptionManager.registerListener(requiredAccountId, listener)
+                            callback.onSuccess(subscribed)
                         }
+                    }
+                    .error { error ->
+                        callback.onError(error)
                     }
             } else {
                 subscriptionManager.registerListener(nameOrId, listener)
+                callback.onSuccess(subscribed)
             }
         }
     }
@@ -236,6 +259,7 @@ class DatabaseApiServiceImpl(
             }
         } else {
             subscriptionManager.removeListeners(nameOrId)
+            callback.onSuccess(true)
         }
     }
 
@@ -243,16 +267,143 @@ class DatabaseApiServiceImpl(
         getFullAccounts(listOf(nameOrId), false)
             .flatMap { accountsMap ->
                 accountsMap[nameOrId]?.account?.getObjectId()?.let { Result.Value(it) }
-                        ?: Result.Error(LocalException())
+                    ?: Result.Error(LocalException())
             }
             .mapError {
                 LocalException("Unable to find required account id for identifier = $nameOrId")
             }
 
-    override fun unsubscribeAll(callback: Callback<Boolean>) =
+    override fun unsubscribeAll(callback: Callback<Boolean>) {
         synchronized(this) {
-            subscriptionManager.clear()
+            if (subscribed) {
+                cancelAllSubscriptions()
+                    .value { result ->
+                        subscribed = !result
+
+                        socketCoreComponent.off(socketMessengerListener)
+                        subscriptionManager.clear()
+                        callback.onSuccess(result)
+                    }
+                    .error { error ->
+                        callback.onError(error)
+                    }
+            } else {
+                callback.onSuccess(true)
+            }
         }
+    }
+
+    override fun callContractNoChangingState(
+        contractId: String,
+        registrarNameOrId: String,
+        assetId: String,
+        byteCode: String
+    ): Result<LocalException, String> {
+        val future = FutureTask<String>()
+        val requiredFeesOperation = QueryContractSocketOperation(
+            id,
+            contractId,
+            registrarNameOrId,
+            assetId,
+            byteCode,
+            callId = socketCoreComponent.currentId,
+            callback = object : Callback<String> {
+                override fun onSuccess(result: String) {
+                    future.setComplete(result)
+                }
+
+                override fun onError(error: LocalException) {
+                    future.setComplete(error)
+                }
+            }
+        )
+        socketCoreComponent.emit(requiredFeesOperation)
+
+        return future.wrapResult()
+    }
+
+    override fun getContractResult(historyId: String): Result<LocalException, ContractResult> {
+        val future = FutureTask<ContractResult>()
+        val requiredFeesOperation = GetContractResultSocketOperation(
+            id,
+            historyId,
+            callId = socketCoreComponent.currentId,
+            callback = object : Callback<ContractResult> {
+                override fun onSuccess(result: ContractResult) {
+                    future.setComplete(result)
+                }
+
+                override fun onError(error: LocalException) {
+                    future.setComplete(error)
+                }
+            }
+        )
+        socketCoreComponent.emit(requiredFeesOperation)
+
+        return future.wrapResult()
+    }
+
+    override fun getAllContracts(): Result<LocalException, List<ContractInfo>> {
+        val future = FutureTask<List<ContractInfo>>()
+        val requiredFeesOperation = GetAllContractsSocketOperation(
+            id,
+            callId = socketCoreComponent.currentId,
+            callback = object : Callback<List<ContractInfo>> {
+                override fun onSuccess(result: List<ContractInfo>) {
+                    future.setComplete(result)
+                }
+
+                override fun onError(error: LocalException) {
+                    future.setComplete(error)
+                }
+            }
+        )
+        socketCoreComponent.emit(requiredFeesOperation)
+
+        return future.wrapResult()
+    }
+
+    override fun getContracts(contractIds: List<String>): Result<LocalException, List<ContractInfo>> {
+        val future = FutureTask<List<ContractInfo>>()
+        val requiredFeesOperation = GetContractsSocketOperation(
+            id,
+            contractIds,
+            callId = socketCoreComponent.currentId,
+            callback = object : Callback<List<ContractInfo>> {
+                override fun onSuccess(result: List<ContractInfo>) {
+                    future.setComplete(result)
+                }
+
+                override fun onError(error: LocalException) {
+                    future.setComplete(error)
+                }
+            }
+        )
+        socketCoreComponent.emit(requiredFeesOperation)
+
+        return future.wrapResult()
+    }
+
+    override fun getContract(contractId: String): Result<LocalException, ContractStruct> {
+        val future = FutureTask<ContractStruct>()
+        val requiredFeesOperation = GetContractSocketOperation(
+            id,
+            contractId,
+            callId = socketCoreComponent.currentId,
+            callback = object : Callback<ContractStruct> {
+                override fun onSuccess(result: ContractStruct) {
+                    future.setComplete(result)
+                }
+
+                override fun onError(error: LocalException) {
+                    future.setComplete(error)
+                }
+            }
+        )
+        socketCoreComponent.emit(requiredFeesOperation)
+
+        return future.wrapResult()
+    }
 
     private fun subscribeCallBlocking(): Boolean {
         val futureResult = FutureTask<Boolean>()
@@ -284,11 +435,31 @@ class DatabaseApiServiceImpl(
         return result
     }
 
+    private fun cancelAllSubscriptions(): Result<LocalException, Boolean> {
+        val future = FutureTask<Boolean>()
+        val cancelSubscriptionsOperation = CancelAllSubscriptionsSocketOperation(
+            id,
+            callId = socketCoreComponent.currentId,
+            callback = object : Callback<Any> {
+                override fun onSuccess(result: Any) {
+                    future.setComplete(true)
+                }
+
+                override fun onError(error: LocalException) {
+                    future.setComplete(error)
+                }
+            }
+        )
+        socketCoreComponent.emit(cancelSubscriptionsOperation)
+
+        return future.wrapResult(false)
+    }
+
     private fun createSubscriptionOperation(clearFilter: Boolean, callback: Callback<Any>) =
         SetSubscribeCallbackSocketOperation(
             id,
             clearFilter,
-            SocketMethodType.CALL,
+            socketCoreComponent.currentId,
             callback
         )
 

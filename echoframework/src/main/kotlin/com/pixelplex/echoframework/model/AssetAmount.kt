@@ -4,7 +4,7 @@ import com.google.common.math.DoubleMath
 import com.google.common.primitives.UnsignedLong
 import com.google.gson.*
 import com.pixelplex.bitcoinj.revert
-import com.pixelplex.echoframework.BITSHARES_ASSET_ID
+import com.pixelplex.echoframework.ECHO_ASSET_ID
 import com.pixelplex.echoframework.exception.IncompatibleOperationException
 import com.pixelplex.echoframework.support.toUnsignedByteArray
 import java.lang.reflect.Type
@@ -19,7 +19,7 @@ import java.math.RoundingMode
  */
 class AssetAmount @JvmOverloads constructor(
     var amount: UnsignedLong,
-    val asset: Asset = Asset(BITSHARES_ASSET_ID)
+    val asset: Asset = Asset(ECHO_ASSET_ID)
 ) : GrapheneSerializable {
 
     /**
