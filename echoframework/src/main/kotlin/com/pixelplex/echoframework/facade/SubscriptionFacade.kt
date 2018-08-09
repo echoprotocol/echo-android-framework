@@ -15,8 +15,10 @@ interface SubscriptionFacade {
      *
      * @param nameOrId Required account id
      * @param listener Listener of events, associated with required account
+     * @param callback Listener of subscribing process state
+     *                 Receives true if subscribing succeed, otherwise false\error (if occurred)
      */
-    fun subscribeOnAccount(nameOrId: String, listener: AccountListener)
+    fun subscribeOnAccount(nameOrId: String, listener: AccountListener, callback: Callback<Boolean>)
 
     /**
      * Unsubscribe listeners from observing account event changes with id = [nameOrId]

@@ -72,18 +72,20 @@ interface GlobalsService {
     /**
      * Registers listener for notifying when account events occur
      *
-     * @param nameOrId       Account object id or name
-     * @param listener Listener for notifying
+     * @param nameOrId Account object id or name
+     * @param listener Listener for updates notifying
+     * @param callback Listener for notifying
      */
     fun subscribeOnAccount(
         nameOrId: String,
-        listener: AccountListener
+        listener: AccountListener,
+        callback: Callback<Boolean>
     )
 
     /**
      * Removes all listener, connected with required account [nameOrId], from events notifying
      *
-     * @param v       Account object id or name
+     * @param nameOrId Account object id or name
      * @param callback Listener for notifying
      */
     fun unsubscribeFromAccount(nameOrId: String, callback: Callback<Boolean>)
