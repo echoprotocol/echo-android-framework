@@ -8,7 +8,7 @@ import com.pixelplex.echoframework.exception.LocalException
 import com.pixelplex.echoframework.facade.AssetsFacade
 import com.pixelplex.echoframework.model.*
 import com.pixelplex.echoframework.model.operations.CreateAssetOperation
-import com.pixelplex.echoframework.model.operations.IssueAssetOperation
+import com.pixelplex.echoframework.model.operations.IssueAssetOperationBuilder
 import com.pixelplex.echoframework.service.DatabaseApiService
 import com.pixelplex.echoframework.service.NetworkBroadcastApiService
 import com.pixelplex.echoframework.support.Result
@@ -101,11 +101,11 @@ class AssetsFacadeImpl(
             val blockData = databaseApiService.getBlockData()
             val chainId = getChainId()
 
-            val operation = IssueAssetOperation(
-                issuer!!,
-                AssetAmount(UnsignedLong.valueOf(amount.toLong()), Asset(asset)),
-                target!!
-            )
+            val operation = IssueAssetOperationBuilder()
+                .setIssuer(issuer!!)
+                .setAmount(AssetAmount(UnsignedLong.valueOf(amount.toLong()), Asset(asset)))
+                .setDestination(target!!)
+                .build()
 
             val privateKey =
                 cryptoCoreComponent.getPrivateKey(
