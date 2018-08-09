@@ -284,6 +284,7 @@ class EchoFrameworkTest {
         if (connect(framework) == false) Assert.fail("Connection error")
 
         val futureSubscriptionById = FutureTask<Account>()
+        val futureSubscriptionResult = FutureTask<Boolean>()
 
         framework.subscribeOnAccount("1.2.18", object : AccountListener {
 
@@ -291,6 +292,14 @@ class EchoFrameworkTest {
                 futureSubscriptionById.setComplete(updatedAccount)
             }
 
+        }, object : Callback<Boolean>{
+            override fun onSuccess(result: Boolean) {
+                futureSubscriptionResult.setComplete(result)
+            }
+
+            override fun onError(error: LocalException) {
+                futureSubscriptionResult.setComplete(error)
+            }
         })
 
         thread {
@@ -299,6 +308,7 @@ class EchoFrameworkTest {
         }
 
         assertNotNull(futureSubscriptionById.get())
+        assertTrue(futureSubscriptionResult.get() ?: false)
     }
 
     @Test
@@ -308,6 +318,7 @@ class EchoFrameworkTest {
         if (connect(framework) == false) Assert.fail("Connection error")
 
         val futureSubscriptionByName = FutureTask<Account>()
+        val futureSubscriptionResult = FutureTask<Boolean>()
 
         framework.subscribeOnAccount("dima1", object : AccountListener {
 
@@ -315,6 +326,14 @@ class EchoFrameworkTest {
                 futureSubscriptionByName.setComplete(updatedAccount)
             }
 
+        }, object : Callback<Boolean> {
+            override fun onSuccess(result: Boolean) {
+                futureSubscriptionResult.setComplete(result)
+            }
+
+            override fun onError(error: LocalException) {
+                futureSubscriptionResult.setComplete(error)
+            }
         })
 
         thread {
@@ -323,6 +342,7 @@ class EchoFrameworkTest {
         }
 
         assertNotNull(futureSubscriptionByName.get())
+        assertTrue(futureSubscriptionResult.get() ?: false)
     }
 
     private fun changePassword(framework: EchoFramework, callback: Callback<Any>) {
