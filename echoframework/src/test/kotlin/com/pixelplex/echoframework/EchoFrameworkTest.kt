@@ -46,14 +46,15 @@ class EchoFrameworkTest {
     private val password = "P5HyvBoQJQKXmcJw5CAK8UkzwFMLK3DAecniAHH7BM6Ci"
     private val legalHistoryItemId = "1.17.2"
     private val legalAssetId = "1.3.0"
-    private val legalContractByteCode = "60806040526000805534801561001457600080fd5b5061011480610024" +
-            "6000396000f300608060405260043610605c5763ffffffff7c010000000000000000000000000000000000" +
-            "00000000000000000000006000350416635b34b966811460615780635b9af12b146075578063a87d942c14" +
-            "608a578063f5c5ad831460ae575b600080fd5b348015606c57600080fd5b50607360c0565b005b34801560" +
-            "8057600080fd5b50607360043560cb565b348015609557600080fd5b50609c60d6565b6040805191825251" +
-            "9081900360200190f35b34801560b957600080fd5b50607360dc565b600080546001019055565b60008054" +
-            "9091019055565b60005490565b600080546000190190555600a165627a7a7230582016b3f6673de41336e2" +
-            "c5d4b136b4e67bbf43062b6bc47eaef982648cd3b92a9d0029"
+    private val legalContractByteCode =
+        "60806040526000805534801561001457600080fd5b5061011480610024" +
+                "6000396000f300608060405260043610605c5763ffffffff7c010000000000000000000000000000000000" +
+                "00000000000000000000006000350416635b34b966811460615780635b9af12b146075578063a87d942c14" +
+                "608a578063f5c5ad831460ae575b600080fd5b348015606c57600080fd5b50607360c0565b005b34801560" +
+                "8057600080fd5b50607360043560cb565b348015609557600080fd5b50609c60d6565b6040805191825251" +
+                "9081900360200190f35b34801560b957600080fd5b50607360dc565b600080546001019055565b60008054" +
+                "9091019055565b60005490565b600080546000190190555600a165627a7a7230582016b3f6673de41336e2" +
+                "c5d4b136b4e67bbf43062b6bc47eaef982648cd3b92a9d0029"
 
     private val illegalContractId = "1.16.-1"
     private val illegalHistoryItemId = "1.17.-1"
@@ -508,7 +509,10 @@ class EchoFrameworkTest {
 //
 //        val futureAsset = FutureTask<Boolean>()
 //
-//        val asset = Asset("", "RTJHRTDFS", 4, "1.2.18").apply {
+//        val asset = Asset("").apply {
+//            symbol = "DFGDSFASD"
+//            precision = 4
+//            issuer = Account("1.2.18")
 //            setBtsOptions(
 //                BitassetOptions(
 //                    86400, 7, 86400,
@@ -521,17 +525,19 @@ class EchoFrameworkTest {
 //
 //        val options =
 //            AssetOptions(
-//                UnsignedLong.valueOf(100000), 0.toLong(), UnsignedLong.ZERO, 79, 1,
+//                UnsignedLong.valueOf(100000), 0.toLong(), UnsignedLong.ZERO, 79, 10,
 //                Price().apply {
 //                    this.quote = AssetAmount(UnsignedLong.valueOf(1), Asset("1.3.1"))
 //                    this.base = AssetAmount(UnsignedLong.valueOf(1), Asset("1.3.0"))
 //                }, "description"
-//            )
+//            ).apply {
+//                whitelistAuthorities = setOf(Account("1.2.19"))
+//            }
 //
 //        asset.assetOptions = options
 //
 //        framework.createAsset(
-//            "dima1", "P5KctJPedZ4K9T77KgmqhVNJ5H6FojEN6fRVp9PYyhAb9",
+//            "dima1", "P5J8pDyzznMmEdiBCdgB7VKtMBuxw5e4MAJEo3sfUbxcM",
 //            asset,
 //            object : Callback<Boolean> {
 //                override fun onSuccess(result: Boolean) {

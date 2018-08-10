@@ -39,7 +39,7 @@ class CreateAssetOperation @JvmOverloads constructor(
         add(id)
         val jsonObject = JsonObject().apply {
             add(KEY_FEE, fee.toJsonObject())
-            addProperty(ISSUER_KEY, asset.issuer)
+            addProperty(ISSUER_KEY, asset.issuer!!.getObjectId())
             addProperty(SYMBOL_KEY, asset.symbol ?: "")
             addProperty(PRECISION_KEY, asset.precision)
             add(OPTIONS_KEY, asset.assetOptions?.toJsonObject())
@@ -89,7 +89,9 @@ class CreateAssetOperation @JvmOverloads constructor(
                 AssetAmount::class.java
             )
 
-            val parsedIssuer = jsonObject.get(ISSUER_KEY).asString
+            val parsedIssuerId = jsonObject.get(ISSUER_KEY).asString
+            val issuerAccount = Account(parsedIssuerId)
+
             val parsedSymbol = jsonObject.get(SYMBOL_KEY).asString
             val parsedPrecision = jsonObject.get(PRECISION_KEY).asInt
             val parsedOptions = context.deserialize<AssetOptions>(
@@ -103,7 +105,7 @@ class CreateAssetOperation @JvmOverloads constructor(
             val parsedPredictionMarket = jsonObject.get(PREDICTION_MARKET_KEY).asBoolean
 
             val asset = Asset(DEFAULT_ASSET_ID).apply {
-                issuer = parsedIssuer
+                issuer = issuerAccount
                 symbol = parsedSymbol
                 precision = parsedPrecision
                 assetOptions = parsedOptions
