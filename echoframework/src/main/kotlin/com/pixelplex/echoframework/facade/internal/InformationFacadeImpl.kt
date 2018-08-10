@@ -7,6 +7,7 @@ import com.pixelplex.echoframework.exception.NotFoundException
 import com.pixelplex.echoframework.facade.InformationFacade
 import com.pixelplex.echoframework.model.*
 import com.pixelplex.echoframework.model.operations.AccountUpdateOperation
+import com.pixelplex.echoframework.model.operations.CreateAssetOperation
 import com.pixelplex.echoframework.model.operations.OperationType
 import com.pixelplex.echoframework.model.operations.TransferOperation
 import com.pixelplex.echoframework.service.AccountHistoryApiService
@@ -171,7 +172,7 @@ class InformationFacadeImpl(
                 continue
             }
 
-           when (operation.type) {
+            when (operation.type) {
                 OperationType.ACCOUNT_UPDATE_OPERATION ->
                     processAccountUpdateOperation(
                         operation as AccountUpdateOperation,
@@ -180,6 +181,9 @@ class InformationFacadeImpl(
 
                 OperationType.TRANSFER_OPERATION ->
                     processTransferOperation(operation as TransferOperation, accountsRegistry)
+
+                OperationType.ASSET_CREATE_OPERATION ->
+                    processAssetCreateOperation(operation as CreateAssetOperation, accountsRegistry)
 
                 else -> {
                 }
@@ -233,6 +237,26 @@ class InformationFacadeImpl(
                 accountsMap[toAccountId]?.account?.let { notNullToAccount ->
                     operation.to = notNullToAccount
                     accountRegistry[toAccountId] = notNullToAccount
+                }
+            }
+    }
+
+    private fun processAssetCreateOperation(
+        operation: CreateAssetOperation,
+        accountRegistry: MutableMap<String, Account>
+    ) {
+        val accountId = operation.asset.issuer?.getObjectId() ?: return
+
+        accountRegistry[accountId]?.let { account ->
+            operation.asset.issuer = account
+            return
+        }
+
+        databaseApiService.getFullAccounts(listOf(accountId), false)
+            .value { accountsMap ->
+                accountsMap[accountId]?.account?.let { notNullAccount ->
+                    operation.asset.issuer = notNullAccount
+                    accountRegistry[accountId] = notNullAccount
                 }
             }
     }

@@ -14,24 +14,19 @@ import java.lang.reflect.Type
  * @author Dmitriy Bushuev
  */
 class AssetOptions @JvmOverloads constructor(
-    @SerializedName(MAX_SUPPLY_KEY)
-    var maxSupply: UnsignedLong? = null,
-    @SerializedName(MARKET_FEE_PERCENT_KEY)
-    var marketFeePercent: Long = 0,
-    @SerializedName(MAX_MARKET_FEE_KEY)
-    var maxMarketFee: UnsignedLong? = null,
-    @SerializedName(ISSUER_PERMISSION_KEY)
-    var issuerPermissions: Long = 0,
+    @SerializedName(MAX_SUPPLY_KEY) var maxSupply: UnsignedLong? = null,
+    @SerializedName(MARKET_FEE_PERCENT_KEY) var marketFeePercent: Long = 0,
+    @SerializedName(MAX_MARKET_FEE_KEY) var maxMarketFee: UnsignedLong? = null,
+    @SerializedName(ISSUER_PERMISSION_KEY) var issuerPermissions: Long = 0,
     var flags: Int = 0,
-    @SerializedName(CORE_EXCHANGE_RATE_KEY)
-    var coreExchangeRate: Price? = null,
+    @SerializedName(CORE_EXCHANGE_RATE_KEY) var coreExchangeRate: Price? = null,
     var description: String? = null
 ) : JsonSerializable, ByteSerializable {
 
-    var whitelistAuthorities: Set<String> = setOf()
-    var blacklistAuthorities: Set<String> = setOf()
-    var whitelistMarkets: Set<String> = setOf()
-    var blacklistMarkets: Set<String> = setOf()
+    var whitelistAuthorities: Set<Account> = setOf()
+    var blacklistAuthorities: Set<Account> = setOf()
+    var whitelistMarkets: Set<Account> = setOf()
+    var blacklistMarkets: Set<Account> = setOf()
 
     var extensions = Extensions()
 
@@ -45,19 +40,19 @@ class AssetOptions @JvmOverloads constructor(
 
         var whitelistAuthoritiesBytes =
             byteArrayOf(whitelistAuthorities.size.toByte())
-        whitelistAuthorities.forEach { auth -> whitelistAuthoritiesBytes += Account(auth).toBytes() }
+        whitelistAuthorities.forEach { auth -> whitelistAuthoritiesBytes += auth.toBytes() }
 
         var blacklistAuthoritiesBytes =
             byteArrayOf(blacklistAuthorities.size.toByte())
-        blacklistAuthorities.forEach { auth -> blacklistAuthoritiesBytes += Account(auth).toBytes() }
+        blacklistAuthorities.forEach { auth -> blacklistAuthoritiesBytes += auth.toBytes() }
 
         var whitelistMarketsBytes =
             byteArrayOf(whitelistMarkets.size.toByte())
-        whitelistMarkets.forEach { market -> whitelistMarketsBytes += Account(market).toBytes() }
+        whitelistMarkets.forEach { market -> whitelistMarketsBytes += market.toBytes() }
 
         var blacklistMarketsBytes =
             byteArrayOf(blacklistMarkets.size.toByte())
-        blacklistMarkets.forEach { market -> blacklistMarketsBytes += Account(market).toBytes() }
+        blacklistMarkets.forEach { market -> blacklistMarketsBytes += market.toBytes() }
 
         val descriptionBytes =
             byteArrayOf((description?.length ?: 0).toByte()) + (description?.toByteArray()
@@ -89,10 +84,14 @@ class AssetOptions @JvmOverloads constructor(
         addProperty(ISSUER_PERMISSION_KEY, issuerPermissions)
         addProperty(FLAGS_KEY, flags)
         add(CORE_EXCHANGE_RATE_KEY, coreExchangeRate?.toJsonObject())
-        add(WHITELIST_KEY, JsonArray().apply { whitelistAuthorities.forEach { add(it) } })
-        add(BLACKLIST_KEY, JsonArray().apply { blacklistAuthorities.forEach { add(it) } })
-        add(WHITELIST_MARKETS_KEY, JsonArray().apply { whitelistMarkets.forEach { add(it) } })
-        add(BLACKLIST_MARKETS_KEY, JsonArray().apply { blacklistMarkets.forEach { add(it) } })
+        add(WHITELIST_KEY,
+            JsonArray().apply { whitelistAuthorities.forEach { add(it.getObjectId()) } })
+        add(BLACKLIST_KEY,
+            JsonArray().apply { blacklistAuthorities.forEach { add(it.getObjectId()) } })
+        add(WHITELIST_MARKETS_KEY,
+            JsonArray().apply { whitelistMarkets.forEach { add(it.getObjectId()) } })
+        add(BLACKLIST_MARKETS_KEY,
+            JsonArray().apply { blacklistMarkets.forEach { add(it.getObjectId()) } })
         addProperty(DESCRIPTION_KEY, description ?: "")
         add(EXTENSIONS_KEY, extensions.toJsonObject())
     }
@@ -122,6 +121,28 @@ class AssetOptions @JvmOverloads constructor(
                 Price::class.java
             )
 
+            val parsedWhitelistAuthorities = mutableSetOf<Account>()
+            val parsedBlacklistAuthorities = mutableSetOf<Account>()
+            val parsedWhitelistMarkets = mutableSetOf<Account>()
+            val parsedBlacklistMarkets = mutableSetOf<Account>()
+
+            jsonOptions.get(WHITELIST_KEY)?.let {
+                it.asJsonArray.forEach { accountId ->
+                    parsedWhitelistAuthorities.add(Account(accountId.asString))
+                }
+            }
+            jsonOptions.get(BLACKLIST_KEY)?.let {
+                it.asJsonArray.forEach { accountId ->
+                    parsedBlacklistAuthorities.add(Account(accountId.asString))
+                }
+            }
+            jsonOptions.get(WHITELIST_MARKETS_KEY)?.let {
+                it.asJsonArray.forEach { accountId -> parsedWhitelistMarkets.add(Account(accountId.asString)) }
+            }
+            jsonOptions.get(BLACKLIST_MARKETS_KEY)?.let {
+                it.asJsonArray.forEach { accountId -> parsedBlacklistMarkets.add(Account(accountId.asString)) }
+            }
+
             return AssetOptions(
                 maxSupply,
                 marketFeePercent,
@@ -130,7 +151,12 @@ class AssetOptions @JvmOverloads constructor(
                 flags,
                 coreExchangeRate,
                 description
-            )
+            ).apply {
+                this.whitelistAuthorities = parsedWhitelistAuthorities
+                this.blacklistAuthorities = parsedBlacklistAuthorities
+                this.whitelistMarkets = parsedWhitelistMarkets
+                this.blacklistAuthorities = parsedBlacklistMarkets
+            }
         }
     }
 

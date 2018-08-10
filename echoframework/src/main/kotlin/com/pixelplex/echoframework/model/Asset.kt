@@ -7,44 +7,31 @@ import com.google.gson.annotations.SerializedName
  *
  * @author Dmitriy Bushuev
  */
-class Asset : GrapheneObject, ByteSerializable {
+class Asset(id: String) : GrapheneObject(id), ByteSerializable {
 
     var symbol: String? = null
 
     var precision = -1
 
-    var issuer: String? = null
+    var issuer: Account? = null
 
-    @SerializedName("dynamic_asset_data_id")
+    @SerializedName(DYNAMIC_ASSET_DATA_ID_KEY)
     var dynamicAssetDataId: String? = null
 
-    @SerializedName("options")
+    @SerializedName(OPTIONS_KEY)
     var assetOptions: AssetOptions? = null
 
     var bitassetOptions = Optional<BitassetOptions>(null)
 
     var predictionMarket = false
 
-    @SerializedName("bitasset_data_id")
+    @SerializedName(BITASSET_DATA_ID_KEY)
     var bitAssetId: String? = null
-
-    constructor(id: String) : super(id)
-
-    constructor(id: String, symbol: String, precision: Int) : super(id) {
-        this.symbol = symbol
-        this.precision = precision
-    }
-
-    constructor(id: String, symbol: String, precision: Int, issuer: String) : super(id) {
-        this.symbol = symbol
-        this.precision = precision
-        this.issuer = issuer
-    }
 
     /**
      * Asset copy constructor
      */
-    constructor(asset: Asset) : super(asset.getObjectId()) {
+    constructor(asset: Asset) : this(asset.getObjectId()) {
         this.symbol = asset.symbol
         this.precision = asset.precision
         this.issuer = asset.issuer
@@ -66,7 +53,7 @@ class Asset : GrapheneObject, ByteSerializable {
     fun getBtsOptions() = bitassetOptions.field
 
     override fun toBytes(): ByteArray {
-        val issuerBytes = Account(issuer!!).toBytes()
+        val issuerBytes = issuer!!.toBytes()
         val symbolBytes = byteArrayOf(symbol!!.length.toByte()) + symbol!!.toByteArray()
         val precisionBytes = precision.toByte()
         val optionsBytes = assetOptions!!.toBytes()
@@ -83,6 +70,12 @@ class Asset : GrapheneObject, ByteSerializable {
         this.getObjectId() == other.getObjectId()
     } else {
         false
+    }
+
+    companion object {
+        private const val DYNAMIC_ASSET_DATA_ID_KEY = "dynamic_asset_data_id"
+        private const val OPTIONS_KEY = "options"
+        private const val BITASSET_DATA_ID_KEY = "bitasset_data_id"
     }
 
 }
