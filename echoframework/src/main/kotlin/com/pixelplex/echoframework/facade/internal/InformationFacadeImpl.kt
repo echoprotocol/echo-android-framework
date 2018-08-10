@@ -6,10 +6,7 @@ import com.pixelplex.echoframework.exception.LocalException
 import com.pixelplex.echoframework.exception.NotFoundException
 import com.pixelplex.echoframework.facade.InformationFacade
 import com.pixelplex.echoframework.model.*
-import com.pixelplex.echoframework.model.operations.AccountUpdateOperation
-import com.pixelplex.echoframework.model.operations.CreateAssetOperation
-import com.pixelplex.echoframework.model.operations.OperationType
-import com.pixelplex.echoframework.model.operations.TransferOperation
+import com.pixelplex.echoframework.model.operations.*
 import com.pixelplex.echoframework.service.AccountHistoryApiService
 import com.pixelplex.echoframework.service.DatabaseApiService
 import com.pixelplex.echoframework.support.*
@@ -185,6 +182,9 @@ class InformationFacadeImpl(
                 OperationType.ASSET_CREATE_OPERATION ->
                     processAssetCreateOperation(operation as CreateAssetOperation, accountsRegistry)
 
+                OperationType.ASSET_ISSUE_OPERATION ->
+                    processAssetIssueOperation(operation as IssueAssetOperation, accountsRegistry)
+
                 else -> {
                 }
             }
@@ -257,6 +257,32 @@ class InformationFacadeImpl(
                 accountsMap[accountId]?.account?.let { notNullAccount ->
                     operation.asset.issuer = notNullAccount
                     accountRegistry[accountId] = notNullAccount
+                }
+            }
+    }
+
+    private fun processAssetIssueOperation(
+        operation: IssueAssetOperation,
+        accountRegistry: MutableMap<String, Account>
+    ) {
+        val fromAccountId = operation.issuer.getObjectId()
+        val toAccountId = operation.issueToAccount.getObjectId()
+
+        if (accountRegistry.containsKey(fromAccountId) && accountRegistry.containsKey(toAccountId)) {
+            accountRegistry[fromAccountId]?.let { operation.issuer = it }
+            accountRegistry[toAccountId]?.let { operation.issueToAccount = it }
+            return
+        }
+
+        databaseApiService.getFullAccounts(listOf(fromAccountId, toAccountId), false)
+            .value { accountsMap ->
+                accountsMap[fromAccountId]?.account?.let { notNullFromAccount ->
+                    operation.issuer = notNullFromAccount
+                    accountRegistry[fromAccountId] = notNullFromAccount
+                }
+                accountsMap[toAccountId]?.account?.let { notNullToAccount ->
+                    operation.issueToAccount = notNullToAccount
+                    accountRegistry[toAccountId] = notNullToAccount
                 }
             }
     }

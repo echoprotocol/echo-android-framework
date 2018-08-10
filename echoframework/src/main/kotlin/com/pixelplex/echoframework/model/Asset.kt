@@ -1,6 +1,10 @@
 package com.pixelplex.echoframework.model
 
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonElement
 import com.google.gson.annotations.SerializedName
+import java.lang.reflect.Type
 
 /**
  * Class used to represent a specific asset on the Graphene platform
@@ -72,10 +76,59 @@ class Asset(id: String) : GrapheneObject(id), ByteSerializable {
         false
     }
 
+    /**
+     * Json deserializer for [Asset]
+     */
+    class AssetDeserializer : JsonDeserializer<Asset> {
+
+        override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext
+        ): Asset? {
+            if (json == null || !json.isJsonObject) return null
+
+            val jsonOptions = json.asJsonObject
+
+            val parsedId = jsonOptions.get(KEY_ID).asString
+            val parsedSymbol = jsonOptions.get(SYMBOL_KEY)?.asString
+            val parsedPrecision = jsonOptions.get(PRECISION_KEY)?.asInt ?: -1
+            val issuerId = jsonOptions.get(ISSUER_KEY).asString
+            val parsedIssuer = Account(issuerId)
+            val parsedDynamicAssetDataId = jsonOptions.get(DYNAMIC_ASSET_DATA_ID_KEY)?.asString
+            val parsedAssetOptions = context.deserialize<AssetOptions>(
+                jsonOptions.get(OPTIONS_KEY),
+                AssetOptions::class.java
+            )
+            val parsedBitassetOptions = context.deserialize<BitassetOptions>(
+                jsonOptions.get(BITASSETS_OPTIONS_KEY),
+                BitassetOptions::class.java
+            )
+            val parsedPredictionMarket = jsonOptions.get(PREDICTION_MARKET_KEY)?.asBoolean ?: false
+            val parsedBitAssetId = jsonOptions.get(BITASSET_DATA_ID_KEY)?.asString
+
+            return Asset(parsedId).apply {
+                this.symbol = parsedSymbol
+                this.precision = parsedPrecision
+                this.issuer = parsedIssuer
+                this.dynamicAssetDataId = parsedDynamicAssetDataId
+                this.assetOptions = parsedAssetOptions
+                this.setBtsOptions(parsedBitassetOptions)
+                this.predictionMarket = parsedPredictionMarket
+                this.bitAssetId = parsedBitAssetId
+            }
+        }
+    }
+
     companion object {
-        private const val DYNAMIC_ASSET_DATA_ID_KEY = "dynamic_asset_data_id"
-        private const val OPTIONS_KEY = "options"
-        private const val BITASSET_DATA_ID_KEY = "bitasset_data_id"
+       const val ISSUER_KEY = "issuer"
+       const val PRECISION_KEY = "precision"
+       const val SYMBOL_KEY = "symbol"
+       const val DYNAMIC_ASSET_DATA_ID_KEY = "dynamic_asset_data_id"
+       const val OPTIONS_KEY = "options"
+       const val BITASSET_DATA_ID_KEY = "bitasset_data_id"
+       const val BITASSETS_OPTIONS_KEY = "bitasset_opts"
+       const val PREDICTION_MARKET_KEY = "is_prediction_market"
     }
 
 }
