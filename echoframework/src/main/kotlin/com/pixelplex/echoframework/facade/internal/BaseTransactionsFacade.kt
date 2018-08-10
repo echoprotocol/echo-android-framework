@@ -6,6 +6,7 @@ import com.pixelplex.echoframework.exception.LocalException
 import com.pixelplex.echoframework.model.*
 import com.pixelplex.echoframework.service.DatabaseApiService
 import com.pixelplex.echoframework.support.dematerialize
+import java.math.BigInteger
 
 /**
  * Includes base logic for transactions assembly
@@ -35,6 +36,31 @@ abstract class BaseTransactionsFacade(
         if (!isKeySame) {
             throw LocalException("Owner account checking exception")
         }
+    }
+
+    protected fun generateMemo(
+        privateKey: ByteArray,
+        fromAccount: Account,
+        toAccount: Account,
+        message: String?
+    ): Memo {
+        if (message != null) {
+            val encryptedMessage = cryptoCoreComponent.encryptMessage(
+                privateKey,
+                toAccount.options.memoKey!!.key,
+                BigInteger.ZERO,
+                message
+            )
+
+            return Memo(
+                Address(fromAccount.options.memoKey!!),
+                Address(toAccount.options.memoKey!!),
+                BigInteger.ZERO,
+                encryptedMessage ?: ByteArray(0)
+            )
+        }
+
+        return Memo()
     }
 
 }

@@ -85,7 +85,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         feeFacade = FeeFacadeImpl(databaseApiService)
         informationFacade = InformationFacadeImpl(databaseApiService, accountHistoryApiService)
         subscriptionFacade =
-                SubscriptionFacadeImpl(databaseApiService)
+                SubscriptionFacadeImpl(socketCoreComponent, databaseApiService, settings.network)
         transactionsFacade =
                 TransactionsFacadeImpl(
                     databaseApiService,

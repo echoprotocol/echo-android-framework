@@ -10,9 +10,13 @@ import com.pixelplex.echoframework.model.*
 import com.pixelplex.echoframework.model.network.Network
 import com.pixelplex.echoframework.model.operations.AccountUpdateOperation
 import com.pixelplex.echoframework.model.operations.AccountUpdateOperationBuilder
+import com.pixelplex.echoframework.processResult
 import com.pixelplex.echoframework.service.DatabaseApiService
 import com.pixelplex.echoframework.service.NetworkBroadcastApiService
-import com.pixelplex.echoframework.support.*
+import com.pixelplex.echoframework.support.dematerialize
+import com.pixelplex.echoframework.support.error
+import com.pixelplex.echoframework.support.map
+import com.pixelplex.echoframework.support.value
 
 /**
  * Implementation of [AuthenticationFacade]
@@ -54,26 +58,22 @@ class AuthenticationFacadeImpl(
         oldPassword: String,
         newPassword: String,
         callback: Callback<Any>
-    ) {
-        Result {
-            val accountId = getAccountId(name, oldPassword)
-            val operation: AccountUpdateOperation =
-                buildAccountUpdateOperation(accountId, name, newPassword)
+    ) = callback.processResult {
+        val accountId = getAccountId(name, oldPassword)
+        val operation: AccountUpdateOperation =
+            buildAccountUpdateOperation(accountId, name, newPassword)
 
-            val blockData = databaseApiService.getBlockData()
-            val chainId = getChainId()
+        val blockData = databaseApiService.getBlockData()
+        val chainId = getChainId()
 
-            val privateKey =
-                cryptoCoreComponent.getPrivateKey(name, oldPassword, AuthorityType.OWNER)
-            val transaction = Transaction(privateKey, blockData, listOf(operation), chainId)
+        val privateKey =
+            cryptoCoreComponent.getPrivateKey(name, oldPassword, AuthorityType.OWNER)
+        val transaction = Transaction(privateKey, blockData, listOf(operation), chainId)
 
-            val fees = getFees(listOf(operation))
-            transaction.setFees(fees)
+        val fees = getFees(listOf(operation))
+        transaction.setFees(fees)
 
-            networkBroadcastApiService.broadcastTransactionWithCallback(transaction).dematerialize()
-        }
-            .value { result -> callback.onSuccess(result) }
-            .error { error -> callback.onError(LocalException(error)) }
+        networkBroadcastApiService.broadcastTransactionWithCallback(transaction).dematerialize()
     }
 
     private fun getAccountId(name: String, password: String): String {
@@ -102,7 +102,8 @@ class AuthenticationFacadeImpl(
         newPassword: String
     ): AccountUpdateOperation {
         val newOwnerKey = cryptoCoreComponent.getAddress(name, newPassword, AuthorityType.OWNER)
-        val newActiveKey = cryptoCoreComponent.getAddress(name, newPassword, AuthorityType.ACTIVE)
+        val newActiveKey =
+            cryptoCoreComponent.getAddress(name, newPassword, AuthorityType.ACTIVE)
         val address = Address(newActiveKey, network)
         val ownerAuthority =
             Authority(1, hashMapOf(Address(newOwnerKey, network).pubKey to 1L), hashMapOf())

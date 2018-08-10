@@ -34,13 +34,13 @@ class CreateAssetOperation @JvmOverloads constructor(
         add(id)
         val jsonObject = JsonObject().apply {
             add(KEY_FEE, fee.toJsonObject())
-            addProperty(ISSUER_KEY, asset.issuer)
-            addProperty(SYMBOL_KEY, asset.symbol ?: "")
-            addProperty(PRECISION_KEY, asset.precision)
+            addProperty(Asset.ISSUER_KEY, asset.issuer!!.getObjectId())
+            addProperty(Asset.SYMBOL_KEY, asset.symbol ?: "")
+            addProperty(Asset.PRECISION_KEY, asset.precision)
             add(OPTIONS_KEY, asset.assetOptions?.toJsonObject())
             if (asset.getBtsOptions() != null)
-                add(BITASSETS_OPTIONS_KEY, asset.getBtsOptions()!!.toJsonObject())
-            addProperty(PREDICTION_MARKET_KEY, asset.predictionMarket)
+                add(Asset.BITASSETS_OPTIONS_KEY, asset.getBtsOptions()!!.toJsonObject())
+            addProperty(Asset.PREDICTION_MARKET_KEY, asset.predictionMarket)
             add(EXTENSIONS_KEY, extensions.toJsonObject())
         }
         add(jsonObject)
@@ -84,21 +84,23 @@ class CreateAssetOperation @JvmOverloads constructor(
                 AssetAmount::class.java
             )
 
-            val parsedIssuer = jsonObject.get(ISSUER_KEY).asString
-            val parsedSymbol = jsonObject.get(SYMBOL_KEY).asString
-            val parsedPrecision = jsonObject.get(PRECISION_KEY).asInt
+            val parsedIssuerId = jsonObject.get(Asset.ISSUER_KEY).asString
+            val issuerAccount = Account(parsedIssuerId)
+
+            val parsedSymbol = jsonObject.get(Asset.SYMBOL_KEY).asString
+            val parsedPrecision = jsonObject.get(Asset.PRECISION_KEY).asInt
             val parsedOptions = context.deserialize<AssetOptions>(
                 jsonObject.get(OPTIONS_KEY),
                 AssetOptions::class.java
             )
             val parsedBitassetOpts = context.deserialize<BitassetOptions>(
-                jsonObject.get(BITASSETS_OPTIONS_KEY),
+                jsonObject.get(Asset.BITASSETS_OPTIONS_KEY),
                 BitassetOptions::class.java
             )
-            val parsedPredictionMarket = jsonObject.get(PREDICTION_MARKET_KEY).asBoolean
+            val parsedPredictionMarket = jsonObject.get(Asset.PREDICTION_MARKET_KEY).asBoolean
 
             val asset = Asset(DEFAULT_ASSET_ID).apply {
-                issuer = parsedIssuer
+                issuer = issuerAccount
                 symbol = parsedSymbol
                 precision = parsedPrecision
                 assetOptions = parsedOptions
@@ -111,14 +113,8 @@ class CreateAssetOperation @JvmOverloads constructor(
     }
 
     companion object {
-        private const val ISSUER_KEY = "issuer"
-        private const val SYMBOL_KEY = "symbol"
-        private const val PRECISION_KEY = "precision"
         private const val OPTIONS_KEY = "common_options"
-        private const val BITASSETS_OPTIONS_KEY = "bitasset_opts"
-        private const val PREDICTION_MARKET_KEY = "is_prediction_market"
         private const val EXTENSIONS_KEY = "extensions"
-
         private const val DEFAULT_ASSET_ID = "1.3.1"
     }
 

@@ -9,6 +9,7 @@ import com.pixelplex.echoframework.model.AuthorityType
 import com.pixelplex.echoframework.model.Transaction
 import com.pixelplex.echoframework.model.contract.*
 import com.pixelplex.echoframework.model.operations.ContractOperationBuilder
+import com.pixelplex.echoframework.processResult
 import com.pixelplex.echoframework.service.DatabaseApiService
 import com.pixelplex.echoframework.service.NetworkBroadcastApiService
 import com.pixelplex.echoframework.support.Result
@@ -86,53 +87,48 @@ class ContractsFacadeImpl(
         methodName: String,
         methodParams: List<ContractMethodParameter>,
         callback: Callback<Boolean>
-    ) {
-        Result {
-            var registrar: Account? = null
+    ) = callback.processResult {
+        var registrar: Account? = null
 
-            databaseApiService.getFullAccounts(listOf(registrarNameOrId), false)
-                .value { accountsMap ->
-                    registrar = accountsMap[registrarNameOrId]?.account
-                            ?:
-                            throw LocalException("Unable to find required account $registrarNameOrId")
-                }
-                .error { accountsError ->
-                    throw LocalException("Error occurred during accounts request", accountsError)
-                }
+        databaseApiService.getFullAccounts(listOf(registrarNameOrId), false)
+            .value { accountsMap ->
+                registrar = accountsMap[registrarNameOrId]?.account
+                        ?:
+                        throw LocalException("Unable to find required account $registrarNameOrId")
+            }
+            .error { accountsError ->
+                throw LocalException("Error occurred during accounts request", accountsError)
+            }
 
-            checkOwnerAccount(registrarNameOrId, password, registrar!!)
+        checkOwnerAccount(registrarNameOrId, password, registrar!!)
 
-            val privateKey = cryptoCoreComponent.getPrivateKey(
-                registrar!!.name,
-                password,
-                AuthorityType.ACTIVE
-            )
+        val privateKey = cryptoCoreComponent.getPrivateKey(
+            registrar!!.name,
+            password,
+            AuthorityType.ACTIVE
+        )
 
-            val contractCode = ContractCodeBuilder()
-                .setMethodName(methodName)
-                .setMethodParams(methodParams)
-                .build()
+        val contractCode = ContractCodeBuilder()
+            .setMethodName(methodName)
+            .setMethodParams(methodParams)
+            .build()
 
-            val contractOperation = ContractOperationBuilder()
-                .setAsset(assetId)
-                .setRegistrar(registrar!!)
-                .setGas(1000000)
-                .setReceiver(contractId)
-                .setContractCode(contractCode)
-                .build()
+        val contractOperation = ContractOperationBuilder()
+            .setAsset(assetId)
+            .setRegistrar(registrar!!)
+            .setGas(1000000)
+            .setReceiver(contractId)
+            .setContractCode(contractCode)
+            .build()
 
-            val blockData = databaseApiService.getBlockData()
-            val chainId = getChainId()
-            val fees = getFees(listOf(contractOperation), assetId)
+        val blockData = databaseApiService.getBlockData()
+        val chainId = getChainId()
+        val fees = getFees(listOf(contractOperation), assetId)
 
-            val transaction = Transaction(privateKey, blockData, listOf(contractOperation), chainId)
-                .apply { setFees(fees) }
+        val transaction = Transaction(privateKey, blockData, listOf(contractOperation), chainId)
+            .apply { setFees(fees) }
 
-            networkBroadcastApiService.broadcastTransactionWithCallback(transaction).dematerialize()
-        }
-            .value { callContractResult -> callback.onSuccess(callContractResult) }
-            .error { error -> callback.onError(LocalException(error)) }
-
+        networkBroadcastApiService.broadcastTransactionWithCallback(transaction).dematerialize()
     }
 
     override fun queryContract(
@@ -142,57 +138,42 @@ class ContractsFacadeImpl(
         methodName: String,
         methodParams: List<ContractMethodParameter>,
         callback: Callback<String>
-    ) {
-        Result {
-            var registrar: Account? = null
+    ) = callback.processResult {
+        var registrar: Account? = null
 
-            databaseApiService.getFullAccounts(listOf(registrarNameOrId), false)
-                .value { accountsMap ->
-                    registrar = accountsMap[registrarNameOrId]?.account
-                            ?:
-                            throw LocalException("Unable to find required account $registrarNameOrId")
-                }
-                .error { accountsError ->
-                    throw LocalException("Error occurred during accounts request", accountsError)
-                }
+        databaseApiService.getFullAccounts(listOf(registrarNameOrId), false)
+            .value { accountsMap ->
+                registrar = accountsMap[registrarNameOrId]?.account
+                        ?:
+                        throw LocalException("Unable to find required account $registrarNameOrId")
+            }
+            .error { accountsError ->
+                throw LocalException("Error occurred during accounts request", accountsError)
+            }
 
-            val contractCode = ContractCodeBuilder()
-                .setMethodName(methodName)
-                .setMethodParams(methodParams)
-                .build()
+        val contractCode = ContractCodeBuilder()
+            .setMethodName(methodName)
+            .setMethodParams(methodParams)
+            .build()
 
-            databaseApiService.callContractNoChangingState(
-                contractId,
-                registrar!!.getObjectId(),
-                assetId,
-                contractCode
-            ).dematerialize()
-        }
-            .value { callContractResult -> callback.onSuccess(callContractResult) }
-            .error { error -> callback.onError(LocalException(error)) }
+        databaseApiService.callContractNoChangingState(
+            contractId,
+            registrar!!.getObjectId(),
+            assetId,
+            contractCode
+        ).dematerialize()
     }
 
-    override fun getContractResult(historyId: String, callback: Callback<ContractResult>) {
-        Result { databaseApiService.getContractResult(historyId).dematerialize() }
-            .value { callContractResult -> callback.onSuccess(callContractResult) }
-            .error { error -> callback.onError(LocalException(error)) }
-    }
+    override fun getContractResult(historyId: String, callback: Callback<ContractResult>) =
+        callback.processResult(databaseApiService.getContractResult(historyId))
 
-    override fun getContracts(contractIds: List<String>, callback: Callback<List<ContractInfo>>) {
-        Result { databaseApiService.getContracts(contractIds).dematerialize() }
-            .value { callContractResult -> callback.onSuccess(callContractResult) }
-            .error { error -> callback.onError(LocalException(error)) }
-    }
+    override fun getContracts(contractIds: List<String>, callback: Callback<List<ContractInfo>>) =
+        callback.processResult(databaseApiService.getContracts(contractIds))
 
-    override fun getAllContracts(callback: Callback<List<ContractInfo>>) {
-        Result { databaseApiService.getAllContracts().dematerialize() }
-            .value { callContractResult -> callback.onSuccess(callContractResult) }
-            .error { error -> callback.onError(LocalException(error)) }
-    }
+    override fun getAllContracts(callback: Callback<List<ContractInfo>>) =
+        callback.processResult(databaseApiService.getAllContracts())
 
-    override fun getContract(contractId: String, callback: Callback<ContractStruct>) {
-        Result { databaseApiService.getContract(contractId).dematerialize() }
-            .value { callContractResult -> callback.onSuccess(callContractResult) }
-            .error { error -> callback.onError(LocalException(error)) }
-    }
+    override fun getContract(contractId: String, callback: Callback<ContractStruct>) =
+        callback.processResult(databaseApiService.getContract(contractId))
+
 }

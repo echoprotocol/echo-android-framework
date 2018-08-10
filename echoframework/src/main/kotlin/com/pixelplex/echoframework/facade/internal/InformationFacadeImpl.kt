@@ -6,15 +6,15 @@ import com.pixelplex.echoframework.exception.LocalException
 import com.pixelplex.echoframework.exception.NotFoundException
 import com.pixelplex.echoframework.facade.InformationFacade
 import com.pixelplex.echoframework.model.*
-import com.pixelplex.echoframework.model.operations.AccountUpdateOperation
-import com.pixelplex.echoframework.model.operations.OperationType
-import com.pixelplex.echoframework.model.operations.TransferOperation
+import com.pixelplex.echoframework.model.operations.*
+import com.pixelplex.echoframework.processResult
 import com.pixelplex.echoframework.service.AccountHistoryApiService
 import com.pixelplex.echoframework.service.DatabaseApiService
 import com.pixelplex.echoframework.support.*
 import com.pixelplex.echoframework.support.Result.Error
 import com.pixelplex.echoframework.support.Result.Value
 import com.pixelplex.echoframework.support.concurrent.future.FutureTask
+import com.pixelplex.echoframework.support.concurrent.future.completeCallback
 import com.pixelplex.echoframework.support.concurrent.future.wrapResult
 
 /**
@@ -115,34 +115,20 @@ class InformationFacadeImpl(
                 return
             }
 
-        accountHistoryApiService.getAccountHistory(
+        callback.processResult(accountHistoryApiService.getAccountHistory(
             accountId,
             transactionStartId,
             transactionStopId,
             limit
         ).map { history ->
             fillTransactionInformation(history)
-        }.value { fullAccountHistory ->
-            callback.onSuccess(fullAccountHistory)
-        }.error { error ->
-            callback.onError(LocalException(error.message, error))
-        }
+        })
     }
 
     private fun getAccount(nameOrId: String): Result<LocalException, Account> {
         val accountFuture = FutureTask<Account>()
 
-        getAccount(nameOrId, object : Callback<Account> {
-
-            override fun onSuccess(result: Account) {
-                accountFuture.setComplete(result)
-            }
-
-            override fun onError(error: LocalException) {
-                accountFuture.setComplete(error)
-            }
-
-        })
+        getAccount(nameOrId, accountFuture.completeCallback())
 
         return accountFuture.wrapResult()
     }
@@ -171,7 +157,7 @@ class InformationFacadeImpl(
                 continue
             }
 
-           when (operation.type) {
+            when (operation.type) {
                 OperationType.ACCOUNT_UPDATE_OPERATION ->
                     processAccountUpdateOperation(
                         operation as AccountUpdateOperation,
@@ -180,6 +166,12 @@ class InformationFacadeImpl(
 
                 OperationType.TRANSFER_OPERATION ->
                     processTransferOperation(operation as TransferOperation, accountsRegistry)
+
+                OperationType.ASSET_CREATE_OPERATION ->
+                    processAssetCreateOperation(operation as CreateAssetOperation, accountsRegistry)
+
+                OperationType.ASSET_ISSUE_OPERATION ->
+                    processAssetIssueOperation(operation as IssueAssetOperation, accountsRegistry)
 
                 else -> {
                 }
@@ -232,6 +224,52 @@ class InformationFacadeImpl(
                 }
                 accountsMap[toAccountId]?.account?.let { notNullToAccount ->
                     operation.to = notNullToAccount
+                    accountRegistry[toAccountId] = notNullToAccount
+                }
+            }
+    }
+
+    private fun processAssetCreateOperation(
+        operation: CreateAssetOperation,
+        accountRegistry: MutableMap<String, Account>
+    ) {
+        val accountId = operation.asset.issuer?.getObjectId() ?: return
+
+        accountRegistry[accountId]?.let { account ->
+            operation.asset.issuer = account
+            return
+        }
+
+        databaseApiService.getFullAccounts(listOf(accountId), false)
+            .value { accountsMap ->
+                accountsMap[accountId]?.account?.let { notNullAccount ->
+                    operation.asset.issuer = notNullAccount
+                    accountRegistry[accountId] = notNullAccount
+                }
+            }
+    }
+
+    private fun processAssetIssueOperation(
+        operation: IssueAssetOperation,
+        accountRegistry: MutableMap<String, Account>
+    ) {
+        val fromAccountId = operation.issuer.getObjectId()
+        val toAccountId = operation.issueToAccount.getObjectId()
+
+        if (accountRegistry.containsKey(fromAccountId) && accountRegistry.containsKey(toAccountId)) {
+            accountRegistry[fromAccountId]?.let { operation.issuer = it }
+            accountRegistry[toAccountId]?.let { operation.issueToAccount = it }
+            return
+        }
+
+        databaseApiService.getFullAccounts(listOf(fromAccountId, toAccountId), false)
+            .value { accountsMap ->
+                accountsMap[fromAccountId]?.account?.let { notNullFromAccount ->
+                    operation.issuer = notNullFromAccount
+                    accountRegistry[fromAccountId] = notNullFromAccount
+                }
+                accountsMap[toAccountId]?.account?.let { notNullToAccount ->
+                    operation.issueToAccount = notNullToAccount
                     accountRegistry[toAccountId] = notNullToAccount
                 }
             }

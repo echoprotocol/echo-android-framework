@@ -14,8 +14,8 @@ import com.pixelplex.echoframework.Callback
 class CancelAllSubscriptionsSocketOperation(
     override val apiId: Int,
     callId: Int,
-    callback: Callback<Any>
-) : SocketOperation<Any>(SocketMethodType.CALL, callId, Any::class.java, callback) {
+    callback: Callback<Boolean>
+) : SocketOperation<Boolean>(SocketMethodType.CALL, callId, Boolean::class.java, callback) {
 
     override fun createParameters(): JsonElement =
         JsonArray().apply {
@@ -24,8 +24,8 @@ class CancelAllSubscriptionsSocketOperation(
             add(JsonArray())
         }
 
-    override fun fromJson(json: String): Any? {
+    override fun fromJson(json: String): Boolean {
         val jsonObject = JsonParser().parse(json).asJsonObject
-        return if (jsonObject.has(RESULT_KEY)) Any() else null
+        return jsonObject.has(RESULT_KEY)
     }
 }

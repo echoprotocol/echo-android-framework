@@ -56,8 +56,6 @@ class SocketCoreComponentImpl(
 
     private inner class SocketCoreMessengerListener : SocketMessengerListener {
 
-        private var wasReconnect = false
-
         override fun onEvent(event: String) {
             val response = mapper.map(event, SocketResponse::class.java) ?: return
 
@@ -83,23 +81,21 @@ class SocketCoreComponentImpl(
             }
         }
 
-        override fun onFailure(error: Throwable) {
-
-        }
-
         override fun onConnected() {
             socketState = SocketState.CONNECTED
+        }
 
-            if (wasReconnect) {
-                operationsMap.forEach { _, operation ->
-                    socketMessenger.emit(
-                        operation.toJsonString() ?: ""
-                    )
-                }
-            }
+        override fun onFailure(error: Throwable) {
+            notifyDisconnected()
         }
 
         override fun onDisconnected() {
+            notifyDisconnected()
+        }
+
+        private fun notifyDisconnected() {
+            if (socketState == SocketState.DISCONNECTED) return
+
             socketState = SocketState.DISCONNECTED
 
             //event to all active operations about disconnection
@@ -112,6 +108,7 @@ class SocketCoreComponentImpl(
 
             //if has required options - reconnect by delay
         }
+
     }
 
     companion object {
