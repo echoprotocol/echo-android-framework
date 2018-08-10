@@ -401,52 +401,52 @@ class EchoFrameworkTest {
         assertNotNull(futureAssets.get()?.isNotEmpty() ?: false)
     }
 
-    @Test
-    fun createAssetTest() {
-        val framework = initFramework()
-
-        if (connect(framework) == false) Assert.fail("Connection error")
-
-        val futureAsset = FutureTask<Boolean>()
-
-        val asset = Asset("").apply {
-            symbol = "QRWEERYIU"
-            precision = 4
-            issuer = Account("1.2.18")
-            setBtsOptions(
-                BitassetOptions(
-                    86400, 7, 86400,
-                    100, 2000
-                )
-            )
-
-            predictionMarket = false
-        }
-
-        val options =
-            AssetOptions(
-                UnsignedLong.valueOf(100000),
-                0.toLong(),
-                UnsignedLong.ZERO,
-                AssetOptions.ALLOW_COMITEE_PROVIDE_FEEDS,
-                AssetOptions.ALLOW_COMITEE_PROVIDE_FEEDS,
-                Price().apply {
-                    this.quote = AssetAmount(UnsignedLong.valueOf(1), Asset("1.3.1"))
-                    this.base = AssetAmount(UnsignedLong.valueOf(1), Asset("1.3.0"))
-                },
-                "description"
-            )
-
-        asset.assetOptions = options
-
-        framework.createAsset(
-            "dima1", "P5J8pDyzznMmEdiBCdgB7VKtMBuxw5e4MAJEo3sfUbxcM",
-            asset,
-            futureAsset.completeCallback()
-        )
-
-        assertNotNull(futureAsset.get())
-    }
+//    @Test
+//    fun createAssetTest() {
+//        val framework = initFramework()
+//
+//        if (connect(framework) == false) Assert.fail("Connection error")
+//
+//        val futureAsset = FutureTask<Boolean>()
+//
+//        val asset = Asset("").apply {
+//            symbol = "QRWEERYIU"
+//            precision = 4
+//            issuer = Account("1.2.18")
+//            setBtsOptions(
+//                BitassetOptions(
+//                    86400, 7, 86400,
+//                    100, 2000
+//                )
+//            )
+//
+//            predictionMarket = false
+//        }
+//
+//        val options =
+//            AssetOptions(
+//                UnsignedLong.valueOf(100000),
+//                0.toLong(),
+//                UnsignedLong.ZERO,
+//                AssetOptions.ALLOW_COMITEE_PROVIDE_FEEDS,
+//                AssetOptions.ALLOW_COMITEE_PROVIDE_FEEDS,
+//                Price().apply {
+//                    this.quote = AssetAmount(UnsignedLong.valueOf(1), Asset("1.3.1"))
+//                    this.base = AssetAmount(UnsignedLong.valueOf(1), Asset("1.3.0"))
+//                },
+//                "description"
+//            )
+//
+//        asset.assetOptions = options
+//
+//        framework.createAsset(
+//            "dima1", "P5J8pDyzznMmEdiBCdgB7VKtMBuxw5e4MAJEo3sfUbxcM",
+//            asset,
+//            futureAsset.completeCallback()
+//        )
+//
+//        assertNotNull(futureAsset.get())
+//    }
 
     @Test
     fun issueAssetTest() {
