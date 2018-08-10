@@ -17,7 +17,7 @@ class AssetOptions @JvmOverloads constructor(
     @SerializedName(MAX_SUPPLY_KEY) var maxSupply: UnsignedLong? = null,
     @SerializedName(MARKET_FEE_PERCENT_KEY) var marketFeePercent: Long = 0,
     @SerializedName(MAX_MARKET_FEE_KEY) var maxMarketFee: UnsignedLong? = null,
-    @SerializedName(ISSUER_PERMISSION_KEY) var issuerPermissions: Long = 0,
+    @SerializedName(ISSUER_PERMISSION_KEY) var issuerPermissions: Int = 0,
     var flags: Int = 0,
     @SerializedName(CORE_EXCHANGE_RATE_KEY) var coreExchangeRate: Price? = null,
     var description: String? = null
@@ -114,7 +114,7 @@ class AssetOptions @JvmOverloads constructor(
             val marketFeePercent = jsonOptions.get(MARKET_FEE_PERCENT_KEY).asLong
             val maxMarketFee = UnsignedLong.valueOf(jsonOptions.get(MAX_MARKET_FEE_KEY).asLong)
             val flags = jsonOptions.get(FLAGS_KEY).asInt
-            val issuerPermissions = jsonOptions.get(ISSUER_PERMISSION_KEY).asLong
+            val issuerPermissions = jsonOptions.get(ISSUER_PERMISSION_KEY).asInt
             val description = jsonOptions.get(DESCRIPTION_KEY).asString
             val coreExchangeRate = context.deserialize<Price>(
                 jsonOptions.get(CORE_EXCHANGE_RATE_KEY),
@@ -174,15 +174,15 @@ class AssetOptions @JvmOverloads constructor(
         private const val WHITELIST_MARKETS_KEY = "whitelist_markets"
         private const val BLACKLIST_MARKETS_KEY = "blacklist_markets"
 
-        val CHARGE_MARKET_FEE = 0x01
-        val WHITE_LIST = 0x02
-        val OVERRIDE_AUTHORITY = 0x04
-        val TRANSFER_RESTRICTED = 0x08
+        val ENABLE_MARKET_FEE = 0x01
+        val WHITE_LISTED_HOLDER = 0x02
+        val ISSUER_HIMSELF_TRANSFER = 0x04
+        val ISSUER_MUST_APPROVE_TRANSFER = 0x08
         val DISABLE_FORCE_SETTLE = 0x10
-        val GLOBAL_SETTLE = 0x20
-        val DISABLE_CONFIDENTIAL = 0x40
-        val WITNESS_FED_ASSET = 0x80
-        val COMITEE_FED_ASSET = 0x100
+        val ALLOW_GLOBAL_SETTLE = 0x20
+        val DISABLE_CONFIDENTIAL_TRANSACTIONS = 0x40
+        val ALLOW_WITNESS_FEEDS_PROVIDING = 0x80
+        val ALLOW_COMITEE_PROVIDE_FEEDS = 0x100
     }
 
 }

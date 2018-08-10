@@ -510,7 +510,7 @@ class EchoFrameworkTest {
 //        val futureAsset = FutureTask<Boolean>()
 //
 //        val asset = Asset("").apply {
-//            symbol = "DFGDSFASD"
+//            symbol = "QWERTYUIO"
 //            precision = 4
 //            issuer = Account("1.2.18")
 //            setBtsOptions(
@@ -525,14 +525,17 @@ class EchoFrameworkTest {
 //
 //        val options =
 //            AssetOptions(
-//                UnsignedLong.valueOf(100000), 0.toLong(), UnsignedLong.ZERO, 79, 10,
+//                UnsignedLong.valueOf(100000),
+//                0.toLong(),
+//                UnsignedLong.ZERO,
+//                AssetOptions.ALLOW_COMITEE_PROVIDE_FEEDS,
+//                AssetOptions.ALLOW_COMITEE_PROVIDE_FEEDS,
 //                Price().apply {
 //                    this.quote = AssetAmount(UnsignedLong.valueOf(1), Asset("1.3.1"))
 //                    this.base = AssetAmount(UnsignedLong.valueOf(1), Asset("1.3.0"))
-//                }, "description"
-//            ).apply {
-//                whitelistAuthorities = setOf(Account("1.2.19"))
-//            }
+//                },
+//                "description"
+//            )
 //
 //        asset.assetOptions = options
 //
