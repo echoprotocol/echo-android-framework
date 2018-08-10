@@ -1,14 +1,15 @@
 package com.pixelplex.echoframework.facade.internal
 
 import com.google.common.primitives.UnsignedLong
-import com.pixelplex.echoframework.ECHO_ASSET_ID
 import com.pixelplex.echoframework.Callback
+import com.pixelplex.echoframework.ECHO_ASSET_ID
 import com.pixelplex.echoframework.core.crypto.CryptoCoreComponent
 import com.pixelplex.echoframework.exception.LocalException
 import com.pixelplex.echoframework.facade.AssetsFacade
 import com.pixelplex.echoframework.model.*
 import com.pixelplex.echoframework.model.operations.CreateAssetOperation
 import com.pixelplex.echoframework.model.operations.IssueAssetOperationBuilder
+import com.pixelplex.echoframework.processResult
 import com.pixelplex.echoframework.service.DatabaseApiService
 import com.pixelplex.echoframework.service.NetworkBroadcastApiService
 import com.pixelplex.echoframework.support.Result
@@ -26,7 +27,7 @@ class AssetsFacadeImpl(
     private val databaseApiService: DatabaseApiService,
     private val networkBroadcastApiService: NetworkBroadcastApiService,
     private val cryptoCoreComponent: CryptoCoreComponent
-) : AssetsFacade {
+) : BaseTransactionsFacade(databaseApiService, cryptoCoreComponent), AssetsFacade {
 
     override fun createAsset(
         name: String,
@@ -78,69 +79,49 @@ class AssetsFacadeImpl(
         destinationIdOrName: String,
         message: String?,
         callback: Callback<Boolean>
-    ) {
-        Result {
-            var issuer: Account? = null
-            var target: Account? = null
+    ) = callback.processResult {
+        var issuer: Account? = null
+        var target: Account? = null
 
-            databaseApiService.getFullAccounts(listOf(issuerNameOrId, destinationIdOrName), false)
-                .value { accountsMap ->
-                    issuer = accountsMap[issuerNameOrId]?.account
-                            ?:
-                            throw LocalException("Unable to find required account $issuerNameOrId")
-                    target = accountsMap[destinationIdOrName]?.account
-                            ?:
-                            throw LocalException("Unable to find required account $destinationIdOrName")
-                }
-                .error { accountsError ->
-                    throw LocalException("Error occurred during accounts request", accountsError)
-                }
+        databaseApiService.getFullAccounts(listOf(issuerNameOrId, destinationIdOrName), false)
+            .value { accountsMap ->
+                issuer = accountsMap[issuerNameOrId]?.account
+                        ?: throw LocalException("Unable to find required account $issuerNameOrId")
+                target = accountsMap[destinationIdOrName]?.account
+                        ?:
+                        throw LocalException("Unable to find required account $destinationIdOrName")
+            }
+            .error { accountsError ->
+                throw LocalException("Error occurred during accounts request", accountsError)
+            }
 
-            checkOwnerAccount(issuer!!.name, password, issuer!!)
+        checkOwnerAccount(issuer!!.name, password, issuer!!)
 
-            val blockData = databaseApiService.getBlockData()
-            val chainId = getChainId()
+        val operation = IssueAssetOperationBuilder()
+            .setIssuer(issuer!!)
+            .setAmount(AssetAmount(UnsignedLong.valueOf(amount.toLong()), Asset(asset)))
+            .setDestination(target!!)
+            .build()
 
-            val operation = IssueAssetOperationBuilder()
-                .setIssuer(issuer!!)
-                .setAmount(AssetAmount(UnsignedLong.valueOf(amount.toLong()), Asset(asset)))
-                .setDestination(target!!)
-                .build()
+        val privateKey =
+            cryptoCoreComponent.getPrivateKey(
+                issuerNameOrId,
+                password,
+                AuthorityType.ACTIVE
+            )
 
-            val privateKey =
-                cryptoCoreComponent.getPrivateKey(
-                    issuerNameOrId,
-                    password,
-                    AuthorityType.ACTIVE
-                )
+        operation.memo = generateMemo(privateKey, issuer!!, target!!, message)
 
-            operation.memo = generateMemo(privateKey, issuer!!, target!!, message)
+        val blockData = databaseApiService.getBlockData()
+        val chainId = getChainId()
+        val fees = getFees(listOf(operation), ECHO_ASSET_ID)
 
-            val fees = getFees(listOf(operation), ECHO_ASSET_ID)
-
-            val transaction = Transaction(privateKey, blockData, listOf(operation), chainId)
-            transaction.setFees(fees)
-
-            networkBroadcastApiService.broadcastTransactionWithCallback(transaction).dematerialize()
+        val transaction = Transaction(privateKey, blockData, listOf(operation), chainId).apply {
+            setFees(fees)
         }
-            .value { result -> callback.onSuccess(result) }
-            .error { error -> callback.onError(LocalException(error)) }
+
+        networkBroadcastApiService.broadcastTransactionWithCallback(transaction).dematerialize()
     }
-
-    private fun checkOwnerAccount(name: String, password: String, account: Account) {
-        val ownerAddress =
-            cryptoCoreComponent.getAddress(name, password, AuthorityType.OWNER)
-
-        val isKeySame = account.isEqualsByKey(ownerAddress, AuthorityType.OWNER)
-        if (!isKeySame) {
-            throw LocalException("Owner account checking exception")
-        }
-    }
-
-    private fun getChainId(): String = databaseApiService.getChainId().dematerialize()
-
-    private fun getFees(operations: List<BaseOperation>, asset: String): List<AssetAmount> =
-        databaseApiService.getRequiredFees(operations, Asset(asset)).dematerialize()
 
     private fun generateMemo(
         privateKey: ByteArray,

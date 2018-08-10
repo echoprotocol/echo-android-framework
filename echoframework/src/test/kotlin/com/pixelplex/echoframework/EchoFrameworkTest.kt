@@ -1,10 +1,8 @@
 package com.pixelplex.echoframework
 
+import com.google.common.primitives.UnsignedLong
 import com.pixelplex.echoframework.exception.LocalException
-import com.pixelplex.echoframework.model.Account
-import com.pixelplex.echoframework.model.Asset
-import com.pixelplex.echoframework.model.Balance
-import com.pixelplex.echoframework.model.HistoryResponse
+import com.pixelplex.echoframework.model.*
 import com.pixelplex.echoframework.model.contract.ContractInfo
 import com.pixelplex.echoframework.model.contract.ContractResult
 import com.pixelplex.echoframework.model.contract.ContractStruct
@@ -13,6 +11,7 @@ import com.pixelplex.echoframework.support.Api
 import com.pixelplex.echoframework.support.EmptyCallback
 import com.pixelplex.echoframework.support.Settings
 import com.pixelplex.echoframework.support.concurrent.future.FutureTask
+import com.pixelplex.echoframework.support.concurrent.future.completeCallback
 import com.pixelplex.echoframework.support.concurrent.future.wrapResult
 import com.pixelplex.echoframework.support.fold
 import org.junit.Assert
@@ -74,19 +73,13 @@ class EchoFrameworkTest {
 
         val futureHistory = FutureTask<HistoryResponse>()
 
-        framework.getAccountHistory("1.2.18", "1.11.1",
+        framework.getAccountHistory(
+            "1.2.18", "1.11.1",
             "1.11.20000",
             100,
-            "1.3.0", object : Callback<HistoryResponse> {
-                override fun onSuccess(result: HistoryResponse) {
-                    futureHistory.setComplete(result)
-                }
-
-                override fun onError(error: LocalException) {
-                    futureHistory.setComplete(error)
-                }
-
-            })
+            "1.3.0",
+            futureHistory.completeCallback()
+        )
 
         framework.stop()
 
@@ -118,34 +111,22 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
-        framework.isOwnedBy("dima1", "P5J8pDyzznMmEdiBCdgB7VKtMBuxw5e4MAJEo3sfUbxcM",
-            object : Callback<Account> {
-                override fun onSuccess(result: Account) {
-                    futureLogin.setComplete(result)
-                }
-
-                override fun onError(error: LocalException) {
-                    futureLogin.setComplete(error)
-                }
-
-            })
+        framework.isOwnedBy(
+            "dima1",
+            "P5J8pDyzznMmEdiBCdgB7VKtMBuxw5e4MAJEo3sfUbxcM",
+            futureLogin.completeCallback()
+        )
 
         val account = futureLogin.get()
         assertTrue(account != null)
 
         val futureLoginFailure = FutureTask<Account>()
 
-        framework.isOwnedBy("dima1", "WrongPassword",
-            object : Callback<Account> {
-                override fun onSuccess(result: Account) {
-                    futureLoginFailure.setComplete(result)
-                }
-
-                override fun onError(error: LocalException) {
-                    futureLoginFailure.setComplete(error)
-                }
-
-            })
+        framework.isOwnedBy(
+            "dima1",
+            "WrongPassword",
+            futureLoginFailure.completeCallback()
+        )
 
         var accountFail: Account? = null
 
@@ -165,17 +146,7 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
-        framework.getAccount("dima1", object :
-            Callback<Account> {
-            override fun onSuccess(result: Account) {
-                futureAccount.setComplete(result)
-            }
-
-            override fun onError(error: LocalException) {
-                futureAccount.setComplete(error)
-            }
-
-        })
+        framework.getAccount("dima1", futureAccount.completeCallback())
 
         val account = futureAccount.get()
         assertTrue(account != null)
@@ -189,34 +160,13 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
-        framework.checkAccountReserved("dima2", object :
-            Callback<Boolean> {
-            override fun onSuccess(result: Boolean) {
-                futureCheckReserved.setComplete(result)
-            }
-
-            override fun onError(error: LocalException) {
-                futureCheckReserved.setComplete(error)
-            }
-
-        })
+        framework.checkAccountReserved("dima2", futureCheckReserved.completeCallback())
 
         assertTrue(futureCheckReserved.get() ?: false)
 
-        val futureCheckAvailable =
-            FutureTask<Boolean>()
+        val futureCheckAvailable = FutureTask<Boolean>()
 
-        framework.checkAccountReserved("edgewruferjd", object :
-            Callback<Boolean> {
-            override fun onSuccess(result: Boolean) {
-                futureCheckAvailable.setComplete(result)
-            }
-
-            override fun onError(error: LocalException) {
-                futureCheckAvailable.setComplete(error)
-            }
-
-        })
+        framework.checkAccountReserved("edgewruferjd", futureCheckAvailable.completeCallback())
 
         assertFalse(futureCheckAvailable.get() ?: false)
     }
@@ -229,17 +179,7 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
-        framework.getBalance("dima2", "1.3.0", object :
-            Callback<Balance> {
-            override fun onSuccess(result: Balance) {
-                futureBalanceExistent.setComplete(result)
-            }
-
-            override fun onError(error: LocalException) {
-                futureBalanceExistent.setComplete(error)
-            }
-
-        })
+        framework.getBalance("dima2", "1.3.0", futureBalanceExistent.completeCallback())
 
         assertTrue(futureBalanceExistent.get() != null)
     }
@@ -252,17 +192,11 @@ class EchoFrameworkTest {
 
         val futureBalanceNonexistent = FutureTask<Balance>()
 
-        framework.getBalance("dima2", "ergergger", object :
-            Callback<Balance> {
-            override fun onSuccess(result: Balance) {
-                futureBalanceNonexistent.setComplete(result)
-            }
-
-            override fun onError(error: LocalException) {
-                futureBalanceNonexistent.setComplete(error)
-            }
-
-        })
+        framework.getBalance(
+            "dima2",
+            "ergergger",
+            futureBalanceNonexistent.completeCallback()
+        )
 
         assertNotNull(futureBalanceNonexistent.get())
     }
@@ -280,19 +214,13 @@ class EchoFrameworkTest {
 
         val futureAccountHistory = FutureTask<HistoryResponse>()
 
-        framework.getAccountHistory(nameOrId, "1.11.1",
+        framework.getAccountHistory(
+            nameOrId, "1.11.1",
             "1.11.20000",
             100,
-            "1.3.0", object : Callback<HistoryResponse> {
-                override fun onSuccess(result: HistoryResponse) {
-                    futureAccountHistory.setComplete(result)
-                }
-
-                override fun onError(error: LocalException) {
-                    futureAccountHistory.setComplete(error)
-                }
-
-            })
+            "1.3.0",
+            futureAccountHistory.completeCallback()
+        )
 
         val history = futureAccountHistory.get()
 
@@ -338,15 +266,7 @@ class EchoFrameworkTest {
                 futureSubscriptionById.setComplete(updatedAccount)
             }
 
-        }, object : Callback<Boolean> {
-            override fun onSuccess(result: Boolean) {
-                futureSubscriptionResult.setComplete(result)
-            }
-
-            override fun onError(error: LocalException) {
-                futureSubscriptionResult.setComplete(error)
-            }
-        })
+        }, futureSubscriptionResult.completeCallback())
 
         thread {
             Thread.sleep(3000)
@@ -372,15 +292,7 @@ class EchoFrameworkTest {
                 futureSubscriptionByName.setComplete(updatedAccount)
             }
 
-        }, object : Callback<Boolean> {
-            override fun onSuccess(result: Boolean) {
-                futureSubscriptionResult.setComplete(result)
-            }
-
-            override fun onError(error: LocalException) {
-                futureSubscriptionResult.setComplete(error)
-            }
-        })
+        }, futureSubscriptionResult.completeCallback())
 
         thread {
             Thread.sleep(3000)
@@ -412,16 +324,9 @@ class EchoFrameworkTest {
             "dima1",
             "P5J8pDyzznMmEdiBCdgB7VKtMBuxw5e4MAJEo3sfUbxcM",
             "dima2",
-            "1", "1.3.0", "Memasik", object : Callback<Boolean> {
-                override fun onSuccess(result: Boolean) {
-                    futureTransfer.setComplete(result)
-                }
-
-                override fun onError(error: LocalException) {
-                    futureTransfer.setComplete(error)
-                }
-
-            })
+            "1", "1.3.0", "Memasik",
+            futureTransfer.completeCallback()
+        )
 
         assertTrue(futureTransfer.get() ?: false)
     }
@@ -439,16 +344,8 @@ class EchoFrameworkTest {
             "dima2",
             "10000",
             "1.3.0",
-            object : Callback<String> {
-                override fun onSuccess(result: String) {
-                    futureFee.setComplete(result)
-                }
-
-                override fun onError(error: LocalException) {
-                    futureFee.setComplete(error)
-                }
-
-            })
+            futureFee.completeCallback()
+        )
 
         assertNotNull(futureFee.get())
     }
@@ -466,16 +363,8 @@ class EchoFrameworkTest {
             "dima2",
             "10000",
             "1.3.1234",
-            object : Callback<String> {
-                override fun onSuccess(result: String) {
-                    futureFee.setComplete(result)
-                }
-
-                override fun onError(error: LocalException) {
-                    futureFee.setComplete(error)
-                }
-
-            })
+            futureFee.completeCallback()
+        )
 
         assertNotNull(futureFee.get())
     }
@@ -490,16 +379,8 @@ class EchoFrameworkTest {
 
         framework.listAssets(
             "ECHO", 10,
-            object : Callback<List<Asset>> {
-                override fun onSuccess(result: List<Asset>) {
-                    futureAssets.setComplete(result)
-                }
-
-                override fun onError(error: LocalException) {
-                    futureAssets.setComplete(error)
-                }
-
-            })
+            futureAssets.completeCallback()
+        )
 
         assertNotNull(futureAssets.get()?.isNotEmpty() ?: false)
     }
@@ -514,74 +395,58 @@ class EchoFrameworkTest {
 
         framework.getAssets(
             listOf("1.3.0", "1.3.2"),
-            object : Callback<List<Asset>> {
-                override fun onSuccess(result: List<Asset>) {
-                    futureAssets.setComplete(result)
-                }
-
-                override fun onError(error: LocalException) {
-                    futureAssets.setComplete(error)
-                }
-
-            })
+            futureAssets.completeCallback()
+        )
 
         assertNotNull(futureAssets.get()?.isNotEmpty() ?: false)
     }
 
-//    @Test
-//    fun createAssetTest() {
-//        val framework = initFramework()
-//
-//        if (connect(framework) == false) Assert.fail("Connection error")
-//
-//        val futureAsset = FutureTask<Boolean>()
-//
-//        val asset = Asset("").apply {
-//            symbol = "SGSDFDFGSDF"
-//            precision = 4
-//            issuer = Account("1.2.18")
-//            setBtsOptions(
-//                BitassetOptions(
-//                    86400, 7, 86400,
-//                    100, 2000
-//                )
-//            )
-//
-//            predictionMarket = false
-//        }
-//
-//        val options =
-//            AssetOptions(
-//                UnsignedLong.valueOf(100000),
-//                0.toLong(),
-//                UnsignedLong.ZERO,
-//                AssetOptions.ALLOW_COMITEE_PROVIDE_FEEDS,
-//                AssetOptions.ALLOW_COMITEE_PROVIDE_FEEDS,
-//                Price().apply {
-//                    this.quote = AssetAmount(UnsignedLong.valueOf(1), Asset("1.3.1"))
-//                    this.base = AssetAmount(UnsignedLong.valueOf(1), Asset("1.3.0"))
-//                },
-//                "description"
-//            )
-//
-//        asset.assetOptions = options
-//
-//        framework.createAsset(
-//            "dima1", "P5J8pDyzznMmEdiBCdgB7VKtMBuxw5e4MAJEo3sfUbxcM",
-//            asset,
-//            object : Callback<Boolean> {
-//                override fun onSuccess(result: Boolean) {
-//                    futureAsset.setComplete(result)
-//                }
-//
-//                override fun onError(error: LocalException) {
-//                    futureAsset.setComplete(error)
-//                }
-//
-//            })
-//
-//        assertNotNull(futureAsset.get())
-//    }
+    @Test
+    fun createAssetTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val futureAsset = FutureTask<Boolean>()
+
+        val asset = Asset("").apply {
+            symbol = "QRWEERYIU"
+            precision = 4
+            issuer = Account("1.2.18")
+            setBtsOptions(
+                BitassetOptions(
+                    86400, 7, 86400,
+                    100, 2000
+                )
+            )
+
+            predictionMarket = false
+        }
+
+        val options =
+            AssetOptions(
+                UnsignedLong.valueOf(100000),
+                0.toLong(),
+                UnsignedLong.ZERO,
+                AssetOptions.ALLOW_COMITEE_PROVIDE_FEEDS,
+                AssetOptions.ALLOW_COMITEE_PROVIDE_FEEDS,
+                Price().apply {
+                    this.quote = AssetAmount(UnsignedLong.valueOf(1), Asset("1.3.1"))
+                    this.base = AssetAmount(UnsignedLong.valueOf(1), Asset("1.3.0"))
+                },
+                "description"
+            )
+
+        asset.assetOptions = options
+
+        framework.createAsset(
+            "dima1", "P5J8pDyzznMmEdiBCdgB7VKtMBuxw5e4MAJEo3sfUbxcM",
+            asset,
+            futureAsset.completeCallback()
+        )
+
+        assertNotNull(futureAsset.get())
+    }
 
     @Test
     fun issueAssetTest() {
@@ -597,16 +462,8 @@ class EchoFrameworkTest {
             "1.3.1",
             "1",
             "dima1", "message",
-            object : Callback<Boolean> {
-                override fun onSuccess(result: Boolean) {
-                    futureIssue.setComplete(result)
-                }
-
-                override fun onError(error: LocalException) {
-                    futureIssue.setComplete(error)
-                }
-
-            })
+            futureIssue.completeCallback()
+        )
 
         assertTrue(futureIssue.get() ?: false)
     }
@@ -653,15 +510,7 @@ class EchoFrameworkTest {
             legalContractId,
             "incrementCounter",
             listOf(),
-            object : Callback<Boolean> {
-                override fun onSuccess(result: Boolean) {
-                    future.setComplete(result)
-                }
-
-                override fun onError(error: LocalException) {
-                    future.setComplete(error)
-                }
-            }
+            future.completeCallback()
         )
 
         assertTrue(future.get() ?: false)
@@ -682,15 +531,7 @@ class EchoFrameworkTest {
             illegalContractId,
             "incrementCounter",
             listOf(),
-            object : Callback<Boolean> {
-                override fun onSuccess(result: Boolean) {
-                    future.setComplete(result)
-                }
-
-                override fun onError(error: LocalException) {
-                    future.setComplete(error)
-                }
-            }
+            future.completeCallback()
         )
 
         assertFalse(future.get() ?: false)
@@ -710,15 +551,7 @@ class EchoFrameworkTest {
             legalContractId,
             "getCount",
             listOf(),
-            object : Callback<String> {
-                override fun onSuccess(result: String) {
-                    future.setComplete(result)
-                }
-
-                override fun onError(error: LocalException) {
-                    future.setComplete(error)
-                }
-            }
+            future.completeCallback()
         )
 
         assertNotNull(future.get())
@@ -739,15 +572,7 @@ class EchoFrameworkTest {
             illegalContractId,
             "getCounter()",
             listOf(),
-            object : Callback<String> {
-                override fun onSuccess(result: String) {
-                    future.setComplete(result)
-                }
-
-                override fun onError(error: LocalException) {
-                    future.setComplete(error)
-                }
-            }
+            future.completeCallback()
         )
 
         assertNotNull(future.get())
@@ -765,15 +590,7 @@ class EchoFrameworkTest {
 
         framework.getContractResult(
             legalHistoryItemId,
-            object : Callback<ContractResult> {
-                override fun onSuccess(result: ContractResult) {
-                    future.setComplete(result)
-                }
-
-                override fun onError(error: LocalException) {
-                    future.setComplete(error)
-                }
-            }
+            future.completeCallback()
         )
 
         val contractResult = future.get()
@@ -791,15 +608,7 @@ class EchoFrameworkTest {
 
         framework.getContractResult(
             illegalHistoryItemId,
-            object : Callback<ContractResult> {
-                override fun onSuccess(result: ContractResult) {
-                    future.setComplete(result)
-                }
-
-                override fun onError(error: LocalException) {
-                    future.setComplete(error)
-                }
-            }
+            future.completeCallback()
         )
 
         assertNotNull(future.get())
@@ -814,15 +623,7 @@ class EchoFrameworkTest {
         val future = FutureTask<List<ContractInfo>>()
 
         framework.getAllContracts(
-            object : Callback<List<ContractInfo>> {
-                override fun onSuccess(result: List<ContractInfo>) {
-                    future.setComplete(result)
-                }
-
-                override fun onError(error: LocalException) {
-                    future.setComplete(error)
-                }
-            }
+            future.completeCallback()
         )
 
         val contractResult = future.get()
@@ -840,15 +641,7 @@ class EchoFrameworkTest {
 
         framework.getContracts(
             listOf(legalContractId),
-            object : Callback<List<ContractInfo>> {
-                override fun onSuccess(result: List<ContractInfo>) {
-                    future.setComplete(result)
-                }
-
-                override fun onError(error: LocalException) {
-                    future.setComplete(error)
-                }
-            }
+            future.completeCallback()
         )
 
         val contractResult = future.get()
@@ -868,20 +661,11 @@ class EchoFrameworkTest {
 
         framework.getContracts(
             listOf(illegalContractId),
-            object : Callback<List<ContractInfo>> {
-                override fun onSuccess(result: List<ContractInfo>) {
-                    future.setComplete(result)
-                }
-
-                override fun onError(error: LocalException) {
-                    future.setComplete(error)
-                }
-            }
+            future.completeCallback()
         )
 
         assertNull(future.get()?.first())
     }
-
 
     @Test
     fun getContractTest() {
@@ -893,15 +677,7 @@ class EchoFrameworkTest {
 
         framework.getContract(
             legalContractId,
-            object : Callback<ContractStruct> {
-                override fun onSuccess(result: ContractStruct) {
-                    future.setComplete(result)
-                }
-
-                override fun onError(error: LocalException) {
-                    future.setComplete(error)
-                }
-            }
+            future.completeCallback()
         )
 
         val contractResult = future.get()
@@ -919,15 +695,7 @@ class EchoFrameworkTest {
 
         framework.getContract(
             illegalContractId,
-            object : Callback<ContractStruct> {
-                override fun onSuccess(result: ContractStruct) {
-                    future.setComplete(result)
-                }
-
-                override fun onError(error: LocalException) {
-                    future.setComplete(error)
-                }
-            }
+            future.completeCallback()
         )
 
         assertNotNull(future.get())

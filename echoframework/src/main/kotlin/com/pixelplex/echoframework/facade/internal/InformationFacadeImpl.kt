@@ -7,12 +7,14 @@ import com.pixelplex.echoframework.exception.NotFoundException
 import com.pixelplex.echoframework.facade.InformationFacade
 import com.pixelplex.echoframework.model.*
 import com.pixelplex.echoframework.model.operations.*
+import com.pixelplex.echoframework.processResult
 import com.pixelplex.echoframework.service.AccountHistoryApiService
 import com.pixelplex.echoframework.service.DatabaseApiService
 import com.pixelplex.echoframework.support.*
 import com.pixelplex.echoframework.support.Result.Error
 import com.pixelplex.echoframework.support.Result.Value
 import com.pixelplex.echoframework.support.concurrent.future.FutureTask
+import com.pixelplex.echoframework.support.concurrent.future.completeCallback
 import com.pixelplex.echoframework.support.concurrent.future.wrapResult
 
 /**
@@ -113,34 +115,20 @@ class InformationFacadeImpl(
                 return
             }
 
-        accountHistoryApiService.getAccountHistory(
+        callback.processResult(accountHistoryApiService.getAccountHistory(
             accountId,
             transactionStartId,
             transactionStopId,
             limit
         ).map { history ->
             fillTransactionInformation(history)
-        }.value { fullAccountHistory ->
-            callback.onSuccess(fullAccountHistory)
-        }.error { error ->
-            callback.onError(LocalException(error.message, error))
-        }
+        })
     }
 
     private fun getAccount(nameOrId: String): Result<LocalException, Account> {
         val accountFuture = FutureTask<Account>()
 
-        getAccount(nameOrId, object : Callback<Account> {
-
-            override fun onSuccess(result: Account) {
-                accountFuture.setComplete(result)
-            }
-
-            override fun onError(error: LocalException) {
-                accountFuture.setComplete(error)
-            }
-
-        })
+        getAccount(nameOrId, accountFuture.completeCallback())
 
         return accountFuture.wrapResult()
     }

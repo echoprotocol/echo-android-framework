@@ -13,6 +13,7 @@ import com.pixelplex.echoframework.model.socketoperations.*
 import com.pixelplex.echoframework.service.DatabaseApiService
 import com.pixelplex.echoframework.support.Result
 import com.pixelplex.echoframework.support.concurrent.future.FutureTask
+import com.pixelplex.echoframework.support.concurrent.future.completeCallback
 import com.pixelplex.echoframework.support.concurrent.future.wrapResult
 import com.pixelplex.echoframework.support.dematerialize
 import java.util.concurrent.TimeUnit
@@ -51,22 +52,14 @@ class DatabaseApiServiceImpl(
         namesOrIds: List<String>,
         subscribe: Boolean
     ): Result<LocalException, Map<String, FullAccount>> {
-
         val future = FutureTask<Map<String, FullAccount>>()
+
         val fullAccountsOperation = FullAccountsSocketOperation(
             id,
             namesOrIds,
             subscribe,
             callId = socketCoreComponent.currentId,
-            callback = object : Callback<Map<String, FullAccount>> {
-                override fun onSuccess(result: Map<String, FullAccount>) {
-                    future.setComplete(result)
-                }
-
-                override fun onError(error: LocalException) {
-                    future.setComplete(error)
-                }
-            },
+            callback = future.completeCallback(),
             network = network
         )
         socketCoreComponent.emit(fullAccountsOperation)
@@ -79,15 +72,7 @@ class DatabaseApiServiceImpl(
         val chainIdOperation = GetChainIdSocketOperation(
             id,
             callId = socketCoreComponent.currentId,
-            callback = object : Callback<String> {
-                override fun onSuccess(result: String) {
-                    future.setComplete(result)
-                }
-
-                override fun onError(error: LocalException) {
-                    future.setComplete(error)
-                }
-            }
+            callback = future.completeCallback()
         )
         socketCoreComponent.emit(chainIdOperation)
 
@@ -108,15 +93,7 @@ class DatabaseApiServiceImpl(
         val blockDataOperation = BlockDataSocketOperation(
             id,
             socketCoreComponent.currentId,
-            callback = object : Callback<DynamicGlobalProperties> {
-                override fun onSuccess(result: DynamicGlobalProperties) {
-                    future.setComplete(result)
-                }
-
-                override fun onError(error: LocalException) {
-                    future.setComplete(error)
-                }
-            }
+            callback = future.completeCallback()
         )
         socketCoreComponent.emit(blockDataOperation)
 
@@ -126,17 +103,7 @@ class DatabaseApiServiceImpl(
     override fun getBlock(blockNumber: String): Result<LocalException, Block> {
         val blockFuture = FutureTask<Block>()
 
-        getBlock(blockNumber, object : Callback<Block> {
-
-            override fun onSuccess(result: Block) {
-                blockFuture.setComplete(result)
-            }
-
-            override fun onError(error: LocalException) {
-                blockFuture.setComplete(error)
-            }
-
-        })
+        getBlock(blockNumber, blockFuture.completeCallback())
 
         return blockFuture.wrapResult()
     }
@@ -164,15 +131,7 @@ class DatabaseApiServiceImpl(
             operations,
             asset,
             callId = socketCoreComponent.currentId,
-            callback = object : Callback<List<AssetAmount>> {
-                override fun onSuccess(result: List<AssetAmount>) {
-                    future.setComplete(result)
-                }
-
-                override fun onError(error: LocalException) {
-                    future.setComplete(error)
-                }
-            }
+            callback = future.completeCallback()
         )
         socketCoreComponent.emit(requiredFeesOperation)
 
@@ -210,15 +169,7 @@ class DatabaseApiServiceImpl(
             assetId,
             byteCode,
             callId = socketCoreComponent.currentId,
-            callback = object : Callback<String> {
-                override fun onSuccess(result: String) {
-                    future.setComplete(result)
-                }
-
-                override fun onError(error: LocalException) {
-                    future.setComplete(error)
-                }
-            }
+            callback = future.completeCallback()
         )
         socketCoreComponent.emit(operation)
 
@@ -231,15 +182,7 @@ class DatabaseApiServiceImpl(
             id,
             historyId,
             callId = socketCoreComponent.currentId,
-            callback = object : Callback<ContractResult> {
-                override fun onSuccess(result: ContractResult) {
-                    future.setComplete(result)
-                }
-
-                override fun onError(error: LocalException) {
-                    future.setComplete(error)
-                }
-            }
+            callback = future.completeCallback()
         )
         socketCoreComponent.emit(operation)
 
@@ -251,15 +194,7 @@ class DatabaseApiServiceImpl(
         val operation = GetAllContractsSocketOperation(
             id,
             callId = socketCoreComponent.currentId,
-            callback = object : Callback<List<ContractInfo>> {
-                override fun onSuccess(result: List<ContractInfo>) {
-                    future.setComplete(result)
-                }
-
-                override fun onError(error: LocalException) {
-                    future.setComplete(error)
-                }
-            }
+            callback = future.completeCallback()
         )
         socketCoreComponent.emit(operation)
 
@@ -272,15 +207,7 @@ class DatabaseApiServiceImpl(
             id,
             contractIds,
             callId = socketCoreComponent.currentId,
-            callback = object : Callback<List<ContractInfo>> {
-                override fun onSuccess(result: List<ContractInfo>) {
-                    future.setComplete(result)
-                }
-
-                override fun onError(error: LocalException) {
-                    future.setComplete(error)
-                }
-            }
+            callback = future.completeCallback()
         )
         socketCoreComponent.emit(operation)
 
@@ -293,15 +220,7 @@ class DatabaseApiServiceImpl(
             id,
             contractId,
             callId = socketCoreComponent.currentId,
-            callback = object : Callback<ContractStruct> {
-                override fun onSuccess(result: ContractStruct) {
-                    future.setComplete(result)
-                }
-
-                override fun onError(error: LocalException) {
-                    future.setComplete(error)
-                }
-            }
+            callback = future.completeCallback()
         )
         socketCoreComponent.emit(operation)
 
