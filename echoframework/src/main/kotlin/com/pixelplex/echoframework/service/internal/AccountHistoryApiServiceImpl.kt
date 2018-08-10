@@ -52,7 +52,6 @@ class AccountHistoryApiServiceImpl(
         limit: Int
     ): Result<Exception, HistoryResponse> {
         val historyFuture = FutureTask<HistoryResponse>()
-
         getAccountHistory(
             accountId,
             start,

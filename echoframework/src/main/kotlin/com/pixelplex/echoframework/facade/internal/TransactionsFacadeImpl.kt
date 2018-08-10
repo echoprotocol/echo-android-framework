@@ -13,7 +13,6 @@ import com.pixelplex.echoframework.service.NetworkBroadcastApiService
 import com.pixelplex.echoframework.support.dematerialize
 import com.pixelplex.echoframework.support.error
 import com.pixelplex.echoframework.support.value
-import java.math.BigInteger
 
 /**
  * Implementation of [TransactionsFacade]
@@ -81,31 +80,6 @@ class TransactionsFacadeImpl(
         ).apply { setFees(fees) }
 
         networkBroadcastApiService.broadcastTransactionWithCallback(transaction).dematerialize()
-    }
-
-    private fun generateMemo(
-        privateKey: ByteArray,
-        fromAccount: Account,
-        toAccount: Account,
-        message: String?
-    ): Memo {
-        if (message != null) {
-            val encryptedMessage = cryptoCoreComponent.encryptMessage(
-                privateKey,
-                toAccount.options.memoKey!!.key,
-                BigInteger.ZERO,
-                message
-            )
-
-            return Memo(
-                Address(fromAccount.options.memoKey!!),
-                Address(toAccount.options.memoKey!!),
-                BigInteger.ZERO,
-                encryptedMessage ?: ByteArray(0)
-            )
-        }
-
-        return Memo()
     }
 
 }

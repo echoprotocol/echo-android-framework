@@ -15,6 +15,7 @@ import com.pixelplex.echoframework.service.internal.AccountSubscriptionManager
 import com.pixelplex.echoframework.service.internal.AccountSubscriptionManagerImpl
 import com.pixelplex.echoframework.support.*
 import com.pixelplex.echoframework.support.concurrent.future.FutureTask
+import com.pixelplex.echoframework.support.concurrent.future.completeCallback
 import com.pixelplex.echoframework.support.concurrent.future.wrapResult
 
 /**
@@ -82,16 +83,8 @@ class SubscriptionFacadeImpl(
     private fun subscribeCallBlocking(): Boolean {
         val futureResult = FutureTask<Boolean>()
 
-        val subscriptionOperation = createSubscriptionOperation(true, object : Callback<Any> {
-            override fun onSuccess(result: Any) {
-                futureResult.setComplete(true)
-            }
-
-            override fun onError(error: LocalException) {
-                futureResult.setComplete(error)
-            }
-
-        })
+        val subscriptionOperation =
+            createSubscriptionOperation(true, futureResult.completeCallback())
 
         socketCoreComponent.emit(subscriptionOperation)
 
@@ -109,7 +102,7 @@ class SubscriptionFacadeImpl(
         return result
     }
 
-    private fun createSubscriptionOperation(clearFilter: Boolean, callback: Callback<Any>) =
+    private fun createSubscriptionOperation(clearFilter: Boolean, callback: Callback<Boolean>) =
         SetSubscribeCallbackSocketOperation(
             databaseApiService.id,
             clearFilter,
@@ -170,15 +163,7 @@ class SubscriptionFacadeImpl(
         val cancelSubscriptionsOperation = CancelAllSubscriptionsSocketOperation(
             databaseApiService.id,
             callId = socketCoreComponent.currentId,
-            callback = object : Callback<Any> {
-                override fun onSuccess(result: Any) {
-                    future.setComplete(true)
-                }
-
-                override fun onError(error: LocalException) {
-                    future.setComplete(error)
-                }
-            }
+            callback = future.completeCallback()
         )
         socketCoreComponent.emit(cancelSubscriptionsOperation)
 

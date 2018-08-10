@@ -67,7 +67,7 @@ class FeeFacadeImpl(private val databaseApiService: DatabaseApiService) : FeeFac
             throw LocalException("Unable to get fee for specified operation")
         }
 
-        fees[0].amount.toString()
+        fees.first().amount.toString()
     })
 
     private fun buildTransaction(

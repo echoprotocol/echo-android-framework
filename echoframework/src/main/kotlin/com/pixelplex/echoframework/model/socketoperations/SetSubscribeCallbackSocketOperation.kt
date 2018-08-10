@@ -4,8 +4,6 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonParser
 import com.pixelplex.echoframework.Callback
-import com.pixelplex.echoframework.ILLEGAL_ID
-import org.json.JSONObject
 
 /**
  * Register global subscription callback to object.
@@ -21,8 +19,8 @@ class SetSubscribeCallbackSocketOperation(
     override val apiId: Int,
     val needClearFilter: Boolean,
     callId: Int,
-    callback: Callback<Any>
-) : SocketOperation<Any>(SocketMethodType.CALL, callId, Any::class.java, callback) {
+    callback: Callback<Boolean>
+) : SocketOperation<Boolean>(SocketMethodType.CALL, callId, Boolean::class.java, callback) {
 
     override fun createParameters(): JsonElement =
         JsonArray().apply {
@@ -34,9 +32,9 @@ class SetSubscribeCallbackSocketOperation(
             })
         }
 
-    override fun fromJson(json: String): Any? {
+    override fun fromJson(json: String): Boolean? {
         val jsonObject = JsonParser().parse(json).asJsonObject
-        return if (jsonObject.has(RESULT_KEY)) Any() else null
+        return jsonObject.has(RESULT_KEY)
     }
 
 }
