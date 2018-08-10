@@ -66,6 +66,33 @@ class EchoFrameworkTest {
         assertTrue(connect(framework) ?: false)
     }
 
+    @Test(expected = LocalException::class)
+    fun disconnectTest() {
+        val framework = initFramework()
+
+        assertTrue(connect(framework) ?: false)
+
+        val futureHistory = FutureTask<HistoryResponse>()
+
+        framework.getAccountHistory("1.2.18", "1.11.1",
+            "1.11.20000",
+            100,
+            "1.3.0", object : Callback<HistoryResponse> {
+                override fun onSuccess(result: HistoryResponse) {
+                    futureHistory.setComplete(result)
+                }
+
+                override fun onError(error: LocalException) {
+                    futureHistory.setComplete(error)
+                }
+
+            })
+
+        framework.stop()
+
+        futureHistory.get()
+    }
+
     @Test
     fun connectFailedTest() {
         val framework = EchoFramework.create(
