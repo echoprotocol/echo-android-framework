@@ -6,7 +6,6 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.annotations.Expose
 import com.pixelplex.echoframework.TIME_DATE_FORMAT
-import com.pixelplex.echoframework.core.logger.internal.LoggerCoreComponent
 import java.lang.reflect.Type
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -56,8 +55,6 @@ class Account : GrapheneObject, GrapheneSerializable {
     @Expose
     var referrerRewardsPercentage: Long = 0
 
-    private val logger = LoggerCoreComponent.create(Account::class.java.simpleName)
-
     /**
      * Requires a user account in the string representation, that is in the 1.2.x format.
      */
@@ -78,8 +75,7 @@ class Account : GrapheneObject, GrapheneSerializable {
     override fun toString(): String = toJsonString() ?: ""
 
     /**
-     * Deserializer used to build a [Account] instance from the full JSON-formatted response obtained
-     * by the 'get_objects' API call.
+     * Deserializer used to build a [Account] instance from the JSON
      */
     class Deserializer : JsonDeserializer<Account> {
 

@@ -1,6 +1,5 @@
 package com.pixelplex.echoframework.service
 
-import com.pixelplex.echoframework.AccountListener
 import com.pixelplex.echoframework.Callback
 import com.pixelplex.echoframework.exception.LocalException
 import com.pixelplex.echoframework.model.*
@@ -68,34 +67,6 @@ interface GlobalsService {
      * @return dynamicGlobalProperties
      */
     fun getDynamicGlobalProperties(): Result<Exception, DynamicGlobalProperties>
-
-    /**
-     * Registers listener for notifying when account events occur
-     *
-     * @param nameOrId Account object id or name
-     * @param listener Listener for updates notifying
-     * @param callback Listener for notifying
-     */
-    fun subscribeOnAccount(
-        nameOrId: String,
-        listener: AccountListener,
-        callback: Callback<Boolean>
-    )
-
-    /**
-     * Removes all listener, connected with required account [nameOrId], from events notifying
-     *
-     * @param nameOrId Account object id or name
-     * @param callback Listener for notifying
-     */
-    fun unsubscribeFromAccount(nameOrId: String, callback: Callback<Boolean>)
-
-    /**
-     * Removes all registered listeners
-     *
-     * @param callback Listener for notifying
-     */
-    fun unsubscribeAll(callback: Callback<Boolean>)
 
 }
 

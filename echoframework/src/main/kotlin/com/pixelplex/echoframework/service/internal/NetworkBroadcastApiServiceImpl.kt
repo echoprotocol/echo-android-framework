@@ -1,15 +1,14 @@
 package com.pixelplex.echoframework.service.internal
 
-import com.pixelplex.echoframework.Callback
 import com.pixelplex.echoframework.ILLEGAL_ID
 import com.pixelplex.echoframework.core.crypto.CryptoCoreComponent
 import com.pixelplex.echoframework.core.socket.SocketCoreComponent
-import com.pixelplex.echoframework.exception.LocalException
 import com.pixelplex.echoframework.model.Transaction
 import com.pixelplex.echoframework.model.socketoperations.TransactionSocketOperation
 import com.pixelplex.echoframework.service.NetworkBroadcastApiService
 import com.pixelplex.echoframework.support.Result
 import com.pixelplex.echoframework.support.concurrent.future.FutureTask
+import com.pixelplex.echoframework.support.concurrent.future.completeCallback
 import com.pixelplex.echoframework.support.concurrent.future.wrapResult
 
 /**
@@ -33,15 +32,7 @@ class NetworkBroadcastApiServiceImpl(
             transaction,
             cryptoCoreComponent.signTransaction(transaction),
             callId = socketCoreComponent.currentId,
-            callback = object : Callback<Boolean> {
-                override fun onSuccess(result: Boolean) {
-                    future.setComplete(result)
-                }
-
-                override fun onError(error: LocalException) {
-                    future.setComplete(error)
-                }
-            }
+            callback = future.completeCallback()
         )
         socketCoreComponent.emit(transactionSocketOperation)
 

@@ -61,6 +61,10 @@ class ListAssetsSocketOperation(
             .registerTypeAdapter(
                 Price::class.java,
                 Price.PriceDeserializer()
+            )
+            .registerTypeAdapter(
+                Asset::class.java,
+                Asset.AssetDeserializer()
             ).create()
 
         return gson.fromJson<List<Asset>>(result, object : TypeToken<List<Asset>>() {}.type)
