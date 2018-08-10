@@ -1,14 +1,13 @@
 package com.pixelplex.echoframework.model.operations
 
+import com.google.common.primitives.Bytes
 import com.google.common.primitives.UnsignedLong
 import com.google.gson.*
-import com.pixelplex.bitcoinj.revert
-import com.pixelplex.echoframework.model.Account
-import com.pixelplex.echoframework.model.Asset
-import com.pixelplex.echoframework.model.AssetAmount
-import com.pixelplex.echoframework.model.BaseOperation
+import com.pixelplex.echoframework.support.Int64
+import com.pixelplex.echoframework.support.Uint8
+import com.pixelplex.echoframework.support.serialize
+import com.pixelplex.echoframework.model.*
 import com.pixelplex.echoframework.model.contract.Contract
-import com.pixelplex.echoframework.support.toUnsignedByteArray
 import java.lang.reflect.Type
 
 /**
@@ -16,44 +15,33 @@ import java.lang.reflect.Type
  *
  * @author Daria Pechkovskaya
  */
-class ContractOperation
-@JvmOverloads constructor(
+class ContractOperation @JvmOverloads constructor(
     val registrar: Account,
-    val receiver: Contract? = null,
+    receiver: Contract?,
     val asset: Asset,
     val value: UnsignedLong,
     val gasPrice: UnsignedLong,
     val gas: UnsignedLong,
     val code: String,
     override var fee: AssetAmount = AssetAmount(UnsignedLong.ZERO)
-
 ) : BaseOperation(OperationType.CONTRACT_OPERATION) {
+
+    val receiver: Optional<Contract> = Optional(receiver, true)
 
     override fun toBytes(): ByteArray {
         val feeBytes = fee.toBytes()
         val registrarBytes = registrar.toBytes()
+        val contractBytes = receiver.toBytes()
+        val assetIdBytes = Uint8.serialize(asset.instance)
+        val valueBytes = Int64.serialize(value)
+        val gasPriceBytes = Int64.serialize(gasPrice)
+        val gasBytes = Int64.serialize(gas)
+        val codeBytes = code.serialize()
 
-        var hasContract: ByteArray = byteArrayOf(0)
-        var contractBytes: ByteArray? = null
-        receiver?.let { nonNullContract ->
-            hasContract = byteArrayOf(1)
-            contractBytes = nonNullContract.toBytes()
-        }
-
-        val assetIdBytes = asset.instance.toUnsignedByteArray()
-        val valueBytes = value.toLong().revert()
-        val gasPriceBytes = gasPrice.toLong().revert()
-        val gasBytes = gas.toLong().revert()
-        val codeLengthBytes = code.length.toLong().toUnsignedByteArray()
-        val codeBytes = code.toByteArray()
-
-        return if (contractBytes != null) {
-            feeBytes + registrarBytes + hasContract + contractBytes!! + assetIdBytes +
-                    valueBytes + gasPriceBytes + gasBytes + codeLengthBytes + codeBytes
-        } else {
-            feeBytes + registrarBytes + hasContract + assetIdBytes + valueBytes +
-                    gasPriceBytes + gasBytes + codeLengthBytes + codeBytes
-        }
+        return Bytes.concat(
+            feeBytes, registrarBytes, contractBytes, assetIdBytes,
+            valueBytes, gasPriceBytes, gasBytes, codeBytes
+        )
     }
 
     override fun toJsonString(): String? {
@@ -69,7 +57,7 @@ class ContractOperation
             add(JsonObject().apply {
                 add(KEY_FEE, fee.toJsonObject())
                 addProperty(KEY_REGISTRAR, registrar.getObjectId())
-                receiver?.let { contract ->
+                receiver.field?.let { contract ->
                     addProperty(KEY_RECEIVER, contract.getObjectId())
                 }
                 addProperty(KEY_ASSET_ID, asset.getObjectId())

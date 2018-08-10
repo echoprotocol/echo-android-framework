@@ -1,12 +1,13 @@
 package com.pixelplex.echoframework.model
 
 import com.google.common.math.DoubleMath
+import com.google.common.primitives.Bytes
 import com.google.common.primitives.UnsignedLong
 import com.google.gson.*
-import com.pixelplex.bitcoinj.revert
 import com.pixelplex.echoframework.ECHO_ASSET_ID
+import com.pixelplex.echoframework.support.Int64
+import com.pixelplex.echoframework.support.Uint8
 import com.pixelplex.echoframework.exception.IncompatibleOperationException
-import com.pixelplex.echoframework.support.toUnsignedByteArray
 import java.lang.reflect.Type
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -132,10 +133,10 @@ class AssetAmount @JvmOverloads constructor(
     }
 
     override fun toBytes(): ByteArray {
-        val assetId = asset.instance.toUnsignedByteArray()
-        val value = this.amount.toLong().revert()
+        val assetId = Uint8.serialize(asset.instance)
+        val value = Int64.serialize(amount)
 
-        return value + assetId
+        return Bytes.concat(value, assetId)
     }
 
     override fun toJsonString(): String? {

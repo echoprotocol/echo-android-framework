@@ -1,11 +1,13 @@
 package com.pixelplex.echoframework.model
 
+import com.google.common.primitives.Bytes
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
-import com.pixelplex.bitcoinj.revert
 import com.pixelplex.echoframework.ECHO_ASSET_ID
-import com.pixelplex.echoframework.support.toUnsignedByteArray
+import com.pixelplex.echoframework.support.Uint16
+import com.pixelplex.echoframework.support.Uint32
+import com.pixelplex.echoframework.support.Uint8
 
 /**
  * Options only available for BitAssets
@@ -26,16 +28,18 @@ class BitassetOptions @JvmOverloads constructor(
     val extensions = Extensions()
 
     override fun toBytes(): ByteArray {
-        val feedLifetimeSecBytes = feedLifetimeSec.revert()
-        val minimumFeedsBytes = minimumFeeds.toByte()
-        val forceSettlementDelaySecBytes = forceSettlementDelaySec.revert()
-        val forceSettlementOffsetPercentBytes = forceSettlementOffsetPercent.revert()
-        val maximumForceSettlementVolumeBytes = maximumForceSettlementVolume.revert()
-        val shortBackingAssetBytes = Asset(shortBackingAsset).instance.toUnsignedByteArray()
+        val feedLifetimeSecBytes = Uint32.serialize(feedLifetimeSec)
+        val minimumFeedsBytes = Uint8.serialize(minimumFeeds)
+        val forceSettlementDelaySecBytes = Uint32.serialize(forceSettlementDelaySec)
+        val forceSettlementOffsetPercentBytes = Uint16.serialize(forceSettlementOffsetPercent)
+        val maximumForceSettlementVolumeBytes = Uint16.serialize(maximumForceSettlementVolume)
+        val shortBackingAssetBytes = Uint8.serialize(Asset(shortBackingAsset).instance)
         val extensionsBytes = extensions.toBytes()
-        return byteArrayOf(1) + feedLifetimeSecBytes + minimumFeedsBytes + forceSettlementDelaySecBytes +
-                forceSettlementOffsetPercentBytes + maximumForceSettlementVolumeBytes +
-                shortBackingAssetBytes + extensionsBytes
+        return Bytes.concat(
+            feedLifetimeSecBytes, minimumFeedsBytes, forceSettlementDelaySecBytes,
+            forceSettlementOffsetPercentBytes, maximumForceSettlementVolumeBytes,
+            shortBackingAssetBytes, extensionsBytes
+        )
     }
 
     override fun toJsonString(): String? = toJsonObject().toString()

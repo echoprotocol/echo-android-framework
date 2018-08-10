@@ -1,9 +1,11 @@
 package com.pixelplex.echoframework.model.contract
 
+import com.google.gson.Gson
+import com.google.gson.JsonElement
+import com.google.gson.annotations.SerializedName
 import com.pixelplex.echoframework.model.AssetAmount
-import com.pixelplex.echoframework.model.ByteSerializable
 import com.pixelplex.echoframework.model.GrapheneObject
-import com.pixelplex.echoframework.support.toUnsignedByteArray
+import com.pixelplex.echoframework.model.GrapheneSerializable
 
 /**
  * Represents contract_object from blockchain
@@ -12,11 +14,15 @@ import com.pixelplex.echoframework.support.toUnsignedByteArray
  */
 class Contract @JvmOverloads constructor(
     id: String,
+
+    @SerializedName("code")
     var contractCode: String? = null,
+
+    @SerializedName("amount")
     var assetAmount: AssetAmount? = null
-) : GrapheneObject(id),
-    ByteSerializable {
+) : GrapheneObject(id), GrapheneSerializable {
 
-    override fun toBytes(): ByteArray = this.instance.toUnsignedByteArray()
+    override fun toJsonString(): String? = Gson().toJson(this, Contract::class.java)
 
+    override fun toJsonObject(): JsonElement? = null
 }

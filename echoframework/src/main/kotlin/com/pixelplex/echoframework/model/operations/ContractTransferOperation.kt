@@ -1,5 +1,6 @@
 package com.pixelplex.echoframework.model.operations
 
+import com.google.common.primitives.Bytes
 import com.google.common.primitives.UnsignedLong
 import com.google.gson.*
 import com.pixelplex.echoframework.model.Account
@@ -36,7 +37,7 @@ constructor(
         val fromBytes = from.toBytes()
         val toBytes = to.toBytes()
         val amountBytes = amount.toBytes()
-        return feeBytes + fromBytes + toBytes + amountBytes
+        return Bytes.concat(feeBytes, fromBytes, toBytes, amountBytes)
     }
 
     override fun toJsonString(): String? {

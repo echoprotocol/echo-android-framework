@@ -7,7 +7,6 @@ import com.google.gson.JsonObject
 import com.google.gson.annotations.Expose
 import com.pixelplex.echoframework.TIME_DATE_FORMAT
 import com.pixelplex.echoframework.core.logger.internal.LoggerCoreComponent
-import com.pixelplex.echoframework.support.toUnsignedByteArray
 import java.lang.reflect.Type
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -71,8 +70,6 @@ class Account : GrapheneObject, GrapheneSerializable {
     constructor(id: String, name: String) : super(id) {
         this.name = name
     }
-
-    override fun toBytes(): ByteArray = this.instance.toUnsignedByteArray()
 
     override fun toJsonString(): String? = getObjectId()
 

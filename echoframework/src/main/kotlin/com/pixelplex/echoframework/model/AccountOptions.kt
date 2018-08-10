@@ -1,8 +1,10 @@
 package com.pixelplex.echoframework.model
 
+import com.google.common.primitives.Bytes
 import com.google.gson.*
-import com.pixelplex.bitcoinj.revert
 import com.pixelplex.echoframework.core.logger.internal.LoggerCoreComponent
+import com.pixelplex.echoframework.support.Uint16
+import com.pixelplex.echoframework.support.serialize
 import com.pixelplex.echoframework.exception.MalformedAddressException
 import com.pixelplex.echoframework.model.network.Network
 import java.lang.reflect.Type
@@ -38,34 +40,30 @@ class AccountOptions : GrapheneSerializable {
 
     override fun toBytes(): ByteArray =
         memoKey?.let { memo ->
-            // Adding byte to indicate that there is memo data
-            var bytes = byteArrayOf(1.toByte())
-
             // Adding memo key
-            bytes += memo.toBytes()
+            val memoBytes = memo.toBytes()
 
             // Adding voting account
-            bytes += votingAccount.toBytes()
+            val voitingAccountBytes = votingAccount.toBytes()
 
             // Adding num_witness
-            bytes += witnessCount.toShort().revert()
+            val witnessCountBytes = Uint16.serialize(witnessCount)
 
             // Adding num_committee
-            bytes += committeeCount.toShort().revert()
+            val committeeCountBytes = Uint16.serialize(committeeCount)
 
             // Vote's array length
-            bytes += votes.size.toByte()
-            votes.forEach { vote ->
-                bytes += vote.toByteArray()
-            }
+            val votesBytes = votes.serialize { vote -> vote.toByteArray() }
 
             // Account options's extensions
-            bytes += extensions.toBytes()
+            val extensionsBytes = extensions.toBytes()
 
-            bytes
-        } ?: let {
-            byteArrayOf(0.toByte())
-        }
+            Bytes.concat(
+                memoBytes, voitingAccountBytes, witnessCountBytes, committeeCountBytes,
+                votesBytes, extensionsBytes
+            )
+
+        } ?: byteArrayOf(0)
 
     override fun toJsonString(): String? = null
 

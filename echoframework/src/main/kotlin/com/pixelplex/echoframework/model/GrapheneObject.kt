@@ -1,6 +1,7 @@
 package com.pixelplex.echoframework.model
 
 import com.google.gson.annotations.Expose
+import com.pixelplex.echoframework.support.Uint8
 
 /**
  * Represents base graphene object model
@@ -12,7 +13,7 @@ import com.google.gson.annotations.Expose
 open class GrapheneObject(
     @Expose
     protected var id: String
-) {
+) : ByteSerializable {
 
     protected var space: Int = 0
     protected var type: Int = 0
@@ -25,6 +26,8 @@ open class GrapheneObject(
             this.instance = parts[2].toLong()
         }
     }
+
+    override fun toBytes(): ByteArray = Uint8.serialize(instance)
 
     /**
      * Returns a String containing the full object apiId in the form {space}.{type}.{instance}
