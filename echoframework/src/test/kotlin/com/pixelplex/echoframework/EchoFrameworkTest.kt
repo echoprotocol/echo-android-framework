@@ -575,32 +575,32 @@ class EchoFrameworkTest {
         assertTrue(futureIssue.get() ?: false)
     }
 
-    @Test
-    fun createContractTest() {
-        val framework = initFramework()
-
-        if (connect(framework) == false) Assert.fail("Connection error")
-
-        val future = FutureTask<Boolean>()
-
-        framework.createContract(
-            login,
-            password,
-            legalAssetId,
-            legalContractByteCode,
-            object : Callback<Boolean> {
-                override fun onSuccess(result: Boolean) {
-                    future.setComplete(result)
-                }
-
-                override fun onError(error: LocalException) {
-                    future.setComplete(error)
-                }
-            }
-        )
-
-        assertTrue(future.get() ?: false)
-    }
+//    @Test
+//    fun createContractTest() {
+//        val framework = initFramework()
+//
+//        if (connect(framework) == false) Assert.fail("Connection error")
+//
+//        val future = FutureTask<Boolean>()
+//
+//        framework.createContract(
+//            login,
+//            password,
+//            legalAssetId,
+//            legalContractByteCode,
+//            object : Callback<Boolean> {
+//                override fun onSuccess(result: Boolean) {
+//                    future.setComplete(result)
+//                }
+//
+//                override fun onError(error: LocalException) {
+//                    future.setComplete(error)
+//                }
+//            }
+//        )
+//
+//        assertTrue(future.get() ?: false)
+//    }
 
     @Test
     fun callContractTest() {
