@@ -510,7 +510,7 @@ class EchoFrameworkTest {
 //        val futureAsset = FutureTask<Boolean>()
 //
 //        val asset = Asset("").apply {
-//            symbol = "QWERTYUIO"
+//            symbol = "SGSDFDFGSDF"
 //            precision = 4
 //            issuer = Account("1.2.18")
 //            setBtsOptions(
