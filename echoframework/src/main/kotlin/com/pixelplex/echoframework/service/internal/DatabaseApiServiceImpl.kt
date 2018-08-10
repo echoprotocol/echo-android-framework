@@ -53,7 +53,6 @@ class DatabaseApiServiceImpl(
         subscribe: Boolean
     ): Result<LocalException, Map<String, FullAccount>> {
         val future = FutureTask<Map<String, FullAccount>>()
-
         val fullAccountsOperation = FullAccountsSocketOperation(
             id,
             namesOrIds,

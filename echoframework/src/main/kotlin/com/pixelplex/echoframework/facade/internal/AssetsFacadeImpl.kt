@@ -123,31 +123,6 @@ class AssetsFacadeImpl(
         networkBroadcastApiService.broadcastTransactionWithCallback(transaction).dematerialize()
     }
 
-    private fun generateMemo(
-        privateKey: ByteArray,
-        fromAccount: Account,
-        toAccount: Account,
-        message: String?
-    ): Memo {
-        if (message != null) {
-            val encryptedMessage = cryptoCoreComponent.encryptMessage(
-                privateKey,
-                toAccount.options.memoKey!!.key,
-                BigInteger.ZERO,
-                message
-            )
-
-            return Memo(
-                Address(fromAccount.options.memoKey!!),
-                Address(toAccount.options.memoKey!!),
-                BigInteger.ZERO,
-                encryptedMessage ?: ByteArray(0)
-            )
-        }
-
-        return Memo()
-    }
-
     override fun listAssets(lowerBound: String, limit: Int, callback: Callback<List<Asset>>) =
         databaseApiService.listAssets(lowerBound, limit, callback)
 
