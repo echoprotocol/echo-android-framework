@@ -7,9 +7,9 @@ import com.pixelplex.echoframework.exception.LocalException
 import com.pixelplex.echoframework.facade.TransactionsFacade
 import com.pixelplex.echoframework.model.*
 import com.pixelplex.echoframework.model.operations.TransferOperationBuilder
+import com.pixelplex.echoframework.processResult
 import com.pixelplex.echoframework.service.DatabaseApiService
 import com.pixelplex.echoframework.service.NetworkBroadcastApiService
-import com.pixelplex.echoframework.support.Result
 import com.pixelplex.echoframework.support.dematerialize
 import com.pixelplex.echoframework.support.error
 import com.pixelplex.echoframework.support.value
@@ -36,55 +36,51 @@ class TransactionsFacadeImpl(
         asset: String,
         message: String?,
         callback: Callback<Boolean>
-    ) {
-        Result {
-            var toAccount: Account? = null
-            var fromAccount: Account? = null
+    ) = callback.processResult {
+        var toAccount: Account? = null
+        var fromAccount: Account? = null
 
-            databaseApiService.getFullAccounts(listOf(nameOrId, toNameOrId), false)
-                .value { accountsMap ->
-                    fromAccount = accountsMap[nameOrId]?.account
-                            ?: throw LocalException("Unable to find required account $nameOrId")
-                    toAccount = accountsMap[toNameOrId]?.account
-                            ?: throw LocalException("Unable to find required account $toNameOrId")
-                }
-                .error { accountsError ->
-                    throw LocalException("Error occurred during accounts request", accountsError)
-                }
+        databaseApiService.getFullAccounts(listOf(nameOrId, toNameOrId), false)
+            .value { accountsMap ->
+                fromAccount = accountsMap[nameOrId]?.account
+                        ?: throw LocalException("Unable to find required account $nameOrId")
+                toAccount = accountsMap[toNameOrId]?.account
+                        ?: throw LocalException("Unable to find required account $toNameOrId")
+            }
+            .error { accountsError ->
+                throw LocalException("Error occurred during accounts request", accountsError)
+            }
 
-            checkOwnerAccount(nameOrId, password, fromAccount!!)
+        checkOwnerAccount(nameOrId, password, fromAccount!!)
 
-            val privateKey =
-                cryptoCoreComponent.getPrivateKey(
-                    fromAccount!!.name,
-                    password,
-                    AuthorityType.ACTIVE
-                )
+        val privateKey =
+            cryptoCoreComponent.getPrivateKey(
+                fromAccount!!.name,
+                password,
+                AuthorityType.ACTIVE
+            )
 
-            val memo = generateMemo(privateKey, fromAccount!!, toAccount!!, message)
+        val memo = generateMemo(privateKey, fromAccount!!, toAccount!!, message)
 
-            val transfer = TransferOperationBuilder()
-                .setFrom(fromAccount!!)
-                .setTo(toAccount!!)
-                .setAmount(AssetAmount(UnsignedLong.valueOf(amount.toLong()), Asset(asset)))
-                .setMemo(memo)
-                .build()
+        val transfer = TransferOperationBuilder()
+            .setFrom(fromAccount!!)
+            .setTo(toAccount!!)
+            .setAmount(AssetAmount(UnsignedLong.valueOf(amount.toLong()), Asset(asset)))
+            .setMemo(memo)
+            .build()
 
-            val blockData = databaseApiService.getBlockData()
-            val chainId = getChainId()
-            val fees = getFees(listOf(transfer), asset)
+        val blockData = databaseApiService.getBlockData()
+        val chainId = getChainId()
+        val fees = getFees(listOf(transfer), asset)
 
-            val transaction = Transaction(
-                privateKey,
-                blockData,
-                listOf(transfer),
-                chainId
-            ).apply { setFees(fees) }
+        val transaction = Transaction(
+            privateKey,
+            blockData,
+            listOf(transfer),
+            chainId
+        ).apply { setFees(fees) }
 
-            networkBroadcastApiService.broadcastTransactionWithCallback(transaction).dematerialize()
-        }
-            .value { transactionResult -> callback.onSuccess(transactionResult) }
-            .error { error -> callback.onError(LocalException(error)) }
+        networkBroadcastApiService.broadcastTransactionWithCallback(transaction).dematerialize()
     }
 
     private fun generateMemo(
