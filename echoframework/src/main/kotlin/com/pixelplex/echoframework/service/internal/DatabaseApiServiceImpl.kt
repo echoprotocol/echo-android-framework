@@ -224,12 +224,10 @@ class DatabaseApiServiceImpl(
 
             if (!subscriptionManager.registered(nameOrId)) {
                 getAccountId(nameOrId)
-                    .flatMap { account ->
-                        getFullAccounts(listOf(account), true)
-                    }
+                    .flatMap { account -> getFullAccounts(listOf(account), true) }
                     .value { accountsMap ->
-                        accountsMap[nameOrId]?.account?.getObjectId()?.let { requiredAccountId ->
-                            subscriptionManager.registerListener(requiredAccountId, listener)
+                        accountsMap.values.firstOrNull()?.account?.getObjectId()?.let { id ->
+                            subscriptionManager.registerListener(id, listener)
                             callback.onSuccess(subscribed)
                         }
                     }
@@ -276,7 +274,7 @@ class DatabaseApiServiceImpl(
         getFullAccounts(listOf(nameOrId), false)
             .flatMap { accountsMap ->
                 accountsMap[nameOrId]?.account?.getObjectId()?.let { Result.Value(it) }
-                        ?: Result.Error(LocalException())
+                    ?: Result.Error(LocalException())
             }
             .mapError {
                 LocalException("Unable to find required account id for identifier = $nameOrId")
