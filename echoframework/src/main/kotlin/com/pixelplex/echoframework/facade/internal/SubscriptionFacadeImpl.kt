@@ -8,8 +8,6 @@ import com.pixelplex.echoframework.core.socket.SocketMessengerListener
 import com.pixelplex.echoframework.exception.LocalException
 import com.pixelplex.echoframework.facade.SubscriptionFacade
 import com.pixelplex.echoframework.model.network.Network
-import com.pixelplex.echoframework.model.socketoperations.CancelAllSubscriptionsSocketOperation
-import com.pixelplex.echoframework.model.socketoperations.SetSubscribeCallbackSocketOperation
 import com.pixelplex.echoframework.service.DatabaseApiService
 import com.pixelplex.echoframework.service.internal.AccountSubscriptionManager
 import com.pixelplex.echoframework.service.internal.AccountSubscriptionManagerImpl
@@ -83,10 +81,7 @@ class SubscriptionFacadeImpl(
     private fun subscribeCallBlocking(): Boolean {
         val futureResult = FutureTask<Boolean>()
 
-        val subscriptionOperation =
-            createSubscriptionOperation(true, futureResult.completeCallback())
-
-        socketCoreComponent.emit(subscriptionOperation)
+        databaseApiService.subscribe(true, futureResult.completeCallback())
 
         var result = false
 
@@ -101,14 +96,6 @@ class SubscriptionFacadeImpl(
 
         return result
     }
-
-    private fun createSubscriptionOperation(clearFilter: Boolean, callback: Callback<Boolean>) =
-        SetSubscribeCallbackSocketOperation(
-            databaseApiService.id,
-            clearFilter,
-            socketCoreComponent.currentId,
-            callback
-        )
 
     override fun unsubscribeFromAccount(nameOrId: String, callback: Callback<Boolean>) {
         // if there are listeners registered with [nameOrId] - remove them
@@ -160,12 +147,7 @@ class SubscriptionFacadeImpl(
 
     private fun cancelAllSubscriptions(): Result<LocalException, Boolean> {
         val future = FutureTask<Boolean>()
-        val cancelSubscriptionsOperation = CancelAllSubscriptionsSocketOperation(
-            databaseApiService.id,
-            callId = socketCoreComponent.currentId,
-            callback = future.completeCallback()
-        )
-        socketCoreComponent.emit(cancelSubscriptionsOperation)
+        databaseApiService.unsubscribe(future.completeCallback())
 
         return future.wrapResult(false)
     }

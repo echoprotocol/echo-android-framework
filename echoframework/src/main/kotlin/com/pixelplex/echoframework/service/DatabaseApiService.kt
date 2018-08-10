@@ -16,7 +16,8 @@ import com.pixelplex.echoframework.support.Result
  * @author Dmitriy Bushuev
  */
 interface DatabaseApiService : ApiService, AccountsService, GlobalsService,
-    AuthorityAndValidationService, BlocksAndTransactionsService, ContractsService, AssetsService
+    AuthorityAndValidationService, BlocksAndTransactionsService, ContractsService, AssetsService,
+    SubscriptionService
 
 /**
  * Encapsulates logic, associated with data from account from blockchain database API
@@ -180,4 +181,22 @@ interface ContractsService {
      * @param contractId Id of contract
      */
     fun getContract(contractId: String): Result<LocalException, ContractStruct>
+}
+
+/**
+ * Encapsulates logic, associated with global subscription to blockchain objects
+ */
+interface SubscriptionService {
+
+    /**
+     * Subscribes to listening chain objects
+     * Clears all subscriptions when [clearFilter] set to true
+     */
+    fun subscribe(clearFilter: Boolean, callback: Callback<Boolean>)
+
+    /**
+     * Subscribes from listening chain objects
+     */
+    fun unsubscribe(callback: Callback<Boolean>)
+
 }

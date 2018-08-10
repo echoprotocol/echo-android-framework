@@ -226,5 +226,26 @@ class DatabaseApiServiceImpl(
         return future.wrapResult()
     }
 
-}
+    override fun subscribe(clearFilter: Boolean, callback: Callback<Boolean>) {
+        socketCoreComponent.emit(createSubscriptionOperation(clearFilter, callback))
+    }
 
+    private fun createSubscriptionOperation(clearFilter: Boolean, callback: Callback<Boolean>) =
+        SetSubscribeCallbackSocketOperation(
+            id,
+            clearFilter,
+            socketCoreComponent.currentId,
+            callback
+        )
+
+    override fun unsubscribe(callback: Callback<Boolean>) {
+        val cancelSubscriptionsOperation = CancelAllSubscriptionsSocketOperation(
+            id,
+            callId = socketCoreComponent.currentId,
+            callback = callback
+        )
+
+        socketCoreComponent.emit(cancelSubscriptionsOperation)
+    }
+
+}
