@@ -1,6 +1,8 @@
 package com.pixelplex.echoframework.model
 
+import com.google.common.primitives.Bytes
 import com.google.gson.annotations.SerializedName
+import com.pixelplex.echoframework.support.serialize
 
 /**
  * Class used to represent a specific asset on the Graphene platform
@@ -21,7 +23,7 @@ class Asset : GrapheneObject, ByteSerializable {
     @SerializedName("options")
     var assetOptions: AssetOptions? = null
 
-    var bitassetOptions = Optional<BitassetOptions>(null)
+    val bitassetOptions = Optional<BitassetOptions>(null, true)
 
     var predictionMarket = false
 
@@ -67,14 +69,15 @@ class Asset : GrapheneObject, ByteSerializable {
 
     override fun toBytes(): ByteArray {
         val issuerBytes = Account(issuer!!).toBytes()
-        val symbolBytes = byteArrayOf(symbol!!.length.toByte()) + symbol!!.toByteArray()
-        val precisionBytes = precision.toByte()
+        val symbolBytes = symbol!!.serialize()
+        val precisionBytes = byteArrayOf(precision.toByte())
         val optionsBytes = assetOptions!!.toBytes()
         val btsOptionsBytes = bitassetOptions.toBytes()
-        val predictionMarketBytes =
-            if (predictionMarket) byteArrayOf(1.toByte()) else byteArrayOf(0.toByte())
-        return issuerBytes + symbolBytes + precisionBytes + optionsBytes + btsOptionsBytes +
-                predictionMarketBytes
+        val predictionMarketBytes = predictionMarket.serialize()
+        return Bytes.concat(
+            issuerBytes, symbolBytes, precisionBytes, optionsBytes,
+            btsOptionsBytes, predictionMarketBytes
+        )
     }
 
     override fun hashCode() = getObjectId().hashCode()

@@ -14,14 +14,20 @@ import com.google.gson.JsonElement
  *
  * @author Daria Pechkovskaya
  */
-class Optional<T : GrapheneSerializable>(var field: T?) : GrapheneSerializable {
+class Optional<T : GrapheneSerializable> @JvmOverloads constructor(
+    var field: T?,
+    var addByteToStart: Boolean = false
+) : GrapheneSerializable {
 
     val isSet: Boolean
         get() = this.field != null
 
     override fun toBytes(): ByteArray =
         try {
-            field?.toBytes() ?: byteArrayOf(0.toByte())
+            field?.let { nonNullField ->
+                val bytes = if (addByteToStart) byteArrayOf(1) else byteArrayOf()
+                bytes + nonNullField.toBytes()
+            } ?: byteArrayOf(0)
         } catch (e: Exception) {
             e.printStackTrace()
             byteArrayOf()

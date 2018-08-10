@@ -1,5 +1,6 @@
 package com.pixelplex.echoframework.model.operations
 
+import com.google.common.primitives.Bytes
 import com.google.common.primitives.UnsignedLong
 import com.google.gson.*
 import com.pixelplex.echoframework.model.*
@@ -21,7 +22,7 @@ class AccountUpdateOperation @JvmOverloads constructor(
 
     var ownerOption = Optional(owner)
     var activeOption = Optional(active)
-    var newOptionsOption = Optional(newOptions)
+    var newOptionsOption = Optional(newOptions, true)
 
     /**
      * Updates owner value
@@ -54,7 +55,14 @@ class AccountUpdateOperation @JvmOverloads constructor(
         val activeBytes = activeOption.toBytes()
         val newOptionsBytes = newOptionsOption.toBytes()
         val extensionBytes = extensions.toBytes()
-        return feeBytes + accountBytes + ownerBytes + activeBytes + newOptionsBytes + extensionBytes
+        return Bytes.concat(
+            feeBytes,
+            accountBytes,
+            ownerBytes,
+            activeBytes,
+            newOptionsBytes,
+            extensionBytes
+        )
     }
 
     override fun toJsonString(): String? = Gson().toJson(this)

@@ -20,17 +20,12 @@ class CreateAssetOperation @JvmOverloads constructor(
         val feeBytes = fee.toBytes()
         val assetBytes = asset.toBytes()
         val extensionsBytes = extensions.toBytes()
-        return Bytes.concat(
-            feeBytes,
-            assetBytes,
-            extensionsBytes
-        )
+        return Bytes.concat(feeBytes, assetBytes, extensionsBytes)
     }
 
     override fun toJsonString(): String {
         val gson = GsonBuilder().registerTypeAdapter(
-            TransferOperation::class.java,
-            CreateAssetSerializer()
+            CreateAssetOperation::class.java, CreateAssetSerializer()
         ).create()
         return gson.toJson(this)
     }

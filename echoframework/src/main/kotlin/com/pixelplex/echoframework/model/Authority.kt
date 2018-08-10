@@ -1,7 +1,10 @@
 package com.pixelplex.echoframework.model
 
+import com.google.common.primitives.Bytes
 import com.google.gson.*
-import com.pixelplex.bitcoinj.revert
+import com.pixelplex.echoframework.support.Uint16
+import com.pixelplex.echoframework.support.Uint32
+import com.pixelplex.echoframework.support.serialize
 import com.pixelplex.echoframework.exception.MalformedAddressException
 import com.pixelplex.echoframework.model.network.Network
 import java.lang.reflect.Type
@@ -14,9 +17,9 @@ import java.lang.reflect.Type
  * @author Dmitriy Bushuev
  */
 class Authority @JvmOverloads constructor(
-    var weightThreshold: Long = 1,
-    var keyAuthorities: HashMap<PublicKey, Long> = hashMapOf(),
-    var accountAuthorities: HashMap<Account, Long> = hashMapOf()
+    var weightThreshold: Int = 1,
+    var keyAuthorities: Map<PublicKey, Long> = mapOf(),
+    var accountAuthorities: Map<Account, Long> = mapOf()
 ) : GrapheneSerializable {
 
     private val extensions: Extensions = Extensions()
@@ -41,35 +44,30 @@ class Authority @JvmOverloads constructor(
         // otherwise its only contribution will be a zero byte
         if (authsSize > 0) {
             // Weight threshold
-            val weightThresholdBytes = weightThreshold.toInt().revert()
-
-            // Number of account authorities
-            val accountAuthoritiesSizeBytes = accountAuthorities.size.toByte()
+            val weightThresholdBytes = Uint32.serialize(weightThreshold)
 
             // Serializing individual accounts and their corresponding weights
-            var accountAuthoritiesBytes: ByteArray = byteArrayOf()
-            accountAuthorities.forEach { account, weight ->
-                accountAuthoritiesBytes += account.toBytes()
-                accountAuthoritiesBytes += weight.toShort().revert()
-            }
-
-            // Number of key authorities
-            val keyAuthoritiesSizeBytes = keyAuthorities.size.toByte()
+            val accountAuthoritiesBytes =
+                accountAuthorities.serialize(
+                    keyToBytes = { account -> account.toBytes() },
+                    valueToBytes = { value -> Uint16.serialize(value) })
 
             // Serializing individual keys and their corresponding weights
-            var keyAuthoritiesBytes: ByteArray = byteArrayOf()
-            keyAuthorities.forEach { account, weight ->
-                keyAuthoritiesBytes += account.toBytes()
-                keyAuthoritiesBytes += weight.toShort().revert()
-            }
+            val keyAuthoritiesBytes =
+                keyAuthorities.serialize(
+                    keyToBytes = { account -> account.toBytes() },
+                    valueToBytes = { value -> Uint16.serialize(value) })
 
             // Adding number of extensions
-            val extensionsSizeBytes = extensions.size().toByte()
+            val extensionsBytes = extensions.toBytes()
 
-            return authsSizeBytes + weightThresholdBytes +
-                    accountAuthoritiesSizeBytes + accountAuthoritiesBytes +
-                    keyAuthoritiesSizeBytes + keyAuthoritiesBytes +
-                    extensionsSizeBytes
+            return Bytes.concat(
+                authsSizeBytes,
+                weightThresholdBytes,
+                accountAuthoritiesBytes,
+                keyAuthoritiesBytes,
+                extensionsBytes
+            )
         }
 
         return authsSizeBytes
@@ -153,7 +151,7 @@ class Authority @JvmOverloads constructor(
 
             val baseObject = json.asJsonObject
 
-            val weightThreshold = baseObject.get(KEY_WEIGHT_THRESHOLD).asLong
+            val weightThreshold = baseObject.get(KEY_WEIGHT_THRESHOLD).asInt
             val keyAuthArray = baseObject.getAsJsonArray(KEY_KEY_AUTHS)
             val accountAuthArray = baseObject.getAsJsonArray(KEY_ACCOUNT_AUTHS)
 

@@ -1,10 +1,8 @@
 package com.pixelplex.echoframework
 
+import com.google.common.primitives.UnsignedLong
 import com.pixelplex.echoframework.exception.LocalException
-import com.pixelplex.echoframework.model.Account
-import com.pixelplex.echoframework.model.Asset
-import com.pixelplex.echoframework.model.Balance
-import com.pixelplex.echoframework.model.HistoryResponse
+import com.pixelplex.echoframework.model.*
 import com.pixelplex.echoframework.model.contract.ContractInfo
 import com.pixelplex.echoframework.model.contract.ContractResult
 import com.pixelplex.echoframework.model.contract.ContractStruct
@@ -508,7 +506,7 @@ class EchoFrameworkTest {
 //
 //        val futureAsset = FutureTask<Boolean>()
 //
-//        val asset = Asset("", "RTJHRTDFS", 4, "1.2.18").apply {
+//        val asset = Asset("", "RTJHRT", 4, "1.2.22").apply {
 //            setBtsOptions(
 //                BitassetOptions(
 //                    86400, 7, 86400,
@@ -521,7 +519,7 @@ class EchoFrameworkTest {
 //
 //        val options =
 //            AssetOptions(
-//                UnsignedLong.valueOf(100000), 0.toLong(), UnsignedLong.ZERO, 79, 1,
+//                UnsignedLong.valueOf(100000), 0L, UnsignedLong.ZERO, 79, 1,
 //                Price().apply {
 //                    this.quote = AssetAmount(UnsignedLong.valueOf(1), Asset("1.3.1"))
 //                    this.base = AssetAmount(UnsignedLong.valueOf(1), Asset("1.3.0"))
@@ -531,7 +529,7 @@ class EchoFrameworkTest {
 //        asset.assetOptions = options
 //
 //        framework.createAsset(
-//            "dima1", "P5KctJPedZ4K9T77KgmqhVNJ5H6FojEN6fRVp9PYyhAb9",
+//            login, password,
 //            asset,
 //            object : Callback<Boolean> {
 //                override fun onSuccess(result: Boolean) {

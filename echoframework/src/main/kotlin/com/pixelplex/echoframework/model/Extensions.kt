@@ -22,7 +22,7 @@ class Extensions : GrapheneSerializable {
             extensions.forEach { extension -> add(extension.toJsonObject()) }
         }
 
-    override fun toBytes() = ByteArray(1)
+    override fun toBytes() = byteArrayOf(0)
 
     /**
      * Returns current extension list size

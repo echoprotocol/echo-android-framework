@@ -1,5 +1,6 @@
 package com.pixelplex.echoframework.model.operations
 
+import com.google.common.primitives.Bytes
 import com.google.common.primitives.UnsignedLong
 import com.google.gson.*
 import com.pixelplex.echoframework.model.Account
@@ -29,7 +30,14 @@ class IssueAssetOperation @JvmOverloads constructor(
         val issueToAccountBytes = issueToAccount.toBytes()
         val memoBytes = memo.toBytes()
         val extensions = extensions.toBytes()
-        return feeBytes + issuerBytes + assetToIssueBytes + issueToAccountBytes + memoBytes + extensions
+        return Bytes.concat(
+            feeBytes,
+            issuerBytes,
+            assetToIssueBytes,
+            issueToAccountBytes,
+            memoBytes,
+            extensions
+        )
     }
 
     override fun toJsonString(): String {

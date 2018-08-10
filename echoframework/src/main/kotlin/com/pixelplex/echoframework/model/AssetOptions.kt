@@ -4,7 +4,9 @@ import com.google.common.primitives.Bytes
 import com.google.common.primitives.UnsignedLong
 import com.google.gson.*
 import com.google.gson.annotations.SerializedName
-import com.pixelplex.bitcoinj.revert
+import com.pixelplex.echoframework.support.Int64
+import com.pixelplex.echoframework.support.Uint16
+import com.pixelplex.echoframework.support.serialize
 import java.lang.reflect.Type
 
 /**
@@ -36,32 +38,30 @@ class AssetOptions @JvmOverloads constructor(
     var extensions = Extensions()
 
     override fun toBytes(): ByteArray {
-        val maxSupplyBytes = maxSupply!!.toLong().revert()
-        val marketFeePercentBytes = marketFeePercent.toShort().revert()
-        val maxMarketFeeBytes = maxMarketFee!!.toLong().revert()
-        val issuerPermissionsBytes = issuerPermissions.toShort().revert()
-        val flagsBytes = flags.toShort().revert()
+        val maxSupplyBytes = Int64.serialize(maxSupply!!)
+        val marketFeePercentBytes = Uint16.serialize(marketFeePercent)
+        val maxMarketFeeBytes = Int64.serialize(maxMarketFee!!)
+        val issuerPermissionsBytes = Uint16.serialize(issuerPermissions)
+        val flagsBytes = Uint16.serialize(flags)
         val coreExchangeRateBytes = coreExchangeRate!!.toBytes()
 
-        var whitelistAuthoritiesBytes =
-            byteArrayOf(whitelistAuthorities.size.toByte())
-        whitelistAuthorities.forEach { auth -> whitelistAuthoritiesBytes += Account(auth).toBytes() }
+        val whitelistAuthoritiesBytes = whitelistAuthorities.serialize { auth ->
+            Account(auth).toBytes()
+        }
 
-        var blacklistAuthoritiesBytes =
-            byteArrayOf(blacklistAuthorities.size.toByte())
-        blacklistAuthorities.forEach { auth -> blacklistAuthoritiesBytes += Account(auth).toBytes() }
+        val blacklistAuthoritiesBytes = blacklistAuthorities.serialize { auth ->
+            Account(auth).toBytes()
+        }
 
-        var whitelistMarketsBytes =
-            byteArrayOf(whitelistMarkets.size.toByte())
-        whitelistMarkets.forEach { market -> whitelistMarketsBytes += Account(market).toBytes() }
+        val whitelistMarketsBytes = whitelistMarkets.serialize { market ->
+            Account(market).toBytes()
+        }
 
-        var blacklistMarketsBytes =
-            byteArrayOf(blacklistMarkets.size.toByte())
-        blacklistMarkets.forEach { market -> blacklistMarketsBytes += Account(market).toBytes() }
+        val blacklistMarketsBytes = blacklistMarkets.serialize { market ->
+            Account(market).toBytes()
+        }
 
-        val descriptionBytes =
-            byteArrayOf((description?.length ?: 0).toByte()) + (description?.toByteArray()
-                    ?: ByteArray(0))
+        val descriptionBytes = description?.serialize() ?: byteArrayOf(0)
         val extensionsBytes = extensions.toBytes()
 
         return Bytes.concat(
