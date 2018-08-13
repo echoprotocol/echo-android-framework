@@ -33,5 +33,7 @@ class ContractMethodParameter
         const val TYPE_ADDRESS = "address"
 
         const val TYPE_INT = "int"
+
+        const val TYPE_STRING = "string"
     }
 }

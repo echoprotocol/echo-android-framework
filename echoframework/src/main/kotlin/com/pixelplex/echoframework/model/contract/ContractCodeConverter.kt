@@ -12,9 +12,6 @@ import org.spongycastle.util.encoders.Hex
 class ContractCodeConverter : Converter<ContractMethodParameter, String> {
 
     companion object {
-        private const val TYPE_INT = "int"
-        private const val TYPE_STRING = "string"
-        private const val TYPE_ADDRESS = "address"
         private const val HASH_PATTERN =
             "0000000000000000000000000000000000000000000000000000000000000000" //64b
         private const val RADIX = 16
@@ -27,9 +24,11 @@ class ContractCodeConverter : Converter<ContractMethodParameter, String> {
         val value = source.value
 
         return when {
-            source.type.contains(TYPE_INT) -> appendNumericPattern(convertToByteCode(value.toLong()))
-            source.type.contains(TYPE_STRING) -> getStringOffset(value)
-            source.type.contains(TYPE_ADDRESS) -> appendAddressPattern(
+            source.type.contains(ContractMethodParameter.TYPE_INT) -> appendNumericPattern(
+                convertToByteCode(value.toLong())
+            )
+            source.type.contains(ContractMethodParameter.TYPE_STRING) -> getStringOffset(value)
+            source.type.contains(ContractMethodParameter.TYPE_ADDRESS) -> appendAddressPattern(
                 Hex.toHexString(Base58.decode(value)).substring(2, 42)
             )
             else -> ""

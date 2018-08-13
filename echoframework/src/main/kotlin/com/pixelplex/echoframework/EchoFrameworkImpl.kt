@@ -53,11 +53,10 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         val socketCoreComponent =
             SocketCoreComponentImpl(settings.socketMessenger, mapperCoreComponent)
 
-        val accountHistoryApiService =
-            AccountHistoryApiServiceImpl(
-                socketCoreComponent,
-                settings.network
-            )
+        val accountHistoryApiService = AccountHistoryApiServiceImpl(
+            socketCoreComponent,
+            settings.network
+        )
         val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, settings.network)
         val networkBroadcastApiService =
             NetworkBroadcastApiServiceImpl(socketCoreComponent, settings.cryptoComponent)
@@ -74,23 +73,24 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             accountHistoryApiService,
             networkBroadcastApiService
         )
-        authenticationFacade =
-                AuthenticationFacadeImpl(
-                    databaseApiService,
-                    networkBroadcastApiService,
-                    settings.cryptoComponent,
-                    settings.network
-                )
+        authenticationFacade = AuthenticationFacadeImpl(
+            databaseApiService,
+            networkBroadcastApiService,
+            settings.cryptoComponent,
+            settings.network
+        )
         feeFacade = FeeFacadeImpl(databaseApiService)
         informationFacade = InformationFacadeImpl(databaseApiService, accountHistoryApiService)
-        subscriptionFacade =
-                SubscriptionFacadeImpl(socketCoreComponent, databaseApiService, settings.network)
-        transactionsFacade =
-                TransactionsFacadeImpl(
-                    databaseApiService,
-                    networkBroadcastApiService,
-                    settings.cryptoComponent
-                )
+        subscriptionFacade = SubscriptionFacadeImpl(
+            socketCoreComponent,
+            databaseApiService,
+            settings.network
+        )
+        transactionsFacade = TransactionsFacadeImpl(
+            databaseApiService,
+            networkBroadcastApiService,
+            settings.cryptoComponent
+        )
         assetsFacade = AssetsFacadeImpl(
             databaseApiService,
             networkBroadcastApiService,

@@ -36,47 +36,42 @@ class ContractsFacadeImpl(
         assetId: String,
         byteCode: String,
         callback: Callback<Boolean>
-    ) {
-        Result {
-            var registrar: Account? = null
+    ) = callback.processResult {
+        var registrar: Account? = null
 
-            databaseApiService.getFullAccounts(listOf(registrarNameOrId), false)
-                .value { accountsMap ->
-                    registrar = accountsMap[registrarNameOrId]?.account
-                            ?:
-                            throw LocalException("Unable to find required account $registrarNameOrId")
-                }
-                .error { accountsError ->
-                    throw LocalException("Error occurred during accounts request", accountsError)
-                }
+        databaseApiService.getFullAccounts(listOf(registrarNameOrId), false)
+            .value { accountsMap ->
+                registrar = accountsMap[registrarNameOrId]?.account
+                        ?:
+                        throw LocalException("Unable to find required account $registrarNameOrId")
+            }
+            .error { accountsError ->
+                throw LocalException("Error occurred during accounts request", accountsError)
+            }
 
-            checkOwnerAccount(registrarNameOrId, password, registrar!!)
+        checkOwnerAccount(registrarNameOrId, password, registrar!!)
 
-            val privateKey = cryptoCoreComponent.getPrivateKey(
-                registrar!!.name,
-                password,
-                AuthorityType.ACTIVE
-            )
+        val privateKey = cryptoCoreComponent.getPrivateKey(
+            registrar!!.name,
+            password,
+            AuthorityType.ACTIVE
+        )
 
-            val contractOperation = ContractOperationBuilder()
-                .setAsset(assetId)
-                .setRegistrar(registrar!!)
-                .setGas(1000000)
-                .setContractCode(byteCode)
-                .build()
+        val contractOperation = ContractOperationBuilder()
+            .setAsset(assetId)
+            .setRegistrar(registrar!!)
+            .setGas(1000000)
+            .setContractCode(byteCode)
+            .build()
 
-            val blockData = databaseApiService.getBlockData()
-            val chainId = getChainId()
-            val fees = getFees(listOf(contractOperation), assetId)
+        val blockData = databaseApiService.getBlockData()
+        val chainId = getChainId()
+        val fees = getFees(listOf(contractOperation), assetId)
 
-            val transaction = Transaction(privateKey, blockData, listOf(contractOperation), chainId)
-                .apply { setFees(fees) }
+        val transaction = Transaction(privateKey, blockData, listOf(contractOperation), chainId)
+            .apply { setFees(fees) }
 
-            networkBroadcastApiService.broadcastTransactionWithCallback(transaction).dematerialize()
-        }
-            .value { creationResult -> callback.onSuccess(creationResult) }
-            .error { error -> callback.onError(LocalException(error)) }
-
+        networkBroadcastApiService.broadcastTransactionWithCallback(transaction).dematerialize()
     }
 
     override fun callContract(

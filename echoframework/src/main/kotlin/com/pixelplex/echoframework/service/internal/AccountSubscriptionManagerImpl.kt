@@ -7,6 +7,7 @@ import com.pixelplex.echoframework.model.Account
 import com.pixelplex.echoframework.model.AccountOptions
 import com.pixelplex.echoframework.model.Authority
 import com.pixelplex.echoframework.model.network.Network
+import com.pixelplex.echoframework.service.AccountSubscriptionManager
 import com.pixelplex.echoframework.support.toJsonObject
 import java.util.concurrent.ConcurrentHashMap
 
@@ -15,7 +16,8 @@ import java.util.concurrent.ConcurrentHashMap
  *
  * @author Dmitriy Bushuev
  */
-class AccountSubscriptionManagerImpl(private val network: Network) : AccountSubscriptionManager {
+class AccountSubscriptionManagerImpl(private val network: Network) :
+    AccountSubscriptionManager {
 
     private val listeners = ConcurrentHashMap<String, MutableList<AccountListener>>()
 
