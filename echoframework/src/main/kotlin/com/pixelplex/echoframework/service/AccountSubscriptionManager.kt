@@ -1,4 +1,4 @@
-package com.pixelplex.echoframework.service.internal
+package com.pixelplex.echoframework.service
 
 import com.pixelplex.echoframework.AccountListener
 import com.pixelplex.echoframework.model.Account

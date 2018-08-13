@@ -12,11 +12,9 @@ import com.pixelplex.echoframework.model.operations.IssueAssetOperationBuilder
 import com.pixelplex.echoframework.processResult
 import com.pixelplex.echoframework.service.DatabaseApiService
 import com.pixelplex.echoframework.service.NetworkBroadcastApiService
-import com.pixelplex.echoframework.support.Result
 import com.pixelplex.echoframework.support.dematerialize
 import com.pixelplex.echoframework.support.error
 import com.pixelplex.echoframework.support.value
-import java.math.BigInteger
 
 /**
  * Implementation of [AssetsFacade]
@@ -34,41 +32,36 @@ class AssetsFacadeImpl(
         password: String,
         asset: Asset,
         callback: Callback<Boolean>
-    ) {
-        Result {
-            val operation = CreateAssetOperation(asset)
+    ) = callback.processResult {
+        val operation = CreateAssetOperation(asset)
 
-            val blockData = databaseApiService.getBlockData()
-            val chainId = getChainId()
-            val fees = getFees(listOf(operation), ECHO_ASSET_ID)
+        val blockData = databaseApiService.getBlockData()
+        val chainId = getChainId()
+        val fees = getFees(listOf(operation), ECHO_ASSET_ID)
 
-            val privateKey =
-                cryptoCoreComponent.getPrivateKey(
-                    name,
-                    password,
-                    AuthorityType.ACTIVE
-                )
+        val privateKey = cryptoCoreComponent.getPrivateKey(
+            name,
+            password,
+            AuthorityType.ACTIVE
+        )
 
-            var account: Account? = null
+        var account: Account? = null
 
-            databaseApiService.getFullAccounts(listOf(name), false)
-                .value { accountsMap ->
-                    account = accountsMap[name]?.account
-                            ?: throw LocalException("Unable to find required account $name")
-                }
-                .error { accountsError ->
-                    throw LocalException("Error occurred during accounts request", accountsError)
-                }
+        databaseApiService.getFullAccounts(listOf(name), false)
+            .value { accountsMap ->
+                account = accountsMap[name]?.account
+                        ?: throw LocalException("Unable to find required account $name")
+            }
+            .error { accountsError ->
+                throw LocalException("Error occurred during accounts request", accountsError)
+            }
 
-            checkOwnerAccount(account!!.name, password, account!!)
+        checkOwnerAccount(account!!.name, password, account!!)
 
-            val transaction = Transaction(privateKey, blockData, listOf(operation), chainId)
-            transaction.setFees(fees)
+        val transaction = Transaction(privateKey, blockData, listOf(operation), chainId)
+        transaction.setFees(fees)
 
-            networkBroadcastApiService.broadcastTransactionWithCallback(transaction).dematerialize()
-        }
-            .value { result -> callback.onSuccess(result) }
-            .error { error -> callback.onError(LocalException(error)) }
+        networkBroadcastApiService.broadcastTransactionWithCallback(transaction).dematerialize()
     }
 
     override fun issueAsset(

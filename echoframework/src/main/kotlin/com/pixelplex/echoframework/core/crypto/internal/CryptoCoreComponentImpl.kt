@@ -8,11 +8,14 @@ import com.pixelplex.echoframework.core.logger.internal.LoggerCoreComponent
 import com.pixelplex.echoframework.model.AuthorityType
 import com.pixelplex.echoframework.model.Transaction
 import com.pixelplex.echoframework.model.network.Network
-import com.pixelplex.echoframework.support.*
+import com.pixelplex.echoframework.support.checkTrue
 import com.pixelplex.echoframework.support.crypto.Checksum
 import com.pixelplex.echoframework.support.crypto.Signature
 import com.pixelplex.echoframework.support.crypto.decryptAES
 import com.pixelplex.echoframework.support.crypto.encryptAES
+import com.pixelplex.echoframework.support.hexlify
+import com.pixelplex.echoframework.support.sha256hash
+import com.pixelplex.echoframework.support.sha512hash
 import org.spongycastle.util.encoders.Hex
 import java.math.BigInteger
 import java.security.NoSuchAlgorithmException
@@ -39,11 +42,7 @@ class CryptoCoreComponentImpl(network: Network) : CryptoCoreComponent {
     ): String {
         return ecKeyConverter.convert(
             ECKey.fromPrivate(
-                getPrivateKey(
-                    userName,
-                    password,
-                    authorityType
-                )
+                getPrivateKey(userName, password, authorityType)
             )
         )
     }

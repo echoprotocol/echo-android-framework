@@ -8,10 +8,8 @@ import com.pixelplex.echoframework.core.socket.SocketMessengerListener
 import com.pixelplex.echoframework.exception.LocalException
 import com.pixelplex.echoframework.facade.SubscriptionFacade
 import com.pixelplex.echoframework.model.network.Network
-import com.pixelplex.echoframework.model.socketoperations.CancelAllSubscriptionsSocketOperation
-import com.pixelplex.echoframework.model.socketoperations.SetSubscribeCallbackSocketOperation
 import com.pixelplex.echoframework.service.DatabaseApiService
-import com.pixelplex.echoframework.service.internal.AccountSubscriptionManager
+import com.pixelplex.echoframework.service.AccountSubscriptionManager
 import com.pixelplex.echoframework.service.internal.AccountSubscriptionManagerImpl
 import com.pixelplex.echoframework.support.*
 import com.pixelplex.echoframework.support.concurrent.future.FutureTask
@@ -58,10 +56,7 @@ class SubscriptionFacadeImpl(
             if (!subscriptionManager.registered(nameOrId)) {
                 getAccountId(nameOrId)
                     .flatMap { account ->
-                        databaseApiService.getFullAccounts(
-                            listOf(account),
-                            true
-                        )
+                        databaseApiService.getFullAccounts(listOf(account), true)
                     }
                     .value { accountsMap ->
                         accountsMap.values.firstOrNull()?.account?.getObjectId()?.let { id ->
@@ -83,10 +78,7 @@ class SubscriptionFacadeImpl(
     private fun subscribeCallBlocking(): Boolean {
         val futureResult = FutureTask<Boolean>()
 
-        val subscriptionOperation =
-            createSubscriptionOperation(true, futureResult.completeCallback())
-
-        socketCoreComponent.emit(subscriptionOperation)
+        databaseApiService.subscribe(true, futureResult.completeCallback())
 
         var result = false
 
@@ -101,14 +93,6 @@ class SubscriptionFacadeImpl(
 
         return result
     }
-
-    private fun createSubscriptionOperation(clearFilter: Boolean, callback: Callback<Boolean>) =
-        SetSubscribeCallbackSocketOperation(
-            databaseApiService.id,
-            clearFilter,
-            socketCoreComponent.currentId,
-            callback
-        )
 
     override fun unsubscribeFromAccount(nameOrId: String, callback: Callback<Boolean>) {
         // if there are listeners registered with [nameOrId] - remove them
@@ -160,12 +144,7 @@ class SubscriptionFacadeImpl(
 
     private fun cancelAllSubscriptions(): Result<LocalException, Boolean> {
         val future = FutureTask<Boolean>()
-        val cancelSubscriptionsOperation = CancelAllSubscriptionsSocketOperation(
-            databaseApiService.id,
-            callId = socketCoreComponent.currentId,
-            callback = future.completeCallback()
-        )
-        socketCoreComponent.emit(cancelSubscriptionsOperation)
+        databaseApiService.unsubscribe(future.completeCallback())
 
         return future.wrapResult(false)
     }
@@ -174,7 +153,7 @@ class SubscriptionFacadeImpl(
         databaseApiService.getFullAccounts(listOf(nameOrId), false)
             .flatMap { accountsMap ->
                 accountsMap[nameOrId]?.account?.getObjectId()?.let { Result.Value(it) }
-                        ?: Result.Error(LocalException())
+                    ?: Result.Error(LocalException())
             }
             .mapError {
                 LocalException("Unable to find required account id for identifier = $nameOrId")
@@ -189,9 +168,7 @@ class SubscriptionFacadeImpl(
 
         override fun onEvent(event: String) {
             // no need to process other events
-            if (event.toJsonObject()?.get(METHOD_KEY)?.asString !=
-                NOTICE_METHOD_KEY
-            ) {
+            if (event.toJsonObject()?.get(METHOD_KEY)?.asString != NOTICE_METHOD_KEY) {
                 return
             }
 
