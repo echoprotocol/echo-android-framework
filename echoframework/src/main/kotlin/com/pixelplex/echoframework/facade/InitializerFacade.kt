@@ -18,11 +18,4 @@ interface InitializerFacade {
      * Disconnects socket
      */
     fun disconnect()
-
-    companion object {
-        /**
-         * Blockchain api id for initializing another apis
-         */
-        const val INITIALIZER_API_ID = 1
-    }
 }

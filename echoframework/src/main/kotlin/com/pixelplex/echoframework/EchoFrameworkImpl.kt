@@ -13,10 +13,7 @@ import com.pixelplex.echoframework.model.contract.ContractInfo
 import com.pixelplex.echoframework.model.contract.ContractMethodParameter
 import com.pixelplex.echoframework.model.contract.ContractResult
 import com.pixelplex.echoframework.model.contract.ContractStruct
-import com.pixelplex.echoframework.service.internal.AccountHistoryApiServiceImpl
-import com.pixelplex.echoframework.service.internal.CryptoApiServiceImpl
-import com.pixelplex.echoframework.service.internal.DatabaseApiServiceImpl
-import com.pixelplex.echoframework.service.internal.NetworkBroadcastApiServiceImpl
+import com.pixelplex.echoframework.service.internal.*
 import com.pixelplex.echoframework.support.Settings
 import com.pixelplex.echoframework.support.concurrent.Dispatcher
 import com.pixelplex.echoframework.support.concurrent.ExecutorServiceDispatcher
@@ -65,11 +62,13 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         val networkBroadcastApiService =
             NetworkBroadcastApiServiceImpl(socketCoreComponent, settings.cryptoComponent)
         val cryptoApiService = CryptoApiServiceImpl(socketCoreComponent)
+        val loginService = LoginApiServiceImpl(socketCoreComponent)
 
         initializerFacade = InitializerFacadeImpl(
             socketCoreComponent,
             settings.url,
             settings.apis,
+            loginService,
             databaseApiService,
             cryptoApiService,
             accountHistoryApiService,

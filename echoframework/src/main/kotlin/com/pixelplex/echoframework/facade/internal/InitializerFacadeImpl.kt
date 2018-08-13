@@ -6,16 +6,8 @@ import com.pixelplex.echoframework.core.socket.SocketMessengerListener
 import com.pixelplex.echoframework.exception.LocalException
 import com.pixelplex.echoframework.exception.SocketException
 import com.pixelplex.echoframework.facade.InitializerFacade
-import com.pixelplex.echoframework.model.socketoperations.AccessSocketOperation
-import com.pixelplex.echoframework.model.socketoperations.AccessSocketOperationType
-import com.pixelplex.echoframework.model.socketoperations.LoginSocketOperation
-import com.pixelplex.echoframework.model.socketoperations.SocketOperation
-import com.pixelplex.echoframework.service.AccountHistoryApiService
-import com.pixelplex.echoframework.service.CryptoApiService
-import com.pixelplex.echoframework.service.DatabaseApiService
-import com.pixelplex.echoframework.service.NetworkBroadcastApiService
+import com.pixelplex.echoframework.service.*
 import com.pixelplex.echoframework.support.Api
-import com.pixelplex.echoframework.support.Converter
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
@@ -27,6 +19,7 @@ class InitializerFacadeImpl(
     private val socketCoreComponent: SocketCoreComponent,
     private val url: String,
     private val apis: Set<Api>,
+    private val loginService: LoginApiService,
     private val databaseApiService: DatabaseApiService,
     private val cryptoApiService: CryptoApiService,
     private val accountHistoryApiService: AccountHistoryApiService,
@@ -61,42 +54,15 @@ class InitializerFacadeImpl(
             return
         }
 
-        login(object : Callback<Boolean> {
+        loginService.login(object : Callback<Boolean> {
             override fun onSuccess(result: Boolean) {
-                val apisOperations = createApiOperations(apis)
-                apisOperations.forEach { operation -> socketCoreComponent.emit(operation) }
+                apis.forEach { api -> loginService.connectApi(api, ApiCallback(api)) }
             }
 
             override fun onError(error: LocalException) {
                 handleCallbackError(error)
             }
         })
-    }
-
-    private fun login(callback: Callback<Boolean>) {
-        val loginOperation = LoginSocketOperation(
-            socketCoreComponent.currentId,
-            InitializerFacade.INITIALIZER_API_ID,
-            callback = callback
-        )
-
-        socketCoreComponent.emit(loginOperation)
-    }
-
-    private fun createApiOperations(apis: Set<Api>): List<SocketOperation<*>> {
-        val operations = arrayListOf<SocketOperation<*>>()
-        val apiTypeConverter = ApiToOperationTypeConverter()
-
-        operations.addAll(apis.map { api ->
-            AccessSocketOperation(
-                accessSocketType = apiTypeConverter.convert(api),
-                api = InitializerFacade.INITIALIZER_API_ID,
-                callId = socketCoreComponent.currentId,
-                callback = ApiCallback(api)
-            )
-        })
-
-        return operations
     }
 
     private fun updateCallback(api: Api, result: Int) {
@@ -155,17 +121,5 @@ class InitializerFacadeImpl(
 
     }
 
-    private class ApiToOperationTypeConverter : Converter<Api, AccessSocketOperationType> {
-
-        private val apiToType = hashMapOf(
-            Api.DATABASE to AccessSocketOperationType.DATABASE,
-            Api.NETWORK_BROADCAST to AccessSocketOperationType.NETWORK_BROADCAST,
-            Api.ACCOUNT_HISTORY to AccessSocketOperationType.HISTORY,
-            Api.CRYPTO to AccessSocketOperationType.CRYPTO
-        )
-
-        override fun convert(source: Api): AccessSocketOperationType =
-            apiToType[source] ?: throw IllegalArgumentException("Unrecognized api type: $source")
-    }
 
 }
