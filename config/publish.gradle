@@ -15,15 +15,15 @@ ext {
     gitUrl = 'https://gitlab.pixelplex.by/646_echo_mobile_library/android.git'
     siteUrl = 'https://gitlab.pixelplex.by/646_echo_mobile_library/android'
 
-    libraryVersion = '1.0.0-alpha'
+    libraryVersion = '1.0.1-alpha'
 
     firstDeveloperId = 'dmitriy'
     firstDeveloperName = 'Dmitriy Bushuev'
-    firstDeveloperEmail = 'd.bushuev@pixelplex.by'
+    firstDeveloperEmail = 'd.bushuev@pixelplex.io'
 
     secondDeveloperId = 'daria'
     secondDeveloperName = 'Daria Pechkovskaya'
-    secondDeveloperEmail = 'd.pechkovskaya@pixelplex.by'
+    secondDeveloperEmail = 'd.pechkovskaya@pixelplex.io'
 
     licenseName = 'The Apache Software License, Version 2.0'
     licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
