@@ -21,7 +21,7 @@ import com.pixelplex.echoframework.model.AssetAmount
  *
  * @author Daria Pechkovskaya
  */
-class AccountBalancesOperation(
+class AccountBalancesSocketOperation(
     override val apiId: Int,
     val nameOrId: String,
     val asset: String,
