@@ -6,17 +6,15 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**
- * Test cases for [AccountBalancesOperation]
+ * Test cases for [AccountBalancesSocketOperation]
  *
  * @author Dmitriy Bushuev
  */
 class AccountBalancesSocketOperationTest {
 
-    private lateinit var operation: AccountBalancesOperation
-
     @Test
     fun serializeTest() {
-        operation = AccountBalancesOperation(
+        val operation = AccountBalancesSocketOperation(
             2,
             "1.2.23215",
             "1.3.0",
