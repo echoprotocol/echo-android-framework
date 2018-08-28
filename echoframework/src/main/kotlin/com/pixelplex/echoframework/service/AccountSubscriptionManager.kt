@@ -38,6 +38,6 @@ interface AccountSubscriptionManager {
     /**
      * Processes notifying event
      */
-    fun processEvent(event: String)
+    fun processEvent(event: String): String?
 
 }
