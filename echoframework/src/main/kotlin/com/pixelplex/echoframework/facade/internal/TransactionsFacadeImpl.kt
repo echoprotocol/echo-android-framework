@@ -50,7 +50,7 @@ class TransactionsFacadeImpl(
                 throw LocalException("Error occurred during accounts request", accountsError)
             }
 
-        checkOwnerAccount(nameOrId, password, fromAccount!!)
+        checkOwnerAccount(fromAccount!!.name, password, fromAccount!!)
 
         val privateKey =
             cryptoCoreComponent.getPrivateKey(
