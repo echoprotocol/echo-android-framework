@@ -7,6 +7,8 @@ import com.pixelplex.echoframework.core.socket.SocketCoreComponent
 import com.pixelplex.echoframework.core.socket.SocketMessengerListener
 import com.pixelplex.echoframework.exception.LocalException
 import com.pixelplex.echoframework.facade.SubscriptionFacade
+import com.pixelplex.echoframework.model.Account
+import com.pixelplex.echoframework.model.FullAccount
 import com.pixelplex.echoframework.model.network.Network
 import com.pixelplex.echoframework.service.DatabaseApiService
 import com.pixelplex.echoframework.service.AccountSubscriptionManager
@@ -159,6 +161,16 @@ class SubscriptionFacadeImpl(
                 LocalException("Unable to find required account id for identifier = $nameOrId")
             }
 
+    private fun getAccount(nameOrId: String): Result<LocalException, Account> =
+        databaseApiService.getFullAccounts(listOf(nameOrId), false)
+            .flatMap { accountsMap ->
+                accountsMap[nameOrId]?.account?.let { Result.Value(it) }
+                        ?: Result.Error(LocalException())
+            }
+            .mapError {
+                LocalException("Unable to find required account id for identifier = $nameOrId")
+            }
+
     private fun resetState() {
         subscriptionManager.clear()
         socketCoreComponent.off(socketMessengerListener)
@@ -172,7 +184,13 @@ class SubscriptionFacadeImpl(
                 return
             }
 
-            subscriptionManager.processEvent(event)
+            val accountId = subscriptionManager.processEvent(event) ?: return
+
+            databaseApiService.getFullAccounts(
+                listOf(accountId),
+                false,
+                FullAccountSubscriptionCallback(accountId)
+            )
         }
 
         override fun onFailure(error: Throwable) = resetState()
@@ -181,6 +199,19 @@ class SubscriptionFacadeImpl(
         }
 
         override fun onDisconnected() = resetState()
+
+        private inner class FullAccountSubscriptionCallback(private val accountId: String) :
+            Callback<Map<String, FullAccount>> {
+            override fun onSuccess(result: Map<String, FullAccount>) {
+                val account = result[accountId]?.account ?: return
+
+                subscriptionManager.notify(account)
+            }
+
+            override fun onError(error: LocalException) {
+            }
+
+        }
     }
 
     companion object {
