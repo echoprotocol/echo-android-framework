@@ -10,8 +10,8 @@ import com.pixelplex.echoframework.facade.SubscriptionFacade
 import com.pixelplex.echoframework.model.Account
 import com.pixelplex.echoframework.model.FullAccount
 import com.pixelplex.echoframework.model.network.Network
-import com.pixelplex.echoframework.service.DatabaseApiService
 import com.pixelplex.echoframework.service.AccountSubscriptionManager
+import com.pixelplex.echoframework.service.DatabaseApiService
 import com.pixelplex.echoframework.service.internal.AccountSubscriptionManagerImpl
 import com.pixelplex.echoframework.support.*
 import com.pixelplex.echoframework.support.concurrent.future.FutureTask
@@ -155,7 +155,7 @@ class SubscriptionFacadeImpl(
         databaseApiService.getFullAccounts(listOf(nameOrId), false)
             .flatMap { accountsMap ->
                 accountsMap[nameOrId]?.account?.getObjectId()?.let { Result.Value(it) }
-                    ?: Result.Error(LocalException())
+                        ?: Result.Error(LocalException())
             }
             .mapError {
                 LocalException("Unable to find required account id for identifier = $nameOrId")
@@ -184,12 +184,12 @@ class SubscriptionFacadeImpl(
                 return
             }
 
-            val accountId = subscriptionManager.processEvent(event) ?: return
+            val accountIds = subscriptionManager.processEvent(event) ?: return
 
             databaseApiService.getFullAccounts(
-                listOf(accountId),
+                accountIds,
                 false,
-                FullAccountSubscriptionCallback(accountId)
+                FullAccountSubscriptionCallback(accountIds)
             )
         }
 
@@ -200,12 +200,14 @@ class SubscriptionFacadeImpl(
 
         override fun onDisconnected() = resetState()
 
-        private inner class FullAccountSubscriptionCallback(private val accountId: String) :
+        private inner class FullAccountSubscriptionCallback(private val accountIds: List<String>) :
             Callback<Map<String, FullAccount>> {
             override fun onSuccess(result: Map<String, FullAccount>) {
-                val account = result[accountId]?.account ?: return
+                accountIds.forEach { accountId ->
+                    val account = result[accountId]?.account ?: return
 
-                subscriptionManager.notify(account)
+                    subscriptionManager.notify(account)
+                }
             }
 
             override fun onError(error: LocalException) {

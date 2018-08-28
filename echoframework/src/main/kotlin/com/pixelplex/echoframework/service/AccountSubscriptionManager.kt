@@ -36,8 +36,8 @@ interface AccountSubscriptionManager {
     fun notify(account: Account)
 
     /**
-     * Processes notifying event
+     * Processes notifying event. Returns list of parsed ids
      */
-    fun processEvent(event: String): String?
+    fun processEvent(event: String): List<String>
 
 }
