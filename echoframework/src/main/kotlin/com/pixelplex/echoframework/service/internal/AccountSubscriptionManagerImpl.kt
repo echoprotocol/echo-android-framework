@@ -98,30 +98,31 @@ class AccountSubscriptionManagerImpl(private val network: Network) :
      *      5) Return null if any of steps fails
      */
     @SuppressWarnings("ReturnCount")
-    override fun processEvent(event: String): String? {
-        val params = event.toJsonObject()?.getAsJsonArray(PARAMS_KEY) ?: return null
+    override fun processEvent(event: String): List<String> {
+        val params = event.toJsonObject()?.getAsJsonArray(PARAMS_KEY) ?: return listOf()
 
         if (params.size() == 0) {
-            return null
+            return listOf()
         }
 
         val firstParam = params[1].asJsonArray
 
         if (firstParam.size() == 0) {
-            return null
+            return listOf()
         }
 
         val statisticArray = firstParam[0].asJsonArray
 
         if (statisticArray.size() == 0) {
-            return null
+            return listOf()
         }
 
         return parseIdFromStatistic(statisticArray)
     }
 
-    private fun parseIdFromStatistic(statisticArray: JsonArray): String? {
+    private fun parseIdFromStatistic(statisticArray: JsonArray): List<String> {
         var accountId: String? = null
+        val ids = mutableListOf<String>()
 
         for (i in 0..(statisticArray.size() - 1)) {
             val statisticObject = statisticArray[i].asJsonObject
@@ -135,11 +136,11 @@ class AccountSubscriptionManagerImpl(private val network: Network) :
             if (listeners[accountId] == null) {
                 continue
             } else {
-                break
+                ids.add(accountId)
             }
         }
 
-        return accountId
+        return ids
     }
 
     companion object {

@@ -60,12 +60,10 @@ class AccountSubscriptionManagerTest {
         }
 
         accountSubscriptionManager.registerListener(registeredId, listener)
-        accountSubscriptionManager.registerListener(registeredId, listener)
-        accountSubscriptionManager.registerListener(registeredId, listener)
 
-        accountSubscriptionManager.processEvent(NOTICE_EVENT)
+        val ids = accountSubscriptionManager.processEvent(NOTICE_EVENT)
 
-        Assert.assertTrue(notifyCount == 3)
+        Assert.assertEquals(1, ids.size)
     }
 
     @Test
@@ -90,94 +88,49 @@ class AccountSubscriptionManagerTest {
     }
 
     companion object {
-        private var NOTICE_EVENT = """  |{
-                                                  |"method":"notice",
-                                                  |"params":
-                                                  |[
-                                                       |4,
-                                                       |[
-                                                          |[
-                                                              |{
-                                                                  |"id":"2.1.0"
-                                                              |},
-                                                              |{
-                                                                  |"id":"2.8.25373"
-                                                              |},
-                                                              |{
-                                                                  |"id":"2.5.24777",
-                                                                  |"owner":"1.2.23215"
-                                                              |},
-                                                              |{
-                                                                  |"id":"1.2.18",
-                                                                  |"membership_expiration_date":"1970-01-01T00:00:00",
-                                                                  |"registrar":"1.2.17",
-                                                                  |"referrer":"1.2.17",
-                                                                  |"lifetime_referrer":"1.2.17",
-                                                                  |"network_fee_percentage":2000,
-                                                                  |"lifetime_referrer_fee_percentage":3000,
-                                                                  |"referrer_rewards_percentage":0,
-                                                                  |"name":"dima1",
-                                                                  |"owner":{
-                                                                      |"weight_threshold":1,
-                                                                      |"account_auths":[
-                                                                    |],
-                                                                    |"key_auths":[
-                                                                      |[
-                                                                          |"ECHO5qrbEeNrHWvGKwx5XVhLCNoytYFhRpSybQT7qpc3SBboEPCEvB",
-                                                                          |1
-                                                                      |]
-                                                                    |],
-                                                                    |"address_auths":[
+        private var NOTICE_EVENT = """  {
+                                                        |"method":"notice",
+                                                            |"params":[
+                                                                |5,|[
+                                                                    |[
+                                                                        {
+                                                                            "id":"2.5.2",
+                                                                            "owner":"1.2.18",
+                                                                            "asset_type":"1.3.0",
+                                                                            "balance":73353484
+                                                                        },
+                                                                        {
+                                                                            "id":"2.6.18",
+                                                                            "owner":"1.2.18",
+                                                                            "most_recent_op":"2.9.45873",
+                                                                            "total_ops":312,
+                                                                            "removed_ops":0,
+                                                                            "total_core_in_orders":0,
+                                                                            "lifetime_fees_paid":289921097,
+                                                                            "pending_fees":0,
+                                                                            "pending_vested_fees":26175448
+                                                                        },
+                                                                        {
+                                                                            "id":"2.1.0",
+                                                                            "head_block_number":317096,
+                                                                            "head_block_id":"0004d6a8370560c50481b8fb412e3b9b8863eaf0",
+                                                                            "time":"2018-08-28T10:45:50",
+                                                                            "current_witness":"1.6.10",
+                                                                            "next_maintenance_time":"2018-08-29T00:00:00",
+                                                                            "last_budget_time":"2018-08-28T00:00:00",
+                                                                            "witness_budget":0,
+                                                                            "accounts_registered_this_interval":4,
+                                                                            "recently_missed_count":0,
+                                                                            "current_aslot":5202344,
+                                                                            "recent_slots_filled":"340282366920938463463374607431768211455",
+                                                                            "dynamic_flags":0,
+                                                                            "last_irreversible_block_num":317080
+                                                                        }
                                                                     |]
-                                                                  |},
-                                                                  |"active":{
-                                                                    |"weight_threshold":1,
-                                                                    |"account_auths":[
-                                                                    |],
-                                                                    |"key_auths":[
-                                                                         |[
-                                                                            |"ECHO7ehHRwcqQ8FTtiVfHpb6FHNDF34QrV8W1Z3uTL5izF7bKAJ6YW",
-                                                                            |1
-                                                                         |]
-                                                                    |],
-                                                                    |"address_auths":[
-                                                                    |]
-                                                                  |},
-                                                                  |"options":{
-                                                                  |"memo_key":"ECHO7ehHRwcqQ8FTtiVfHpb6FHNDF34QrV8W1Z3uTL5izF7bKAJ6YW",
-                                                                  |"voting_account":"1.2.5",
-                                                                  |"num_witness":0,
-                                                                  |"num_committee":0,
-                                                                  |"votes":[
-                                                                  |],
-                                                                  |"extensions":[
-                                                                  |]
-                                                                  |},
-                                                                  |"statistics":"2.6.18",
-                                                                  |"whitelisting_accounts":[
-                                                                  |],
-                                                                  |"blacklisting_accounts":[
-                                                                  |],
-                                                                  |"whitelisted_accounts":[
-                                                                  |],
-                                                                  |"blacklisted_accounts":[
-                                                                  |],
-                                                                  |"owner_special_authority":[
-                                                                  |0,
-                                                                  |{
-                                                                  |}
-                                                                  |],
-                                                                  |"active_special_authority":[
-                                                                  |0,
-                                                                  |{
-                                                                  |}
-                                                                  |],
-                                                                  |"top_n_control_flags":0
-                                                                  |}
-                                                          |]
-                                                       |]
-                                                      |]
-                                                      |}""".trimMargin()
+                                                                |]
+                                                            |]
+                                                        |}
+                                                      """.trimMargin()
     }
 
 }
