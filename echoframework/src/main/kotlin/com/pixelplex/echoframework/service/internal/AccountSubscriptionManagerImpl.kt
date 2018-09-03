@@ -121,7 +121,7 @@ class AccountSubscriptionManagerImpl(private val network: Network) :
     }
 
     private fun parseIdFromStatistic(statisticArray: JsonArray): List<String> {
-        var accountId: String? = null
+        var accountId: String
         val ids = mutableListOf<String>()
 
         for (i in 0..(statisticArray.size() - 1)) {

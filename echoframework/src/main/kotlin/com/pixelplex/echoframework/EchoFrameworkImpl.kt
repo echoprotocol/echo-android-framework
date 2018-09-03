@@ -180,15 +180,14 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         password: String,
         asset: Asset,
         callback: Callback<Boolean>
-    ) =
-        dispatch(Runnable {
-            assetsFacade.createAsset(
-                name,
-                password,
-                asset,
-                callback
-            )
-        })
+    ) = dispatch(Runnable {
+        assetsFacade.createAsset(
+            name,
+            password,
+            asset,
+            callback
+        )
+    })
 
     override fun issueAsset(
         issuerNameOrId: String,
@@ -198,18 +197,17 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         destinationIdOrName: String,
         message: String?,
         callback: Callback<Boolean>
-    ) =
-        dispatch(Runnable {
-            assetsFacade.issueAsset(
-                issuerNameOrId,
-                password,
-                asset,
-                amount,
-                destinationIdOrName,
-                message,
-                callback
-            )
-        })
+    ) = dispatch(Runnable {
+        assetsFacade.issueAsset(
+            issuerNameOrId,
+            password,
+            asset,
+            amount,
+            destinationIdOrName,
+            message,
+            callback
+        )
+    })
 
     override fun listAssets(lowerBound: String, limit: Int, callback: Callback<List<Asset>>) =
         dispatch(Runnable {

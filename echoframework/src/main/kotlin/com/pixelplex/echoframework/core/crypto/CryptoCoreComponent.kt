@@ -45,7 +45,7 @@ interface CryptoCoreComponent {
      * @param privateKey Private key of one of the transfer operation parties
      * @param publicKey  Public key of another participant of transfer
      * @param nonce      Random entropy of memo payload for deriving unique key for every transfer
-     * @param message    Message for encrypting
+     * @param message    Message for decrypting
      */
     fun decryptMessage(
         privateKey: ByteArray, publicKey: ByteArray, nonce: BigInteger,

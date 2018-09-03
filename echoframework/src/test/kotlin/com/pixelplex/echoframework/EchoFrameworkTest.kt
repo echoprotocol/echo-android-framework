@@ -323,9 +323,9 @@ class EchoFrameworkTest {
         if (connect(framework) == false) Assert.fail("Connection error")
 
         framework.sendTransferOperation(
+            "dimaty12345",
+            "P5JRnzqtPYLxU9ypfndHczCqt178nzomv4DuspTPr1iTf",
             "dima1",
-            "P5J8pDyzznMmEdiBCdgB7VKtMBuxw5e4MAJEo3sfUbxcM",
-            "dima2",
             "1", "1.3.0", "Memasik",
             futureTransfer.completeCallback()
         )
@@ -412,9 +412,9 @@ class EchoFrameworkTest {
 //        val futureAsset = FutureTask<Boolean>()
 //
 //        val asset = Asset("").apply {
-//            symbol = "QRWEERYIU"
+//            symbol = "QWEASDGHRTYUIO"
 //            precision = 4
-//            issuer = Account("1.2.18")
+//            issuer = Account("1.2.188")
 //            setBtsOptions(
 //                BitassetOptions(
 //                    86400, 7, 86400,
@@ -442,7 +442,7 @@ class EchoFrameworkTest {
 //        asset.assetOptions = options
 //
 //        framework.createAsset(
-//            "dima1", "P5J8pDyzznMmEdiBCdgB7VKtMBuxw5e4MAJEo3sfUbxcM",
+//            "dimaty12345", "P5JRnzqtPYLxU9ypfndHczCqt178nzomv4DuspTPr1iTf",
 //            asset,
 //            futureAsset.completeCallback()
 //        )
@@ -459,9 +459,9 @@ class EchoFrameworkTest {
         if (connect(framework) == false) Assert.fail("Connection error")
 
         framework.issueAsset(
-            "dima2",
-            "P5KdaL4usZTknpaBwpi2xVAEPJxtvPRopDY1vG6BJTbr5S3ZLksx",
-            "1.3.1",
+            "dimaty12345",
+            "P5JRnzqtPYLxU9ypfndHczCqt178nzomv4DuspTPr1iTf",
+            "1.3.79",
             "1",
             "dima1", "message",
             futureIssue.completeCallback()
