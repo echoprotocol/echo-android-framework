@@ -43,19 +43,14 @@ class AccountSubscriptionManagerTest {
         accountSubscriptionManager.registerListener(registeredId, listener)
 
         assertTrue(accountSubscriptionManager.removeListeners(registeredId)!!.size == 4)
-
-        accountSubscriptionManager.processEvent(NOTICE_EVENT)
     }
 
     @Test
     fun processEventTest() {
         val registeredId = "1.2.18"
 
-        var notifyCount = 0
-
         val listener = object : AccountListener {
             override fun onChange(updatedAccount: Account) {
-                notifyCount++
             }
         }
 
@@ -88,10 +83,10 @@ class AccountSubscriptionManagerTest {
     }
 
     companion object {
-        private var NOTICE_EVENT = """  {
+        private var NOTICE_EVENT = """{
                                                         |"method":"notice",
                                                             |"params":[
-                                                                |5,|[
+                                                                |5,[
                                                                     |[
                                                                         {
                                                                             "id":"2.5.2",
@@ -129,8 +124,7 @@ class AccountSubscriptionManagerTest {
                                                                     |]
                                                                 |]
                                                             |]
-                                                        |}
-                                                      """.trimMargin()
+                                                        }""".trimMargin()
     }
 
 }

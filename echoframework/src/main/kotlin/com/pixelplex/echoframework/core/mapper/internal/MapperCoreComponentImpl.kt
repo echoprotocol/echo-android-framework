@@ -5,7 +5,6 @@ import com.pixelplex.echoframework.core.logger.internal.LoggerCoreComponent
 import com.pixelplex.echoframework.core.mapper.MapperCoreComponent
 import java.text.ParseException
 
-
 /**
  * Implementation of [MapperCoreComponent]
  *
