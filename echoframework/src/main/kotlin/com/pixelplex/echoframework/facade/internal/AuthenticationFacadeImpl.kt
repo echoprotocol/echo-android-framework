@@ -104,7 +104,10 @@ class AuthenticationFacadeImpl(
         val newOwnerKey = cryptoCoreComponent.getAddress(name, newPassword, AuthorityType.OWNER)
         val newActiveKey =
             cryptoCoreComponent.getAddress(name, newPassword, AuthorityType.ACTIVE)
-        val address = Address(newActiveKey, network)
+        val newMemoKey =
+            cryptoCoreComponent.getAddress(name, newPassword, AuthorityType.KEY)
+
+        val address = Address(newMemoKey, network)
         val ownerAuthority =
             Authority(1, hashMapOf(Address(newOwnerKey, network).pubKey to 1L), hashMapOf())
         val activeAuthority =
