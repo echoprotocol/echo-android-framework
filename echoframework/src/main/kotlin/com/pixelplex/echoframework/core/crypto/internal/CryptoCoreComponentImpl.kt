@@ -64,7 +64,7 @@ class CryptoCoreComponentImpl(network: Network) : CryptoCoreComponent {
         return Sha256Hash.hash(seedBytes)
     }
 
-    override fun signTransaction(transaction: Transaction): ByteArray =
+    override fun signTransaction(transaction: Transaction): ArrayList<ByteArray> =
         Signature.signTransaction(transaction)
 
     override fun encryptMessage(

@@ -3,6 +3,7 @@ package com.pixelplex.echoframework.core.crypto
 import com.pixelplex.echoframework.model.AuthorityType
 import com.pixelplex.echoframework.model.Transaction
 import java.math.BigInteger
+import java.util.*
 
 /**
  * Encapsulates logic, associated with keys generation and encryption/decryption processes
@@ -22,9 +23,9 @@ interface CryptoCoreComponent {
     fun getPrivateKey(userName: String, password: String, authorityType: AuthorityType): ByteArray
 
     /**
-     * Generates transaction signature
+     * Generates transaction signatures
      */
-    fun signTransaction(transaction: Transaction): ByteArray
+    fun signTransaction(transaction: Transaction): ArrayList<ByteArray>
 
     /**
      * Encrypts string message using input keys

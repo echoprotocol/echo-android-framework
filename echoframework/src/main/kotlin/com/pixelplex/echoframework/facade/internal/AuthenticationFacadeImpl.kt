@@ -68,10 +68,12 @@ class AuthenticationFacadeImpl(
 
         val privateKey =
             cryptoCoreComponent.getPrivateKey(name, oldPassword, AuthorityType.OWNER)
-        val transaction = Transaction(privateKey, blockData, listOf(operation), chainId)
-
         val fees = getFees(listOf(operation))
-        transaction.setFees(fees)
+
+        val transaction = Transaction(blockData, listOf(operation), chainId).apply {
+            setFees(fees)
+            addPrivateKey(privateKey)
+        }
 
         networkBroadcastApiService.broadcastTransactionWithCallback(transaction).dematerialize()
     }

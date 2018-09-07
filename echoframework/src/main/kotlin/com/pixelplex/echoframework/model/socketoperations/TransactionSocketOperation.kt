@@ -19,7 +19,7 @@ import org.spongycastle.util.encoders.Hex
 class TransactionSocketOperation(
     override val apiId: Int,
     val transaction: Transaction,
-    val signature: ByteArray,
+    val signatures: ArrayList<ByteArray>,
     callId: Int,
     callback: Callback<Boolean>
 ) : SocketOperation<Boolean>(SocketMethodType.CALL, callId, Boolean::class.java, callback) {
@@ -36,7 +36,9 @@ class TransactionSocketOperation(
 
     private fun Transaction.jsonWithSignature(): JsonElement {
         val transactionJson = this.toJsonObject().asJsonObject
-        val signaturesJson = JsonArray().apply { add(Hex.toHexString(signature)) }
+        val signaturesJson = JsonArray().apply {
+            signatures.forEach { add(Hex.toHexString(it)) }
+        }
         transactionJson.add(Transaction.KEY_SIGNATURES, signaturesJson)
 
         return transactionJson

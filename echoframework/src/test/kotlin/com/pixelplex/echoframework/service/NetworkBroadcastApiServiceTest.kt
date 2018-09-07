@@ -44,11 +44,10 @@ class NetworkBroadcastApiServiceTest {
             )
 
         transaction = Transaction(
-            privateKey,
             blockData,
             listOf(transfer),
             chainId
-        )
+        ).apply { addPrivateKey(privateKey) }
     }
 
     @Test

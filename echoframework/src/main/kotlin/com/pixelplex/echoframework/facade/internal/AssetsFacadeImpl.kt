@@ -58,8 +58,10 @@ class AssetsFacadeImpl(
 
         checkOwnerAccount(account!!.name, password, account!!)
 
-        val transaction = Transaction(privateKey, blockData, listOf(operation), chainId)
-        transaction.setFees(fees)
+        val transaction = Transaction(blockData, listOf(operation), chainId).apply {
+            setFees(fees)
+            addPrivateKey(privateKey)
+        }
 
         networkBroadcastApiService.broadcastTransactionWithCallback(transaction).dematerialize()
     }
@@ -116,8 +118,9 @@ class AssetsFacadeImpl(
         val chainId = getChainId()
         val fees = getFees(listOf(operation), ECHO_ASSET_ID)
 
-        val transaction = Transaction(privateKey, blockData, listOf(operation), chainId).apply {
+        val transaction = Transaction(blockData, listOf(operation), chainId).apply {
             setFees(fees)
+            addPrivateKey(privateKey)
         }
 
         networkBroadcastApiService.broadcastTransactionWithCallback(transaction).dematerialize()
