@@ -11,10 +11,10 @@ import com.pixelplex.echoframework.model.AuthorityType
 import com.pixelplex.echoframework.model.Transaction
 import com.pixelplex.echoframework.model.network.Echodevnet
 import com.pixelplex.echoframework.model.network.Mainnet
-import com.pixelplex.echoframework.model.network.Testnet
 import org.junit.Assert.*
 import org.junit.Test
 import java.math.BigInteger
+import java.util.*
 
 /**
  * Test cases for [Settings]
@@ -109,7 +109,8 @@ class SettingsTest {
             BigInteger("0")
         ).getPrivKeyBytes()
 
-        override fun signTransaction(transaction: Transaction): ByteArray = ByteArray(1)
+        override fun signTransaction(transaction: Transaction): ArrayList<ByteArray> =
+            arrayListOf(ByteArray(1))
 
     }
 

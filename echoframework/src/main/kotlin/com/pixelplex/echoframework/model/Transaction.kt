@@ -17,52 +17,34 @@ import java.util.concurrent.TimeUnit
  *
  * @author Daria Pechkovskaya
  */
-class Transaction : ByteSerializable, JsonSerializable {
+class Transaction
+/**
+ * Constructor used to build a Transaction object without a private key. This kind of object
+ * is used to represent a transaction data that we don't intend to serialize and sign.
+ *
+ * @param blockData:  Block data instance, containing information about the location of this
+ *                    transaction in the blockchain.
+ * @param operations: The list of operations included in this transaction.
+ */
+    (var blockData: BlockData, var operations: List<BaseOperation>, var chainId: String) :
+    ByteSerializable, JsonSerializable {
 
-    var privateKey: ByteArray? = null
-    var blockData: BlockData
-    var operations: List<BaseOperation>
+    var privateKeys = mutableListOf<ByteArray>()
     private val extensions: Extensions = Extensions()
-    var chainId: String
 
     /**
-     * Constructor used to build a Transaction object without a private key. This kind of object
-     * is used to represent a transaction data that we don't intend to serialize and sign.
-     *
-     * @param blockData:  Block data instance, containing information about the location of this
-     *                    transaction in the blockchain.
-     * @param operations: The list of operations included in this transaction.
-     */
-    constructor(blockData: BlockData, operations: List<BaseOperation>, chainId: String) {
-        this.blockData = blockData
-        this.operations = operations
-        this.chainId = chainId
-    }
-
-    /**
-     * Represents a transaction data that we intend to serialize and sign.
-     *
-     * @param privateKey : Instance of a ECKey containing the private key that will be used to sign
-     *                     this transaction.
-     * @param blockData :  Block data containing important information used to sign a transaction.
-     * @param operations : List of operations to include in the transaction.
-     */
-    constructor(
-        privateKey: ByteArray,
-        blockData: BlockData,
-        operations: List<BaseOperation>,
-        chainId: String
-    ) :
-            this(blockData, operations, chainId) {
-        this.privateKey = privateKey
-    }
-
-    /**
-     * This method is used to query whether the instance has a private key.
+     * This method is used to query whether the instance has a private keys.
      *
      * @return
      */
-    val hasPrivateKey: Boolean = privateKey != null
+    val hasPrivateKeys: Boolean = privateKeys.isNotEmpty()
+
+    /**
+     * Adds required public key to list for signature purposes
+     */
+    fun addPrivateKey(key: ByteArray) {
+        privateKeys.add(key)
+    }
 
     /**
      * Updates the fees for all operations in this transaction.

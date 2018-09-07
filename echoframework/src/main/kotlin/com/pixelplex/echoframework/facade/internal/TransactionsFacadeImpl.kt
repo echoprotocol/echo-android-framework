@@ -80,11 +80,13 @@ class TransactionsFacadeImpl(
         val fees = getFees(listOf(transfer), asset)
 
         val transaction = Transaction(
-            privateKey,
             blockData,
             listOf(transfer),
             chainId
-        ).apply { setFees(fees) }
+        ).apply {
+            setFees(fees)
+            addPrivateKey(privateKey)
+        }
 
         networkBroadcastApiService.broadcastTransactionWithCallback(transaction).dematerialize()
     }

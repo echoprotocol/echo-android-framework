@@ -73,15 +73,14 @@ class CryptoCoreComponentTest {
 
         val transferOperation = buildOperation()
         val transaction = Transaction(
-            privateKey,
             BlockData(5, 123L, 2342355235L),
             listOf(transferOperation),
             "39f5e2ede1f8bc1a3a54a7914414e3779e33193f1f5693510e73cb7a87617447"
-        )
+        ).apply { addPrivateKey(privateKey) }
 
         val signature = cryptoCoreComponent.signTransaction(transaction)
 
-        assertTrue(signature.size == SIGN_DATA_BYTES)
+        assertTrue(signature[0].size == SIGN_DATA_BYTES)
     }
 
     @Test

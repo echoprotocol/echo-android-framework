@@ -6,6 +6,7 @@ import com.pixelplex.bitcoinj.Sha256Hash
 import com.pixelplex.bitcoinj.bigIntegerToBytes
 import com.pixelplex.echoframework.exception.MalformedTransactionException
 import com.pixelplex.echoframework.model.Transaction
+import java.util.*
 
 /**
  * Object used to transaction signing
@@ -40,41 +41,47 @@ object Signature {
      * @return: A valid signature of the transaction.
      */
     @JvmStatic
-    fun signTransaction(transaction: Transaction): ByteArray {
-        checkPrivateKey(transaction)
-
-        val nonNullPrivateKey = transaction.privateKey!!
+    fun signTransaction(transaction: Transaction): ArrayList<ByteArray> {
+        checkPrivateKeys(transaction)
 
         var isGrapheneCanonical = false
-        var signData: ByteArray = byteArrayOf()
+        val signatures = ArrayList<ByteArray>()
+
+        var sigData: ByteArray
 
         while (!isGrapheneCanonical) {
+            signatures.clear()
             val serializedTransaction = transaction.toBytes()
             val hash = Sha256Hash.wrap(Sha256Hash.hash(serializedTransaction))
-            val key = ECKey.fromPrivate(nonNullPrivateKey)
-            val sign = key.sign(hash)
-            val recId =
-                getRecId(sign, hash, key)
+            for (privateKey in transaction.privateKeys) {
+                val key = ECKey.fromPrivate(privateKey)
+                val sign = key.sign(hash)
+                val recId = getRecId(sign, hash, key)
 
-            signData = createSignData(
-                key,
-                recId,
-                sign
-            )
+                sigData = createSignData(
+                    key,
+                    recId,
+                    sign
+                )
 
-            if (isSignatureNotValid(signData)) {
-                ++transaction.blockData.relativeExpiration
-            } else {
-                isGrapheneCanonical = true
+                if (isSignatureNotValid(sigData)) {
+                    break
+                } else {
+                    signatures.add(sigData)
+                }
             }
 
+            if (signatures.size == transaction.privateKeys.size) {
+                isGrapheneCanonical = true
+            } else {
+                ++transaction.blockData.relativeExpiration
+            }
         }
-
-        return signData
+        return signatures
     }
 
-    private fun checkPrivateKey(transaction: Transaction) {
-        if (transaction.privateKey == null)
+    private fun checkPrivateKeys(transaction: Transaction) {
+        if (transaction.privateKeys.isEmpty())
             throw MalformedTransactionException("Transaction must have private key for signing.")
     }
 

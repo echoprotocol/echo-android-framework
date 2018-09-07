@@ -12,7 +12,6 @@ import com.pixelplex.echoframework.model.operations.ContractOperationBuilder
 import com.pixelplex.echoframework.processResult
 import com.pixelplex.echoframework.service.DatabaseApiService
 import com.pixelplex.echoframework.service.NetworkBroadcastApiService
-import com.pixelplex.echoframework.support.Result
 import com.pixelplex.echoframework.support.dematerialize
 import com.pixelplex.echoframework.support.error
 import com.pixelplex.echoframework.support.value
@@ -68,8 +67,11 @@ class ContractsFacadeImpl(
         val chainId = getChainId()
         val fees = getFees(listOf(contractOperation), assetId)
 
-        val transaction = Transaction(privateKey, blockData, listOf(contractOperation), chainId)
-            .apply { setFees(fees) }
+        val transaction = Transaction(blockData, listOf(contractOperation), chainId)
+            .apply {
+                setFees(fees)
+                addPrivateKey(privateKey)
+            }
 
         networkBroadcastApiService.broadcastTransactionWithCallback(transaction).dematerialize()
     }
@@ -120,8 +122,11 @@ class ContractsFacadeImpl(
         val chainId = getChainId()
         val fees = getFees(listOf(contractOperation), assetId)
 
-        val transaction = Transaction(privateKey, blockData, listOf(contractOperation), chainId)
-            .apply { setFees(fees) }
+        val transaction = Transaction(blockData, listOf(contractOperation), chainId)
+            .apply {
+                setFees(fees)
+                addPrivateKey(privateKey)
+            }
 
         networkBroadcastApiService.broadcastTransactionWithCallback(transaction).dematerialize()
     }
