@@ -3,11 +3,10 @@ package com.pixelplex.echoframework.model.operations
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.UnsignedLong
 import com.google.gson.*
-import com.pixelplex.echoframework.support.Int64
-import com.pixelplex.echoframework.support.Uint8
-import com.pixelplex.echoframework.support.serialize
 import com.pixelplex.echoframework.model.*
 import com.pixelplex.echoframework.model.contract.Contract
+import com.pixelplex.echoframework.support.Int64
+import com.pixelplex.echoframework.support.Uint8
 import java.lang.reflect.Type
 
 /**
@@ -36,7 +35,7 @@ class ContractOperation @JvmOverloads constructor(
         val valueBytes = Int64.serialize(value)
         val gasPriceBytes = Int64.serialize(gasPrice)
         val gasBytes = Int64.serialize(gas)
-        val codeBytes = code.serialize()
+        val codeBytes = Uint8.serialize(code.length) + code.toByteArray()
 
         return Bytes.concat(
             feeBytes, registrarBytes, contractBytes, assetIdBytes,
