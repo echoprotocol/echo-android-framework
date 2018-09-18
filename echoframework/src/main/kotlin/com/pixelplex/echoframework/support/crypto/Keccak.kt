@@ -185,7 +185,7 @@ class Keccak {
         var retValue = value.shiftLeft(shift)
         var tmpValue = value.shiftLeft(shift)
 
-        if (retValue > BIT_64) {
+        if (retValue > bit64) {
             for (i in 64 until 64 + shift) {
                 tmpValue = tmpValue.clearBit(i)
             }
@@ -269,6 +269,6 @@ class Keccak {
         /**
          * max unsigned long
          */
-        private val BIT_64 = BigInteger("18446744073709551615")
+        private val bit64 = BigInteger("18446744073709551615")
     }
 }

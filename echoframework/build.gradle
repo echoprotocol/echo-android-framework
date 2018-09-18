@@ -61,8 +61,7 @@ task analyzeCode(type: JavaExec) {
     def config = "$rootDir\\config\\detekt-ruleset.yml"
     def filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
     def output = "$buildDir\\reports\\detekt"
-    def outputName = "detekt-report"
-    def params = ['-i', input, '-c', config, '-f', filters, '-o', output, '-on', outputName]
+    def params = ['-i', input, '-c', config, '-f', filters, '-r', output]
     args(params)
 }
 

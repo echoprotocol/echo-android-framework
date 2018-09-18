@@ -234,9 +234,6 @@ class ECKey {
 
         private const val CURVE_MIN_WIDTH = 12
 
-        // The parameters of the secp256k1 curve that Bitcoin uses.
-        private val CURVE_PARAMS = CustomNamedCurves.getByName("secp256k1")
-
         private var secureRandom: SecureRandom
 
         init {
@@ -261,10 +258,10 @@ class ECKey {
             // Tell Bouncy Castle to precompute data that's needed during secp256k1 calculations. Increasing the width
             // number makes calculations faster, but at a cost of extra memory usage and with decreasing returns. 12 was
             // picked after consulting with the BC team.
-            FixedPointUtil.precompute(CURVE_PARAMS.g, 12)
+            FixedPointUtil.precompute(curveParams.g, 12)
             curve = ECDomainParameters(
-                CURVE_PARAMS.curve, CURVE_PARAMS.g, CURVE_PARAMS.n,
-                CURVE_PARAMS.h
+                curveParams.curve, curveParams.g, curveParams.n,
+                curveParams.h
             )
             secureRandom = SecureRandom()
         }
