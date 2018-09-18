@@ -49,7 +49,7 @@ object Base58 {
 
     private val alphabet =
         "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz".toCharArray()
-    private val ENCODED_ZERO = alphabet[0]
+    private val encodedZero = alphabet[0]
 
     private const val INDEXES_ARRAY_SIZE = 128
     private val indexes = IntArray(INDEXES_ARRAY_SIZE)
@@ -91,12 +91,12 @@ object Base58 {
         }
 
         // Preserve exactly as many leading encoded zeros in output as there were leading zeros in input.
-        while (outputStart < encoded.size && encoded[outputStart] == ENCODED_ZERO) {
+        while (outputStart < encoded.size && encoded[outputStart] == encodedZero) {
             ++outputStart
         }
 
         while (--zeros >= 0) {
-            encoded[--outputStart] = ENCODED_ZERO
+            encoded[--outputStart] = encodedZero
         }
 
         // Return encoded string (including encoded leading zeros).

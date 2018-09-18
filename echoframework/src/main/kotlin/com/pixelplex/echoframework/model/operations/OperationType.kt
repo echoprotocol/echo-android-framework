@@ -66,10 +66,10 @@ enum class OperationType {
  */
 class OperationTypeToClassConverter : Converter<Int, Class<*>?> {
 
-    override fun convert(source: Int): Class<*>? = OPERATION_TYPE_REGISTRY[source]
+    override fun convert(source: Int): Class<*>? = operationTypeRegistry[source]
 
     companion object {
-        private val OPERATION_TYPE_REGISTRY = hashMapOf(
+        private val operationTypeRegistry = hashMapOf(
             OperationType.ACCOUNT_UPDATE_OPERATION.ordinal to AccountUpdateOperation::class.java,
             OperationType.TRANSFER_OPERATION.ordinal to TransferOperation::class.java,
             OperationType.ASSET_CREATE_OPERATION.ordinal to CreateAssetOperation::class.java,
