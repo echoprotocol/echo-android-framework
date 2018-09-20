@@ -3,6 +3,7 @@ package com.pixelplex.echoframework.facade
 import com.pixelplex.echoframework.Callback
 import com.pixelplex.echoframework.model.Account
 import com.pixelplex.echoframework.model.Balance
+import com.pixelplex.echoframework.model.FullAccount
 import com.pixelplex.echoframework.model.HistoryResponse
 
 /**
@@ -19,7 +20,7 @@ interface InformationFacade {
      * @param callback Listener of operation results.
      *                 Receives success result only when required account exists
      */
-    fun getAccount(nameOrId: String, callback: Callback<Account>)
+    fun getAccount(nameOrId: String, callback: Callback<FullAccount>)
 
     /**
      * Checks whether account with [nameOrId] already exists

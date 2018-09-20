@@ -1,7 +1,7 @@
 package com.pixelplex.echoframework.support.concurrent
 
 import com.pixelplex.echoframework.AccountListener
-import com.pixelplex.echoframework.model.Account
+import com.pixelplex.echoframework.model.FullAccount
 
 /**
  * Executes account listener events on main (UI) thread
@@ -12,7 +12,7 @@ class MainThreadAccountListener(private val delegate: AccountListener) : Account
 
     private val mainThreadExecutor = MainThreadExecutor()
 
-    override fun onChange(updatedAccount: Account) {
+    override fun onChange(updatedAccount: FullAccount) {
         mainThreadExecutor.execute {
             delegate.onChange(updatedAccount)
         }

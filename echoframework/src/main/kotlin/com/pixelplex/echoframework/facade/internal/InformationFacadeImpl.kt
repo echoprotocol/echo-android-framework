@@ -29,10 +29,10 @@ class InformationFacadeImpl(
     private val accountHistoryApiService: AccountHistoryApiService
 ) : InformationFacade {
 
-    override fun getAccount(nameOrId: String, callback: Callback<Account>) =
+    override fun getAccount(nameOrId: String, callback: Callback<FullAccount>) =
         findAccount(nameOrId,
             { fullAccount ->
-                fullAccount?.account?.let { notNullAccount ->
+                fullAccount?.let { notNullAccount ->
                     callback.onSuccess(notNullAccount)
                 } ?: callback.onError(NotFoundException("Account not found."))
             },
@@ -108,7 +108,7 @@ class InformationFacadeImpl(
         var accountId: String = nameOrId
 
         getAccount(nameOrId)
-            .value { account -> accountId = account.getObjectId() }
+            .value { account -> accountId = account.account!!.getObjectId() }
             .error { error ->
                 LOGGER.log("Unable to find account $nameOrId for history request", error)
                 callback.onError(error)
@@ -125,8 +125,8 @@ class InformationFacadeImpl(
         })
     }
 
-    private fun getAccount(nameOrId: String): Result<LocalException, Account> {
-        val accountFuture = FutureTask<Account>()
+    private fun getAccount(nameOrId: String): Result<LocalException, FullAccount> {
+        val accountFuture = FutureTask<FullAccount>()
 
         getAccount(nameOrId, accountFuture.completeCallback())
 

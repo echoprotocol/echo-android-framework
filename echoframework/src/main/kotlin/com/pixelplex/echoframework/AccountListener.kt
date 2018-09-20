@@ -1,6 +1,6 @@
 package com.pixelplex.echoframework
 
-import com.pixelplex.echoframework.model.Account
+import com.pixelplex.echoframework.model.FullAccount
 
 /**
  * Account subscription results listener
@@ -14,6 +14,6 @@ interface AccountListener {
      *
      * @param updatedAccount Updated account with all changes
      */
-    fun onChange(updatedAccount: Account)
+    fun onChange(updatedAccount: FullAccount)
 
 }

@@ -2,6 +2,7 @@ package com.pixelplex.echoframework.service
 
 import com.pixelplex.echoframework.AccountListener
 import com.pixelplex.echoframework.model.Account
+import com.pixelplex.echoframework.model.FullAccount
 import com.pixelplex.echoframework.model.network.Echodevnet
 import com.pixelplex.echoframework.service.internal.AccountSubscriptionManagerImpl
 import org.junit.Assert
@@ -21,7 +22,7 @@ class AccountSubscriptionManagerTest {
     fun registeredTest() {
         val registeredId = "1.2.3"
         accountSubscriptionManager.registerListener(registeredId, object : AccountListener {
-            override fun onChange(updatedAccount: Account) {
+            override fun onChange(updatedAccount: FullAccount) {
             }
         })
 
@@ -32,7 +33,7 @@ class AccountSubscriptionManagerTest {
     fun removeTest() {
         val registeredId = "1.2.18"
         val listener = object : AccountListener {
-            override fun onChange(updatedAccount: Account) {
+            override fun onChange(updatedAccount: FullAccount) {
                 Assert.fail()
             }
         }
@@ -50,7 +51,7 @@ class AccountSubscriptionManagerTest {
         val registeredId = "1.2.18"
 
         val listener = object : AccountListener {
-            override fun onChange(updatedAccount: Account) {
+            override fun onChange(updatedAccount: FullAccount) {
             }
         }
 
@@ -68,7 +69,7 @@ class AccountSubscriptionManagerTest {
         var notifyCount = 0
 
         val listener = object : AccountListener {
-            override fun onChange(updatedAccount: Account) {
+            override fun onChange(updatedAccount: FullAccount) {
                 notifyCount++
             }
         }
@@ -77,7 +78,7 @@ class AccountSubscriptionManagerTest {
         accountSubscriptionManager.registerListener(registeredId, listener)
         accountSubscriptionManager.registerListener(registeredId, listener)
 
-        accountSubscriptionManager.notify(Account("1.2.18"))
+        accountSubscriptionManager.notify(FullAccount(Account("1.2.18")))
 
         Assert.assertTrue(notifyCount == 3)
     }

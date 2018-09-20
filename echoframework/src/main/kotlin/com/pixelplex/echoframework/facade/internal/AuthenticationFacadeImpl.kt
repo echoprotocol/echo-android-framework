@@ -32,14 +32,14 @@ class AuthenticationFacadeImpl(
     private val network: Network
 ) : BaseTransactionsFacade(databaseApiService, cryptoCoreComponent), AuthenticationFacade {
 
-    override fun isOwnedBy(name: String, password: String, callback: Callback<Account>) {
+    override fun isOwnedBy(name: String, password: String, callback: Callback<FullAccount>) {
         databaseApiService.getFullAccounts(listOf(name), false)
             .map { accountsMap -> accountsMap[name] }
-            .map { fullAccount -> fullAccount?.account }
             .value { account ->
                 val address = cryptoCoreComponent.getAddress(name, password, AuthorityType.OWNER)
 
-                val isKeySame = account?.isEqualsByKey(address, AuthorityType.OWNER) ?: false
+                val isKeySame =
+                    account?.account?.isEqualsByKey(address, AuthorityType.OWNER) ?: false
                 if (isKeySame) {
                     callback.onSuccess(account!!)
                     return

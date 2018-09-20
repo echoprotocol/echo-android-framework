@@ -5,10 +5,7 @@ import com.pixelplex.echoframework.core.mapper.internal.MapperCoreComponentImpl
 import com.pixelplex.echoframework.core.socket.internal.SocketCoreComponentImpl
 import com.pixelplex.echoframework.facade.*
 import com.pixelplex.echoframework.facade.internal.*
-import com.pixelplex.echoframework.model.Account
-import com.pixelplex.echoframework.model.Asset
-import com.pixelplex.echoframework.model.Balance
-import com.pixelplex.echoframework.model.HistoryResponse
+import com.pixelplex.echoframework.model.*
 import com.pixelplex.echoframework.model.contract.ContractInfo
 import com.pixelplex.echoframework.model.contract.ContractMethodParameter
 import com.pixelplex.echoframework.model.contract.ContractResult
@@ -109,7 +106,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
     override fun stop() =
         dispatch(Runnable { initializerFacade.disconnect() })
 
-    override fun isOwnedBy(name: String, password: String, callback: Callback<Account>) =
+    override fun isOwnedBy(name: String, password: String, callback: Callback<FullAccount>) =
         dispatch(Runnable {
             authenticationFacade.isOwnedBy(
                 name,
@@ -148,7 +145,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         )
     })
 
-    override fun getAccount(nameOrId: String, callback: Callback<Account>) =
+    override fun getAccount(nameOrId: String, callback: Callback<FullAccount>) =
         dispatch(Runnable {
             informationFacade.getAccount(nameOrId, callback.wrapOriginal())
         })

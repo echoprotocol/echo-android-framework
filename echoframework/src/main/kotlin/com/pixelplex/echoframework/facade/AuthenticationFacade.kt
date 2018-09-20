@@ -1,7 +1,7 @@
 package com.pixelplex.echoframework.facade
 
 import com.pixelplex.echoframework.Callback
-import com.pixelplex.echoframework.model.Account
+import com.pixelplex.echoframework.model.FullAccount
 
 /**
  * Encapsulates logic, associated with user authentication and account configuration processes
@@ -17,7 +17,7 @@ interface AuthenticationFacade {
      * @param password Required account's password
      * @param callback Listener of login operation results
      */
-    fun isOwnedBy(name: String, password: String, callback: Callback<Account>)
+    fun isOwnedBy(name: String, password: String, callback: Callback<FullAccount>)
 
     /**
      * Describes password changing logic contract

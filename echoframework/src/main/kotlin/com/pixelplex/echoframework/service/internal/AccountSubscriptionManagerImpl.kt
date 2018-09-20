@@ -3,6 +3,7 @@ package com.pixelplex.echoframework.service.internal
 import com.google.gson.JsonArray
 import com.pixelplex.echoframework.AccountListener
 import com.pixelplex.echoframework.model.Account
+import com.pixelplex.echoframework.model.FullAccount
 import com.pixelplex.echoframework.model.network.Network
 import com.pixelplex.echoframework.service.AccountSubscriptionManager
 import com.pixelplex.echoframework.support.toJsonObject
@@ -35,8 +36,8 @@ class AccountSubscriptionManagerImpl(private val network: Network) :
 
     override fun clear() = listeners.clear()
 
-    override fun notify(account: Account) {
-        val objectId = account.getObjectId()
+    override fun notify(account: FullAccount) {
+        val objectId = account.account!!.getObjectId()
         listeners[objectId]?.forEach { listener ->
             listener.onChange(account)
         }
