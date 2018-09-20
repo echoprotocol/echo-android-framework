@@ -8,6 +8,7 @@ import android.widget.TextView
 import com.pixelplex.echoframework.Callback
 import com.pixelplex.echoframework.exception.LocalException
 import com.pixelplex.echoframework.model.Account
+import com.pixelplex.echoframework.model.FullAccount
 import com.pixelplex.sample.R
 import kotlinx.android.synthetic.main.fragment_authorization.*
 
@@ -34,8 +35,8 @@ class AuthorizationFragment : BaseFragment() {
             lib?.isOwnedBy(
                 etName.text.toString(),
                 etPassword.text.toString(),
-                object : Callback<Account> {
-                    override fun onSuccess(result: Account) {
+                object : Callback<FullAccount> {
+                    override fun onSuccess(result: FullAccount) {
                         clear()
                         progressListener?.toggle(false)
                         updateStatus("Login success!")

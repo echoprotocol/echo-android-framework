@@ -8,7 +8,7 @@ import android.widget.TextView
 import com.pixelplex.echoframework.AccountListener
 import com.pixelplex.echoframework.Callback
 import com.pixelplex.echoframework.exception.LocalException
-import com.pixelplex.echoframework.model.Account
+import com.pixelplex.echoframework.model.FullAccount
 import com.pixelplex.sample.R
 import kotlinx.android.synthetic.main.fragment_subscription.*
 
@@ -33,7 +33,7 @@ class SubscriptionFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         accountListener = object : AccountListener {
-            override fun onChange(updatedAccount: Account) {
+            override fun onChange(updatedAccount: FullAccount) {
                 updateStatus(updatedAccount.toString())
             }
         }
