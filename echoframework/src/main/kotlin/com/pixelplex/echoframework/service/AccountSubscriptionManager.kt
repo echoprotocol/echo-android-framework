@@ -2,6 +2,7 @@ package com.pixelplex.echoframework.service
 
 import com.pixelplex.echoframework.AccountListener
 import com.pixelplex.echoframework.model.Account
+import com.pixelplex.echoframework.model.FullAccount
 
 /**
  * Encapsulates logic connected with account subscription event parsing and listeners notifying
@@ -33,7 +34,7 @@ interface AccountSubscriptionManager {
     /**
      * Notifies listeners, connected with input account
      */
-    fun notify(account: Account)
+    fun notify(account: FullAccount)
 
     /**
      * Processes notifying event. Returns list of parsed ids

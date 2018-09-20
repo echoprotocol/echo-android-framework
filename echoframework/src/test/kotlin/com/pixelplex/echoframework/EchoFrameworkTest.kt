@@ -1,9 +1,9 @@
 package com.pixelplex.echoframework
 
 import com.pixelplex.echoframework.exception.LocalException
-import com.pixelplex.echoframework.model.Account
 import com.pixelplex.echoframework.model.Asset
 import com.pixelplex.echoframework.model.Balance
+import com.pixelplex.echoframework.model.FullAccount
 import com.pixelplex.echoframework.model.HistoryResponse
 import com.pixelplex.echoframework.model.contract.ContractInfo
 import com.pixelplex.echoframework.model.contract.ContractResult
@@ -109,7 +109,7 @@ class EchoFrameworkTest {
     fun isOwnedByTest() {
         val framework = initFramework()
 
-        val futureLogin = FutureTask<Account>()
+        val futureLogin = FutureTask<FullAccount>()
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
@@ -122,7 +122,7 @@ class EchoFrameworkTest {
         val account = futureLogin.get()
         assertTrue(account != null)
 
-        val futureLoginFailure = FutureTask<Account>()
+        val futureLoginFailure = FutureTask<FullAccount>()
 
         framework.isOwnedBy(
             "dima1",
@@ -130,9 +130,9 @@ class EchoFrameworkTest {
             futureLoginFailure.completeCallback()
         )
 
-        var accountFail: Account? = null
+        var accountFail: FullAccount? = null
 
-        futureLoginFailure.wrapResult<Exception, Account>().fold({ foundAccount ->
+        futureLoginFailure.wrapResult<Exception, FullAccount>().fold({ foundAccount ->
             accountFail = foundAccount
         }, {
         })
@@ -144,7 +144,7 @@ class EchoFrameworkTest {
     fun getAccountTest() {
         val framework = initFramework()
 
-        val futureAccount = FutureTask<Account>()
+        val futureAccount = FutureTask<FullAccount>()
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
@@ -259,12 +259,12 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
-        val futureSubscriptionById = FutureTask<Account>()
+        val futureSubscriptionById = FutureTask<FullAccount>()
         val futureSubscriptionResult = FutureTask<Boolean>()
 
         framework.subscribeOnAccount("1.2.18", object : AccountListener {
 
-            override fun onChange(updatedAccount: Account) {
+            override fun onChange(updatedAccount: FullAccount) {
                 futureSubscriptionById.setComplete(updatedAccount)
             }
 
@@ -285,12 +285,12 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
-        val futureSubscriptionByName = FutureTask<Account>()
+        val futureSubscriptionByName = FutureTask<FullAccount>()
         val futureSubscriptionResult = FutureTask<Boolean>()
 
         framework.subscribeOnAccount("dima1", object : AccountListener {
 
-            override fun onChange(updatedAccount: Account) {
+            override fun onChange(updatedAccount: FullAccount) {
                 futureSubscriptionByName.setComplete(updatedAccount)
             }
 

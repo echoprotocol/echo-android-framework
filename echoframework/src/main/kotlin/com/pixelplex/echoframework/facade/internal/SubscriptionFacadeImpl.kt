@@ -155,7 +155,7 @@ class SubscriptionFacadeImpl(
         databaseApiService.getFullAccounts(listOf(nameOrId), false)
             .flatMap { accountsMap ->
                 accountsMap[nameOrId]?.account?.getObjectId()?.let { Result.Value(it) }
-                        ?: Result.Error(LocalException())
+                    ?: Result.Error(LocalException())
             }
             .mapError {
                 LocalException("Unable to find required account id for identifier = $nameOrId")
@@ -165,7 +165,7 @@ class SubscriptionFacadeImpl(
         databaseApiService.getFullAccounts(listOf(nameOrId), false)
             .flatMap { accountsMap ->
                 accountsMap[nameOrId]?.account?.let { Result.Value(it) }
-                        ?: Result.Error(LocalException())
+                    ?: Result.Error(LocalException())
             }
             .mapError {
                 LocalException("Unable to find required account id for identifier = $nameOrId")
@@ -204,7 +204,7 @@ class SubscriptionFacadeImpl(
             Callback<Map<String, FullAccount>> {
             override fun onSuccess(result: Map<String, FullAccount>) {
                 accountIds.forEach { accountId ->
-                    val account = result[accountId]?.account ?: return
+                    val account = result[accountId] ?: return
 
                     subscriptionManager.notify(account)
                 }
