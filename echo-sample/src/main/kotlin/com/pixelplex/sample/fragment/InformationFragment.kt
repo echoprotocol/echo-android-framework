@@ -8,8 +8,8 @@ import android.widget.TextView
 import com.pixelplex.echoframework.Callback
 import com.pixelplex.echoframework.ECHO_ASSET_ID
 import com.pixelplex.echoframework.exception.LocalException
-import com.pixelplex.echoframework.model.Account
 import com.pixelplex.echoframework.model.Balance
+import com.pixelplex.echoframework.model.FullAccount
 import com.pixelplex.echoframework.model.HistoryResponse
 import com.pixelplex.sample.R
 import kotlinx.android.synthetic.main.fragment_info.*
@@ -47,8 +47,8 @@ class InformationFragment : BaseFragment() {
             progressListener?.toggle(true)
             lib?.getAccount(
                 etName.text.toString(),
-                object : Callback<Account> {
-                    override fun onSuccess(result: Account) {
+                object : Callback<FullAccount> {
+                    override fun onSuccess(result: FullAccount) {
                         progressListener?.toggle(false)
                         updateStatus("Account found!", true)
                     }
