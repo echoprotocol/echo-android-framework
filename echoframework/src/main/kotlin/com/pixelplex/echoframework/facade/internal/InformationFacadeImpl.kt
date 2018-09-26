@@ -87,7 +87,7 @@ class InformationFacadeImpl(
     ): Result<LocalException, Balance> = account?.let { notNullAccount ->
         val accountBalances = notNullAccount.balances
         if (accountBalances?.isEmpty() == false) {
-            accountBalances.firstOrNull { balance -> balance.assetType == asset }?.let { balance ->
+            accountBalances.firstOrNull { balance -> balance.asset?.getObjectId() == asset }?.let { balance ->
                 Value(balance)
             } ?: Error(
                 NotFoundException("Account balance with asset type = $asset is not found")
