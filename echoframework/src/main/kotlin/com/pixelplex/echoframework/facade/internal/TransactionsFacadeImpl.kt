@@ -33,6 +33,7 @@ class TransactionsFacadeImpl(
         toNameOrId: String,
         amount: String,
         asset: String,
+        feeAsset: String?,
         message: String?,
         callback: Callback<Boolean>
     ) = callback.processResult {
@@ -77,7 +78,7 @@ class TransactionsFacadeImpl(
 
         val blockData = databaseApiService.getBlockData()
         val chainId = getChainId()
-        val fees = getFees(listOf(transfer), asset)
+        val fees = getFees(listOf(transfer), feeAsset ?: asset)
 
         val transaction = Transaction(
             blockData,
