@@ -326,7 +326,7 @@ class EchoFrameworkTest {
             "dimaty12345",
             "P5JRnzqtPYLxU9ypfndHczCqt178nzomv4DuspTPr1iTf",
             "dima1",
-            "1", "1.3.0", "Memasik",
+            "1", "1.3.0", "1.3.0", "Memasik",
             futureTransfer.completeCallback()
         )
 

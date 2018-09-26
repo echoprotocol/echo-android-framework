@@ -232,6 +232,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         toNameOrId: String,
         amount: String,
         asset: String,
+        feeAsset: String?,
         message: String?,
         callback: Callback<Boolean>
     ) = dispatch(Runnable {
@@ -241,6 +242,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             toNameOrId,
             amount,
             asset,
+            feeAsset,
             message,
             callback.wrapOriginal()
         )
