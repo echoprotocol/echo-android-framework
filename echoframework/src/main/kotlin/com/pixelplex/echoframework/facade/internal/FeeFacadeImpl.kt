@@ -2,16 +2,21 @@ package com.pixelplex.echoframework.facade.internal
 
 import com.google.common.primitives.UnsignedLong
 import com.pixelplex.echoframework.Callback
+import com.pixelplex.echoframework.core.crypto.CryptoCoreComponent
 import com.pixelplex.echoframework.core.logger.internal.LoggerCoreComponent
 import com.pixelplex.echoframework.exception.LocalException
 import com.pixelplex.echoframework.facade.FeeFacade
 import com.pixelplex.echoframework.model.Account
 import com.pixelplex.echoframework.model.Asset
 import com.pixelplex.echoframework.model.AssetAmount
+import com.pixelplex.echoframework.model.Memo
 import com.pixelplex.echoframework.model.operations.TransferOperationBuilder
 import com.pixelplex.echoframework.processResult
 import com.pixelplex.echoframework.service.DatabaseApiService
-import com.pixelplex.echoframework.support.*
+import com.pixelplex.echoframework.support.Result
+import com.pixelplex.echoframework.support.error
+import com.pixelplex.echoframework.support.map
+import com.pixelplex.echoframework.support.value
 
 /**
  * Implementation of [FeeFacade]
@@ -20,13 +25,20 @@ import com.pixelplex.echoframework.support.*
  *
  * @author Dmitriy Bushuev
  */
-class FeeFacadeImpl(private val databaseApiService: DatabaseApiService) : FeeFacade {
+class FeeFacadeImpl(
+    private val databaseApiService: DatabaseApiService,
+    private val cryptoCoreComponent: CryptoCoreComponent
+) : BaseTransactionsFacade(databaseApiService, cryptoCoreComponent),
+    FeeFacade {
 
     override fun getFeeForTransferOperation(
         fromNameOrId: String,
+        password: String,
         toNameOrId: String,
         amount: String,
         asset: String,
+        feeAsset: String?,
+        message: String?,
         callback: Callback<String>
     ) = callback.processResult(Result {
         var toAccount: Account? = null
@@ -51,9 +63,12 @@ class FeeFacadeImpl(private val databaseApiService: DatabaseApiService) : FeeFac
             throw LocalException("Unable to find required accounts: source = $fromNameOrId, target = $toNameOrId")
         }
 
-        val transfer = buildTransaction(fromAccount!!, toAccount!!, amount, asset)
+        val memoPrivateKey = memoKey(fromAccount!!.name, password)
+        val memo = generateMemo(memoPrivateKey, fromAccount!!, toAccount!!, message)
 
-        databaseApiService.getRequiredFees(listOf(transfer), Asset(asset)).dematerialize()
+        val transfer = buildTransaction(fromAccount!!, toAccount!!, amount, asset, memo)
+
+        getFees(listOf(transfer), feeAsset ?: asset)
     }.map { fees ->
         if (fees.isEmpty()) {
             LOGGER.log(
@@ -62,6 +77,7 @@ class FeeFacadeImpl(private val databaseApiService: DatabaseApiService) : FeeFac
                             |Target = $toNameOrId
                             |Amount = $amount
                             |Asset = $asset
+                            |Fee asset = $feeAsset
                         """
             )
             throw LocalException("Unable to get fee for specified operation")
@@ -74,11 +90,13 @@ class FeeFacadeImpl(private val databaseApiService: DatabaseApiService) : FeeFac
         fromAccount: Account,
         toAccount: Account,
         amount: String,
-        asset: String
+        asset: String,
+        memo: Memo
     ) = TransferOperationBuilder()
         .setFrom(fromAccount)
         .setTo(toAccount)
         .setAmount(AssetAmount(UnsignedLong.valueOf(amount.toLong()), Asset(asset)))
+        .setMemo(memo)
         .build()
 
     companion object {

@@ -2,10 +2,16 @@ package com.pixelplex.echoframework.service
 
 import com.google.common.primitives.UnsignedLong
 import com.pixelplex.echoframework.Callback
+import com.pixelplex.echoframework.core.socket.SocketCoreComponent
+import com.pixelplex.echoframework.core.socket.SocketMessengerListener
+import com.pixelplex.echoframework.core.socket.SocketState
 import com.pixelplex.echoframework.exception.LocalException
 import com.pixelplex.echoframework.model.*
 import com.pixelplex.echoframework.model.contract.*
 import com.pixelplex.echoframework.model.network.Echodevnet
+import com.pixelplex.echoframework.model.socketoperations.FullAccountsSocketOperation
+import com.pixelplex.echoframework.model.socketoperations.GetAssetsSocketOperation
+import com.pixelplex.echoframework.model.socketoperations.SocketOperation
 import com.pixelplex.echoframework.service.internal.DatabaseApiServiceImpl
 import com.pixelplex.echoframework.support.error
 import com.pixelplex.echoframework.support.value
@@ -50,7 +56,7 @@ class DatabaseApiServiceTest {
 
     @Test
     fun getFullAccountsTest() {
-        val socketCoreComponent = ServiceSocketCoreComponentMock(fullAccountsResponse)
+        val socketCoreComponent = DatabaseApiServiceSocketCoreComponentMock()
 
         val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, Echodevnet())
 
@@ -96,7 +102,7 @@ class DatabaseApiServiceTest {
 
     @Test
     fun getFullAccountsResultTest() {
-        val socketCoreComponent = ServiceSocketCoreComponentMock(fullAccountsResponse)
+        val socketCoreComponent = DatabaseApiServiceSocketCoreComponentMock()
 
         val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, Echodevnet())
 
@@ -415,5 +421,38 @@ class DatabaseApiServiceTest {
             .error { error ->
                 assertNotNull(error)
             }
+    }
+
+    /**
+     * [SocketCoreComponent] mock for [DatabaseApiService]
+     *
+     * @author Dmitriy Bushuev
+     */
+    inner class DatabaseApiServiceSocketCoreComponentMock : SocketCoreComponent {
+
+        override val socketState: SocketState = SocketState.CONNECTED
+
+        override val currentId: Int = 1
+
+        override fun connect(url: String) {
+        }
+
+        override fun disconnect() {
+        }
+
+        override fun emit(operation: SocketOperation<*>) {
+            if (operation is GetAssetsSocketOperation) {
+                operation.callback.onSuccess(listOf())
+            } else {
+                (operation as FullAccountsSocketOperation).callback.onSuccess(fullAccountsResponse)
+            }
+        }
+
+        override fun on(listener: SocketMessengerListener) {
+        }
+
+        override fun off(listener: SocketMessengerListener) {
+        }
+
     }
 }

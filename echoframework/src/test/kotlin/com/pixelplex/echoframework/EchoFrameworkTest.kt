@@ -343,9 +343,12 @@ class EchoFrameworkTest {
 
         framework.getFeeForTransferOperation(
             "dima1",
+            "P5J8pDyzznMmEdiBCdgB7VKtMBuxw5e4MAJEo3sfUbxcM",
             "dima2",
             "10000",
             "1.3.0",
+            "1.3.0",
+            "message",
             futureFee.completeCallback()
         )
 
@@ -362,9 +365,12 @@ class EchoFrameworkTest {
 
         framework.getFeeForTransferOperation(
             "dimaty123",
+            "P5J8pDyzznMmEdiBCdgB7VKtMBuxw5e4MAJEo3sfUbxcM",
             "dima2",
             "10000",
             "1.3.1234",
+            "1.3.1234",
+            "message",
             futureFee.completeCallback()
         )
 

@@ -60,13 +60,7 @@ class TransactionsFacadeImpl(
                 AuthorityType.ACTIVE
             )
 
-        val memoPrivateKey =
-            cryptoCoreComponent.getPrivateKey(
-                fromAccount!!.name,
-                password,
-                AuthorityType.KEY
-            )
-
+        val memoPrivateKey = memoKey(fromAccount!!.name, password)
         val memo = generateMemo(memoPrivateKey, fromAccount!!, toAccount!!, message)
 
         val transfer = TransferOperationBuilder()
