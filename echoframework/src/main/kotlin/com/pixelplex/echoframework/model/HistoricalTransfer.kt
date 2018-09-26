@@ -44,6 +44,8 @@ data class HistoricalTransfer(
     @Expose
     var virtualOp: Long = -1
 
+    var result: HistoryResult? = null
+
     /**
      * Json deserializer for [HistoricalTransfer] class
      */
@@ -67,11 +69,24 @@ data class HistoricalTransfer(
             // Parsing operation list
             val operation = parseOperation(jsonObject.get(OPERATIONS_KEY), context)
 
+            val result = jsonObject.get(OPERATION_RESULT_KEY).asJsonArray
+
+            val resultId = result[0].asInt
+            var objectId: String? = null
+            var payload: Any? = null
+
+            if (resultId == 1) {
+                objectId = result[1].asString
+            } else {
+                payload = result[1]
+            }
+
             return HistoricalTransfer(id, operation).apply {
-                blockNum = blockNumber
-                trxInBlock = trxNumInBlock
-                opInTrx = opNumInTrx
-                virtualOp = virtualOpNum
+                this.blockNum = blockNumber
+                this.trxInBlock = trxNumInBlock
+                this.opInTrx = opNumInTrx
+                this.virtualOp = virtualOpNum
+                this.result = HistoryResult(resultId, objectId, payload)
             }
         }
 
@@ -100,6 +115,7 @@ data class HistoricalTransfer(
         private const val TRX_IN_BLOCK_KEY = "trx_in_block"
         private const val OPERATIONS_IN_TRX_KEY = "op_in_trx"
         private const val VIRTUAL_OPERATION_KEY = "virtual_op"
+        private const val OPERATION_RESULT_KEY = "result"
 
         private const val OPERATIONS_KEY = "op"
     }
