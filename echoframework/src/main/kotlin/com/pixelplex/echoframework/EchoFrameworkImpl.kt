@@ -5,7 +5,10 @@ import com.pixelplex.echoframework.core.mapper.internal.MapperCoreComponentImpl
 import com.pixelplex.echoframework.core.socket.internal.SocketCoreComponentImpl
 import com.pixelplex.echoframework.facade.*
 import com.pixelplex.echoframework.facade.internal.*
-import com.pixelplex.echoframework.model.*
+import com.pixelplex.echoframework.model.Asset
+import com.pixelplex.echoframework.model.Balance
+import com.pixelplex.echoframework.model.FullAccount
+import com.pixelplex.echoframework.model.HistoryResponse
 import com.pixelplex.echoframework.model.contract.ContractInfo
 import com.pixelplex.echoframework.model.contract.ContractMethodParameter
 import com.pixelplex.echoframework.model.contract.ContractResult
@@ -76,7 +79,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             settings.cryptoComponent,
             settings.network
         )
-        feeFacade = FeeFacadeImpl(databaseApiService)
+        feeFacade = FeeFacadeImpl(databaseApiService, settings.cryptoComponent)
         informationFacade = InformationFacadeImpl(databaseApiService, accountHistoryApiService)
         subscriptionFacade = SubscriptionFacadeImpl(
             socketCoreComponent,
@@ -131,16 +134,22 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
 
     override fun getFeeForTransferOperation(
         fromNameOrId: String,
+        password: String,
         toNameOrId: String,
         amount: String,
         asset: String,
+        feeAsset: String?,
+        message: String?,
         callback: Callback<String>
     ) = dispatch(Runnable {
         feeFacade.getFeeForTransferOperation(
             fromNameOrId,
+            password,
             toNameOrId,
             amount,
             asset,
+            feeAsset,
+            message,
             callback.wrapOriginal()
         )
     })

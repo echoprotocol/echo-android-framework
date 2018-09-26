@@ -105,13 +105,7 @@ class AssetsFacadeImpl(
                 AuthorityType.ACTIVE
             )
 
-        val memoPrivateKey =
-            cryptoCoreComponent.getPrivateKey(
-                issuerNameOrId,
-                password,
-                AuthorityType.KEY
-            )
-
+        val memoPrivateKey = memoKey(issuerNameOrId, password)
         operation.memo = generateMemo(memoPrivateKey, issuer!!, target!!, message)
 
         val blockData = databaseApiService.getBlockData()

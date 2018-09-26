@@ -38,6 +38,9 @@ abstract class BaseTransactionsFacade(
         }
     }
 
+    protected fun memoKey(name: String, password: String) =
+        cryptoCoreComponent.getPrivateKey(name, password, AuthorityType.KEY)
+
     protected fun generateMemo(
         privateKey: ByteArray,
         fromAccount: Account,
