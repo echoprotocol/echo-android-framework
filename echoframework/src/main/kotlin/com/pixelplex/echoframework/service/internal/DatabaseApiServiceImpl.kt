@@ -42,7 +42,17 @@ class DatabaseApiServiceImpl(
             namesOrIds,
             subscribe,
             callId = socketCoreComponent.currentId,
-            callback = callback,
+            callback = object : Callback<Map<String, FullAccount>> {
+
+                override fun onSuccess(result: Map<String, FullAccount>) {
+                    fillAccounts(result, callback)
+                }
+
+                override fun onError(error: LocalException) {
+                    callback.onError(error)
+                }
+
+            },
             network = network
         )
         socketCoreComponent.emit(fullAccountsOperation)
@@ -53,17 +63,66 @@ class DatabaseApiServiceImpl(
         subscribe: Boolean
     ): Result<LocalException, Map<String, FullAccount>> {
         val future = FutureTask<Map<String, FullAccount>>()
-        val fullAccountsOperation = FullAccountsSocketOperation(
-            id,
-            namesOrIds,
-            subscribe,
-            callId = socketCoreComponent.currentId,
-            callback = future.completeCallback(),
-            network = network
-        )
-        socketCoreComponent.emit(fullAccountsOperation)
-
+        getFullAccounts(namesOrIds, subscribe, future.completeCallback())
         return future.wrapResult(mapOf())
+    }
+
+    private fun fillAccounts(
+        accounts: Map<String, FullAccount>,
+        callback: Callback<Map<String, FullAccount>>
+    ) {
+        val requiredAssets = getRequiredAssets(accounts.values)
+        getAssets(requiredAssets.toList(), object : Callback<List<Asset>> {
+
+            override fun onSuccess(result: List<Asset>) {
+                fillAssets(accounts, result, callback)
+            }
+
+            override fun onError(error: LocalException) {
+                callback.onError(error)
+            }
+
+        })
+    }
+
+    private fun getRequiredAssets(accounts: Collection<FullAccount>): List<String> {
+        val requiredAssets = mutableSetOf<String>()
+
+        accounts.forEach { fullAccount ->
+            val balanceAssets =
+                fullAccount.balances?.map { it.asset!!.getObjectId() } ?: emptyList()
+            val accountAssets = fullAccount.assets?.map { it.getObjectId() } ?: emptyList()
+
+            requiredAssets.addAll(balanceAssets)
+            requiredAssets.addAll(accountAssets)
+        }
+
+        return requiredAssets.toList()
+    }
+
+    private fun fillAssets(
+        accounts: Map<String, FullAccount>,
+        assets: List<Asset>,
+        callback: Callback<Map<String, FullAccount>>
+    ) {
+        accounts.values.forEach { fullAccount ->
+            fullAccount.balances?.forEach { balance ->
+                balance.asset =
+                        assets.find { asset -> asset.getObjectId() == balance.asset?.getObjectId() } ?:
+                        balance.asset
+            }
+
+            val filledAssets = mutableListOf<Asset>()
+            fullAccount.assets?.forEach { asset ->
+                val candidate =
+                    assets.find { it.getObjectId() == asset.getObjectId() } ?: asset
+                filledAssets.add(candidate)
+            }
+
+            fullAccount.assets = filledAssets
+        }
+
+        callback.onSuccess(accounts)
     }
 
     override fun getChainId(): Result<Exception, String> {
@@ -152,6 +211,13 @@ class DatabaseApiServiceImpl(
         )
 
         socketCoreComponent.emit(operation)
+    }
+
+    private fun getAssets(assetIds: List<String>): Result<LocalException, List<Asset>> {
+        val futureAssets = FutureTask<List<Asset>>()
+        getAssets(assetIds, futureAssets.completeCallback())
+
+        return futureAssets.wrapResult()
     }
 
     override fun callContractNoChangingState(

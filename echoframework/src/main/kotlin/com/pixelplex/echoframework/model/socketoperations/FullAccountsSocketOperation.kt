@@ -5,11 +5,7 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonParser
 import com.pixelplex.echoframework.Callback
-import com.pixelplex.echoframework.ILLEGAL_ID
-import com.pixelplex.echoframework.model.Account
-import com.pixelplex.echoframework.model.AccountOptions
-import com.pixelplex.echoframework.model.Authority
-import com.pixelplex.echoframework.model.FullAccount
+import com.pixelplex.echoframework.model.*
 import com.pixelplex.echoframework.model.network.Network
 
 /**
@@ -88,6 +84,8 @@ class FullAccountsSocketOperation(
     private fun configureGson() = GsonBuilder().apply {
         registerTypeAdapter(Authority::class.java, Authority.Deserializer(network))
         registerTypeAdapter(Account::class.java, Account.Deserializer())
+        registerTypeAdapter(FullAccount::class.java, FullAccount.FullAccountDeserializer())
+        registerTypeAdapter(Balance::class.java, Balance.BalanceDeserializer())
         registerTypeAdapter(
             AccountOptions::class.java,
             AccountOptions.Deserializer(network)
