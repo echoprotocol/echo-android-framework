@@ -7,5 +7,6 @@ package com.pixelplex.echoframework.model
  */
 class HistoryResult(
     val type: Int,
-    val objectId: String
+    val objectId: String?,
+    val data: Any?
 )
