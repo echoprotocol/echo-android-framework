@@ -25,8 +25,8 @@ class AccountCreateOperation
  */
 @JvmOverloads constructor(
     val name: String,
-    val registrar: String,
-    val referrer: String,
+    var registrar: Account,
+    var referrer: Account,
     val referrerPercent: Int = 0,
     owner: Authority,
     active: Authority,
@@ -74,8 +74,8 @@ class AccountCreateOperation
         val accountUpdate = JsonObject().apply {
             add(KEY_FEE, fee.toJsonObject())
             addProperty(KEY_NAME, name)
-            addProperty(KEY_REGISTRAR, registrar)
-            addProperty(KEY_REFERRER, referrer)
+            addProperty(KEY_REGISTRAR, registrar.toJsonString())
+            addProperty(KEY_REFERRER, referrer.toJsonString())
             addProperty(KEY_REFERRER_PERCENT, referrerPercent)
 
             if (owner.isSet)
@@ -95,8 +95,8 @@ class AccountCreateOperation
     override fun toBytes(): ByteArray {
         val feeBytes = fee.toBytes()
         val nameBytes = name.toByteArray()
-        val registrar = registrar.toByteArray()
-        val referrer = referrer.toByteArray()
+        val registrar = registrar.toBytes()
+        val referrer = referrer.toBytes()
         val referrerPercent = byteArrayOf(referrerPercent.toByte())
         val ownerBytes = owner.toBytes()
         val activeBytes = active.toBytes()
@@ -129,8 +129,8 @@ class AccountCreateOperation
             val jsonObject = json.asJsonObject
 
             val name = jsonObject.get(KEY_NAME).asString
-            val referrer = jsonObject.get(KEY_REFERRER).asString
-            val registrar = jsonObject.get(KEY_REGISTRAR).asString
+            val referrer = Account(jsonObject.get(KEY_REFERRER).asString)
+            val registrar =Account(jsonObject.get(KEY_REGISTRAR).asString)
 
             // Deserializing Authority objects
             val owner =
