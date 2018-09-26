@@ -39,7 +39,7 @@ data class Balance(
             val id = balanceObject[ID_KEY].asString
             val owner = balanceObject[OWNER_KEY].asString
             val asset = parseAsset(balanceObject)
-            val balance = balanceObject[BALANCE_KEY].asInt.toBigInteger()
+            val balance = balanceObject[BALANCE_KEY].asLong.toBigInteger()
 
             return Balance(id, owner, asset, balance)
         }

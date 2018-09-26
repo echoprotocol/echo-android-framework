@@ -173,6 +173,12 @@ class InformationFacadeImpl(
                 OperationType.ASSET_ISSUE_OPERATION ->
                     processAssetIssueOperation(operation as IssueAssetOperation, accountsRegistry)
 
+                OperationType.ACCOUNT_CREATE_OPERATION ->
+                    processAccountCreateOperation(
+                        operation as AccountCreateOperation,
+                        accountsRegistry
+                    )
+
                 else -> {
                 }
             }
@@ -271,6 +277,32 @@ class InformationFacadeImpl(
                 accountsMap[toAccountId]?.account?.let { notNullToAccount ->
                     operation.issueToAccount = notNullToAccount
                     accountRegistry[toAccountId] = notNullToAccount
+                }
+            }
+    }
+
+    private fun processAccountCreateOperation(
+        operation: AccountCreateOperation,
+        accountRegistry: MutableMap<String, Account>
+    ) {
+        val registrar = operation.registrar.getObjectId()
+        val referrer = operation.referrer.getObjectId()
+
+        if (accountRegistry.containsKey(registrar) && accountRegistry.containsKey(referrer)) {
+            accountRegistry[registrar]?.let { operation.registrar = it }
+            accountRegistry[referrer]?.let { operation.referrer = it }
+            return
+        }
+
+        databaseApiService.getFullAccounts(listOf(registrar, referrer), false)
+            .value { accountsMap ->
+                accountsMap[registrar]?.account?.let { notNullRegistrar ->
+                    operation.registrar = notNullRegistrar
+                    accountRegistry[registrar] = notNullRegistrar
+                }
+                accountsMap[referrer]?.account?.let { notNullReferrer ->
+                    operation.referrer = notNullReferrer
+                    accountRegistry[referrer] = notNullReferrer
                 }
             }
     }

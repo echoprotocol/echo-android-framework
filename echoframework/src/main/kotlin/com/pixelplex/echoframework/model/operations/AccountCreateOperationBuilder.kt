@@ -1,6 +1,7 @@
 package com.pixelplex.echoframework.model.operations
 
 import com.pixelplex.echoframework.exception.MalformedOperationException
+import com.pixelplex.echoframework.model.Account
 import com.pixelplex.echoframework.model.AccountOptions
 import com.pixelplex.echoframework.model.AssetAmount
 import com.pixelplex.echoframework.model.Authority
@@ -113,8 +114,8 @@ class AccountCreateOperationBuilder : Builder<AccountCreateOperation> {
         return fee?.let { nullSafeFee ->
             AccountCreateOperation(
                 name!!,
-                registrar!!,
-                referrer!!,
+                Account(registrar!!),
+                Account(referrer!!),
                 referrerPercent,
                 owner!!,
                 active!!,
@@ -123,8 +124,8 @@ class AccountCreateOperationBuilder : Builder<AccountCreateOperation> {
             )
         } ?: AccountCreateOperation(
             name!!,
-            registrar!!,
-            referrer!!,
+            Account(registrar!!),
+            Account(referrer!!),
             referrerPercent,
             owner!!,
             active!!,
