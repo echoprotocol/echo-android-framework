@@ -53,7 +53,7 @@ class TransferOperationBuilder : Builder<TransferOperation> {
     /**
      * Defines fee value of transfer operation
      */
-    fun setMemo(memo: Memo): TransferOperationBuilder {
+    fun setMemo(memo: Memo?): TransferOperationBuilder {
         this.transferMemo = memo
         return this
     }

@@ -334,7 +334,7 @@ class EchoFrameworkTest {
     }
 
     @Test
-    fun getRequiredFeeTest() {
+    fun getRequiredFeeWithMemoTest() {
         val framework = initFramework()
 
         if (connect(framework) == false) Assert.fail("Connection error")
@@ -349,6 +349,26 @@ class EchoFrameworkTest {
             "1.3.0",
             "1.3.0",
             "message",
+            futureFee.completeCallback()
+        )
+
+        assertNotNull(futureFee.get())
+    }
+
+    @Test
+    fun getRequiredFeeTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val futureFee = FutureTask<String>()
+
+        framework.getFeeForTransferOperation(
+            "dima1",
+            "dima2",
+            "10000",
+            "1.3.0",
+            "1.3.0",
             futureFee.completeCallback()
         )
 

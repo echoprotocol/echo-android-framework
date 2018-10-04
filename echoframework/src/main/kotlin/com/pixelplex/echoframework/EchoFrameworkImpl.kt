@@ -154,6 +154,24 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         )
     })
 
+    override fun getFeeForTransferOperation(
+        fromNameOrId: String,
+        toNameOrId: String,
+        amount: String,
+        asset: String,
+        feeAsset: String?,
+        callback: Callback<String>
+    ) = dispatch(Runnable {
+        feeFacade.getFeeForTransferOperation(
+            fromNameOrId,
+            toNameOrId,
+            amount,
+            asset,
+            feeAsset,
+            callback.wrapOriginal()
+        )
+    })
+
     override fun getAccount(nameOrId: String, callback: Callback<FullAccount>) =
         dispatch(Runnable {
             informationFacade.getAccount(nameOrId, callback.wrapOriginal())
