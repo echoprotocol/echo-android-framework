@@ -5,6 +5,7 @@ import com.google.gson.*
 import com.pixelplex.echoframework.core.logger.internal.LoggerCoreComponent
 import com.pixelplex.echoframework.exception.MalformedAddressException
 import com.pixelplex.echoframework.model.network.Network
+import com.pixelplex.echoframework.support.Uint8
 import com.pixelplex.echoframework.support.hexToBytes
 import com.pixelplex.echoframework.support.revert
 import org.spongycastle.util.encoders.Hex
@@ -48,7 +49,7 @@ class Memo : ByteSerializable, JsonSerializable {
                 byteArrayOf(0.toByte()),
                 byteArrayOf(0.toByte()),
                 byteArrayOf(0.toByte()),
-                byteArrayOf(this.byteMessage!!.size.toByte()),
+                Uint8.serialize(this.byteMessage!!.size),
                 this.byteMessage
             )
         } else {
@@ -68,7 +69,7 @@ class Memo : ByteSerializable, JsonSerializable {
                 source!!.pubKey.key,
                 destination!!.pubKey.key,
                 nonceBytes,
-                byteArrayOf(this.byteMessage!!.size.toByte()),
+                Uint8.serialize(this.byteMessage!!.size),
                 this.byteMessage
             )
         }
