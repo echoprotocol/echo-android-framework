@@ -67,4 +67,4 @@ maven_publishing:
   only:
     - master
   script:
-    - ./gradlew clean install bintrayUpload -PbintrayUser = %bintrayUserVar% -PbintrayApiKey = %bintrayApiKeyVar%
+    - ./gradlew clean install bintrayUpload -PbintrayUser=%bintrayUserVar% -PbintrayApiKey=%bintrayApiKeyVar%
