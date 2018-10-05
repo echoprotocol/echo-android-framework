@@ -45,6 +45,22 @@ interface SubscriptionFacade {
     )
 
     /**
+     * Unsubscribe listeners from observing block adding event
+     *
+     * @param callback Listener of unsubscribing process state
+     *                 Receives true if unsubscribing succeed, otherwise false\error (if occurred)
+     */
+    fun unsubscribeFromBlock(callback: Callback<Boolean>)
+
+    /**
+     * Unsubscribe listeners from observing dynamic global properties chnages event
+     *
+     * @param callback Listener of unsubscribing process state
+     *                 Receives true if unsubscribing succeed, otherwise false\error (if occurred)
+     */
+    fun unsubscribeFromBlockchainData(callback: Callback<Boolean>)
+
+    /**
      * Unsubscribe listeners from observing account event changes with id = [nameOrId]
      *
      * @param nameOrId Required account id to unsubscribe from
