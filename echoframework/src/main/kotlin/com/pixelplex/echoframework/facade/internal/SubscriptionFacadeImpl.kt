@@ -8,11 +8,14 @@ import com.pixelplex.echoframework.core.socket.SocketMessengerListener
 import com.pixelplex.echoframework.exception.LocalException
 import com.pixelplex.echoframework.facade.SubscriptionFacade
 import com.pixelplex.echoframework.model.Account
+import com.pixelplex.echoframework.model.Block
+import com.pixelplex.echoframework.model.DynamicGlobalProperties
 import com.pixelplex.echoframework.model.FullAccount
 import com.pixelplex.echoframework.model.network.Network
-import com.pixelplex.echoframework.service.AccountSubscriptionManager
-import com.pixelplex.echoframework.service.DatabaseApiService
+import com.pixelplex.echoframework.service.*
 import com.pixelplex.echoframework.service.internal.AccountSubscriptionManagerImpl
+import com.pixelplex.echoframework.service.internal.BlockSubscriptionManagerImpl
+import com.pixelplex.echoframework.service.internal.CurrentBlockchainDataSubscriptionManagerImpl
 import com.pixelplex.echoframework.support.*
 import com.pixelplex.echoframework.support.concurrent.future.FutureTask
 import com.pixelplex.echoframework.support.concurrent.future.completeCallback
@@ -38,6 +41,14 @@ class SubscriptionFacadeImpl(
 
     private val subscriptionManager: AccountSubscriptionManager by lazy {
         AccountSubscriptionManagerImpl(network)
+    }
+
+    private val blockSubscriptionManager: BlockSubscriptionManager by lazy {
+        BlockSubscriptionManagerImpl()
+    }
+
+    private val blockcnainDataSubscriptionManager: CurrentBlockchainDataSubscriptionManager by lazy {
+        CurrentBlockchainDataSubscriptionManagerImpl()
     }
 
     override fun subscribeOnAccount(
@@ -80,7 +91,7 @@ class SubscriptionFacadeImpl(
     private fun subscribeCallBlocking(): Boolean {
         val futureResult = FutureTask<Boolean>()
 
-        databaseApiService.subscribe(true, futureResult.completeCallback())
+        databaseApiService.subscribe(false, futureResult.completeCallback())
 
         var result = false
 
@@ -94,6 +105,77 @@ class SubscriptionFacadeImpl(
             }
 
         return result
+    }
+
+    override fun subscribeOnBlockchainData(
+        listener: UpdateListener<DynamicGlobalProperties>,
+        callback: Callback<Boolean>
+    ) {
+        synchronized(this) {
+            if (!subscribed) {
+                socketCoreComponent.on(socketMessengerListener)
+
+                this.subscribed = subscribeCallBlocking()
+                if (!subscribed) {
+                    callback.onError(LocalException("Subscription request error"))
+                }
+            }
+
+            if (!blockcnainDataSubscriptionManager.containListeners()) {
+                getCurrentBlockchainData()
+                    .value { _ ->
+                        blockcnainDataSubscriptionManager.addListener(listener)
+                        callback.onSuccess(subscribed)
+                    }
+                    .error { error ->
+                        LOGGER.log("Blockchain data retrieving error.", error)
+                        callback.onError(LocalException(error))
+                    }
+            } else {
+                blockcnainDataSubscriptionManager.addListener(listener)
+                callback.onSuccess(subscribed)
+            }
+        }
+    }
+
+    override fun subscribeOnBlock(listener: UpdateListener<Block>, callback: Callback<Boolean>) {
+        synchronized(this) {
+            if (!subscribed) {
+                socketCoreComponent.on(socketMessengerListener)
+
+                this.subscribed = subscribeCallBlocking()
+                if (!subscribed) {
+                    callback.onError(LocalException("Subscription request error"))
+                }
+            }
+
+            if (!blockSubscriptionManager.containListeners()) {
+                getCurrentBlockchainData()
+                    .value { _ ->
+                        blockSubscriptionManager.addListener(listener)
+                        callback.onSuccess(subscribed)
+                    }
+                    .error { error ->
+                        LOGGER.log("Blockchain data retrieving error.", error)
+                        callback.onError(LocalException(error))
+                    }
+            } else {
+                blockSubscriptionManager.addListener(listener)
+                callback.onSuccess(subscribed)
+            }
+        }
+    }
+
+    private fun getCurrentBlockchainData(): Result<LocalException, DynamicGlobalProperties> {
+        return databaseApiService.getObjects(listOf(blockObjectId), blockcnainDataSubscriptionManager.mapper)
+            .flatMap { objects ->
+                objects.firstOrNull()?.let {
+                    Result.Value(it)
+                } ?: Result.Error(LocalException())
+            }
+            .mapError {
+                LocalException("Unable to find required object id for identifier = $blockObjectId")
+            }
     }
 
     override fun unsubscribeFromAccount(nameOrId: String, callback: Callback<Boolean>) {
@@ -161,6 +243,7 @@ class SubscriptionFacadeImpl(
                 LocalException("Unable to find required account id for identifier = $nameOrId")
             }
 
+
     private fun getAccount(nameOrId: String): Result<LocalException, Account> =
         databaseApiService.getFullAccounts(listOf(nameOrId), false)
             .flatMap { accountsMap ->
@@ -184,8 +267,34 @@ class SubscriptionFacadeImpl(
                 return
             }
 
-            val accountIds = subscriptionManager.processEvent(event) ?: return
+            processBlockchainData(event)?.let { blockchainData ->
+                if (blockSubscriptionManager.containListeners()) {
+                    processBlockData(blockchainData)
+                }
 
+            } ?: let {
+                if (subscriptionManager.containsListeners()) {
+                    processAccountData(event)
+                }
+            }
+        }
+
+        private fun processBlockchainData(event: String): DynamicGlobalProperties? {
+            val blockchainData =
+                blockcnainDataSubscriptionManager.processEvent(event) ?: return null
+
+            blockcnainDataSubscriptionManager.notify(blockchainData)
+
+            return blockchainData
+        }
+
+        private fun processBlockData(blockchainData: DynamicGlobalProperties) {
+            val blockNumber = blockchainData.headBlockNumber.toString()
+            databaseApiService.getBlock(blockNumber, BlockSubscriptionCallback())
+        }
+
+        private fun processAccountData(event: String) {
+            val accountIds = subscriptionManager.processEvent(event)
             databaseApiService.getFullAccounts(
                 accountIds,
                 false,
@@ -214,11 +323,24 @@ class SubscriptionFacadeImpl(
             }
 
         }
+
+        private inner class BlockSubscriptionCallback : Callback<Block> {
+            override fun onSuccess(result: Block) {
+                blockSubscriptionManager.notify(result)
+            }
+
+            override fun onError(error: LocalException) {
+            }
+
+        }
     }
 
     companion object {
         const val METHOD_KEY = "method"
         private const val NOTICE_METHOD_KEY = "notice"
+
+        const val blockObjectId =
+            CurrentBlockchainDataSubscriptionManager.CURRENT_BLOCKCHAIN_DATA_OBJECT_ID
 
         private val LOGGER = LoggerCoreComponent.create(SubscriptionFacadeImpl::class.java.name)
     }

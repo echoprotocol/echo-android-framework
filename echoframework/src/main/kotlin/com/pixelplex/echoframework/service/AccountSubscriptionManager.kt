@@ -17,6 +17,11 @@ interface AccountSubscriptionManager {
     fun registerListener(id: String, listener: AccountListener)
 
     /**
+     * Checks if manager contains any listeners
+     */
+    fun containsListeners(): Boolean
+
+    /**
      * Check, whether listeners already registered by this id
      */
     fun registered(id: String): Boolean

@@ -1,14 +1,12 @@
 package com.pixelplex.echoframework
 
 import com.pixelplex.echoframework.exception.LocalException
-import com.pixelplex.echoframework.model.Asset
-import com.pixelplex.echoframework.model.Balance
-import com.pixelplex.echoframework.model.FullAccount
-import com.pixelplex.echoframework.model.HistoryResponse
+import com.pixelplex.echoframework.model.*
 import com.pixelplex.echoframework.model.contract.ContractInfo
 import com.pixelplex.echoframework.model.contract.ContractResult
 import com.pixelplex.echoframework.model.contract.ContractStruct
 import com.pixelplex.echoframework.model.network.Echodevnet
+import com.pixelplex.echoframework.service.UpdateListener
 import com.pixelplex.echoframework.support.Api
 import com.pixelplex.echoframework.support.EmptyCallback
 import com.pixelplex.echoframework.support.Settings
@@ -272,7 +270,7 @@ class EchoFrameworkTest {
 
         thread {
             Thread.sleep(3000)
-            changePassword(framework, EmptyCallback())
+            sendAmount(framework, EmptyCallback())
         }
 
         assertNotNull(futureSubscriptionById.get())
@@ -289,7 +287,6 @@ class EchoFrameworkTest {
         val futureSubscriptionResult = FutureTask<Boolean>()
 
         framework.subscribeOnAccount("dima1", object : AccountListener {
-
             override fun onChange(updatedAccount: FullAccount) {
                 futureSubscriptionByName.setComplete(updatedAccount)
             }
@@ -312,6 +309,105 @@ class EchoFrameworkTest {
             "P5J8pDyzznMmEdiBCdgB7VKtMBuxw5e4MAJEo3sfUbxcM",
             callback
         )
+    }
+
+    private fun sendAmount(framework: EchoFramework, callback: Callback<Boolean>) {
+        framework.sendTransferOperation(
+            "dima1",
+            "P5J8pDyzznMmEdiBCdgB7VKtMBuxw5e4MAJEo3sfUbxcM",
+            "dariatest2",
+            "10",
+            "1.3.0",
+            "1.3.0",
+            null,
+            callback
+        )
+    }
+
+    @Test
+    fun subscribeOnBlockchainDataUpdatesWithAccountChanges() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val futureSubscriptionBlockchainData = FutureTask<DynamicGlobalProperties>()
+        val futureSubscriptionBlockchainDataResult = FutureTask<Boolean>()
+        val futureSubscriptionByName = FutureTask<FullAccount>()
+        val futureSubscriptionAccountResult = FutureTask<Boolean>()
+
+        framework.subscribeOnBlockchainData(object : UpdateListener<DynamicGlobalProperties> {
+            override fun onUpdate(data: DynamicGlobalProperties) {
+                futureSubscriptionBlockchainData.setComplete(data)
+            }
+        }, futureSubscriptionBlockchainDataResult.completeCallback())
+
+        framework.subscribeOnAccount("dima1", object : AccountListener {
+            override fun onChange(updatedAccount: FullAccount) {
+                futureSubscriptionByName.setComplete(updatedAccount)
+            }
+        }, futureSubscriptionAccountResult.completeCallback())
+
+        thread {
+            Thread.sleep(3000)
+            sendAmount(framework, EmptyCallback())
+
+            Thread.sleep(3000)
+            futureSubscriptionBlockchainData.cancel()
+        }
+
+        assertNotNull(futureSubscriptionBlockchainData.get())
+        assertTrue(futureSubscriptionBlockchainDataResult.get() ?: false)
+
+        assertNotNull(futureSubscriptionByName.get())
+        assertTrue(futureSubscriptionAccountResult.get() ?: false)
+    }
+
+    @Test
+    fun subscriptionOnBlockchainDataUpdates() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val futureSubscriptionBlockchainData = FutureTask<DynamicGlobalProperties>()
+        val futureSubscriptionResult = FutureTask<Boolean>()
+
+        framework.subscribeOnBlockchainData(object : UpdateListener<DynamicGlobalProperties> {
+            override fun onUpdate(data: DynamicGlobalProperties) {
+                futureSubscriptionBlockchainData.setComplete(data)
+            }
+        }, futureSubscriptionResult.completeCallback())
+
+        thread {
+            Thread.sleep(10000)
+            futureSubscriptionBlockchainData.cancel()
+        }
+
+        assertNotNull(futureSubscriptionBlockchainData.get())
+        assertTrue(futureSubscriptionResult.get() ?: false)
+    }
+
+    @Test
+    fun subscriptionOnBlock() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val futureSubscriptionBlock = FutureTask<Block>()
+        val futureSubscriptionResult = FutureTask<Boolean>()
+
+        framework.subscribeOnBlock(object : UpdateListener<Block> {
+            override fun onUpdate(data: Block) {
+                futureSubscriptionBlock.setComplete(data)
+            }
+        }, futureSubscriptionResult.completeCallback())
+
+        thread {
+            Thread.sleep(5000)
+            futureSubscriptionBlock.cancel()
+        }
+
+        assertNotNull(futureSubscriptionBlock.get())
+        assertTrue(futureSubscriptionResult.get() ?: false)
     }
 
     @Test

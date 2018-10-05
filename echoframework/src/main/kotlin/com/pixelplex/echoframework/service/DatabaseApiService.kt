@@ -1,6 +1,7 @@
 package com.pixelplex.echoframework.service
 
 import com.pixelplex.echoframework.Callback
+import com.pixelplex.echoframework.core.mapper.ObjectMapper
 import com.pixelplex.echoframework.exception.LocalException
 import com.pixelplex.echoframework.model.*
 import com.pixelplex.echoframework.model.contract.ContractInfo
@@ -17,7 +18,7 @@ import com.pixelplex.echoframework.support.Result
  */
 interface DatabaseApiService : ApiService, AccountsService, GlobalsService,
     AuthorityAndValidationService, BlocksAndTransactionsService, ContractsService, AssetsService,
-    SubscriptionService
+    SubscriptionService, ObjectsService
 
 /**
  * Encapsulates logic, associated with data from account from blockchain database API
@@ -198,5 +199,19 @@ interface SubscriptionService {
      * Subscribes from listening chain objects
      */
     fun unsubscribe(callback: Callback<Boolean>)
+
+}
+
+/**
+ * Encapsulates logic, associated with retrieving blockchain objects
+ */
+interface ObjectsService {
+
+    /**
+     * Return objects, required by [ids]
+     *
+     * @param mapper Maps object data by [ObjectMapper]
+     */
+    fun <T: GrapheneObject> getObjects(ids: List<String>, mapper: ObjectMapper<T>) : Result<Exception, List<T>>
 
 }

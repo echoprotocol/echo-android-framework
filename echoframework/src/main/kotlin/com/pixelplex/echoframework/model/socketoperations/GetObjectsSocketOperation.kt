@@ -1,12 +1,10 @@
 package com.pixelplex.echoframework.model.socketoperations
 
-import com.google.gson.GsonBuilder
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonParser
-import com.google.gson.reflect.TypeToken
 import com.pixelplex.echoframework.Callback
-import com.pixelplex.echoframework.ILLEGAL_ID
+import com.pixelplex.echoframework.core.mapper.ObjectMapper
 import com.pixelplex.echoframework.model.GrapheneObject
 
 /**
@@ -14,20 +12,22 @@ import com.pixelplex.echoframework.model.GrapheneObject
  * If any of the provided IDs does not map to an object, a null variant is returned in its position.
  *
  * @param ids of the objects to retrieve
+ * @param mapper Mapper for received object
  * @return The objects retrieved, in the order they are mentioned in ids
  *
  * @author Daria Pechkovskaya
  */
-class GetObjectsSocketOperation(
+class GetObjectsSocketOperation<T : GrapheneObject>(
     override val apiId: Int,
     val ids: Array<String>,
+    val mapper: ObjectMapper<T>,
     callId: Int,
-    callback: Callback<List<GrapheneObject>>
+    callback: Callback<List<T>>
 
-) : SocketOperation<List<GrapheneObject>>(
+) : SocketOperation<List<T>>(
     SocketMethodType.CALL,
     callId,
-    listOf<GrapheneObject>().javaClass,
+    listOf<T>().javaClass,
     callback
 ) {
 
@@ -43,19 +43,16 @@ class GetObjectsSocketOperation(
             add(JsonArray().apply { add(identifiersJson) })
         }
 
-    override fun fromJson(json: String): List<GrapheneObject> {
+    override fun fromJson(json: String): List<T> {
         val parser = JsonParser()
         val jsonTree = parser.parse(json)
 
-        val result = jsonTree.asJsonObject.get(RESULT_KEY)?.asJsonObject
-                ?: return emptyList()
+        val result = jsonTree.asJsonObject.get(RESULT_KEY)?.asJsonArray
+            ?: return emptyList()
 
-        val gson = GsonBuilder().create()
-
-        return gson.fromJson<List<GrapheneObject>>(
-            result,
-            object : TypeToken<List<GrapheneObject>>() {}.type
-        )
+        return result.mapNotNull { jsonElement ->
+            mapper.map(jsonElement.toString())
+        }
     }
 
     companion object {
