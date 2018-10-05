@@ -5,20 +5,15 @@ import com.pixelplex.echoframework.core.mapper.internal.MapperCoreComponentImpl
 import com.pixelplex.echoframework.core.socket.internal.SocketCoreComponentImpl
 import com.pixelplex.echoframework.facade.*
 import com.pixelplex.echoframework.facade.internal.*
-import com.pixelplex.echoframework.model.Asset
-import com.pixelplex.echoframework.model.Balance
-import com.pixelplex.echoframework.model.FullAccount
-import com.pixelplex.echoframework.model.HistoryResponse
+import com.pixelplex.echoframework.model.*
 import com.pixelplex.echoframework.model.contract.ContractInfo
 import com.pixelplex.echoframework.model.contract.ContractMethodParameter
 import com.pixelplex.echoframework.model.contract.ContractResult
 import com.pixelplex.echoframework.model.contract.ContractStruct
+import com.pixelplex.echoframework.service.UpdateListener
 import com.pixelplex.echoframework.service.internal.*
 import com.pixelplex.echoframework.support.Settings
-import com.pixelplex.echoframework.support.concurrent.Dispatcher
-import com.pixelplex.echoframework.support.concurrent.ExecutorServiceDispatcher
-import com.pixelplex.echoframework.support.concurrent.MainThreadAccountListener
-import com.pixelplex.echoframework.support.concurrent.MainThreadCallback
+import com.pixelplex.echoframework.support.concurrent.*
 
 /**
  * Implementation of [EchoFramework] base library API
@@ -176,6 +171,24 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
     ) = dispatch(Runnable {
         subscriptionFacade.subscribeOnAccount(
             nameOrId,
+            listener.wrapOriginal(),
+            callback.wrapOriginal()
+        )
+    })
+
+    override fun subscribeOnBlock(listener: UpdateListener<Block>, callback: Callback<Boolean>) =
+        dispatch(Runnable {
+            subscriptionFacade.subscribeOnBlock(
+                listener.wrapOriginal(),
+                callback.wrapOriginal()
+            )
+        })
+
+    override fun subscribeOnBlockchainData(
+        listener: UpdateListener<DynamicGlobalProperties>,
+        callback: Callback<Boolean>
+    ) = dispatch(Runnable {
+        subscriptionFacade.subscribeOnBlockchainData(
             listener.wrapOriginal(),
             callback.wrapOriginal()
         )
@@ -363,6 +376,13 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             this
         } else {
             MainThreadAccountListener(this)
+        }
+
+    private fun <T> UpdateListener<T>.wrapOriginal(): UpdateListener<T> =
+        if (!returnOnMainThread) {
+            this
+        } else {
+            MainThreadUpdateListener<T>(this)
         }
 
     private fun dispatch(job: Runnable) = dispatcher.dispatch(job)
