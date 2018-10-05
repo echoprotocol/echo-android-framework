@@ -57,7 +57,7 @@ pages:
   script:
     - ./gradlew dokka
     - mkdir public
-    - mv echoframework/build/javadoc public
+    - mv echoframework/build/javadoc/* public
   artifacts:
     paths:
       - public
