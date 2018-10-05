@@ -1,5 +1,5 @@
 plugins {
-    id "io.gitlab.arturbosch.detekt" version "1.0.0.RC7-3"
+    id "io.gitlab.arturbosch.detekt" version "1.0.0.RC8"
 }
 
 apply plugin: 'com.android.library'
@@ -60,8 +60,7 @@ task analyzeCode(type: JavaExec) {
     def input = "$projectDir/src"
     def config = "$rootDir/config/detekt-ruleset.yml"
     def filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
-    def output = "$buildDir/reports/detekt"
-    def params = ['-i', input, '-c', config, '-f', filters, '-r', output]
+    def params = ['-i', input, '-c', config, '-f', filters]
     args(params)
 }
 
