@@ -167,7 +167,10 @@ class SubscriptionFacadeImpl(
     }
 
     private fun getCurrentBlockchainData(): Result<LocalException, DynamicGlobalProperties> {
-        return databaseApiService.getObjects(listOf(blockObjectId), blockcnainDataSubscriptionManager.mapper)
+        return databaseApiService.getObjects(
+            listOf(blockObjectId),
+            blockcnainDataSubscriptionManager.mapper
+        )
             .flatMap { objects ->
                 objects.firstOrNull()?.let {
                     Result.Value(it)
@@ -206,6 +209,28 @@ class SubscriptionFacadeImpl(
         }
     }
 
+    override fun unsubscribeFromBlock(callback: Callback<Boolean>) {
+        if (!blockSubscriptionManager.containListeners()) {
+            LOGGER.log("No listeners found for block subscription")
+            callback.onError(LocalException("No listeners found for block subscription"))
+
+        } else {
+            blockSubscriptionManager.clear()
+            callback.onSuccess(true)
+        }
+    }
+
+    override fun unsubscribeFromBlockchainData(callback: Callback<Boolean>) {
+        if (!blockcnainDataSubscriptionManager.containListeners()) {
+            LOGGER.log("No listeners found for blockchain changes subscription")
+            callback.onError(LocalException("No listeners found for blockchain changes subscription"))
+
+        } else {
+            blockcnainDataSubscriptionManager.clear()
+            callback.onSuccess(true)
+        }
+    }
+
     override fun unsubscribeAll(callback: Callback<Boolean>) {
         synchronized(this) {
             if (subscribed) {
@@ -215,6 +240,8 @@ class SubscriptionFacadeImpl(
 
                         socketCoreComponent.off(socketMessengerListener)
                         subscriptionManager.clear()
+                        blockSubscriptionManager.clear()
+                        blockcnainDataSubscriptionManager.clear()
                         callback.onSuccess(result)
                     }
                     .error { error ->
@@ -256,6 +283,8 @@ class SubscriptionFacadeImpl(
 
     private fun resetState() {
         subscriptionManager.clear()
+        blockSubscriptionManager.clear()
+        blockcnainDataSubscriptionManager.clear()
         socketCoreComponent.off(socketMessengerListener)
     }
 
