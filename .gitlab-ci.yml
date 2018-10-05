@@ -55,9 +55,9 @@ pages:
   only:
     - master
   script:
-    - call gradlew dokka
-    - call mkdir public
-    - call mv echoframework\build\javadoc public
+    - ./gradlew dokka
+    - mkdir public
+    - mv echoframework/build/javadoc public
   artifacts:
     paths:
       - public
