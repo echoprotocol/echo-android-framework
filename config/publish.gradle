@@ -4,18 +4,18 @@ apply plugin: 'com.github.dcendents.android-maven'
 
 ext {
     bintrayRepo = 'echo'
-    bintrayName = 'com.pixelplex.echoframework'
+    bintrayName = 'org.echo.mobile.framework'
 
-    publishedGroupId = 'com.pixelplex.echo'
+    publishedGroupId = 'org.echo'
     libraryName = 'echoframework'
     artifact = 'echoframework'
 
-    libraryDescription = 'Framework for working with graphene blockchain'
+    libraryDescription = 'Framework for working with ECHO blockchain'
 
     gitUrl = 'https://gitlab.pixelplex.by/646_echo_mobile_library/android.git'
-    siteUrl = 'https://gitlab.pixelplex.by/646_echo_mobile_library/android'
+    siteUrl = 'https://echo.org'
 
-    libraryVersion = '1.0.4-alpha'
+    libraryVersion = '1.0.5'
 
     firstDeveloperId = 'dmitriy'
     firstDeveloperName = 'Dmitriy Bushuev'
@@ -25,9 +25,9 @@ ext {
     secondDeveloperName = 'Daria Pechkovskaya'
     secondDeveloperEmail = 'd.pechkovskaya@pixelplex.io'
 
-    licenseName = 'The Apache Software License, Version 2.0'
-    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-    allLicenses = ["Apache-2.0"]
+    licenseName = 'MIT LICENSE'
+    licenseUrl = 'https://opensource.org/licenses/MIT'
+    allLicenses = ["MIT"]
 }
 
 group = publishedGroupId

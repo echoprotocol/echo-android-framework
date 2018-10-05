@@ -9,7 +9,7 @@ android {
     buildToolsVersion globalConfiguration["androidBuildToolsVersion"]
 
     defaultConfig {
-        applicationId "com.pixelplex.echo_sample"
+        applicationId "org.echo.mobile.framework.sample"
         vectorDrawables.useSupportLibrary = true
 
         minSdkVersion globalConfiguration["androidMinSdkVersion"]

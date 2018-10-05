@@ -57,10 +57,10 @@ configurations {
 task analyzeCode(type: JavaExec) {
     main = "io.gitlab.arturbosch.detekt.cli.Main"
     classpath = configurations.detekt
-    def input = "$projectDir\\src"
-    def config = "$rootDir\\config\\detekt-ruleset.yml"
+    def input = "$projectDir/src"
+    def config = "$rootDir/config/detekt-ruleset.yml"
     def filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
-    def output = "$buildDir\\reports\\detekt"
+    def output = "$buildDir/reports/detekt"
     def params = ['-i', input, '-c', config, '-f', filters, '-r', output]
     args(params)
 }
