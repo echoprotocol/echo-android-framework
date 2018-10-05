@@ -2,6 +2,7 @@ package com.pixelplex.echoframework.service.internal
 
 import com.pixelplex.echoframework.Callback
 import com.pixelplex.echoframework.ILLEGAL_ID
+import com.pixelplex.echoframework.core.mapper.ObjectMapper
 import com.pixelplex.echoframework.core.socket.SocketCoreComponent
 import com.pixelplex.echoframework.exception.LocalException
 import com.pixelplex.echoframework.model.*
@@ -314,4 +315,20 @@ class DatabaseApiServiceImpl(
         socketCoreComponent.emit(cancelSubscriptionsOperation)
     }
 
+    override fun <T : GrapheneObject> getObjects(
+        ids: List<String>,
+        mapper: ObjectMapper<T>
+    ): Result<Exception, List<T>> {
+        val future = FutureTask<List<T>>()
+        val operation = GetObjectsSocketOperation<T>(
+            id,
+            ids.toTypedArray(),
+            mapper,
+            callId = socketCoreComponent.currentId,
+            callback = future.completeCallback()
+        )
+        socketCoreComponent.emit(operation)
+
+        return future.wrapResult()
+    }
 }

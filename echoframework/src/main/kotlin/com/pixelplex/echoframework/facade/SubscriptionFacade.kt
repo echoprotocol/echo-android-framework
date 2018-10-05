@@ -2,6 +2,9 @@ package com.pixelplex.echoframework.facade
 
 import com.pixelplex.echoframework.AccountListener
 import com.pixelplex.echoframework.Callback
+import com.pixelplex.echoframework.model.Block
+import com.pixelplex.echoframework.model.DynamicGlobalProperties
+import com.pixelplex.echoframework.service.UpdateListener
 
 /**
  * Encapsulates logic, associated with subscription on blockchain objects
@@ -19,6 +22,27 @@ interface SubscriptionFacade {
      *                 Receives true if subscribing succeed, otherwise false\error (if occurred)
      */
     fun subscribeOnAccount(nameOrId: String, listener: AccountListener, callback: Callback<Boolean>)
+
+    /**
+     * Subscribe [listener] on block adding events
+     *
+     * @param listener Listener of events, associated with new added block
+     * @param callback Listener of subscribing process state
+     *                 Receives true if subscribing succeed, otherwise false\error (if occurred)
+     */
+    fun subscribeOnBlock(listener: UpdateListener<Block>, callback: Callback<Boolean>)
+
+    /**
+     * Subscribe [listener] on dynamic global properties changes events
+     *
+     * @param listener Listener of events, associated with dynamic global properties changes
+     * @param callback Listener of subscribing process state
+     *                 Receives true if subscribing succeed, otherwise false\error (if occurred)
+     */
+    fun subscribeOnBlockchainData(
+        listener: UpdateListener<DynamicGlobalProperties>,
+        callback: Callback<Boolean>
+    )
 
     /**
      * Unsubscribe listeners from observing account event changes with id = [nameOrId]

@@ -30,6 +30,8 @@ class AccountSubscriptionManagerImpl(private val network: Network) :
         }
     }
 
+    override fun containsListeners(): Boolean = listeners.isNotEmpty()
+
     override fun registered(id: String): Boolean = listeners.containsKey(id)
 
     override fun removeListeners(id: String): MutableList<AccountListener>? = listeners.remove(id)
