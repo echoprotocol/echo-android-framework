@@ -13,11 +13,11 @@ ext {
     androidCompileSdkVersion = 28
 
     // Application
-    androidApplicationId = 'com.pixelplex.echolib'
+    androidApplicationId = 'org.echo.mobile.framework'
     androidVersionCode = 1
     androidVersionName = "1.0"
 
     // Test
-    testApplicationId = 'com.pixelplex.echolib.test'
+    testApplicationId = 'org.echo.mobile.framework.test'
     testRunner = 'android.support.test.runner.AndroidJUnitRunner'
 }

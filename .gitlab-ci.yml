@@ -1,5 +1,5 @@
 before_script:
-  - set ANDROID_HOME=D:\sdk
+  - chmod +x ./gradlew
 
 stages:
   - build
@@ -20,14 +20,14 @@ build_debug:
   only:
     - develop
   script:
-    - gradlew assembleDebug
+    - ./gradlew assembleDebug
 
 build_release:
   <<: *build_template_def
   only:
     - master
   script:
-    - gradlew assembleRelease
+    - ./gradlew assembleRelease
 
 unit_test:
   stage: test
@@ -35,7 +35,7 @@ unit_test:
     - master
     - develop
   script:
-    - gradlew testReleaseUnitTest
+    - ./gradlew testReleaseUnitTest
   artifacts:
     expire_in: 4 hours
     paths:
@@ -44,7 +44,7 @@ unit_test:
 code_analysis:
   stage: checkstyle
   script:
-    - gradlew lint analyzeCode
+    - ./gradlew lint analyzeCode
   artifacts:
     expire_in: 4 hours
     paths:
@@ -55,9 +55,9 @@ pages:
   only:
     - master
   script:
-    - call gradlew dokka
-    - call mkdir public
-    - call xcopy /s/e/y echoframework\build\javadoc public
+    - ./gradlew dokka
+    - mkdir public
+    - mv echoframework/build/javadoc/* public
   artifacts:
     paths:
       - public
@@ -67,4 +67,4 @@ maven_publishing:
   only:
     - master
   script:
-    - gradlew install bintrayUpload -PbintrayUser = %bintrayUserVar% -PbintrayApiKey = %bintrayApiKeyVar%
+    - ./gradlew clean install bintrayUpload -PbintrayUser=$bintrayUserVar -PbintrayApiKey=$bintrayApiKeyVar

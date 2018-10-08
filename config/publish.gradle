@@ -3,31 +3,31 @@ apply plugin: 'com.jfrog.bintray'
 apply plugin: 'com.github.dcendents.android-maven'
 
 ext {
-    bintrayRepo = 'echo'
-    bintrayName = 'com.pixelplex.echoframework'
+    bintrayRepo = 'mobile'
+    bintrayName = 'android-framework-stable'
 
-    publishedGroupId = 'com.pixelplex.echo'
-    libraryName = 'echoframework'
-    artifact = 'echoframework'
+    publishedGroupId = 'org.echo.mobile'
+    libraryName = 'android-framework'
+    artifact = 'android-framework'
 
-    libraryDescription = 'Framework for working with graphene blockchain'
+    libraryDescription = 'Framework for working with ECHO blockchain'
 
-    gitUrl = 'https://gitlab.pixelplex.by/646_echo_mobile_library/android.git'
-    siteUrl = 'https://gitlab.pixelplex.by/646_echo_mobile_library/android'
+    gitUrl = 'https://github.com/echoprotocol/echo-android-framework'
+    siteUrl = 'https://echo.org'
 
-    libraryVersion = '1.0.3-alpha'
+    libraryVersion = '1.0.5'
 
-    firstDeveloperId = 'dmitriy'
+    firstDeveloperId = 'd.bushuev'
     firstDeveloperName = 'Dmitriy Bushuev'
     firstDeveloperEmail = 'd.bushuev@pixelplex.io'
 
-    secondDeveloperId = 'daria'
+    secondDeveloperId = 'd.pechkovskaya'
     secondDeveloperName = 'Daria Pechkovskaya'
     secondDeveloperEmail = 'd.pechkovskaya@pixelplex.io'
 
-    licenseName = 'The Apache Software License, Version 2.0'
-    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-    allLicenses = ["Apache-2.0"]
+    licenseName = 'MIT LICENSE'
+    licenseUrl = 'https://opensource.org/licenses/MIT'
+    allLicenses = ["MIT"]
 }
 
 group = publishedGroupId
@@ -51,6 +51,11 @@ install {
                 }
             }
             developers {
+                developer {
+                    id 'pixelplex'
+                    name 'pixelplex inc'
+                    email 'info@pixelplex.io'
+                }
                 developer {
                     id firstDeveloperId
                     name firstDeveloperName
@@ -118,14 +123,14 @@ if (project.rootProject.file('local.properties').exists()) {
 
 // Bintray account name for library publishing
 def bintrayAccount = properties.getProperty("bintrayUser")
-if (bintrayAccount == null && project.hasProperty("bintrayUserVar")) {
-    bintrayAccount = project.findProperty("bintrayUserVar")
+if (bintrayAccount == null && project.hasProperty("bintrayUser")) {
+    bintrayAccount = project.findProperty("bintrayUser")
 }
 
 // Bintray api key for library publishing
 def bintrayKey = properties.getProperty("bintrayApiKey")
-if (bintrayKey == null && project.hasProperty("bintrayApiKeyVar")) {
-    bintrayKey = project.findProperty("bintrayApiKeyVar")
+if (bintrayKey == null && project.hasProperty("bintrayApiKey")) {
+    bintrayKey = project.findProperty("bintrayApiKey")
 }
 
 task validateBintrayCredentials() {
@@ -136,7 +141,7 @@ task validateBintrayCredentials() {
     }
 }
 
-bintrayUpload.doFirst {validateBintrayCredentials}
+bintrayUpload.dependsOn(validateBintrayCredentials)
 
 bintray {
     user = bintrayAccount
@@ -148,11 +153,12 @@ bintray {
         name = bintrayName
         desc = libraryDescription
         websiteUrl = siteUrl
+        userOrg = 'echo'
         vcsUrl = gitUrl
         licenses = allLicenses
         dryRun = false
         publish = true
-        override = false
+        override = true
         publicDownloadNumbers = true
         version {
             desc = libraryDescription
