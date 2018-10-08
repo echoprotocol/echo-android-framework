@@ -194,6 +194,12 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         )
     })
 
+    override fun unsubscribeFromBlockchainData(callback: Callback<Boolean>) =
+        dispatch(Runnable { subscriptionFacade.unsubscribeFromBlockchainData(callback) })
+
+    override fun unsubscribeFromBlock(callback: Callback<Boolean>) =
+        dispatch(Runnable { subscriptionFacade.unsubscribeFromBlock(callback) })
+
     override fun createAsset(
         name: String,
         password: String,
@@ -305,7 +311,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
     })
 
     override fun callContract(
-        registrarNameOrId: String,
+        userNameOrId: String,
         password: String,
         assetId: String,
         contractId: String,
@@ -314,7 +320,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         callback: Callback<Boolean>
     ) = dispatch(Runnable {
         contractsFacade.callContract(
-            registrarNameOrId,
+            userNameOrId,
             password,
             assetId,
             contractId,
@@ -325,7 +331,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
     })
 
     override fun queryContract(
-        registrarNameOrId: String,
+        userNameOrId: String,
         assetId: String,
         contractId: String,
         methodName: String,
@@ -333,7 +339,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         callback: Callback<String>
     ) = dispatch(Runnable {
         contractsFacade.queryContract(
-            registrarNameOrId,
+            userNameOrId,
             assetId,
             contractId,
             methodName,
@@ -386,15 +392,5 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         }
 
     private fun dispatch(job: Runnable) = dispatcher.dispatch(job)
-
-
-    override fun unsubscribeFromBlockchainData(callback: Callback<Boolean>) {
-        TODO("not implemented")
-    }
-
-    override fun unsubscribeFromBlock(callback: Callback<Boolean>) {
-        TODO("not implemented")
-    }
-
 
 }

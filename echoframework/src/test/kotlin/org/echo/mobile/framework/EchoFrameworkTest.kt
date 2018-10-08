@@ -61,7 +61,7 @@ class EchoFrameworkTest {
     private val illegalHistoryItemId = "1.17.-1"
 
     private val contractId = "1.16.16186"
-    private val owner = "vsharaev1"
+    private val ownerId = "1.2.95"
     private val ownerPassword = "newTestPass"
 
     @Test
@@ -637,7 +637,7 @@ class EchoFrameworkTest {
         val address = "1.2.18".split(".").last()
 
         framework.callContract(
-            owner, ownerPassword, "1.3.0", contractId, "addUserToDoor",
+            ownerId, ownerPassword, "1.3.0", contractId, "addUserToDoor",
             listOf(
                 ContractMethodParameter("doorId", "int64", "2"),
                 ContractMethodParameter(
@@ -661,7 +661,7 @@ class EchoFrameworkTest {
         val future = FutureTask<Boolean>()
 
         framework.callContract(
-            owner, ownerPassword, "1.3.0", contractId, "addDoor",
+            ownerId, ownerPassword, "1.3.0", contractId, "addDoor",
             listOf(
                 ContractMethodParameter("doorId", "int64", "3"),
                 ContractMethodParameter(
