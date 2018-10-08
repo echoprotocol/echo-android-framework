@@ -3,6 +3,7 @@ package org.echo.mobile.framework
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.model.*
 import org.echo.mobile.framework.model.contract.ContractInfo
+import org.echo.mobile.framework.model.contract.ContractMethodParameter
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
 import org.echo.mobile.framework.model.network.Echodevnet
@@ -17,6 +18,7 @@ import org.echo.mobile.framework.support.fold
 import org.junit.Assert
 import org.junit.Assert.*
 import org.junit.Test
+import java.text.SimpleDateFormat
 import kotlin.concurrent.thread
 
 /**
@@ -57,6 +59,10 @@ class EchoFrameworkTest {
 
     private val illegalContractId = "1.16.-1"
     private val illegalHistoryItemId = "1.17.-1"
+
+    private val contractId = "1.16.16186"
+    private val owner = "vsharaev1"
+    private val ownerPassword = "newTestPass"
 
     @Test
     fun connectTest() {
@@ -614,6 +620,56 @@ class EchoFrameworkTest {
             legalContractId,
             "incrementCounter",
             listOf(),
+            future.completeCallback()
+        )
+
+        assertTrue(future.get() ?: false)
+    }
+
+    @Test
+    fun callContractWithAddressParameterTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<Boolean>()
+
+        val address = "1.2.18".split(".").last()
+
+        framework.callContract(
+            owner, ownerPassword, "1.3.0", contractId, "addUserToDoor",
+            listOf(
+                ContractMethodParameter("doorId", "int64", "2"),
+                ContractMethodParameter(
+                    "address",
+                    ContractMethodParameter.TYPE_ADDRESS,
+                    address
+                )
+            ),
+            future.completeCallback()
+        )
+
+        assertTrue(future.get() ?: false)
+    }
+
+    @Test
+    fun callContractWithStringParameterTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<Boolean>()
+
+        framework.callContract(
+            owner, ownerPassword, "1.3.0", contractId, "addDoor",
+            listOf(
+                ContractMethodParameter("doorId", "int64", "3"),
+                ContractMethodParameter(
+                    "doorName",
+                    ContractMethodParameter.TYPE_STRING,
+                    "door + ${SimpleDateFormat("HH:mm").format(System.currentTimeMillis())}"
+                )
+            ),
             future.completeCallback()
         )
 
