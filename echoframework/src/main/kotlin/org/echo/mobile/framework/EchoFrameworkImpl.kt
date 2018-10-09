@@ -388,7 +388,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         if (!returnOnMainThread) {
             this
         } else {
-            MainThreadUpdateListener<T>(this)
+            MainThreadUpdateListener(this)
         }
 
     private fun dispatch(job: Runnable) = dispatcher.dispatch(job)
