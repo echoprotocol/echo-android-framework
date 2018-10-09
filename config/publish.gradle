@@ -8,7 +8,7 @@ ext {
 
     publishedGroupId = 'org.echo.mobile'
     libraryName = 'android-framework'
-    artifact = 'android-framework'
+    artifact = 'echoframework'
 
     libraryDescription = 'Framework for working with ECHO blockchain'
 
