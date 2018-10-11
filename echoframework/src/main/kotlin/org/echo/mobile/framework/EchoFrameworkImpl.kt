@@ -10,7 +10,7 @@ import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractMethodParameter
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
-import org.echo.mobile.framework.service.UpdateListener
+import org.echo.mobile.framework.service.*
 import org.echo.mobile.framework.service.internal.*
 import org.echo.mobile.framework.support.Settings
 import org.echo.mobile.framework.support.concurrent.*
@@ -18,11 +18,20 @@ import org.echo.mobile.framework.support.concurrent.*
 /**
  * Implementation of [EchoFramework] base library API
  *
- * Delegates all logic to specific facades
+ * Delegates all logic to specific facades/
+ *
+ * All methods and services can lead to error if you use them without associated initialized api id,
+ * that eou need to specify in [Settings] before library initialization
  *
  * @author Dmitriy Bushuev
  */
 class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework {
+
+    override val accountHistoryApiService: AccountHistoryApiService
+    override val databaseApiService: DatabaseApiService
+    override val networkBroadcastApiService: NetworkBroadcastApiService
+    override val cryptoApiService: CryptoApiService
+    override val loginService: LoginApiService
 
     private val initializerFacade: InitializerFacade
     private val authenticationFacade: AuthenticationFacade
@@ -43,20 +52,19 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         LoggerCoreComponent.logLevel = settings.logLevel
         returnOnMainThread = settings.returnOnMainThread
 
-        val mapperCoreComponent =
-            MapperCoreComponentImpl()
+        val mapperCoreComponent = MapperCoreComponentImpl()
         val socketCoreComponent =
             SocketCoreComponentImpl(settings.socketMessenger, mapperCoreComponent)
 
-        val accountHistoryApiService = AccountHistoryApiServiceImpl(
+        accountHistoryApiService = AccountHistoryApiServiceImpl(
             socketCoreComponent,
             settings.network
         )
-        val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, settings.network)
-        val networkBroadcastApiService =
-            NetworkBroadcastApiServiceImpl(socketCoreComponent, settings.cryptoComponent)
-        val cryptoApiService = CryptoApiServiceImpl(socketCoreComponent)
-        val loginService = LoginApiServiceImpl(socketCoreComponent)
+        databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, settings.network)
+        networkBroadcastApiService =
+                NetworkBroadcastApiServiceImpl(socketCoreComponent, settings.cryptoComponent)
+        cryptoApiService = CryptoApiServiceImpl(socketCoreComponent)
+        loginService = LoginApiServiceImpl(socketCoreComponent)
 
         initializerFacade = InitializerFacadeImpl(
             socketCoreComponent,

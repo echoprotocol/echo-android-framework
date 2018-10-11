@@ -859,6 +859,58 @@ class EchoFrameworkTest {
         assertNotNull(future.get())
     }
 
+    @Test
+    fun getBlockDataTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<BlockData>()
+
+        framework.databaseApiService.getBlockData(future.completeCallback())
+
+        assertNotNull(future.get())
+    }
+
+    @Test
+    fun getDynamicGlobalPropertiesTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<DynamicGlobalProperties>()
+
+        framework.databaseApiService.getDynamicGlobalProperties(future.completeCallback())
+
+        assertNotNull(future.get())
+    }
+
+    @Test
+    fun getBlockTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<Block>()
+
+        framework.databaseApiService.getBlock("1", future.completeCallback())
+
+        assertNotNull(future.get())
+    }
+
+    @Test
+    fun getChainIdTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<String>()
+
+        framework.databaseApiService.getChainId(future.completeCallback())
+
+        assertNotNull(future.get())
+    }
+
     private fun connect(framework: EchoFramework): Boolean? {
         val futureConnect = FutureTask<Boolean>()
 

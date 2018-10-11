@@ -128,14 +128,18 @@ class DatabaseApiServiceImpl(
 
     override fun getChainId(): Result<Exception, String> {
         val future = FutureTask<String>()
+        getChainId(future.completeCallback())
+
+        return future.wrapResult()
+    }
+
+    override fun getChainId(callback: Callback<String>) {
         val chainIdOperation = GetChainIdSocketOperation(
             id,
             callId = socketCoreComponent.currentId,
-            callback = future.completeCallback()
+            callback = callback
         )
         socketCoreComponent.emit(chainIdOperation)
-
-        return future.wrapResult()
     }
 
     override fun getBlockData(): BlockData {
@@ -147,16 +151,24 @@ class DatabaseApiServiceImpl(
         return BlockData(headBlockNumber, headBlockId, expirationTime)
     }
 
+    override fun getBlockData(callback: Callback<BlockData>) {
+        callback.onSuccess(getBlockData())
+    }
+
     override fun getDynamicGlobalProperties(): Result<Exception, DynamicGlobalProperties> {
         val future = FutureTask<DynamicGlobalProperties>()
+        getDynamicGlobalProperties(future.completeCallback())
+
+        return future.wrapResult()
+    }
+
+    override fun getDynamicGlobalProperties(callback: Callback<DynamicGlobalProperties>) {
         val blockDataOperation = BlockDataSocketOperation(
             id,
             socketCoreComponent.currentId,
-            callback = future.completeCallback()
+            callback
         )
         socketCoreComponent.emit(blockDataOperation)
-
-        return future.wrapResult()
     }
 
     override fun getBlock(blockNumber: String): Result<LocalException, Block> {
@@ -212,13 +224,6 @@ class DatabaseApiServiceImpl(
         )
 
         socketCoreComponent.emit(operation)
-    }
-
-    private fun getAssets(assetIds: List<String>): Result<LocalException, List<Asset>> {
-        val futureAssets = FutureTask<List<Asset>>()
-        getAssets(assetIds, futureAssets.completeCallback())
-
-        return futureAssets.wrapResult()
     }
 
     override fun callContractNoChangingState(
