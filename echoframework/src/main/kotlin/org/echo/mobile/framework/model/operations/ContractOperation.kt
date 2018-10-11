@@ -15,7 +15,7 @@ import java.lang.reflect.Type
  * @author Daria Pechkovskaya
  */
 class ContractOperation @JvmOverloads constructor(
-    val registrar: Account,
+    var registrar: Account,
     receiver: Contract?,
     val asset: Asset,
     val value: UnsignedLong,

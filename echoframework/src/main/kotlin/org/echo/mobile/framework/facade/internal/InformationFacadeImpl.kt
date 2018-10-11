@@ -179,6 +179,12 @@ class InformationFacadeImpl(
                         accountsRegistry
                     )
 
+                OperationType.CONTRACT_OPERATION ->
+                    processContractOperation(
+                        operation as ContractOperation,
+                        accountsRegistry
+                    )
+
                 else -> {
                 }
             }
@@ -303,6 +309,26 @@ class InformationFacadeImpl(
                 accountsMap[referrer]?.account?.let { notNullReferrer ->
                     operation.referrer = notNullReferrer
                     accountRegistry[referrer] = notNullReferrer
+                }
+            }
+    }
+
+    private fun processContractOperation(
+        operation: ContractOperation,
+        accountRegistry: MutableMap<String, Account>
+    ) {
+        val registrar = operation.registrar.getObjectId()
+
+        if (accountRegistry.containsKey(registrar)) {
+            accountRegistry[registrar]?.let { operation.registrar = it }
+            return
+        }
+
+        databaseApiService.getFullAccounts(listOf(registrar), false)
+            .value { accountsMap ->
+                accountsMap[registrar]?.account?.let { notNullRegistrar ->
+                    operation.registrar = notNullRegistrar
+                    accountRegistry[registrar] = notNullRegistrar
                 }
             }
     }
