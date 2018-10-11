@@ -1,7 +1,6 @@
 package org.echo.mobile.framework.facade
 
 import org.echo.mobile.framework.Callback
-import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.Balance
 import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.HistoryResponse
@@ -47,7 +46,6 @@ interface InformationFacade {
      * @param transactionStartId   ID of the most recent operation to retrieve
      * @param transactionStopId    ID of the earliest operation to retrieve
      * @param limit                Maximum number of operations to retrieve
-     * @param asset                Specific asset type id
      * @param callback             Listener of operation results
      */
     fun getAccountHistory(
@@ -55,7 +53,6 @@ interface InformationFacade {
         transactionStartId: String,
         transactionStopId: String,
         limit: Int,
-        asset: String,
         callback: Callback<HistoryResponse>
     )
 

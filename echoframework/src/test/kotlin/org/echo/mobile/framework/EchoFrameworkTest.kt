@@ -83,7 +83,6 @@ class EchoFrameworkTest {
             "1.2.18", "1.11.1",
             "1.11.20000",
             100,
-            "1.3.0",
             futureHistory.completeCallback()
         )
 
@@ -224,7 +223,6 @@ class EchoFrameworkTest {
             nameOrId, "1.11.1",
             "1.11.20000",
             100,
-            "1.3.0",
             futureAccountHistory.completeCallback()
         )
 

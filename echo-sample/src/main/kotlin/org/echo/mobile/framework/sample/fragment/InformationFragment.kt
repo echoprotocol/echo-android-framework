@@ -107,7 +107,6 @@ class InformationFragment : BaseFragment() {
                 "1.11.0",
                 "1.11.0",
                 10,
-                ECHO_ASSET_ID,
                 object : Callback<HistoryResponse> {
                     override fun onSuccess(result: HistoryResponse) {
                         updateStatus("\n${result.transactions.joinToString(separator = ",\n")}")

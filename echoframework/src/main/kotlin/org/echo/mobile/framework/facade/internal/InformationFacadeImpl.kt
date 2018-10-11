@@ -102,7 +102,6 @@ class InformationFacadeImpl(
         transactionStartId: String,
         transactionStopId: String,
         limit: Int,
-        asset: String,
         callback: Callback<HistoryResponse>
     ) {
         var accountId: String = nameOrId

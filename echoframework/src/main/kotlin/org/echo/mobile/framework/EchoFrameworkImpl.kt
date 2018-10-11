@@ -281,15 +281,13 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         transactionStartId: String,
         transactionStopId: String,
         limit: Int,
-        asset: String,
-        callback: Callback<HistoryResponse>
+ё        callback: Callback<HistoryResponse>
     ) = dispatch(Runnable {
         informationFacade.getAccountHistory(
             nameOrId,
             transactionStartId,
             transactionStopId,
             limit,
-            asset,
             callback.wrapOriginal()
         )
     })
