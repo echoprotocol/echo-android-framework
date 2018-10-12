@@ -1,4 +1,4 @@
-package org.echo.mobile.framework.service.internal
+package org.echo.mobile.framework.service.internal.subscription
 
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonElement
@@ -18,7 +18,8 @@ class CurrentBlockchainDataSubscriptionManagerImpl : CurrentBlockchainDataSubscr
 
     private val listeners = mutableListOf<UpdateListener<DynamicGlobalProperties>>()
 
-    override val mapper: ObjectMapper<DynamicGlobalProperties> = DynamicGlobalPropertiesMapper()
+    override val mapper: ObjectMapper<DynamicGlobalProperties> =
+        DynamicGlobalPropertiesMapper()
 
     override fun addListener(listener: UpdateListener<DynamicGlobalProperties>) {
         listeners.add(listener)

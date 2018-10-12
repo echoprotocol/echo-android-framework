@@ -6,10 +6,7 @@ import org.echo.mobile.framework.core.socket.internal.SocketCoreComponentImpl
 import org.echo.mobile.framework.facade.*
 import org.echo.mobile.framework.facade.internal.*
 import org.echo.mobile.framework.model.*
-import org.echo.mobile.framework.model.contract.ContractInfo
-import org.echo.mobile.framework.model.contract.ContractMethodParameter
-import org.echo.mobile.framework.model.contract.ContractResult
-import org.echo.mobile.framework.model.contract.ContractStruct
+import org.echo.mobile.framework.model.contract.*
 import org.echo.mobile.framework.service.*
 import org.echo.mobile.framework.service.internal.*
 import org.echo.mobile.framework.support.Settings
@@ -201,6 +198,26 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             callback.wrapOriginal()
         )
     })
+
+    override fun subscribeOnContract(
+        contractId: String,
+        listener: UpdateListener<Contract>,
+        callback: Callback<Boolean>
+    ) = dispatch(Runnable {
+        subscriptionFacade.subscribeOnContract(
+            contractId,
+            listener.wrapOriginal(),
+            callback.wrapOriginal()
+        )
+    })
+
+    override fun unsubscribeFromContract(contractId: String, callback: Callback<Boolean>) =
+        dispatch(Runnable {
+            subscriptionFacade.unsubscribeFromContract(
+                contractId,
+                callback.wrapOriginal()
+            )
+        })
 
     override fun unsubscribeFromBlockchainData(callback: Callback<Boolean>) =
         dispatch(Runnable { subscriptionFacade.unsubscribeFromBlockchainData(callback) })

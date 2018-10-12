@@ -1,8 +1,7 @@
-package org.echo.mobile.framework.service.internal
+package org.echo.mobile.framework.service.internal.subscription
 
 import com.google.gson.JsonArray
 import org.echo.mobile.framework.AccountListener
-import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.network.Network
 import org.echo.mobile.framework.service.AccountSubscriptionManager

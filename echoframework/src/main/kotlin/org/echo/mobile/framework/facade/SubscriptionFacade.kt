@@ -4,6 +4,7 @@ import org.echo.mobile.framework.AccountListener
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.model.Block
 import org.echo.mobile.framework.model.DynamicGlobalProperties
+import org.echo.mobile.framework.model.contract.Contract
 import org.echo.mobile.framework.service.UpdateListener
 
 /**
@@ -45,6 +46,16 @@ interface SubscriptionFacade {
     )
 
     /**
+     * Subscribe [listener] on dynamic contract changes
+     * [callback] is needed for subscription process result events notifying
+     */
+    fun subscribeOnContract(
+        contractId: String,
+        listener: UpdateListener<Contract>,
+        callback: Callback<Boolean>
+    )
+
+    /**
      * Unsubscribe listeners from observing block adding event
      *
      * @param callback Listener of unsubscribing process state
@@ -59,6 +70,14 @@ interface SubscriptionFacade {
      *                 Receives true if unsubscribing succeed, otherwise false\error (if occurred)
      */
     fun unsubscribeFromBlockchainData(callback: Callback<Boolean>)
+
+    /**
+     * Unsubscribe listeners from observing contract [contractId] changes
+     *
+     * @param callback Listener of unsubscribing process state
+     *                 Receives true if unsubscribing succeed, otherwise false\error (if occurred)
+     */
+    fun unsubscribeFromContract(contractId: String, callback: Callback<Boolean>)
 
     /**
      * Unsubscribe listeners from observing account event changes with id = [nameOrId]

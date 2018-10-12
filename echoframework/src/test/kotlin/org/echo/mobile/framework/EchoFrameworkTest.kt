@@ -414,6 +414,25 @@ class EchoFrameworkTest {
         assertTrue(futureSubscriptionResult.get() ?: false)
     }
 
+//    @Test
+//    fun subscriptionOnContractTest() {
+//        val framework = initFramework()
+//
+//        if (connect(framework) == false) Assert.fail("Connection error")
+//
+//        val futureSubscriptionBlock = FutureTask<Contract>()
+//        val futureSubscriptionResult = FutureTask<Boolean>()
+//
+//        framework.subscribeOnContract("1.16.16244", object : UpdateListener<Contract> {
+//            override fun onUpdate(data: Contract) {
+//                futureSubscriptionBlock.setComplete(data)
+//            }
+//        }, futureSubscriptionResult.completeCallback())
+//
+//        assertNotNull(futureSubscriptionBlock.get())
+//        assertTrue(futureSubscriptionResult.get() ?: false)
+//    }
+
     @Test
     fun transferTest() {
         val framework = initFramework()
