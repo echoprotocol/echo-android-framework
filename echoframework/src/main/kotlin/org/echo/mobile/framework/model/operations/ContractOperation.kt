@@ -17,7 +17,7 @@ import java.lang.reflect.Type
 class ContractOperation @JvmOverloads constructor(
     var registrar: Account,
     receiver: Contract?,
-    val asset: Asset,
+    var asset: Asset,
     val value: UnsignedLong,
     val gasPrice: UnsignedLong,
     val gas: UnsignedLong,

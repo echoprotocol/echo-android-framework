@@ -20,7 +20,7 @@ import java.math.RoundingMode
  */
 class AssetAmount @JvmOverloads constructor(
     var amount: UnsignedLong,
-    val asset: Asset = Asset(ECHO_ASSET_ID)
+    var asset: Asset = Asset(ECHO_ASSET_ID)
 ) : GrapheneSerializable {
 
     /**

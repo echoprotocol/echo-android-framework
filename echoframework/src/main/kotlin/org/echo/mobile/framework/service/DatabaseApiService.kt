@@ -150,6 +150,11 @@ interface AssetsService {
      */
     fun getAssets(assetIds: List<String>, callback: Callback<List<Asset>>)
 
+    /**
+     * Query list of assets by it's ids [assetIds]
+     */
+    fun getAssets(assetIds: List<String>): Result<LocalException, List<Asset>>
+
 }
 
 /**

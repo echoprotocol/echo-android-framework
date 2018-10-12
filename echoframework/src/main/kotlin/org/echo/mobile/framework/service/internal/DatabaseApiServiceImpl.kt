@@ -215,6 +215,13 @@ class DatabaseApiServiceImpl(
         socketCoreComponent.emit(operation)
     }
 
+    override fun getAssets(assetIds: List<String>): Result<LocalException, List<Asset>> {
+        val futureAssets = FutureTask<List<Asset>>()
+        getAssets(assetIds, futureAssets.completeCallback())
+
+        return futureAssets.wrapResult()
+    }
+
     override fun getAssets(assetIds: List<String>, callback: Callback<List<Asset>>) {
         val operation = GetAssetsSocketOperation(
             id,
