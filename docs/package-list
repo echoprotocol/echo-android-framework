@@ -13,11 +13,13 @@ org.echo.mobile.framework.facade
 org.echo.mobile.framework.facade.internal
 org.echo.mobile.framework.model
 org.echo.mobile.framework.model.contract
+org.echo.mobile.framework.model.contract.output
 org.echo.mobile.framework.model.network
 org.echo.mobile.framework.model.operations
 org.echo.mobile.framework.model.socketoperations
 org.echo.mobile.framework.service
 org.echo.mobile.framework.service.internal
+org.echo.mobile.framework.service.internal.subscription
 org.echo.mobile.framework.support
 org.echo.mobile.framework.support.concurrent
 org.echo.mobile.framework.support.concurrent.future
