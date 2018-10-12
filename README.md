@@ -38,14 +38,14 @@ fun init() {
             Settings.Configurator()
                 .setApis(Api.DATABASE, Api.ACCOUNT_HISTORY, Api.NETWORK_BROADCAST)
                 .configure()
-        )
+            )
 
     // Start framework. Connect to node and setup public apis
     echo.start(object : Callback<Any> {
                   override fun onError(error: LocalException) { }
     
                   override fun onSuccess(result: Any) {}
-              })
+            })
 }
 ```
 
@@ -60,9 +60,9 @@ There are simple examples of usage framework
 ```kotlin
 fun login() {
      echo.isOwnedBy("name", "password", object : Callback<FullAccount> {
-                override fun onSuccess(result: FullAccount) {}
-                     
-                override fun onError(error: LocalException) {}
+                    override fun onSuccess(result: FullAccount) {}
+                         
+                    override fun onError(error: LocalException) {}
             })
 }
 ```
@@ -73,25 +73,23 @@ fun login() {
 fun getInfo() {
     val name = "some name"
     
-    echo.getAccount(name, object: Callback<FullAccount> {
-               override fun onSuccess(result: FullAccount) {}
-    
-               override fun onError(error: LocalException) {}
-    
-           })
+    echo.getAccount(name, object : Callback<FullAccount> {
+                        override fun onSuccess(result: FullAccount) {}
+                        
+                        override fun onError(error: LocalException) {}
+            })
     
     echo.getBalance(name, "1.3.0", object : Callback<Balance> {
-                override fun onSuccess(result: Balance) {}
-    
-                override fun onError(error: LocalException) {}
-    
+                        override fun onSuccess(result: Balance) {}
+                        
+                        override fun onError(error: LocalException) {}
             })
     
     echo.isOwnedBy(name, "password", object : Callback<FullAccount> {
-                    override fun onSuccess(result: FullAccount) {}
-                    
-                    override fun onError(error: LocalException) {}
-                })
+                        override fun onSuccess(result: FullAccount) {}
+                        
+                        override fun onError(error: LocalException) {}
+            })
 }
 ```
 
@@ -103,11 +101,11 @@ fun getHistory() {
                            startId = "1.11.0", 
                            stopId = "1.11.0", 
                            limit = 100, 
-                           object: Callback<HistoryResponce> {
-                           override fun onSuccess(result: HistoryResponse) {}
-                           
-                           override fun onError(error: LocalException) {}
-    })
+                           object : Callback<HistoryResponce> {
+                               override fun onSuccess(result: HistoryResponse) {}
+                               
+                               override fun onError(error: LocalException) {}
+            })
 }
 ```
 
@@ -119,11 +117,11 @@ fun subscribeToAccount() {
                 object : AccountListener {
                     override fun onChange(updatedAccount: FullAccount) {}
                 }, 
-                object: Callback<Boolean> {
+                object : Callback<Boolean> {
                     override fun onSuccess(result: Boolean) {}
-                
+                    
                     override fun onError(error: LocalException) {}
-                })
+            })
 }
 ```
 
@@ -135,12 +133,12 @@ fun changePassword() {
                "account name or id",
                "old password",
                "new password",
-               object: Callback<Boolean> {
+               object : Callback<Boolean> {
                    override fun onSuccess(result: Boolean) {}
                
                    override fun onError(error: LocalException) {}
                }
-           )
+            )
 }
 ```
 
@@ -156,12 +154,12 @@ fun feeForTransfer() {
                     asset = "1.3.0",
                     feeAsset = "1.3.0",
                     "message",
-                    object: Callback<String> {
+                    object : Callback<String> {
                         override fun onSuccess(result: String) {}
                     
                         override fun onError(error: LocalException) {}
                     }
-                )
+            )
 }
 ```
 
@@ -176,12 +174,12 @@ fun send() {
                                asset = "1.3.0",
                                assetForFee = "1.3.0",
                                message = null, // optional
-                               object: Callback<Boolean> {
+                               object : Callback<Boolean> {
                                     override fun onSuccess(result: Boolean) {}
                                 
                                     override fun onError(error: LocalException) {}
-                                }
-                )
+                               }
+            )
 }
 ```
 
@@ -213,7 +211,7 @@ fun createAsset() {
     val price = Price().apply {
                       this.quote = AssetAmount(UnsignedLong.valueOf(1), Asset("1.3.1"))
                       this.base = AssetAmount(UnsignedLong.valueOf(1), Asset("1.3.0"))
-                 }
+            }
     
     val options = AssetOptions(
                     UnsignedLong.valueOf(100000),
@@ -223,19 +221,19 @@ fun createAsset() {
                     AssetOptions.ALLOW_COMITEE_PROVIDE_FEEDS,
                     price,
                     "description"
-                )
+            )
                 
     asset.assetOptions = options
     
     echo.createAsset(
                "issuer name or id", "password",
                asset,
-               object: Callback<Boolean> {
+               object : Callback<Boolean> {
                    override fun onSuccess(result: Boolean) {}
                
                    override fun onError(error: LocalException) {}
                }
-           )        
+            )        
 }
 ```
 
@@ -251,7 +249,7 @@ fun issueAsset() {
                 "1",
                 "target account name or id", 
                 "message", // optional
-                object: Callback<Boolean> {
+                object : Callback<Boolean> {
                      override fun onSuccess(result: Boolean) {}
                  
                      override fun onError(error: LocalException) {}
