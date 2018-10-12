@@ -59,7 +59,7 @@ There are simple examples of usage framework
 
 ```kotlin
 fun login() {
-     echo.isOwnedBy("name", "password", object : Callback<FullAccount> {
+    echo.isOwnedBy("name", "password", object : Callback<FullAccount> {
                     override fun onSuccess(result: FullAccount) {}
                          
                     override fun onError(error: LocalException) {}
@@ -129,7 +129,7 @@ fun subscribeToAccount() {
 
 ```kotlin
 fun changePassword() {
-   echo.changePassword(
+    echo.changePassword(
                "account name or id",
                "old password",
                "new password",
@@ -146,19 +146,19 @@ fun changePassword() {
 
 ```kotlin
 fun feeForTransfer() {
-         framework.getFeeForTransferOperation(
-                    "from name or id",
-                    "from account password",
-                    "to name or id",
-                    amount = "10000",
-                    asset = "1.3.0",
-                    feeAsset = "1.3.0",
-                    "message",
-                    object : Callback<String> {
-                        override fun onSuccess(result: String) {}
-                    
-                        override fun onError(error: LocalException) {}
-                    }
+    framework.getFeeForTransferOperation(
+               "from name or id",
+               "from account password",
+               "to name or id",
+               amount = "10000",
+               asset = "1.3.0",
+               feeAsset = "1.3.0",
+               "message",
+               object : Callback<String> {
+                   override fun onSuccess(result: String) {}
+               
+                   override fun onError(error: LocalException) {}
+               }
             )
 }
 ```
@@ -189,51 +189,50 @@ fun send() {
 
 ```kotlin
 fun createAsset() {
-    
-   val asset = Asset("").apply {
-       symbol = "ASSET SYMBOL"
-       precision = 4
-       issuer = Account("account id")
-       setBtsOptions(
-           BitassetOptions(
-               feedLifetymeSec = 86400, 
-               minimumFeeds = 7, 
-               forceSettlementDelaySec = 86400,
-               forceSettlementOffsetPercent = 100, 
-               maximumForceSettlementVolume = 2000
-           )
-       )
-   
-       predictionMarket = false
-   }
-   
-    
-    val price = Price().apply {
-                      this.quote = AssetAmount(UnsignedLong.valueOf(1), Asset("1.3.1"))
-                      this.base = AssetAmount(UnsignedLong.valueOf(1), Asset("1.3.0"))
-            }
-    
-    val options = AssetOptions(
-                    UnsignedLong.valueOf(100000),
-                    0.toLong(),
-                    UnsignedLong.ZERO,
-                    AssetOptions.ALLOW_COMITEE_PROVIDE_FEEDS,
-                    AssetOptions.ALLOW_COMITEE_PROVIDE_FEEDS,
-                    price,
-                    "description"
+    val asset = Asset("").apply {
+        symbol = "ASSET SYMBOL"
+        precision = 4
+        issuer = Account("account id")
+        setBtsOptions(
+            BitassetOptions(
+                feedLifetymeSec = 86400, 
+                minimumFeeds = 7, 
+                forceSettlementDelaySec = 86400,
+                forceSettlementOffsetPercent = 100, 
+                maximumForceSettlementVolume = 2000
             )
-                
-    asset.assetOptions = options
+        )
     
-    echo.createAsset(
-               "issuer name or id", "password",
-               asset,
-               object : Callback<Boolean> {
-                   override fun onSuccess(result: Boolean) {}
-               
-                   override fun onError(error: LocalException) {}
-               }
-            )        
+        predictionMarket = false
+    }
+    
+     
+     val price = Price().apply {
+                       this.quote = AssetAmount(UnsignedLong.valueOf(1), Asset("1.3.1"))
+                       this.base = AssetAmount(UnsignedLong.valueOf(1), Asset("1.3.0"))
+             }
+     
+     val options = AssetOptions(
+                     UnsignedLong.valueOf(100000),
+                     0.toLong(),
+                     UnsignedLong.ZERO,
+                     AssetOptions.ALLOW_COMITEE_PROVIDE_FEEDS,
+                     AssetOptions.ALLOW_COMITEE_PROVIDE_FEEDS,
+                     price,
+                     "description"
+             )
+                 
+     asset.assetOptions = options
+     
+     echo.createAsset(
+                "issuer name or id", "password",
+                asset,
+                object : Callback<Boolean> {
+                    override fun onSuccess(result: Boolean) {}
+                
+                    override fun onError(error: LocalException) {}
+                }
+             )        
 }
 ```
 
@@ -241,7 +240,6 @@ fun createAsset() {
 
 ```kotlin
 fun issueAsset() {
-    
     framework.issueAsset(
                 "issuer account name or id",
                 "password",
@@ -264,7 +262,6 @@ fun issueAsset() {
 
 ```kotlin
 fun createContract() {
-        
     val byteCode = "some bytecode"
     
     framework.createContract(
