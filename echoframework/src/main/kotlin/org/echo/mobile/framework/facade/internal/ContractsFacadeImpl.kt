@@ -48,7 +48,7 @@ class ContractsFacadeImpl(
                 throw LocalException("Error occurred during accounts request", accountsError)
             }
 
-        checkOwnerAccount(registrarNameOrId, password, registrar!!)
+        checkOwnerAccount(registrar!!.name, password, registrar!!)
 
         val privateKey = cryptoCoreComponent.getPrivateKey(
             registrar!!.name,
@@ -77,7 +77,7 @@ class ContractsFacadeImpl(
     }
 
     override fun callContract(
-        registrarNameOrId: String,
+        userNameOrId: String,
         password: String,
         assetId: String,
         contractId: String,
@@ -87,17 +87,16 @@ class ContractsFacadeImpl(
     ) = callback.processResult {
         var registrar: Account? = null
 
-        databaseApiService.getFullAccounts(listOf(registrarNameOrId), false)
+        databaseApiService.getFullAccounts(listOf(userNameOrId), false)
             .value { accountsMap ->
-                registrar = accountsMap[registrarNameOrId]?.account
-                        ?:
-                        throw LocalException("Unable to find required account $registrarNameOrId")
+                registrar = accountsMap[userNameOrId]?.account
+                        ?: throw LocalException("Unable to find required account $userNameOrId")
             }
             .error { accountsError ->
                 throw LocalException("Error occurred during accounts request", accountsError)
             }
 
-        checkOwnerAccount(registrarNameOrId, password, registrar!!)
+        checkOwnerAccount(registrar!!.name, password, registrar!!)
 
         val privateKey = cryptoCoreComponent.getPrivateKey(
             registrar!!.name,
@@ -132,7 +131,7 @@ class ContractsFacadeImpl(
     }
 
     override fun queryContract(
-        registrarNameOrId: String,
+        userNameOrId: String,
         assetId: String,
         contractId: String,
         methodName: String,
@@ -141,11 +140,11 @@ class ContractsFacadeImpl(
     ) = callback.processResult {
         var registrar: Account? = null
 
-        databaseApiService.getFullAccounts(listOf(registrarNameOrId), false)
+        databaseApiService.getFullAccounts(listOf(userNameOrId), false)
             .value { accountsMap ->
-                registrar = accountsMap[registrarNameOrId]?.account
+                registrar = accountsMap[userNameOrId]?.account
                         ?:
-                        throw LocalException("Unable to find required account $registrarNameOrId")
+                        throw LocalException("Unable to find required account $userNameOrId")
             }
             .error { accountsError ->
                 throw LocalException("Error occurred during accounts request", accountsError)

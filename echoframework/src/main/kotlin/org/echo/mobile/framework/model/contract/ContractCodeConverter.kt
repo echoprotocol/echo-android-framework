@@ -13,7 +13,8 @@ import java.util.regex.Pattern
  *
  * @author Daria Pechkovskaya
  */
-class ContractCodeConverter : Converter<ContractMethodParameter, String> {
+class ContractCodeConverter(private var paramsCount: Int) :
+    Converter<ContractMethodParameter, String> {
 
     companion object {
         private const val HASH_PATTERN =
@@ -25,7 +26,6 @@ class ContractCodeConverter : Converter<ContractMethodParameter, String> {
         private const val RADIX = 16
     }
 
-    private var mParamsCount: Long = 0
     private var currStringOffset: Long = 0
 
     override fun convert(source: ContractMethodParameter): String {
@@ -41,14 +41,20 @@ class ContractCodeConverter : Converter<ContractMethodParameter, String> {
             source.type.contains(ContractMethodParameter.TYPE_INT) ->
                 appendNumericPattern(convertToByteCode(BigDecimal(value).toBigInteger()))
 
-            source.type.contains(ContractMethodParameter.TYPE_ADDRESS) ->
+            source.type.contains(ContractMethodParameter.TYPE_ADDRESS) && value.length == 34 ->
                 appendAddressPattern(Hex.toHexString(Base58.decode(value)).substring(2, 42))
+
+            source.type.contains(ContractMethodParameter.TYPE_ADDRESS) ->
+                appendNumericPattern(convertToByteCode(BigDecimal(value).toBigInteger()))
 
             else -> ""
         }
     }
 
-    private fun parameterIsArray(contractMethodParameter: ContractMethodParameter): Boolean {
+    /**
+     * Checks whether parameter of contract call is array
+     */
+    fun parameterIsArray(contractMethodParameter: ContractMethodParameter): Boolean {
         val p = Pattern.compile(ARRAY_PARAMETER_CHECK_PATTERN)
         val m = p.matcher(contractMethodParameter.type)
         return m.matches()
@@ -83,7 +89,7 @@ class ContractCodeConverter : Converter<ContractMethodParameter, String> {
     }
 
     private fun getStringOffset(value: String): String {
-        val currOffset = (mParamsCount + currStringOffset) * 32
+        val currOffset = (paramsCount + currStringOffset) * 32
         currStringOffset =
                 (getStringHash(value).length / HASH_PATTERN.length + 1).toLong()
         return appendNumericPattern(convertToByteCode(currOffset))
@@ -98,22 +104,50 @@ class ContractCodeConverter : Converter<ContractMethodParameter, String> {
         }
     }
 
-    private fun appendArrayParameters(parameter: ContractMethodParameter): String {
+    /**
+     * Appends string pattern to contract call parameters
+     */
+    fun appendStringPattern(_value: String): String {
+        val value = convertToByteCode(_value)
+
+        var fullParameter = ""
+        fullParameter += getStringLength(value)
+
+        fullParameter += if (value.length <= HASH_PATTERN.length) {
+            formNotFullString(value)
+        } else {
+            val ost = value.length % HASH_PATTERN.length
+            value + HASH_PATTERN.substring(0, HASH_PATTERN.length - ost)
+        }
+
+        return fullParameter
+    }
+
+    private fun convertToByteCode(_value: String): String {
+        return Hex.toHexString(_value.toByteArray(Charsets.UTF_8))
+    }
+
+    private fun getStringLength(_value: String): String {
+        return appendNumericPattern(convertToByteCode(String(Hex.decode(_value)).length.toLong() * 2))
+    }
+
+    /**
+     * Appends array parameter pattern to contract call parameters
+     */
+    fun appendArrayParameter(parameter: ContractMethodParameter): String {
         var stringParams = ""
 
-        if (parameterIsArray(parameter)) {
-            val arrayTypeAndLength = getArrayTypeAndLength(parameter)
-            val paramsList = getArrayValues(parameter)
-            if (paramsList.isNotEmpty()) {
-                val arrayLength = if (arrayTypeAndLength.second.isEmpty()) {
-                    paramsList.size.toString()
-                } else {
-                    arrayTypeAndLength.second
-                }
-                stringParams += appendNumericPattern(arrayLength)
-                for (item in paramsList) {
-                    stringParams += appendArrayParameter(arrayTypeAndLength.first, item)
-                }
+        val arrayTypeAndLength = getArrayTypeAndLength(parameter)
+        val paramsList = getArrayValues(parameter)
+        if (paramsList.isNotEmpty()) {
+            val arrayLength = if (arrayTypeAndLength.second.isEmpty()) {
+                paramsList.size.toString()
+            } else {
+                arrayTypeAndLength.second
+            }
+            stringParams += appendNumericPattern(arrayLength)
+            for (item in paramsList) {
+                stringParams += appendArrayParameter(arrayTypeAndLength.first, item)
             }
         }
 

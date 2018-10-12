@@ -42,7 +42,7 @@ class ContractCodeBuilder : Builder<String> {
             throw MalformedParameterException("Contract code requires a name of method to be set")
         }
 
-        codeConverter = ContractCodeConverter()
+        codeConverter = ContractCodeConverter(mMethodParams.size)
         keccak = Keccak()
 
         var abiParams = ""
@@ -59,6 +59,29 @@ class ContractCodeBuilder : Builder<String> {
         val methodHex = Hex.toHexString(methodName.toByteArray())
         val hashMethod = keccak.getHash(methodHex, Parameter.KECCAK_256).substring(0, 8)
 
-        return hashMethod + abiParams
+        return hashMethod + abiParams + appendStringParameters() + appendArrayParameters()
     }
+
+    private fun appendStringParameters(): String {
+        var stringParams = ""
+        mMethodParams.forEach { param ->
+            if (param.type.contains(ContractMethodParameter.TYPE_STRING)) {
+                stringParams += codeConverter.appendStringPattern(param.value)
+            }
+        }
+
+        return stringParams
+    }
+
+    private fun appendArrayParameters(): String {
+        var stringParams = ""
+        mMethodParams.forEach { param ->
+            if (codeConverter.parameterIsArray(param)) {
+                stringParams += codeConverter.appendArrayParameter(param)
+            }
+        }
+
+        return stringParams
+    }
+
 }

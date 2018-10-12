@@ -65,10 +65,20 @@ interface GlobalsService {
     fun getChainId(): Result<Exception, String>
 
     /**
+     * Retrieves blockchain chain id
+     */
+    fun getChainId(callback: Callback<String>)
+
+    /**
      * Retrieves current blockchain block data
      * @return dynamicGlobalProperties
      */
     fun getDynamicGlobalProperties(): Result<Exception, DynamicGlobalProperties>
+
+    /**
+     * Retrieves current blockchain block data
+     */
+    fun getDynamicGlobalProperties(callback: Callback<DynamicGlobalProperties>)
 
 }
 
@@ -104,6 +114,11 @@ interface BlocksAndTransactionsService {
     fun getBlockData(): BlockData
 
     /**
+     * Retrieves base block information
+     */
+    fun getBlockData(callback: Callback<BlockData>)
+
+    /**
      * Retrieves full signed block
      *
      * @param blockNumber Height of the block to be returned
@@ -134,6 +149,11 @@ interface AssetsService {
      * Query list of assets by it's ids [assetIds]
      */
     fun getAssets(assetIds: List<String>, callback: Callback<List<Asset>>)
+
+    /**
+     * Query list of assets by it's ids [assetIds]
+     */
+    fun getAssets(assetIds: List<String>): Result<LocalException, List<Asset>>
 
 }
 
@@ -212,6 +232,9 @@ interface ObjectsService {
      *
      * @param mapper Maps object data by [ObjectMapper]
      */
-    fun <T: GrapheneObject> getObjects(ids: List<String>, mapper: ObjectMapper<T>) : Result<Exception, List<T>>
+    fun <T : GrapheneObject> getObjects(
+        ids: List<String>,
+        mapper: ObjectMapper<T>
+    ): Result<Exception, List<T>>
 
 }

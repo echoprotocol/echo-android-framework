@@ -102,7 +102,6 @@ class InformationFacadeImpl(
         transactionStartId: String,
         transactionStopId: String,
         limit: Int,
-        asset: String,
         callback: Callback<HistoryResponse>
     ) {
         var accountId: String = nameOrId
@@ -139,6 +138,7 @@ class InformationFacadeImpl(
         // Need to save all requested additional information to avoid unnecessary calls
         val blocks = mutableMapOf<Long, Block>()
         val accountsRegistry = mutableMapOf<String, Account>()
+        val assetsRegistry = mutableListOf<Asset>()
 
         for (transaction in history.transactions) {
             if (!blocks.containsKey(transaction.blockNum)) {
@@ -157,6 +157,8 @@ class InformationFacadeImpl(
                 continue
             }
 
+            fillFeeAssets(operation, assetsRegistry)
+
             when (operation.type) {
                 OperationType.ACCOUNT_UPDATE_OPERATION ->
                     processAccountUpdateOperation(
@@ -165,18 +167,37 @@ class InformationFacadeImpl(
                     )
 
                 OperationType.TRANSFER_OPERATION ->
-                    processTransferOperation(operation as TransferOperation, accountsRegistry)
+                    processTransferOperation(
+                        operation as TransferOperation,
+                        accountsRegistry,
+                        assetsRegistry
+                    )
 
                 OperationType.ASSET_CREATE_OPERATION ->
-                    processAssetCreateOperation(operation as CreateAssetOperation, accountsRegistry)
+                    processAssetCreateOperation(
+                        operation as CreateAssetOperation,
+                        accountsRegistry,
+                        assetsRegistry
+                    )
 
                 OperationType.ASSET_ISSUE_OPERATION ->
-                    processAssetIssueOperation(operation as IssueAssetOperation, accountsRegistry)
+                    processAssetIssueOperation(
+                        operation as IssueAssetOperation,
+                        accountsRegistry,
+                        assetsRegistry
+                    )
 
                 OperationType.ACCOUNT_CREATE_OPERATION ->
                     processAccountCreateOperation(
                         operation as AccountCreateOperation,
                         accountsRegistry
+                    )
+
+                OperationType.CONTRACT_OPERATION ->
+                    processContractOperation(
+                        operation as ContractOperation,
+                        accountsRegistry,
+                        assetsRegistry
                     )
 
                 else -> {
@@ -195,90 +216,79 @@ class InformationFacadeImpl(
     ) {
         val accountId = operation.account.getObjectId()
 
-        accountRegistry[accountId]?.let { account ->
-            operation.account = account
-            return
-        }
+        fillAccounts(listOf(accountId), accountRegistry)
 
-        databaseApiService.getFullAccounts(listOf(accountId), false)
-            .value { accountsMap ->
-                accountsMap[accountId]?.account?.let { notNullAccount ->
-                    operation.account = notNullAccount
-                    accountRegistry[accountId] = notNullAccount
-                }
-            }
+        accountRegistry[accountId]?.let { notNullAccount ->
+            operation.account = notNullAccount
+        }
     }
 
     private fun processTransferOperation(
         operation: TransferOperation,
-        accountRegistry: MutableMap<String, Account>
+        accountRegistry: MutableMap<String, Account>,
+        assetsRegistry: MutableList<Asset>
     ) {
+        val transferAssetId = operation.transferAmount.asset.getObjectId()
+
+        getAsset(transferAssetId, assetsRegistry)?.let { notNullAsset ->
+            operation.transferAmount.asset = notNullAsset
+        }
+
         val fromAccountId = operation.from?.getObjectId() ?: ""
         val toAccountId = operation.to?.getObjectId() ?: ""
 
-        if (accountRegistry.containsKey(fromAccountId) && accountRegistry.containsKey(toAccountId)) {
-            operation.from = accountRegistry[fromAccountId]
-            operation.to = accountRegistry[toAccountId]
-            return
-        }
+        fillAccounts(listOf(fromAccountId, toAccountId), accountRegistry)
 
-        databaseApiService.getFullAccounts(listOf(fromAccountId, toAccountId), false)
-            .value { accountsMap ->
-                accountsMap[fromAccountId]?.account?.let { notNullFromAccount ->
-                    operation.from = notNullFromAccount
-                    accountRegistry[fromAccountId] = notNullFromAccount
-                }
-                accountsMap[toAccountId]?.account?.let { notNullToAccount ->
-                    operation.to = notNullToAccount
-                    accountRegistry[toAccountId] = notNullToAccount
-                }
-            }
+        accountRegistry[fromAccountId]?.let { notNullAccount ->
+            operation.from = notNullAccount
+        }
+        accountRegistry[toAccountId]?.let { notNullAccount ->
+            operation.to = notNullAccount
+        }
     }
 
     private fun processAssetCreateOperation(
         operation: CreateAssetOperation,
-        accountRegistry: MutableMap<String, Account>
+        accountRegistry: MutableMap<String, Account>,
+        assetsRegistry: MutableList<Asset>
     ) {
-        val accountId = operation.asset.issuer?.getObjectId() ?: return
+        val createdAssetId = operation.asset.getObjectId()
 
-        accountRegistry[accountId]?.let { account ->
-            operation.asset.issuer = account
-            return
+        getAsset(createdAssetId, assetsRegistry)?.let { notNullAsset ->
+            operation.asset = notNullAsset
         }
 
-        databaseApiService.getFullAccounts(listOf(accountId), false)
-            .value { accountsMap ->
-                accountsMap[accountId]?.account?.let { notNullAccount ->
-                    operation.asset.issuer = notNullAccount
-                    accountRegistry[accountId] = notNullAccount
-                }
-            }
+        val accountId = operation.asset.issuer?.getObjectId() ?: return
+
+        fillAccounts(listOf(accountId), accountRegistry)
+
+        accountRegistry[accountId]?.let { notNullAccount ->
+            operation.asset.issuer = notNullAccount
+        }
     }
 
     private fun processAssetIssueOperation(
         operation: IssueAssetOperation,
-        accountRegistry: MutableMap<String, Account>
+        accountRegistry: MutableMap<String, Account>,
+        assetsRegistry: MutableList<Asset>
     ) {
+        val issueAssetId = operation.assetToIssue.asset.getObjectId()
+
+        getAsset(issueAssetId, assetsRegistry)?.let { notNullAsset ->
+            operation.assetToIssue.asset = notNullAsset
+        }
+
         val fromAccountId = operation.issuer.getObjectId()
         val toAccountId = operation.issueToAccount.getObjectId()
 
-        if (accountRegistry.containsKey(fromAccountId) && accountRegistry.containsKey(toAccountId)) {
-            accountRegistry[fromAccountId]?.let { operation.issuer = it }
-            accountRegistry[toAccountId]?.let { operation.issueToAccount = it }
-            return
-        }
+        fillAccounts(listOf(fromAccountId, toAccountId), accountRegistry)
 
-        databaseApiService.getFullAccounts(listOf(fromAccountId, toAccountId), false)
-            .value { accountsMap ->
-                accountsMap[fromAccountId]?.account?.let { notNullFromAccount ->
-                    operation.issuer = notNullFromAccount
-                    accountRegistry[fromAccountId] = notNullFromAccount
-                }
-                accountsMap[toAccountId]?.account?.let { notNullToAccount ->
-                    operation.issueToAccount = notNullToAccount
-                    accountRegistry[toAccountId] = notNullToAccount
-                }
-            }
+        accountRegistry[fromAccountId]?.let { notNullAccount ->
+            operation.issuer = notNullAccount
+        }
+        accountRegistry[toAccountId]?.let { notNullAccount ->
+            operation.issueToAccount = notNullAccount
+        }
     }
 
     private fun processAccountCreateOperation(
@@ -288,21 +298,72 @@ class InformationFacadeImpl(
         val registrar = operation.registrar.getObjectId()
         val referrer = operation.referrer.getObjectId()
 
-        if (accountRegistry.containsKey(registrar) && accountRegistry.containsKey(referrer)) {
-            accountRegistry[registrar]?.let { operation.registrar = it }
-            accountRegistry[referrer]?.let { operation.referrer = it }
+        fillAccounts(listOf(registrar, referrer), accountRegistry)
+
+        accountRegistry[registrar]?.let { notNullAccount ->
+            operation.registrar = notNullAccount
+        }
+        accountRegistry[referrer]?.let { notNullAccount ->
+            operation.referrer = notNullAccount
+        }
+    }
+
+    private fun processContractOperation(
+        operation: ContractOperation,
+        accountRegistry: MutableMap<String, Account>,
+        assetsRegistry: MutableList<Asset>
+    ) {
+        val assetId = operation.asset.getObjectId()
+
+        getAsset(assetId, assetsRegistry)?.let { notNullAsset ->
+            operation.asset = notNullAsset
+        }
+
+        val registrar = operation.registrar.getObjectId()
+
+        fillAccounts(listOf(registrar), accountRegistry)
+
+        accountRegistry[registrar]?.let { notNullAccount ->
+            operation.registrar = notNullAccount
+        }
+    }
+
+    private fun fillFeeAssets(operation: BaseOperation, assetsRegistry: MutableList<Asset>) {
+        val assetId = operation.fee.asset.getObjectId()
+
+        getAsset(assetId, assetsRegistry)?.let { notNullAsset ->
+            operation.fee.asset = notNullAsset
+        }
+    }
+
+    private fun getAsset(assetId: String, assetsRegistry: MutableList<Asset>): Asset? {
+        val cachedAsset = assetsRegistry.find { it.getObjectId() == assetId }
+
+        cachedAsset?.let { notNullCachedAsset ->
+            return notNullCachedAsset
+        }
+
+        databaseApiService.getAssets(listOf(assetId))
+            .value { assets ->
+                assets.find { it.getObjectId() == assetId }?.let { notNullAsset ->
+                    assetsRegistry.add(notNullAsset)
+                    return notNullAsset
+                }
+            }
+        return null
+    }
+
+    private fun fillAccounts(ids: List<String>, accountsRegistry: MutableMap<String, Account>) {
+        if (accountsRegistry.keys.containsAll(ids)) {
             return
         }
 
-        databaseApiService.getFullAccounts(listOf(registrar, referrer), false)
+        databaseApiService.getFullAccounts(ids, false)
             .value { accountsMap ->
-                accountsMap[registrar]?.account?.let { notNullRegistrar ->
-                    operation.registrar = notNullRegistrar
-                    accountRegistry[registrar] = notNullRegistrar
-                }
-                accountsMap[referrer]?.account?.let { notNullReferrer ->
-                    operation.referrer = notNullReferrer
-                    accountRegistry[referrer] = notNullReferrer
+                accountsMap.forEach { (key, value) ->
+                    value.account?.let { account ->
+                        accountsRegistry[key] = account
+                    }
                 }
             }
     }

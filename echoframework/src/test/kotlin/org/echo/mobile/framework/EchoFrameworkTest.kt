@@ -3,6 +3,7 @@ package org.echo.mobile.framework
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.model.*
 import org.echo.mobile.framework.model.contract.ContractInfo
+import org.echo.mobile.framework.model.contract.ContractMethodParameter
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
 import org.echo.mobile.framework.model.network.Echodevnet
@@ -17,6 +18,7 @@ import org.echo.mobile.framework.support.fold
 import org.junit.Assert
 import org.junit.Assert.*
 import org.junit.Test
+import java.text.SimpleDateFormat
 import kotlin.concurrent.thread
 
 /**
@@ -58,6 +60,10 @@ class EchoFrameworkTest {
     private val illegalContractId = "1.16.-1"
     private val illegalHistoryItemId = "1.17.-1"
 
+    private val contractId = "1.16.16186"
+    private val ownerId = "1.2.95"
+    private val ownerPassword = "newTestPass"
+
     @Test
     fun connectTest() {
         val framework = initFramework()
@@ -77,7 +83,6 @@ class EchoFrameworkTest {
             "1.2.18", "1.11.1",
             "1.11.20000",
             100,
-            "1.3.0",
             futureHistory.completeCallback()
         )
 
@@ -218,7 +223,6 @@ class EchoFrameworkTest {
             nameOrId, "1.11.1",
             "1.11.20000",
             100,
-            "1.3.0",
             futureAccountHistory.completeCallback()
         )
 
@@ -409,6 +413,25 @@ class EchoFrameworkTest {
         assertNotNull(futureSubscriptionBlock.get())
         assertTrue(futureSubscriptionResult.get() ?: false)
     }
+
+//    @Test
+//    fun subscriptionOnContractTest() {
+//        val framework = initFramework()
+//
+//        if (connect(framework) == false) Assert.fail("Connection error")
+//
+//        val futureSubscriptionBlock = FutureTask<Contract>()
+//        val futureSubscriptionResult = FutureTask<Boolean>()
+//
+//        framework.subscribeOnContract("1.16.16244", object : UpdateListener<Contract> {
+//            override fun onUpdate(data: Contract) {
+//                futureSubscriptionBlock.setComplete(data)
+//            }
+//        }, futureSubscriptionResult.completeCallback())
+//
+//        assertNotNull(futureSubscriptionBlock.get())
+//        assertTrue(futureSubscriptionResult.get() ?: false)
+//    }
 
     @Test
     fun transferTest() {
@@ -620,6 +643,56 @@ class EchoFrameworkTest {
         assertTrue(future.get() ?: false)
     }
 
+    @Test
+    fun callContractWithAddressParameterTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<Boolean>()
+
+        val address = "1.2.18".split(".").last()
+
+        framework.callContract(
+            ownerId, ownerPassword, "1.3.0", contractId, "addUserToDoor",
+            listOf(
+                ContractMethodParameter("doorId", "int64", "2"),
+                ContractMethodParameter(
+                    "address",
+                    ContractMethodParameter.TYPE_ADDRESS,
+                    address
+                )
+            ),
+            future.completeCallback()
+        )
+
+        assertTrue(future.get() ?: false)
+    }
+
+    @Test
+    fun callContractWithStringParameterTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<Boolean>()
+
+        framework.callContract(
+            ownerId, ownerPassword, "1.3.0", contractId, "addDoor",
+            listOf(
+                ContractMethodParameter("doorId", "int64", "3"),
+                ContractMethodParameter(
+                    "doorName",
+                    ContractMethodParameter.TYPE_STRING,
+                    "door + ${SimpleDateFormat("HH:mm").format(System.currentTimeMillis())}"
+                )
+            ),
+            future.completeCallback()
+        )
+
+        assertTrue(future.get() ?: false)
+    }
+
     @Test(expected = LocalException::class)
     fun callContractFailureTest() {
         val framework = initFramework()
@@ -801,6 +874,58 @@ class EchoFrameworkTest {
             illegalContractId,
             future.completeCallback()
         )
+
+        assertNotNull(future.get())
+    }
+
+    @Test
+    fun getBlockDataTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<BlockData>()
+
+        framework.databaseApiService.getBlockData(future.completeCallback())
+
+        assertNotNull(future.get())
+    }
+
+    @Test
+    fun getDynamicGlobalPropertiesTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<DynamicGlobalProperties>()
+
+        framework.databaseApiService.getDynamicGlobalProperties(future.completeCallback())
+
+        assertNotNull(future.get())
+    }
+
+    @Test
+    fun getBlockTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<Block>()
+
+        framework.databaseApiService.getBlock("1", future.completeCallback())
+
+        assertNotNull(future.get())
+    }
+
+    @Test
+    fun getChainIdTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<String>()
+
+        framework.databaseApiService.getChainId(future.completeCallback())
 
         assertNotNull(future.get())
     }

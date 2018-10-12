@@ -1,4 +1,4 @@
-package org.echo.mobile.framework.service.internal
+package org.echo.mobile.framework.service.internal.subscription
 
 import org.echo.mobile.framework.model.Block
 import org.echo.mobile.framework.service.BlockSubscriptionManager

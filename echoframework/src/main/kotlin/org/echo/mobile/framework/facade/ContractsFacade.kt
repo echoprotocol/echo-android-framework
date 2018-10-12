@@ -17,10 +17,10 @@ interface ContractsFacade {
      * Creates contract on blockchain
      *
      * @param registrarNameOrId Name or id of account that creates the contract
-     * @param password Password from account for transaction signature
-     * @param assetId Asset of contract
-     * @param byteCode Bytecode of the created contract
-     * @param callback Listener of operation results.
+     * @param password          Password from account for transaction signature
+     * @param assetId           Asset of contract
+     * @param byteCode          Bytecode of the created contract
+     * @param callback          Listener of operation results.
      *                 Retrieves true if creation succeed, otherwise - false
      */
     fun createContract(
@@ -34,17 +34,17 @@ interface ContractsFacade {
     /**
      * Calls to contract on blockchain
      *
-     * @param registrarNameOrId Name or id of account that creates the contract
-     * @param password Password from account for transaction signature
-     * @param assetId Asset of contract
-     * @param contractId Id of called contract
-     * @param methodName Name of called method
+     * @param userNameOrId Name or id of account that calls the contract
+     * @param password     Password from account for transaction signature
+     * @param assetId      Asset of contract
+     * @param contractId   Id of called contract
+     * @param methodName   Name of called method
      * @param methodParams Parameters of called method
-     * @param callback Listener of operation results.
-     *                 Retrieves true if call succeed, otherwise - false
+     * @param callback     Listener of operation results.
+     *                     Retrieves true if call succeed, otherwise - false
      */
     fun callContract(
-        registrarNameOrId: String,
+        userNameOrId: String,
         password: String,
         assetId: String,
         contractId: String,
@@ -56,15 +56,15 @@ interface ContractsFacade {
     /**
      * Calls contract method without changing state of blockchain
      *
-     * @param registrarNameOrId Name or id of account that creates the contract
-     * @param contractId Id of called contract
-     * @param assetId Asset of contract
-     * @param methodName Name of called method
+     * @param userNameOrId Name or id of account that calls the contract
+     * @param contractId   Id of called contract
+     * @param assetId      Asset of contract
+     * @param methodName   Name of called method
      * @param methodParams Parameters of called method
-     * @param callback Listener of operation results.
+     * @param callback     Listener of operation results.
      */
     fun queryContract(
-        registrarNameOrId: String,
+        userNameOrId: String,
         assetId: String,
         contractId: String,
         methodName: String,

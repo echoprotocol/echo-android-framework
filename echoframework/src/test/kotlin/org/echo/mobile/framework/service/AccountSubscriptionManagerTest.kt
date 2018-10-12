@@ -4,7 +4,7 @@ import org.echo.mobile.framework.AccountListener
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.network.Echodevnet
-import org.echo.mobile.framework.service.internal.AccountSubscriptionManagerImpl
+import org.echo.mobile.framework.service.internal.subscription.AccountSubscriptionManagerImpl
 import org.junit.Assert
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -16,7 +16,10 @@ import org.junit.Test
  */
 class AccountSubscriptionManagerTest {
 
-    private val accountSubscriptionManager = AccountSubscriptionManagerImpl(Echodevnet())
+    private val accountSubscriptionManager =
+        AccountSubscriptionManagerImpl(
+            Echodevnet()
+        )
 
     @Test
     fun registeredTest() {
