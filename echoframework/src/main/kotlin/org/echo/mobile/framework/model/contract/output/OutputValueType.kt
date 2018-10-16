@@ -60,9 +60,10 @@ class StringOutputValueType : OutputValueType {
 
     override fun decode(source: ByteArray): Pair<Any, ByteArray> {
         val offset = String(source).slice(0 until SLICE_SIZE).toInt(NUMBER_RADIX) * 2
-        val length = String(source).slice(SLICE_SIZE until SLICE_SIZE * 2).toInt(NUMBER_RADIX)
+        val length = String(source).slice(SLICE_SIZE until SLICE_SIZE * 2).toInt(NUMBER_RADIX) * 2
 
-        val result = String(Hex.decode(String(source).slice(offset until (offset + length))))
+        val result =
+            String(Hex.decode(String(source).slice(SLICE_SIZE + offset until (SLICE_SIZE * 2 + length))))
 
         val start = SLICE_SIZE + countSlicesOfData(result.toByteArray()) * SLICE_SIZE
 
@@ -77,6 +78,7 @@ class StringOutputValueType : OutputValueType {
     }
 
 }
+
 
 /**
  * Implementation of [OutputValueType] for фввкуыы types

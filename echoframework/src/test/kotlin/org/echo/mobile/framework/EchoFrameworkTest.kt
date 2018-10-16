@@ -320,7 +320,7 @@ class EchoFrameworkTest {
             "dima1",
             "P5J8pDyzznMmEdiBCdgB7VKtMBuxw5e4MAJEo3sfUbxcM",
             "dariatest2",
-            "10",
+            "1",
             "1.3.0",
             "1.3.0",
             null,
