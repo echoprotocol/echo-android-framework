@@ -81,7 +81,7 @@ class StringOutputValueType : OutputValueType {
 
 
 /**
- * Implementation of [OutputValueType] for фввкуыы types
+ * Implementation of [OutputValueType] for address types
  */
 class AddressOutputValueType : OutputValueType {
 
@@ -89,6 +89,46 @@ class AddressOutputValueType : OutputValueType {
         val address = String(source.copyOfRange(0, SLICE_SIZE)).toLong(NUMBER_RADIX)
 
         return Pair(address, source.copyOfRange(SLICE_SIZE, source.size))
+    }
+
+}
+
+/**
+ * Implementation of [OutputValueType] for fixed arrays
+ */
+class FixedArrayOutputValueType(private val size: Int, private val itemType: OutputValueType) :
+    OutputValueType {
+
+    override fun decode(source: ByteArray): Pair<Any, ByteArray> {
+        return processList(source, size)
+    }
+
+    private fun processList(listSource: ByteArray, count: Int): Pair<List<Any>, ByteArray> {
+        var sourceResult = listSource
+        val result = mutableListOf<Any>()
+        (0 until count).forEach {
+            val candidate = itemType.decode(sourceResult)
+            result.add(candidate.first)
+            sourceResult = candidate.second
+        }
+
+        return Pair(result, sourceResult)
+    }
+
+}
+
+/**
+ * Implementation of [OutputValueType] for fixed bytes types types
+ */
+class FixedBytesOutputValueType : OutputValueType {
+
+    override fun decode(source: ByteArray): Pair<Any, ByteArray> {
+        val stringOutput = String(Hex.decode(source.copyOfRange(0, SLICE_SIZE)))
+
+        val start = SLICE_SIZE
+        val end = source.count()
+
+        return Pair(stringOutput, source.copyOfRange(start, end))
     }
 
 }

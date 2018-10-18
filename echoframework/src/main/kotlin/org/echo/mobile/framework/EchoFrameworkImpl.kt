@@ -6,7 +6,11 @@ import org.echo.mobile.framework.core.socket.internal.SocketCoreComponentImpl
 import org.echo.mobile.framework.facade.*
 import org.echo.mobile.framework.facade.internal.*
 import org.echo.mobile.framework.model.*
-import org.echo.mobile.framework.model.contract.*
+import org.echo.mobile.framework.model.contract.Contract
+import org.echo.mobile.framework.model.contract.ContractInfo
+import org.echo.mobile.framework.model.contract.ContractResult
+import org.echo.mobile.framework.model.contract.ContractStruct
+import org.echo.mobile.framework.model.contract.input.InputValue
 import org.echo.mobile.framework.service.*
 import org.echo.mobile.framework.service.internal.*
 import org.echo.mobile.framework.support.Settings
@@ -339,7 +343,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         assetId: String,
         contractId: String,
         methodName: String,
-        methodParams: List<ContractMethodParameter>,
+        methodParams: List<InputValue>,
         callback: Callback<Boolean>
     ) = dispatch(Runnable {
         contractsFacade.callContract(
@@ -358,7 +362,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         assetId: String,
         contractId: String,
         methodName: String,
-        methodParams: List<ContractMethodParameter>,
+        methodParams: List<InputValue>,
         callback: Callback<String>
     ) = dispatch(Runnable {
         contractsFacade.queryContract(

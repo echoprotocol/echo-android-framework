@@ -111,4 +111,35 @@ class ContractOutputDecoderTest {
         assertTrue(result[1].value as Boolean)
     }
 
+    @Test
+    fun decodeFixedBytesTest() {
+        val source =
+            ("64696d6100000000000000000000000000000000000000000000000000000000").toByteArray()
+
+        val decoder = ContractOutputDecoder()
+        val result = decoder.decode(
+            source,
+            listOf(FixedBytesOutputValueType())
+        )
+
+        assertNotNull(result.first().value)
+    }
+
+    @Test
+    fun decodeFixedUInt32ArrayTest() {
+        val source =
+            ("0000000000000000000000000000000000000000000000000000000000000001" +
+                    "0000000000000000000000000000000000000000000000000000000000000002" +
+                    "0000000000000000000000000000000000000000000000000000000000000003").toByteArray()
+
+        val decoder = ContractOutputDecoder()
+        val result = decoder.decode(
+            source,
+            listOf(FixedArrayOutputValueType(3, NumberOutputValueType()))
+        )
+
+        assertTrue((result.first().value as List<Any>).isNotEmpty())
+        assertEquals((result.first().value as List<Long>)[0], 1L)
+    }
+
 }

@@ -3,9 +3,12 @@ package org.echo.mobile.framework
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.model.*
 import org.echo.mobile.framework.model.contract.ContractInfo
-import org.echo.mobile.framework.model.contract.ContractMethodParameter
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
+import org.echo.mobile.framework.model.contract.input.AddressInputValueType
+import org.echo.mobile.framework.model.contract.input.InputValue
+import org.echo.mobile.framework.model.contract.input.NumberInputValueType
+import org.echo.mobile.framework.model.contract.input.StringInputValueType
 import org.echo.mobile.framework.model.network.Echodevnet
 import org.echo.mobile.framework.service.UpdateListener
 import org.echo.mobile.framework.support.Api
@@ -656,10 +659,9 @@ class EchoFrameworkTest {
         framework.callContract(
             ownerId, ownerPassword, "1.3.0", contractId, "addUserToDoor",
             listOf(
-                ContractMethodParameter("doorId", "int64", "2"),
-                ContractMethodParameter(
-                    "address",
-                    ContractMethodParameter.TYPE_ADDRESS,
+                InputValue(NumberInputValueType("int64"), "3"),
+                InputValue(
+                    AddressInputValueType(),
                     address
                 )
             ),
@@ -680,10 +682,9 @@ class EchoFrameworkTest {
         framework.callContract(
             ownerId, ownerPassword, "1.3.0", contractId, "addDoor",
             listOf(
-                ContractMethodParameter("doorId", "int64", "3"),
-                ContractMethodParameter(
-                    "doorName",
-                    ContractMethodParameter.TYPE_STRING,
+                InputValue(NumberInputValueType("int64"), "3"),
+                InputValue(
+                    StringInputValueType(),
                     "door + ${SimpleDateFormat("HH:mm").format(System.currentTimeMillis())}"
                 )
             ),

@@ -2,9 +2,9 @@ package org.echo.mobile.framework.facade
 
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.model.contract.ContractInfo
-import org.echo.mobile.framework.model.contract.ContractMethodParameter
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
+import org.echo.mobile.framework.model.contract.input.InputValue
 
 /**
  * Encapsulates logic, associated with various blockchain smart contract processes
@@ -39,7 +39,7 @@ interface ContractsFacade {
      * @param assetId      Asset of contract
      * @param contractId   Id of called contract
      * @param methodName   Name of called method
-     * @param methodParams Parameters of called method
+     * @param methodParams Parameters of calling method
      * @param callback     Listener of operation results.
      *                     Retrieves true if call succeed, otherwise - false
      */
@@ -49,7 +49,7 @@ interface ContractsFacade {
         assetId: String,
         contractId: String,
         methodName: String,
-        methodParams: List<ContractMethodParameter>,
+        methodParams: List<InputValue>,
         callback: Callback<Boolean>
     )
 
@@ -59,7 +59,7 @@ interface ContractsFacade {
      * @param userNameOrId Name or id of account that calls the contract
      * @param contractId   Id of called contract
      * @param assetId      Asset of contract
-     * @param methodName   Name of called method
+     * @param methodName   Name of calling method
      * @param methodParams Parameters of called method
      * @param callback     Listener of operation results.
      */
@@ -68,7 +68,7 @@ interface ContractsFacade {
         assetId: String,
         contractId: String,
         methodName: String,
-        methodParams: List<ContractMethodParameter>,
+        methodParams: List<InputValue>,
         callback: Callback<String>
     )
 

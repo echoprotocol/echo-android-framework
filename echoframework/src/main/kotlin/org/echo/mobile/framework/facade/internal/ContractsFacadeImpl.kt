@@ -7,7 +7,11 @@ import org.echo.mobile.framework.facade.ContractsFacade
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.AuthorityType
 import org.echo.mobile.framework.model.Transaction
-import org.echo.mobile.framework.model.contract.*
+import org.echo.mobile.framework.model.contract.ContractInfo
+import org.echo.mobile.framework.model.contract.ContractResult
+import org.echo.mobile.framework.model.contract.ContractStruct
+import org.echo.mobile.framework.model.contract.input.ContractInputEncoder
+import org.echo.mobile.framework.model.contract.input.InputValue
 import org.echo.mobile.framework.model.operations.ContractOperationBuilder
 import org.echo.mobile.framework.processResult
 import org.echo.mobile.framework.service.DatabaseApiService
@@ -82,7 +86,7 @@ class ContractsFacadeImpl(
         assetId: String,
         contractId: String,
         methodName: String,
-        methodParams: List<ContractMethodParameter>,
+        methodParams: List<InputValue>,
         callback: Callback<Boolean>
     ) = callback.processResult {
         var registrar: Account? = null
@@ -104,10 +108,7 @@ class ContractsFacadeImpl(
             AuthorityType.ACTIVE
         )
 
-        val contractCode = ContractCodeBuilder()
-            .setMethodName(methodName)
-            .setMethodParams(methodParams)
-            .build()
+        val contractCode = ContractInputEncoder().encode(methodName, methodParams)
 
         val contractOperation = ContractOperationBuilder()
             .setAsset(assetId)
@@ -135,7 +136,7 @@ class ContractsFacadeImpl(
         assetId: String,
         contractId: String,
         methodName: String,
-        methodParams: List<ContractMethodParameter>,
+        methodParams: List<InputValue>,
         callback: Callback<String>
     ) = callback.processResult {
         var registrar: Account? = null
@@ -143,17 +144,13 @@ class ContractsFacadeImpl(
         databaseApiService.getFullAccounts(listOf(userNameOrId), false)
             .value { accountsMap ->
                 registrar = accountsMap[userNameOrId]?.account
-                        ?:
-                        throw LocalException("Unable to find required account $userNameOrId")
+                        ?: throw LocalException("Unable to find required account $userNameOrId")
             }
             .error { accountsError ->
                 throw LocalException("Error occurred during accounts request", accountsError)
             }
 
-        val contractCode = ContractCodeBuilder()
-            .setMethodName(methodName)
-            .setMethodParams(methodParams)
-            .build()
+        val contractCode = ContractInputEncoder().encode(methodName, methodParams)
 
         databaseApiService.callContractNoChangingState(
             contractId,
