@@ -38,6 +38,8 @@ class ContractsFacadeImpl(
         password: String,
         assetId: String,
         byteCode: String,
+        gasLimit: Long,
+        gasPrice: Long,
         callback: Callback<Boolean>
     ) = callback.processResult {
         var registrar: Account? = null
@@ -63,7 +65,8 @@ class ContractsFacadeImpl(
         val contractOperation = ContractOperationBuilder()
             .setAsset(assetId)
             .setRegistrar(registrar!!)
-            .setGas(1000000)
+            .setGas(gasLimit)
+            .setGasPrice(gasPrice)
             .setContractCode(byteCode)
             .build()
 
@@ -87,6 +90,8 @@ class ContractsFacadeImpl(
         contractId: String,
         methodName: String,
         methodParams: List<InputValue>,
+        gasLimit: Long,
+        gasPrice: Long,
         callback: Callback<Boolean>
     ) = callback.processResult {
         var registrar: Account? = null
@@ -113,7 +118,8 @@ class ContractsFacadeImpl(
         val contractOperation = ContractOperationBuilder()
             .setAsset(assetId)
             .setRegistrar(registrar!!)
-            .setGas(1000000)
+            .setGas(gasLimit)
+            .setGasPrice(gasPrice)
             .setReceiver(contractId)
             .setContractCode(contractCode)
             .build()

@@ -611,7 +611,7 @@ class EchoFrameworkTest {
 //            password,
 //            legalAssetId,
 //            legalContractByteCode,
-//            object : Callback<Boolean> {
+//            callback = object : Callback<Boolean> {
 //                override fun onSuccess(result: Boolean) {
 //                    future.setComplete(result)
 //                }
@@ -640,7 +640,7 @@ class EchoFrameworkTest {
             legalContractId,
             "incrementCounter",
             listOf(),
-            future.completeCallback()
+            callback = future.completeCallback()
         )
 
         assertTrue(future.get() ?: false)
@@ -665,7 +665,7 @@ class EchoFrameworkTest {
                     address
                 )
             ),
-            future.completeCallback()
+            callback = future.completeCallback()
         )
 
         assertTrue(future.get() ?: false)
@@ -688,7 +688,7 @@ class EchoFrameworkTest {
                     "door + ${SimpleDateFormat("HH:mm").format(System.currentTimeMillis())}"
                 )
             ),
-            future.completeCallback()
+            callback = future.completeCallback()
         )
 
         assertTrue(future.get() ?: false)
@@ -709,7 +709,7 @@ class EchoFrameworkTest {
             illegalContractId,
             "incrementCounter",
             listOf(),
-            future.completeCallback()
+            callback = future.completeCallback()
         )
 
         assertFalse(future.get() ?: false)

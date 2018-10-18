@@ -20,14 +20,18 @@ interface ContractsFacade {
      * @param password          Password from account for transaction signature
      * @param assetId           Asset of contract
      * @param byteCode          Bytecode of the created contract
+     * @param gasLimit          Gas limit for contract operation
+     * @param gasPrice          One gas price for contract operation
      * @param callback          Listener of operation results.
-     *                 Retrieves true if creation succeed, otherwise - false
+     *                          Retrieves true if creation succeed, otherwise - false
      */
     fun createContract(
         registrarNameOrId: String,
         password: String,
         assetId: String,
         byteCode: String,
+        gasLimit: Long = DEFAULT_GAS_LIMIT,
+        gasPrice: Long = DEFAULT_GAS_PRICE,
         callback: Callback<Boolean>
     )
 
@@ -40,6 +44,8 @@ interface ContractsFacade {
      * @param contractId   Id of called contract
      * @param methodName   Name of called method
      * @param methodParams Parameters of calling method
+     * @param gasLimit     Gas limit for contract operation
+     * @param gasPrice     One gas price for contract operation
      * @param callback     Listener of operation results.
      *                     Retrieves true if call succeed, otherwise - false
      */
@@ -50,6 +56,8 @@ interface ContractsFacade {
         contractId: String,
         methodName: String,
         methodParams: List<InputValue>,
+        gasLimit: Long = DEFAULT_GAS_LIMIT,
+        gasPrice: Long = DEFAULT_GAS_PRICE,
         callback: Callback<Boolean>
     )
 
@@ -97,4 +105,10 @@ interface ContractsFacade {
      * @param contractId Id of contract
      */
     fun getContract(contractId: String, callback: Callback<ContractStruct>)
+
+    companion object {
+        private const val DEFAULT_GAS_LIMIT = 1000000L
+        private const val DEFAULT_GAS_PRICE = 0L
+    }
+
 }

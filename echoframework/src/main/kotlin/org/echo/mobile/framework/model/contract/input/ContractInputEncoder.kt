@@ -1,6 +1,5 @@
 package org.echo.mobile.framework.model.contract.input
 
-import org.echo.mobile.framework.model.contract.ContractCodeConverter
 import org.echo.mobile.framework.support.crypto.Keccak
 import org.echo.mobile.framework.support.crypto.Parameter
 import org.spongycastle.util.encoders.Hex
@@ -12,14 +11,12 @@ import org.spongycastle.util.encoders.Hex
  */
 class ContractInputEncoder {
 
-    private lateinit var codeConverter: ContractCodeConverter
     private lateinit var keccak: Keccak
 
     /**
      * Encodes contract method [methodName] with all parameters [params]
      */
     fun encode(methodName: String, params: List<InputValue> = listOf()): String {
-        codeConverter = ContractCodeConverter(params.size)
         keccak = Keccak()
 
         var encodedMethodName = methodName

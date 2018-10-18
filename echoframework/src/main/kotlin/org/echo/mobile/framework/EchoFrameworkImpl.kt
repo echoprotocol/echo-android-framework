@@ -326,6 +326,8 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         password: String,
         assetId: String,
         byteCode: String,
+        gasLimit: Long,
+        gasPrice: Long,
         callback: Callback<Boolean>
     ) = dispatch(Runnable {
         contractsFacade.createContract(
@@ -333,6 +335,8 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             password,
             assetId,
             byteCode,
+            gasLimit,
+            gasPrice,
             callback.wrapOriginal()
         )
     })
@@ -344,6 +348,8 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         contractId: String,
         methodName: String,
         methodParams: List<InputValue>,
+        gasLimit: Long,
+        gasPrice: Long,
         callback: Callback<Boolean>
     ) = dispatch(Runnable {
         contractsFacade.callContract(
@@ -353,6 +359,8 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             contractId,
             methodName,
             methodParams,
+            gasLimit,
+            gasPrice,
             callback.wrapOriginal()
         )
     })
