@@ -20,14 +20,14 @@ build_debug:
   only:
     - develop
   script:
-    - ./gradlew assembleDebug
+    - ./gradlew :echoframework:assembleDebug
 
 build_release:
   <<: *build_template_def
   only:
     - master
   script:
-    - ./gradlew assembleRelease
+    - ./gradlew :echoframework:assembleRelease
 
 unit_test:
   stage: test
@@ -35,7 +35,7 @@ unit_test:
     - master
     - develop
   script:
-    - ./gradlew testReleaseUnitTest
+    - ./gradlew :echoframework:testReleaseUnitTest
   artifacts:
     expire_in: 4 hours
     paths:
@@ -44,7 +44,7 @@ unit_test:
 code_analysis:
   stage: checkstyle
   script:
-    - ./gradlew lint analyzeCode
+    - ./gradlew :echoframework:lint :echoframework:analyzeCode
   artifacts:
     expire_in: 4 hours
     paths:
@@ -55,7 +55,7 @@ pages:
   only:
     - master
   script:
-    - ./gradlew dokka
+    - ./gradlew :echoframework:dokka
     - mkdir public
     - mv echoframework/build/javadoc/* public
   artifacts:
@@ -67,4 +67,4 @@ maven_publishing:
   only:
     - master
   script:
-    - ./gradlew clean install bintrayUpload -PbintrayUser=$bintrayUserVar -PbintrayApiKey=$bintrayApiKeyVar
+    - ./gradlew :echoframework:clean :echoframework:install :echoframework:bintrayUpload -PbintrayUser=$bintrayUserVar -PbintrayApiKey=$bintrayApiKeyVar
