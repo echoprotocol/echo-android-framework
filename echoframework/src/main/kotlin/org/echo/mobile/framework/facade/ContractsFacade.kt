@@ -2,9 +2,9 @@ package org.echo.mobile.framework.facade
 
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.model.contract.ContractInfo
-import org.echo.mobile.framework.model.contract.ContractMethodParameter
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
+import org.echo.mobile.framework.model.contract.input.InputValue
 
 /**
  * Encapsulates logic, associated with various blockchain smart contract processes
@@ -20,14 +20,18 @@ interface ContractsFacade {
      * @param password          Password from account for transaction signature
      * @param assetId           Asset of contract
      * @param byteCode          Bytecode of the created contract
+     * @param gasLimit          Gas limit for contract operation
+     * @param gasPrice          One gas price for contract operation
      * @param callback          Listener of operation results.
-     *                 Retrieves true if creation succeed, otherwise - false
+     *                          Retrieves true if creation succeed, otherwise - false
      */
     fun createContract(
         registrarNameOrId: String,
         password: String,
         assetId: String,
         byteCode: String,
+        gasLimit: Long = DEFAULT_GAS_LIMIT,
+        gasPrice: Long = DEFAULT_GAS_PRICE,
         callback: Callback<Boolean>
     )
 
@@ -39,7 +43,9 @@ interface ContractsFacade {
      * @param assetId      Asset of contract
      * @param contractId   Id of called contract
      * @param methodName   Name of called method
-     * @param methodParams Parameters of called method
+     * @param methodParams Parameters of calling method
+     * @param gasLimit     Gas limit for contract operation
+     * @param gasPrice     One gas price for contract operation
      * @param callback     Listener of operation results.
      *                     Retrieves true if call succeed, otherwise - false
      */
@@ -49,7 +55,9 @@ interface ContractsFacade {
         assetId: String,
         contractId: String,
         methodName: String,
-        methodParams: List<ContractMethodParameter>,
+        methodParams: List<InputValue>,
+        gasLimit: Long = DEFAULT_GAS_LIMIT,
+        gasPrice: Long = DEFAULT_GAS_PRICE,
         callback: Callback<Boolean>
     )
 
@@ -59,7 +67,7 @@ interface ContractsFacade {
      * @param userNameOrId Name or id of account that calls the contract
      * @param contractId   Id of called contract
      * @param assetId      Asset of contract
-     * @param methodName   Name of called method
+     * @param methodName   Name of calling method
      * @param methodParams Parameters of called method
      * @param callback     Listener of operation results.
      */
@@ -68,7 +76,7 @@ interface ContractsFacade {
         assetId: String,
         contractId: String,
         methodName: String,
-        methodParams: List<ContractMethodParameter>,
+        methodParams: List<InputValue>,
         callback: Callback<String>
     )
 
@@ -97,4 +105,10 @@ interface ContractsFacade {
      * @param contractId Id of contract
      */
     fun getContract(contractId: String, callback: Callback<ContractStruct>)
+
+    companion object {
+        private const val DEFAULT_GAS_LIMIT = 1000000L
+        private const val DEFAULT_GAS_PRICE = 0L
+    }
+
 }
