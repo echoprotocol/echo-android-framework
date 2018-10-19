@@ -1,6 +1,7 @@
 package org.echo.mobile.framework.service.internal.subscription
 
 import com.google.gson.GsonBuilder
+import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonParseException
 import org.echo.mobile.framework.core.mapper.ObjectMapper
@@ -46,8 +47,9 @@ class CurrentBlockchainDataSubscriptionManagerImpl : CurrentBlockchainDataSubscr
         try {
             val dataParam = getDataParam(event)?.asJsonArray
 
-            val dynamicGlobalPropertiesJson = dataParam?.firstOrNull()?.asJsonArray?.firstOrNull()
-                ?: return null
+            val dynamicGlobalPropertiesJson =
+                dataParam?.firstOrNull()?.asJsonArray?.findGlobalProperties()
+                    ?: return null
 
             return mapper.map(dynamicGlobalPropertiesJson.toString())
         } catch (ex: JsonParseException) {
@@ -65,6 +67,19 @@ class CurrentBlockchainDataSubscriptionManagerImpl : CurrentBlockchainDataSubscr
         return params[1].asJsonArray
     }
 
+    private fun JsonArray.findGlobalProperties(): JsonElement? {
+        for (i in 0..(size() - 1)) {
+            val propertiesObject = this[i].asJsonObject
+
+            val objectId = propertiesObject?.get(PROPERTIES_OBJECT_ID_KEY)?.asString ?: continue
+
+            if (!objectId.startsWith(PROPERTIES_OBJECT_ID)) continue
+
+            return propertiesObject
+        }
+        return null
+    }
+
     private class DynamicGlobalPropertiesMapper : ObjectMapper<DynamicGlobalProperties> {
         private val gson = configureGson()
         override fun map(data: String): DynamicGlobalProperties? =
@@ -80,5 +95,7 @@ class CurrentBlockchainDataSubscriptionManagerImpl : CurrentBlockchainDataSubscr
 
     companion object {
         private const val PARAMS_KEY = "params"
+        private const val PROPERTIES_OBJECT_ID_KEY = "id"
+        private const val PROPERTIES_OBJECT_ID = "2.1.0"
     }
 }

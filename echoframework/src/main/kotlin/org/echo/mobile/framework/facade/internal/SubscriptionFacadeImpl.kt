@@ -353,11 +353,10 @@ class SubscriptionFacadeImpl(
                 if (blockSubscriptionManager.containListeners()) {
                     processBlockData(blockchainData)
                 }
+            }
 
-            } ?: let {
-                if (accountSubscriptionManager.containsListeners()) {
-                    processAccountData(event)
-                }
+            if (accountSubscriptionManager.containsListeners()) {
+                processAccountData(event)
             }
         }
 

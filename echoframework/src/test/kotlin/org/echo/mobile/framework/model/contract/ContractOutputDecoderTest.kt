@@ -39,14 +39,13 @@ class ContractOutputDecoderTest {
 
     @Test
     fun decodeStringTest() {
-        val trueSource = "000000000000000000000000000000000000000000000000000000000000004" +
-                "000000000000000000000000000000000000000000000000000000000000000" +
-                "18646f6f72202b2031373a32390000000000000000000000000000000000000000"
+        val trueSource =
+            "000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000035452580000000000000000000000000000000000000000000000000000000000"
 
         val decoder = ContractOutputDecoder()
         val result = decoder.decode(trueSource.toByteArray(), listOf(StringOutputValueType()))
 
-        assertEquals(result.first().value.toString(), "door + 17:29")
+        assertEquals(result.first().value.toString(), "TRX")
     }
 
     @Test
@@ -65,12 +64,12 @@ class ContractOutputDecoderTest {
     }
 
     @Test
-    fun decodeIntWithBooleanWithTest() {
-        val source = ("000000000000000000000000000000000000000000000000000000000000000a0000" +
-                "0000000000000000000000000000000000000000000000000000000000010000" +
-                "0000000000000000000000000000000000000000000000000000000000400000" +
-                "000000000000000000000000000000000000000000000000000000000018646f" +
-                "6f72202b2031373a32390000000000000000000000000000000000000000").toByteArray()
+    fun decodeIntWithBooleanWithStringTest() {
+        val source = ("000000000000000000000000000000000000000000000000000000000000000a" +
+                "0000000000000000000000000000000000000000000000000000000000000001" +
+                "000000000000000000000000000000000000000000000000000000000000002" +
+                "00000000000000000000000000000000000000000000000000000000000000003545258" +
+                "0000000000000000000000000000000000000000000000000000000000").toByteArray()
 
         val decoder = ContractOutputDecoder()
         val result =
@@ -81,7 +80,7 @@ class ContractOutputDecoderTest {
 
         assertEquals(result.first().value as Long, 10)
         assertTrue(result[1].value as Boolean)
-        assertEquals(result.last().value.toString(), "door + 17:29")
+        assertEquals(result.last().value.toString(), "TRX")
     }
 
     @Test
@@ -110,6 +109,37 @@ class ContractOutputDecoderTest {
 
         assertNotNull(result.first().value)
         assertTrue(result[1].value as Boolean)
+    }
+
+    @Test
+    fun decodeFixedBytesTest() {
+        val source =
+            ("64696d6100000000000000000000000000000000000000000000000000000000").toByteArray()
+
+        val decoder = ContractOutputDecoder()
+        val result = decoder.decode(
+            source,
+            listOf(FixedBytesOutputValueType())
+        )
+
+        assertNotNull(result.first().value)
+    }
+
+    @Test
+    fun decodeFixedUInt32ArrayTest() {
+        val source =
+            ("0000000000000000000000000000000000000000000000000000000000000001" +
+                    "0000000000000000000000000000000000000000000000000000000000000002" +
+                    "0000000000000000000000000000000000000000000000000000000000000003").toByteArray()
+
+        val decoder = ContractOutputDecoder()
+        val result = decoder.decode(
+            source,
+            listOf(FixedArrayOutputValueType(3, NumberOutputValueType()))
+        )
+
+        assertTrue((result.first().value as List<Any>).isNotEmpty())
+        assertEquals((result.first().value as List<Long>)[0], 1L)
     }
 
 }

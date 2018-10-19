@@ -6,14 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import kotlinx.android.synthetic.main.fragment_contracts.*
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.ECHO_ASSET_ID
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.model.contract.ContractInfo
-import org.echo.mobile.framework.model.contract.ContractMethodParameter
 import org.echo.mobile.framework.model.contract.ContractResult
+import org.echo.mobile.framework.model.contract.input.InputValue
+import org.echo.mobile.framework.model.contract.input.NumberInputValueType
 import org.echo.mobile.framework.sample.R
-import kotlinx.android.synthetic.main.fragment_contracts.*
 import java.util.regex.Pattern
 
 
@@ -68,7 +69,7 @@ class ContractsFragment : BaseFragment() {
                 etPassword.text.toString(),
                 ECHO_ASSET_ID,
                 etBytecode.text.toString(),
-                object : Callback<Boolean> {
+                callback = object : Callback<Boolean> {
                     override fun onSuccess(result: Boolean) {
                         updateStatus("Contract creation succeed", true)
                     }
@@ -91,7 +92,7 @@ class ContractsFragment : BaseFragment() {
                 etContractId.text.toString(),
                 etMethodName.text.toString(),
                 parseContractParams(etMethodParams.text.toString()),
-                object : Callback<Boolean> {
+                callback = object : Callback<Boolean> {
                     override fun onSuccess(result: Boolean) {
                         updateStatus("Contract called succeed", true)
                     }
@@ -171,11 +172,11 @@ class ContractsFragment : BaseFragment() {
         collapse(lytContracts, tvContracts)
     }
 
-    private fun parseContractParams(params: String): List<ContractMethodParameter> {
+    private fun parseContractParams(params: String): List<InputValue> {
         if (params.isEmpty()) return listOf()
 
         val paramsList = params.trim().split(",").map { item -> item.trim() }
-        val contractParams = arrayListOf<ContractMethodParameter>()
+        val contractParams = arrayListOf<InputValue>()
 
         val pattern = Pattern.compile("(.+?) (.+?) = (.+?)$")
 
@@ -185,7 +186,7 @@ class ContractsFragment : BaseFragment() {
                 val type = matcher.group(1)
                 val name = matcher.group(2)
                 val value = matcher.group(3)
-                contractParams.add(ContractMethodParameter(name, type, value))
+                contractParams.add(InputValue(NumberInputValueType(name), value))
             } else {
                 Toast.makeText(context, "Incorrect params format!", Toast.LENGTH_SHORT).show()
             }

@@ -1,8 +1,7 @@
 package org.echo.mobile.framework.model.contract.output
 
-
 /**
- * Decodes input data according to required output types
+ * Decodes output contract data according to required output types
  *
  * @author Dmitriy Bushuev
  */
