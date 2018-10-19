@@ -13,6 +13,7 @@ org.echo.mobile.framework.facade
 org.echo.mobile.framework.facade.internal
 org.echo.mobile.framework.model
 org.echo.mobile.framework.model.contract
+org.echo.mobile.framework.model.contract.input
 org.echo.mobile.framework.model.contract.output
 org.echo.mobile.framework.model.network
 org.echo.mobile.framework.model.operations
