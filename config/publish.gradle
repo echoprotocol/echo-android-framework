@@ -91,20 +91,7 @@ task sourcesJar(type: Jar) {
     from "$projectDir/src/main/kotlin"
 }
 
-dokka {
-    outputFormat = 'javadoc'
-    outputDirectory = "$buildDir/javadoc"
-    // Use to include or exclude non public members.
-    includeNonPublic = false
-
-    // Do not output deprecated members. Applies globally, can be overridden by packageOptions
-    skipDeprecated = true
-
-    // Emit warnings about not documented members. Applies globally, also can be overridden by packageOptions
-    reportUndocumented = false
-}
-
-task javadocJar(type: Jar, dependsOn: dokka) {
+task javadocJar(type: Jar, dependsOn: dokkaJavadoc) {
     group = JavaBasePlugin.DOCUMENTATION_GROUP
     description = "Assembles framework docs with Dokka"
     classifier = "javadoc"

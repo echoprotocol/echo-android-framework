@@ -53,6 +53,20 @@ configurations {
     detekt
 }
 
+task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaAndroidTask) {
+    outputFormat = 'javadoc'
+    outputDirectory = "$buildDir/javadoc"
+    // Use to include or exclude non public members.
+    includeNonPublic = false
+    noStdlibLink = true
+
+    // Do not output deprecated members. Applies globally, can be overridden by packageOptions
+    skipDeprecated = true
+
+    // Emit warnings about not documented members. Applies globally, also can be overridden by packageOptions
+    reportUndocumented = false
+}
+
 //detekt task
 task analyzeCode(type: JavaExec) {
     main = "io.gitlab.arturbosch.detekt.cli.Main"
