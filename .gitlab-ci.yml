@@ -54,7 +54,6 @@ pages:
   stage: docgen
   only:
     - master
-    - bugfix/javadoc
   script:
     - ./gradlew :echoframework:clean :echoframework:dokkaJavadoc --stacktrace
     - mkdir public
