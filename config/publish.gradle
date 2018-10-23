@@ -95,7 +95,7 @@ task javadocJar(type: Jar, dependsOn: dokkaJavadoc) {
     group = JavaBasePlugin.DOCUMENTATION_GROUP
     description = "Assembles framework docs with Dokka"
     classifier = "javadoc"
-    from(dokka)
+    from(dokkaJavadoc)
 }
 
 artifacts {
