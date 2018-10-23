@@ -96,7 +96,7 @@ class FutureTest {
         val future = FutureTask<Int>()
 
         thread {
-            Thread.sleep(100)
+            Thread.sleep(400)
             future.setComplete(1)
         }
 
