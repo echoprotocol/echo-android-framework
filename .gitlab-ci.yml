@@ -20,14 +20,14 @@ build_debug:
   only:
     - develop
   script:
-    - ./gradlew :echoframework:assembleDebug
+    - ./gradlew :echoframework:assembleDebug --stacktrace
 
 build_release:
   <<: *build_template_def
   only:
     - master
   script:
-    - ./gradlew :echoframework:assembleRelease
+    - ./gradlew :echoframework:assembleRelease --stacktrace
 
 unit_test:
   stage: test
@@ -35,7 +35,7 @@ unit_test:
     - master
     - develop
   script:
-    - ./gradlew :echoframework:testReleaseUnitTest
+    - ./gradlew :echoframework:testReleaseUnitTest --stacktrace
   artifacts:
     expire_in: 4 hours
     paths:
@@ -44,7 +44,7 @@ unit_test:
 code_analysis:
   stage: checkstyle
   script:
-    - ./gradlew :echoframework:lint :echoframework:analyzeCode
+    - ./gradlew :echoframework:lint :echoframework:analyzeCode --stacktrace
   artifacts:
     expire_in: 4 hours
     paths:
@@ -54,8 +54,9 @@ pages:
   stage: docgen
   only:
     - master
+    - bugfix/javadoc
   script:
-    - ./gradlew :echoframework:dokkaJavadoc
+    - ./gradlew :echoframework:clean :echoframework:dokkaJavadoc --stacktrace
     - mkdir public
     - mv echoframework/build/javadoc/* public
   artifacts:
