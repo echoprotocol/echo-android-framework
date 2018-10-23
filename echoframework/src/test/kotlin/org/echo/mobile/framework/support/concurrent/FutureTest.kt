@@ -7,7 +7,6 @@ import org.echo.mobile.framework.support.concurrent.future.wrapResult
 import org.echo.mobile.framework.support.fold
 import org.junit.Assert.*
 import org.junit.Test
-import java.util.concurrent.ExecutionException
 import java.util.concurrent.Semaphore
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
@@ -39,7 +38,7 @@ class FutureTest {
 
         })
 
-        assertTrue(semaphore.tryAcquire(200, TimeUnit.MILLISECONDS))
+        assertTrue(semaphore.tryAcquire(400, TimeUnit.MILLISECONDS))
     }
 
     @Test
@@ -64,7 +63,7 @@ class FutureTest {
 
         })
 
-        assertTrue(semaphore.tryAcquire(200, TimeUnit.MILLISECONDS))
+        assertTrue(semaphore.tryAcquire(400, TimeUnit.MILLISECONDS))
     }
 
     @Test(expected = LocalException::class)
