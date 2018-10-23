@@ -65,6 +65,8 @@ task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaAndroidTask) {
 
     // Emit warnings about not documented members. Applies globally, also can be overridden by packageOptions
     reportUndocumented = false
+
+    cacheRoot = "$rootDir/config/dokka"
 }
 
 //detekt task
