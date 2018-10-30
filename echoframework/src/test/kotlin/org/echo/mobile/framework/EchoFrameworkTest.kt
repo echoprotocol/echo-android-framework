@@ -456,7 +456,7 @@ class EchoFrameworkTest {
     }
 
     @Test
-    fun getRequiredFeeTest() {
+    fun getRequiredFeeTransferOperationTest() {
         val framework = initFramework()
 
         if (connect(framework) == false) Assert.fail("Connection error")
@@ -478,7 +478,7 @@ class EchoFrameworkTest {
     }
 
     @Test(expected = LocalException::class)
-    fun getRequiredFeeFailureTest() {
+    fun getRequiredTransferOperationFeeFailureTest() {
         val framework = initFramework()
 
         if (connect(framework) == false) Assert.fail("Connection error")
@@ -494,6 +494,48 @@ class EchoFrameworkTest {
             "1.3.1234",
             "message",
             futureFee.completeCallback()
+        )
+
+        assertNotNull(futureFee.get())
+    }
+
+    @Test
+    fun getRequiredContractOperationFeeTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val futureFee = FutureTask<String>()
+
+        framework.getFeeForContractOperation(
+            userNameOrId = "dima1",
+            contractId = legalContractId,
+            methodName = "incrementCounter",
+            methodParams = listOf(),
+            assetId = "1.3.0",
+            feeAsset = "1.3.0",
+            callback = futureFee.completeCallback()
+        )
+
+        assertNotNull(futureFee.get())
+    }
+
+    @Test(expected = LocalException::class)
+    fun getRequiredContractOperationFeeFailureTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val futureFee = FutureTask<String>()
+
+        framework.getFeeForContractOperation(
+            userNameOrId = "dima1",
+            contractId = legalContractId,
+            methodName = "incrementCounter",
+            methodParams = listOf(),
+            assetId = "1.3.123456",
+            feeAsset = "1.3.123456",
+            callback = futureFee.completeCallback()
         )
 
         assertNotNull(futureFee.get())
@@ -637,6 +679,7 @@ class EchoFrameworkTest {
             login,
             password,
             legalAssetId,
+            legalAssetId,
             legalContractId,
             "incrementCounter",
             listOf(),
@@ -657,7 +700,7 @@ class EchoFrameworkTest {
         val address = "1.2.18".split(".").last()
 
         framework.callContract(
-            ownerId, ownerPassword, "1.3.0", contractId, "addUserToDoor",
+            ownerId, ownerPassword, "1.3.0", "1.3.0", contractId, "addUserToDoor",
             listOf(
                 InputValue(NumberInputValueType("int64"), "3"),
                 InputValue(
@@ -680,7 +723,7 @@ class EchoFrameworkTest {
         val future = FutureTask<Boolean>()
 
         framework.callContract(
-            ownerId, ownerPassword, "1.3.0", contractId, "addDoor",
+            ownerId, ownerPassword, "1.3.0", "1.3.0", contractId, "addDoor",
             listOf(
                 InputValue(NumberInputValueType("int64"), "3"),
                 InputValue(
@@ -705,6 +748,7 @@ class EchoFrameworkTest {
         framework.callContract(
             login,
             password,
+            legalAssetId,
             legalAssetId,
             illegalContractId,
             "incrementCounter",

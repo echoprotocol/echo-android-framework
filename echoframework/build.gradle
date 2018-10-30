@@ -9,7 +9,7 @@ android {
     def globalConfiguration = rootProject.extensions.getByName("ext")
 
     compileSdkVersion globalConfiguration["androidCompileSdkVersion"]
-    buildToolsVersion globalConfiguration["androidBuildToolsVersion"]
+    buildToolsVersion '28.0.3'
 
     defaultConfig {
         minSdkVersion globalConfiguration["androidMinSdkVersion"]
@@ -34,7 +34,6 @@ android {
 dependencies {
     //Tests
     testImplementation libraryDependencies.jUnit
-    androidTestImplementation libraryDependencies.testRunner
 
     //Kotlin
     implementation libraryDependencies.kotlin

@@ -37,6 +37,7 @@ class ContractsFacadeImpl(
         registrarNameOrId: String,
         password: String,
         assetId: String,
+        feeAsset: String?,
         byteCode: String,
         gasLimit: Long,
         gasPrice: Long,
@@ -72,7 +73,7 @@ class ContractsFacadeImpl(
 
         val blockData = databaseApiService.getBlockData()
         val chainId = getChainId()
-        val fees = getFees(listOf(contractOperation), assetId)
+        val fees = getFees(listOf(contractOperation), feeAsset ?: assetId)
 
         val transaction = Transaction(blockData, listOf(contractOperation), chainId)
             .apply {
@@ -87,6 +88,7 @@ class ContractsFacadeImpl(
         userNameOrId: String,
         password: String,
         assetId: String,
+        feeAsset: String?,
         contractId: String,
         methodName: String,
         methodParams: List<InputValue>,
@@ -126,7 +128,7 @@ class ContractsFacadeImpl(
 
         val blockData = databaseApiService.getBlockData()
         val chainId = getChainId()
-        val fees = getFees(listOf(contractOperation), assetId)
+        val fees = getFees(listOf(contractOperation), feeAsset ?: assetId)
 
         val transaction = Transaction(blockData, listOf(contractOperation), chainId)
             .apply {

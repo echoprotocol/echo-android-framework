@@ -27,3 +27,7 @@ const val ILLEGAL_ID = -1
  * Id of ECHO asset
  */
 const val ECHO_ASSET_ID = "1.3.0"
+
+const val DEFAULT_GAS_LIMIT = 1000000L
+
+const val DEFAULT_GAS_PRICE = 0L

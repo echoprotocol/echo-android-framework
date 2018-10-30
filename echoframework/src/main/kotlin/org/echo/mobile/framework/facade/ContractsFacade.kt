@@ -1,6 +1,8 @@
 package org.echo.mobile.framework.facade
 
 import org.echo.mobile.framework.Callback
+import org.echo.mobile.framework.DEFAULT_GAS_LIMIT
+import org.echo.mobile.framework.DEFAULT_GAS_PRICE
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
@@ -29,6 +31,7 @@ interface ContractsFacade {
         registrarNameOrId: String,
         password: String,
         assetId: String,
+        feeAsset: String?,
         byteCode: String,
         gasLimit: Long = DEFAULT_GAS_LIMIT,
         gasPrice: Long = DEFAULT_GAS_PRICE,
@@ -53,6 +56,7 @@ interface ContractsFacade {
         userNameOrId: String,
         password: String,
         assetId: String,
+        feeAsset: String?,
         contractId: String,
         methodName: String,
         methodParams: List<InputValue>,
@@ -105,10 +109,5 @@ interface ContractsFacade {
      * @param contractId Id of contract
      */
     fun getContract(contractId: String, callback: Callback<ContractStruct>)
-
-    companion object {
-        private const val DEFAULT_GAS_LIMIT = 1000000L
-        private const val DEFAULT_GAS_PRICE = 0L
-    }
 
 }

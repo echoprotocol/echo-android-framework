@@ -82,6 +82,10 @@ class GetAccountHistorySocketOperation(
             ContractOperation.Deserializer()
         )
         registerTypeAdapter(
+            ContractTransferOperation::class.java,
+            ContractTransferOperation.Deserializer()
+        )
+        registerTypeAdapter(
             CreateAssetOperation::class.java,
             CreateAssetOperation.CreateAssetDeserializer()
         )

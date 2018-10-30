@@ -68,6 +68,7 @@ class ContractsFragment : BaseFragment() {
                 etName.text.toString(),
                 etPassword.text.toString(),
                 ECHO_ASSET_ID,
+                null,
                 etBytecode.text.toString(),
                 callback = object : Callback<Boolean> {
                     override fun onSuccess(result: Boolean) {
@@ -89,6 +90,7 @@ class ContractsFragment : BaseFragment() {
                 etNameCall.text.toString(),
                 etPasswordCall.text.toString(),
                 ECHO_ASSET_ID,
+                null,
                 etContractId.text.toString(),
                 etMethodName.text.toString(),
                 parseContractParams(etMethodParams.text.toString()),
