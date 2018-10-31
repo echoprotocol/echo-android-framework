@@ -417,24 +417,91 @@ class EchoFrameworkTest {
         assertTrue(futureSubscriptionResult.get() ?: false)
     }
 
-//    @Test
-//    fun subscriptionOnContractTest() {
-//        val framework = initFramework()
-//
-//        if (connect(framework) == false) Assert.fail("Connection error")
-//
-//        val futureSubscriptionBlock = FutureTask<Contract>()
-//        val futureSubscriptionResult = FutureTask<Boolean>()
-//
-//        framework.subscribeOnContract("1.16.16244", object : UpdateListener<Contract> {
-//            override fun onUpdate(data: Contract) {
-//                futureSubscriptionBlock.setComplete(data)
-//            }
-//        }, futureSubscriptionResult.completeCallback())
-//
-//        assertNotNull(futureSubscriptionBlock.get())
-//        assertTrue(futureSubscriptionResult.get() ?: false)
-//    }
+
+    @Test
+    fun subscribeContractLogsArrayTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<Boolean>()
+        val futureSubscription = FutureTask<List<Log>>()
+
+        framework.subscribeOnContractLogs(
+            "1.16.19431",
+            "0",
+            "0",
+            object : UpdateListener<List<Log>> {
+                override fun onUpdate(data: List<Log>) {
+                    futureSubscription.setComplete(data)
+                }
+            },
+            future.completeCallback()
+        )
+
+        thread {
+            Thread.sleep(1000)
+            callContractEmptyMethod("1.16.19431", "testArrayEvent", framework, EmptyCallback())
+        }
+
+        val contractResult = future.get()
+        assertNotNull(contractResult)
+
+        val updateResult = futureSubscription.get()
+        assertNotNull(updateResult)
+    }
+
+    @Test
+    fun subscribeContractLogsTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<Boolean>()
+        val futureSubscription = FutureTask<List<Log>>()
+
+        framework.subscribeOnContractLogs(
+            "1.16.19431",
+            "0",
+            "0",
+            object : UpdateListener<List<Log>> {
+                override fun onUpdate(data: List<Log>) {
+                    futureSubscription.setComplete(data)
+                }
+            },
+            future.completeCallback()
+        )
+
+        thread {
+            Thread.sleep(1000)
+            callContractEmptyMethod("1.16.19431", "testAddressEvent", framework, EmptyCallback())
+        }
+
+        val contractResult = future.get()
+        assertNotNull(contractResult)
+
+        val updateResult = futureSubscription.get()
+        assertNotNull(updateResult)
+    }
+
+    private fun callContractEmptyMethod(
+        contractId: String,
+        methodName: String,
+        framework: EchoFramework,
+        callback: Callback<Boolean>
+    ) {
+        framework.callContract(
+            "dima1",
+            "P5J8pDyzznMmEdiBCdgB7VKtMBuxw5e4MAJEo3sfUbxcM",
+            "1.3.0",
+            "1.3.0",
+            contractId,
+            methodName,
+            listOf(),
+            callback = callback
+        )
+    }
+
 
     @Test
     fun transferTest() {
@@ -811,7 +878,7 @@ class EchoFrameworkTest {
         val future = FutureTask<ContractResult>()
 
         framework.getContractResult(
-            legalHistoryItemId,
+            "1.17.34782",
             future.completeCallback()
         )
 
@@ -819,6 +886,27 @@ class EchoFrameworkTest {
         assertNotNull(contractResult)
         assertEquals(contractResult!!.execRes.excepted, "None")
     }
+
+    @Test
+    fun getContractLogsTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<List<Log>>()
+
+        framework.getContractLogs(
+            "1.16.16803",
+            "1404100",
+            "1404111",
+            future.completeCallback()
+        )
+
+        val contractResult = future.get()
+        assertNotNull(contractResult)
+        assert(contractResult!!.isNotEmpty())
+    }
+
 
     @Test(expected = LocalException::class)
     fun getContractResultFailureTest() {

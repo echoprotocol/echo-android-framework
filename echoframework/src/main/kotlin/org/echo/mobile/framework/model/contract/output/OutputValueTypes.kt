@@ -1,9 +1,11 @@
 package org.echo.mobile.framework.model.contract.output
 
 import org.spongycastle.util.encoders.Hex
+import java.lang.NumberFormatException
 
 private const val NUMBER_RADIX = 16
 private const val SLICE_SIZE = 64
+private const val ADDRESS_TYPE_SIZE = 2
 
 /**
  * Describes functionality for contract result decoder
@@ -81,16 +83,69 @@ class StringOutputValueType : OutputValueType {
 
 
 /**
- * Implementation of [OutputValueType] for address types
+ * Implementation of [OutputValueType] for all address types
  */
 class AddressOutputValueType : OutputValueType {
 
     override fun decode(source: ByteArray): Pair<Any, ByteArray> {
-        val address = String(source.copyOfRange(0, SLICE_SIZE)).toLong(NUMBER_RADIX)
-
-        return Pair(address, source.copyOfRange(SLICE_SIZE, source.size))
+        return try {
+            AccountAddressOutputValueType().decode(source)
+        } catch (ex: NumberFormatException) {
+            ContractAddressOutputValueType().decode(source)
+        }
     }
 
+}
+
+/**
+ * Implementation of [OutputValueType] for account address types
+ */
+class AccountAddressOutputValueType : OutputValueType {
+
+    companion object {
+        const val PREFIX = "1.2."
+    }
+
+    override fun decode(source: ByteArray): Pair<Any, ByteArray> {
+        val address = String(source.copyOfRange(0, SLICE_SIZE))
+            .toLong(NUMBER_RADIX).toString()
+        return Pair(PREFIX + address, source.copyOfRange(SLICE_SIZE, source.size))
+    }
+}
+
+/**
+ * Implementation of [OutputValueType] for contract address types
+ */
+class ContractAddressOutputValueType : OutputValueType {
+
+    companion object {
+        const val PREFIX = "1.16."
+        const val CONTRACT_ADDRESS_SIZE = 40
+        const val CONTRACT_ADDRESS_PREFIX = "01000000"
+    }
+
+    override fun decode(source: ByteArray): Pair<Any, ByteArray> {
+        val startFormatRange: Int
+        val endFormatRange: Int
+
+        val isFull = source.size >= SLICE_SIZE &&
+                String(source.copyOfRange(0, SLICE_SIZE)).indexOf(CONTRACT_ADDRESS_PREFIX) > 0
+
+        if (isFull) {
+            startFormatRange = SLICE_SIZE / 2
+            endFormatRange = SLICE_SIZE
+
+        } else {
+            startFormatRange = CONTRACT_ADDRESS_SIZE - SLICE_SIZE / 2
+            endFormatRange = CONTRACT_ADDRESS_SIZE
+        }
+
+
+        val address = String(source.copyOfRange(startFormatRange, endFormatRange))
+            .toLong(NUMBER_RADIX).toString()
+
+        return Pair(PREFIX + address, source.copyOfRange(endFormatRange, source.size))
+    }
 }
 
 /**
@@ -106,7 +161,7 @@ class FixedArrayOutputValueType(private val size: Int, private val itemType: Out
     private fun processList(listSource: ByteArray, count: Int): Pair<List<Any>, ByteArray> {
         var sourceResult = listSource
         val result = mutableListOf<Any>()
-        (0 until count).forEach {
+        (0 until count).forEach { _ ->
             val candidate = itemType.decode(sourceResult)
             result.add(candidate.first)
             sourceResult = candidate.second
@@ -154,7 +209,7 @@ class ListValueType(private val itemType: OutputValueType) : OutputValueType {
     private fun processList(listSource: ByteArray, count: Int): Pair<List<Any>, ByteArray> {
         var sourceResult = listSource
         val result = mutableListOf<Any>()
-        (0 until count).forEach {
+        (0 until count).forEach { _ ->
             val candidate = itemType.decode(sourceResult)
             result.add(candidate.first)
             sourceResult = candidate.second

@@ -267,6 +267,23 @@ class DatabaseApiServiceImpl(
         return future.wrapResult()
     }
 
+    override fun getContractLogs(
+        contractId: String,
+        fromBlock: String,
+        toBlock: String
+    ): Result<LocalException, List<Log>> {
+        val futureTask = FutureTask<List<Log>>()
+        val operation = GetContractLogsSocketOperation(
+            id,
+            contractId, fromBlock, toBlock,
+            callId = socketCoreComponent.currentId,
+            callback = futureTask.completeCallback()
+        )
+        socketCoreComponent.emit(operation)
+
+        return futureTask.wrapResult()
+    }
+
     override fun getAllContracts(): Result<LocalException, List<ContractInfo>> {
         val future = FutureTask<List<ContractInfo>>()
         val operation = GetAllContractsSocketOperation(
@@ -297,6 +314,25 @@ class DatabaseApiServiceImpl(
         val operation = GetContractSocketOperation(
             id,
             contractId,
+            callId = socketCoreComponent.currentId,
+            callback = future.completeCallback()
+        )
+        socketCoreComponent.emit(operation)
+
+        return future.wrapResult()
+    }
+
+    override fun subscribeContractLogs(
+        contractId: String,
+        fromBlock: String,
+        toBlock: String
+    ): Result<LocalException, List<Log>> {
+        val future = FutureTask<List<Log>>()
+        val operation = SubscribeContractLogsSocketOperation(
+            id,
+            contractId,
+            fromBlock,
+            toBlock,
             callId = socketCoreComponent.currentId,
             callback = future.completeCallback()
         )

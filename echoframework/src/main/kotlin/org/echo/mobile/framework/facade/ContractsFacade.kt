@@ -3,6 +3,7 @@ package org.echo.mobile.framework.facade
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.DEFAULT_GAS_LIMIT
 import org.echo.mobile.framework.DEFAULT_GAS_PRICE
+import org.echo.mobile.framework.model.Log
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
@@ -90,6 +91,21 @@ interface ContractsFacade {
      * @param historyId History operation id
      */
     fun getContractResult(historyId: String, callback: Callback<ContractResult>)
+
+    /**
+     * Return list of contract logs
+     *
+     * @param contractId   Contract id for fetching logs
+     * @param fromBlock    Number of the earliest block to retrieve
+     * @param toBlock      Number of the most recent block to retrieve
+     * @param callback     Listener of operation results.
+     */
+    fun getContractLogs(
+        contractId: String,
+        fromBlock: String,
+        toBlock: String,
+        callback: Callback<List<Log>>
+    )
 
     /**
      * Returns contracts called by ids

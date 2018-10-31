@@ -44,6 +44,8 @@ enum class SocketOperationKeys(val key: String) {
     TRANSACTION_WITH_CALLBACK("broadcast_transaction_with_callback"),
     GET_ALL_CONTRACTS("get_all_contracts"),
     GET_CONTRACT_RESULT("get_contract_result"),
+    GET_CONTRACT_LOGS("get_contract_logs"),
+    SUBSCRIBE_CONTRACT_LOGS("subscribe_contract_logs"),
     CALL_CONTRACT_NO_CHANGING_STATE("call_contract_no_changing_state"),
     GET_CONTRACTS("get_contracts"),
     GET_CONTRACT("get_contract");

@@ -84,21 +84,52 @@ class ContractOutputDecoderTest {
     }
 
     @Test
-    fun decodeAddressTest() {
+    fun decodeAccountAddressTest() {
         val source =
             "0000000000000000000000000000000000000000000000000000000000000016".toByteArray()
 
         val decoder = ContractOutputDecoder()
-        val result = decoder.decode(source, listOf(AddressOutputValueType()))
+        val result = decoder.decode(source, listOf(AccountAddressOutputValueType()))
 
-        assertEquals(result.first().value.toString(), "22")
+        val value = result.first().value
+        assertNotNull(value)
+        assertEquals(value.toString(), "1.2.22")
     }
+
+    @Test
+    fun decodeContractAddressTest() {
+        val source =
+            "01000000000000000000000000000000000041a3".toByteArray()
+
+        val decoder = ContractOutputDecoder()
+        val result = decoder.decode(source, listOf(ContractAddressOutputValueType()))
+
+        val value = result.first().value
+        assertNotNull(value)
+        assertEquals(value.toString(), "1.16.16803")
+    }
+
+    @Test
+    fun decodeContractFullAddressTest() {
+        val source =
+            "00000000000000000000000001000000000000000000000000000000000041a3".toByteArray()
+
+        val decoder = ContractOutputDecoder()
+        val result = decoder.decode(source, listOf(ContractAddressOutputValueType()))
+
+        val value = result.first().value
+        assertNotNull(value)
+        assertEquals(value.toString(), "1.16.16803")
+    }
+
 
     @Test
     fun decodeAddressListTest() {
         val source =
-            ("00000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000002" +
-                    "000000000000000000000000000000000000000000000000000000000000028d0000000000000000000000000000000000000000000000000000000000000040" +
+            ("0000000000000000000000000000000000000000000000000000000000000020" +
+                    "0000000000000000000000000000000000000000000000000000000000000002" +
+                    "0000000000000000000000000000000000000000000000000000000000000016" +
+                    "0000000000000000000000000100000000000000000000000000000000004be4" +
                     "0000000000000000000000000000000000000000000000000000000000000001").toByteArray()
 
         val decoder = ContractOutputDecoder()
@@ -107,7 +138,9 @@ class ContractOutputDecoderTest {
             listOf(ListValueType(AddressOutputValueType()), BooleanOutputValueType())
         )
 
-        assertNotNull(result.first().value)
+        val addressesArray = result.first().value as? List<String>
+        assertNotNull(addressesArray)
+        assert(addressesArray!!.size == 2)
         assertTrue(result[1].value as Boolean)
     }
 

@@ -6,7 +6,6 @@ import org.echo.mobile.framework.core.socket.internal.SocketCoreComponentImpl
 import org.echo.mobile.framework.facade.*
 import org.echo.mobile.framework.facade.internal.*
 import org.echo.mobile.framework.model.*
-import org.echo.mobile.framework.model.contract.Contract
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
@@ -233,24 +232,22 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         )
     })
 
-    override fun subscribeOnContract(
+    override fun subscribeOnContractLogs(
         contractId: String,
-        listener: UpdateListener<Contract>,
+        fromBlock: String,
+        toBlock: String,
+        listener: UpdateListener<List<Log>>,
         callback: Callback<Boolean>
     ) = dispatch(Runnable {
-        subscriptionFacade.subscribeOnContract(
-            contractId,
-            listener.wrapOriginal(),
-            callback.wrapOriginal()
-        )
+        subscriptionFacade.subscribeOnContractLogs(contractId, fromBlock, toBlock, listener, callback)
     })
 
-    override fun unsubscribeFromContract(
+    override fun unsubscribeFromContractLogs(
         contractId: String,
         callback: Callback<Boolean>
     ) =
         dispatch(Runnable {
-            subscriptionFacade.unsubscribeFromContract(
+            subscriptionFacade.unsubscribeFromContractLogs(
                 contractId,
                 callback.wrapOriginal()
             )
@@ -448,6 +445,17 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         contractsFacade.getContractResult(
             historyId,
             callback
+        )
+    })
+
+    override fun getContractLogs(
+        contractId: String,
+        fromBlock: String,
+        toBlock: String,
+        callback: Callback<List<Log>>
+    ) = dispatch(Runnable {
+        contractsFacade.getContractLogs(
+            contractId, fromBlock, toBlock, callback
         )
     })
 

@@ -6,6 +6,7 @@ import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.facade.ContractsFacade
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.AuthorityType
+import org.echo.mobile.framework.model.Log
 import org.echo.mobile.framework.model.Transaction
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
@@ -170,6 +171,10 @@ class ContractsFacadeImpl(
 
     override fun getContractResult(historyId: String, callback: Callback<ContractResult>) =
         callback.processResult(databaseApiService.getContractResult(historyId))
+
+    override fun getContractLogs(
+        contractId: String, fromBlock: String, toBlock: String, callback: Callback<List<Log>>
+    ) = callback.processResult(databaseApiService.getContractLogs(contractId, fromBlock, toBlock))
 
     override fun getContracts(contractIds: List<String>, callback: Callback<List<ContractInfo>>) =
         callback.processResult(databaseApiService.getContracts(contractIds))

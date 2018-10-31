@@ -185,6 +185,19 @@ interface ContractsService {
     fun getContractResult(historyId: String): Result<LocalException, ContractResult>
 
     /**
+     * Return list of contract logs
+     *
+     * @param contractId   Contract id for fetching logs
+     * @param fromBlock    Number of the earliest block to retrieve
+     * @param toBlock      Number of the most recent block to retrieve
+     */
+    fun getContractLogs(
+        contractId: String,
+        fromBlock: String,
+        toBlock: String
+    ): Result<LocalException, List<Log>>
+
+    /**
      * Returns all contracts from blockchain
      */
     fun getAllContracts(): Result<LocalException, List<ContractInfo>>
@@ -202,6 +215,7 @@ interface ContractsService {
      * @param contractId Id of contract
      */
     fun getContract(contractId: String): Result<LocalException, ContractStruct>
+
 }
 
 /**
@@ -220,6 +234,18 @@ interface SubscriptionService {
      */
     fun unsubscribe(callback: Callback<Boolean>)
 
+    /**
+     * Subscribes to listening contract logs
+     *
+     * @param contractId   Contract id for fetching logs
+     * @param fromBlock    Number of the earliest block to retrieve
+     * @param toBlock      Number of the most recent block to retrieve
+     */
+    fun subscribeContractLogs(
+        contractId: String,
+        fromBlock: String,
+        toBlock: String
+    ): Result<LocalException, List<Log>>
 }
 
 /**
