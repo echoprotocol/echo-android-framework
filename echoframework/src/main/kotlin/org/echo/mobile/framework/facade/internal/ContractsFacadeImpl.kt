@@ -40,6 +40,7 @@ class ContractsFacadeImpl(
         assetId: String,
         feeAsset: String?,
         byteCode: String,
+        params: List<InputValue>,
         gasLimit: Long,
         gasPrice: Long,
         callback: Callback<Boolean>
@@ -64,23 +65,24 @@ class ContractsFacadeImpl(
             AuthorityType.ACTIVE
         )
 
+        val constructorParams = ContractInputEncoder().encode("", params)
+
         val contractOperation = ContractOperationBuilder()
             .setAsset(assetId)
             .setRegistrar(registrar!!)
             .setGas(gasLimit)
             .setGasPrice(gasPrice)
-            .setContractCode(byteCode)
+            .setContractCode(byteCode + constructorParams)
             .build()
 
         val blockData = databaseApiService.getBlockData()
         val chainId = getChainId()
         val fees = getFees(listOf(contractOperation), feeAsset ?: assetId)
 
-        val transaction = Transaction(blockData, listOf(contractOperation), chainId)
-            .apply {
-                setFees(fees)
-                addPrivateKey(privateKey)
-            }
+        val transaction = Transaction(blockData, listOf(contractOperation), chainId).apply {
+            setFees(fees)
+            addPrivateKey(privateKey)
+        }
 
         networkBroadcastApiService.broadcastTransactionWithCallback(transaction).dematerialize()
     }

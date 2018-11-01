@@ -22,7 +22,9 @@ interface ContractsFacade {
      * @param registrarNameOrId Name or id of account that creates the contract
      * @param password          Password from account for transaction signature
      * @param assetId           Asset of contract
+     * @param feeAsset          Asset for fee pay
      * @param byteCode          Bytecode of the created contract
+     * @param params            Params for contract constructor
      * @param gasLimit          Gas limit for contract operation
      * @param gasPrice          One gas price for contract operation
      * @param callback          Listener of operation results.
@@ -34,6 +36,7 @@ interface ContractsFacade {
         assetId: String,
         feeAsset: String?,
         byteCode: String,
+        params: List<InputValue> = listOf(),
         gasLimit: Long = DEFAULT_GAS_LIMIT,
         gasPrice: Long = DEFAULT_GAS_PRICE,
         callback: Callback<Boolean>
@@ -45,6 +48,7 @@ interface ContractsFacade {
      * @param userNameOrId Name or id of account that calls the contract
      * @param password     Password from account for transaction signature
      * @param assetId      Asset of contract
+     * @param feeAsset     Asset for fee pay
      * @param contractId   Id of called contract
      * @param methodName   Name of called method
      * @param methodParams Parameters of calling method

@@ -85,7 +85,7 @@ class StringOutputValueType : OutputValueType {
 /**
  * Implementation of [OutputValueType] for all address types
  */
-class AddressOutputValueType : OutputValueType {
+open class AddressOutputValueType : OutputValueType {
 
     override fun decode(source: ByteArray): Pair<Any, ByteArray> {
         return try {
@@ -100,7 +100,7 @@ class AddressOutputValueType : OutputValueType {
 /**
  * Implementation of [OutputValueType] for account address types
  */
-class AccountAddressOutputValueType : OutputValueType {
+class AccountAddressOutputValueType : AddressOutputValueType() {
 
     companion object {
         const val PREFIX = "1.2."
@@ -116,7 +116,7 @@ class AccountAddressOutputValueType : OutputValueType {
 /**
  * Implementation of [OutputValueType] for contract address types
  */
-class ContractAddressOutputValueType : OutputValueType {
+class ContractAddressOutputValueType : AddressOutputValueType() {
 
     companion object {
         const val PREFIX = "1.16."

@@ -4,8 +4,8 @@ import com.google.common.reflect.TypeToken
 import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.google.gson.JsonParseException
+import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent
 import org.echo.mobile.framework.model.Log
-import org.echo.mobile.framework.model.contract.output.AddressOutputValueType
 import org.echo.mobile.framework.model.contract.output.ContractAddressOutputValueType
 import org.echo.mobile.framework.model.contract.output.ContractOutputDecoder
 import org.echo.mobile.framework.service.ContractSubscriptionManager
@@ -77,7 +77,7 @@ class ContractSubscriptionManagerImpl : ContractSubscriptionManager {
 
             return logsMap
         } catch (ex: JsonParseException) {
-            ex.printStackTrace()
+            LOGGER.log("Error while parsing contract logs.", ex)
             return emptyMap()
         }
     }
@@ -94,6 +94,9 @@ class ContractSubscriptionManagerImpl : ContractSubscriptionManager {
 
     companion object {
         private const val PARAMS_KEY = "params"
+        private val LOGGER =
+            LoggerCoreComponent.create(ContractSubscriptionManagerImpl::class.java.name)
     }
+
 
 }

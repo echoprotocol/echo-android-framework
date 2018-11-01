@@ -1,5 +1,6 @@
 package org.echo.mobile.framework.model.contract
 
+import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.model.contract.input.*
 import org.junit.Assert
 import org.junit.Test
@@ -69,7 +70,40 @@ class ContractInputEncoderTest {
         val result = "e4dc2aa40000000000000000000000000000000000000000000000000000000000000012"
 
         val encoded =
+            contractInputEncoder.encode(function, listOf(InputValue(AddressInputValueType(), "1.2.18")))
+
+        Assert.assertEquals(result, encoded)
+    }
+
+    @Test(expected = LocalException::class)
+    fun encodeFunctionWithAddressFailureTest() {
+        val function = "totalSupply"
+        val result = "e4dc2aa40000000000000000000000000000000000000000000000000000000000000012"
+
+        val encoded =
             contractInputEncoder.encode(function, listOf(InputValue(AddressInputValueType(), "18")))
+
+        Assert.assertEquals(result, encoded)
+    }
+
+    @Test
+    fun encodeFunctionWithAccountAddressTest() {
+        val function = "totalSupply"
+        val result = "e4dc2aa40000000000000000000000000000000000000000000000000000000000000012"
+
+        val encoded =
+            contractInputEncoder.encode(function, listOf(InputValue(AccountAddressInputValueType(), "1.2.18")))
+
+        Assert.assertEquals(result, encoded)
+    }
+
+    @Test
+    fun encodeFunctionWithContractAddressTest() {
+        val function = "totalSupply"
+        val result = "e4dc2aa40000000000000000000000000100000000000000000000000000000000000012"
+
+        val encoded =
+            contractInputEncoder.encode(function, listOf(InputValue(ContractAddressInputValueType(), "1.16.18")))
 
         Assert.assertEquals(result, encoded)
     }
@@ -116,7 +150,7 @@ class ContractInputEncoderTest {
         val params = listOf(
             InputValue(NumberInputValueType("uint"), "123"),
             InputValue(StringInputValueType(), "Hello, World!"),
-            InputValue(AddressInputValueType(), "18")
+            InputValue(AddressInputValueType(), "1.2.18")
         )
 
         val encoded = contractInputEncoder.encode(function, params)

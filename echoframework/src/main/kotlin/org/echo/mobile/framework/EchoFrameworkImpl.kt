@@ -378,6 +378,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         assetId: String,
         feeAsset: String?,
         byteCode: String,
+        params: List<InputValue>,
         gasLimit: Long,
         gasPrice: Long,
         callback: Callback<Boolean>
@@ -388,6 +389,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             assetId,
             feeAsset,
             byteCode,
+            params,
             gasLimit,
             gasPrice,
             callback.wrapOriginal()
