@@ -1,6 +1,7 @@
 package org.echo.mobile.framework.service
 
 import org.echo.mobile.framework.model.Transaction
+import org.echo.mobile.framework.model.TransactionResult
 import org.echo.mobile.framework.support.Result
 
 /**
@@ -22,6 +23,14 @@ interface TransactionsService {
      *
      * @param transaction Transaction to broadcast
      */
-    fun broadcastTransactionWithCallback(transaction: Transaction): Result<Exception, Boolean>
+    fun broadcastTransaction(transaction: Transaction): Result<Exception, Boolean>
+
+    /**
+     * Broadcast a [transaction] to the network with callback from blockchain.
+     *
+     * @param transaction Transaction to broadcast.
+     * @return Id of call to network
+     */
+    fun broadcastTransactionWithCallback(transaction: Transaction): Result<Exception, Int>
 
 }

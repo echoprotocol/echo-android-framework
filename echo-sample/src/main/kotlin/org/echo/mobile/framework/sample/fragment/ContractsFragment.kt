@@ -70,8 +70,8 @@ class ContractsFragment : BaseFragment() {
                 ECHO_ASSET_ID,
                 null,
                 etBytecode.text.toString(),
-                callback = object : Callback<Boolean> {
-                    override fun onSuccess(result: Boolean) {
+                callback = object : Callback<String> {
+                    override fun onSuccess(result: String) {
                         updateStatus("Contract creation succeed", true)
                     }
 
@@ -94,8 +94,8 @@ class ContractsFragment : BaseFragment() {
                 etContractId.text.toString(),
                 etMethodName.text.toString(),
                 parseContractParams(etMethodParams.text.toString()),
-                callback = object : Callback<Boolean> {
-                    override fun onSuccess(result: Boolean) {
+                callback = object : Callback<String> {
+                    override fun onSuccess(result: String) {
                         updateStatus("Contract called succeed", true)
                     }
 

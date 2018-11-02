@@ -4,7 +4,9 @@ import org.echo.mobile.framework.ILLEGAL_ID
 import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
 import org.echo.mobile.framework.core.socket.SocketCoreComponent
 import org.echo.mobile.framework.model.Transaction
+import org.echo.mobile.framework.model.TransactionResult
 import org.echo.mobile.framework.model.socketoperations.TransactionSocketOperation
+import org.echo.mobile.framework.model.socketoperations.TransactionWithCallbackSocketOperation
 import org.echo.mobile.framework.service.NetworkBroadcastApiService
 import org.echo.mobile.framework.support.Result
 import org.echo.mobile.framework.support.concurrent.future.FutureTask
@@ -25,9 +27,23 @@ class NetworkBroadcastApiServiceImpl(
 
     override var id: Int = ILLEGAL_ID
 
-    override fun broadcastTransactionWithCallback(transaction: Transaction): Result<Exception, Boolean> {
+    override fun broadcastTransaction(transaction: Transaction): Result<Exception, Boolean> {
         val future = FutureTask<Boolean>()
         val transactionSocketOperation = TransactionSocketOperation(
+            id,
+            transaction,
+            cryptoCoreComponent.signTransaction(transaction),
+            callId = socketCoreComponent.currentId,
+            callback = future.completeCallback()
+        )
+        socketCoreComponent.emit(transactionSocketOperation)
+
+        return future.wrapResult()
+    }
+
+    override fun broadcastTransactionWithCallback(transaction: Transaction): Result<Exception, Int> {
+        val future = FutureTask<Int>()
+        val transactionSocketOperation = TransactionWithCallbackSocketOperation(
             id,
             transaction,
             cryptoCoreComponent.signTransaction(transaction),

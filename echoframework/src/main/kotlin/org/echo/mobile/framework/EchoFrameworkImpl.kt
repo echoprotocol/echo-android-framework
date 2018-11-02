@@ -97,12 +97,16 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         assetsFacade = AssetsFacadeImpl(
             databaseApiService,
             networkBroadcastApiService,
-            settings.cryptoComponent
+            settings.cryptoComponent,
+            socketCoreComponent,
+            settings.network
         )
         contractsFacade = ContractsFacadeImpl(
             databaseApiService,
             networkBroadcastApiService,
-            settings.cryptoComponent
+            settings.cryptoComponent,
+            socketCoreComponent,
+            settings.network
         )
     }
 
@@ -239,7 +243,13 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         listener: UpdateListener<List<Log>>,
         callback: Callback<Boolean>
     ) = dispatch(Runnable {
-        subscriptionFacade.subscribeOnContractLogs(contractId, fromBlock, toBlock, listener, callback)
+        subscriptionFacade.subscribeOnContractLogs(
+            contractId,
+            fromBlock,
+            toBlock,
+            listener,
+            callback
+        )
     })
 
     override fun unsubscribeFromContractLogs(
@@ -271,7 +281,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         name: String,
         password: String,
         asset: Asset,
-        callback: Callback<Boolean>
+        callback: Callback<String>
     ) = dispatch(Runnable {
         assetsFacade.createAsset(
             name,
@@ -381,7 +391,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         params: List<InputValue>,
         gasLimit: Long,
         gasPrice: Long,
-        callback: Callback<Boolean>
+        callback: Callback<String>
     ) = dispatch(Runnable {
         contractsFacade.createContract(
             registrarNameOrId,
@@ -406,7 +416,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         methodParams: List<InputValue>,
         gasLimit: Long,
         gasPrice: Long,
-        callback: Callback<Boolean>
+        callback: Callback<String>
     ) = dispatch(Runnable {
         contractsFacade.callContract(
             userNameOrId,

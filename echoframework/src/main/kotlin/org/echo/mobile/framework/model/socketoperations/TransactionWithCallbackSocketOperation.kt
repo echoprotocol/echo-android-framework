@@ -16,19 +16,20 @@ import org.spongycastle.util.encoders.Hex
  *
  * @author Daria Pechkovskaya
  */
-class TransactionSocketOperation(
+class TransactionWithCallbackSocketOperation(
     override val apiId: Int,
     val transaction: Transaction,
     val signatures: ArrayList<ByteArray>,
     callId: Int,
-    callback: Callback<Boolean>
-) : SocketOperation<Boolean>(SocketMethodType.CALL, callId, Boolean::class.java, callback) {
+    callback: Callback<Int>
+) : SocketOperation<Int>(SocketMethodType.CALL, callId, Int::class.java, callback) {
 
     override fun createParameters(): JsonElement =
         JsonArray().apply {
             add(apiId)
-            add(SocketOperationKeys.BROADCAST_TRANSACTION.key)
+            add(SocketOperationKeys.TRANSACTION_WITH_CALLBACK.key)
             add(JsonArray().apply {
+                add(callId)
                 add(transaction.jsonWithSignature())
             })
         }
@@ -43,8 +44,8 @@ class TransactionSocketOperation(
         return transactionJson
     }
 
-    override fun fromJson(json: String): Boolean? {
-        return json.toJsonObject()?.has(RESULT_KEY) ?: false
+    override fun fromJson(json: String): Int {
+        return json.toJsonObject()?.has(RESULT_KEY)?.let { callId } ?: -1
     }
 
 }

@@ -28,7 +28,8 @@ interface ContractsFacade {
      * @param gasLimit          Gas limit for contract operation
      * @param gasPrice          One gas price for contract operation
      * @param callback          Listener of operation results.
-     *                          Retrieves true if creation succeed, otherwise - false
+     *                          Retrieves result of transactions -
+     *                          history id which contains created contract id
      */
     fun createContract(
         registrarNameOrId: String,
@@ -39,7 +40,7 @@ interface ContractsFacade {
         params: List<InputValue> = listOf(),
         gasLimit: Long = DEFAULT_GAS_LIMIT,
         gasPrice: Long = DEFAULT_GAS_PRICE,
-        callback: Callback<Boolean>
+        callback: Callback<String>
     )
 
     /**
@@ -55,7 +56,9 @@ interface ContractsFacade {
      * @param gasLimit     Gas limit for contract operation
      * @param gasPrice     One gas price for contract operation
      * @param callback     Listener of operation results.
-     *                     Retrieves true if call succeed, otherwise - false
+     *                     Retrieves result of transactions if exists -
+     *                     history id which contains call contract result,
+     *                     if not exists - empty string
      */
     fun callContract(
         userNameOrId: String,
@@ -67,7 +70,7 @@ interface ContractsFacade {
         methodParams: List<InputValue>,
         gasLimit: Long = DEFAULT_GAS_LIMIT,
         gasPrice: Long = DEFAULT_GAS_PRICE,
-        callback: Callback<Boolean>
+        callback: Callback<String>
     )
 
     /**

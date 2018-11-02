@@ -12,12 +12,14 @@ interface AssetsFacade {
 
     /**
      * Creates asset [asset] with required parameters
+     *
+     * @return Returns created asset id
      */
     fun createAsset(
         name: String,
         password: String,
         asset: Asset,
-        callback: Callback<Boolean>
+        callback: Callback<String>
     )
 
     /**

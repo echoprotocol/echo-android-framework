@@ -2,6 +2,7 @@ package org.echo.mobile.framework.facade.internal
 
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
+import org.echo.mobile.framework.core.socket.SocketCoreComponent
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.facade.ContractsFacade
 import org.echo.mobile.framework.model.Account
@@ -13,6 +14,7 @@ import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
 import org.echo.mobile.framework.model.contract.input.ContractInputEncoder
 import org.echo.mobile.framework.model.contract.input.InputValue
+import org.echo.mobile.framework.model.network.Network
 import org.echo.mobile.framework.model.operations.ContractOperationBuilder
 import org.echo.mobile.framework.processResult
 import org.echo.mobile.framework.service.DatabaseApiService
@@ -31,8 +33,15 @@ import org.echo.mobile.framework.support.value
 class ContractsFacadeImpl(
     private val databaseApiService: DatabaseApiService,
     private val networkBroadcastApiService: NetworkBroadcastApiService,
-    private val cryptoCoreComponent: CryptoCoreComponent
-) : BaseTransactionsFacade(databaseApiService, cryptoCoreComponent), ContractsFacade {
+    private val cryptoCoreComponent: CryptoCoreComponent,
+    socketCoreComponent: SocketCoreComponent,
+    network: Network
+) : BaseNotifiedTransactionsFacade(
+    databaseApiService,
+    cryptoCoreComponent,
+    socketCoreComponent,
+    network
+), ContractsFacade {
 
     override fun createContract(
         registrarNameOrId: String,
@@ -43,7 +52,7 @@ class ContractsFacadeImpl(
         params: List<InputValue>,
         gasLimit: Long,
         gasPrice: Long,
-        callback: Callback<Boolean>
+        callback: Callback<String>
     ) = callback.processResult {
         var registrar: Account? = null
 
@@ -84,7 +93,13 @@ class ContractsFacadeImpl(
             addPrivateKey(privateKey)
         }
 
-        networkBroadcastApiService.broadcastTransactionWithCallback(transaction).dematerialize()
+        val callId =
+            networkBroadcastApiService.broadcastTransactionWithCallback(transaction).dematerialize()
+        val transactionResult = subscribeOnTransactionResult(callId.toString()).dematerialize()
+
+
+        transactionResult.trx.operationsWithResults.values.firstOrNull()
+            ?: throw LocalException("Result of contract creation not found.")
     }
 
     override fun callContract(
@@ -97,7 +112,7 @@ class ContractsFacadeImpl(
         methodParams: List<InputValue>,
         gasLimit: Long,
         gasPrice: Long,
-        callback: Callback<Boolean>
+        callback: Callback<String>
     ) = callback.processResult {
         var registrar: Account? = null
 
@@ -139,7 +154,11 @@ class ContractsFacadeImpl(
                 addPrivateKey(privateKey)
             }
 
-        networkBroadcastApiService.broadcastTransactionWithCallback(transaction).dematerialize()
+        val callId =
+            networkBroadcastApiService.broadcastTransactionWithCallback(transaction).dematerialize()
+        val transactionResult = subscribeOnTransactionResult(callId.toString()).dematerialize()
+
+        transactionResult.trx.operationsWithResults.values.firstOrNull() ?: ""
     }
 
     override fun queryContract(
