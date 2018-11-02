@@ -1,6 +1,5 @@
 package org.echo.mobile.framework
 
-import com.google.common.primitives.UnsignedLong
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.model.*
 import org.echo.mobile.framework.model.contract.ContractInfo
@@ -19,7 +18,6 @@ import org.echo.mobile.framework.support.fold
 import org.junit.Assert
 import org.junit.Assert.*
 import org.junit.Test
-import java.lang.Thread.sleep
 import java.text.SimpleDateFormat
 import kotlin.concurrent.thread
 
@@ -703,52 +701,52 @@ class EchoFrameworkTest {
         assertNotNull(futureAssets.get()?.isNotEmpty() ?: false)
     }
 
-    @Test
-    fun createAssetTest() {
-        val framework = initFramework()
-
-        if (connect(framework) == false) Assert.fail("Connection error")
-
-        val futureAsset = FutureTask<String>()
-
-        val asset = Asset("").apply {
-            symbol = "ASSETM"
-            precision = 4
-            issuer = Account("1.2.188")
-            setBtsOptions(
-                BitassetOptions(
-                    86400, 7, 86400,
-                    100, 2000
-                )
-            )
-
-            predictionMarket = false
-        }
-
-        val options =
-            AssetOptions(
-                UnsignedLong.valueOf(100000),
-                0.toLong(),
-                UnsignedLong.ZERO,
-                AssetOptions.ALLOW_COMITEE_PROVIDE_FEEDS,
-                AssetOptions.ALLOW_COMITEE_PROVIDE_FEEDS,
-                Price().apply {
-                    this.quote = AssetAmount(UnsignedLong.valueOf(1), Asset("1.3.1"))
-                    this.base = AssetAmount(UnsignedLong.valueOf(1), Asset("1.3.0"))
-                },
-                "description"
-            )
-
-        asset.assetOptions = options
-
-        framework.createAsset(
-            "dimaty12345", "P5JRnzqtPYLxU9ypfndHczCqt178nzomv4DuspTPr1iTf",
-            asset,
-            futureAsset.completeCallback()
-        )
-
-        assertTrue(futureAsset.get()?.startsWith("1.3.") ?: false)
-    }
+//    @Test
+//    fun createAssetTest() {
+//        val framework = initFramework()
+//
+//        if (connect(framework) == false) Assert.fail("Connection error")
+//
+//        val futureAsset = FutureTask<String>()
+//
+//        val asset = Asset("").apply {
+//            symbol = "ASSETM"
+//            precision = 4
+//            issuer = Account("1.2.188")
+//            setBtsOptions(
+//                BitassetOptions(
+//                    86400, 7, 86400,
+//                    100, 2000
+//                )
+//            )
+//
+//            predictionMarket = false
+//        }
+//
+//        val options =
+//            AssetOptions(
+//                UnsignedLong.valueOf(100000),
+//                0.toLong(),
+//                UnsignedLong.ZERO,
+//                AssetOptions.ALLOW_COMITEE_PROVIDE_FEEDS,
+//                AssetOptions.ALLOW_COMITEE_PROVIDE_FEEDS,
+//                Price().apply {
+//                    this.quote = AssetAmount(UnsignedLong.valueOf(1), Asset("1.3.1"))
+//                    this.base = AssetAmount(UnsignedLong.valueOf(1), Asset("1.3.0"))
+//                },
+//                "description"
+//            )
+//
+//        asset.assetOptions = options
+//
+//        framework.createAsset(
+//            "dimaty12345", "P5JRnzqtPYLxU9ypfndHczCqt178nzomv4DuspTPr1iTf",
+//            asset,
+//            futureAsset.completeCallback()
+//        )
+//
+//        assertTrue(futureAsset.get()?.startsWith("1.3.") ?: false)
+//    }
 
     @Test
     fun issueAssetTest() {
