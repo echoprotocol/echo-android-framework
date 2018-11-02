@@ -2,6 +2,7 @@ package org.echo.mobile.framework.model.contract
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import org.echo.mobile.framework.model.Log
 
 /**
  * Contains classes, describing result of contract operation
@@ -61,5 +62,5 @@ class TrReceipt(
     val bloom: String = "",
 
     @Expose
-    val log: List<String> = listOf()
+    val log: List<Log> = listOf()
 )

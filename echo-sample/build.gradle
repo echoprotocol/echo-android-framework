@@ -6,7 +6,7 @@ android {
     def globalConfiguration = rootProject.extensions.getByName("ext")
 
     compileSdkVersion globalConfiguration["androidCompileSdkVersion"]
-    buildToolsVersion globalConfiguration["androidBuildToolsVersion"]
+    buildToolsVersion '28.0.3'
 
     defaultConfig {
         applicationId "org.echo.mobile.framework.sample"

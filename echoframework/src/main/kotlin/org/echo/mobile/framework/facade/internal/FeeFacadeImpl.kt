@@ -6,10 +6,10 @@ import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
 import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.facade.FeeFacade
-import org.echo.mobile.framework.model.Account
-import org.echo.mobile.framework.model.Asset
-import org.echo.mobile.framework.model.AssetAmount
-import org.echo.mobile.framework.model.Memo
+import org.echo.mobile.framework.model.*
+import org.echo.mobile.framework.model.contract.input.ContractInputEncoder
+import org.echo.mobile.framework.model.contract.input.InputValue
+import org.echo.mobile.framework.model.operations.ContractOperationBuilder
 import org.echo.mobile.framework.model.operations.TransferOperationBuilder
 import org.echo.mobile.framework.processResult
 import org.echo.mobile.framework.service.DatabaseApiService
@@ -28,8 +28,7 @@ import org.echo.mobile.framework.support.value
 class FeeFacadeImpl(
     private val databaseApiService: DatabaseApiService,
     private val cryptoCoreComponent: CryptoCoreComponent
-) : BaseTransactionsFacade(databaseApiService, cryptoCoreComponent),
-    FeeFacade {
+) : BaseTransactionsFacade(databaseApiService, cryptoCoreComponent), FeeFacade {
 
     override fun getFeeForTransferOperation(
         fromNameOrId: String,
@@ -98,6 +97,65 @@ class FeeFacadeImpl(
         .setAmount(AssetAmount(UnsignedLong.valueOf(amount.toLong()), Asset(asset)))
         .setMemo(memo)
         .build()
+
+
+    override fun getFeeForContractOperation(
+        userNameOrId: String,
+        contractId: String,
+        methodName: String,
+        methodParams: List<InputValue>,
+        assetId: String,
+        feeAsset: String?,
+        callback: Callback<String>
+    ) = callback.processResult(Result {
+
+        var account: Account? = null
+
+        databaseApiService.getFullAccounts(listOf(userNameOrId), false)
+            .value { accountsMap ->
+                account = accountsMap[userNameOrId]?.account
+            }
+            .error { accountsError ->
+                throw LocalException("Error occurred during accounts request", accountsError)
+            }
+
+        if (account == null) {
+            LOGGER.log(
+                """Unable to find accounts for contract call.
+                    |Caller = $account
+                """.trimMargin()
+            )
+            throw LocalException("Unable to find required accounts: caller = $account")
+        }
+
+        val contractCode = ContractInputEncoder().encode(methodName, methodParams)
+
+        val contractOperation = ContractOperationBuilder()
+            .setAsset(assetId)
+            .setRegistrar(account!!)
+            .setReceiver(contractId)
+            .setContractCode(contractCode)
+            .build()
+
+        getFees(listOf(contractOperation), feeAsset ?: assetId)
+
+    }.map {fees ->
+        if (fees.isEmpty()) {
+            LOGGER.log(
+                """Empty fee list for required operation.
+                            |Caller = $userNameOrId
+                            |Target = $contractId
+                            |Method name = $methodName
+                            |Method params = ${methodParams.joinToString()}
+                            |Fee asset = ${feeAsset ?: assetId}
+                        """
+            )
+            throw LocalException("Unable to get fee for specified operation")
+        }
+
+        fees.first().amount.toString()
+    })
+
 
     companion object {
         private val LOGGER = LoggerCoreComponent.create(FeeFacadeImpl::class.java.name)

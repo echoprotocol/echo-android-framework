@@ -1,6 +1,6 @@
 package org.echo.mobile.framework.service
 
-import org.echo.mobile.framework.model.contract.Contract
+import org.echo.mobile.framework.model.Log
 
 /**
  * Encapsulates logic connected with contract subscription listeners notifying
@@ -12,7 +12,7 @@ interface ContractSubscriptionManager {
     /**
      * Registers required listener by contract [id]
      */
-    fun registerListener(id: String, listener: UpdateListener<Contract>)
+    fun registerListener(id: String, listener: UpdateListener<List<Log>>)
 
     /**
      * Checks if manager contains any listeners
@@ -27,7 +27,7 @@ interface ContractSubscriptionManager {
     /**
      * Removes listener by [id]
      */
-    fun removeListeners(id: String): MutableList<UpdateListener<Contract>>?
+    fun removeListeners(id: String): MutableList<UpdateListener<List<Log>>>?
 
     /**
      * Removes all listeners
@@ -35,8 +35,13 @@ interface ContractSubscriptionManager {
     fun clear()
 
     /**
-     * Notifies listeners, connected with input [contract]
+     * Notifies contract [logs] for listeners, connected with input [contractId]
      */
-    fun notify(contract: Contract)
+    fun notify(contractId: String, logs: List<Log>)
+
+    /**
+     * Processes notifying event.
+     */
+    fun processEvent(event: String): Map<String, List<Log>>
 
 }

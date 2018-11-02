@@ -1,11 +1,11 @@
 package org.echo.mobile.framework.support
 
-import org.echo.mobile.framework.ECHO_URL
 import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
 import org.echo.mobile.framework.core.crypto.internal.CryptoCoreComponentImpl
 import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent.LogLevel
 import org.echo.mobile.framework.core.socket.SocketMessenger
 import org.echo.mobile.framework.core.socket.internal.SocketMessengerImpl
+import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.model.network.Echodevnet
 import org.echo.mobile.framework.model.network.Network
 
@@ -114,7 +114,7 @@ class Settings private constructor(
          * @return settings for library initialization
          */
         fun configure(): Settings {
-            val url = this.url ?: ECHO_URL
+            val url = this.url ?: throw LocalException("Url for socket connection is not defined.")
             val socketMessenger = (this.socketMessenger ?: SocketMessengerImpl())
                 .apply {
                     setUrl(url)

@@ -1,6 +1,6 @@
 package org.echo.mobile.framework.model.contract.input
 
-import org.echo.mobile.bitcoinj.Base58
+import org.echo.mobile.framework.exception.LocalException
 import org.spongycastle.util.encoders.Hex
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -97,7 +97,7 @@ class NumberInputValueType(override var name: String) : InputValueType {
 }
 
 /**
- * Implementation of [InputValueType] for address types
+ * Implementation of [InputValueType] for any address types
  */
 class AddressInputValueType : InputValueType {
 
@@ -105,17 +105,73 @@ class AddressInputValueType : InputValueType {
 
     override var name: String = "address"
 
-    override fun encode(source: String): String = if (source.length == 34) {
-        appendAddressPattern(Hex.toHexString(Base58.decode(source)).substring(2, 42))
-    } else {
-        appendNumericPattern(convertToByteCode(BigDecimal(source).toBigInteger()))
-    }
+    override fun encode(source: String): String = when {
 
-    private fun appendAddressPattern(value: String): String {
-        return HASH_PATTERN.substring(value.length) + value
+        source.startsWith(AccountAddressInputValueType.PREFIX) -> {
+            AccountAddressInputValueType().encode(source)
+        }
+        source.startsWith(ContractAddressInputValueType.PREFIX) -> {
+            ContractAddressInputValueType().encode(source)
+        }
+        else -> {
+            throw LocalException("Unable to determine address type for value: $source")
+        }
     }
 
 }
+
+/**
+ * Implementation of [InputValueType] for account address types
+ */
+class AccountAddressInputValueType : InputValueType {
+
+    override var encodingContext: EncodingContext? = null
+
+    override var name: String = "address"
+
+    companion object {
+        const val PREFIX = "1.2."
+    }
+
+    override fun encode(source: String): String {
+        val encodeSource = if (source.startsWith(PREFIX)) source.removePrefix(PREFIX) else source
+        return appendNumericPattern(convertToByteCode(BigDecimal(encodeSource).toBigInteger()))
+    }
+}
+
+/**
+ * Implementation of [InputValueType] for contract address types
+ */
+class ContractAddressInputValueType : InputValueType {
+
+    override var encodingContext: EncodingContext? = null
+
+    override var name: String = "address"
+
+    companion object {
+        const val PREFIX = "1.16."
+        const val CONTRACT_ADDRESS_SIZE = 40
+        const val CONTRACT_ADDRESS_PREFIX = "01"
+    }
+
+    override fun encode(source: String): String {
+        val encodeSource = if (source.startsWith(PREFIX)) source.removePrefix(PREFIX) else source
+
+        return appendContractAddressPattern(
+            CONTRACT_ADDRESS_PREFIX,
+            convertToByteCode(BigDecimal(encodeSource).toBigInteger())
+        )
+    }
+
+    private fun appendContractAddressPattern(prefix: String, value: String): String {
+        val valueHash = HASH_PATTERN.substring(0, CONTRACT_ADDRESS_SIZE - value.length) + value
+        val prefixedHash = prefix + valueHash.substring(prefix.length, valueHash.length)
+
+        return HASH_PATTERN.substring(0, HASH_PATTERN.length - prefixedHash.length) + prefixedHash
+    }
+
+}
+
 
 /**
  * Implementation of [InputValueType] for fixed bytes types

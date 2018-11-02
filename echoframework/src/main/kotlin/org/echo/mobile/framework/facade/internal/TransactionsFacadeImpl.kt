@@ -83,7 +83,7 @@ class TransactionsFacadeImpl(
             addPrivateKey(privateKey)
         }
 
-        networkBroadcastApiService.broadcastTransactionWithCallback(transaction).dematerialize()
+        networkBroadcastApiService.broadcastTransaction(transaction).dematerialize()
     }
 
 }

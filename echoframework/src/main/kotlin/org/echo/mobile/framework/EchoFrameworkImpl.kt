@@ -1,12 +1,12 @@
 package org.echo.mobile.framework
 
+import com.google.common.primitives.UnsignedLong
 import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent
 import org.echo.mobile.framework.core.mapper.internal.MapperCoreComponentImpl
 import org.echo.mobile.framework.core.socket.internal.SocketCoreComponentImpl
 import org.echo.mobile.framework.facade.*
 import org.echo.mobile.framework.facade.internal.*
 import org.echo.mobile.framework.model.*
-import org.echo.mobile.framework.model.contract.Contract
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
@@ -98,12 +98,16 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         assetsFacade = AssetsFacadeImpl(
             databaseApiService,
             networkBroadcastApiService,
-            settings.cryptoComponent
+            settings.cryptoComponent,
+            socketCoreComponent,
+            settings.network
         )
         contractsFacade = ContractsFacadeImpl(
             databaseApiService,
             networkBroadcastApiService,
-            settings.cryptoComponent
+            settings.cryptoComponent,
+            socketCoreComponent,
+            settings.network
         )
     }
 
@@ -158,17 +162,44 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         )
     })
 
+    override fun getFeeForContractOperation(
+        userNameOrId: String,
+        contractId: String,
+        methodName: String,
+        methodParams: List<InputValue>,
+        assetId: String,
+        feeAsset: String?,
+        callback: Callback<String>
+    ) = dispatch(Runnable {
+        feeFacade.getFeeForContractOperation(
+            userNameOrId,
+            contractId,
+            methodName,
+            methodParams,
+            assetId,
+            feeAsset,
+            callback.wrapOriginal()
+        )
+    })
+
     override fun getAccount(nameOrId: String, callback: Callback<FullAccount>) =
         dispatch(Runnable {
             informationFacade.getAccount(nameOrId, callback.wrapOriginal())
         })
 
-    override fun checkAccountReserved(nameOrId: String, callback: Callback<Boolean>) =
+    override fun checkAccountReserved(
+        nameOrId: String,
+        callback: Callback<Boolean>
+    ) =
         dispatch(Runnable {
             informationFacade.checkAccountReserved(nameOrId, callback.wrapOriginal())
         })
 
-    override fun getBalance(nameOrId: String, asset: String, callback: Callback<Balance>) =
+    override fun getBalance(
+        nameOrId: String,
+        asset: String,
+        callback: Callback<Balance>
+    ) =
         dispatch(Runnable {
             informationFacade.getBalance(nameOrId, asset, callback.wrapOriginal())
         })
@@ -185,7 +216,10 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         )
     })
 
-    override fun subscribeOnBlock(listener: UpdateListener<Block>, callback: Callback<Boolean>) =
+    override fun subscribeOnBlock(
+        listener: UpdateListener<Block>,
+        callback: Callback<Boolean>
+    ) =
         dispatch(Runnable {
             subscriptionFacade.subscribeOnBlock(
                 listener.wrapOriginal(),
@@ -203,37 +237,52 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         )
     })
 
-    override fun subscribeOnContract(
+    override fun subscribeOnContractLogs(
         contractId: String,
-        listener: UpdateListener<Contract>,
+        fromBlock: String,
+        toBlock: String,
+        listener: UpdateListener<List<Log>>,
         callback: Callback<Boolean>
     ) = dispatch(Runnable {
-        subscriptionFacade.subscribeOnContract(
+        subscriptionFacade.subscribeOnContractLogs(
             contractId,
-            listener.wrapOriginal(),
-            callback.wrapOriginal()
+            fromBlock,
+            toBlock,
+            listener,
+            callback
         )
     })
 
-    override fun unsubscribeFromContract(contractId: String, callback: Callback<Boolean>) =
+    override fun unsubscribeFromContractLogs(
+        contractId: String,
+        callback: Callback<Boolean>
+    ) =
         dispatch(Runnable {
-            subscriptionFacade.unsubscribeFromContract(
+            subscriptionFacade.unsubscribeFromContractLogs(
                 contractId,
                 callback.wrapOriginal()
             )
         })
 
     override fun unsubscribeFromBlockchainData(callback: Callback<Boolean>) =
-        dispatch(Runnable { subscriptionFacade.unsubscribeFromBlockchainData(callback) })
+        dispatch(Runnable {
+            subscriptionFacade.unsubscribeFromBlockchainData(
+                callback
+            )
+        })
 
     override fun unsubscribeFromBlock(callback: Callback<Boolean>) =
-        dispatch(Runnable { subscriptionFacade.unsubscribeFromBlock(callback) })
+        dispatch(Runnable {
+            subscriptionFacade.unsubscribeFromBlock(
+                callback
+            )
+        })
 
     override fun createAsset(
         name: String,
         password: String,
         asset: Asset,
-        callback: Callback<Boolean>
+        callback: Callback<String>
     ) = dispatch(Runnable {
         assetsFacade.createAsset(
             name,
@@ -263,19 +312,32 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         )
     })
 
-    override fun listAssets(lowerBound: String, limit: Int, callback: Callback<List<Asset>>) =
+    override fun listAssets(
+        lowerBound: String,
+        limit: Int,
+        callback: Callback<List<Asset>>
+    ) =
         dispatch(Runnable {
             assetsFacade.listAssets(lowerBound, limit, callback)
         })
 
-    override fun getAssets(assetIds: List<String>, callback: Callback<List<Asset>>) =
+    override fun getAssets(
+        assetIds: List<String>,
+        callback: Callback<List<Asset>>
+    ) =
         dispatch(Runnable {
             assetsFacade.getAssets(assetIds, callback)
         })
 
-    override fun unsubscribeFromAccount(nameOrId: String, callback: Callback<Boolean>) =
+    override fun unsubscribeFromAccount(
+        nameOrId: String,
+        callback: Callback<Boolean>
+    ) =
         dispatch(Runnable {
-            subscriptionFacade.unsubscribeFromAccount(nameOrId, callback.wrapOriginal())
+            subscriptionFacade.unsubscribeFromAccount(
+                nameOrId,
+                callback.wrapOriginal()
+            )
         })
 
     override fun unsubscribeAll(callback: Callback<Boolean>) =
@@ -325,16 +387,20 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         registrarNameOrId: String,
         password: String,
         assetId: String,
+        feeAsset: String?,
         byteCode: String,
+        params: List<InputValue>,
         gasLimit: Long,
         gasPrice: Long,
-        callback: Callback<Boolean>
+        callback: Callback<String>
     ) = dispatch(Runnable {
         contractsFacade.createContract(
             registrarNameOrId,
             password,
             assetId,
+            feeAsset,
             byteCode,
+            params,
             gasLimit,
             gasPrice,
             callback.wrapOriginal()
@@ -345,20 +411,24 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         userNameOrId: String,
         password: String,
         assetId: String,
+        feeAsset: String?,
         contractId: String,
         methodName: String,
         methodParams: List<InputValue>,
+        value: String,
         gasLimit: Long,
         gasPrice: Long,
-        callback: Callback<Boolean>
+        callback: Callback<String>
     ) = dispatch(Runnable {
         contractsFacade.callContract(
             userNameOrId,
             password,
             assetId,
+            feeAsset,
             contractId,
             methodName,
             methodParams,
+            value,
             gasLimit,
             gasPrice,
             callback.wrapOriginal()
@@ -387,22 +457,52 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         historyId: String,
         callback: Callback<ContractResult>
     ) = dispatch(Runnable {
-        contractsFacade.getContractResult(historyId, callback)
+        contractsFacade.getContractResult(
+            historyId,
+            callback
+        )
     })
 
-    override fun getContracts(contractIds: List<String>, callback: Callback<List<ContractInfo>>) =
+    override fun getContractLogs(
+        contractId: String,
+        fromBlock: String,
+        toBlock: String,
+        callback: Callback<List<Log>>
+    ) = dispatch(Runnable {
+        contractsFacade.getContractLogs(
+            contractId, fromBlock, toBlock, callback
+        )
+    })
+
+    override fun getContracts(
+        contractIds: List<String>,
+        callback: Callback<List<ContractInfo>>
+    ) =
         dispatch(Runnable {
-            contractsFacade.getContracts(contractIds, callback)
+            contractsFacade.getContracts(
+                contractIds,
+                callback
+            )
         })
 
-    override fun getAllContracts(callback: Callback<List<ContractInfo>>) =
+    override fun getAllContracts(
+        callback: Callback<List<ContractInfo>>
+    ) =
         dispatch(Runnable {
-            contractsFacade.getAllContracts(callback)
+            contractsFacade.getAllContracts(
+                callback
+            )
         })
 
-    override fun getContract(contractId: String, callback: Callback<ContractStruct>) =
+    override fun getContract(
+        contractId: String,
+        callback: Callback<ContractStruct>
+    ) =
         dispatch(Runnable {
-            contractsFacade.getContract(contractId, callback)
+            contractsFacade.getContract(
+                contractId,
+                callback
+            )
         })
 
     private fun <T> Callback<T>.wrapOriginal(): Callback<T> =
@@ -416,16 +516,24 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         if (!returnOnMainThread) {
             this
         } else {
-            MainThreadAccountListener(this)
+            MainThreadAccountListener(
+                this
+            )
         }
 
     private fun <T> UpdateListener<T>.wrapOriginal(): UpdateListener<T> =
         if (!returnOnMainThread) {
             this
         } else {
-            MainThreadUpdateListener(this)
+            MainThreadUpdateListener(
+                this
+            )
         }
 
-    private fun dispatch(job: Runnable) = dispatcher.dispatch(job)
+    private fun dispatch(
+        job: Runnable
+    ) = dispatcher.dispatch(
+        job
+    )
 
 }

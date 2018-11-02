@@ -75,7 +75,7 @@ class AuthenticationFacadeImpl(
             addPrivateKey(privateKey)
         }
 
-        networkBroadcastApiService.broadcastTransactionWithCallback(transaction).dematerialize()
+        networkBroadcastApiService.broadcastTransaction(transaction).dematerialize()
     }
 
     private fun getAccountId(name: String, password: String): String {
