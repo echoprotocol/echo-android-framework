@@ -121,7 +121,7 @@ class ContractAddressOutputValueType : AddressOutputValueType() {
     companion object {
         const val PREFIX = "1.16."
         const val CONTRACT_ADDRESS_SIZE = 40
-        const val CONTRACT_ADDRESS_PREFIX = "01000000"
+        const val CONTRACT_ADDRESS_PREFIX = "01"
     }
 
     override fun decode(source: ByteArray): Pair<Any, ByteArray> {
@@ -136,7 +136,8 @@ class ContractAddressOutputValueType : AddressOutputValueType() {
             endFormatRange = SLICE_SIZE
 
         } else {
-            startFormatRange = CONTRACT_ADDRESS_SIZE - SLICE_SIZE / 2
+            startFormatRange = CONTRACT_ADDRESS_SIZE - SLICE_SIZE / 2 -
+                    CONTRACT_ADDRESS_PREFIX.length
             endFormatRange = CONTRACT_ADDRESS_SIZE
         }
 

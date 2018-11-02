@@ -1,6 +1,5 @@
 package org.echo.mobile.framework.model.contract.input
 
-import org.echo.mobile.bitcoinj.Base58
 import org.echo.mobile.framework.exception.LocalException
 import org.spongycastle.util.encoders.Hex
 import java.math.BigDecimal
@@ -151,24 +150,24 @@ class ContractAddressInputValueType : InputValueType {
 
     companion object {
         const val PREFIX = "1.16."
+        const val CONTRACT_ADDRESS_SIZE = 40
+        const val CONTRACT_ADDRESS_PREFIX = "01"
     }
-
-    private val codePrefix = "01000000"
 
     override fun encode(source: String): String {
         val encodeSource = if (source.startsWith(PREFIX)) source.removePrefix(PREFIX) else source
 
         return appendContractAddressPattern(
-            codePrefix,
+            CONTRACT_ADDRESS_PREFIX,
             convertToByteCode(BigDecimal(encodeSource).toBigInteger())
         )
     }
 
     private fun appendContractAddressPattern(prefix: String, value: String): String {
-        val valueHash = HASH_PATTERN.substring(0, HASH_PATTERN.length / 2 - value.length) + value
-        val prefixHash = HASH_PATTERN.substring(0, HASH_PATTERN.length / 2 - prefix.length) + prefix
+        val valueHash = HASH_PATTERN.substring(0, CONTRACT_ADDRESS_SIZE - value.length) + value
+        val prefixedHash = prefix + valueHash.substring(prefix.length, valueHash.length)
 
-        return prefixHash + valueHash
+        return HASH_PATTERN.substring(0, HASH_PATTERN.length - prefixedHash.length) + prefixedHash
     }
 
 }
