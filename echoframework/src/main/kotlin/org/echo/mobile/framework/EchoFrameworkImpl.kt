@@ -1,5 +1,6 @@
 package org.echo.mobile.framework
 
+import com.google.common.primitives.UnsignedLong
 import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent
 import org.echo.mobile.framework.core.mapper.internal.MapperCoreComponentImpl
 import org.echo.mobile.framework.core.socket.internal.SocketCoreComponentImpl
@@ -414,6 +415,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         contractId: String,
         methodName: String,
         methodParams: List<InputValue>,
+        value: String,
         gasLimit: Long,
         gasPrice: Long,
         callback: Callback<String>
@@ -426,6 +428,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             contractId,
             methodName,
             methodParams,
+            value,
             gasLimit,
             gasPrice,
             callback.wrapOriginal()

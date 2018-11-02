@@ -851,6 +851,29 @@ class EchoFrameworkTest {
     }
 
     @Test
+    fun payableCallContractTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<String>()
+
+        framework.callContract(
+            login,
+            password,
+            legalAssetId,
+            legalAssetId,
+            legalContractId,
+            "incrementCounter",
+            listOf(),
+            "1000",
+            callback = future.completeCallback()
+        )
+
+        assertTrue(future.get()?.startsWith("1.17.") ?: false)
+    }
+
+    @Test
     fun callContractWithAddressParameterTest() {
         val framework = initFramework()
 

@@ -1,5 +1,6 @@
 package org.echo.mobile.framework.facade.internal
 
+import com.google.common.primitives.UnsignedLong
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
 import org.echo.mobile.framework.core.socket.SocketCoreComponent
@@ -110,6 +111,7 @@ class ContractsFacadeImpl(
         contractId: String,
         methodName: String,
         methodParams: List<InputValue>,
+        value: String,
         gasLimit: Long,
         gasPrice: Long,
         callback: Callback<String>
@@ -142,6 +144,7 @@ class ContractsFacadeImpl(
             .setGasPrice(gasPrice)
             .setReceiver(contractId)
             .setContractCode(contractCode)
+            .setValue(UnsignedLong.valueOf(value))
             .build()
 
         val blockData = databaseApiService.getBlockData()

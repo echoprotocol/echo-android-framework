@@ -8,6 +8,7 @@ import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
 import org.echo.mobile.framework.model.contract.input.InputValue
+import java.math.BigInteger
 
 /**
  * Encapsulates logic, associated with various blockchain smart contract processes
@@ -53,6 +54,7 @@ interface ContractsFacade {
      * @param contractId   Id of called contract
      * @param methodName   Name of called method
      * @param methodParams Parameters of calling method
+     * @param value        Amount for payable methods
      * @param gasLimit     Gas limit for contract operation
      * @param gasPrice     One gas price for contract operation
      * @param callback     Listener of operation results.
@@ -68,6 +70,7 @@ interface ContractsFacade {
         contractId: String,
         methodName: String,
         methodParams: List<InputValue>,
+        value: String = BigInteger.ZERO.toString(),
         gasLimit: Long = DEFAULT_GAS_LIMIT,
         gasPrice: Long = DEFAULT_GAS_PRICE,
         callback: Callback<String>

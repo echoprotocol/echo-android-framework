@@ -10,6 +10,7 @@ import org.echo.mobile.framework.support.Api
 import org.echo.mobile.framework.support.Settings
 import org.echo.mobile.framework.sample.fragment.MainFragment
 import kotlinx.android.synthetic.main.activity_main.*
+import org.echo.mobile.framework.ECHO_URL
 
 class MainActivity : AppCompatActivity(), ProgressListener {
 
@@ -21,6 +22,7 @@ class MainActivity : AppCompatActivity(), ProgressListener {
 
         lib = EchoFramework.create(
             Settings.Configurator()
+                .setUrl(ECHO_URL)
                 .setReturnOnMainThread(true)
                 .setApis(Api.DATABASE, Api.NETWORK_BROADCAST, Api.ACCOUNT_HISTORY)
                 .configure()
