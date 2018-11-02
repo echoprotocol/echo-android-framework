@@ -11,7 +11,7 @@ import org.echo.mobile.framework.support.Result
  *
  * @author Dmitriy Bushuev
  */
-interface NetworkBroadcastApiService : ApiService, TransactionsService
+interface NetworkBroadcastApiService : ApiService, TransactionsService, CustomOperationService
 
 /**
  * Encapsulates logic, associated with transactions

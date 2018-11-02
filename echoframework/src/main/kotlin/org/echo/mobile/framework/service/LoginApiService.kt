@@ -12,7 +12,7 @@ import org.echo.mobile.framework.support.Result
  *
  * @author Daria Pechkovskaya
  */
-interface LoginApiService : ApiService {
+interface LoginApiService : ApiService, CustomOperationService {
 
     /**
      * Authenticate to the RPC server.

@@ -379,4 +379,27 @@ class DatabaseApiServiceImpl(
 
         return future.wrapResult()
     }
+
+    override fun <T> callCustomOperation(operation: CustomOperation<T>, callback: Callback<T>) {
+        val customSocketOperation = CustomSocketOperation(
+            id,
+            socketCoreComponent.currentId,
+            operation,
+            callback
+        )
+        socketCoreComponent.emit(customSocketOperation)
+    }
+
+    override fun <T> callCustomOperation(operation: CustomOperation<T>): Result<LocalException, T> {
+        val futureTask = FutureTask<T>()
+        val customSocketOperation = CustomSocketOperation(
+            id,
+            socketCoreComponent.currentId,
+            operation,
+            futureTask.completeCallback()
+        )
+        socketCoreComponent.emit(customSocketOperation)
+
+        return futureTask.wrapResult()
+    }
 }

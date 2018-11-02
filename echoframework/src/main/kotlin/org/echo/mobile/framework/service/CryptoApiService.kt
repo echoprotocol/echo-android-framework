@@ -7,4 +7,4 @@ package org.echo.mobile.framework.service
  *
  * @author Dmitriy Bushuev
  */
-interface CryptoApiService : ApiService
+interface CryptoApiService : ApiService, CustomOperationService

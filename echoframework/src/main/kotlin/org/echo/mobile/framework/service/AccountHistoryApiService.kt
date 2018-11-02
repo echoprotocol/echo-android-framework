@@ -11,7 +11,7 @@ import org.echo.mobile.framework.support.Result
  *
  * @author Dmitriy Bushuev
  */
-interface AccountHistoryApiService : ApiService {
+interface AccountHistoryApiService : ApiService, CustomOperationService {
 
     /**
      * Get operations relevant to the specified account

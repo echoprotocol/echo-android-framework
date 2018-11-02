@@ -18,7 +18,7 @@ import org.echo.mobile.framework.support.Result
  */
 interface DatabaseApiService : ApiService, AccountsService, GlobalsService,
     AuthorityAndValidationService, BlocksAndTransactionsService, ContractsService, AssetsService,
-    SubscriptionService, ObjectsService
+    SubscriptionService, ObjectsService, CustomOperationService
 
 /**
  * Encapsulates logic, associated with data from account from blockchain database API
