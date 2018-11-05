@@ -4,9 +4,11 @@ import com.google.common.primitives.UnsignedLong
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.ECHO_ASSET_ID
 import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
+import org.echo.mobile.framework.core.socket.SocketCoreComponent
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.facade.AssetsFacade
 import org.echo.mobile.framework.model.*
+import org.echo.mobile.framework.model.network.Network
 import org.echo.mobile.framework.model.operations.CreateAssetOperation
 import org.echo.mobile.framework.model.operations.IssueAssetOperationBuilder
 import org.echo.mobile.framework.processResult
@@ -24,14 +26,21 @@ import org.echo.mobile.framework.support.value
 class AssetsFacadeImpl(
     private val databaseApiService: DatabaseApiService,
     private val networkBroadcastApiService: NetworkBroadcastApiService,
-    private val cryptoCoreComponent: CryptoCoreComponent
-) : BaseTransactionsFacade(databaseApiService, cryptoCoreComponent), AssetsFacade {
+    private val cryptoCoreComponent: CryptoCoreComponent,
+    socketCoreComponent: SocketCoreComponent,
+    network: Network
+) : BaseNotifiedTransactionsFacade(
+    databaseApiService,
+    cryptoCoreComponent,
+    socketCoreComponent,
+    network
+), AssetsFacade {
 
     override fun createAsset(
         name: String,
         password: String,
         asset: Asset,
-        callback: Callback<Boolean>
+        callback: Callback<String>
     ) = callback.processResult {
         val operation = CreateAssetOperation(asset)
 
@@ -63,7 +72,13 @@ class AssetsFacadeImpl(
             addPrivateKey(privateKey)
         }
 
-        networkBroadcastApiService.broadcastTransactionWithCallback(transaction).dematerialize()
+        val callId =
+            networkBroadcastApiService.broadcastTransactionWithCallback(transaction).dematerialize()
+        val transactionResult = subscribeOnTransactionResult(callId.toString()).dematerialize()
+
+
+        transactionResult.trx.operationsWithResults.values.firstOrNull()
+            ?: throw LocalException("Result of contract creation not found.")
     }
 
     override fun issueAsset(
@@ -117,7 +132,7 @@ class AssetsFacadeImpl(
             addPrivateKey(privateKey)
         }
 
-        networkBroadcastApiService.broadcastTransactionWithCallback(transaction).dematerialize()
+        networkBroadcastApiService.broadcastTransaction(transaction).dematerialize()
     }
 
     override fun listAssets(lowerBound: String, limit: Int, callback: Callback<List<Asset>>) =

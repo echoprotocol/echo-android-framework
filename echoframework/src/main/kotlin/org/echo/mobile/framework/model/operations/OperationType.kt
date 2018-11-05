@@ -7,6 +7,8 @@ import org.echo.mobile.framework.support.Converter
  *
  * <a href="https://bitshares.org/doxygen/operations_8hpp_source.html">Source</a>
  *
+ * Virtual operations is using only for parsing history results
+ *
  * @author Daria Pechkovskaya
  */
 enum class OperationType {
@@ -57,8 +59,8 @@ enum class OperationType {
     FBA_DISTRIBUTE_OPERATION,       //VIRTUAL
     BID_COLLATERAL_OPERATION,
     EXECUTE_BID_OPERATION,          //VIRTUAL
-    CONTRACT_OPERATION,             //temp
-    CONTRACT_TRANSFER_OPERATION     //temp
+    CONTRACT_OPERATION,
+    CONTRACT_TRANSFER_OPERATION     //VIRTUAL
 }
 
 /**
@@ -76,7 +78,8 @@ class OperationTypeToClassConverter : Converter<Int, Class<*>?> {
             OperationType.ASSET_ISSUE_OPERATION.ordinal to IssueAssetOperation::class.java,
             OperationType.TRANSFER_OPERATION.ordinal to TransferOperation::class.java,
             OperationType.ACCOUNT_CREATE_OPERATION.ordinal to AccountCreateOperation::class.java,
-            OperationType.CONTRACT_OPERATION.ordinal to ContractOperation::class.java
+            OperationType.CONTRACT_OPERATION.ordinal to ContractOperation::class.java,
+            OperationType.CONTRACT_TRANSFER_OPERATION to ContractTransferOperation::class.java
         )
     }
 

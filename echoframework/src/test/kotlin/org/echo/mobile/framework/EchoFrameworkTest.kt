@@ -5,10 +5,7 @@ import org.echo.mobile.framework.model.*
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
-import org.echo.mobile.framework.model.contract.input.AddressInputValueType
-import org.echo.mobile.framework.model.contract.input.InputValue
-import org.echo.mobile.framework.model.contract.input.NumberInputValueType
-import org.echo.mobile.framework.model.contract.input.StringInputValueType
+import org.echo.mobile.framework.model.contract.input.*
 import org.echo.mobile.framework.model.network.Echodevnet
 import org.echo.mobile.framework.service.UpdateListener
 import org.echo.mobile.framework.support.Api
@@ -59,6 +56,70 @@ class EchoFrameworkTest {
                 "9081900360200190f35b34801560b957600080fd5b50607360dc565b600080546001019055565b60008054" +
                 "9091019055565b60005490565b600080546000190190555600a165627a7a7230582016b3f6673de41336e2" +
                 "c5d4b136b4e67bbf43062b6bc47eaef982648cd3b92a9d0029"
+
+    private val legalContractParamsBytecode =
+        "608060405234801561001057600080fd5b50610556806100206000396000f3006080604052600436106100" +
+                "57576000357c0100000000000000000000000000000000000000000000000000000000900463ff" +
+                "ffffff168063213c1fcb1461005c578063f2c298be14610118578063f8a8fd6d14610181575b60" +
+                "0080fd5b34801561006857600080fd5b5061009d600480360381019080803573ffffffffffffff" +
+                "ffffffffffffffffffffffffff169060200190929190505050610211565b604051808060200182" +
+                "8103825283818151815260200191508051906020019080838360005b838110156100dd57808201" +
+                "51818401526020810190506100c2565b50505050905090810190601f16801561010a5780820380" +
+                "516001836020036101000a031916815260200191505b509250505060405180910390f35b348015" +
+                "61012457600080fd5b5061017f6004803603810190808035906020019082018035906020019080" +
+                "80601f016020809104026020016040519081016040528093929190818152602001838380828437" +
+                "82019150505050505091929192905050506102c1565b005b34801561018d57600080fd5b506101" +
+                "966103e7565b604051808060200182810382528381815181526020019150805190602001908083" +
+                "8360005b838110156101d65780820151818401526020810190506101bb565b50505050905090810" +
+                "190601f1680156102035780820380516001836020036101000a031916815260200191505b509250" +
+                "505060405180910390f35b600060205280600052604060002060009150905080546001816001161" +
+                "56101000203166002900480601f0160208091040260200160405190810160405280929190818152" +
+                "602001828054600181600116156101000203166002900480156102b95780601f1061028e576101" +
+                "008083540402835291602001916102b9565b820191906000526020600020905b81548152906001" +
+                "019060200180831161029c57829003601f168201915b505050505081565b806000803373ffffff" +
+                "ffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1" +
+                "681526020019081526020016000209080519060200190610313929190610485565b507fbec1c4e" +
+                "1c777d57c8686d8eff4ba1ec5f8207b289e8d10f9b4be199c6baf00bd3382604051808373fffff" +
+                "fffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff" +
+                "16815260200180602001828103825283818151815260200191508051906020019080838360005b" +
+                "838110156103a957808201518184015260208101905061038e565b50505050905090810190601f1" +
+                "680156103d65780820380516001836020036101000a031916815260200191505b50935050505060" +
+                "405180910390a150565b60018054600181600116156101000203166002900480601f01602080910" +
+                "40260200160405190810160405280929190818152602001828054600181600116156101000203166" +
+                "0029004801561047d5780601f106104525761010080835404028352916020019161047d565b8201" +
+                "91906000526020600020905b81548152906001019060200180831161046057829003601f16820191" +
+                "5b505050505081565b82805460018160011615610100020316600290049060005260206000209060" +
+                "1f016020900481019282601f106104c657805160ff19168380011785556104f4565b828001600101" +
+                "855582156104f4579182015b828111156104f35782518255916020019190600101906104d8565b5b" +
+                "5090506105019190610505565b5090565b61052791905b8082111561052357600081600090555060" +
+                "010161050b565b5090565b905600a165627a7a72305820c3d8fad64386213f092995be2224f17d" +
+                "efe50984ba08d2e54d9229ec7a2504be0029"
+
+
+    private val legalContractWithParamsBytecode =
+        "608060405233600160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908" +
+                "373ffffffffffffffffffffffffffffffffffffffff16021790555034801561005157600080fd5" +
+                "b50604051602080610375833981018060405281019080805190602001909291905050508060026" +
+                "0006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373fffffff" +
+                "fffffffffffffffffffffffffffffffff160217905550806000806101000a81548173fffffffff" +
+                "fffffffffffffffffffffffffffffff021916908373fffffffffffffffffffffffffffffffffff" +
+                "fffff16021790555050610270806101056000396000f3006080604052600436106100415760003" +
+                "57c0100000000000000000000000000000000000000000000000000000000900463ffffffff168" +
+                "063f2c298be14610046575b600080fd5b34801561005257600080fd5b506100ad6004803603810" +
+                "19080803590602001908201803590602001908080601f016020809104026020016040519081016" +
+                "04052809392919081815260200183838082843782019150505050505091929192905050506100a" +
+                "f565b005b600260009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1" +
+                "673ffffffffffffffffffffffffffffffffffffffff1663f2c298be826040518263ffffffff167" +
+                "c01000000000000000000000000000000000000000000000000000000000281526004018080602" +
+                "001828103825283818151815260200191508051906020019080838360005b83811015610159578" +
+                "08201518184015260208101905061013e565b50505050905090810190601f16801561018657808" +
+                "20380516001836020036101000a031916815260200191505b50925050506000604051808303816" +
+                "00087803b1580156101a557600080fd5b505af11580156101b9573d6000803e3d6000fd5b50505" +
+                "0507f248e1568b00b4eb005baa2f75ec2d472c0c98685c367661e1ffcbdc0f26fdfe1600080905" +
+                "4906101000a900473ffffffffffffffffffffffffffffffffffffffff16604051808273fffffff" +
+                "fffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1" +
+                "6815260200191505060405180910390a1505600a165627a7a723058203a4f281bf5a18502c2caf" +
+                "37eac0d1729a184bab65879a54b6481020492b675e10029"
 
     private val illegalContractId = "1.16.-1"
     private val illegalHistoryItemId = "1.17.-1"
@@ -417,24 +478,91 @@ class EchoFrameworkTest {
         assertTrue(futureSubscriptionResult.get() ?: false)
     }
 
-//    @Test
-//    fun subscriptionOnContractTest() {
-//        val framework = initFramework()
-//
-//        if (connect(framework) == false) Assert.fail("Connection error")
-//
-//        val futureSubscriptionBlock = FutureTask<Contract>()
-//        val futureSubscriptionResult = FutureTask<Boolean>()
-//
-//        framework.subscribeOnContract("1.16.16244", object : UpdateListener<Contract> {
-//            override fun onUpdate(data: Contract) {
-//                futureSubscriptionBlock.setComplete(data)
-//            }
-//        }, futureSubscriptionResult.completeCallback())
-//
-//        assertNotNull(futureSubscriptionBlock.get())
-//        assertTrue(futureSubscriptionResult.get() ?: false)
-//    }
+
+    @Test
+    fun subscribeContractLogsArrayTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<Boolean>()
+        val futureSubscription = FutureTask<List<Log>>()
+
+        framework.subscribeOnContractLogs(
+            "1.16.19431",
+            "0",
+            "0",
+            object : UpdateListener<List<Log>> {
+                override fun onUpdate(data: List<Log>) {
+                    futureSubscription.setComplete(data)
+                }
+            },
+            future.completeCallback()
+        )
+
+        thread {
+            Thread.sleep(1000)
+            callContractEmptyMethod("1.16.19431", "testArrayEvent", framework, EmptyCallback())
+        }
+
+        val contractResult = future.get()
+        assertNotNull(contractResult)
+
+        val updateResult = futureSubscription.get()
+        assertNotNull(updateResult)
+    }
+
+    @Test
+    fun subscribeContractLogsTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<Boolean>()
+        val futureSubscription = FutureTask<List<Log>>()
+
+        framework.subscribeOnContractLogs(
+            "1.16.19431",
+            "0",
+            "0",
+            object : UpdateListener<List<Log>> {
+                override fun onUpdate(data: List<Log>) {
+                    futureSubscription.setComplete(data)
+                }
+            },
+            future.completeCallback()
+        )
+
+        thread {
+            Thread.sleep(1000)
+            callContractEmptyMethod("1.16.19431", "testAddressEvent", framework, EmptyCallback())
+        }
+
+        val contractResult = future.get()
+        assertNotNull(contractResult)
+
+        val updateResult = futureSubscription.get()
+        assertNotNull(updateResult)
+    }
+
+    private fun callContractEmptyMethod(
+        contractId: String,
+        methodName: String,
+        framework: EchoFramework,
+        callback: Callback<String>
+    ) {
+        framework.callContract(
+            "dima1",
+            "P5J8pDyzznMmEdiBCdgB7VKtMBuxw5e4MAJEo3sfUbxcM",
+            "1.3.0",
+            "1.3.0",
+            contractId,
+            methodName,
+            listOf(),
+            callback = callback
+        )
+    }
+
 
     @Test
     fun transferTest() {
@@ -447,7 +575,7 @@ class EchoFrameworkTest {
         framework.sendTransferOperation(
             "dimaty12345",
             "P5JRnzqtPYLxU9ypfndHczCqt178nzomv4DuspTPr1iTf",
-            "dima1",
+            "dariatest2",
             "1", "1.3.0", "1.3.0", "Memasik",
             futureTransfer.completeCallback()
         )
@@ -456,7 +584,7 @@ class EchoFrameworkTest {
     }
 
     @Test
-    fun getRequiredFeeTest() {
+    fun getRequiredFeeTransferOperationTest() {
         val framework = initFramework()
 
         if (connect(framework) == false) Assert.fail("Connection error")
@@ -478,7 +606,7 @@ class EchoFrameworkTest {
     }
 
     @Test(expected = LocalException::class)
-    fun getRequiredFeeFailureTest() {
+    fun getRequiredTransferOperationFeeFailureTest() {
         val framework = initFramework()
 
         if (connect(framework) == false) Assert.fail("Connection error")
@@ -494,6 +622,48 @@ class EchoFrameworkTest {
             "1.3.1234",
             "message",
             futureFee.completeCallback()
+        )
+
+        assertNotNull(futureFee.get())
+    }
+
+    @Test
+    fun getRequiredContractOperationFeeTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val futureFee = FutureTask<String>()
+
+        framework.getFeeForContractOperation(
+            userNameOrId = "dima1",
+            contractId = legalContractId,
+            methodName = "incrementCounter",
+            methodParams = listOf(),
+            assetId = "1.3.0",
+            feeAsset = "1.3.0",
+            callback = futureFee.completeCallback()
+        )
+
+        assertNotNull(futureFee.get())
+    }
+
+    @Test(expected = LocalException::class)
+    fun getRequiredContractOperationFeeFailureTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val futureFee = FutureTask<String>()
+
+        framework.getFeeForContractOperation(
+            userNameOrId = "dima1",
+            contractId = legalContractId,
+            methodName = "incrementCounter",
+            methodParams = listOf(),
+            assetId = "1.3.123456",
+            feeAsset = "1.3.123456",
+            callback = futureFee.completeCallback()
         )
 
         assertNotNull(futureFee.get())
@@ -537,10 +707,10 @@ class EchoFrameworkTest {
 //
 //        if (connect(framework) == false) Assert.fail("Connection error")
 //
-//        val futureAsset = FutureTask<Boolean>()
+//        val futureAsset = FutureTask<String>()
 //
 //        val asset = Asset("").apply {
-//            symbol = "QWEASDGHRTYUIO"
+//            symbol = "ASSETM"
 //            precision = 4
 //            issuer = Account("1.2.188")
 //            setBtsOptions(
@@ -575,7 +745,7 @@ class EchoFrameworkTest {
 //            futureAsset.completeCallback()
 //        )
 //
-//        assertNotNull(futureAsset.get())
+//        assertTrue(futureAsset.get()?.startsWith("1.3.") ?: false)
 //    }
 
     @Test
@@ -598,32 +768,63 @@ class EchoFrameworkTest {
         assertTrue(futureIssue.get() ?: false)
     }
 
-//    @Test
-//    fun createContractTest() {
-//        val framework = initFramework()
-//
-//        if (connect(framework) == false) Assert.fail("Connection error")
-//
-//        val future = FutureTask<Boolean>()
-//
-//        framework.createContract(
-//            login,
-//            password,
-//            legalAssetId,
-//            legalContractByteCode,
-//            callback = object : Callback<Boolean> {
-//                override fun onSuccess(result: Boolean) {
-//                    future.setComplete(result)
-//                }
-//
-//                override fun onError(error: LocalException) {
-//                    future.setComplete(error)
-//                }
-//            }
-//        )
-//
-//        assertTrue(future.get() ?: false)
-//    }
+    @Test
+    fun createContractTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<String>()
+
+        framework.createContract(
+            login,
+            password,
+            legalAssetId,
+            legalAssetId,
+            legalContractParamsBytecode,
+            callback = object : Callback<String> {
+                override fun onSuccess(result: String) {
+                    future.setComplete(result)
+                }
+
+                override fun onError(error: LocalException) {
+                    future.setComplete(error)
+                }
+            }
+        )
+
+        assertTrue(future.get()?.startsWith("1.17.") ?: false)
+    }
+
+    @Test
+    fun createContractWithParametersTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<String>()
+
+        framework.createContract(
+            login,
+            password,
+            legalAssetId,
+            legalAssetId,
+            legalContractWithParamsBytecode,
+            listOf(InputValue(ContractAddressInputValueType(), "19439")),
+
+            callback = object : Callback<String> {
+                override fun onSuccess(result: String) {
+                    future.setComplete(result)
+                }
+
+                override fun onError(error: LocalException) {
+                    future.setComplete(error)
+                }
+            }
+        )
+
+        assertTrue(future.get()?.startsWith("1.17.") ?: false)
+    }
 
     @Test
     fun callContractTest() {
@@ -631,11 +832,12 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
-        val future = FutureTask<Boolean>()
+        val future = FutureTask<String>()
 
         framework.callContract(
             login,
             password,
+            legalAssetId,
             legalAssetId,
             legalContractId,
             "incrementCounter",
@@ -643,7 +845,30 @@ class EchoFrameworkTest {
             callback = future.completeCallback()
         )
 
-        assertTrue(future.get() ?: false)
+        assertTrue(future.get()?.startsWith("1.17.") ?: false)
+    }
+
+    @Test
+    fun payableCallContractTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<String>()
+
+        framework.callContract(
+            login,
+            password,
+            legalAssetId,
+            legalAssetId,
+            legalContractId,
+            "incrementCounter",
+            listOf(),
+            "1000",
+            callback = future.completeCallback()
+        )
+
+        assertTrue(future.get()?.startsWith("1.17.") ?: false)
     }
 
     @Test
@@ -652,23 +877,23 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
-        val future = FutureTask<Boolean>()
+        val future = FutureTask<String>()
 
-        val address = "1.2.18".split(".").last()
+        val address = "1.2.18"
 
         framework.callContract(
-            ownerId, ownerPassword, "1.3.0", contractId, "addUserToDoor",
+            ownerId, ownerPassword, "1.3.0", "1.3.0", contractId, "addUserToDoor",
             listOf(
                 InputValue(NumberInputValueType("int64"), "3"),
                 InputValue(
-                    AddressInputValueType(),
+                    AccountAddressInputValueType(),
                     address
                 )
             ),
             callback = future.completeCallback()
         )
 
-        assertTrue(future.get() ?: false)
+        assertTrue(future.get()?.startsWith("1.17.") ?: false)
     }
 
     @Test
@@ -677,10 +902,10 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
-        val future = FutureTask<Boolean>()
+        val future = FutureTask<String>()
 
         framework.callContract(
-            ownerId, ownerPassword, "1.3.0", contractId, "addDoor",
+            ownerId, ownerPassword, "1.3.0", "1.3.0", contractId, "addDoor",
             listOf(
                 InputValue(NumberInputValueType("int64"), "3"),
                 InputValue(
@@ -691,7 +916,7 @@ class EchoFrameworkTest {
             callback = future.completeCallback()
         )
 
-        assertTrue(future.get() ?: false)
+        assertTrue(future.get()?.startsWith("1.17.") ?: false)
     }
 
     @Test(expected = LocalException::class)
@@ -700,11 +925,12 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
-        val future = FutureTask<Boolean>()
+        val future = FutureTask<String>()
 
         framework.callContract(
             login,
             password,
+            legalAssetId,
             legalAssetId,
             illegalContractId,
             "incrementCounter",
@@ -712,7 +938,7 @@ class EchoFrameworkTest {
             callback = future.completeCallback()
         )
 
-        assertFalse(future.get() ?: false)
+        assertNull(future.get())
     }
 
     @Test
@@ -767,7 +993,7 @@ class EchoFrameworkTest {
         val future = FutureTask<ContractResult>()
 
         framework.getContractResult(
-            legalHistoryItemId,
+            "1.17.34782",
             future.completeCallback()
         )
 
@@ -775,6 +1001,27 @@ class EchoFrameworkTest {
         assertNotNull(contractResult)
         assertEquals(contractResult!!.execRes.excepted, "None")
     }
+
+    @Test
+    fun getContractLogsTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<List<Log>>()
+
+        framework.getContractLogs(
+            "1.16.16803",
+            "1404100",
+            "1404111",
+            future.completeCallback()
+        )
+
+        val contractResult = future.get()
+        assertNotNull(contractResult)
+        assert(contractResult!!.isNotEmpty())
+    }
+
 
     @Test(expected = LocalException::class)
     fun getContractResultFailureTest() {

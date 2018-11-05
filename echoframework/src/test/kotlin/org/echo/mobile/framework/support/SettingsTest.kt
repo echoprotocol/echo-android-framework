@@ -7,6 +7,7 @@ import org.echo.mobile.framework.core.crypto.internal.CryptoCoreComponentImpl
 import org.echo.mobile.framework.core.socket.SocketMessenger
 import org.echo.mobile.framework.core.socket.SocketMessengerListener
 import org.echo.mobile.framework.core.socket.internal.SocketMessengerImpl
+import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.model.AuthorityType
 import org.echo.mobile.framework.model.Transaction
 import org.echo.mobile.framework.model.network.Echodevnet
@@ -25,6 +26,18 @@ class SettingsTest {
 
     @Test
     fun defaultConfigurationTest() {
+        val settings = Settings.Configurator().setUrl(ECHO_URL).configure()
+
+        assertEquals(settings.url, ECHO_URL)
+        assertTrue(settings.socketMessenger is SocketMessengerImpl)
+        assertTrue(settings.cryptoComponent is CryptoCoreComponentImpl)
+        assertTrue(settings.apis.size == Api.values().size)
+        assertFalse(settings.returnOnMainThread)
+        assertTrue(settings.network is Echodevnet)
+    }
+
+    @Test(expected = LocalException::class)
+    fun defaultConfigurationFailureTest() {
         val settings = Settings.Configurator().configure()
 
         assertEquals(settings.url, ECHO_URL)

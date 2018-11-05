@@ -7,12 +7,7 @@ import org.echo.mobile.framework.core.socket.SocketCoreComponent
 import org.echo.mobile.framework.core.socket.SocketMessengerListener
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.facade.SubscriptionFacade
-import org.echo.mobile.framework.model.Account
-import org.echo.mobile.framework.model.Block
-import org.echo.mobile.framework.model.DynamicGlobalProperties
-import org.echo.mobile.framework.model.FullAccount
-import org.echo.mobile.framework.model.contract.Contract
-import org.echo.mobile.framework.model.contract.ContractStruct
+import org.echo.mobile.framework.model.*
 import org.echo.mobile.framework.model.network.Network
 import org.echo.mobile.framework.service.*
 import org.echo.mobile.framework.service.internal.subscription.*
@@ -151,23 +146,29 @@ class SubscriptionFacadeImpl(
         }
     }
 
-    override fun subscribeOnContract(
+    override fun subscribeOnContractLogs(
         contractId: String,
-        listener: UpdateListener<Contract>,
+        fromBlock: String,
+        toBlock: String,
+        listener: UpdateListener<List<Log>>,
         callback: Callback<Boolean>
     ) {
         synchronized(this) {
             subscribeGlobal(callback)
 
-            if (!blockSubscriptionManager.containListeners()) {
-                getCurrentBlockchainData()
-                    .value { _ -> tryInitContractListener(contractId, listener, callback) }
+            if (!contractSubscriptionManager.registered(contractId)) {
+                databaseApiService.subscribeContractLogs(contractId, fromBlock, toBlock)
+                    .value {
+                        contractSubscriptionManager.registerListener(contractId, listener)
+                        callback.onSuccess(subscribed)
+                    }
                     .error { error ->
-                        LOGGER.log("Blockchain data retrieving error.", error)
+                        LOGGER.log("Subscription contract logs request error", error)
                         callback.onError(LocalException(error))
                     }
             } else {
-                tryInitContractListener(contractId, listener, callback)
+                contractSubscriptionManager.registerListener(contractId, listener)
+                callback.onSuccess(subscribed)
             }
         }
     }
@@ -183,24 +184,6 @@ class SubscriptionFacadeImpl(
         }
     }
 
-    private fun tryInitContractListener(
-        contractId: String,
-        listener: UpdateListener<Contract>,
-        callback: Callback<Boolean>
-    ) {
-        getContractData(contractId)
-            .value { _ ->
-                contractSubscriptionManager.registerListener(contractId, listener)
-                blockSubscriptionManager
-                    .addListener(ContractBlockListenerDelegate(contractSubscriptionManager))
-                callback.onSuccess(subscribed)
-            }
-            .error { error ->
-                LOGGER.log("Contract data retrieving error.", error)
-                callback.onError(LocalException(error))
-            }
-    }
-
     private fun getCurrentBlockchainData(): Result<LocalException, DynamicGlobalProperties> {
         return databaseApiService.getObjects(
             listOf(blockObjectId),
@@ -213,13 +196,6 @@ class SubscriptionFacadeImpl(
             }
             .mapError {
                 LocalException("Unable to find required object id for identifier = $blockObjectId")
-            }
-    }
-
-    private fun getContractData(contractId: String): Result<LocalException, ContractStruct> {
-        return databaseApiService.getContract(contractId)
-            .mapError {
-                LocalException("Unable to find required contract for identifier = $contractId")
             }
     }
 
@@ -273,7 +249,7 @@ class SubscriptionFacadeImpl(
         }
     }
 
-    override fun unsubscribeFromContract(contractId: String, callback: Callback<Boolean>) {
+    override fun unsubscribeFromContractLogs(contractId: String, callback: Callback<Boolean>) {
         if (!contractSubscriptionManager.registered(contractId)) {
             LOGGER.log("No listeners found for contract $contractId changes")
             callback.onError(LocalException("No listeners found for contract $contractId changes"))
@@ -323,17 +299,6 @@ class SubscriptionFacadeImpl(
                 LocalException("Unable to find required account id for identifier = $nameOrId")
             }
 
-
-    private fun getAccount(nameOrId: String): Result<LocalException, Account> =
-        databaseApiService.getFullAccounts(listOf(nameOrId), false)
-            .flatMap { accountsMap ->
-                accountsMap[nameOrId]?.account?.let { Result.Value(it) }
-                    ?: Result.Error(LocalException())
-            }
-            .mapError {
-                LocalException("Unable to find required account id for identifier = $nameOrId")
-            }
-
     private fun resetState() {
         accountSubscriptionManager.clear()
         blockSubscriptionManager.clear()
@@ -358,6 +323,10 @@ class SubscriptionFacadeImpl(
             if (accountSubscriptionManager.containsListeners()) {
                 processAccountData(event)
             }
+
+            if (contractSubscriptionManager.containsListeners()) {
+                processContractLogs(event)
+            }
         }
 
         private fun processBlockchainData(event: String): DynamicGlobalProperties? {
@@ -381,6 +350,14 @@ class SubscriptionFacadeImpl(
                 false,
                 FullAccountSubscriptionCallback(accountIds)
             )
+        }
+
+        private fun processContractLogs(event: String) {
+            val contractLogs = contractSubscriptionManager.processEvent(event)
+            contractLogs.forEach { (contractId, logs) ->
+                contractSubscriptionManager.notify(contractId, logs)
+            }
+
         }
 
         override fun onFailure(error: Throwable) = resetState()

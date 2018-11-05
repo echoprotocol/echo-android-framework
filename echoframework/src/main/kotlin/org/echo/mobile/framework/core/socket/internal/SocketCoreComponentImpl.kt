@@ -100,7 +100,7 @@ class SocketCoreComponentImpl(
 
             //event to all active operations about disconnection
             val error = SocketConnectionException("Socket is disconnected.")
-            operationsMap.forEach { _, operation ->
+            operationsMap.forEach { (_, operation) ->
                 operation.callback.onError(error)
             }
             operationsMap.clear()

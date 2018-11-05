@@ -57,7 +57,7 @@ class NetworkBroadcastApiServiceTest {
         val networkBroadcastApiService =
             NetworkBroadcastApiServiceImpl(socketCoreComponent, cryptoCoreComponent)
 
-        networkBroadcastApiService.broadcastTransactionWithCallback(transaction)
+        networkBroadcastApiService.broadcastTransaction(transaction)
             .value { assertTrue(it) }
             .error { fail() }
     }
@@ -69,7 +69,7 @@ class NetworkBroadcastApiServiceTest {
         val networkBroadcastApiService =
             NetworkBroadcastApiServiceImpl(socketCoreComponent, cryptoCoreComponent)
 
-        networkBroadcastApiService.broadcastTransactionWithCallback(transaction)
+        networkBroadcastApiService.broadcastTransaction(transaction)
             .value { assertFalse(it) }
             .error { fail() }
     }
@@ -81,7 +81,7 @@ class NetworkBroadcastApiServiceTest {
         val networkBroadcastApiService =
             NetworkBroadcastApiServiceImpl(socketCoreComponent, cryptoCoreComponent)
 
-        networkBroadcastApiService.broadcastTransactionWithCallback(transaction)
+        networkBroadcastApiService.broadcastTransaction(transaction)
             .value { fail() }
             .error {
                 assertNotNull(it)

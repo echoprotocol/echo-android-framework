@@ -1,4 +1,4 @@
-[ ![Download](https://api.bintray.com/packages/echo/mobile/android-framework-stable/images/download.svg?version=1.0.7) ](https://bintray.com/echo/mobile/android-framework-stable/1.0.7/link)
+[ ![Download](https://api.bintray.com/packages/echo/mobile/android-framework-stable/images/download.svg?version=1.0.8) ](https://bintray.com/echo/mobile/android-framework-stable/1.0.8/link)
 
 # echo-android-framework (echo-android-framework)
 
@@ -9,7 +9,7 @@ Pure Kotlin Echo framework for Android mobile development. Can be used to work w
 This framework can be obtained through gradle dependency:
 
 ```
-implementation 'org.echo.mobile:echoframework:1.0.7'
+implementation 'org.echo.mobile:echoframework:1.0.8'
 ```
 
 Or maven dependency:
@@ -18,7 +18,7 @@ Or maven dependency:
 <dependency>
   <groupId>org.echo.mobile</groupId>
   <artifactId>echoframework</artifactId>
-  <version>1.0.7</version>
+  <version>1.0.8</version>
   <type>pom</type>
 </dependency>
 ```
@@ -36,6 +36,7 @@ fun init() {
             Custom api options which can be used
              */
             Settings.Configurator()
+                .setUrl(ECHO_URL)
                 .setApis(Api.DATABASE, Api.ACCOUNT_HISTORY, Api.NETWORK_BROADCAST)
                 .configure()
             )
@@ -152,8 +153,8 @@ fun feeForTransfer() {
                "to name or id",
                amount = "10000",
                asset = "1.3.0",
-               feeAsset = "1.3.0",
-               "message",
+               feeAsset = "1.3.0", //optional
+               "message",          //optional
                object : Callback<String> {
                    override fun onSuccess(result: String) {}
                
@@ -172,7 +173,7 @@ fun send() {
                                toNameOrId = "some name",
                                amount = "300",
                                asset = "1.3.0",
-                               assetForFee = "1.3.0",
+                               feeAsset = "1.3.0",
                                message = null, // optional
                                object : Callback<Boolean> {
                                     override fun onSuccess(result: Boolean) {}
@@ -195,7 +196,7 @@ fun createAsset() {
         issuer = Account("account id")
         setBtsOptions(
             BitassetOptions(
-                feedLifetymeSec = 86400, 
+                feedLifetimeSec = 86400,
                 minimumFeeds = 7, 
                 forceSettlementDelaySec = 86400,
                 forceSettlementOffsetPercent = 100, 
@@ -268,7 +269,9 @@ fun createContract() {
         "registrarNameOrId",
         "password",
         assetId = "1.3.0",
+        feeAsset = "1.3.0",     // optional
         byteCode,
+        params = listOf(),      // optional
         object : Callback<Boolean> {
             override fun onSuccess(result: Boolean) {}
     
@@ -286,9 +289,11 @@ fun callContract() {
                 "account name or id",
                 "password",
                 assetId = "1.3.0",
+                feeAsset = "1.3.0",     //optional
                 contractId = "contractId",
                 methodName = "incrementCounter",
                 methodParams = listOf(),
+                value = "1",            //optional
                 object : Callback<Boolean> {
                     override fun onSuccess(result: Boolean) {}
             
