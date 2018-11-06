@@ -83,7 +83,9 @@ class StringOutputValueType : OutputValueType {
 
 
 /**
- * Implementation of [OutputValueType] for all address types
+ * Implementation of [OutputValueType] for all address types.
+ * Decodes prefixed address values. For example, account address: 1.2.1.
+ * If address is not clear, throws exception.
  */
 open class AddressOutputValueType : OutputValueType {
 
@@ -98,7 +100,8 @@ open class AddressOutputValueType : OutputValueType {
 }
 
 /**
- * Implementation of [OutputValueType] for account address types
+ * Implementation of [OutputValueType] for account address types.
+ * Can decode addresses with account prefix "1.2." and without it.
  */
 class AccountAddressOutputValueType : AddressOutputValueType() {
 
@@ -115,6 +118,7 @@ class AccountAddressOutputValueType : AddressOutputValueType() {
 
 /**
  * Implementation of [OutputValueType] for contract address types
+ * Can decode addresses with contract prefix "1.16." and without it.
  */
 class ContractAddressOutputValueType : AddressOutputValueType() {
 
