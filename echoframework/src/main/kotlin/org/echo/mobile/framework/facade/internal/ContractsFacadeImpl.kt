@@ -6,10 +6,7 @@ import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
 import org.echo.mobile.framework.core.socket.SocketCoreComponent
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.facade.ContractsFacade
-import org.echo.mobile.framework.model.Account
-import org.echo.mobile.framework.model.AuthorityType
-import org.echo.mobile.framework.model.Log
-import org.echo.mobile.framework.model.Transaction
+import org.echo.mobile.framework.model.*
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
@@ -20,6 +17,8 @@ import org.echo.mobile.framework.model.operations.ContractOperationBuilder
 import org.echo.mobile.framework.processResult
 import org.echo.mobile.framework.service.DatabaseApiService
 import org.echo.mobile.framework.service.NetworkBroadcastApiService
+import org.echo.mobile.framework.support.concurrent.future.FutureTask
+import org.echo.mobile.framework.support.concurrent.future.completeCallback
 import org.echo.mobile.framework.support.dematerialize
 import org.echo.mobile.framework.support.error
 import org.echo.mobile.framework.support.value
@@ -55,6 +54,7 @@ class ContractsFacadeImpl(
         gasPrice: Long,
         callback: Callback<String>
     ) = callback.processResult {
+
         var registrar: Account? = null
 
         databaseApiService.getFullAccounts(listOf(registrarNameOrId), false)
@@ -95,13 +95,16 @@ class ContractsFacadeImpl(
         }
 
         val callId =
-            networkBroadcastApiService.broadcastTransactionWithCallback(transaction).dematerialize()
-        val transactionResult = subscribeOnTransactionResult(callId.toString()).dematerialize()
+            networkBroadcastApiService.broadcastTransactionWithCallback(transaction)
+                .dematerialize()
 
+        val future = FutureTask<TransactionResult>()
+        subscribeOnTransactionResult(callId.toString(), future.completeCallback())
 
-        transactionResult.trx.operationsWithResults.values.firstOrNull()
+        future.get()?.trx?.operationsWithResults?.values?.firstOrNull()
             ?: throw LocalException("Result of contract creation not found.")
     }
+
 
     override fun callContract(
         userNameOrId: String,
@@ -116,6 +119,7 @@ class ContractsFacadeImpl(
         gasPrice: Long,
         callback: Callback<String>
     ) = callback.processResult {
+
         var registrar: Account? = null
 
         databaseApiService.getFullAccounts(listOf(userNameOrId), false)
@@ -157,11 +161,13 @@ class ContractsFacadeImpl(
                 addPrivateKey(privateKey)
             }
 
-        val callId =
-            networkBroadcastApiService.broadcastTransactionWithCallback(transaction).dematerialize()
-        val transactionResult = subscribeOnTransactionResult(callId.toString()).dematerialize()
+        val callId = networkBroadcastApiService.broadcastTransactionWithCallback(transaction)
+            .dematerialize()
 
-        transactionResult.trx.operationsWithResults.values.firstOrNull() ?: ""
+        val future = FutureTask<TransactionResult>()
+        subscribeOnTransactionResult(callId.toString(), future.completeCallback())
+
+        future.get()?.trx?.operationsWithResults?.values?.firstOrNull() ?: ""
     }
 
     override fun queryContract(
@@ -198,9 +204,18 @@ class ContractsFacadeImpl(
 
     override fun getContractLogs(
         contractId: String, fromBlock: String, toBlock: String, callback: Callback<List<Log>>
-    ) = callback.processResult(databaseApiService.getContractLogs(contractId, fromBlock, toBlock))
+    ) = callback.processResult(
+        databaseApiService.getContractLogs(
+            contractId,
+            fromBlock,
+            toBlock
+        )
+    )
 
-    override fun getContracts(contractIds: List<String>, callback: Callback<List<ContractInfo>>) =
+    override fun getContracts(
+        contractIds: List<String>,
+        callback: Callback<List<ContractInfo>>
+    ) =
         callback.processResult(databaseApiService.getContracts(contractIds))
 
     override fun getAllContracts(callback: Callback<List<ContractInfo>>) =

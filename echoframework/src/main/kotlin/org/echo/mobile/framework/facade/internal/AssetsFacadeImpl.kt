@@ -14,6 +14,8 @@ import org.echo.mobile.framework.model.operations.IssueAssetOperationBuilder
 import org.echo.mobile.framework.processResult
 import org.echo.mobile.framework.service.DatabaseApiService
 import org.echo.mobile.framework.service.NetworkBroadcastApiService
+import org.echo.mobile.framework.support.concurrent.future.FutureTask
+import org.echo.mobile.framework.support.concurrent.future.completeCallback
 import org.echo.mobile.framework.support.dematerialize
 import org.echo.mobile.framework.support.error
 import org.echo.mobile.framework.support.value
@@ -42,6 +44,7 @@ class AssetsFacadeImpl(
         asset: Asset,
         callback: Callback<String>
     ) = callback.processResult {
+
         val operation = CreateAssetOperation(asset)
 
         val blockData = databaseApiService.getBlockData()
@@ -73,11 +76,13 @@ class AssetsFacadeImpl(
         }
 
         val callId =
-            networkBroadcastApiService.broadcastTransactionWithCallback(transaction).dematerialize()
-        val transactionResult = subscribeOnTransactionResult(callId.toString()).dematerialize()
+            networkBroadcastApiService.broadcastTransactionWithCallback(transaction)
+                .dematerialize()
 
+        val future = FutureTask<TransactionResult>()
+        subscribeOnTransactionResult(callId.toString(), future.completeCallback())
 
-        transactionResult.trx.operationsWithResults.values.firstOrNull()
+        future.get()?.trx?.operationsWithResults?.values?.firstOrNull()
             ?: throw LocalException("Result of contract creation not found.")
     }
 

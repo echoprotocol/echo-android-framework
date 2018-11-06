@@ -97,7 +97,9 @@ class NumberInputValueType(override var name: String) : InputValueType {
 }
 
 /**
- * Implementation of [InputValueType] for any address types
+ * Implementation of [InputValueType] for any address types.
+ * Can encode only prefixed addresses.  For example, account address: 1.2.1.
+ * If address is not clear, throws exception.
  */
 class AddressInputValueType : InputValueType {
 
@@ -121,7 +123,8 @@ class AddressInputValueType : InputValueType {
 }
 
 /**
- * Implementation of [InputValueType] for account address types
+ * Implementation of [InputValueType] for account address types.
+ * Can encode addresses with account prefix "1.2." and without it.
  */
 class AccountAddressInputValueType : InputValueType {
 
@@ -140,7 +143,8 @@ class AccountAddressInputValueType : InputValueType {
 }
 
 /**
- * Implementation of [InputValueType] for contract address types
+ * Implementation of [InputValueType] for contract address types.
+ * Can decode addresses with contract prefix "1.16." and without it.
  */
 class ContractAddressInputValueType : InputValueType {
 

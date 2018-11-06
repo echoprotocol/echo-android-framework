@@ -1,18 +1,14 @@
 package org.echo.mobile.framework.facade.internal
 
+import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
 import org.echo.mobile.framework.core.socket.SocketCoreComponent
 import org.echo.mobile.framework.core.socket.SocketMessengerListener
-import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.model.TransactionResult
 import org.echo.mobile.framework.model.network.Network
 import org.echo.mobile.framework.service.DatabaseApiService
 import org.echo.mobile.framework.service.TransactionSubscriptionManager
 import org.echo.mobile.framework.service.internal.subscription.TransactionSubscriptionManagerImpl
-import org.echo.mobile.framework.support.Result
-import org.echo.mobile.framework.support.concurrent.future.FutureTask
-import org.echo.mobile.framework.support.concurrent.future.completeCallback
-import org.echo.mobile.framework.support.concurrent.future.wrapResult
 import org.echo.mobile.framework.support.toJsonObject
 
 /**
@@ -27,6 +23,7 @@ abstract class BaseNotifiedTransactionsFacade(
     private val network: Network
 ) : BaseTransactionsFacade(databaseApiService, cryptoCoreComponent) {
 
+    @Volatile
     private var subscribed = false
 
     private val socketMessengerListener by lazy {
@@ -37,14 +34,13 @@ abstract class BaseNotifiedTransactionsFacade(
         TransactionSubscriptionManagerImpl(network)
     }
 
-    protected fun subscribeOnTransactionResult(callId: String): Result<LocalException, TransactionResult> =
-        synchronized(this) {
-            subscribeSocket()
-
-            val future = FutureTask<TransactionResult>()
-            transactionSubscriptionManager.register(callId, future.completeCallback())
-            return future.wrapResult()
-        }
+    protected fun subscribeOnTransactionResult(
+        callId: String,
+        callback: Callback<TransactionResult>
+    ) {
+        subscribeSocket()
+        transactionSubscriptionManager.register(callId, callback)
+    }
 
     private fun subscribeSocket() {
         if (!subscribed) {

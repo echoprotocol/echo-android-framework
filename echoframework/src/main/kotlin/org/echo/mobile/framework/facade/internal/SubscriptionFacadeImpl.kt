@@ -7,10 +7,16 @@ import org.echo.mobile.framework.core.socket.SocketCoreComponent
 import org.echo.mobile.framework.core.socket.SocketMessengerListener
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.facade.SubscriptionFacade
-import org.echo.mobile.framework.model.*
+import org.echo.mobile.framework.model.Block
+import org.echo.mobile.framework.model.DynamicGlobalProperties
+import org.echo.mobile.framework.model.FullAccount
+import org.echo.mobile.framework.model.Log
 import org.echo.mobile.framework.model.network.Network
 import org.echo.mobile.framework.service.*
-import org.echo.mobile.framework.service.internal.subscription.*
+import org.echo.mobile.framework.service.internal.subscription.AccountSubscriptionManagerImpl
+import org.echo.mobile.framework.service.internal.subscription.BlockSubscriptionManagerImpl
+import org.echo.mobile.framework.service.internal.subscription.ContractSubscriptionManagerImpl
+import org.echo.mobile.framework.service.internal.subscription.CurrentBlockchainDataSubscriptionManagerImpl
 import org.echo.mobile.framework.support.*
 import org.echo.mobile.framework.support.concurrent.future.FutureTask
 import org.echo.mobile.framework.support.concurrent.future.completeCallback
@@ -110,7 +116,7 @@ class SubscriptionFacadeImpl(
 
             if (!blockcnainDataSubscriptionManager.containListeners()) {
                 getCurrentBlockchainData()
-                    .value { _ ->
+                    .value {
                         blockcnainDataSubscriptionManager.addListener(listener)
                         callback.onSuccess(subscribed)
                     }
@@ -345,11 +351,13 @@ class SubscriptionFacadeImpl(
 
         private fun processAccountData(event: String) {
             val accountIds = accountSubscriptionManager.processEvent(event)
-            databaseApiService.getFullAccounts(
-                accountIds,
-                false,
-                FullAccountSubscriptionCallback(accountIds)
-            )
+            if (accountIds.isNotEmpty()) {
+                databaseApiService.getFullAccounts(
+                    accountIds,
+                    false,
+                    FullAccountSubscriptionCallback(accountIds)
+                )
+            }
         }
 
         private fun processContractLogs(event: String) {

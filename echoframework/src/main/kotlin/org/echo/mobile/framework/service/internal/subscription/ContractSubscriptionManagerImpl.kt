@@ -3,7 +3,6 @@ package org.echo.mobile.framework.service.internal.subscription
 import com.google.common.reflect.TypeToken
 import com.google.gson.Gson
 import com.google.gson.JsonElement
-import com.google.gson.JsonParseException
 import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent
 import org.echo.mobile.framework.model.Log
 import org.echo.mobile.framework.model.contract.output.ContractAddressOutputValueType
@@ -76,7 +75,7 @@ class ContractSubscriptionManagerImpl : ContractSubscriptionManager {
             }
 
             return logsMap
-        } catch (ex: JsonParseException) {
+        } catch (ex: Exception) {
             LOGGER.log("Error while parsing contract logs.", ex)
             return emptyMap()
         }

@@ -43,12 +43,15 @@ class TransactionSubscriptionManagerImpl(network: Network) : TransactionSubscrip
         val callback = callbacks.remove(callId)
 
         try {
-            val jsonResult = dataParam?.asJsonArray?.firstOrNull()?.asJsonObject
-            val result = gson.fromJson<TransactionResult>(jsonResult, type)
+            val jsonResult = dataParam?.asJsonArray?.firstOrNull()
 
-            callback?.onSuccess(result) ?: return
+            if (jsonResult?.isJsonObject == true) {
+                val result = gson.fromJson<TransactionResult>(jsonResult, type)
 
-        } catch (ex: JsonParseException) {
+                callback?.onSuccess(result) ?: return
+            }
+
+        } catch (ex: Exception) {
             LOGGER.log("Error while parsing transaction result.", ex)
             callback?.onError(LocalException("Error while parsing transaction result.", ex))
                 ?: return
