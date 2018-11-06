@@ -1,4 +1,4 @@
-[ ![Download](https://api.bintray.com/packages/echo/mobile/android-framework-stable/images/download.svg?version=1.0.8) ](https://bintray.com/echo/mobile/android-framework-stable/1.0.8/link)
+[ ![Download](https://api.bintray.com/packages/echo/mobile/android-framework-stable/images/download.svg?version=1.0.9) ](https://bintray.com/echo/mobile/android-framework-stable/1.0.9/link)
 
 # echo-android-framework (echo-android-framework)
 
@@ -9,7 +9,7 @@ Pure Kotlin Echo framework for Android mobile development. Can be used to work w
 This framework can be obtained through gradle dependency:
 
 ```
-implementation 'org.echo.mobile:echoframework:1.0.8'
+implementation 'org.echo.mobile:echoframework:1.0.9'
 ```
 
 Or maven dependency:
@@ -18,7 +18,7 @@ Or maven dependency:
 <dependency>
   <groupId>org.echo.mobile</groupId>
   <artifactId>echoframework</artifactId>
-  <version>1.0.8</version>
+  <version>1.0.9</version>
   <type>pom</type>
 </dependency>
 ```
@@ -31,7 +31,6 @@ For setup framework use this simple code:
 fun init() { 
     val echo = EchoFramework.create(
             /** Here you can put your custom settings for our framework
-
             Example:
             Custom api options which can be used
              */
@@ -40,7 +39,6 @@ fun init() {
                 .setApis(Api.DATABASE, Api.ACCOUNT_HISTORY, Api.NETWORK_BROADCAST)
                 .configure()
             )
-
     // Start framework. Connect to node and setup public apis
     echo.start(object : Callback<Any> {
                   override fun onError(error: LocalException) { }
