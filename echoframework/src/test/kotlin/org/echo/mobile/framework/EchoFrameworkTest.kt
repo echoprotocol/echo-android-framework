@@ -5,7 +5,10 @@ import org.echo.mobile.framework.model.*
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
-import org.echo.mobile.framework.model.contract.input.*
+import org.echo.mobile.framework.model.contract.input.AccountAddressInputValueType
+import org.echo.mobile.framework.model.contract.input.ContractAddressInputValueType
+import org.echo.mobile.framework.model.contract.input.InputValue
+import org.echo.mobile.framework.model.contract.input.StringInputValueType
 import org.echo.mobile.framework.model.network.Echodevnet
 import org.echo.mobile.framework.service.UpdateListener
 import org.echo.mobile.framework.support.Api
@@ -18,7 +21,6 @@ import org.echo.mobile.framework.support.fold
 import org.junit.Assert
 import org.junit.Assert.*
 import org.junit.Test
-import java.text.SimpleDateFormat
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.thread
 
@@ -43,14 +45,13 @@ class EchoFrameworkTest {
                 .configure()
         )
 
-    private val legalContractId = "1.16.1"
-    private val accountId = "1.2.1864"
-    private val login = "frameworktest1"
-    private val password = "P5JCEwpYgwWQALZWQTRwU25moVu4j4Hsnh1GbLhsde3ny"
-    private val secondAccountId = "1.2.1865"
-    private val secondLogin = "frameworktest2"
-    private val secondPassword = "P5KNC3RDvMFNMcDEfc9fu8Wfr61Pk73UjHaZ5qWkz1Kxg"
-    private val legalHistoryItemId = "1.17.2"
+    private val legalContractId = "1.16.2590"
+    private val accountId = "1.2.46"
+    private val login = "frameworktest2"
+    private val password = "P5J3zbh52vTnK8W9vyFTLRLGeENc1smQFWdouDieKbs4SYfW7YYi"
+    private val secondAccountId = "1.2.47"
+    private val secondLogin = "frameworktest3"
+    private val secondPassword = "P5K8EbTtkTN6tvUX6YTXYBBvtMANcWBXvMSBkdKkjUc9vtWQjpUv"
     private val legalAssetId = "1.3.0"
 
     private val legalContractParamsBytecode =
@@ -119,10 +120,6 @@ class EchoFrameworkTest {
 
     private val illegalContractId = "1.16.-1"
     private val illegalHistoryItemId = "1.17.-1"
-
-    private val contractId = "1.16.16186"
-    private val ownerId = "1.2.95"
-    private val ownerPassword = "newTestPass"
 
     @Test
     fun connectTest() {
@@ -245,7 +242,7 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
-        framework.getBalance(login, "1.3.0", futureBalanceExistent.completeCallback())
+        framework.getBalance(login, legalAssetId, futureBalanceExistent.completeCallback())
 
         assertTrue(futureBalanceExistent.get() != null)
     }
@@ -303,16 +300,18 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
-        changePassword(framework, object : Callback<Any> {
-            override fun onSuccess(result: Any) {
-                futureChangePassword.setComplete(true)
-            }
+        framework.changePassword(
+            login, password, password,
+            object : Callback<Any> {
+                override fun onSuccess(result: Any) {
+                    futureChangePassword.setComplete(true)
+                }
 
-            override fun onError(error: LocalException) {
-                futureChangePassword.setComplete(false)
-            }
+                override fun onError(error: LocalException) {
+                    futureChangePassword.setComplete(false)
+                }
 
-        })
+            })
 
         assertTrue(futureChangePassword.get() ?: false)
     }
@@ -368,25 +367,16 @@ class EchoFrameworkTest {
         assertTrue(futureSubscriptionResult.get() ?: false)
     }
 
-    private fun changePassword(framework: EchoFramework, callback: Callback<Any>) {
-        framework.changePassword(
-            login,
-            password,
-            password,
-            callback
-        )
-    }
-
     private fun sendAmount(framework: EchoFramework, callback: Callback<Boolean>) {
         framework.sendTransferOperation(
             login,
             password,
-            secondLogin,
-            "1",
-            "1.3.0",
-            "1.3.0",
-            null,
-            callback
+            toNameOrId = secondLogin,
+            amount = "1",
+            asset = legalAssetId,
+            feeAsset = legalAssetId,
+            message = null,
+            callback = callback
         )
     }
 
@@ -487,20 +477,23 @@ class EchoFrameworkTest {
         val futureSubscription = FutureTask<List<Log>>()
 
         framework.subscribeOnContractLogs(
-            "1.16.19431",
-            "0",
-            "0",
-            object : UpdateListener<List<Log>> {
+            legalContractId,
+            listener = object : UpdateListener<List<Log>> {
                 override fun onUpdate(data: List<Log>) {
                     futureSubscription.setComplete(data)
                 }
             },
-            future.completeCallback()
+            callback = future.completeCallback()
         )
 
         thread {
             Thread.sleep(1000)
-            callContractEmptyMethod("1.16.19431", "testArrayEvent", framework, EmptyCallback())
+            callContractWithEmptyParams(
+                legalContractId,
+                "testArrayEvent",
+                framework,
+                EmptyCallback()
+            )
         }
 
         val contractResult = future.get()
@@ -508,6 +501,7 @@ class EchoFrameworkTest {
 
         val updateResult = futureSubscription.get()
         assertNotNull(updateResult)
+        assert(updateResult!!.isNotEmpty())
     }
 
     @Test
@@ -520,20 +514,23 @@ class EchoFrameworkTest {
         val futureSubscription = FutureTask<List<Log>>()
 
         framework.subscribeOnContractLogs(
-            "1.16.19431",
-            "0",
-            "0",
-            object : UpdateListener<List<Log>> {
+            legalContractId,
+            listener = object : UpdateListener<List<Log>> {
                 override fun onUpdate(data: List<Log>) {
                     futureSubscription.setComplete(data)
                 }
             },
-            future.completeCallback()
+            callback = future.completeCallback()
         )
 
         thread {
             Thread.sleep(1000)
-            callContractEmptyMethod("1.16.19431", "testAddressEvent", framework, EmptyCallback())
+            callContractWithEmptyParams(
+                legalContractId,
+                "testAddressEvent",
+                framework,
+                EmptyCallback()
+            )
         }
 
         val contractResult = future.get()
@@ -541,22 +538,23 @@ class EchoFrameworkTest {
 
         val updateResult = futureSubscription.get()
         assertNotNull(updateResult)
+        assert(updateResult!!.isNotEmpty())
     }
 
-    private fun callContractEmptyMethod(
+    private fun callContractWithEmptyParams(
         contractId: String,
         methodName: String,
         framework: EchoFramework,
         callback: Callback<String>
     ) {
         framework.callContract(
-            login,
-            password,
-            "1.3.0",
-            "1.3.0",
-            contractId,
-            methodName,
-            listOf(),
+            userNameOrId = login,
+            password = password,
+            assetId = legalAssetId,
+            feeAsset = legalAssetId,
+            contractId = contractId,
+            methodName = methodName,
+            methodParams = listOf(),
             callback = callback
         )
     }
@@ -573,9 +571,12 @@ class EchoFrameworkTest {
         framework.sendTransferOperation(
             login,
             password,
-            secondLogin,
-            "1", "1.3.0", "1.3.0", "Memasik",
-            futureTransfer.completeCallback()
+            toNameOrId = secondLogin,
+            amount = "1",
+            asset = legalAssetId,
+            feeAsset = legalAssetId,
+            message = "Memasik",
+            callback = futureTransfer.completeCallback()
         )
 
         assertTrue(futureTransfer.get() ?: false)
@@ -593,11 +594,11 @@ class EchoFrameworkTest {
             login,
             password,
             secondLogin,
-            "10000",
-            "1.3.0",
-            "1.3.0",
-            "message",
-            futureFee.completeCallback()
+            amount = "10000",
+            asset = legalAssetId,
+            feeAsset = legalAssetId,
+            message = "Memasiki",
+            callback = futureFee.completeCallback()
         )
 
         assertNotNull(futureFee.get())
@@ -618,7 +619,7 @@ class EchoFrameworkTest {
             "10000",
             "1.3.1234",
             "1.3.1234",
-            "message",
+            "Ololoshka",
             futureFee.completeCallback()
         )
 
@@ -636,10 +637,10 @@ class EchoFrameworkTest {
         framework.getFeeForContractOperation(
             userNameOrId = login,
             contractId = legalContractId,
-            methodName = "incrementCounter",
+            methodName = "testReturn",
             methodParams = listOf(),
-            assetId = "1.3.0",
-            feeAsset = "1.3.0",
+            assetId = legalAssetId,
+            feeAsset = legalAssetId,
             callback = futureFee.completeCallback()
         )
 
@@ -657,10 +658,10 @@ class EchoFrameworkTest {
         framework.getFeeForContractOperation(
             userNameOrId = login,
             contractId = legalContractId,
-            methodName = "incrementCounter",
+            methodName = "testReturn",
             methodParams = listOf(),
-            assetId = "1.3.123456",
-            feeAsset = "1.3.123456",
+            assetId = legalAssetId,
+            feeAsset = "1.3.123",
             callback = futureFee.completeCallback()
         )
 
@@ -676,8 +677,8 @@ class EchoFrameworkTest {
         val futureAssets = FutureTask<List<Asset>>()
 
         framework.listAssets(
-            "ECHO", 10,
-            futureAssets.completeCallback()
+            lowerBound = "ECHO", limit = 10,
+            callback = futureAssets.completeCallback()
         )
 
         assertNotNull(futureAssets.get()?.isNotEmpty() ?: false)
@@ -708,15 +709,15 @@ class EchoFrameworkTest {
 //        val futureAsset = FutureTask<String>()
 //
 //        val asset = Asset("").apply {
-//            symbol = "ASSETM"
+//            symbol = "DMK"
 //            precision = 4
-//            issuer = Account("1.2.188")
-//            setBtsOptions(
-//                BitassetOptions(
-//                    86400, 7, 86400,
-//                    100, 2000
-//                )
-//            )
+//            issuer = Account(accountId)
+////            setBtsOptions(
+////                BitassetOptions(
+////                    86400, 7, 86400,
+////                    100, 2000
+////                )
+////            )
 //
 //            predictionMarket = false
 //        }
@@ -738,7 +739,7 @@ class EchoFrameworkTest {
 //        asset.assetOptions = options
 //
 //        framework.createAsset(
-//            "dimaty12345", "P5JRnzqtPYLxU9ypfndHczCqt178nzomv4DuspTPr1iTf",
+//            login, password,
 //            asset,
 //            futureAsset.completeCallback()
 //        )
@@ -757,11 +758,11 @@ class EchoFrameworkTest {
         framework.issueAsset(
             login,
             password,
-            "1.3.152",
-            "1",
-            secondLogin,
-            "message",
-            futureIssue.completeCallback()
+            asset = "1.3.3",
+            amount = "10000",
+            destinationIdOrName = login,
+            message = "Do it",
+            callback = futureIssue.completeCallback()
         )
 
         assertTrue(futureIssue.get() ?: false)
@@ -778,9 +779,9 @@ class EchoFrameworkTest {
         framework.createContract(
             login,
             password,
-            legalAssetId,
-            legalAssetId,
-            legalContractParamsBytecode,
+            assetId = legalAssetId,
+            feeAsset = legalAssetId,
+            byteCode = legalContractParamsBytecode,
             callback = object : Callback<String> {
                 override fun onSuccess(result: String) {
                     future.setComplete(result)
@@ -806,11 +807,10 @@ class EchoFrameworkTest {
         framework.createContract(
             login,
             password,
-            legalAssetId,
-            legalAssetId,
-            legalContractWithParamsBytecode,
-            listOf(InputValue(ContractAddressInputValueType(), "19439")),
-
+            assetId = legalAssetId,
+            feeAsset = legalAssetId,
+            byteCode = legalContractWithParamsBytecode,
+            params = listOf(InputValue(ContractAddressInputValueType(), "2587")),
             callback = object : Callback<String> {
                 override fun onSuccess(result: String) {
                     future.setComplete(result)
@@ -836,11 +836,11 @@ class EchoFrameworkTest {
         framework.callContract(
             login,
             password,
-            legalAssetId,
-            legalAssetId,
-            "1.16.16244",
-            "transfer",
-            listOf(),
+            assetId = legalAssetId,
+            feeAsset = legalAssetId,
+            contractId = legalContractId,
+            methodName = "transfer",
+            methodParams = listOf(),
             callback = future.completeCallback()
         )
 
@@ -868,11 +868,11 @@ class EchoFrameworkTest {
         framework.callContract(
             login,
             password,
-            legalAssetId,
-            legalAssetId,
-            "1.16.16244",
-            "transfer",
-            listOf(),
+            assetId = legalAssetId,
+            feeAsset = legalAssetId,
+            contractId = legalContractId,
+            methodName = "transfer",
+            methodParams = listOf(),
             callback = future.completeCallback()
         )
 
@@ -893,7 +893,7 @@ class EchoFrameworkTest {
             legalAssetId,
             legalAssetId,
             legalContractId,
-            "incrementCounter",
+            "testReturn",
             listOf(),
             "1000",
             callback = future.completeCallback()
@@ -913,15 +913,12 @@ class EchoFrameworkTest {
         val address = accountId
 
         framework.callContract(
-            ownerId, ownerPassword,
-            "1.3.0",
-            "1.3.0",
-            contractId,
-            "addUserToDoor",
-            listOf(
-                InputValue(NumberInputValueType("int64"), "3"),
-                InputValue(AccountAddressInputValueType(), address)
-            ),
+            login, password,
+            assetId = legalAssetId,
+            feeAsset = legalAssetId,
+            contractId = legalContractId,
+            methodName = "testAddressParameter",
+            methodParams = listOf(InputValue(AccountAddressInputValueType(), address)),
             callback = future.completeCallback()
         )
 
@@ -937,13 +934,13 @@ class EchoFrameworkTest {
         val future = FutureTask<String>()
 
         framework.callContract(
-            ownerId, ownerPassword, "1.3.0", "1.3.0", contractId, "addDoor",
-            listOf(
-                InputValue(NumberInputValueType("int64"), "3"),
-                InputValue(
-                    StringInputValueType(),
-                    "door + ${SimpleDateFormat("HH:mm").format(System.currentTimeMillis())}"
-                )
+            login, password,
+            assetId = legalAssetId,
+            feeAsset = legalAssetId,
+            contractId = legalContractId,
+            methodName = "testStringParameter",
+            methodParams = listOf(
+                InputValue(StringInputValueType(), "door123")
             ),
             callback = future.completeCallback()
         )
@@ -962,11 +959,11 @@ class EchoFrameworkTest {
         framework.callContract(
             login,
             password,
-            legalAssetId,
-            legalAssetId,
-            illegalContractId,
-            "incrementCounter",
-            listOf(),
+            assetId = legalAssetId,
+            feeAsset = legalAssetId,
+            contractId = illegalContractId,
+            methodName = "incrementCounter",
+            methodParams = listOf(),
             callback = future.completeCallback()
         )
 
@@ -984,10 +981,10 @@ class EchoFrameworkTest {
         framework.queryContract(
             login,
             legalAssetId,
-            legalContractId,
-            "getCount",
-            listOf(),
-            future.completeCallback()
+            contractId = legalContractId,
+            methodName = "testReturn",
+            methodParams = listOf(),
+            callback = future.completeCallback()
         )
 
         assertNotNull(future.get())
@@ -1004,11 +1001,11 @@ class EchoFrameworkTest {
 
         framework.queryContract(
             login,
-            legalAssetId,
-            illegalContractId,
-            "getCounter()",
-            listOf(),
-            future.completeCallback()
+            assetId = legalAssetId,
+            contractId = illegalContractId,
+            methodName = "testReturn",
+            methodParams = listOf(),
+            callback = future.completeCallback()
         )
 
         assertNotNull(future.get())
@@ -1025,8 +1022,8 @@ class EchoFrameworkTest {
         val future = FutureTask<ContractResult>()
 
         framework.getContractResult(
-            "1.17.34782",
-            future.completeCallback()
+            historyId = "1.17.4955",
+            callback = future.completeCallback()
         )
 
         val contractResult = future.get()
@@ -1043,10 +1040,10 @@ class EchoFrameworkTest {
         val future = FutureTask<List<Log>>()
 
         framework.getContractLogs(
-            "1.16.16803",
-            "1404100",
-            "1404111",
-            future.completeCallback()
+            contractId = legalContractId,
+            fromBlock = "70000",
+            toBlock = "70300",
+            callback = future.completeCallback()
         )
 
         val contractResult = future.get()
