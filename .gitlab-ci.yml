@@ -7,6 +7,7 @@ stages:
   - checkstyle
   - docgen
   - publish
+  - variables_test
 
 .build_template: &build_template_def
   stage: build
@@ -69,3 +70,13 @@ maven_publishing:
     - release
   script:
     - ./gradlew :echoframework:clean :echoframework:install :echoframework:bintrayUpload -PbintrayUser=$bintrayUserVar -PbintrayApiKey=$bintrayApiKeyVar
+
+var_test:
+  stage: variables_test
+  variables:
+      CI_DEBUG_TRACE: "true"
+  only:
+    - feature/ci_improvements
+  script:
+    - $version = 2
+    - export
