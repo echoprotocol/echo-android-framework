@@ -75,8 +75,8 @@ var_test:
   stage: variables_test
   variables:
       CI_DEBUG_TRACE: "true"
+      - $version = 2
   only:
     - feature/ci_improvements
   script:
-    - $version = 2
     - export
