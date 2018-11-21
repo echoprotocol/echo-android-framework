@@ -76,5 +76,5 @@ var_test:
   only:
     - feature/ci_improvements
   script:
-    - $version=5
+    - export version=5
     - export
