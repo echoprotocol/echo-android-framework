@@ -4,11 +4,10 @@ import com.google.common.primitives.UnsignedLong
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.ECHO_ASSET_ID
 import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
-import org.echo.mobile.framework.core.socket.SocketCoreComponent
 import org.echo.mobile.framework.exception.LocalException
+import org.echo.mobile.framework.exception.NotFoundException
 import org.echo.mobile.framework.facade.AssetsFacade
 import org.echo.mobile.framework.model.*
-import org.echo.mobile.framework.model.network.Network
 import org.echo.mobile.framework.model.operations.CreateAssetOperation
 import org.echo.mobile.framework.model.operations.IssueAssetOperationBuilder
 import org.echo.mobile.framework.processResult
@@ -17,8 +16,6 @@ import org.echo.mobile.framework.service.NetworkBroadcastApiService
 import org.echo.mobile.framework.support.concurrent.future.FutureTask
 import org.echo.mobile.framework.support.concurrent.future.completeCallback
 import org.echo.mobile.framework.support.dematerialize
-import org.echo.mobile.framework.support.error
-import org.echo.mobile.framework.support.value
 
 /**
  * Implementation of [AssetsFacade]
@@ -29,61 +26,72 @@ class AssetsFacadeImpl(
     private val databaseApiService: DatabaseApiService,
     private val networkBroadcastApiService: NetworkBroadcastApiService,
     private val cryptoCoreComponent: CryptoCoreComponent,
-    socketCoreComponent: SocketCoreComponent,
-    network: Network
-) : BaseNotifiedTransactionsFacade(
-    databaseApiService,
-    cryptoCoreComponent,
-    socketCoreComponent,
-    network
-), AssetsFacade {
+    private val notifiedTransactionsHelper: NotifiedTransactionsHelper
+) : BaseTransactionsFacade(databaseApiService, cryptoCoreComponent), AssetsFacade {
 
     override fun createAsset(
         name: String,
         password: String,
         asset: Asset,
-        callback: Callback<String>
-    ) = callback.processResult {
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<String>?
+    ) {
 
-        val operation = CreateAssetOperation(asset)
+        val callId: String
+        try {
+            val privateKey = cryptoCoreComponent.getPrivateKey(
+                name, password, AuthorityType.ACTIVE
+            )
 
-        val blockData = databaseApiService.getBlockData()
-        val chainId = getChainId()
-        val fees = getFees(listOf(operation), ECHO_ASSET_ID)
+            val accountsMap =
+                databaseApiService.getFullAccounts(listOf(name), false).dematerialize()
 
-        val privateKey = cryptoCoreComponent.getPrivateKey(
-            name,
-            password,
-            AuthorityType.ACTIVE
-        )
+            val account = accountsMap[name]?.account
+                ?: throw NotFoundException("Unable to find required account $name")
 
-        var account: Account? = null
+            checkOwnerAccount(account.name, password, account)
 
-        databaseApiService.getFullAccounts(listOf(name), false)
-            .value { accountsMap ->
-                account = accountsMap[name]?.account
-                        ?: throw LocalException("Unable to find required account $name")
+            val blockData = databaseApiService.getBlockData()
+            val chainId = getChainId()
+
+            val operation = CreateAssetOperation(asset)
+            val fees = getFees(listOf(operation), ECHO_ASSET_ID)
+
+            val transaction = Transaction(blockData, listOf(operation), chainId).apply {
+                setFees(fees)
+                addPrivateKey(privateKey)
             }
-            .error { accountsError ->
-                throw LocalException("Error occurred during accounts request", accountsError)
-            }
 
-        checkOwnerAccount(account!!.name, password, account!!)
+            callId = networkBroadcastApiService.broadcastTransactionWithCallback(transaction)
+                .dematerialize().toString()
 
-        val transaction = Transaction(blockData, listOf(operation), chainId).apply {
-            setFees(fees)
-            addPrivateKey(privateKey)
+            broadcastCallback.onSuccess(true)
+
+        } catch (ex: Exception) {
+            broadcastCallback.onError(ex as? LocalException ?: LocalException(ex))
+            return
         }
 
-        val callId =
-            networkBroadcastApiService.broadcastTransactionWithCallback(transaction)
-                .dematerialize()
+        resultCallback?.let {
+            retrieveTransactionResult(callId, it)
+        }
+    }
 
-        val future = FutureTask<TransactionResult>()
-        subscribeOnTransactionResult(callId.toString(), future.completeCallback())
+    private fun retrieveTransactionResult(callId: String, callback: Callback<String>) {
+        try {
+            val future = FutureTask<TransactionResult>()
+            notifiedTransactionsHelper.subscribeOnTransactionResult(
+                callId,
+                future.completeCallback()
+            )
 
-        future.get()?.trx?.operationsWithResults?.values?.firstOrNull()
-            ?: throw LocalException("Result of contract creation not found.")
+            val result = future.get()?.trx?.operationsWithResults?.values?.firstOrNull()
+                ?: throw NotFoundException("Result of asset creation not found.")
+
+            callback.onSuccess(result)
+        } catch (ex: Exception) {
+            callback.onError(ex as? LocalException ?: LocalException(ex))
+        }
     }
 
     override fun issueAsset(
@@ -95,38 +103,32 @@ class AssetsFacadeImpl(
         message: String?,
         callback: Callback<Boolean>
     ) = callback.processResult {
-        var issuer: Account? = null
-        var target: Account? = null
+        val accountsMap =
+            databaseApiService.getFullAccounts(listOf(issuerNameOrId, destinationIdOrName), false)
+                .dematerialize()
 
-        databaseApiService.getFullAccounts(listOf(issuerNameOrId, destinationIdOrName), false)
-            .value { accountsMap ->
-                issuer = accountsMap[issuerNameOrId]?.account
-                        ?: throw LocalException("Unable to find required account $issuerNameOrId")
-                target = accountsMap[destinationIdOrName]?.account
-                        ?:
-                        throw LocalException("Unable to find required account $destinationIdOrName")
-            }
-            .error { accountsError ->
-                throw LocalException("Error occurred during accounts request", accountsError)
-            }
+        val issuer = accountsMap[issuerNameOrId]?.account
+            ?: throw NotFoundException("Unable to find required account $issuerNameOrId")
 
-        checkOwnerAccount(issuer!!.name, password, issuer!!)
+        val target = accountsMap[destinationIdOrName]?.account
+            ?: throw NotFoundException("Unable to find required account $destinationIdOrName")
+
+        checkOwnerAccount(issuer.name, password, issuer)
 
         val operation = IssueAssetOperationBuilder()
-            .setIssuer(issuer!!)
+            .setIssuer(issuer)
             .setAmount(AssetAmount(UnsignedLong.valueOf(amount.toLong()), Asset(asset)))
-            .setDestination(target!!)
+            .setDestination(target)
             .build()
 
-        val privateKey =
-            cryptoCoreComponent.getPrivateKey(
-                issuerNameOrId,
-                password,
-                AuthorityType.ACTIVE
-            )
+        val privateKey = cryptoCoreComponent.getPrivateKey(
+            issuerNameOrId,
+            password,
+            AuthorityType.ACTIVE
+        )
 
         val memoPrivateKey = memoKey(issuerNameOrId, password)
-        operation.memo = generateMemo(memoPrivateKey, issuer!!, target!!, message)
+        operation.memo = generateMemo(memoPrivateKey, issuer, target, message)
 
         val blockData = databaseApiService.getBlockData()
         val chainId = getChainId()
