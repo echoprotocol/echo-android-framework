@@ -73,7 +73,8 @@ maven_publishing:
 
 var_test:
   stage: variables_test
-  script: export version=4
+  variables:
+    - $version=4
   only:
     - feature/ci_improvements
   script:
