@@ -1,27 +1,23 @@
 package org.echo.mobile.framework.facade.internal
 
 import org.echo.mobile.framework.Callback
-import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
 import org.echo.mobile.framework.core.socket.SocketCoreComponent
 import org.echo.mobile.framework.core.socket.SocketMessengerListener
 import org.echo.mobile.framework.model.TransactionResult
 import org.echo.mobile.framework.model.network.Network
-import org.echo.mobile.framework.service.DatabaseApiService
 import org.echo.mobile.framework.service.TransactionSubscriptionManager
 import org.echo.mobile.framework.service.internal.subscription.TransactionSubscriptionManagerImpl
 import org.echo.mobile.framework.support.toJsonObject
 
 /**
- * Includes base logic for notified transactions assembly
+ * Includes logic for notified transactions assembly
  *
  * @author Daria Pechkovskaya
  */
-abstract class BaseNotifiedTransactionsFacade(
-    databaseApiService: DatabaseApiService,
-    cryptoCoreComponent: CryptoCoreComponent,
+class NotifiedTransactionsHelper(
     private val socketCoreComponent: SocketCoreComponent,
     private val network: Network
-) : BaseTransactionsFacade(databaseApiService, cryptoCoreComponent) {
+) {
 
     @Volatile
     private var subscribed = false
@@ -34,10 +30,10 @@ abstract class BaseNotifiedTransactionsFacade(
         TransactionSubscriptionManagerImpl(network)
     }
 
-    protected fun subscribeOnTransactionResult(
-        callId: String,
-        callback: Callback<TransactionResult>
-    ) {
+    /**
+     * Subscribes on notifying transaction result by [callId]
+     */
+    fun subscribeOnTransactionResult(callId: String, callback: Callback<TransactionResult>) {
         subscribeSocket()
         transactionSubscriptionManager.register(callId, callback)
     }
@@ -58,7 +54,6 @@ abstract class BaseNotifiedTransactionsFacade(
             }
 
             transactionSubscriptionManager.tryProcessEvent(event)
-
         }
 
         override fun onFailure(error: Throwable) = resetState()

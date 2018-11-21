@@ -1,6 +1,5 @@
 package org.echo.mobile.framework
 
-import com.google.common.primitives.UnsignedLong
 import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent
 import org.echo.mobile.framework.core.mapper.internal.MapperCoreComponentImpl
 import org.echo.mobile.framework.core.socket.internal.SocketCoreComponentImpl
@@ -13,6 +12,7 @@ import org.echo.mobile.framework.model.contract.ContractStruct
 import org.echo.mobile.framework.model.contract.input.InputValue
 import org.echo.mobile.framework.service.*
 import org.echo.mobile.framework.service.internal.*
+import org.echo.mobile.framework.facade.internal.NotifiedTransactionsHelper
 import org.echo.mobile.framework.support.Settings
 import org.echo.mobile.framework.support.concurrent.*
 
@@ -95,19 +95,24 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             networkBroadcastApiService,
             settings.cryptoComponent
         )
+
+        val notifiedTransactionsHelper =
+            NotifiedTransactionsHelper(
+                socketCoreComponent,
+                settings.network
+            )
+
         assetsFacade = AssetsFacadeImpl(
             databaseApiService,
             networkBroadcastApiService,
             settings.cryptoComponent,
-            socketCoreComponent,
-            settings.network
+            notifiedTransactionsHelper
         )
         contractsFacade = ContractsFacadeImpl(
             databaseApiService,
             networkBroadcastApiService,
             settings.cryptoComponent,
-            socketCoreComponent,
-            settings.network
+            notifiedTransactionsHelper
         )
     }
 
@@ -239,18 +244,10 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
 
     override fun subscribeOnContractLogs(
         contractId: String,
-        fromBlock: String,
-        toBlock: String,
         listener: UpdateListener<List<Log>>,
         callback: Callback<Boolean>
     ) = dispatch(Runnable {
-        subscriptionFacade.subscribeOnContractLogs(
-            contractId,
-            fromBlock,
-            toBlock,
-            listener,
-            callback
-        )
+        subscriptionFacade.subscribeOnContractLogs(contractId, listener, callback)
     })
 
     override fun unsubscribeFromContractLogs(
@@ -266,29 +263,25 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
 
     override fun unsubscribeFromBlockchainData(callback: Callback<Boolean>) =
         dispatch(Runnable {
-            subscriptionFacade.unsubscribeFromBlockchainData(
-                callback
-            )
+            subscriptionFacade.unsubscribeFromBlockchainData(callback)
         })
 
     override fun unsubscribeFromBlock(callback: Callback<Boolean>) =
         dispatch(Runnable {
-            subscriptionFacade.unsubscribeFromBlock(
-                callback
-            )
+            subscriptionFacade.unsubscribeFromBlock(callback)
         })
 
     override fun createAsset(
         name: String,
         password: String,
         asset: Asset,
-        callback: Callback<String>
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<String>?
     ) = dispatch(Runnable {
         assetsFacade.createAsset(
-            name,
-            password,
+            name, password,
             asset,
-            callback
+            broadcastCallback.wrapOriginal(), resultCallback?.wrapOriginal()
         )
     })
 
@@ -392,7 +385,8 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         params: List<InputValue>,
         gasLimit: Long,
         gasPrice: Long,
-        callback: Callback<String>
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<String>?
     ) = dispatch(Runnable {
         contractsFacade.createContract(
             registrarNameOrId,
@@ -403,7 +397,8 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             params,
             gasLimit,
             gasPrice,
-            callback.wrapOriginal()
+            broadcastCallback.wrapOriginal(),
+            resultCallback?.wrapOriginal()
         )
     })
 
@@ -418,7 +413,8 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         value: String,
         gasLimit: Long,
         gasPrice: Long,
-        callback: Callback<String>
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<String>?
     ) = dispatch(Runnable {
         contractsFacade.callContract(
             userNameOrId,
@@ -431,7 +427,8 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             value,
             gasLimit,
             gasPrice,
-            callback.wrapOriginal()
+            broadcastCallback.wrapOriginal(),
+            resultCallback?.wrapOriginal()
         )
     })
 

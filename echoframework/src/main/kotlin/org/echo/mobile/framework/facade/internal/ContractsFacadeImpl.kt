@@ -3,16 +3,18 @@ package org.echo.mobile.framework.facade.internal
 import com.google.common.primitives.UnsignedLong
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
-import org.echo.mobile.framework.core.socket.SocketCoreComponent
 import org.echo.mobile.framework.exception.LocalException
+import org.echo.mobile.framework.exception.NotFoundException
 import org.echo.mobile.framework.facade.ContractsFacade
-import org.echo.mobile.framework.model.*
+import org.echo.mobile.framework.model.AuthorityType
+import org.echo.mobile.framework.model.Log
+import org.echo.mobile.framework.model.Transaction
+import org.echo.mobile.framework.model.TransactionResult
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
 import org.echo.mobile.framework.model.contract.input.ContractInputEncoder
 import org.echo.mobile.framework.model.contract.input.InputValue
-import org.echo.mobile.framework.model.network.Network
 import org.echo.mobile.framework.model.operations.ContractOperationBuilder
 import org.echo.mobile.framework.processResult
 import org.echo.mobile.framework.service.DatabaseApiService
@@ -20,8 +22,6 @@ import org.echo.mobile.framework.service.NetworkBroadcastApiService
 import org.echo.mobile.framework.support.concurrent.future.FutureTask
 import org.echo.mobile.framework.support.concurrent.future.completeCallback
 import org.echo.mobile.framework.support.dematerialize
-import org.echo.mobile.framework.support.error
-import org.echo.mobile.framework.support.value
 
 /**
  * Implementation of [ContractsFacade]
@@ -34,13 +34,10 @@ class ContractsFacadeImpl(
     private val databaseApiService: DatabaseApiService,
     private val networkBroadcastApiService: NetworkBroadcastApiService,
     private val cryptoCoreComponent: CryptoCoreComponent,
-    socketCoreComponent: SocketCoreComponent,
-    network: Network
-) : BaseNotifiedTransactionsFacade(
+    private val notifiedTransactionsHelper: NotifiedTransactionsHelper
+) : BaseTransactionsFacade(
     databaseApiService,
-    cryptoCoreComponent,
-    socketCoreComponent,
-    network
+    cryptoCoreComponent
 ), ContractsFacade {
 
     override fun createContract(
@@ -52,57 +49,82 @@ class ContractsFacadeImpl(
         params: List<InputValue>,
         gasLimit: Long,
         gasPrice: Long,
-        callback: Callback<String>
-    ) = callback.processResult {
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<String>?
+    ) {
 
-        var registrar: Account? = null
+        val callId: String
+        try {
 
-        databaseApiService.getFullAccounts(listOf(registrarNameOrId), false)
-            .value { accountsMap ->
-                registrar = accountsMap[registrarNameOrId]?.account
-                        ?:
-                        throw LocalException("Unable to find required account $registrarNameOrId")
+            val accountsMap =
+                databaseApiService.getFullAccounts(listOf(registrarNameOrId), false).dematerialize()
+            val registrar = accountsMap[registrarNameOrId]?.account
+                ?: throw LocalException("Unable to find required account $registrarNameOrId")
+
+            checkOwnerAccount(registrar.name, password, registrar)
+
+            val privateKey = cryptoCoreComponent.getPrivateKey(
+                registrar.name,
+                password,
+                AuthorityType.ACTIVE
+            )
+
+            val constructorParams = ContractInputEncoder().encode("", params)
+
+            val contractOperation = ContractOperationBuilder()
+                .setAsset(assetId)
+                .setRegistrar(registrar)
+                .setGas(gasLimit)
+                .setGasPrice(gasPrice)
+                .setContractCode(byteCode + constructorParams)
+                .build()
+
+            val blockData = databaseApiService.getBlockData()
+            val chainId = getChainId()
+            val fees = getFees(listOf(contractOperation), feeAsset ?: assetId)
+
+            val transaction = Transaction(blockData, listOf(contractOperation), chainId).apply {
+                setFees(fees)
+                addPrivateKey(privateKey)
             }
-            .error { accountsError ->
-                throw LocalException("Error occurred during accounts request", accountsError)
-            }
 
-        checkOwnerAccount(registrar!!.name, password, registrar!!)
+            callId = networkBroadcastApiService.broadcastTransactionWithCallback(transaction)
+                .dematerialize().toString()
 
-        val privateKey = cryptoCoreComponent.getPrivateKey(
-            registrar!!.name,
-            password,
-            AuthorityType.ACTIVE
-        )
+            broadcastCallback.onSuccess(true)
 
-        val constructorParams = ContractInputEncoder().encode("", params)
-
-        val contractOperation = ContractOperationBuilder()
-            .setAsset(assetId)
-            .setRegistrar(registrar!!)
-            .setGas(gasLimit)
-            .setGasPrice(gasPrice)
-            .setContractCode(byteCode + constructorParams)
-            .build()
-
-        val blockData = databaseApiService.getBlockData()
-        val chainId = getChainId()
-        val fees = getFees(listOf(contractOperation), feeAsset ?: assetId)
-
-        val transaction = Transaction(blockData, listOf(contractOperation), chainId).apply {
-            setFees(fees)
-            addPrivateKey(privateKey)
+        } catch (ex: Exception) {
+            broadcastCallback.onError(ex as? LocalException ?: LocalException(ex))
+            return
         }
 
-        val callId =
-            networkBroadcastApiService.broadcastTransactionWithCallback(transaction)
-                .dematerialize()
 
-        val future = FutureTask<TransactionResult>()
-        subscribeOnTransactionResult(callId.toString(), future.completeCallback())
+        resultCallback?.let {
+            retrieveTransactionResult(callId, it)
+        }
+    }
 
-        future.get()?.trx?.operationsWithResults?.values?.firstOrNull()
-            ?: throw LocalException("Result of contract creation not found.")
+    private fun retrieveTransactionResult(
+        callId: String,
+        callback: Callback<String>,
+        default: String? = null
+    ) {
+        try {
+            val future = FutureTask<TransactionResult>()
+            notifiedTransactionsHelper.subscribeOnTransactionResult(
+                callId,
+                future.completeCallback()
+            )
+
+            val result = future.get()?.trx?.operationsWithResults?.values?.firstOrNull()
+                ?: default
+                ?: throw NotFoundException("Result of operation not found.")
+
+            callback.onSuccess(result)
+
+        } catch (ex: Exception) {
+            callback.onError(ex as? LocalException ?: LocalException(ex))
+        }
     }
 
 
@@ -117,57 +139,61 @@ class ContractsFacadeImpl(
         value: String,
         gasLimit: Long,
         gasPrice: Long,
-        callback: Callback<String>
-    ) = callback.processResult {
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<String>?
+    ) {
 
-        var registrar: Account? = null
+        val callId: String
+        try {
+            val accountsMap =
+                databaseApiService.getFullAccounts(listOf(userNameOrId), false).dematerialize()
 
-        databaseApiService.getFullAccounts(listOf(userNameOrId), false)
-            .value { accountsMap ->
-                registrar = accountsMap[userNameOrId]?.account
-                        ?: throw LocalException("Unable to find required account $userNameOrId")
-            }
-            .error { accountsError ->
-                throw LocalException("Error occurred during accounts request", accountsError)
-            }
+            val registrar = accountsMap[userNameOrId]?.account
+                ?: throw LocalException("Unable to find required account $userNameOrId")
 
-        checkOwnerAccount(registrar!!.name, password, registrar!!)
+            checkOwnerAccount(registrar.name, password, registrar)
 
-        val privateKey = cryptoCoreComponent.getPrivateKey(
-            registrar!!.name,
-            password,
-            AuthorityType.ACTIVE
-        )
+            val privateKey = cryptoCoreComponent.getPrivateKey(
+                registrar.name,
+                password,
+                AuthorityType.ACTIVE
+            )
 
-        val contractCode = ContractInputEncoder().encode(methodName, methodParams)
+            val contractCode = ContractInputEncoder().encode(methodName, methodParams)
 
-        val contractOperation = ContractOperationBuilder()
-            .setAsset(assetId)
-            .setRegistrar(registrar!!)
-            .setGas(gasLimit)
-            .setGasPrice(gasPrice)
-            .setReceiver(contractId)
-            .setContractCode(contractCode)
-            .setValue(UnsignedLong.valueOf(value))
-            .build()
+            val contractOperation = ContractOperationBuilder()
+                .setAsset(assetId)
+                .setRegistrar(registrar)
+                .setGas(gasLimit)
+                .setGasPrice(gasPrice)
+                .setReceiver(contractId)
+                .setContractCode(contractCode)
+                .setValue(UnsignedLong.valueOf(value))
+                .build()
 
-        val blockData = databaseApiService.getBlockData()
-        val chainId = getChainId()
-        val fees = getFees(listOf(contractOperation), feeAsset ?: assetId)
+            val blockData = databaseApiService.getBlockData()
+            val chainId = getChainId()
+            val fees = getFees(listOf(contractOperation), feeAsset ?: assetId)
 
-        val transaction = Transaction(blockData, listOf(contractOperation), chainId)
-            .apply {
+            val transaction = Transaction(blockData, listOf(contractOperation), chainId).apply {
                 setFees(fees)
                 addPrivateKey(privateKey)
             }
 
-        val callId = networkBroadcastApiService.broadcastTransactionWithCallback(transaction)
-            .dematerialize()
+            callId = networkBroadcastApiService.broadcastTransactionWithCallback(transaction)
+                .dematerialize().toString()
 
-        val future = FutureTask<TransactionResult>()
-        subscribeOnTransactionResult(callId.toString(), future.completeCallback())
+            broadcastCallback.onSuccess(true)
 
-        future.get()?.trx?.operationsWithResults?.values?.firstOrNull() ?: ""
+        } catch (ex: Exception) {
+            broadcastCallback.onError(ex as? LocalException ?: LocalException(ex))
+            return
+        }
+
+
+        resultCallback?.let {
+            retrieveTransactionResult(callId, it, default = "")
+        }
     }
 
     override fun queryContract(
@@ -178,22 +204,18 @@ class ContractsFacadeImpl(
         methodParams: List<InputValue>,
         callback: Callback<String>
     ) = callback.processResult {
-        var registrar: Account? = null
 
-        databaseApiService.getFullAccounts(listOf(userNameOrId), false)
-            .value { accountsMap ->
-                registrar = accountsMap[userNameOrId]?.account
-                        ?: throw LocalException("Unable to find required account $userNameOrId")
-            }
-            .error { accountsError ->
-                throw LocalException("Error occurred during accounts request", accountsError)
-            }
+        val accountsMap =
+            databaseApiService.getFullAccounts(listOf(userNameOrId), false).dematerialize()
+
+        val registrar = accountsMap[userNameOrId]?.account
+            ?: throw LocalException("Unable to find required account $userNameOrId")
 
         val contractCode = ContractInputEncoder().encode(methodName, methodParams)
 
         databaseApiService.callContractNoChangingState(
             contractId,
-            registrar!!.getObjectId(),
+            registrar.getObjectId(),
             assetId,
             contractCode
         ).dematerialize()
@@ -205,11 +227,7 @@ class ContractsFacadeImpl(
     override fun getContractLogs(
         contractId: String, fromBlock: String, toBlock: String, callback: Callback<List<Log>>
     ) = callback.processResult(
-        databaseApiService.getContractLogs(
-            contractId,
-            fromBlock,
-            toBlock
-        )
+        databaseApiService.getContractLogs(contractId, fromBlock, toBlock)
     )
 
     override fun getContracts(

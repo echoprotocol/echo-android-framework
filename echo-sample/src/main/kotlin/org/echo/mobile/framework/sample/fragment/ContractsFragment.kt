@@ -70,9 +70,9 @@ class ContractsFragment : BaseFragment() {
                 ECHO_ASSET_ID,
                 null,
                 etBytecode.text.toString(),
-                callback = object : Callback<String> {
-                    override fun onSuccess(result: String) {
-                        updateStatus("Contract creation succeed", true)
+                broadcastCallback = object : Callback<Boolean> {
+                    override fun onSuccess(result: Boolean) {
+                        updateStatus("Contract creation broadcasted", true)
                     }
 
                     override fun onError(error: LocalException) {
@@ -94,9 +94,9 @@ class ContractsFragment : BaseFragment() {
                 etContractId.text.toString(),
                 etMethodName.text.toString(),
                 parseContractParams(etMethodParams.text.toString()),
-                callback = object : Callback<String> {
-                    override fun onSuccess(result: String) {
-                        updateStatus("Contract called succeed", true)
+                broadcastCallback = object : Callback<Boolean> {
+                    override fun onSuccess(result: Boolean) {
+                        updateStatus("Contract called broadcasted", true)
                     }
 
                     override fun onError(error: LocalException) {

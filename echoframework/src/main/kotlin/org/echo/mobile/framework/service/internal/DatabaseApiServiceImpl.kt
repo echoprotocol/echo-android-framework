@@ -50,7 +50,7 @@ class DatabaseApiServiceImpl(
                 }
 
                 override fun onError(error: LocalException) {
-                    callback.onError(error)
+                    callback.onError(LocalException("Error occurred during accounts request", error))
                 }
 
             },

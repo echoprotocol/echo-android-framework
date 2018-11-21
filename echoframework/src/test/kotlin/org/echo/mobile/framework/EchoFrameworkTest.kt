@@ -215,6 +215,7 @@ class EchoFrameworkTest {
         assertTrue(account != null)
     }
 
+
     @Test
     fun checkAccountReservedTest() {
         val framework = initFramework()
@@ -545,7 +546,7 @@ class EchoFrameworkTest {
         contractId: String,
         methodName: String,
         framework: EchoFramework,
-        callback: Callback<String>
+        sentCallback: Callback<Boolean>
     ) {
         framework.callContract(
             userNameOrId = login,
@@ -555,7 +556,7 @@ class EchoFrameworkTest {
             contractId = contractId,
             methodName = methodName,
             methodParams = listOf(),
-            callback = callback
+            broadcastCallback = sentCallback
         )
     }
 
@@ -774,6 +775,7 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
+        val broadcastFuture = FutureTask<Boolean>()
         val future = FutureTask<String>()
 
         framework.createContract(
@@ -782,17 +784,11 @@ class EchoFrameworkTest {
             assetId = legalAssetId,
             feeAsset = legalAssetId,
             byteCode = legalContractParamsBytecode,
-            callback = object : Callback<String> {
-                override fun onSuccess(result: String) {
-                    future.setComplete(result)
-                }
-
-                override fun onError(error: LocalException) {
-                    future.setComplete(error)
-                }
-            }
+            broadcastCallback = broadcastFuture.completeCallback(),
+            resultCallback = future.completeCallback()
         )
 
+        assertTrue(broadcastFuture.get() ?: false)
         assertTrue(future.get()?.startsWith("1.17.") ?: false)
     }
 
@@ -802,6 +798,7 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
+        val broadcastFuture = FutureTask<Boolean>()
         val future = FutureTask<String>()
 
         framework.createContract(
@@ -811,17 +808,11 @@ class EchoFrameworkTest {
             feeAsset = legalAssetId,
             byteCode = legalContractWithParamsBytecode,
             params = listOf(InputValue(ContractAddressInputValueType(), "2587")),
-            callback = object : Callback<String> {
-                override fun onSuccess(result: String) {
-                    future.setComplete(result)
-                }
-
-                override fun onError(error: LocalException) {
-                    future.setComplete(error)
-                }
-            }
+            broadcastCallback = broadcastFuture.completeCallback(),
+            resultCallback = future.completeCallback()
         )
 
+        assertTrue(broadcastFuture.get() ?: false)
         assertTrue(future.get()?.startsWith("1.17.") ?: false)
     }
 
@@ -831,6 +822,7 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
+        val broadcastFuture = FutureTask<Boolean>()
         val future = FutureTask<String>()
 
         framework.callContract(
@@ -841,9 +833,11 @@ class EchoFrameworkTest {
             contractId = legalContractId,
             methodName = "transfer",
             methodParams = listOf(),
-            callback = future.completeCallback()
+            broadcastCallback = broadcastFuture.completeCallback(),
+            resultCallback = future.completeCallback()
         )
 
+        assertTrue(broadcastFuture.get() ?: false)
         assertTrue(future.get()?.startsWith("1.17.") ?: false)
     }
 
@@ -863,6 +857,7 @@ class EchoFrameworkTest {
 
         }, futureSubscriptionResult.completeCallback())
 
+        val broadcastFuture = FutureTask<Boolean>()
         val future = FutureTask<String>()
 
         framework.callContract(
@@ -873,9 +868,11 @@ class EchoFrameworkTest {
             contractId = legalContractId,
             methodName = "transfer",
             methodParams = listOf(),
-            callback = future.completeCallback()
+            broadcastCallback = broadcastFuture.completeCallback(),
+            resultCallback = future.completeCallback()
         )
 
+        assertTrue(broadcastFuture.get() ?: false)
         assertTrue(future.get(15, TimeUnit.SECONDS)?.startsWith("1.17.") ?: false)
     }
 
@@ -885,6 +882,7 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
+        val broadcastFuture = FutureTask<Boolean>()
         val future = FutureTask<String>()
 
         framework.callContract(
@@ -896,9 +894,11 @@ class EchoFrameworkTest {
             "testReturn",
             listOf(),
             "1000",
-            callback = future.completeCallback()
+            broadcastCallback = broadcastFuture.completeCallback(),
+            resultCallback = future.completeCallback()
         )
 
+        assertTrue(broadcastFuture.get() ?: false)
         assertTrue(future.get()?.startsWith("1.17.") ?: false)
     }
 
@@ -908,6 +908,7 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
+        val broadcastFuture = FutureTask<Boolean>()
         val future = FutureTask<String>()
 
         val address = accountId
@@ -919,9 +920,11 @@ class EchoFrameworkTest {
             contractId = legalContractId,
             methodName = "testAddressParameter",
             methodParams = listOf(InputValue(AccountAddressInputValueType(), address)),
-            callback = future.completeCallback()
+            broadcastCallback = broadcastFuture.completeCallback(),
+            resultCallback = future.completeCallback()
         )
 
+        assertTrue(broadcastFuture.get() ?: false)
         assertTrue(future.get()?.startsWith("1.17.") ?: false)
     }
 
@@ -931,6 +934,7 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
+        val broadcastFuture = FutureTask<Boolean>()
         val future = FutureTask<String>()
 
         framework.callContract(
@@ -942,9 +946,11 @@ class EchoFrameworkTest {
             methodParams = listOf(
                 InputValue(StringInputValueType(), "door123")
             ),
-            callback = future.completeCallback()
+            broadcastCallback = broadcastFuture.completeCallback(),
+            resultCallback = future.completeCallback()
         )
 
+        assertTrue(broadcastFuture.get() ?: false)
         assertTrue(future.get()?.startsWith("1.17.") ?: false)
     }
 
@@ -954,6 +960,7 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
+        val broadcastFuture = FutureTask<Boolean>()
         val future = FutureTask<String>()
 
         framework.callContract(
@@ -964,9 +971,11 @@ class EchoFrameworkTest {
             contractId = illegalContractId,
             methodName = "incrementCounter",
             methodParams = listOf(),
-            callback = future.completeCallback()
+            broadcastCallback = broadcastFuture.completeCallback(),
+            resultCallback = future.completeCallback()
         )
 
+        assertFalse(broadcastFuture.get() ?: false)
         assertNull(future.get())
     }
 
