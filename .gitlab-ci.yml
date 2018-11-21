@@ -74,8 +74,7 @@ maven_publishing:
 var_test:
   stage: variables_test
   variables:
-      CI_DEBUG_TRACE: "true"
-      - $version = 2
+    - $version = $version + 1
   only:
     - feature/ci_improvements
   script:
