@@ -1,4 +1,4 @@
-[ ![Download](https://api.bintray.com/packages/echo/mobile/android-framework-stable/images/download.svg?version=1.0.8) ](https://bintray.com/echo/mobile/android-framework-stable/1.0.8/link)
+[ ![Download](https://api.bintray.com/packages/echo/mobile/android-framework-stable/images/download.svg) ](https://bintray.com/echo/mobile/android-framework-stable/_latestVersion)
 
 # echo-android-framework (echo-android-framework)
 
