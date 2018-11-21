@@ -82,3 +82,8 @@ task analyzeCode(type: JavaExec) {
 check.dependsOn(analyzeCode)
 
 apply from: "$rootDir/config/publish.gradle"
+
+task copyJavaDocs(type: Copy) {
+    from "${buildDir}/javadoc"
+    into "${rootDir}/docs"
+}
