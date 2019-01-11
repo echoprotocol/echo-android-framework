@@ -3,6 +3,7 @@ package org.echo.mobile.framework.model.contract
 import org.echo.mobile.framework.model.contract.output.*
 import org.junit.Assert.*
 import org.junit.Test
+import java.math.BigInteger
 
 /**
  * Test cases for [ContractOutputDecoder]
@@ -14,12 +15,12 @@ class ContractOutputDecoderTest {
     @Test
     fun decodeIntTest() {
         val source =
-            "000000000000000000000000000000000000000000000000000000000000000a".toByteArray()
+            "0000000000000000000000000000000000000000000000056bc75e2d63100000".toByteArray()
 
         val decoder = ContractOutputDecoder()
         val result = decoder.decode(source, listOf(NumberOutputValueType()))
 
-        assertEquals(result.first().value as Long, 10)
+        assertEquals(result.first().value as BigInteger, "100000000000000000000".toBigInteger())
     }
 
     @Test
