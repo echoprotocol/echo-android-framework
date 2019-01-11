@@ -271,10 +271,12 @@ class InformationFacadeImpl(
         accountRegistry: MutableMap<String, Account>,
         assetsRegistry: MutableList<Asset>
     ) {
-        val createdAssetId = operation.asset.getObjectId()
+        val createdAssetSymbol = operation.asset.symbol
 
-        getAsset(createdAssetId, assetsRegistry)?.let { notNullAsset ->
-            operation.asset = notNullAsset
+        if (createdAssetSymbol != null) {
+            getAssetBySymbol(createdAssetSymbol, assetsRegistry)?.let { notNullAsset ->
+                operation.asset = notNullAsset
+            }
         }
 
         val accountId = operation.asset.issuer?.getObjectId() ?: return
@@ -373,6 +375,23 @@ class InformationFacadeImpl(
         databaseApiService.getAssets(listOf(assetId))
             .value { assets ->
                 assets.find { it.getObjectId() == assetId }?.let { notNullAsset ->
+                    assetsRegistry.add(notNullAsset)
+                    return notNullAsset
+                }
+            }
+        return null
+    }
+
+    private fun getAssetBySymbol(symbol: String, assetsRegistry: MutableList<Asset>): Asset? {
+        val cachedAsset = assetsRegistry.find { it.symbol == symbol }
+
+        cachedAsset?.let { notNullCachedAsset ->
+            return notNullCachedAsset
+        }
+
+        databaseApiService.lookupAssetsSymbols(listOf(symbol))
+            .value { assets ->
+                assets.find { it.symbol == symbol }?.let { notNullAsset ->
                     assetsRegistry.add(notNullAsset)
                     return notNullAsset
                 }
