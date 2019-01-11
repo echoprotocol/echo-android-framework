@@ -3,18 +3,51 @@ package org.echo.mobile.framework
 import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent
 import org.echo.mobile.framework.core.mapper.internal.MapperCoreComponentImpl
 import org.echo.mobile.framework.core.socket.internal.SocketCoreComponentImpl
-import org.echo.mobile.framework.facade.*
-import org.echo.mobile.framework.facade.internal.*
-import org.echo.mobile.framework.model.*
+import org.echo.mobile.framework.facade.AssetsFacade
+import org.echo.mobile.framework.facade.AuthenticationFacade
+import org.echo.mobile.framework.facade.ContractsFacade
+import org.echo.mobile.framework.facade.FeeFacade
+import org.echo.mobile.framework.facade.InformationFacade
+import org.echo.mobile.framework.facade.InitializerFacade
+import org.echo.mobile.framework.facade.SubscriptionFacade
+import org.echo.mobile.framework.facade.TransactionsFacade
+import org.echo.mobile.framework.facade.internal.AssetsFacadeImpl
+import org.echo.mobile.framework.facade.internal.AuthenticationFacadeImpl
+import org.echo.mobile.framework.facade.internal.ContractsFacadeImpl
+import org.echo.mobile.framework.facade.internal.FeeFacadeImpl
+import org.echo.mobile.framework.facade.internal.InformationFacadeImpl
+import org.echo.mobile.framework.facade.internal.InitializerFacadeImpl
+import org.echo.mobile.framework.facade.internal.NotifiedTransactionsHelper
+import org.echo.mobile.framework.facade.internal.SubscriptionFacadeImpl
+import org.echo.mobile.framework.facade.internal.TransactionsFacadeImpl
+import org.echo.mobile.framework.model.Asset
+import org.echo.mobile.framework.model.Balance
+import org.echo.mobile.framework.model.Block
+import org.echo.mobile.framework.model.DynamicGlobalProperties
+import org.echo.mobile.framework.model.FullAccount
+import org.echo.mobile.framework.model.HistoryResponse
+import org.echo.mobile.framework.model.Log
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
 import org.echo.mobile.framework.model.contract.input.InputValue
-import org.echo.mobile.framework.service.*
-import org.echo.mobile.framework.service.internal.*
-import org.echo.mobile.framework.facade.internal.NotifiedTransactionsHelper
+import org.echo.mobile.framework.service.AccountHistoryApiService
+import org.echo.mobile.framework.service.CryptoApiService
+import org.echo.mobile.framework.service.DatabaseApiService
+import org.echo.mobile.framework.service.LoginApiService
+import org.echo.mobile.framework.service.NetworkBroadcastApiService
+import org.echo.mobile.framework.service.UpdateListener
+import org.echo.mobile.framework.service.internal.AccountHistoryApiServiceImpl
+import org.echo.mobile.framework.service.internal.CryptoApiServiceImpl
+import org.echo.mobile.framework.service.internal.DatabaseApiServiceImpl
+import org.echo.mobile.framework.service.internal.LoginApiServiceImpl
+import org.echo.mobile.framework.service.internal.NetworkBroadcastApiServiceImpl
 import org.echo.mobile.framework.support.Settings
-import org.echo.mobile.framework.support.concurrent.*
+import org.echo.mobile.framework.support.concurrent.Dispatcher
+import org.echo.mobile.framework.support.concurrent.ExecutorServiceDispatcher
+import org.echo.mobile.framework.support.concurrent.MainThreadAccountListener
+import org.echo.mobile.framework.support.concurrent.MainThreadCallback
+import org.echo.mobile.framework.support.concurrent.MainThreadUpdateListener
 
 /**
  * Implementation of [EchoFramework] base library API
@@ -320,6 +353,11 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
     ) =
         dispatch(Runnable {
             assetsFacade.getAssets(assetIds, callback)
+        })
+
+    override fun lookupAssetsSymbols(symbolsOrIds: List<String>, callback: Callback<List<Asset>>) =
+        dispatch(Runnable {
+            assetsFacade.lookupAssetsSymbols(symbolsOrIds, callback)
         })
 
     override fun unsubscribeFromAccount(

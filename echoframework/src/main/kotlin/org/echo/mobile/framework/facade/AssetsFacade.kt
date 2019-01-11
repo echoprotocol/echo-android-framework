@@ -47,4 +47,9 @@ interface AssetsFacade {
      */
     fun getAssets(assetIds: List<String>, callback: Callback<List<Asset>>)
 
+    /**
+     * Query list of assets by it's [symbolsOrIds]
+     */
+    fun lookupAssetsSymbols(symbolsOrIds: List<String>, callback: Callback<List<Asset>>)
+
 }

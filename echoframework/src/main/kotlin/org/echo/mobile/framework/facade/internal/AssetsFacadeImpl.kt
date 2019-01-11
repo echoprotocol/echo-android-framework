@@ -7,7 +7,11 @@ import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.exception.NotFoundException
 import org.echo.mobile.framework.facade.AssetsFacade
-import org.echo.mobile.framework.model.*
+import org.echo.mobile.framework.model.Asset
+import org.echo.mobile.framework.model.AssetAmount
+import org.echo.mobile.framework.model.AuthorityType
+import org.echo.mobile.framework.model.Transaction
+import org.echo.mobile.framework.model.TransactionResult
 import org.echo.mobile.framework.model.operations.CreateAssetOperation
 import org.echo.mobile.framework.model.operations.IssueAssetOperationBuilder
 import org.echo.mobile.framework.processResult
@@ -145,8 +149,9 @@ class AssetsFacadeImpl(
     override fun listAssets(lowerBound: String, limit: Int, callback: Callback<List<Asset>>) =
         databaseApiService.listAssets(lowerBound, limit, callback)
 
-    override fun getAssets(assetIds: List<String>, callback: Callback<List<Asset>>) {
+    override fun getAssets(assetIds: List<String>, callback: Callback<List<Asset>>) =
         databaseApiService.getAssets(assetIds, callback)
-    }
 
+    override fun lookupAssetsSymbols(symbolsOrIds: List<String>, callback: Callback<List<Asset>>) =
+        databaseApiService.lookupAssetsSymbols(symbolsOrIds, callback)
 }
