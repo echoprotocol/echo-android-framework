@@ -3,7 +3,15 @@ package org.echo.mobile.framework.service
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.core.mapper.ObjectMapper
 import org.echo.mobile.framework.exception.LocalException
-import org.echo.mobile.framework.model.*
+import org.echo.mobile.framework.model.Asset
+import org.echo.mobile.framework.model.AssetAmount
+import org.echo.mobile.framework.model.BaseOperation
+import org.echo.mobile.framework.model.Block
+import org.echo.mobile.framework.model.BlockData
+import org.echo.mobile.framework.model.DynamicGlobalProperties
+import org.echo.mobile.framework.model.FullAccount
+import org.echo.mobile.framework.model.GrapheneObject
+import org.echo.mobile.framework.model.Log
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
@@ -154,6 +162,16 @@ interface AssetsService {
      * Query list of assets by it's ids [assetIds]
      */
     fun getAssets(assetIds: List<String>): Result<LocalException, List<Asset>>
+
+    /**
+     * Query list of assets by it's [symbolsOrIds]
+     */
+    fun lookupAssetsSymbols(symbolsOrIds: List<String>, callback: Callback<List<Asset>>)
+
+    /**
+     * Query list of assets by it's [symbolsOrIds] and wraps with [Result]
+     */
+    fun lookupAssetsSymbols(symbolsOrIds: List<String>): Result<LocalException, List<Asset>>
 
 }
 

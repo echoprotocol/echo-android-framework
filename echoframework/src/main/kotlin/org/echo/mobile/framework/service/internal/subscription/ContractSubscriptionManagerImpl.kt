@@ -76,7 +76,6 @@ class ContractSubscriptionManagerImpl : ContractSubscriptionManager {
 
             return logsMap
         } catch (ex: Exception) {
-            LOGGER.log("Error while parsing contract logs.", ex)
             return emptyMap()
         }
     }

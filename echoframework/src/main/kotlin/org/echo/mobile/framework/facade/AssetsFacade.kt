@@ -11,15 +11,17 @@ import org.echo.mobile.framework.model.Asset
 interface AssetsFacade {
 
     /**
-     * Creates asset [asset] with required parameters
+     * Creates [asset] with required parameters.
      *
-     * @return Returns created asset id
+     * @param broadcastCallback Callback for result of operation broadcast
+     * @param resultCallback Callback for retrieving result of operation  (not required)
      */
     fun createAsset(
         name: String,
         password: String,
         asset: Asset,
-        callback: Callback<String>
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<String>? = null
     )
 
     /**
@@ -44,5 +46,10 @@ interface AssetsFacade {
      * Query list of assets by it's ids [assetIds]
      */
     fun getAssets(assetIds: List<String>, callback: Callback<List<Asset>>)
+
+    /**
+     * Query list of assets by it's [symbolsOrIds]
+     */
+    fun lookupAssetsSymbols(symbolsOrIds: List<String>, callback: Callback<List<Asset>>)
 
 }

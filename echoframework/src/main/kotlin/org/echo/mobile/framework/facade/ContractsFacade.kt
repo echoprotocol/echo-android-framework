@@ -20,17 +20,20 @@ interface ContractsFacade {
     /**
      * Creates contract on blockchain
      *
-     * @param registrarNameOrId Name or id of account that creates the contract
-     * @param password          Password from account for transaction signature
-     * @param assetId           Asset of contract
-     * @param feeAsset          Asset for fee pay
-     * @param byteCode          Bytecode of the created contract
-     * @param params            Params for contract constructor
-     * @param gasLimit          Gas limit for contract operation
-     * @param gasPrice          One gas price for contract operation
-     * @param callback          Listener of operation results.
-     *                          Retrieves result of transactions -
-     *                          history id which contains created contract id
+     * @param registrarNameOrId     Name or id of account that creates the contract
+     * @param password              Password from account for transaction signature
+     * @param assetId               Asset of contract
+     * @param feeAsset              Asset for fee pay
+     * @param byteCode              Bytecode of the created contract
+     * @param params                Params for contract constructor
+     * @param gasLimit              Gas limit for contract operation
+     * @param gasPrice              One gas price for contract operation
+     *
+     * @param broadcastCallback     Callback for result of operation broadcast
+     * @param resultCallback        Callback for retrieving result of operation (not required).
+     *                              Retrieves result of transactions if exists -
+     *                              history id which contains call contract result,
+     *                              if not exists - empty string
      */
     fun createContract(
         registrarNameOrId: String,
@@ -41,26 +44,28 @@ interface ContractsFacade {
         params: List<InputValue> = listOf(),
         gasLimit: Long = DEFAULT_GAS_LIMIT,
         gasPrice: Long = DEFAULT_GAS_PRICE,
-        callback: Callback<String>
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<String>? = null
     )
 
     /**
      * Calls to contract on blockchain
      *
-     * @param userNameOrId Name or id of account that calls the contract
-     * @param password     Password from account for transaction signature
-     * @param assetId      Asset of contract
-     * @param feeAsset     Asset for fee pay
-     * @param contractId   Id of called contract
-     * @param methodName   Name of called method
-     * @param methodParams Parameters of calling method
-     * @param value        Amount for payable methods
-     * @param gasLimit     Gas limit for contract operation
-     * @param gasPrice     One gas price for contract operation
-     * @param callback     Listener of operation results.
-     *                     Retrieves result of transactions if exists -
-     *                     history id which contains call contract result,
-     *                     if not exists - empty string
+     * @param userNameOrId          Name or id of account that calls the contract
+     * @param password              Password from account for transaction signature
+     * @param assetId               Asset of contract
+     * @param feeAsset              Asset for fee pay
+     * @param contractId            Id of called contract
+     * @param methodName            Name of called method
+     * @param methodParams          Parameters of calling method
+     * @param value                 Amount for payable methods
+     * @param gasLimit              Gas limit for contract operation
+     * @param gasPrice              One gas price for contract operation
+     * @param broadcastCallback     Callback for result of operation deploying
+     * @param resultCallback        Callback for retrieving result of operation (not required).
+     *                              Retrieves result of transactions if exists -
+     *                              history id which contains call contract result,
+     *                              if not exists - empty string
      */
     fun callContract(
         userNameOrId: String,
@@ -73,7 +78,8 @@ interface ContractsFacade {
         value: String = BigInteger.ZERO.toString(),
         gasLimit: Long = DEFAULT_GAS_LIMIT,
         gasPrice: Long = DEFAULT_GAS_PRICE,
-        callback: Callback<String>
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<String>? = null
     )
 
     /**

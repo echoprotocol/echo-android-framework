@@ -1,8 +1,21 @@
 package org.echo.mobile.framework.model.contract
 
-import org.echo.mobile.framework.model.contract.output.*
-import org.junit.Assert.*
+import org.echo.mobile.framework.model.contract.output.AccountAddressOutputValueType
+import org.echo.mobile.framework.model.contract.output.AddressOutputValueType
+import org.echo.mobile.framework.model.contract.output.BooleanOutputValueType
+import org.echo.mobile.framework.model.contract.output.ContractAddressOutputValueType
+import org.echo.mobile.framework.model.contract.output.ContractOutputDecoder
+import org.echo.mobile.framework.model.contract.output.FixedArrayOutputValueType
+import org.echo.mobile.framework.model.contract.output.FixedBytesOutputValueType
+import org.echo.mobile.framework.model.contract.output.ListValueType
+import org.echo.mobile.framework.model.contract.output.NumberOutputValueType
+import org.echo.mobile.framework.model.contract.output.StringOutputValueType
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
+import java.math.BigInteger
 
 /**
  * Test cases for [ContractOutputDecoder]
@@ -14,12 +27,12 @@ class ContractOutputDecoderTest {
     @Test
     fun decodeIntTest() {
         val source =
-            "000000000000000000000000000000000000000000000000000000000000000a".toByteArray()
+            "0000000000000000000000000000000000000000000000056bc75e2d63100000".toByteArray()
 
         val decoder = ContractOutputDecoder()
         val result = decoder.decode(source, listOf(NumberOutputValueType()))
 
-        assertEquals(result.first().value as Long, 10)
+        assertEquals(result.first().value as BigInteger, "100000000000000000000".toBigInteger())
     }
 
     @Test
@@ -59,7 +72,7 @@ class ContractOutputDecoderTest {
         val result =
             decoder.decode(source, listOf(NumberOutputValueType(), BooleanOutputValueType()))
 
-        assertEquals(result.first().value as Long, 10)
+        assertEquals(result.first().value as BigInteger, 10.toBigInteger())
         assertTrue(result.last().value as Boolean)
     }
 
@@ -78,7 +91,7 @@ class ContractOutputDecoderTest {
                 listOf(NumberOutputValueType(), BooleanOutputValueType(), StringOutputValueType())
             )
 
-        assertEquals(result.first().value as Long, 10)
+        assertEquals(result.first().value as BigInteger, 10.toBigInteger())
         assertTrue(result[1].value as Boolean)
         assertEquals(result.last().value.toString(), "TRX")
     }

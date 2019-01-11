@@ -5,12 +5,40 @@ import org.echo.mobile.framework.ILLEGAL_ID
 import org.echo.mobile.framework.core.mapper.ObjectMapper
 import org.echo.mobile.framework.core.socket.SocketCoreComponent
 import org.echo.mobile.framework.exception.LocalException
-import org.echo.mobile.framework.model.*
+import org.echo.mobile.framework.model.Asset
+import org.echo.mobile.framework.model.AssetAmount
+import org.echo.mobile.framework.model.BaseOperation
+import org.echo.mobile.framework.model.Block
+import org.echo.mobile.framework.model.BlockData
+import org.echo.mobile.framework.model.DynamicGlobalProperties
+import org.echo.mobile.framework.model.FullAccount
+import org.echo.mobile.framework.model.GrapheneObject
+import org.echo.mobile.framework.model.Log
+import org.echo.mobile.framework.model.Transaction
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
 import org.echo.mobile.framework.model.network.Network
-import org.echo.mobile.framework.model.socketoperations.*
+import org.echo.mobile.framework.model.socketoperations.BlockDataSocketOperation
+import org.echo.mobile.framework.model.socketoperations.CancelAllSubscriptionsSocketOperation
+import org.echo.mobile.framework.model.socketoperations.CustomOperation
+import org.echo.mobile.framework.model.socketoperations.CustomSocketOperation
+import org.echo.mobile.framework.model.socketoperations.FullAccountsSocketOperation
+import org.echo.mobile.framework.model.socketoperations.GetAllContractsSocketOperation
+import org.echo.mobile.framework.model.socketoperations.GetAssetsSocketOperation
+import org.echo.mobile.framework.model.socketoperations.GetBlockSocketOperation
+import org.echo.mobile.framework.model.socketoperations.GetChainIdSocketOperation
+import org.echo.mobile.framework.model.socketoperations.GetContractLogsSocketOperation
+import org.echo.mobile.framework.model.socketoperations.GetContractResultSocketOperation
+import org.echo.mobile.framework.model.socketoperations.GetContractSocketOperation
+import org.echo.mobile.framework.model.socketoperations.GetContractsSocketOperation
+import org.echo.mobile.framework.model.socketoperations.GetObjectsSocketOperation
+import org.echo.mobile.framework.model.socketoperations.ListAssetsSocketOperation
+import org.echo.mobile.framework.model.socketoperations.LookupAssetsSymbolsSocketOperation
+import org.echo.mobile.framework.model.socketoperations.QueryContractSocketOperation
+import org.echo.mobile.framework.model.socketoperations.RequiredFeesSocketOperation
+import org.echo.mobile.framework.model.socketoperations.SetSubscribeCallbackSocketOperation
+import org.echo.mobile.framework.model.socketoperations.SubscribeContractLogsSocketOperation
 import org.echo.mobile.framework.service.DatabaseApiService
 import org.echo.mobile.framework.support.Result
 import org.echo.mobile.framework.support.concurrent.future.FutureTask
@@ -50,7 +78,12 @@ class DatabaseApiServiceImpl(
                 }
 
                 override fun onError(error: LocalException) {
-                    callback.onError(error)
+                    callback.onError(
+                        LocalException(
+                            "Error occurred during accounts request",
+                            error
+                        )
+                    )
                 }
 
             },
@@ -231,6 +264,24 @@ class DatabaseApiServiceImpl(
         )
 
         socketCoreComponent.emit(operation)
+    }
+
+    override fun lookupAssetsSymbols(symbolsOrIds: List<String>, callback: Callback<List<Asset>>) {
+        val operation = LookupAssetsSymbolsSocketOperation(
+            id,
+            symbolsOrIds.toTypedArray(),
+            callId = socketCoreComponent.currentId,
+            callback = callback
+        )
+
+        socketCoreComponent.emit(operation)
+    }
+
+    override fun lookupAssetsSymbols(symbolsOrIds: List<String>): Result<LocalException, List<Asset>> {
+        val future = FutureTask<List<Asset>>()
+        lookupAssetsSymbols(symbolsOrIds, future.completeCallback())
+
+        return future.wrapResult()
     }
 
     override fun callContractNoChangingState(

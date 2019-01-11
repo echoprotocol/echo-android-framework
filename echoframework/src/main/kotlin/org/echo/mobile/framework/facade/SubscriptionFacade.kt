@@ -58,13 +58,9 @@ interface SubscriptionFacade {
      * [callback] is needed for subscription process result events notifying
      *
      * @param contractId Contract id for subscribe to logs
-     * @param fromBlock Number of the earliest block to subscribe
-     * @param toBlock Number of the most recent block to subscribe
      */
     fun subscribeOnContractLogs(
         contractId: String,
-        fromBlock: String = DEFAULT_BLOCK_NUMBER,
-        toBlock: String = DEFAULT_BLOCK_NUMBER,
         listener: UpdateListener<List<Log>>,
         callback: Callback<Boolean>
     )
