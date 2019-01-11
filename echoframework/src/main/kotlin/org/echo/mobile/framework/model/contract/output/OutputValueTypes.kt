@@ -28,7 +28,7 @@ open class NumberOutputValueType : OutputValueType {
 
     override fun decode(source: ByteArray): Pair<Any, ByteArray> {
         val sourceSlice = source.take(SLICE_SIZE)
-        val value = String(sourceSlice.toByteArray()).toLong(NUMBER_RADIX)
+        val value = String(sourceSlice.toByteArray()).toBigInteger(NUMBER_RADIX)
         return Pair(value, source.copyOfRange(SLICE_SIZE, source.size))
     }
 
