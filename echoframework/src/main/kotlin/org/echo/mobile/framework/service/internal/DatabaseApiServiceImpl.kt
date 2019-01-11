@@ -277,6 +277,13 @@ class DatabaseApiServiceImpl(
         socketCoreComponent.emit(operation)
     }
 
+    override fun lookupAssetsSymbols(symbolsOrIds: List<String>): Result<LocalException, List<Asset>> {
+        val future = FutureTask<List<Asset>>()
+        lookupAssetsSymbols(symbolsOrIds, future.completeCallback())
+
+        return future.wrapResult()
+    }
+
     override fun callContractNoChangingState(
         contractId: String,
         registrarNameOrId: String,
