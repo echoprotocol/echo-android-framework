@@ -5,17 +5,35 @@ import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.exception.NotFoundException
 import org.echo.mobile.framework.facade.InformationFacade
-import org.echo.mobile.framework.model.*
-import org.echo.mobile.framework.model.operations.*
+import org.echo.mobile.framework.model.Account
+import org.echo.mobile.framework.model.Asset
+import org.echo.mobile.framework.model.Balance
+import org.echo.mobile.framework.model.BaseOperation
+import org.echo.mobile.framework.model.Block
+import org.echo.mobile.framework.model.FullAccount
+import org.echo.mobile.framework.model.HistoricalTransfer
+import org.echo.mobile.framework.model.HistoryResponse
+import org.echo.mobile.framework.model.HistoryResult
+import org.echo.mobile.framework.model.operations.AccountCreateOperation
+import org.echo.mobile.framework.model.operations.AccountUpdateOperation
+import org.echo.mobile.framework.model.operations.ContractOperation
+import org.echo.mobile.framework.model.operations.CreateAssetOperation
+import org.echo.mobile.framework.model.operations.IssueAssetOperation
+import org.echo.mobile.framework.model.operations.OperationType
+import org.echo.mobile.framework.model.operations.TransferOperation
 import org.echo.mobile.framework.processResult
 import org.echo.mobile.framework.service.AccountHistoryApiService
 import org.echo.mobile.framework.service.DatabaseApiService
-import org.echo.mobile.framework.support.*
+import org.echo.mobile.framework.support.Result
 import org.echo.mobile.framework.support.Result.Error
 import org.echo.mobile.framework.support.Result.Value
 import org.echo.mobile.framework.support.concurrent.future.FutureTask
 import org.echo.mobile.framework.support.concurrent.future.completeCallback
 import org.echo.mobile.framework.support.concurrent.future.wrapResult
+import org.echo.mobile.framework.support.error
+import org.echo.mobile.framework.support.map
+import org.echo.mobile.framework.support.parse
+import org.echo.mobile.framework.support.value
 
 /**
  * Implementation of [InformationFacade]
@@ -196,6 +214,7 @@ class InformationFacadeImpl(
                 OperationType.CONTRACT_OPERATION ->
                     processContractOperation(
                         operation as ContractOperation,
+                        transaction.result,
                         accountsRegistry,
                         assetsRegistry
                     )
@@ -310,6 +329,7 @@ class InformationFacadeImpl(
 
     private fun processContractOperation(
         operation: ContractOperation,
+        historyResult: HistoryResult?,
         accountRegistry: MutableMap<String, Account>,
         assetsRegistry: MutableList<Asset>
     ) {
@@ -325,6 +345,13 @@ class InformationFacadeImpl(
 
         accountRegistry[registrar]?.let { notNullAccount ->
             operation.registrar = notNullAccount
+        }
+
+        historyResult?.objectId?.let { resultId ->
+            databaseApiService.getContractResult(resultId)
+                .value { contractResult ->
+                    operation.contractResult = contractResult
+                }
         }
     }
 

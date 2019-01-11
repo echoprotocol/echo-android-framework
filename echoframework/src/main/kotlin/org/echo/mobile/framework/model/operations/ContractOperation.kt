@@ -5,6 +5,7 @@ import com.google.common.primitives.UnsignedLong
 import com.google.gson.*
 import org.echo.mobile.framework.model.*
 import org.echo.mobile.framework.model.contract.Contract
+import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.support.Int64
 import org.echo.mobile.framework.support.Uint8
 import java.lang.reflect.Type
@@ -26,6 +27,8 @@ class ContractOperation @JvmOverloads constructor(
 ) : BaseOperation(OperationType.CONTRACT_OPERATION) {
 
     val receiver: Optional<Contract> = Optional(receiver, true)
+
+    var contractResult: ContractResult? = null
 
     override fun toBytes(): ByteArray {
         val feeBytes = fee.toBytes()
