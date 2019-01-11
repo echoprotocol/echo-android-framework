@@ -155,6 +155,11 @@ interface AssetsService {
      */
     fun getAssets(assetIds: List<String>): Result<LocalException, List<Asset>>
 
+    /**
+     * Query list of assets by it's [symbolsOrIds]
+     */
+    fun lookupAssetsSymbols(symbolsOrIds: List<String>, callback: Callback<List<Asset>>)
+
 }
 
 /**

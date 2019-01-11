@@ -694,11 +694,34 @@ class EchoFrameworkTest {
         val futureAssets = FutureTask<List<Asset>>()
 
         framework.getAssets(
-            listOf("1.3.0", "1.3.2"),
+            listOf("1.3.0", "1.3.150"),
             futureAssets.completeCallback()
         )
 
-        assertNotNull(futureAssets.get()?.isNotEmpty() ?: false)
+        val assets = futureAssets.get()
+        assertNotNull(assets)
+        assertEquals(2, assets?.size ?: 0)
+        assertEquals(assets?.firstOrNull()?.symbol, "ECHO")
+    }
+
+    @Test
+    fun lookupAssetsSymbols(){
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val futureAssets = FutureTask<List<Asset>>()
+
+        framework.lookupAssetsSymbols(
+            listOf("ECHO", "1.3.0"),
+            futureAssets.completeCallback()
+        )
+
+        val assets = futureAssets.get()
+        assertNotNull(assets)
+        assertEquals(assets?.size, 2)
+        assertEquals(assets?.firstOrNull()?.getObjectId(), "1.3.0")
+        assertEquals(assets?.get(1)?.symbol, "ECHO")
     }
 
 //    @Test
