@@ -16,15 +16,20 @@ class MainActivity : AppCompatActivity(), ProgressListener {
 
     lateinit var lib: EchoFramework
 
+    companion object {
+        const val ECHO_URL = "wss://echo-devnet-node.pixelplex.io/"
+        const val new_url = "ws://195.201.164.54:6311"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         lib = EchoFramework.create(
             Settings.Configurator()
-                .setUrl(ECHO_URL)
+                .setUrl(new_url)
                 .setReturnOnMainThread(true)
-                .setApis(Api.DATABASE, Api.NETWORK_BROADCAST, Api.ACCOUNT_HISTORY)
+                .setApis(Api.DATABASE, Api.NETWORK_BROADCAST, Api.ACCOUNT_HISTORY, Api.REGISTRATION)
                 .configure()
         )
 
