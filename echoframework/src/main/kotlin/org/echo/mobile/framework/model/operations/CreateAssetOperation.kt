@@ -115,7 +115,7 @@ class CreateAssetOperation @JvmOverloads constructor(
     companion object {
         private const val OPTIONS_KEY = "common_options"
         private const val EXTENSIONS_KEY = "extensions"
-        private const val DEFAULT_ASSET_ID = "1.3.1"
+        private const val DEFAULT_ASSET_ID = "1.3.0"
     }
 
 }
