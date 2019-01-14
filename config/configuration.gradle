@@ -14,8 +14,8 @@ ext {
 
     // Application
     androidApplicationId = 'org.echo.mobile.framework'
-    androidVersionCode = 1
-    androidVersionName = "1.0"
+    androidVersionCode = 2
+    androidVersionName = "2.0"
 
     // Test
     testApplicationId = 'org.echo.mobile.framework.test'
