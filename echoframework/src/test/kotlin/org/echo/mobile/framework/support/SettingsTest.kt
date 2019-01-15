@@ -12,10 +12,12 @@ import org.echo.mobile.framework.model.AuthorityType
 import org.echo.mobile.framework.model.Transaction
 import org.echo.mobile.framework.model.network.Echodevnet
 import org.echo.mobile.framework.model.network.Mainnet
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.math.BigInteger
-import java.util.*
+import java.util.ArrayList
 
 /**
  * Test cases for [Settings]
@@ -94,6 +96,9 @@ class SettingsTest {
     }
 
     private class TestCryptoComponent : CryptoCoreComponent {
+
+        override fun getEchorandKey(userName: String, password: String): String = ""
+
         override fun encryptMessage(
             privateKey: ByteArray,
             publicKey: ByteArray,

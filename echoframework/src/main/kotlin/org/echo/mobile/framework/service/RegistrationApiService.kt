@@ -1,7 +1,6 @@
 package org.echo.mobile.framework.service
 
 import org.echo.mobile.framework.Callback
-import org.echo.mobile.framework.model.FullAccount
 
 /**
  * Encapsulates logic, associated with blockchain registration API
@@ -13,7 +12,7 @@ interface RegistrationApiService : ApiService {
     /**
      * Registration on blockchain node.
      *
-     * @param callback Listener of call result. Return actual registered account
+     * @param callback Listener of call result. Return true if call succeed, otherwise false
      */
     fun register(
         accountName: String,
@@ -21,6 +20,6 @@ interface RegistrationApiService : ApiService {
         keyActive: String,
         keyMemo: String,
         echorandKey: String,
-        callback: Callback<FullAccount>
+        callback: Callback<Boolean>
     )
 }

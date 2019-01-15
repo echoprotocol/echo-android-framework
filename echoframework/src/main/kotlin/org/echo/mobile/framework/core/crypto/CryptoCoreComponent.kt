@@ -3,7 +3,7 @@ package org.echo.mobile.framework.core.crypto
 import org.echo.mobile.framework.model.AuthorityType
 import org.echo.mobile.framework.model.Transaction
 import java.math.BigInteger
-import java.util.*
+import java.util.ArrayList
 
 /**
  * Encapsulates logic, associated with keys generation and encryption/decryption processes
@@ -21,6 +21,11 @@ interface CryptoCoreComponent {
      * Generates private elliptic curve key for transaction signing
      */
     fun getPrivateKey(userName: String, password: String, authorityType: AuthorityType): ByteArray
+
+    /**
+     * Generates echorand key using [userName] and password
+     */
+    fun getEchorandKey(userName: String, password: String): String
 
     /**
      * Generates transaction signatures

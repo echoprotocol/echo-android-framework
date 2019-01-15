@@ -36,12 +36,14 @@ import org.echo.mobile.framework.service.CryptoApiService
 import org.echo.mobile.framework.service.DatabaseApiService
 import org.echo.mobile.framework.service.LoginApiService
 import org.echo.mobile.framework.service.NetworkBroadcastApiService
+import org.echo.mobile.framework.service.RegistrationApiService
 import org.echo.mobile.framework.service.UpdateListener
 import org.echo.mobile.framework.service.internal.AccountHistoryApiServiceImpl
 import org.echo.mobile.framework.service.internal.CryptoApiServiceImpl
 import org.echo.mobile.framework.service.internal.DatabaseApiServiceImpl
 import org.echo.mobile.framework.service.internal.LoginApiServiceImpl
 import org.echo.mobile.framework.service.internal.NetworkBroadcastApiServiceImpl
+import org.echo.mobile.framework.service.internal.RegistrationApiServiceImpl
 import org.echo.mobile.framework.support.Settings
 import org.echo.mobile.framework.support.concurrent.Dispatcher
 import org.echo.mobile.framework.support.concurrent.ExecutorServiceDispatcher
@@ -66,6 +68,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
     override val networkBroadcastApiService: NetworkBroadcastApiService
     override val cryptoApiService: CryptoApiService
     override val loginService: LoginApiService
+    override val registrationService: RegistrationApiService
 
     private val initializerFacade: InitializerFacade
     private val authenticationFacade: AuthenticationFacade
@@ -99,6 +102,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
                 NetworkBroadcastApiServiceImpl(socketCoreComponent, settings.cryptoComponent)
         cryptoApiService = CryptoApiServiceImpl(socketCoreComponent)
         loginService = LoginApiServiceImpl(socketCoreComponent)
+        registrationService = RegistrationApiServiceImpl(socketCoreComponent)
 
         initializerFacade = InitializerFacadeImpl(
             socketCoreComponent,
@@ -108,11 +112,13 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             databaseApiService,
             cryptoApiService,
             accountHistoryApiService,
-            networkBroadcastApiService
+            networkBroadcastApiService,
+            registrationService
         )
         authenticationFacade = AuthenticationFacadeImpl(
             databaseApiService,
             networkBroadcastApiService,
+            registrationService,
             settings.cryptoComponent,
             settings.network
         )
@@ -177,6 +183,15 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             callback.wrapOriginal()
         )
     })
+
+    override fun register(userName: String, password: String, callback: Callback<Boolean>) =
+        dispatch(Runnable {
+            authenticationFacade.register(
+                userName,
+                password,
+                callback.wrapOriginal()
+            )
+        })
 
     override fun getFeeForTransferOperation(
         fromNameOrId: String,

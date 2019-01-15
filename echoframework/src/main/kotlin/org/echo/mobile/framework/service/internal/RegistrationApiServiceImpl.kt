@@ -5,8 +5,6 @@ import org.echo.mobile.framework.ILLEGAL_ID
 import org.echo.mobile.framework.core.socket.SocketCoreComponent
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.exception.RegistrationException
-import org.echo.mobile.framework.model.FullAccount
-import org.echo.mobile.framework.model.network.Network
 import org.echo.mobile.framework.model.socketoperations.RegisterSocketOperation
 import org.echo.mobile.framework.service.RegistrationApiService
 
@@ -17,10 +15,8 @@ import org.echo.mobile.framework.service.RegistrationApiService
  *
  * @author Daria Pechkovskaya
  */
-class RegistrationApiServiceImpl(
-    private val socketCoreComponent: SocketCoreComponent,
-    private val network: Network
-) : RegistrationApiService {
+class RegistrationApiServiceImpl(private val socketCoreComponent: SocketCoreComponent) :
+    RegistrationApiService {
 
     override var id: Int = ILLEGAL_ID
 
@@ -30,9 +26,8 @@ class RegistrationApiServiceImpl(
         keyActive: String,
         keyMemo: String,
         echorandKey: String,
-        callback: Callback<FullAccount>
+        callback: Callback<Boolean>
     ) {
-
         val fullAccountsOperation = RegisterSocketOperation(
             id,
             accountName,
@@ -41,9 +36,9 @@ class RegistrationApiServiceImpl(
             keyMemo,
             echorandKey,
             callId = socketCoreComponent.currentId,
-            callback = object : Callback<FullAccount> {
+            callback = object : Callback<Boolean> {
 
-                override fun onSuccess(result: FullAccount) {
+                override fun onSuccess(result: Boolean) {
                     callback.onSuccess(result)
                 }
 
@@ -51,8 +46,7 @@ class RegistrationApiServiceImpl(
                     callback.onError(RegistrationException("Can't register account", error))
                 }
 
-            },
-            network = network
+            }
         )
         socketCoreComponent.emit(fullAccountsOperation)
     }

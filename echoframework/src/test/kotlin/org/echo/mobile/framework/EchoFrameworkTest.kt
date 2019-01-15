@@ -1,7 +1,14 @@
 package org.echo.mobile.framework
 
 import org.echo.mobile.framework.exception.LocalException
-import org.echo.mobile.framework.model.*
+import org.echo.mobile.framework.model.Asset
+import org.echo.mobile.framework.model.Balance
+import org.echo.mobile.framework.model.Block
+import org.echo.mobile.framework.model.BlockData
+import org.echo.mobile.framework.model.DynamicGlobalProperties
+import org.echo.mobile.framework.model.FullAccount
+import org.echo.mobile.framework.model.HistoryResponse
+import org.echo.mobile.framework.model.Log
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
@@ -19,7 +26,11 @@ import org.echo.mobile.framework.support.concurrent.future.completeCallback
 import org.echo.mobile.framework.support.concurrent.future.wrapResult
 import org.echo.mobile.framework.support.fold
 import org.junit.Assert
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.thread
@@ -316,6 +327,30 @@ class EchoFrameworkTest {
 
         assertTrue(futureChangePassword.get() ?: false)
     }
+
+//    @Test
+//    fun registrationTest() {
+//        val framework = initFramework()
+//
+//        val futureChangePassword = FutureTask<Boolean>()
+//
+//        if (connect(framework) == false) Assert.fail("Connection error")
+//
+//        framework.register(
+//            "accountRegistrationTest", "registrationPassword",
+//            object : Callback<Boolean> {
+//                override fun onSuccess(result: Boolean) {
+//                    futureChangePassword.setComplete(true)
+//                }
+//
+//                override fun onError(error: LocalException) {
+//                    futureChangePassword.setComplete(false)
+//                }
+//
+//            })
+//
+//        assertTrue(futureChangePassword.get() ?: false)
+//    }
 
     @Test
     fun subscriptionByIdTest() {
@@ -705,7 +740,7 @@ class EchoFrameworkTest {
     }
 
     @Test
-    fun lookupAssetsSymbols(){
+    fun lookupAssetsSymbols() {
         val framework = initFramework()
 
         if (connect(framework) == false) Assert.fail("Connection error")
