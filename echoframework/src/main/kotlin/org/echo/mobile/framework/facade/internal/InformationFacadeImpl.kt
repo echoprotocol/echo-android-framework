@@ -16,7 +16,8 @@ import org.echo.mobile.framework.model.HistoryResponse
 import org.echo.mobile.framework.model.HistoryResult
 import org.echo.mobile.framework.model.operations.AccountCreateOperation
 import org.echo.mobile.framework.model.operations.AccountUpdateOperation
-import org.echo.mobile.framework.model.operations.ContractOperation
+import org.echo.mobile.framework.model.operations.ContractCallOperation
+import org.echo.mobile.framework.model.operations.ContractCreateOperation
 import org.echo.mobile.framework.model.operations.CreateAssetOperation
 import org.echo.mobile.framework.model.operations.IssueAssetOperation
 import org.echo.mobile.framework.model.operations.OperationType
@@ -211,9 +212,17 @@ class InformationFacadeImpl(
                         accountsRegistry
                     )
 
-                OperationType.CONTRACT_OPERATION ->
-                    processContractOperation(
-                        operation as ContractOperation,
+                OperationType.CONTRACT_CREATE_OPERATION ->
+                    processContractCreateOperation(
+                        operation as ContractCreateOperation,
+                        transaction.result,
+                        accountsRegistry,
+                        assetsRegistry
+                    )
+
+                OperationType.CONTRACT_CALL_OPERATION ->
+                    processContractCallOperation(
+                        operation as ContractCallOperation,
                         transaction.result,
                         accountsRegistry,
                         assetsRegistry
@@ -329,16 +338,44 @@ class InformationFacadeImpl(
         }
     }
 
-    private fun processContractOperation(
-        operation: ContractOperation,
+    private fun processContractCreateOperation(
+        operation: ContractCreateOperation,
         historyResult: HistoryResult?,
         accountRegistry: MutableMap<String, Account>,
         assetsRegistry: MutableList<Asset>
     ) {
-        val assetId = operation.asset.getObjectId()
+        val assetId = operation.value.asset.getObjectId()
 
         getAsset(assetId, assetsRegistry)?.let { notNullAsset ->
-            operation.asset = notNullAsset
+            operation.value.asset = notNullAsset
+        }
+
+        val registrar = operation.registrar.getObjectId()
+
+        fillAccounts(listOf(registrar), accountRegistry)
+
+        accountRegistry[registrar]?.let { notNullAccount ->
+            operation.registrar = notNullAccount
+        }
+
+        historyResult?.objectId?.let { resultId ->
+            databaseApiService.getContractResult(resultId)
+                .value { contractResult ->
+                    operation.contractResult = contractResult
+                }
+        }
+    }
+
+    private fun processContractCallOperation(
+        operation: ContractCallOperation,
+        historyResult: HistoryResult?,
+        accountRegistry: MutableMap<String, Account>,
+        assetsRegistry: MutableList<Asset>
+    ) {
+        val assetId = operation.value.asset.getObjectId()
+
+        getAsset(assetId, assetsRegistry)?.let { notNullAsset ->
+            operation.value.asset = notNullAsset
         }
 
         val registrar = operation.registrar.getObjectId()

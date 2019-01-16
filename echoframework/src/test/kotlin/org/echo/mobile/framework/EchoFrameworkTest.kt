@@ -57,7 +57,7 @@ class EchoFrameworkTest {
                 .configure()
         )
 
-    private val legalContractId = "1.16.2590"
+    private val legalContractId = "1.16.28"
     private val accountId = "1.2.22"
     private val login = "dima"
     private val password = "dima"
@@ -301,7 +301,7 @@ class EchoFrameworkTest {
 
         assertNotNull(history)
         assertTrue(history?.transactions?.isNotEmpty() ?: false)
-        assertNotNull(history?.transactions?.get(0)?.timestamp)
+        assertNotNull(history?.transactions?.get(0)?.blockNum)
     }
 
     @Test
@@ -594,7 +594,6 @@ class EchoFrameworkTest {
             broadcastCallback = sentCallback
         )
     }
-
 
     @Test
     fun transferTest() {
@@ -1089,7 +1088,7 @@ class EchoFrameworkTest {
         val future = FutureTask<ContractResult>()
 
         framework.getContractResult(
-            historyId = "1.17.4955",
+            historyId = "1.17.30",
             callback = future.completeCallback()
         )
 

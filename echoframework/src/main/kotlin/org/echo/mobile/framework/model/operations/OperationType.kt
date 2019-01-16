@@ -59,6 +59,8 @@ enum class OperationType {
     FBA_DISTRIBUTE_OPERATION,       //VIRTUAL
     BID_COLLATERAL_OPERATION,
     EXECUTE_BID_OPERATION,          //VIRTUAL
+    CONTRACT_CREATE_OPERATION,
+    CONTRACT_CALL_OPERATION,
     CONTRACT_OPERATION,
     CONTRACT_TRANSFER_OPERATION     //VIRTUAL
 }
@@ -78,7 +80,8 @@ class OperationTypeToClassConverter : Converter<Int, Class<*>?> {
             OperationType.ASSET_ISSUE_OPERATION.ordinal to IssueAssetOperation::class.java,
             OperationType.TRANSFER_OPERATION.ordinal to TransferOperation::class.java,
             OperationType.ACCOUNT_CREATE_OPERATION.ordinal to AccountCreateOperation::class.java,
-            OperationType.CONTRACT_OPERATION.ordinal to ContractOperation::class.java,
+            OperationType.CONTRACT_CREATE_OPERATION.ordinal to ContractCreateOperation::class.java,
+            OperationType.CONTRACT_CALL_OPERATION.ordinal to ContractCallOperation::class.java,
             OperationType.CONTRACT_TRANSFER_OPERATION to ContractTransferOperation::class.java
         )
     }

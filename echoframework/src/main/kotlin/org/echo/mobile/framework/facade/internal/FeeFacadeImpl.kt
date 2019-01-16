@@ -9,7 +9,7 @@ import org.echo.mobile.framework.facade.FeeFacade
 import org.echo.mobile.framework.model.*
 import org.echo.mobile.framework.model.contract.input.ContractInputEncoder
 import org.echo.mobile.framework.model.contract.input.InputValue
-import org.echo.mobile.framework.model.operations.ContractOperationBuilder
+import org.echo.mobile.framework.model.operations.ContractCreateOperationBuilder
 import org.echo.mobile.framework.model.operations.TransferOperationBuilder
 import org.echo.mobile.framework.processResult
 import org.echo.mobile.framework.service.DatabaseApiService
@@ -130,7 +130,7 @@ class FeeFacadeImpl(
 
         val contractCode = ContractInputEncoder().encode(methodName, methodParams)
 
-        val contractOperation = ContractOperationBuilder()
+        val contractOperation = ContractCreateOperationBuilder()
             .setAsset(assetId)
             .setRegistrar(account!!)
             .setReceiver(contractId)

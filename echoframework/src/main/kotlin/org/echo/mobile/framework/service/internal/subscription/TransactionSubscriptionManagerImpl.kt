@@ -1,21 +1,29 @@
 package org.echo.mobile.framework.service.internal.subscription
 
 import com.google.common.reflect.TypeToken
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonElement
-import com.google.gson.JsonParseException
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent
 import org.echo.mobile.framework.exception.LocalException
-import org.echo.mobile.framework.model.*
-import org.echo.mobile.framework.model.contract.output.ContractAddressOutputValueType
-import org.echo.mobile.framework.model.contract.output.ContractOutputDecoder
+import org.echo.mobile.framework.model.Account
+import org.echo.mobile.framework.model.AccountOptions
+import org.echo.mobile.framework.model.AssetAmount
+import org.echo.mobile.framework.model.AssetOptions
+import org.echo.mobile.framework.model.Authority
+import org.echo.mobile.framework.model.Memo
+import org.echo.mobile.framework.model.TransactionOperationsResult
+import org.echo.mobile.framework.model.TransactionResult
 import org.echo.mobile.framework.model.network.Network
-import org.echo.mobile.framework.model.operations.*
-import org.echo.mobile.framework.service.ContractSubscriptionManager
+import org.echo.mobile.framework.model.operations.AccountCreateOperation
+import org.echo.mobile.framework.model.operations.AccountUpdateOperation
+import org.echo.mobile.framework.model.operations.ContractCallOperation
+import org.echo.mobile.framework.model.operations.ContractCreateOperation
+import org.echo.mobile.framework.model.operations.ContractTransferOperation
+import org.echo.mobile.framework.model.operations.CreateAssetOperation
+import org.echo.mobile.framework.model.operations.IssueAssetOperation
+import org.echo.mobile.framework.model.operations.TransferOperation
 import org.echo.mobile.framework.service.TransactionSubscriptionManager
-import org.echo.mobile.framework.service.UpdateListener
 import org.echo.mobile.framework.support.toJsonObject
 import java.util.concurrent.ConcurrentHashMap
 
@@ -84,8 +92,12 @@ class TransactionSubscriptionManagerImpl(network: Network) : TransactionSubscrip
             TransferOperation.TransferDeserializer()
         )
         registerTypeAdapter(
-            ContractOperation::class.java,
-            ContractOperation.Deserializer()
+            ContractCreateOperation::class.java,
+            ContractCreateOperation.Deserializer()
+        )
+        registerTypeAdapter(
+            ContractCallOperation::class.java,
+            ContractCallOperation.Deserializer()
         )
         registerTypeAdapter(
             ContractTransferOperation::class.java,

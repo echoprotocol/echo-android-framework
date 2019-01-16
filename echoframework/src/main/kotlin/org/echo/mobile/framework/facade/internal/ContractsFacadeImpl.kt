@@ -6,6 +6,8 @@ import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.exception.NotFoundException
 import org.echo.mobile.framework.facade.ContractsFacade
+import org.echo.mobile.framework.model.Asset
+import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.AuthorityType
 import org.echo.mobile.framework.model.Log
 import org.echo.mobile.framework.model.Transaction
@@ -15,7 +17,8 @@ import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
 import org.echo.mobile.framework.model.contract.input.ContractInputEncoder
 import org.echo.mobile.framework.model.contract.input.InputValue
-import org.echo.mobile.framework.model.operations.ContractOperationBuilder
+import org.echo.mobile.framework.model.operations.ContractCallOperationBuilder
+import org.echo.mobile.framework.model.operations.ContractCreateOperationBuilder
 import org.echo.mobile.framework.processResult
 import org.echo.mobile.framework.service.DatabaseApiService
 import org.echo.mobile.framework.service.NetworkBroadcastApiService
@@ -71,7 +74,7 @@ class ContractsFacadeImpl(
 
             val constructorParams = ContractInputEncoder().encode("", params)
 
-            val contractOperation = ContractOperationBuilder()
+            val contractOperation = ContractCreateOperationBuilder()
                 .setAsset(assetId)
                 .setRegistrar(registrar)
                 .setGas(gasLimit)
@@ -142,7 +145,6 @@ class ContractsFacadeImpl(
         broadcastCallback: Callback<Boolean>,
         resultCallback: Callback<String>?
     ) {
-
         val callId: String
         try {
             val accountsMap =
@@ -161,14 +163,13 @@ class ContractsFacadeImpl(
 
             val contractCode = ContractInputEncoder().encode(methodName, methodParams)
 
-            val contractOperation = ContractOperationBuilder()
-                .setAsset(assetId)
+            val contractOperation = ContractCallOperationBuilder()
                 .setRegistrar(registrar)
                 .setGas(gasLimit)
                 .setGasPrice(gasPrice)
                 .setReceiver(contractId)
                 .setContractCode(contractCode)
-                .setValue(UnsignedLong.valueOf(value))
+                .setValue(AssetAmount(UnsignedLong.valueOf(value), Asset(assetId)))
                 .build()
 
             val blockData = databaseApiService.getBlockData()
