@@ -240,7 +240,7 @@ class ContractsFacadeImpl(
     override fun getAllContracts(callback: Callback<List<ContractInfo>>) =
         callback.processResult(databaseApiService.getAllContracts())
 
-    override fun getContract(contractId: String, callback: Callback<ContractStruct>) =
+    override fun getContract(contractId: String, callback: Callback<String>) =
         callback.processResult(databaseApiService.getContract(contractId))
 
 }

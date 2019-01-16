@@ -11,7 +11,6 @@ import org.echo.mobile.framework.model.HistoryResponse
 import org.echo.mobile.framework.model.Log
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
-import org.echo.mobile.framework.model.contract.ContractStruct
 import org.echo.mobile.framework.model.contract.input.AccountAddressInputValueType
 import org.echo.mobile.framework.model.contract.input.ContractAddressInputValueType
 import org.echo.mobile.framework.model.contract.input.InputValue
@@ -103,7 +102,6 @@ class EchoFrameworkTest {
                 "5090506105019190610505565b5090565b61052791905b8082111561052357600081600090555060" +
                 "010161050b565b5090565b905600a165627a7a72305820c3d8fad64386213f092995be2224f17d" +
                 "efe50984ba08d2e54d9229ec7a2504be0029"
-
 
     private val legalContractWithParamsBytecode =
         "608060405233600160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908" +
@@ -1094,7 +1092,6 @@ class EchoFrameworkTest {
 
         val contractResult = future.get()
         assertNotNull(contractResult)
-        assertEquals(contractResult!!.execRes.excepted, "None")
     }
 
     @Test
@@ -1117,8 +1114,7 @@ class EchoFrameworkTest {
         assert(contractResult!!.isNotEmpty())
     }
 
-
-    @Test(expected = LocalException::class)
+    @Test
     fun getContractResultFailureTest() {
         val framework = initFramework()
 
@@ -1131,7 +1127,7 @@ class EchoFrameworkTest {
             future.completeCallback()
         )
 
-        assertNotNull(future.get())
+        assertTrue(future.get()?.execRes?.newAddress == "")
     }
 
     @Test
@@ -1193,7 +1189,7 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
-        val future = FutureTask<ContractStruct>()
+        val future = FutureTask<String>()
 
         framework.getContract(
             legalContractId,
@@ -1202,7 +1198,6 @@ class EchoFrameworkTest {
 
         val contractResult = future.get()
         assertNotNull(contractResult)
-        assertEquals(contractResult!!.contractInfo.getObjectId(), legalContractId)
     }
 
     @Test(expected = LocalException::class)
@@ -1211,7 +1206,7 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
-        val future = FutureTask<ContractStruct>()
+        val future = FutureTask<String>()
 
         framework.getContract(
             illegalContractId,

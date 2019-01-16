@@ -546,7 +546,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
 
     override fun getContract(
         contractId: String,
-        callback: Callback<ContractStruct>
+        callback: Callback<String>
     ) =
         dispatch(Runnable {
             contractsFacade.getContract(
