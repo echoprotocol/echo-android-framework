@@ -45,24 +45,25 @@ class EchoFrameworkTest {
     private fun initFramework() =
         EchoFramework.create(
             Settings.Configurator()
-                .setUrl(ECHO_URL)
+                .setUrl("ws://195.201.164.54:6311")
                 .setNetworkType(Echodevnet())
                 .setReturnOnMainThread(false)
                 .setApis(
                     Api.DATABASE,
                     Api.NETWORK_BROADCAST,
-                    Api.ACCOUNT_HISTORY
+                    Api.ACCOUNT_HISTORY,
+                    Api.REGISTRATION
                 )
                 .configure()
         )
 
     private val legalContractId = "1.16.2590"
-    private val accountId = "1.2.46"
-    private val login = "frameworktest2"
-    private val password = "P5J3zbh52vTnK8W9vyFTLRLGeENc1smQFWdouDieKbs4SYfW7YYi"
-    private val secondAccountId = "1.2.47"
-    private val secondLogin = "frameworktest3"
-    private val secondPassword = "P5K8EbTtkTN6tvUX6YTXYBBvtMANcWBXvMSBkdKkjUc9vtWQjpUv"
+    private val accountId = "1.2.22"
+    private val login = "dima"
+    private val password = "dima"
+    private val secondAccountId = "1.2.26"
+    private val secondLogin = "daria"
+    private val secondPassword = "daria"
     private val legalAssetId = "1.3.0"
 
     private val legalContractParamsBytecode =
@@ -186,8 +187,8 @@ class EchoFrameworkTest {
         if (connect(framework) == false) Assert.fail("Connection error")
 
         framework.isOwnedBy(
-            login,
-            password,
+            "daria",
+            "daria",
             futureLogin.completeCallback()
         )
 
@@ -225,7 +226,6 @@ class EchoFrameworkTest {
         val account = futureAccount.get()
         assertTrue(account != null)
     }
-
 
     @Test
     fun checkAccountReservedTest() {
@@ -280,7 +280,7 @@ class EchoFrameworkTest {
     fun accountHistoryByIdTest() = getAccountHistory(accountId)
 
     @Test
-    fun accountHistoryByNameTest() = getAccountHistory(login)
+    fun accountHistoryByNameTest() = getAccountHistory("dima")
 
     private fun getAccountHistory(nameOrId: String) {
         val framework = initFramework()
@@ -313,7 +313,7 @@ class EchoFrameworkTest {
         if (connect(framework) == false) Assert.fail("Connection error")
 
         framework.changePassword(
-            login, password, password,
+            "dima", "dima", "dima",
             object : Callback<Any> {
                 override fun onSuccess(result: Any) {
                     futureChangePassword.setComplete(true)
@@ -337,7 +337,7 @@ class EchoFrameworkTest {
 //        if (connect(framework) == false) Assert.fail("Connection error")
 //
 //        framework.register(
-//            "accountRegistrationTest", "registrationPassword",
+//            "daria", "daria",
 //            object : Callback<Boolean> {
 //                override fun onSuccess(result: Boolean) {
 //                    futureChangePassword.setComplete(true)

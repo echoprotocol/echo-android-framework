@@ -97,6 +97,9 @@ class SettingsTest {
 
     private class TestCryptoComponent : CryptoCoreComponent {
 
+        override fun getRawEchorandKey(userName: String, password: String): ByteArray =
+            byteArrayOf(0)
+
         override fun getEchorandKey(userName: String, password: String): String = ""
 
         override fun encryptMessage(

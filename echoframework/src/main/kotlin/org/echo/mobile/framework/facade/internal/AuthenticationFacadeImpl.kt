@@ -25,6 +25,7 @@ import org.echo.mobile.framework.support.dematerialize
 import org.echo.mobile.framework.support.error
 import org.echo.mobile.framework.support.map
 import org.echo.mobile.framework.support.value
+import org.spongycastle.util.encoders.Hex
 
 /**
  * Implementation of [AuthenticationFacade]
@@ -71,6 +72,12 @@ class AuthenticationFacadeImpl(
         val accountId = getAccountId(name, oldPassword)
         val operation: AccountUpdateOperation =
             buildAccountUpdateOperation(accountId, name, newPassword)
+
+        val account =
+            databaseApiService.getFullAccounts(listOf(accountId), false).dematerialize()
+
+        operation.newOptionsOption.field?.delegatingAccount =
+                account[accountId]?.account!!.options.delegatingAccount
 
         val blockData = databaseApiService.getBlockData()
         val chainId = getChainId()
@@ -127,6 +134,7 @@ class AuthenticationFacadeImpl(
         newPassword: String
     ): AccountUpdateOperation {
         val (owner, active, memo) = generateAccountKeys(name, newPassword)
+        val echorandKey = Hex.toHexString(cryptoCoreComponent.getRawEchorandKey(name, newPassword))
 
         val address = Address(memo, network)
 
@@ -143,6 +151,7 @@ class AuthenticationFacadeImpl(
             .setAccount(account)
             .setOwner(ownerAuthority)
             .setActive(activeAuthority)
+            .setEdKey(echorandKey)
             .build()
     }
 

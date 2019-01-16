@@ -23,14 +23,17 @@ class EchorandKeyProviderImpl(
     EchorandKeyProvider {
 
     override fun provide(seed: ByteArray): String =
-        wrapError { Base58.encode(edDSACryptoAdapter.keyPair(seed).first) }
+        wrapError { prefix + Base58.encode(edDSACryptoAdapter.keyPair(seed).first) }
 
     override fun provide(): String =
-        wrapError { Base58.encode(edDSACryptoAdapter.keyPair().first) }
+        wrapError { prefix + Base58.encode(edDSACryptoAdapter.keyPair().first) }
 
-    private fun wrapError(body: () -> String): String =
+    override fun provideRaw(seed: ByteArray): ByteArray =
+        wrapError { edDSACryptoAdapter.keyPair(seed).first }
+
+    private fun <T> wrapError(body: () -> T): T =
         try {
-            prefix + body()
+            body()
         } catch (exception: Exception) {
             throw LocalException("Error occurred during eddsa key generation", exception)
         }

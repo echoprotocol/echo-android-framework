@@ -3,7 +3,11 @@ package org.echo.mobile.framework.support.operationbuilders
 import com.google.common.primitives.UnsignedLong
 import org.echo.mobile.bitcoinj.ECKey
 import org.echo.mobile.framework.exception.MalformedOperationException
-import org.echo.mobile.framework.model.*
+import org.echo.mobile.framework.model.Account
+import org.echo.mobile.framework.model.AccountOptions
+import org.echo.mobile.framework.model.AssetAmount
+import org.echo.mobile.framework.model.Authority
+import org.echo.mobile.framework.model.PublicKey
 import org.echo.mobile.framework.model.operations.AccountUpdateOperation
 import org.echo.mobile.framework.model.operations.AccountUpdateOperationBuilder
 import org.junit.Assert.assertEquals
@@ -40,6 +44,7 @@ class AccountUpdateOperationBuilderTest {
             .setAccount(account)
             .setOwner(owner)
             .setActive(active)
+            .setEdKey("")
             .setOptions(options)
             .build()
     }

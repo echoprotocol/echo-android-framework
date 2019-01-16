@@ -23,9 +23,14 @@ interface CryptoCoreComponent {
     fun getPrivateKey(userName: String, password: String, authorityType: AuthorityType): ByteArray
 
     /**
-     * Generates echorand key using [userName] and password
+     * Generates echorand key using [userName] and [password]
      */
     fun getEchorandKey(userName: String, password: String): String
+
+    /**
+     * Generates raw echorand key using [userName] and [password]
+     */
+    fun getRawEchorandKey(userName: String, password: String): ByteArray
 
     /**
      * Generates transaction signatures

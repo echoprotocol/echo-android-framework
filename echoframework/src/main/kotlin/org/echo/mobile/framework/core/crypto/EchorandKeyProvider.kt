@@ -19,4 +19,9 @@ interface EchorandKeyProvider {
      */
     fun provide(): String
 
+    /**
+     * Generates echorand key in raw representation
+     */
+    fun provideRaw(seed: ByteArray): ByteArray
+
 }

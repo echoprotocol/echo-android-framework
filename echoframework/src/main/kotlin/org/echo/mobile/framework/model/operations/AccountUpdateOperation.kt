@@ -2,8 +2,19 @@ package org.echo.mobile.framework.model.operations
 
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.UnsignedLong
-import com.google.gson.*
-import org.echo.mobile.framework.model.*
+import com.google.gson.Gson
+import com.google.gson.JsonArray
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonElement
+import com.google.gson.JsonObject
+import org.echo.mobile.framework.model.Account
+import org.echo.mobile.framework.model.AccountOptions
+import org.echo.mobile.framework.model.AssetAmount
+import org.echo.mobile.framework.model.Authority
+import org.echo.mobile.framework.model.BaseOperation
+import org.echo.mobile.framework.model.Optional
+import org.spongycastle.util.encoders.Hex
 import java.lang.reflect.Type
 
 /**
@@ -16,6 +27,7 @@ class AccountUpdateOperation @JvmOverloads constructor(
     var account: Account,
     owner: Authority?,
     active: Authority?,
+    private val edKey: String?,
     newOptions: AccountOptions?,
     override var fee: AssetAmount = AssetAmount(UnsignedLong.ZERO)
 ) : BaseOperation(OperationType.ACCOUNT_UPDATE_OPERATION) {
@@ -53,6 +65,11 @@ class AccountUpdateOperation @JvmOverloads constructor(
         val accountBytes = account.toBytes()
         val ownerBytes = ownerOption.toBytes()
         val activeBytes = activeOption.toBytes()
+
+        val edKeyBytes = edKey?.let {
+            byteArrayOf(1) + Hex.decode(edKey)
+        } ?: byteArrayOf(0)
+
         val newOptionsBytes = newOptionsOption.toBytes()
         val extensionBytes = extensions.toBytes()
         return Bytes.concat(
@@ -60,6 +77,7 @@ class AccountUpdateOperation @JvmOverloads constructor(
             accountBytes,
             ownerBytes,
             activeBytes,
+            edKeyBytes,
             newOptionsBytes,
             extensionBytes
         )
@@ -74,12 +92,10 @@ class AccountUpdateOperation @JvmOverloads constructor(
             val accountUpdate = JsonObject().apply {
                 add(KEY_FEE, fee.toJsonObject())
                 addProperty(KEY_ACCOUNT, account.toJsonString())
-                if (ownerOption.isSet)
-                    add(KEY_OWNER, ownerOption.toJsonObject())
-                if (activeOption.isSet)
-                    add(KEY_ACTIVE, activeOption.toJsonObject())
-                if (newOptionsOption.isSet)
-                    add(KEY_NEW_OPTIONS, newOptionsOption.toJsonObject())
+                if (ownerOption.isSet) add(KEY_OWNER, ownerOption.toJsonObject())
+                if (activeOption.isSet) add(KEY_ACTIVE, activeOption.toJsonObject())
+                if (edKey != null) addProperty(KEY_ED_KEY, edKey)
+                if (newOptionsOption.isSet) add(KEY_NEW_OPTIONS, newOptionsOption.toJsonObject())
                 add(KEY_EXTENSIONS, extensions.toJsonObject())
             }
 
@@ -106,6 +122,7 @@ class AccountUpdateOperation @JvmOverloads constructor(
             val account = createAccount(operationObject)
             val owner = parseOwner(operationObject, context)
             val active = parseActive(operationObject, context)
+            val edKey = operationObject.get(AccountCreateOperation.KEY_ED_KEY).asString
             val newOptions = parseNewOptions(operationObject, context)
             val fee = parseFee(operationObject, context)
 
@@ -113,6 +130,7 @@ class AccountUpdateOperation @JvmOverloads constructor(
                 account,
                 owner,
                 active,
+                edKey,
                 newOptions,
                 fee ?: AssetAmount(UnsignedLong.ZERO)
             )
@@ -159,6 +177,7 @@ class AccountUpdateOperation @JvmOverloads constructor(
         const val KEY_ACCOUNT = "account"
         const val KEY_OWNER = "owner"
         const val KEY_ACTIVE = "active"
+        const val KEY_ED_KEY = "ed_key"
         const val KEY_NEW_OPTIONS = "new_options"
         const val KEY_EXTENSIONS = "extensions"
     }

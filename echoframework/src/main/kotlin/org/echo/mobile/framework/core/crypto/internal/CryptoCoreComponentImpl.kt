@@ -70,6 +70,12 @@ class CryptoCoreComponentImpl(network: Network, edDSACryptoAdapter: EdDSACryptoA
         return echorandKeyProvider.provide(secretKeySeed)
     }
 
+    override fun getRawEchorandKey(userName: String, password: String): ByteArray {
+        val seedString = echorandSeed(userName, password)
+        val secretKeySeed = ECKey.fromPrivate(createPrivateKey(seedString)).getPrivKeyBytes()
+        return echorandKeyProvider.provideRaw(secretKeySeed)
+    }
+
     private fun generateSeed(userName: String, password: String, authorityType: AuthorityType) =
         seedProvider.provide(userName, password, authorityType)
 
