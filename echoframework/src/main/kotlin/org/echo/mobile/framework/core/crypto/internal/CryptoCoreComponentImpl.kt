@@ -5,7 +5,7 @@ import org.echo.mobile.bitcoinj.ECKey
 import org.echo.mobile.bitcoinj.Sha256Hash
 import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
 import org.echo.mobile.framework.core.crypto.EchorandKeyProvider
-import org.echo.mobile.framework.core.crypto.internal.addsa.EdDSACryptoAdapter
+import org.echo.mobile.framework.core.crypto.internal.eddsa.EdDSACryptoAdapter
 import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent
 import org.echo.mobile.framework.model.AuthorityType
 import org.echo.mobile.framework.model.Transaction

@@ -1,5 +1,6 @@
 package org.echo.mobile.framework
 
+import jp.co.soramitsu.crypto.ed25519.EdDSASecurityProvider
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.model.Asset
 import org.echo.mobile.framework.model.Balance
@@ -31,6 +32,7 @@ import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import java.security.Security
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.thread
 
@@ -40,8 +42,8 @@ import kotlin.concurrent.thread
  * @author Dmitriy Bushuev
  */
 class EchoFrameworkTest {
-    private fun initFramework() =
-        EchoFramework.create(
+    private fun initFramework(): EchoFramework {
+        return EchoFramework.create(
             Settings.Configurator()
                 .setUrl("ws://195.201.164.54:6311")
                 .setNetworkType(Echodevnet())
@@ -54,6 +56,7 @@ class EchoFrameworkTest {
                 )
                 .configure()
         )
+    }
 
     private val legalContractId = "1.16.28"
     private val legalContractIdForLogs = "1.16.47"

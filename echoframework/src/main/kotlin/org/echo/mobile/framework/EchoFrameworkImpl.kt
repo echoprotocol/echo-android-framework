@@ -50,6 +50,7 @@ import org.echo.mobile.framework.support.concurrent.MainThreadAccountListener
 import org.echo.mobile.framework.support.concurrent.MainThreadCallback
 import org.echo.mobile.framework.support.concurrent.MainThreadUpdateListener
 
+
 /**
  * Implementation of [EchoFramework] base library API
  *

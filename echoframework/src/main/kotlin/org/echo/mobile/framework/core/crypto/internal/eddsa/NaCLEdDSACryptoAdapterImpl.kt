@@ -1,4 +1,4 @@
-package org.echo.mobile.framework.core.crypto.internal.addsa
+package org.echo.mobile.framework.core.crypto.internal.eddsa
 
 import org.echo.mobile.nacl.NaCl
 
@@ -7,7 +7,7 @@ import org.echo.mobile.nacl.NaCl
  *
  * @author Dmitriy Bushuev
  */
-class EdDSACryptoAdapterImpl : EdDSACryptoAdapter {
+class NaCLEdDSACryptoAdapterImpl : EdDSACryptoAdapter {
 
     override fun keyPair(): Pair<ByteArray, ByteArray> = NaCl.Box.keyPair()
 

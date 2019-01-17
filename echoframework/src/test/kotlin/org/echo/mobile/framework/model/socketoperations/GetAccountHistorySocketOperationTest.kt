@@ -86,7 +86,7 @@ class GetAccountHistorySocketOperationTest {
         val contractOperationHistoryItem = contractHistoryItem.operation
         assertNotNull(contractOperationHistoryItem)
         assert(contractOperationHistoryItem is ContractCreateOperation)
-        assert(contractOperationHistoryItem!!.id == OperationType.CONTRACT_OPERATION.ordinal.toByte())
+        assert(contractOperationHistoryItem!!.id == OperationType.CONTRACT_CREATE_OPERATION.ordinal.toByte())
 
         val transferHistoryItem = history.transactions[1]
         assertNotNull(transferHistoryItem)
@@ -112,7 +112,11 @@ class GetAccountHistorySocketOperationTest {
                                                   "registrar": "1.2.22",
                                                   "receiver": "1.16.1",
                                                   "asset_id": "1.3.0",
-                                                  "value": 0,
+                                                  "eth_accuracy": false,
+                                                  "value": {
+                                                    "amount": 20,
+                                                    "asset_id": "1.3.0"
+                                                  },
                                                   "gasPrice": 0,
                                                   "gas": 1000000,
                                                   "code": "5b34b966"

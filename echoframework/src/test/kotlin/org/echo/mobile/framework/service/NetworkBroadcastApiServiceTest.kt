@@ -2,7 +2,7 @@ package org.echo.mobile.framework.service
 
 import com.google.common.primitives.UnsignedLong
 import org.echo.mobile.framework.core.crypto.internal.CryptoCoreComponentImpl
-import org.echo.mobile.framework.core.crypto.internal.addsa.EdDSACryptoAdapterImpl
+import org.echo.mobile.framework.core.crypto.internal.eddsa.NaCLEdDSACryptoAdapterImpl
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.Asset
@@ -31,7 +31,7 @@ import org.spongycastle.util.encoders.Hex
 class NetworkBroadcastApiServiceTest {
 
     private val cryptoCoreComponent =
-        CryptoCoreComponentImpl(Echodevnet(), EdDSACryptoAdapterImpl())
+        CryptoCoreComponentImpl(Echodevnet(), NaCLEdDSACryptoAdapterImpl())
 
     private lateinit var transaction: Transaction
 

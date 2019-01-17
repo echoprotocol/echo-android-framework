@@ -1,4 +1,4 @@
-package org.echo.mobile.framework.core.crypto.internal.addsa
+package org.echo.mobile.framework.core.crypto.internal.eddsa
 
 /**
  * Adapter interface for EdDSA key pair generation

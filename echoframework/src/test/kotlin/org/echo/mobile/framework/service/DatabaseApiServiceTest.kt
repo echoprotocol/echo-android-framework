@@ -408,7 +408,7 @@ class DatabaseApiServiceTest {
 
     @Test
     fun getContractTest() {
-        val response = ContractStruct(ContractInfo("1.16.1", "2.20.1", false))
+        val response = "wegfergregrefgwer"
 
         val socketCoreComponent = ServiceSocketCoreComponentMock(response)
 

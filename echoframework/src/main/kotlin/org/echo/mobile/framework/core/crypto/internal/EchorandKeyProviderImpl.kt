@@ -3,7 +3,7 @@ package org.echo.mobile.framework.core.crypto.internal
 import org.echo.mobile.bitcoinj.Base58
 import org.echo.mobile.framework.core.crypto.EchorandKeyProvider
 import org.echo.mobile.framework.core.crypto.internal.EchorandKeyProviderImpl.Companion.ECHORAND_KEY_PREFIX
-import org.echo.mobile.framework.core.crypto.internal.addsa.EdDSACryptoAdapter
+import org.echo.mobile.framework.core.crypto.internal.eddsa.EdDSACryptoAdapter
 import org.echo.mobile.framework.exception.LocalException
 
 /**
