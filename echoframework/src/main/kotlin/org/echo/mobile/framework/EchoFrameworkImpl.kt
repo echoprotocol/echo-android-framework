@@ -29,7 +29,6 @@ import org.echo.mobile.framework.model.HistoryResponse
 import org.echo.mobile.framework.model.Log
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
-import org.echo.mobile.framework.model.contract.ContractStruct
 import org.echo.mobile.framework.model.contract.input.InputValue
 import org.echo.mobile.framework.service.AccountHistoryApiService
 import org.echo.mobile.framework.service.CryptoApiService
@@ -54,7 +53,7 @@ import org.echo.mobile.framework.support.concurrent.MainThreadUpdateListener
 /**
  * Implementation of [EchoFramework] base library API
  *
- * Delegates all logic to specific facades/
+ * Delegates all logic to specific facades
  *
  * All methods and services can lead to error if you use them without associated initialized api id,
  * that eou need to specify in [Settings] before library initialization
