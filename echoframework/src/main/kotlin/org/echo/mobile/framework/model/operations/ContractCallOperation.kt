@@ -2,7 +2,6 @@ package org.echo.mobile.framework.model.operations
 
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.UnsignedLong
-import com.google.gson.GsonBuilder
 import com.google.gson.JsonArray
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
@@ -12,9 +11,7 @@ import com.google.gson.JsonSerializationContext
 import com.google.gson.JsonSerializer
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.AssetAmount
-import org.echo.mobile.framework.model.BaseOperation
 import org.echo.mobile.framework.model.contract.Contract
-import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.support.Int64
 import org.echo.mobile.framework.support.Uint8
 import java.lang.reflect.Type
@@ -26,16 +23,22 @@ import java.lang.reflect.Type
  * @author Dmitriy Bushuev
  */
 class ContractCallOperation @JvmOverloads constructor(
-    var registrar: Account,
+    registrar: Account,
     var callee: Contract,
-    val value: AssetAmount,
-    val gasPrice: UnsignedLong,
-    val gas: UnsignedLong,
-    val code: String,
-    override var fee: AssetAmount = AssetAmount(UnsignedLong.ZERO)
-) : BaseOperation(OperationType.CONTRACT_CALL_OPERATION) {
-
-    var contractResult: ContractResult? = null
+    value: AssetAmount,
+    gasPrice: UnsignedLong,
+    gas: UnsignedLong,
+    code: String,
+    fee: AssetAmount = AssetAmount(UnsignedLong.ZERO)
+) : ContractOperation(
+    registrar,
+    value,
+    gasPrice,
+    gas,
+    code,
+    fee,
+    OperationType.CONTRACT_CALL_OPERATION
+) {
 
     override fun toBytes(): ByteArray {
         val feeBytes = fee.toBytes()
@@ -51,13 +54,6 @@ class ContractCallOperation @JvmOverloads constructor(
         )
     }
 
-    override fun toJsonString(): String? {
-        val gson = GsonBuilder()
-            .registerTypeAdapter(ContractCallOperation::class.java, Serializer())
-            .create()
-        return gson.toJson(this)
-    }
-
     override fun toJsonObject(): JsonElement {
         return JsonArray().apply {
             add(this@ContractCallOperation.id)
@@ -71,17 +67,6 @@ class ContractCallOperation @JvmOverloads constructor(
                 addProperty(KEY_CODE, code)
             })
         }
-    }
-
-    override fun toString(): String = "${javaClass.simpleName}(${toJsonObject()})"
-
-    companion object {
-        private const val KEY_REGISTRAR = "registrar"
-        private const val KEY_RECEIVER = "callee"
-        private const val KEY_VALUE = "value"
-        private const val KEY_GAS_PRICE = "gasPrice"
-        private const val KEY_GAS = "gas"
-        private const val KEY_CODE = "code"
     }
 
     /**
