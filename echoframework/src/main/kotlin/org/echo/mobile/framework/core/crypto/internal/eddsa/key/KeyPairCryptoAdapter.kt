@@ -1,13 +1,13 @@
-package org.echo.mobile.framework.core.crypto.internal.eddsa
+package org.echo.mobile.framework.core.crypto.internal.eddsa.key
 
 /**
  * Adapter interface for EdDSA key pair generation
  *
- * Required for eddsa key generation API unification
+ * Required for key generation API unification
  *
  * @author Dmitriy Bushuev
  */
-interface EdDSACryptoAdapter {
+interface KeyPairCryptoAdapter {
 
     /**
      * Generates EdDSA key pair from random seed (secretKey)

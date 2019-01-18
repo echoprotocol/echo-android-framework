@@ -1,4 +1,4 @@
-package org.echo.mobile.framework.core.crypto.internal.eddsa
+package org.echo.mobile.framework.core.crypto.internal.eddsa.key
 
 import jp.co.soramitsu.crypto.ed25519.EdDSAPrivateKey
 import jp.co.soramitsu.crypto.ed25519.EdDSAPublicKey

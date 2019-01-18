@@ -3,14 +3,14 @@ package org.echo.mobile.framework.sample
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import kotlinx.android.synthetic.main.activity_main.*
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.EchoFramework
 import org.echo.mobile.framework.exception.LocalException
+import org.echo.mobile.framework.sample.fragment.MainFragment
 import org.echo.mobile.framework.support.Api
 import org.echo.mobile.framework.support.Settings
-import org.echo.mobile.framework.sample.fragment.MainFragment
-import kotlinx.android.synthetic.main.activity_main.*
-import org.echo.mobile.framework.ECHO_URL
+import java.security.Signature
 
 class MainActivity : AppCompatActivity(), ProgressListener {
 
@@ -34,6 +34,8 @@ class MainActivity : AppCompatActivity(), ProgressListener {
         )
 
         startLib()
+
+        Signature.getInstance("NONEwithEdDSA", "EdDSA")
     }
 
     private fun startLib() {

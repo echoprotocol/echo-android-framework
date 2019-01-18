@@ -1,14 +1,14 @@
-package org.echo.mobile.framework.core.crypto.internal.eddsa
+package org.echo.mobile.framework.core.crypto.internal.eddsa.key
 
 import jp.co.soramitsu.crypto.ed25519.EdDSAPrivateKey
 import jp.co.soramitsu.crypto.ed25519.EdDSAPublicKey
 
 /**
- * [EdDSACryptoAdapter] implementation based on iroha library port for java
+ * [KeyPairCryptoAdapter] implementation based on iroha library port for java
  *
  * @author Dmitriy Bushuev
  */
-class IrohaEdDSACryptoAdapterImpl : EdDSACryptoAdapter {
+class IrohaKeyPairCryptoAdapter : KeyPairCryptoAdapter {
 
     override fun keyPair(): Pair<ByteArray, ByteArray> = KeyPairGenerator().generate()
 

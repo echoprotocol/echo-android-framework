@@ -5,7 +5,7 @@ import org.echo.mobile.bitcoinj.ECKey
 import org.echo.mobile.bitcoinj.Sha256Hash
 import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
 import org.echo.mobile.framework.core.crypto.EchorandKeyProvider
-import org.echo.mobile.framework.core.crypto.internal.eddsa.EdDSACryptoAdapter
+import org.echo.mobile.framework.core.crypto.internal.eddsa.key.KeyPairCryptoAdapter
 import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent
 import org.echo.mobile.framework.model.AuthorityType
 import org.echo.mobile.framework.model.Transaction
@@ -33,14 +33,14 @@ import java.util.Arrays
  * @author Daria Pechkovskaya
  * @author Dmitriy Bushuev
  */
-class CryptoCoreComponentImpl(network: Network, edDSACryptoAdapter: EdDSACryptoAdapter) :
+class CryptoCoreComponentImpl(network: Network, keyPairCryptoAdapter: KeyPairCryptoAdapter) :
     CryptoCoreComponent {
 
     private val seedProvider = RoleDependentSeedProvider()
     private val ecKeyConverter = ECKeyToAddressConverter(network.addressPrefix)
 
     private val echorandKeyProvider: EchorandKeyProvider by lazy {
-        EchorandKeyProviderImpl(edDSACryptoAdapter)
+        EchorandKeyProviderImpl(keyPairCryptoAdapter)
     }
 
     override fun getAddress(

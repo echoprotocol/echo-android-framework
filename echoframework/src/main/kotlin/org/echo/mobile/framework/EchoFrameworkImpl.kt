@@ -1,5 +1,6 @@
 package org.echo.mobile.framework
 
+import org.echo.mobile.framework.core.crypto.internal.eddsa.EdDSASecurityProvider
 import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent
 import org.echo.mobile.framework.core.mapper.internal.MapperCoreComponentImpl
 import org.echo.mobile.framework.core.socket.internal.SocketCoreComponentImpl
@@ -49,7 +50,7 @@ import org.echo.mobile.framework.support.concurrent.ExecutorServiceDispatcher
 import org.echo.mobile.framework.support.concurrent.MainThreadAccountListener
 import org.echo.mobile.framework.support.concurrent.MainThreadCallback
 import org.echo.mobile.framework.support.concurrent.MainThreadUpdateListener
-
+import java.security.Security
 
 /**
  * Implementation of [EchoFramework] base library API
@@ -86,6 +87,8 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
      * Initializes and setups all facades with required dependencies
      */
     init {
+        Security.addProvider(EdDSASecurityProvider())
+
         LoggerCoreComponent.logLevel = settings.logLevel
         returnOnMainThread = settings.returnOnMainThread
 

@@ -1,13 +1,14 @@
-package org.echo.mobile.framework.core.crypto.internal.eddsa
+package org.echo.mobile.framework.core.crypto.internal.eddsa.key
 
 import org.echo.mobile.nacl.NaCl
 
 /**
- * [EdDSACryptoAdapter] implementation based on NaCl library port for kotlin
+ * [KeyPairCryptoAdapter] implementation based on NaCl library port for kotlin
  *
  * @author Dmitriy Bushuev
  */
-class NaCLEdDSACryptoAdapterImpl : EdDSACryptoAdapter {
+class NaCLKeyPairCryptoAdapter :
+    KeyPairCryptoAdapter {
 
     override fun keyPair(): Pair<ByteArray, ByteArray> = NaCl.Box.keyPair()
 

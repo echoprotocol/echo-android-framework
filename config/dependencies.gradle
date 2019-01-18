@@ -11,6 +11,7 @@ ext {
     spongycastleVersion = '1.58.0.0'
     appCompatVersion = '28.0.0-rc01'
     eddsaIrohaVersion = '1.0'
+    multidexVersion = '1.0.3'
 
     //Tests
     jUnitVersion = '4.12'
@@ -30,7 +31,8 @@ ext {
 
     sampleDependencies = [
             kotlin   : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion",
-            appCompat: "com.android.support:appcompat-v7:$appCompatVersion"
+            appCompat: "com.android.support:appcompat-v7:$appCompatVersion",
+            multidex : "com.android.support:multidex:$multidexVersion"
     ]
 
 }
