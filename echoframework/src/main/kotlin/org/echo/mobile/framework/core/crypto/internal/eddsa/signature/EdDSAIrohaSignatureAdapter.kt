@@ -1,6 +1,7 @@
 package org.echo.mobile.framework.core.crypto.internal.eddsa.signature
 
 import org.echo.mobile.framework.core.crypto.internal.eddsa.key.KeyPairGenerator
+import org.echo.mobile.framework.exception.LocalException
 import java.security.Signature
 
 /**
@@ -10,16 +11,19 @@ import java.security.Signature
  */
 class EdDSAIrohaSignatureAdapter : SignatureAdapter {
 
-    override fun sign(source: ByteArray, privateKey: ByteArray): ByteArray {
-        val private = privateKey.initPrivateKey()
+    override fun sign(source: ByteArray, privateKey: ByteArray): ByteArray =
+        try {
+            val private = privateKey.initPrivateKey()
 
-        val signature = initSignature().apply {
-            initSign(private)
-            update(source)
+            val signature = initSignature().apply {
+                initSign(private)
+                update(source)
+            }
+
+            signature.sign()
+        } catch (exception: Exception) {
+            throw LocalException("Error during signature process", exception)
         }
-
-        return signature.sign()
-    }
 
     private fun initSignature() =
         Signature.getInstance(
