@@ -42,6 +42,7 @@ dependencies {
     implementation libraryDependencies.socket
     implementation libraryDependencies.guava
     implementation libraryDependencies.spongycastle
+    implementation libraryDependencies.eddsaIroha
 
     //Code analysis
     detekt libraryDependencies.detekt

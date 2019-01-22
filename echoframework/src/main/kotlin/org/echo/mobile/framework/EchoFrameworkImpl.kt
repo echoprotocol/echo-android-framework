@@ -1,5 +1,6 @@
 package org.echo.mobile.framework
 
+import org.echo.mobile.framework.core.crypto.internal.eddsa.EdDSASecurityProvider
 import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent
 import org.echo.mobile.framework.core.mapper.internal.MapperCoreComponentImpl
 import org.echo.mobile.framework.core.socket.internal.SocketCoreComponentImpl
@@ -29,30 +30,32 @@ import org.echo.mobile.framework.model.HistoryResponse
 import org.echo.mobile.framework.model.Log
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
-import org.echo.mobile.framework.model.contract.ContractStruct
 import org.echo.mobile.framework.model.contract.input.InputValue
 import org.echo.mobile.framework.service.AccountHistoryApiService
 import org.echo.mobile.framework.service.CryptoApiService
 import org.echo.mobile.framework.service.DatabaseApiService
 import org.echo.mobile.framework.service.LoginApiService
 import org.echo.mobile.framework.service.NetworkBroadcastApiService
+import org.echo.mobile.framework.service.RegistrationApiService
 import org.echo.mobile.framework.service.UpdateListener
 import org.echo.mobile.framework.service.internal.AccountHistoryApiServiceImpl
 import org.echo.mobile.framework.service.internal.CryptoApiServiceImpl
 import org.echo.mobile.framework.service.internal.DatabaseApiServiceImpl
 import org.echo.mobile.framework.service.internal.LoginApiServiceImpl
 import org.echo.mobile.framework.service.internal.NetworkBroadcastApiServiceImpl
+import org.echo.mobile.framework.service.internal.RegistrationApiServiceImpl
 import org.echo.mobile.framework.support.Settings
 import org.echo.mobile.framework.support.concurrent.Dispatcher
 import org.echo.mobile.framework.support.concurrent.ExecutorServiceDispatcher
 import org.echo.mobile.framework.support.concurrent.MainThreadAccountListener
 import org.echo.mobile.framework.support.concurrent.MainThreadCallback
 import org.echo.mobile.framework.support.concurrent.MainThreadUpdateListener
+import java.security.Security
 
 /**
  * Implementation of [EchoFramework] base library API
  *
- * Delegates all logic to specific facades/
+ * Delegates all logic to specific facades
  *
  * All methods and services can lead to error if you use them without associated initialized api id,
  * that eou need to specify in [Settings] before library initialization
@@ -66,6 +69,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
     override val networkBroadcastApiService: NetworkBroadcastApiService
     override val cryptoApiService: CryptoApiService
     override val loginService: LoginApiService
+    override val registrationService: RegistrationApiService
 
     private val initializerFacade: InitializerFacade
     private val authenticationFacade: AuthenticationFacade
@@ -83,6 +87,8 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
      * Initializes and setups all facades with required dependencies
      */
     init {
+        Security.addProvider(EdDSASecurityProvider())
+
         LoggerCoreComponent.logLevel = settings.logLevel
         returnOnMainThread = settings.returnOnMainThread
 
@@ -99,6 +105,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
                 NetworkBroadcastApiServiceImpl(socketCoreComponent, settings.cryptoComponent)
         cryptoApiService = CryptoApiServiceImpl(socketCoreComponent)
         loginService = LoginApiServiceImpl(socketCoreComponent)
+        registrationService = RegistrationApiServiceImpl(socketCoreComponent)
 
         initializerFacade = InitializerFacadeImpl(
             socketCoreComponent,
@@ -108,11 +115,13 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             databaseApiService,
             cryptoApiService,
             accountHistoryApiService,
-            networkBroadcastApiService
+            networkBroadcastApiService,
+            registrationService
         )
         authenticationFacade = AuthenticationFacadeImpl(
             databaseApiService,
             networkBroadcastApiService,
+            registrationService,
             settings.cryptoComponent,
             settings.network
         )
@@ -177,6 +186,15 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             callback.wrapOriginal()
         )
     })
+
+    override fun register(userName: String, password: String, callback: Callback<Boolean>) =
+        dispatch(Runnable {
+            authenticationFacade.register(
+                userName,
+                password,
+                callback.wrapOriginal()
+            )
+        })
 
     override fun getFeeForTransferOperation(
         fromNameOrId: String,
@@ -531,7 +549,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
 
     override fun getContract(
         contractId: String,
-        callback: Callback<ContractStruct>
+        callback: Callback<String>
     ) =
         dispatch(Runnable {
             contractsFacade.getContract(

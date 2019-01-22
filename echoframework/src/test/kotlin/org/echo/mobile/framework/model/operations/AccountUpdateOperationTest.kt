@@ -62,6 +62,7 @@ class AccountUpdateOperationTest {
                                 "address_auths":[
                                 ]
                             },
+                            ed_key: "a08fd46ee534e62d08e577a84a28601903d424bdf288be45644ece293672943e",
                             "active":{
                                     "weight_threshold":1,
                                     "account_auths":[
@@ -78,6 +79,7 @@ class AccountUpdateOperationTest {
                             "new_options":{
                                 "memo_key":"TEST4vUGEra6N7pg9SNSL4SHQPkiXghmKAzDj86TJXEUMPJw1ohHXR",
                                 "voting_account":"1.2.5",
+                                "delegating_account":"1.2.12",
                                 "num_witness":0,
                                 "num_committee":0,
                                 "votes":[

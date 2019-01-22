@@ -6,17 +6,26 @@ import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.exception.NotFoundException
 import org.echo.mobile.framework.facade.AuthenticationFacade
-import org.echo.mobile.framework.model.*
+import org.echo.mobile.framework.model.Account
+import org.echo.mobile.framework.model.AccountOptions
+import org.echo.mobile.framework.model.Address
+import org.echo.mobile.framework.model.Authority
+import org.echo.mobile.framework.model.AuthorityType
+import org.echo.mobile.framework.model.FullAccount
+import org.echo.mobile.framework.model.Transaction
+import org.echo.mobile.framework.model.isEqualsByKey
 import org.echo.mobile.framework.model.network.Network
 import org.echo.mobile.framework.model.operations.AccountUpdateOperation
 import org.echo.mobile.framework.model.operations.AccountUpdateOperationBuilder
 import org.echo.mobile.framework.processResult
 import org.echo.mobile.framework.service.DatabaseApiService
 import org.echo.mobile.framework.service.NetworkBroadcastApiService
+import org.echo.mobile.framework.service.RegistrationApiService
 import org.echo.mobile.framework.support.dematerialize
 import org.echo.mobile.framework.support.error
 import org.echo.mobile.framework.support.map
 import org.echo.mobile.framework.support.value
+import org.spongycastle.util.encoders.Hex
 
 /**
  * Implementation of [AuthenticationFacade]
@@ -28,6 +37,7 @@ import org.echo.mobile.framework.support.value
 class AuthenticationFacadeImpl(
     private val databaseApiService: DatabaseApiService,
     private val networkBroadcastApiService: NetworkBroadcastApiService,
+    private val registrationApiService: RegistrationApiService,
     private val cryptoCoreComponent: CryptoCoreComponent,
     private val network: Network
 ) : BaseTransactionsFacade(databaseApiService, cryptoCoreComponent), AuthenticationFacade {
@@ -63,6 +73,12 @@ class AuthenticationFacadeImpl(
         val operation: AccountUpdateOperation =
             buildAccountUpdateOperation(accountId, name, newPassword)
 
+        val account =
+            databaseApiService.getFullAccounts(listOf(accountId), false).dematerialize()
+
+        operation.newOptionsOption.field?.delegatingAccount =
+                account[accountId]?.account!!.options.delegatingAccount
+
         val blockData = databaseApiService.getBlockData()
         val chainId = getChainId()
 
@@ -76,6 +92,20 @@ class AuthenticationFacadeImpl(
         }
 
         networkBroadcastApiService.broadcastTransaction(transaction).dematerialize()
+    }
+
+    override fun register(userName: String, password: String, callback: Callback<Boolean>) {
+        val (owner, active, memo) = generateAccountKeys(userName, password)
+        val echorandKey = cryptoCoreComponent.getEchorandKey(userName, password)
+
+        registrationApiService.register(
+            userName,
+            owner,
+            active,
+            memo,
+            echorandKey,
+            callback
+        )
     }
 
     private fun getAccountId(name: String, password: String): String {
@@ -103,17 +133,16 @@ class AuthenticationFacadeImpl(
         name: String,
         newPassword: String
     ): AccountUpdateOperation {
-        val newOwnerKey = cryptoCoreComponent.getAddress(name, newPassword, AuthorityType.OWNER)
-        val newActiveKey =
-            cryptoCoreComponent.getAddress(name, newPassword, AuthorityType.ACTIVE)
-        val newMemoKey =
-            cryptoCoreComponent.getAddress(name, newPassword, AuthorityType.KEY)
+        val (owner, active, memo) = generateAccountKeys(name, newPassword)
+        val echorandKey = Hex.toHexString(cryptoCoreComponent.getRawEchorandKey(name, newPassword))
 
-        val address = Address(newMemoKey, network)
+        val address = Address(memo, network)
+
         val ownerAuthority =
-            Authority(1, hashMapOf(Address(newOwnerKey, network).pubKey to 1L), hashMapOf())
+            Authority(1, hashMapOf(Address(owner, network).pubKey to 1L), hashMapOf())
         val activeAuthority =
-            Authority(1, hashMapOf(Address(newActiveKey, network).pubKey to 1L), hashMapOf())
+            Authority(1, hashMapOf(Address(active, network).pubKey to 1L), hashMapOf())
+
         val newOptions = AccountOptions(address.pubKey)
         val account = Account(id)
 
@@ -122,7 +151,21 @@ class AuthenticationFacadeImpl(
             .setAccount(account)
             .setOwner(ownerAuthority)
             .setActive(activeAuthority)
+            .setEdKey(echorandKey)
             .build()
+    }
+
+    private fun generateAccountKeys(
+        name: String,
+        password: String
+    ): Triple<String, String, String> {
+        val ownerKey = cryptoCoreComponent.getAddress(name, password, AuthorityType.OWNER)
+        val activeKey =
+            cryptoCoreComponent.getAddress(name, password, AuthorityType.ACTIVE)
+        val memoKey =
+            cryptoCoreComponent.getAddress(name, password, AuthorityType.KEY)
+
+        return Triple(ownerKey, activeKey, memoKey)
     }
 
     companion object {

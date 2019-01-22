@@ -5,9 +5,23 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.reflect.TypeToken
 import org.echo.mobile.framework.Callback
-import org.echo.mobile.framework.model.*
+import org.echo.mobile.framework.model.Account
+import org.echo.mobile.framework.model.AccountOptions
+import org.echo.mobile.framework.model.AssetAmount
+import org.echo.mobile.framework.model.AssetOptions
+import org.echo.mobile.framework.model.Authority
+import org.echo.mobile.framework.model.HistoricalTransfer
+import org.echo.mobile.framework.model.HistoryResponse
+import org.echo.mobile.framework.model.Memo
 import org.echo.mobile.framework.model.network.Network
-import org.echo.mobile.framework.model.operations.*
+import org.echo.mobile.framework.model.operations.AccountCreateOperation
+import org.echo.mobile.framework.model.operations.AccountUpdateOperation
+import org.echo.mobile.framework.model.operations.ContractCallOperation
+import org.echo.mobile.framework.model.operations.ContractCreateOperation
+import org.echo.mobile.framework.model.operations.ContractTransferOperation
+import org.echo.mobile.framework.model.operations.CreateAssetOperation
+import org.echo.mobile.framework.model.operations.IssueAssetOperation
+import org.echo.mobile.framework.model.operations.TransferOperation
 
 /**
  * Get operations relevant to the specified account.
@@ -78,8 +92,12 @@ class GetAccountHistorySocketOperation(
             TransferOperation.TransferDeserializer()
         )
         registerTypeAdapter(
-            ContractOperation::class.java,
-            ContractOperation.Deserializer()
+            ContractCreateOperation::class.java,
+            ContractCreateOperation.Deserializer()
+        )
+        registerTypeAdapter(
+            ContractCallOperation::class.java,
+            ContractCallOperation.Deserializer()
         )
         registerTypeAdapter(
             ContractTransferOperation::class.java,

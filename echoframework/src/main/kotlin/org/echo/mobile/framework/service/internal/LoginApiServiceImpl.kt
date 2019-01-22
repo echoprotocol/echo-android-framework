@@ -3,7 +3,11 @@ package org.echo.mobile.framework.service.internal
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.core.socket.SocketCoreComponent
 import org.echo.mobile.framework.exception.LocalException
-import org.echo.mobile.framework.model.socketoperations.*
+import org.echo.mobile.framework.model.socketoperations.AccessSocketOperation
+import org.echo.mobile.framework.model.socketoperations.AccessSocketOperationType
+import org.echo.mobile.framework.model.socketoperations.CustomOperation
+import org.echo.mobile.framework.model.socketoperations.CustomSocketOperation
+import org.echo.mobile.framework.model.socketoperations.LoginSocketOperation
 import org.echo.mobile.framework.service.LoginApiService
 import org.echo.mobile.framework.support.Api
 import org.echo.mobile.framework.support.Converter
@@ -43,7 +47,8 @@ class LoginApiServiceImpl(val socketCoreComponent: SocketCoreComponent) : LoginA
             Api.DATABASE to AccessSocketOperationType.DATABASE,
             Api.NETWORK_BROADCAST to AccessSocketOperationType.NETWORK_BROADCAST,
             Api.ACCOUNT_HISTORY to AccessSocketOperationType.HISTORY,
-            Api.CRYPTO to AccessSocketOperationType.CRYPTO
+            Api.CRYPTO to AccessSocketOperationType.CRYPTO,
+            Api.REGISTRATION to AccessSocketOperationType.REGISTRATION
         )
 
         override fun convert(source: Api): AccessSocketOperationType =

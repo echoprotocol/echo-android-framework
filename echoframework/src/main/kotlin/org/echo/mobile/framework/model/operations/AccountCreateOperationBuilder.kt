@@ -22,6 +22,7 @@ class AccountCreateOperationBuilder : Builder<AccountCreateOperation> {
     private var fee: AssetAmount? = null
     private var owner: Authority? = null
     private var active: Authority? = null
+    private var edKey: String? = null
     private var options: AccountOptions? = null
 
     /**
@@ -96,6 +97,14 @@ class AccountCreateOperationBuilder : Builder<AccountCreateOperation> {
     }
 
     /**
+     * Sets new echorand ed key [edKey] for account
+     */
+    fun setEdKey(edKey: String): AccountCreateOperationBuilder {
+        this.edKey = edKey
+        return this
+    }
+
+    /**
      * Sets options for account
      *
      * @param newOptions New [AccountOptions] for account
@@ -119,6 +128,7 @@ class AccountCreateOperationBuilder : Builder<AccountCreateOperation> {
                 referrerPercent,
                 owner!!,
                 active!!,
+                edKey!!,
                 options!!,
                 nullSafeFee
             )
@@ -129,6 +139,7 @@ class AccountCreateOperationBuilder : Builder<AccountCreateOperation> {
             referrerPercent,
             owner!!,
             active!!,
+            edKey!!,
             options!!
         )
     }

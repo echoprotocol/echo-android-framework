@@ -2,8 +2,19 @@ package org.echo.mobile.framework.model.operations
 
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.UnsignedLong
-import com.google.gson.*
-import org.echo.mobile.framework.model.*
+import com.google.gson.Gson
+import com.google.gson.JsonArray
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonElement
+import com.google.gson.JsonObject
+import com.google.gson.JsonParseException
+import org.echo.mobile.framework.model.Account
+import org.echo.mobile.framework.model.AccountOptions
+import org.echo.mobile.framework.model.AssetAmount
+import org.echo.mobile.framework.model.Authority
+import org.echo.mobile.framework.model.BaseOperation
+import org.echo.mobile.framework.model.Optional
 import java.lang.reflect.Type
 
 /**
@@ -30,6 +41,7 @@ class AccountCreateOperation
     val referrerPercent: Int = 0,
     owner: Authority,
     active: Authority,
+    private val edKey: String,
     options: AccountOptions,
     override var fee: AssetAmount = AssetAmount(UnsignedLong.ZERO)
 ) : BaseOperation(OperationType.ACCOUNT_CREATE_OPERATION) {
@@ -78,12 +90,12 @@ class AccountCreateOperation
             addProperty(KEY_REFERRER, referrer.toJsonString())
             addProperty(KEY_REFERRER_PERCENT, referrerPercent)
 
-            if (owner.isSet)
-                add(KEY_OWNER, owner.toJsonObject())
-            if (active.isSet)
-                add(KEY_ACTIVE, active.toJsonObject())
-            if (options.isSet)
-                add(KEY_OPTIONS, options.toJsonObject())
+            if (owner.isSet) add(KEY_OWNER, owner.toJsonObject())
+            if (active.isSet) add(KEY_ACTIVE, active.toJsonObject())
+
+            addProperty(KEY_ACTIVE, edKey)
+
+            if (options.isSet) add(KEY_OPTIONS, options.toJsonObject())
 
             add(KEY_EXTENSIONS, extensions.toJsonObject())
         }
@@ -100,6 +112,7 @@ class AccountCreateOperation
         val referrerPercent = byteArrayOf(referrerPercent.toByte())
         val ownerBytes = owner.toBytes()
         val activeBytes = active.toBytes()
+        val edKeyBytes = edKey.toByteArray()
         val newOptionsBytes = options.toBytes()
         val extensionBytes = extensions.toBytes()
         return Bytes.concat(
@@ -110,6 +123,7 @@ class AccountCreateOperation
             nameBytes,
             ownerBytes,
             activeBytes,
+            edKeyBytes,
             newOptionsBytes,
             extensionBytes
         )
@@ -130,13 +144,14 @@ class AccountCreateOperation
 
             val name = jsonObject.get(KEY_NAME).asString
             val referrer = Account(jsonObject.get(KEY_REFERRER).asString)
-            val registrar =Account(jsonObject.get(KEY_REGISTRAR).asString)
+            val registrar = Account(jsonObject.get(KEY_REGISTRAR).asString)
 
             // Deserializing Authority objects
             val owner =
                 context.deserialize<Authority>(jsonObject.get(KEY_OWNER), Authority::class.java)
             val active =
                 context.deserialize<Authority>(jsonObject.get(KEY_ACTIVE), Authority::class.java)
+            val edKey = jsonObject.get(KEY_ED_KEY).asString
 
             //Deserializing AccountOptions object
             val options = context.deserialize<AccountOptions>(
@@ -148,7 +163,17 @@ class AccountCreateOperation
             val fee =
                 context.deserialize<AssetAmount>(jsonObject.get(KEY_FEE), AssetAmount::class.java)
 
-            return AccountCreateOperation(name, registrar, referrer, 0, owner, active, options, fee)
+            return AccountCreateOperation(
+                name,
+                registrar,
+                referrer,
+                0,
+                owner,
+                active,
+                edKey,
+                options,
+                fee
+            )
         }
 
     }
@@ -160,6 +185,7 @@ class AccountCreateOperation
         const val KEY_REFERRER_PERCENT = "referrer_percent"
         const val KEY_OWNER = "owner"
         const val KEY_ACTIVE = "active"
+        const val KEY_ED_KEY = "ed_key"
         const val KEY_OPTIONS = "options"
         const val KEY_EXTENSIONS = "extensions"
     }

@@ -11,18 +11,18 @@ import org.echo.mobile.framework.support.Builder
 import org.echo.mobile.framework.support.toUnsignedLong
 
 /**
- * Represents builder for [ContractOperation].
+ * Represents builder for [ContractCreateOperation].
  * Checks required data.
  *
  * @author Daria Pechkovskaya
  */
-class ContractOperationBuilder : Builder<ContractOperation> {
+class ContractCreateOperationBuilder : Builder<ContractCreateOperation> {
 
     private var fee: AssetAmount? = null
     private var registrar: Account? = null
     private var receiver: Contract? = null
     private var asset: Asset? = null
-    private var value: UnsignedLong? = null
+    private var value: AssetAmount? = null
     private var gasPrice: UnsignedLong? = null
     private var gas: UnsignedLong? = null
     private var code: String? = null
@@ -31,7 +31,7 @@ class ContractOperationBuilder : Builder<ContractOperation> {
      * Sets actual fee [AssetAmount] for operation
      * @param fee Actual fee [AssetAmount]
      */
-    fun setFee(fee: AssetAmount): ContractOperationBuilder {
+    fun setFee(fee: AssetAmount): ContractCreateOperationBuilder {
         this.fee = fee
         return this
     }
@@ -40,7 +40,7 @@ class ContractOperationBuilder : Builder<ContractOperation> {
      * Sets account working with contract
      * @param registrar Account working with contract
      */
-    fun setRegistrar(registrar: Account): ContractOperationBuilder {
+    fun setRegistrar(registrar: Account): ContractCreateOperationBuilder {
         this.registrar = registrar
         return this
     }
@@ -49,26 +49,8 @@ class ContractOperationBuilder : Builder<ContractOperation> {
      * Sets contract receiver id
      * @param receiverId if of contract receiver
      */
-    fun setReceiver(receiverId: String): ContractOperationBuilder {
+    fun setReceiver(receiverId: String): ContractCreateOperationBuilder {
         this.receiver = Contract(receiverId)
-        return this
-    }
-
-    /**
-     * Sets contract receiver id
-     * @param receiverId if of contract receiver
-     */
-    fun setReceiver(receiver: Contract): ContractOperationBuilder {
-        this.receiver = receiver
-        return this
-    }
-
-    /**
-     * Sets asset for operation
-     * @param asset Asset for operation
-     */
-    fun setAsset(asset: Asset): ContractOperationBuilder {
-        this.asset = asset
         return this
     }
 
@@ -76,7 +58,7 @@ class ContractOperationBuilder : Builder<ContractOperation> {
      * Sets asset for operation
      * @param assetId Id of asset for operation
      */
-    fun setAsset(assetId: String): ContractOperationBuilder {
+    fun setAsset(assetId: String): ContractCreateOperationBuilder {
         this.asset = Asset(assetId)
         return this
     }
@@ -85,17 +67,8 @@ class ContractOperationBuilder : Builder<ContractOperation> {
      * Sets pay value for contract operation
      * @param value Pay value for operation
      */
-    fun setValue(value: UnsignedLong): ContractOperationBuilder {
+    fun setValue(value: AssetAmount): ContractCreateOperationBuilder {
         this.value = value
-        return this
-    }
-
-    /**
-     * Sets pay value for contract operation
-     * @param value Pay value for operation
-     */
-    fun setValue(value: Long): ContractOperationBuilder {
-        this.value = value.toUnsignedLong()
         return this
     }
 
@@ -103,7 +76,7 @@ class ContractOperationBuilder : Builder<ContractOperation> {
      * Sets gas price for contract operation
      * @param gasPrice Gas price for operation
      */
-    fun setGasPrice(gasPrice: UnsignedLong): ContractOperationBuilder {
+    fun setGasPrice(gasPrice: UnsignedLong): ContractCreateOperationBuilder {
         this.gasPrice = gasPrice
         return this
     }
@@ -112,7 +85,7 @@ class ContractOperationBuilder : Builder<ContractOperation> {
      * Sets gas price for contract operation
      * @param gasPrice Gas price for operation
      */
-    fun setGasPrice(gasPrice: Long): ContractOperationBuilder {
+    fun setGasPrice(gasPrice: Long): ContractCreateOperationBuilder {
         this.gasPrice = gasPrice.toUnsignedLong()
         return this
     }
@@ -121,7 +94,7 @@ class ContractOperationBuilder : Builder<ContractOperation> {
      * Sets gas for contract operation
      * @param gas Gas for operation
      */
-    fun setGas(gas: UnsignedLong): ContractOperationBuilder {
+    fun setGas(gas: UnsignedLong): ContractCreateOperationBuilder {
         this.gas = gas
         return this
     }
@@ -130,7 +103,7 @@ class ContractOperationBuilder : Builder<ContractOperation> {
      * Sets gas for contract operation
      * @param gas Gas for operation
      */
-    fun setGas(gas: Long): ContractOperationBuilder {
+    fun setGas(gas: Long): ContractCreateOperationBuilder {
         this.gas = gas.toUnsignedLong()
         return this
     }
@@ -139,25 +112,31 @@ class ContractOperationBuilder : Builder<ContractOperation> {
      * Sets code for contract if [receiver] is not set
      * @param code Code for contract operation
      */
-    fun setContractCode(code: String): ContractOperationBuilder {
+    fun setContractCode(code: String): ContractCreateOperationBuilder {
         this.code = code
         return this
     }
 
-    override fun build(): ContractOperation {
+    override fun build(): ContractCreateOperation {
         checkRegistrar(registrar)
         checkContractCode(code)
 
-        val asset = this.asset ?: Asset(ECHO_ASSET_ID)
-        val value = this.value ?: UnsignedLong.ZERO
+        val value = this.value ?: AssetAmount(UnsignedLong.ZERO, Asset(ECHO_ASSET_ID))
         val gasPrice = this.gasPrice ?: UnsignedLong.ZERO
         val gas = this.gas ?: UnsignedLong.ZERO
         val registrar = this.registrar!!
         val code = this.code!!
 
         return fee?.let { nullSafeFee ->
-            ContractOperation(registrar, receiver, asset, value, gasPrice, gas, code, nullSafeFee)
-        } ?: ContractOperation(registrar, receiver, asset, value, gasPrice, gas, code)
+            ContractCreateOperation(
+                registrar,
+                value,
+                gasPrice,
+                gas,
+                code,
+                fee = nullSafeFee
+            )
+        } ?: ContractCreateOperation(registrar, value, gasPrice, gas, code)
     }
 
     private fun checkRegistrar(account: Account?) {

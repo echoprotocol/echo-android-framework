@@ -2,6 +2,7 @@ package org.echo.mobile.framework.support
 
 import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
 import org.echo.mobile.framework.core.crypto.internal.CryptoCoreComponentImpl
+import org.echo.mobile.framework.core.crypto.internal.eddsa.key.IrohaKeyPairCryptoAdapter
 import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent.LogLevel
 import org.echo.mobile.framework.core.socket.SocketMessenger
 import org.echo.mobile.framework.core.socket.internal.SocketMessengerImpl
@@ -120,7 +121,11 @@ class Settings private constructor(
                     setUrl(url)
                 }
             val network = network ?: Echodevnet()
-            val cryptoComponent = this.cryptoComponent ?: CryptoCoreComponentImpl(network)
+            val cryptoComponent =
+                this.cryptoComponent ?: CryptoCoreComponentImpl(
+                    network,
+                    IrohaKeyPairCryptoAdapter()
+                )
             val apis = apis ?: Api.values().toSet()
 
             return Settings(

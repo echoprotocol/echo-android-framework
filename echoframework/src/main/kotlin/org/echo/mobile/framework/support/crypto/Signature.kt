@@ -6,7 +6,7 @@ import org.echo.mobile.bitcoinj.Sha256Hash
 import org.echo.mobile.bitcoinj.bigIntegerToBytes
 import org.echo.mobile.framework.exception.MalformedTransactionException
 import org.echo.mobile.framework.model.Transaction
-import java.util.*
+import java.util.ArrayList
 
 /**
  * Object used to transaction signing

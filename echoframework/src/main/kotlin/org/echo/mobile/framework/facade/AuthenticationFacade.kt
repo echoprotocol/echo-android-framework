@@ -34,4 +34,11 @@ interface AuthenticationFacade {
         callback: Callback<Any>
     )
 
+    /**
+     * Registers user in echo blockchain using [userName] and [password]
+     *
+     * Returns true/false according to registration result
+     */
+    fun register(userName: String, password: String, callback: Callback<Boolean>)
+
 }
