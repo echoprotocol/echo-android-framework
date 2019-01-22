@@ -46,10 +46,11 @@ class GetContractsSocketOperation(
         try {
             val result = jsonTree.asJsonObject.get(RESULT_KEY)?.asJsonArray
 
-            return GsonBuilder().create().fromJson<List<ContractInfo>>(
-                result,
-                object : TypeToken<List<ContractInfo>>() {}.type
-            )
+            return GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()
+                .fromJson<List<ContractInfo>>(
+                    result,
+                    object : TypeToken<List<ContractInfo>>() {}.type
+                )
 
         } catch (ex: Exception) {
             ex.printStackTrace()

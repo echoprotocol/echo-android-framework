@@ -121,9 +121,11 @@ class GetBlockSocketOperationTest {
                                     ],
                                     "address_auths": []
                                   },
+                                  "ed_key": "edKey",
                                   "new_options": {
                                     "memo_key": "ECHO5xiJsHy6r2m4XBJiRHmpMUqJHrNjzw3aJe6KE5gzwFn1mwKUR9",
                                     "voting_account": "1.2.5",
+                                    "delegating_account": "1.2.12",
                                     "num_witness": 0,
                                     "num_committee": 0,
                                     "votes": [],

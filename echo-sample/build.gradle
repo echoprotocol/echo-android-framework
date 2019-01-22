@@ -16,6 +16,8 @@ android {
         targetSdkVersion globalConfiguration["androidTargetSdkVersion"]
         versionCode globalConfiguration["androidVersionCode"]
         testInstrumentationRunner globalConfiguration["testRunner"]
+
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -36,4 +38,7 @@ dependencies {
 
     implementation sampleDependencies.kotlin
     implementation sampleDependencies.appCompat
+
+    //multidex
+    implementation sampleDependencies.multidex
 }

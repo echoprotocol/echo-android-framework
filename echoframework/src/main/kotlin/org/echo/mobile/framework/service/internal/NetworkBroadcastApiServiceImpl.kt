@@ -6,7 +6,6 @@ import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
 import org.echo.mobile.framework.core.socket.SocketCoreComponent
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.model.Transaction
-import org.echo.mobile.framework.model.TransactionResult
 import org.echo.mobile.framework.model.socketoperations.CustomOperation
 import org.echo.mobile.framework.model.socketoperations.CustomSocketOperation
 import org.echo.mobile.framework.model.socketoperations.TransactionSocketOperation

@@ -1,7 +1,18 @@
 package org.echo.mobile.framework
 
-import org.echo.mobile.framework.facade.*
-import org.echo.mobile.framework.service.*
+import org.echo.mobile.framework.facade.AssetsFacade
+import org.echo.mobile.framework.facade.AuthenticationFacade
+import org.echo.mobile.framework.facade.ContractsFacade
+import org.echo.mobile.framework.facade.FeeFacade
+import org.echo.mobile.framework.facade.InformationFacade
+import org.echo.mobile.framework.facade.SubscriptionFacade
+import org.echo.mobile.framework.facade.TransactionsFacade
+import org.echo.mobile.framework.service.AccountHistoryApiService
+import org.echo.mobile.framework.service.CryptoApiService
+import org.echo.mobile.framework.service.DatabaseApiService
+import org.echo.mobile.framework.service.LoginApiService
+import org.echo.mobile.framework.service.NetworkBroadcastApiService
+import org.echo.mobile.framework.service.RegistrationApiService
 import org.echo.mobile.framework.support.Settings
 
 /**
@@ -39,6 +50,11 @@ interface EchoFramework : AuthenticationFacade, FeeFacade, InformationFacade, Su
      * Current library instance of [LoginApiService]
      */
     val loginService: LoginApiService
+
+    /**
+     * Current library instance of [RegistrationApiService]
+     */
+    val registrationService: RegistrationApiService
 
     /**
      * Starts socket connection, connects to blockchain apis

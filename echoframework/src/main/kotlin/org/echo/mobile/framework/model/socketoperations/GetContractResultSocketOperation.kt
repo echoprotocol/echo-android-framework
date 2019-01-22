@@ -42,7 +42,11 @@ class GetContractResultSocketOperation(
             return null
         }
 
-        val result = jsonTree.asJsonObject.get(RESULT_KEY)?.asJsonObject
+        val resultArray = jsonTree.asJsonObject.get(RESULT_KEY)?.asJsonArray
+
+        if (resultArray == null || resultArray.size() < 2) return null
+
+        val result = resultArray.get(1).asJsonObject
 
         return Gson().fromJson<ContractResult>(result, type)
     }

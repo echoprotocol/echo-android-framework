@@ -111,6 +111,7 @@ class FullAccountsSocketOperationTest {
                                                 |"options":{
                                                 |"memo_key":"TEST4vUGEra6N7pg9SNSL4SHQPkiXghmKAzDj86TJXEUMPJw1ohHXR",
                                                 |"voting_account":"1.2.5",
+                                                |"delegating_account":"1.2.12",
                                                 |"num_witness":0,
                                                 |"num_committee":0,
                                                 |"votes":[

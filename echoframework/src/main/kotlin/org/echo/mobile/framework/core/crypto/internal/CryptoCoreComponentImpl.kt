@@ -4,6 +4,8 @@ import com.google.common.primitives.Bytes
 import org.echo.mobile.bitcoinj.ECKey
 import org.echo.mobile.bitcoinj.Sha256Hash
 import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
+import org.echo.mobile.framework.core.crypto.EchorandKeyProvider
+import org.echo.mobile.framework.core.crypto.internal.eddsa.key.KeyPairCryptoAdapter
 import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent
 import org.echo.mobile.framework.model.AuthorityType
 import org.echo.mobile.framework.model.Transaction
@@ -19,7 +21,8 @@ import org.echo.mobile.framework.support.sha512hash
 import org.spongycastle.util.encoders.Hex
 import java.math.BigInteger
 import java.security.NoSuchAlgorithmException
-import java.util.*
+import java.util.ArrayList
+import java.util.Arrays
 
 /**
  * Implementation of [CryptoCoreComponent]
@@ -30,10 +33,15 @@ import java.util.*
  * @author Daria Pechkovskaya
  * @author Dmitriy Bushuev
  */
-class CryptoCoreComponentImpl(network: Network) : CryptoCoreComponent {
+class CryptoCoreComponentImpl(network: Network, keyPairCryptoAdapter: KeyPairCryptoAdapter) :
+    CryptoCoreComponent {
 
     private val seedProvider = RoleDependentSeedProvider()
     private val ecKeyConverter = ECKeyToAddressConverter(network.addressPrefix)
+
+    private val echorandKeyProvider: EchorandKeyProvider by lazy {
+        EchorandKeyProviderImpl(keyPairCryptoAdapter)
+    }
 
     override fun getAddress(
         userName: String,
@@ -54,6 +62,18 @@ class CryptoCoreComponentImpl(network: Network) : CryptoCoreComponent {
     ): ByteArray {
         val seedString = generateSeed(userName, password, authorityType)
         return ECKey.fromPrivate(createPrivateKey(seedString)).getPrivKeyBytes()
+    }
+
+    override fun getEchorandKey(userName: String, password: String): String {
+        val seedString = echorandSeed(userName, password)
+        val secretKeySeed = ECKey.fromPrivate(createPrivateKey(seedString)).getPrivKeyBytes()
+        return echorandKeyProvider.provide(secretKeySeed)
+    }
+
+    override fun getRawEchorandKey(userName: String, password: String): ByteArray {
+        val seedString = echorandSeed(userName, password)
+        val secretKeySeed = ECKey.fromPrivate(createPrivateKey(seedString)).getPrivKeyBytes()
+        return echorandKeyProvider.provideRaw(secretKeySeed)
     }
 
     private fun generateSeed(userName: String, password: String, authorityType: AuthorityType) =
@@ -153,8 +173,13 @@ class CryptoCoreComponentImpl(network: Network) : CryptoCoreComponent {
         return plaintext
     }
 
+    private fun echorandSeed(userName: String, password: String) =
+        userName + ECHORAND_KEY_SEED_PART + password
+
     companion object {
         private val LOGGER = LoggerCoreComponent.create(CryptoCoreComponentImpl::class.java.name)
+
+        private const val ECHORAND_KEY_SEED_PART = "echorand"
     }
 
 }
