@@ -19,6 +19,7 @@ class AccountUpdateOperationBuilder : Builder<AccountUpdateOperation> {
     private var account: Account? = null
     private var owner: Authority? = null
     private var active: Authority? = null
+    private var edKey: String? = null
     private var newOptions: AccountOptions? = null
 
     /**
@@ -58,6 +59,14 @@ class AccountUpdateOperationBuilder : Builder<AccountUpdateOperation> {
     }
 
     /**
+     * Sets new echorand ed key [edKey] for account
+     */
+    fun setEdKey(edKey: String): AccountUpdateOperationBuilder {
+        this.edKey = edKey
+        return this
+    }
+
+    /**
      * Sets new options for account
      * @param newOptions New [AccountOptions] for account
      */
@@ -71,8 +80,8 @@ class AccountUpdateOperationBuilder : Builder<AccountUpdateOperation> {
         checkAuthoritiesAccountOptions(owner, active, newOptions)
 
         return fee?.let { nullSafeFee ->
-            AccountUpdateOperation(account!!, owner, active, newOptions, nullSafeFee)
-        } ?: AccountUpdateOperation(account!!, owner, active, newOptions)
+            AccountUpdateOperation(account!!, owner, active, edKey, newOptions, nullSafeFee)
+        } ?: AccountUpdateOperation(account!!, owner, active, edKey, newOptions)
     }
 
     private fun checkAccount(account: Account?) {

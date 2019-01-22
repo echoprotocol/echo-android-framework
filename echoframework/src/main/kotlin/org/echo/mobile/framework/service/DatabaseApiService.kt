@@ -228,11 +228,11 @@ interface ContractsService {
     fun getContracts(contractIds: List<String>): Result<LocalException, List<ContractInfo>>
 
     /**
-     * Return full information about contract
+     * Returns contract code by [contractId]
      *
      * @param contractId Id of contract
      */
-    fun getContract(contractId: String): Result<LocalException, ContractStruct>
+    fun getContract(contractId: String): Result<LocalException, String>
 
 }
 

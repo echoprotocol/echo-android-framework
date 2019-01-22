@@ -1,12 +1,16 @@
 package org.echo.mobile.framework.model
 
 import com.google.common.primitives.Bytes
-import com.google.gson.*
+import com.google.gson.JsonArray
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonElement
+import com.google.gson.JsonObject
 import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent
-import org.echo.mobile.framework.support.Uint16
-import org.echo.mobile.framework.support.serialize
 import org.echo.mobile.framework.exception.MalformedAddressException
 import org.echo.mobile.framework.model.network.Network
+import org.echo.mobile.framework.support.Uint16
+import org.echo.mobile.framework.support.serialize
 import java.lang.reflect.Type
 
 /**
@@ -23,6 +27,8 @@ class AccountOptions : GrapheneSerializable {
     var memoKey: PublicKey? = null
 
     var votingAccount: Account = Account(Account.PROXY_TO_SELF)
+
+    var delegatingAccount: Account = Account(Account.PROXY_TO_SELF)
 
     var witnessCount: Int = 0
 
@@ -44,7 +50,10 @@ class AccountOptions : GrapheneSerializable {
             val memoBytes = memo.toBytes()
 
             // Adding voting account
-            val voitingAccountBytes = votingAccount.toBytes()
+            val votingAccountBytes = votingAccount.toBytes()
+
+            // Adding delegating account
+            val delegatingAccountBytes = delegatingAccount.toBytes()
 
             // Adding num_witness
             val witnessCountBytes = Uint16.serialize(witnessCount)
@@ -59,8 +68,13 @@ class AccountOptions : GrapheneSerializable {
             val extensionsBytes = extensions.toBytes()
 
             Bytes.concat(
-                memoBytes, voitingAccountBytes, witnessCountBytes, committeeCountBytes,
-                votesBytes, extensionsBytes
+                memoBytes,
+                votingAccountBytes,
+                delegatingAccountBytes,
+                witnessCountBytes,
+                committeeCountBytes,
+                votesBytes,
+                extensionsBytes
             )
 
         } ?: byteArrayOf(0)
@@ -73,6 +87,7 @@ class AccountOptions : GrapheneSerializable {
             addProperty(KEY_NUM_COMMITTEE, committeeCount)
             addProperty(KEY_NUM_WITNESS, witnessCount)
             addProperty(KEY_VOTING_ACCOUNT, votingAccount.getObjectId())
+            addProperty(KEY_DELEGATING_ACCOUNT, delegatingAccount.getObjectId())
 
             val votesArray = JsonArray().apply {
                 votes.forEach { vote -> add(vote) }
@@ -108,6 +123,7 @@ class AccountOptions : GrapheneSerializable {
                 AccountOptions()
             }.apply {
                 votingAccount = Account(jsonAccountOptions.get(KEY_VOTING_ACCOUNT).asString)
+                delegatingAccount = Account(jsonAccountOptions.get(KEY_DELEGATING_ACCOUNT).asString)
                 witnessCount = jsonAccountOptions.get(KEY_NUM_WITNESS).asInt
                 committeeCount = jsonAccountOptions.get(KEY_NUM_COMMITTEE).asInt
             }
@@ -122,6 +138,7 @@ class AccountOptions : GrapheneSerializable {
         const val KEY_NUM_WITNESS = "num_witness"
         const val KEY_VOTES = "votes"
         const val KEY_VOTING_ACCOUNT = "voting_account"
+        const val KEY_DELEGATING_ACCOUNT = "delegating_account"
         const val KEY_EXTENSIONS = Extensions.KEY_EXTENSIONS
     }
 

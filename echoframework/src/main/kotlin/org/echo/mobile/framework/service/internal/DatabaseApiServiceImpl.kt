@@ -360,8 +360,8 @@ class DatabaseApiServiceImpl(
         return future.wrapResult()
     }
 
-    override fun getContract(contractId: String): Result<LocalException, ContractStruct> {
-        val future = FutureTask<ContractStruct>()
+    override fun getContract(contractId: String): Result<LocalException, String> {
+        val future = FutureTask<String>()
         val operation = GetContractSocketOperation(
             id,
             contractId,

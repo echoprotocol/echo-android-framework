@@ -23,7 +23,8 @@ class InitializerFacadeImpl(
     private val databaseApiService: DatabaseApiService,
     private val cryptoApiService: CryptoApiService,
     private val accountHistoryApiService: AccountHistoryApiService,
-    private val networkBroadcastApiService: NetworkBroadcastApiService
+    private val networkBroadcastApiService: NetworkBroadcastApiService,
+    private val registrationApiService: RegistrationApiService
 ) : InitializerFacade {
 
     private val initializeSocketListener by lazy { InitializeSocketListener() }
@@ -82,6 +83,7 @@ class InitializerFacadeImpl(
             Api.ACCOUNT_HISTORY -> accountHistoryApiService.id = id
             Api.CRYPTO -> cryptoApiService.id = id
             Api.NETWORK_BROADCAST -> networkBroadcastApiService.id = id
+            Api.REGISTRATION -> registrationApiService.id = id
         }
     }
 

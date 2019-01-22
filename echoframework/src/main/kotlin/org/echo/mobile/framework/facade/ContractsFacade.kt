@@ -6,7 +6,6 @@ import org.echo.mobile.framework.DEFAULT_GAS_PRICE
 import org.echo.mobile.framework.model.Log
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
-import org.echo.mobile.framework.model.contract.ContractStruct
 import org.echo.mobile.framework.model.contract.input.InputValue
 import java.math.BigInteger
 
@@ -136,10 +135,10 @@ interface ContractsFacade {
     fun getAllContracts(callback: Callback<List<ContractInfo>>)
 
     /**
-     * Return full information about contract
+     * Return contract code by [contractId]
      *
      * @param contractId Id of contract
      */
-    fun getContract(contractId: String, callback: Callback<ContractStruct>)
+    fun getContract(contractId: String, callback: Callback<String>)
 
 }

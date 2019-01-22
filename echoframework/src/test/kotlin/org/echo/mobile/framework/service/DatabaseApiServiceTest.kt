@@ -6,8 +6,16 @@ import org.echo.mobile.framework.core.socket.SocketCoreComponent
 import org.echo.mobile.framework.core.socket.SocketMessengerListener
 import org.echo.mobile.framework.core.socket.SocketState
 import org.echo.mobile.framework.exception.LocalException
-import org.echo.mobile.framework.model.*
-import org.echo.mobile.framework.model.contract.*
+import org.echo.mobile.framework.model.Asset
+import org.echo.mobile.framework.model.AssetAmount
+import org.echo.mobile.framework.model.Block
+import org.echo.mobile.framework.model.DynamicGlobalProperties
+import org.echo.mobile.framework.model.FullAccount
+import org.echo.mobile.framework.model.contract.ContractInfo
+import org.echo.mobile.framework.model.contract.ContractResult
+import org.echo.mobile.framework.model.contract.ContractStruct
+import org.echo.mobile.framework.model.contract.ExecRes
+import org.echo.mobile.framework.model.contract.TrReceipt
 import org.echo.mobile.framework.model.network.Echodevnet
 import org.echo.mobile.framework.model.socketoperations.FullAccountsSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetAssetsSocketOperation
@@ -15,10 +23,14 @@ import org.echo.mobile.framework.model.socketoperations.SocketOperation
 import org.echo.mobile.framework.service.internal.DatabaseApiServiceImpl
 import org.echo.mobile.framework.support.error
 import org.echo.mobile.framework.support.value
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
+import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Test
-import java.util.*
+import java.util.Date
 
 /**
  * Test cases for [DatabaseApiServiceImpl]
@@ -396,7 +408,7 @@ class DatabaseApiServiceTest {
 
     @Test
     fun getContractTest() {
-        val response = ContractStruct(ContractInfo("1.16.1", "2.20.1", false))
+        val response = "wegfergregrefgwer"
 
         val socketCoreComponent = ServiceSocketCoreComponentMock(response)
 
@@ -405,7 +417,6 @@ class DatabaseApiServiceTest {
         databaseApiService.getContract("")
             .value { result ->
                 assertNotNull(result)
-                assertEquals(result.contractInfo.getObjectId(), result.contractInfo.getObjectId())
             }
             .error { fail() }
     }

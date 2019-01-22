@@ -1,6 +1,6 @@
 ext {
 
-    kotlinVersion = "1.2.51"
+    kotlinVersion = "1.3.11"
 
     //Libraries
     googleGsonVersion = '2.8.5'
@@ -10,6 +10,8 @@ ext {
     guavaVersion = '24.0-android'
     spongycastleVersion = '1.58.0.0'
     appCompatVersion = '28.0.0-rc01'
+    eddsaIrohaVersion = '1.0'
+    multidexVersion = '1.0.3'
 
     //Tests
     jUnitVersion = '4.12'
@@ -23,12 +25,14 @@ ext {
             detekt      : "io.gitlab.arturbosch.detekt:detekt-cli:$detektVersion",
             socket      : "com.neovisionaries:nv-websocket-client:$socketVersion",
             guava       : "com.google.guava:guava:$guavaVersion",
-            spongycastle: "com.madgag.spongycastle:core:$spongycastleVersion"
+            spongycastle: "com.madgag.spongycastle:core:$spongycastleVersion",
+            eddsaIroha  : "com.github.warchant:ed25519-sha3-java:$eddsaIrohaVersion"
     ]
 
     sampleDependencies = [
             kotlin   : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion",
-            appCompat: "com.android.support:appcompat-v7:$appCompatVersion"
+            appCompat: "com.android.support:appcompat-v7:$appCompatVersion",
+            multidex : "com.android.support:multidex:$multidexVersion"
     ]
 
 }
