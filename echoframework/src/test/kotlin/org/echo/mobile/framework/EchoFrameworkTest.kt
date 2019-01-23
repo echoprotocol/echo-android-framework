@@ -1,6 +1,5 @@
 package org.echo.mobile.framework
 
-import jp.co.soramitsu.crypto.ed25519.EdDSASecurityProvider
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.model.Asset
 import org.echo.mobile.framework.model.Balance
@@ -32,7 +31,6 @@ import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.security.Security
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.thread
 
