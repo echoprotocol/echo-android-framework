@@ -5,6 +5,7 @@ import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent
 import org.echo.mobile.framework.core.socket.SocketCoreComponent
 import org.echo.mobile.framework.core.socket.SocketMessengerListener
+import org.echo.mobile.framework.exception.AccountNotFoundException
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.facade.SubscriptionFacade
 import org.echo.mobile.framework.model.Block
@@ -12,15 +13,26 @@ import org.echo.mobile.framework.model.DynamicGlobalProperties
 import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.Log
 import org.echo.mobile.framework.model.network.Network
-import org.echo.mobile.framework.service.*
+import org.echo.mobile.framework.service.AccountSubscriptionManager
+import org.echo.mobile.framework.service.BlockSubscriptionManager
+import org.echo.mobile.framework.service.ContractSubscriptionManager
+import org.echo.mobile.framework.service.CurrentBlockchainDataSubscriptionManager
+import org.echo.mobile.framework.service.DatabaseApiService
+import org.echo.mobile.framework.service.UpdateListener
 import org.echo.mobile.framework.service.internal.subscription.AccountSubscriptionManagerImpl
 import org.echo.mobile.framework.service.internal.subscription.BlockSubscriptionManagerImpl
 import org.echo.mobile.framework.service.internal.subscription.ContractSubscriptionManagerImpl
 import org.echo.mobile.framework.service.internal.subscription.CurrentBlockchainDataSubscriptionManagerImpl
-import org.echo.mobile.framework.support.*
+import org.echo.mobile.framework.support.Result
 import org.echo.mobile.framework.support.concurrent.future.FutureTask
 import org.echo.mobile.framework.support.concurrent.future.completeCallback
 import org.echo.mobile.framework.support.concurrent.future.wrapResult
+import org.echo.mobile.framework.support.error
+import org.echo.mobile.framework.support.flatMap
+import org.echo.mobile.framework.support.map
+import org.echo.mobile.framework.support.mapError
+import org.echo.mobile.framework.support.toJsonObject
+import org.echo.mobile.framework.support.value
 
 /**
  * Implementation of [SubscriptionFacade]
@@ -79,7 +91,7 @@ class SubscriptionFacadeImpl(
                     }
                     .error { error ->
                         LOGGER.log("Account finding error.", error)
-                        callback.onError(LocalException(error))
+                        callback.onError(AccountNotFoundException("Account finding error.", error))
                     }
             } else {
                 accountSubscriptionManager.registerListener(nameOrId, listener)
@@ -300,7 +312,7 @@ class SubscriptionFacadeImpl(
                     ?: Result.Error(LocalException())
             }
             .mapError {
-                LocalException("Unable to find required account id for identifier = $nameOrId")
+                AccountNotFoundException("Unable to find required account id for identifier = $nameOrId")
             }
 
     private fun resetState() {

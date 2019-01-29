@@ -4,6 +4,7 @@ import com.google.common.primitives.UnsignedLong
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.ECHO_ASSET_ID
 import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
+import org.echo.mobile.framework.exception.AccountNotFoundException
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.exception.NotFoundException
 import org.echo.mobile.framework.facade.AssetsFacade
@@ -51,7 +52,7 @@ class AssetsFacadeImpl(
                 databaseApiService.getFullAccounts(listOf(name), false).dematerialize()
 
             val account = accountsMap[name]?.account
-                ?: throw NotFoundException("Unable to find required account $name")
+                ?: throw AccountNotFoundException("Unable to find required account $name")
 
             checkOwnerAccount(account.name, password, account)
 
@@ -112,10 +113,10 @@ class AssetsFacadeImpl(
                 .dematerialize()
 
         val issuer = accountsMap[issuerNameOrId]?.account
-            ?: throw NotFoundException("Unable to find required account $issuerNameOrId")
+            ?: throw AccountNotFoundException("Unable to find required account $issuerNameOrId")
 
         val target = accountsMap[destinationIdOrName]?.account
-            ?: throw NotFoundException("Unable to find required account $destinationIdOrName")
+            ?: throw AccountNotFoundException("Unable to find required account $destinationIdOrName")
 
         checkOwnerAccount(issuer.name, password, issuer)
 
