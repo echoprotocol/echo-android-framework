@@ -3,6 +3,7 @@ package org.echo.mobile.framework.facade.internal
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
 import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent
+import org.echo.mobile.framework.exception.AccountNotFoundException
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.exception.NotFoundException
 import org.echo.mobile.framework.facade.AuthenticationFacade
@@ -56,7 +57,7 @@ class AuthenticationFacadeImpl(
                 }
 
                 LOGGER.log("No account found owned by $name with specified password")
-                callback.onError(NotFoundException("No account found owned by $name with specified password"))
+                callback.onError(AccountNotFoundException("No account found owned by $name with specified password"))
             }
             .error { error ->
                 callback.onError(LocalException(error.message, error))
@@ -124,7 +125,7 @@ class AuthenticationFacadeImpl(
         return if (isKeySame) {
             account!!.getObjectId()
         } else {
-            throw NotFoundException("No account found for specified name and password")
+            throw AccountNotFoundException("No account found for specified name and password")
         }
     }
 

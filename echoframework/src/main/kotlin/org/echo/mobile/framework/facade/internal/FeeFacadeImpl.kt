@@ -4,9 +4,13 @@ import com.google.common.primitives.UnsignedLong
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
 import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent
+import org.echo.mobile.framework.exception.AccountNotFoundException
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.facade.FeeFacade
-import org.echo.mobile.framework.model.*
+import org.echo.mobile.framework.model.Account
+import org.echo.mobile.framework.model.Asset
+import org.echo.mobile.framework.model.AssetAmount
+import org.echo.mobile.framework.model.Memo
 import org.echo.mobile.framework.model.contract.input.ContractInputEncoder
 import org.echo.mobile.framework.model.contract.input.InputValue
 import org.echo.mobile.framework.model.operations.ContractCreateOperationBuilder
@@ -59,7 +63,7 @@ class FeeFacadeImpl(
                     |Target = $toNameOrId
                 """.trimMargin()
             )
-            throw LocalException("Unable to find required accounts: source = $fromNameOrId, target = $toNameOrId")
+            throw AccountNotFoundException("Unable to find required accounts: source = $fromNameOrId, target = $toNameOrId")
         }
 
         val memoPrivateKey = memoKey(fromAccount!!.name, password)
@@ -125,7 +129,7 @@ class FeeFacadeImpl(
                     |Caller = $account
                 """.trimMargin()
             )
-            throw LocalException("Unable to find required accounts: caller = $account")
+            throw AccountNotFoundException("Unable to find required accounts: caller = $account")
         }
 
         val contractCode = ContractInputEncoder().encode(methodName, methodParams)
@@ -139,7 +143,7 @@ class FeeFacadeImpl(
 
         getFees(listOf(contractOperation), feeAsset ?: assetId)
 
-    }.map {fees ->
+    }.map { fees ->
         if (fees.isEmpty()) {
             LOGGER.log(
                 """Empty fee list for required operation.
