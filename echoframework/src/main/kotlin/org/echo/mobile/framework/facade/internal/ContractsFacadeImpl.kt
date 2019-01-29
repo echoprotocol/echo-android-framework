@@ -3,6 +3,7 @@ package org.echo.mobile.framework.facade.internal
 import com.google.common.primitives.UnsignedLong
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
+import org.echo.mobile.framework.exception.AccountNotFoundException
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.exception.NotFoundException
 import org.echo.mobile.framework.facade.ContractsFacade
@@ -62,7 +63,7 @@ class ContractsFacadeImpl(
             val accountsMap =
                 databaseApiService.getFullAccounts(listOf(registrarNameOrId), false).dematerialize()
             val registrar = accountsMap[registrarNameOrId]?.account
-                ?: throw LocalException("Unable to find required account $registrarNameOrId")
+                ?: throw AccountNotFoundException("Unable to find required account $registrarNameOrId")
 
             checkOwnerAccount(registrar.name, password, registrar)
 
@@ -100,7 +101,6 @@ class ContractsFacadeImpl(
             broadcastCallback.onError(ex as? LocalException ?: LocalException(ex))
             return
         }
-
 
         resultCallback?.let {
             retrieveTransactionResult(callId, it)

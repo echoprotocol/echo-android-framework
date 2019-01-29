@@ -2,6 +2,7 @@ package org.echo.mobile.framework.facade.internal
 
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent
+import org.echo.mobile.framework.exception.AccountNotFoundException
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.exception.NotFoundException
 import org.echo.mobile.framework.facade.InformationFacade
@@ -54,7 +55,7 @@ class InformationFacadeImpl(
             { fullAccount ->
                 fullAccount?.let { notNullAccount ->
                     callback.onSuccess(notNullAccount)
-                } ?: callback.onError(NotFoundException("Account not found."))
+                } ?: callback.onError(AccountNotFoundException("Account not found."))
             },
             { error ->
                 callback.onError(LocalException(error.message, error))
@@ -115,7 +116,7 @@ class InformationFacadeImpl(
         } else {
             Error(LocalException("Account balances are empty."))
         }
-    } ?: Error(NotFoundException("Account not found."))
+    } ?: Error(AccountNotFoundException("Account not found."))
 
     override fun getAccountHistory(
         nameOrId: String,

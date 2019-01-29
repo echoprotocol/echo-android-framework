@@ -1,10 +1,16 @@
 package org.echo.mobile.framework.model
 
 import com.google.common.primitives.Bytes
-import com.google.gson.*
+import com.google.gson.Gson
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonElement
+import com.google.gson.JsonObject
+import com.google.gson.JsonParseException
 import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent
 import org.echo.mobile.framework.exception.MalformedAddressException
 import org.echo.mobile.framework.model.network.Network
+import org.echo.mobile.framework.support.Uint8
 import org.echo.mobile.framework.support.hexToBytes
 import org.echo.mobile.framework.support.revert
 import org.spongycastle.util.encoders.Hex
@@ -48,7 +54,7 @@ class Memo : ByteSerializable, JsonSerializable {
                 byteArrayOf(0.toByte()),
                 byteArrayOf(0.toByte()),
                 byteArrayOf(0.toByte()),
-                byteArrayOf(this.byteMessage!!.size.toByte()),
+                Uint8.serialize(this.byteMessage!!.size),
                 this.byteMessage
             )
         } else {
@@ -68,7 +74,7 @@ class Memo : ByteSerializable, JsonSerializable {
                 source!!.pubKey.key,
                 destination!!.pubKey.key,
                 nonceBytes,
-                byteArrayOf(this.byteMessage!!.size.toByte()),
+                Uint8.serialize(this.byteMessage!!.size),
                 this.byteMessage
             )
         }
