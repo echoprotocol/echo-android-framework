@@ -14,14 +14,15 @@ class ContractInfo(
     @Expose
     val statistics: String,
     @Expose
-    val suicided: Boolean,
+    val destroyed: Boolean,
     @Expose
     @SerializedName("type")
-    val contractType: String = ""
+    val contractType: String = "",
+    @Expose
+    @SerializedName("supported_asset_id")
+    val supported_asset_id: String = ""
 ) : GrapheneObject(id) {
 
     override fun toString(): String =
-        "${javaClass.simpleName}(id=$id, statistics=$statistics, suicided=$suicided)"
+        "${javaClass.simpleName}(id=$id, statistics=$statistics, destroyed=$destroyed)"
 }
-
-

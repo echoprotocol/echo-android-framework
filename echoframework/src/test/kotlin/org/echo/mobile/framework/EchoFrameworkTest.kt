@@ -56,13 +56,13 @@ class EchoFrameworkTest {
         )
     }
 
-    private val legalContractId = "1.16.28"
-    private val legalContractIdForLogs = "1.16.47"
-    private val legalTokenId = "1.16.37"
-    private val accountId = "1.2.23"
+    private val legalContractId = "1.16.123"
+    private val legalContractIdForLogs = "1.16.125"
+    private val legalTokenId = "1.16.55"
+    private val accountId = "1.2.26"
     private val login = "dima"
     private val password = "dima"
-    private val secondAccountId = "1.2.26"
+    private val secondAccountId = "1.2.27"
     private val secondLogin = "daria"
     private val secondPassword = "daria"
     private val legalAssetId = "1.3.0"
@@ -130,6 +130,34 @@ class EchoFrameworkTest {
                 "6815260200191505060405180910390a1505600a165627a7a723058203a4f281bf5a18502c2caf" +
                 "37eac0d1729a184bab65879a54b6481020492b675e10029"
 
+    private val legalContractForLogs =
+        "608060405234801561001057600080fd5b50610361806100206000396000f3fe60806040526004" +
+                "3610610046576000357c01000000000000000000000000000000000000000000000000" +
+                "00000000900480631361c3941461004b578063b835666314610076575b600080fd5b34" +
+                "801561005757600080fd5b506100606100a1565b60405161006d91906102c9565b6040" +
+                "5180910390f35b34801561008257600080fd5b5061008b61018a565b60405161009891" +
+                "906102c9565b60405180910390f35b60007f909c57d5c6ac08245cf2a6de3900e2b868" +
+                "513fa59099b92b27d8db823d92df9c60016040516100d391906102e4565b6040518091" +
+                "0390a17f909c57d5c6ac08245cf2a6de3900e2b868513fa59099b92b27d8db823d92df" +
+                "9c600160405161010b91906102e4565b60405180910390a17f909c57d5c6ac08245cf2" +
+                "a6de3900e2b868513fa59099b92b27d8db823d92df9c600160405161014391906102e4" +
+                "565b60405180910390a17f909c57d5c6ac08245cf2a6de3900e2b868513fa59099b92b" +
+                "27d8db823d92df9c600160405161017b91906102e4565b60405180910390a160019050" +
+                "90565b60007f909c57d5c6ac08245cf2a6de3900e2b868513fa59099b92b27d8db823d" +
+                "92df9c60016040516101bc91906102e4565b60405180910390a17f909c57d5c6ac0824" +
+                "5cf2a6de3900e2b868513fa59099b92b27d8db823d92df9c60016040516101f4919061" +
+                "02e4565b60405180910390a17f909c57d5c6ac08245cf2a6de3900e2b868513fa59099" +
+                "b92b27d8db823d92df9c600160405161022c91906102e4565b60405180910390a17f90" +
+                "9c57d5c6ac08245cf2a6de3900e2b868513fa59099b92b27d8db823d92df9c60016040" +
+                "5161026491906102e4565b60405180910390a17f909c57d5c6ac08245cf2a6de3900e2" +
+                "b868513fa59099b92b27d8db823d92df9c600160405161029c91906102e4565b604051" +
+                "80910390a16001905090565b6102b4816102ff565b82525050565b6102c38161031556" +
+                "5b82525050565b60006020820190506102de60008301846102ab565b92915050565b60" +
+                "006020820190506102f960008301846102ba565b92915050565b600081151590509190" +
+                "50565b6000819050919050565b60006103208261030b565b905091905056fea265627a" +
+                "7a7230582005a24d9fd2c692f02e51617d5ed7e8ed1e4dde1b976b267b6953998c664a" +
+                "79ec6c6578706572696d656e74616cf50037"
+
     private val illegalContractId = "1.16.-1"
     private val illegalHistoryItemId = "1.17.-1"
 
@@ -187,8 +215,8 @@ class EchoFrameworkTest {
         if (connect(framework) == false) Assert.fail("Connection error")
 
         framework.isOwnedBy(
-            "daria",
-            "daria",
+            login,
+            password,
             futureLogin.completeCallback()
         )
 
@@ -768,7 +796,7 @@ class EchoFrameworkTest {
 //        val broadcastFuture = FutureTask<Boolean>()
 //
 //        val asset = Asset("").apply {
-//            symbol = "DIMAS"
+//            symbol = "TESTASSET"
 //            precision = 4
 //            issuer = Account(accountId)
 ////            setBtsOptions(
@@ -783,7 +811,7 @@ class EchoFrameworkTest {
 //
 //        val options =
 //            AssetOptions(
-//                UnsignedLong.valueOf(100000),
+//                UnsignedLong.valueOf(100000000000),
 //                0.toLong(),
 //                UnsignedLong.ZERO,
 //                AssetOptions.ALLOW_COMITEE_PROVIDE_FEEDS,
@@ -819,7 +847,7 @@ class EchoFrameworkTest {
         framework.issueAsset(
             login,
             password,
-            asset = "1.3.3",
+            asset = "1.3.2",
             amount = "1",
             destinationIdOrName = login,
             message = "Do it",
