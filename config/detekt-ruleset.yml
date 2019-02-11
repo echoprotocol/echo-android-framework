@@ -30,10 +30,10 @@ complexity:
     includeStaticDeclarations: false
   LargeClass:
     active: true
-    threshold: 200
+    threshold: 500
   LongMethod:
     active: true
-    threshold: 20
+    threshold: 100
   LongParameterList:
     active: true
     threshold: 15
