@@ -9,7 +9,7 @@ import com.google.gson.annotations.SerializedName
 import org.echo.mobile.framework.model.operations.OperationTypeToClassConverter
 import org.echo.mobile.framework.model.socketoperations.OperationCodingKeys
 import java.lang.reflect.Type
-import java.util.*
+import java.util.Date
 
 /**
  * Represents account history

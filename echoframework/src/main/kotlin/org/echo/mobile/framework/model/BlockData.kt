@@ -75,9 +75,9 @@ class BlockData : ByteSerializable {
             when (i) {
                 in 0 until REF_BLOCK_NUM_BYTES -> result[i] = (refBlockNum shr OFFSET * i).toByte()
                 in REF_BLOCK_NUM_BYTES until REF_BLOCK_PREFIX_END -> result[i] =
-                        (refBlockPrefix shr OFFSET * (i - REF_BLOCK_NUM_BYTES)).toByte()
+                    (refBlockPrefix shr OFFSET * (i - REF_BLOCK_NUM_BYTES)).toByte()
                 else -> result[i] =
-                        (relativeExpiration shr OFFSET * (i - REF_BLOCK_PREFIX_END)).toByte()
+                    (relativeExpiration shr OFFSET * (i - REF_BLOCK_PREFIX_END)).toByte()
             }
         }
         return result

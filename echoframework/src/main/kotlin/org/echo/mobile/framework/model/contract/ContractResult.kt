@@ -10,9 +10,11 @@ import org.echo.mobile.framework.model.Log
  *
  * @author Daria Pechkovskaya
  */
-
 class ContractResult(val contractType: Int, val rawString: String = "")
 
+/**
+ * Converts [ContractResult] to [RegularContractResult] if possible,else returns null
+ */
 fun ContractResult.toRegular(): RegularContractResult? {
     if (this.contractType == ContractType.REGULAR.ordinal) {
         return Gson().fromJson<RegularContractResult>(rawString, RegularContractResult::class.java)
@@ -21,6 +23,9 @@ fun ContractResult.toRegular(): RegularContractResult? {
     return null
 }
 
+/**
+ * Converts [ContractResult] to [ContractResultx86] if possible,else returns null
+ */
 fun ContractResult.toX86(): ContractResultx86? {
     if (this.contractType == ContractType.X86.ordinal) {
         return Gson().fromJson<ContractResultx86>(rawString, ContractResultx86::class.java)
@@ -29,6 +34,9 @@ fun ContractResult.toX86(): ContractResultx86? {
     return null
 }
 
+/**
+ * Contains all possible contract types in blockchain
+ */
 enum class ContractType {
     REGULAR,
     X86

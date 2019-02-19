@@ -91,7 +91,7 @@ class ContractCodeConverter(private var paramsCount: Int) :
     private fun getStringOffset(value: String): String {
         val currOffset = (paramsCount + currStringOffset) * 32
         currStringOffset =
-                (getStringHash(value).length / HASH_PATTERN.length + 1).toLong()
+            (getStringHash(value).length / HASH_PATTERN.length + 1).toLong()
         return appendNumericPattern(convertToByteCode(currOffset))
     }
 

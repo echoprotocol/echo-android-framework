@@ -232,7 +232,7 @@ interface ContractsService {
      *
      * @param contractId Id of contract
      */
-    fun getContract(contractId: String): Result<LocalException, String>
+    fun getContract(contractId: String): Result<LocalException, ContractStruct>
 
 }
 

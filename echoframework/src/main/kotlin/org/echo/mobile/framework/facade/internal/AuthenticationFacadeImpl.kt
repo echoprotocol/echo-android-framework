@@ -5,7 +5,6 @@ import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
 import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent
 import org.echo.mobile.framework.exception.AccountNotFoundException
 import org.echo.mobile.framework.exception.LocalException
-import org.echo.mobile.framework.exception.NotFoundException
 import org.echo.mobile.framework.facade.AuthenticationFacade
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.AccountOptions
@@ -78,7 +77,7 @@ class AuthenticationFacadeImpl(
             databaseApiService.getFullAccounts(listOf(accountId), false).dematerialize()
 
         operation.newOptionsOption.field?.delegatingAccount =
-                account[accountId]?.account!!.options.delegatingAccount
+            account[accountId]?.account!!.options.delegatingAccount
 
         val blockData = databaseApiService.getBlockData()
         val chainId = getChainId()

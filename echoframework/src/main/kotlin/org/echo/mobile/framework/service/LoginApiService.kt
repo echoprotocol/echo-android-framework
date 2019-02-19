@@ -1,9 +1,7 @@
 package org.echo.mobile.framework.service
 
 import org.echo.mobile.framework.Callback
-import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.support.Api
-import org.echo.mobile.framework.support.Result
 
 /**
  * Encapsulates logic, associated with blockchain login API

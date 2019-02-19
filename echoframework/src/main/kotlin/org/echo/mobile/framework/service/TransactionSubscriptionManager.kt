@@ -1,7 +1,6 @@
 package org.echo.mobile.framework.service
 
 import org.echo.mobile.framework.Callback
-import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.model.TransactionResult
 
 /**

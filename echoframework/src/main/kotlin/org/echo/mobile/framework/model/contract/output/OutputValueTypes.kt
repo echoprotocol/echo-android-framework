@@ -1,7 +1,6 @@
 package org.echo.mobile.framework.model.contract.output
 
 import org.spongycastle.util.encoders.Hex
-import java.lang.NumberFormatException
 
 private const val NUMBER_RADIX = 16
 private const val SLICE_SIZE = 64

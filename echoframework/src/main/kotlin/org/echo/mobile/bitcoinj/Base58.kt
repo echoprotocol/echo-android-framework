@@ -19,7 +19,7 @@
 package org.echo.mobile.bitcoinj
 
 import java.math.BigInteger
-import java.util.*
+import java.util.Arrays
 
 /**
  * Base58 is a way to encode Bitcoin addresses (or arbitrary data) as alphanumeric strings.

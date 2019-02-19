@@ -1,11 +1,10 @@
 package org.echo.mobile.framework.facade
 
 import org.echo.mobile.framework.Callback
-import org.echo.mobile.framework.DEFAULT_GAS_LIMIT
-import org.echo.mobile.framework.DEFAULT_GAS_PRICE
 import org.echo.mobile.framework.model.Log
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
+import org.echo.mobile.framework.model.contract.ContractStruct
 import org.echo.mobile.framework.model.contract.input.InputValue
 import java.math.BigInteger
 
@@ -130,6 +129,6 @@ interface ContractsFacade {
      *
      * @param contractId Id of contract
      */
-    fun getContract(contractId: String, callback: Callback<String>)
+    fun getContract(contractId: String, callback: Callback<ContractStruct>)
 
 }

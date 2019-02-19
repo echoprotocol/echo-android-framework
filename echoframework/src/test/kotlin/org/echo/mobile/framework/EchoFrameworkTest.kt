@@ -12,6 +12,7 @@ import org.echo.mobile.framework.model.Log
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractResultx86
+import org.echo.mobile.framework.model.contract.ContractStruct
 import org.echo.mobile.framework.model.contract.RegularContractResult
 import org.echo.mobile.framework.model.contract.input.AccountAddressInputValueType
 import org.echo.mobile.framework.model.contract.input.ContractAddressInputValueType
@@ -1302,7 +1303,7 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
-        val future = FutureTask<String>()
+        val future = FutureTask<ContractStruct>()
 
         framework.getContract(
             legalContractId,
@@ -1319,7 +1320,7 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
-        val future = FutureTask<String>()
+        val future = FutureTask<ContractStruct>()
 
         framework.getContract(
             illegalContractId,

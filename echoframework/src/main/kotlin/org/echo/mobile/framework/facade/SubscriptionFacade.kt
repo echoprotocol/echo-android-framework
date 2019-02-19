@@ -5,7 +5,6 @@ import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.model.Block
 import org.echo.mobile.framework.model.DynamicGlobalProperties
 import org.echo.mobile.framework.model.Log
-import org.echo.mobile.framework.model.contract.Contract
 import org.echo.mobile.framework.service.UpdateListener
 
 /**

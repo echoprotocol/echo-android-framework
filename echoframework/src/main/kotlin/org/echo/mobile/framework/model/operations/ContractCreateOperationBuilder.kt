@@ -8,7 +8,6 @@ import org.echo.mobile.framework.model.Asset
 import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.contract.Contract
 import org.echo.mobile.framework.support.Builder
-import org.echo.mobile.framework.support.toUnsignedLong
 
 /**
  * Represents builder for [ContractCreateOperation].

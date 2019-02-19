@@ -142,8 +142,8 @@ class DatabaseApiServiceImpl(
         accounts.values.forEach { fullAccount ->
             fullAccount.balances?.forEach { balance ->
                 balance.asset =
-                        assets.find { asset -> asset.getObjectId() == balance.asset?.getObjectId() } ?:
-                        balance.asset
+                    assets.find { asset -> asset.getObjectId() == balance.asset?.getObjectId() }
+                        ?: balance.asset
             }
 
             val filledAssets = mutableListOf<Asset>()
@@ -360,8 +360,8 @@ class DatabaseApiServiceImpl(
         return future.wrapResult()
     }
 
-    override fun getContract(contractId: String): Result<LocalException, String> {
-        val future = FutureTask<String>()
+    override fun getContract(contractId: String): Result<LocalException, ContractStruct> {
+        val future = FutureTask<ContractStruct>()
         val operation = GetContractSocketOperation(
             id,
             contractId,

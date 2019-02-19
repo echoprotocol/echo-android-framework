@@ -6,7 +6,7 @@ package org.echo.mobile.framework.exception
  *
  * @author Daria Pechkovskaya
  */
-class MalformedParameterException: LocalException {
+class MalformedParameterException : LocalException {
 
     constructor() : super()
     constructor(message: String?) : super(message)

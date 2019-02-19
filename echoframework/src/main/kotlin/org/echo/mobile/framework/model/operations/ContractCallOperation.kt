@@ -12,7 +12,6 @@ import com.google.gson.JsonSerializer
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.contract.Contract
-import org.echo.mobile.framework.support.Int64
 import org.echo.mobile.framework.support.Uint8
 import java.lang.reflect.Type
 
