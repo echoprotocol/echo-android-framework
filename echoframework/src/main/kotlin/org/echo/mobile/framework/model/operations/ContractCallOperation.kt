@@ -12,7 +12,6 @@ import com.google.gson.JsonSerializer
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.contract.Contract
-import org.echo.mobile.framework.support.Int64
 import org.echo.mobile.framework.support.Uint8
 import java.lang.reflect.Type
 
@@ -26,15 +25,11 @@ class ContractCallOperation @JvmOverloads constructor(
     registrar: Account,
     var callee: Contract,
     value: AssetAmount,
-    gasPrice: UnsignedLong,
-    gas: UnsignedLong,
     code: String,
     fee: AssetAmount = AssetAmount(UnsignedLong.ZERO)
 ) : ContractOperation(
     registrar,
     value,
-    gasPrice,
-    gas,
     code,
     fee,
     OperationType.CONTRACT_CALL_OPERATION
@@ -45,12 +40,10 @@ class ContractCallOperation @JvmOverloads constructor(
         val registrarBytes = registrar.toBytes()
         val contractBytes = callee.toBytes()
         val valueBytes = value.toBytes()
-        val gasPriceBytes = Int64.serialize(gasPrice)
-        val gasBytes = Int64.serialize(gas)
         val codeBytes = Uint8.serialize(code.length) + code.toByteArray()
 
         return Bytes.concat(
-            feeBytes, registrarBytes, valueBytes, gasPriceBytes, gasBytes, codeBytes, contractBytes
+            feeBytes, registrarBytes, valueBytes, codeBytes, contractBytes
         )
     }
 
@@ -62,8 +55,6 @@ class ContractCallOperation @JvmOverloads constructor(
                 addProperty(KEY_REGISTRAR, registrar.getObjectId())
                 addProperty(KEY_RECEIVER, callee.getObjectId())
                 add(KEY_VALUE, value.toJsonObject())
-                addProperty(KEY_GAS_PRICE, gasPrice)
-                addProperty(KEY_GAS, gas)
                 addProperty(KEY_CODE, code)
             })
         }
@@ -114,16 +105,12 @@ class ContractCallOperation @JvmOverloads constructor(
                 jsonObject.get(KEY_VALUE),
                 AssetAmount::class.java
             )
-            val gasPrice = jsonObject.get(KEY_GAS_PRICE).asLong
-            val gas = jsonObject.get(KEY_GAS).asLong
             val code = jsonObject.get(KEY_CODE).asString
 
             return ContractCallOperation(
                 registrar,
                 receiver!!,
                 value,
-                UnsignedLong.valueOf(gasPrice),
-                UnsignedLong.valueOf(gas),
                 code,
                 fee
             )

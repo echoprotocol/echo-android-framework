@@ -2,7 +2,7 @@ package org.echo.mobile.framework.model
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
-import java.util.*
+import java.util.ArrayList
 
 /**
  * Represents additional payload of models

@@ -12,7 +12,9 @@ import java.io.DataOutputStream
 import java.nio.ByteBuffer
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 
 /**
  * Contains all project extensions

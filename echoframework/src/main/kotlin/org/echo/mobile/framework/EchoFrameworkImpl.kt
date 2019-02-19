@@ -30,6 +30,7 @@ import org.echo.mobile.framework.model.HistoryResponse
 import org.echo.mobile.framework.model.Log
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
+import org.echo.mobile.framework.model.contract.ContractStruct
 import org.echo.mobile.framework.model.contract.input.InputValue
 import org.echo.mobile.framework.service.AccountHistoryApiService
 import org.echo.mobile.framework.service.CryptoApiService
@@ -102,7 +103,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         )
         databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, settings.network)
         networkBroadcastApiService =
-                NetworkBroadcastApiServiceImpl(socketCoreComponent, settings.cryptoComponent)
+            NetworkBroadcastApiServiceImpl(socketCoreComponent, settings.cryptoComponent)
         cryptoApiService = CryptoApiServiceImpl(socketCoreComponent)
         loginService = LoginApiServiceImpl(socketCoreComponent)
         registrationService = RegistrationApiServiceImpl(socketCoreComponent)
@@ -439,8 +440,6 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         feeAsset: String?,
         byteCode: String,
         params: List<InputValue>,
-        gasLimit: Long,
-        gasPrice: Long,
         broadcastCallback: Callback<Boolean>,
         resultCallback: Callback<String>?
     ) = dispatch(Runnable {
@@ -451,8 +450,6 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             feeAsset,
             byteCode,
             params,
-            gasLimit,
-            gasPrice,
             broadcastCallback.wrapOriginal(),
             resultCallback?.wrapOriginal()
         )
@@ -467,8 +464,6 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         methodName: String,
         methodParams: List<InputValue>,
         value: String,
-        gasLimit: Long,
-        gasPrice: Long,
         broadcastCallback: Callback<Boolean>,
         resultCallback: Callback<String>?
     ) = dispatch(Runnable {
@@ -481,8 +476,6 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             methodName,
             methodParams,
             value,
-            gasLimit,
-            gasPrice,
             broadcastCallback.wrapOriginal(),
             resultCallback?.wrapOriginal()
         )
@@ -549,7 +542,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
 
     override fun getContract(
         contractId: String,
-        callback: Callback<String>
+        callback: Callback<ContractStruct>
     ) =
         dispatch(Runnable {
             contractsFacade.getContract(

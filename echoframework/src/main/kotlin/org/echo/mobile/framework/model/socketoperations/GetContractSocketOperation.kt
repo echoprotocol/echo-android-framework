@@ -4,6 +4,7 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonParser
 import org.echo.mobile.framework.Callback
+import org.echo.mobile.framework.model.contract.ContractStruct
 
 /**
  * Retrieves full information about contract.
@@ -16,11 +17,11 @@ class GetContractSocketOperation(
     override val apiId: Int,
     private val contractId: String,
     callId: Int,
-    callback: Callback<String>
-) : SocketOperation<String>(
+    callback: Callback<ContractStruct>
+) : SocketOperation<ContractStruct>(
     SocketMethodType.CALL,
     callId,
-    String::class.java,
+    ContractStruct::class.java,
     callback
 ) {
 
@@ -31,7 +32,7 @@ class GetContractSocketOperation(
             add(JsonArray().apply { add(contractId) })
         }
 
-    override fun fromJson(json: String): String? {
+    override fun fromJson(json: String): ContractStruct? {
         val parser = JsonParser()
         val jsonTree = parser.parse(json)
 
@@ -42,7 +43,10 @@ class GetContractSocketOperation(
         try {
             val result = jsonTree.asJsonObject.get(RESULT_KEY)!!.asJsonArray
 
-            return result[1]?.asJsonObject?.get(CONTRACT_CODE_KEY)?.asString
+            val contractType = result[0].asInt
+            val contractCode = result[1]?.asJsonObject?.get(CONTRACT_CODE_KEY)?.asString ?: ""
+
+            return ContractStruct(contractType, contractCode)
         } catch (ex: Exception) {
             ex.printStackTrace()
         }

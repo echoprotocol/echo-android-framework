@@ -12,7 +12,6 @@ import com.google.gson.JsonSerializer
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.Asset
 import org.echo.mobile.framework.model.AssetAmount
-import org.echo.mobile.framework.support.Int64
 import org.echo.mobile.framework.support.Uint8
 import org.echo.mobile.framework.support.serialize
 import java.lang.reflect.Type
@@ -26,8 +25,6 @@ import java.lang.reflect.Type
 class ContractCreateOperation @JvmOverloads constructor(
     registrar: Account,
     value: AssetAmount,
-    gasPrice: UnsignedLong,
-    gas: UnsignedLong,
     code: String,
     var echAccuracy: Boolean = false,
     var supportedAsset: Asset? = null,
@@ -35,8 +32,6 @@ class ContractCreateOperation @JvmOverloads constructor(
 ) : ContractOperation(
     registrar,
     value,
-    gasPrice,
-    gas,
     code,
     fee,
     OperationType.CONTRACT_CREATE_OPERATION
@@ -46,8 +41,6 @@ class ContractCreateOperation @JvmOverloads constructor(
         val feeBytes = fee.toBytes()
         val registrarBytes = registrar.toBytes()
         val valueBytes = value.toBytes()
-        val gasPriceBytes = Int64.serialize(gasPrice)
-        val gasBytes = Int64.serialize(gas)
         val codeBytes = Uint8.serialize(code.length) + code.toByteArray()
         val echAccuracyBytes = echAccuracy.serialize()
         val supportedAssetBytes = supportedAsset?.let {
@@ -58,8 +51,6 @@ class ContractCreateOperation @JvmOverloads constructor(
             feeBytes,
             registrarBytes,
             valueBytes,
-            gasPriceBytes,
-            gasBytes,
             codeBytes,
             echAccuracyBytes,
             supportedAssetBytes
@@ -73,8 +64,6 @@ class ContractCreateOperation @JvmOverloads constructor(
                 add(KEY_FEE, fee.toJsonObject())
                 addProperty(KEY_REGISTRAR, registrar.getObjectId())
                 add(KEY_VALUE, value.toJsonObject())
-                addProperty(KEY_GAS_PRICE, gasPrice)
-                addProperty(KEY_GAS, gas)
                 addProperty(KEY_CODE, code)
                 addProperty(KEY_ACCURACY, echAccuracy.toString())
                 supportedAsset?.let {
@@ -129,8 +118,6 @@ class ContractCreateOperation @JvmOverloads constructor(
                 jsonObject.get(KEY_VALUE),
                 AssetAmount::class.java
             )
-            val gasPrice = jsonObject.get(KEY_GAS_PRICE).asLong
-            val gas = jsonObject.get(KEY_GAS).asLong
             val code = jsonObject.get(KEY_CODE).asString
             val echAccuracy = jsonObject.get(KEY_ACCURACY).asBoolean
 
@@ -140,8 +127,6 @@ class ContractCreateOperation @JvmOverloads constructor(
             return ContractCreateOperation(
                 registrar,
                 value,
-                UnsignedLong.valueOf(gasPrice),
-                UnsignedLong.valueOf(gas),
                 code,
                 echAccuracy,
                 supportedAsset,

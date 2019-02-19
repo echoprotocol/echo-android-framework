@@ -19,7 +19,8 @@ class BlockSubscriptionManagerImpl : BlockSubscriptionManager {
 
     override fun containListeners(): Boolean = listeners.isNotEmpty()
 
-    override fun containsListener(listener: UpdateListener<Block>): Boolean = listeners.contains(listener)
+    override fun containsListener(listener: UpdateListener<Block>): Boolean =
+        listeners.contains(listener)
 
     override fun removeListener(listener: UpdateListener<Block>) {
         listeners.remove(listener)

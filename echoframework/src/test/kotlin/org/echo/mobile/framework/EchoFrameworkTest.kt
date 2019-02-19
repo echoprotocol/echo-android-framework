@@ -11,10 +11,15 @@ import org.echo.mobile.framework.model.HistoryResponse
 import org.echo.mobile.framework.model.Log
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
+import org.echo.mobile.framework.model.contract.ContractResultx86
+import org.echo.mobile.framework.model.contract.ContractStruct
+import org.echo.mobile.framework.model.contract.RegularContractResult
 import org.echo.mobile.framework.model.contract.input.AccountAddressInputValueType
 import org.echo.mobile.framework.model.contract.input.ContractAddressInputValueType
 import org.echo.mobile.framework.model.contract.input.InputValue
 import org.echo.mobile.framework.model.contract.input.StringInputValueType
+import org.echo.mobile.framework.model.contract.toRegular
+import org.echo.mobile.framework.model.contract.toX86
 import org.echo.mobile.framework.model.network.Echodevnet
 import org.echo.mobile.framework.service.UpdateListener
 import org.echo.mobile.framework.support.Api
@@ -43,7 +48,7 @@ class EchoFrameworkTest {
     private fun initFramework(): EchoFramework {
         return EchoFramework.create(
             Settings.Configurator()
-                .setUrl("ws://195.201.164.54:6311")
+                .setUrl("ws://195.201.164.54:63101")
                 .setNetworkType(Echodevnet())
                 .setReturnOnMainThread(false)
                 .setApis(
@@ -56,54 +61,49 @@ class EchoFrameworkTest {
         )
     }
 
-    private val legalContractId = "1.16.123"
-    private val legalContractIdForLogs = "1.16.125"
-    private val legalTokenId = "1.16.55"
-    private val accountId = "1.2.26"
+    private val legalContractId = "1.16.26"
+    private val legalTokenId = "1.16.124"
+    private val accountId = "1.2.16"
     private val login = "dima"
     private val password = "dima"
-    private val secondAccountId = "1.2.27"
+    private val secondAccountId = "1.2.17"
     private val secondLogin = "daria"
     private val secondPassword = "daria"
     private val legalAssetId = "1.3.0"
 
     private val legalContractParamsBytecode =
-        "608060405234801561001057600080fd5b50610556806100206000396000f3006080604052600436106100" +
-                "57576000357c0100000000000000000000000000000000000000000000000000000000900463ff" +
-                "ffffff168063213c1fcb1461005c578063f2c298be14610118578063f8a8fd6d14610181575b60" +
-                "0080fd5b34801561006857600080fd5b5061009d600480360381019080803573ffffffffffffff" +
-                "ffffffffffffffffffffffffff169060200190929190505050610211565b604051808060200182" +
-                "8103825283818151815260200191508051906020019080838360005b838110156100dd57808201" +
-                "51818401526020810190506100c2565b50505050905090810190601f16801561010a5780820380" +
-                "516001836020036101000a031916815260200191505b509250505060405180910390f35b348015" +
-                "61012457600080fd5b5061017f6004803603810190808035906020019082018035906020019080" +
-                "80601f016020809104026020016040519081016040528093929190818152602001838380828437" +
-                "82019150505050505091929192905050506102c1565b005b34801561018d57600080fd5b506101" +
-                "966103e7565b604051808060200182810382528381815181526020019150805190602001908083" +
-                "8360005b838110156101d65780820151818401526020810190506101bb565b50505050905090810" +
-                "190601f1680156102035780820380516001836020036101000a031916815260200191505b509250" +
-                "505060405180910390f35b600060205280600052604060002060009150905080546001816001161" +
-                "56101000203166002900480601f0160208091040260200160405190810160405280929190818152" +
-                "602001828054600181600116156101000203166002900480156102b95780601f1061028e576101" +
-                "008083540402835291602001916102b9565b820191906000526020600020905b81548152906001" +
-                "019060200180831161029c57829003601f168201915b505050505081565b806000803373ffffff" +
-                "ffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1" +
-                "681526020019081526020016000209080519060200190610313929190610485565b507fbec1c4e" +
-                "1c777d57c8686d8eff4ba1ec5f8207b289e8d10f9b4be199c6baf00bd3382604051808373fffff" +
-                "fffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff" +
-                "16815260200180602001828103825283818151815260200191508051906020019080838360005b" +
-                "838110156103a957808201518184015260208101905061038e565b50505050905090810190601f1" +
-                "680156103d65780820380516001836020036101000a031916815260200191505b50935050505060" +
-                "405180910390a150565b60018054600181600116156101000203166002900480601f01602080910" +
-                "40260200160405190810160405280929190818152602001828054600181600116156101000203166" +
-                "0029004801561047d5780601f106104525761010080835404028352916020019161047d565b8201" +
-                "91906000526020600020905b81548152906001019060200180831161046057829003601f16820191" +
-                "5b505050505081565b82805460018160011615610100020316600290049060005260206000209060" +
-                "1f016020900481019282601f106104c657805160ff19168380011785556104f4565b828001600101" +
-                "855582156104f4579182015b828111156104f35782518255916020019190600101906104d8565b5b" +
-                "5090506105019190610505565b5090565b61052791905b8082111561052357600081600090555060" +
-                "010161050b565b5090565b905600a165627a7a72305820c3d8fad64386213f092995be2224f17d" +
-                "efe50984ba08d2e54d9229ec7a2504be0029"
+        "60806040526000805534801561001457600080fd5b506104e180610024600" +
+                "0396000f3fe608060405260043610610088576000357c01000000000000000000000000000000000000" +
+                "00000000000000000000900480631361c3941461008d5780635b34b966146100a45780637a3a86b2146" +
+                "100bb578063a87d942c1461014c578063b835666314610177578063c820d1b21461018e578063e13a77" +
+                "16146102cf578063f5c5ad8314610319575b600080fd5b34801561009957600080fd5b506100a261033" +
+                "0565b005b3480156100b057600080fd5b506100b961039a565b005b3480156100c757600080fd5b5061" +
+                "010a600480360360208110156100de57600080fd5b81019080803573fffffffffffffffffffffffffff" +
+                "fffffffffffff1690602001909291905050506103ac565b604051808273ffffffffffffffffffffffff" +
+                "ffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019150506040" +
+                "5180910390f35b34801561015857600080fd5b506101616103b6565b604051808281526020019150506" +
+                "0405180910390f35b34801561018357600080fd5b5061018c6103bf565b005b34801561019a57600080" +
+                "fd5b50610254600480360360208110156101b157600080fd5b81019080803590602001906401000000" +
+                "008111156101ce57600080fd5b8201836020820111156101e057600080fd5b803590602001918460018" +
+                "3028401116401000000008311171561020257600080fd5b91908080601f016020809104026020016040" +
+                "519081016040528093929190818152602001838380828437600081840152601f19601f8201169050808" +
+                "30192505050505050509192919290505050610491565b60405180806020018281038252838181518152" +
+                "60200191508051906020019080838360005b838110156102945780820151818401526020810190506102" +
+                "79565b50505050905090810190601f1680156102c15780820380516001836020036101000a0319168152" +
+                "60200191505b509250505060405180910390f35b6102d761049b565b604051808273fffffffffffffff" +
+                "fffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001915" +
+                "05060405180910390f35b34801561032557600080fd5b5061032e6104a3565b005b7f65e06b3884a88e1" +
+                "3243953e5160aec7a836e4cc7abc0762f84c66d6b918efe7f60405180806020018281038252600981526" +
+                "02001807f6c6f67206576656e7400000000000000000000000000000000000000000000008152506020" +
+                "0191505060405180910390a1565b60016000808282540192505081905550565b6000819050919050565" +
+                "b60008054905090565b7f65e06b3884a88e13243953e5160aec7a836e4cc7abc0762f84c66d6b918efe" +
+                "7f60405180806020018281038252600f8152602001807f6c6f67206576656e742066697273740000000" +
+                "00000000000000000000000000081525060200191505060405180910390a17f65e06b3884a88e1324395" +
+                "3e5160aec7a836e4cc7abc0762f84c66d6b918efe7f60405180806020018281038252601081526020018" +
+                "07f6c6f67206576656e74207365636f6e640000000000000000000000000000000081525060200191505" +
+                "060405180910390a1565b6060819050919050565b600033905090565b600160008082825403925050819" +
+                "0555056fea165627a7a7230582093e5f08daa13bf9bc7c17df95e119be299398beca796aa23631e9174" +
+                "4285958f0029"
 
     private val legalContractWithParamsBytecode =
         "608060405233600160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908" +
@@ -130,33 +130,89 @@ class EchoFrameworkTest {
                 "6815260200191505060405180910390a1505600a165627a7a723058203a4f281bf5a18502c2caf" +
                 "37eac0d1729a184bab65879a54b6481020492b675e10029"
 
-    private val legalContractForLogs =
-        "608060405234801561001057600080fd5b50610361806100206000396000f3fe60806040526004" +
-                "3610610046576000357c01000000000000000000000000000000000000000000000000" +
-                "00000000900480631361c3941461004b578063b835666314610076575b600080fd5b34" +
-                "801561005757600080fd5b506100606100a1565b60405161006d91906102c9565b6040" +
-                "5180910390f35b34801561008257600080fd5b5061008b61018a565b60405161009891" +
-                "906102c9565b60405180910390f35b60007f909c57d5c6ac08245cf2a6de3900e2b868" +
-                "513fa59099b92b27d8db823d92df9c60016040516100d391906102e4565b6040518091" +
-                "0390a17f909c57d5c6ac08245cf2a6de3900e2b868513fa59099b92b27d8db823d92df" +
-                "9c600160405161010b91906102e4565b60405180910390a17f909c57d5c6ac08245cf2" +
-                "a6de3900e2b868513fa59099b92b27d8db823d92df9c600160405161014391906102e4" +
-                "565b60405180910390a17f909c57d5c6ac08245cf2a6de3900e2b868513fa59099b92b" +
-                "27d8db823d92df9c600160405161017b91906102e4565b60405180910390a160019050" +
-                "90565b60007f909c57d5c6ac08245cf2a6de3900e2b868513fa59099b92b27d8db823d" +
-                "92df9c60016040516101bc91906102e4565b60405180910390a17f909c57d5c6ac0824" +
-                "5cf2a6de3900e2b868513fa59099b92b27d8db823d92df9c60016040516101f4919061" +
-                "02e4565b60405180910390a17f909c57d5c6ac08245cf2a6de3900e2b868513fa59099" +
-                "b92b27d8db823d92df9c600160405161022c91906102e4565b60405180910390a17f90" +
-                "9c57d5c6ac08245cf2a6de3900e2b868513fa59099b92b27d8db823d92df9c60016040" +
-                "5161026491906102e4565b60405180910390a17f909c57d5c6ac08245cf2a6de3900e2" +
-                "b868513fa59099b92b27d8db823d92df9c600160405161029c91906102e4565b604051" +
-                "80910390a16001905090565b6102b4816102ff565b82525050565b6102c38161031556" +
-                "5b82525050565b60006020820190506102de60008301846102ab565b92915050565b60" +
-                "006020820190506102f960008301846102ba565b92915050565b600081151590509190" +
-                "50565b6000819050919050565b60006103208261030b565b905091905056fea265627a" +
-                "7a7230582005a24d9fd2c692f02e51617d5ed7e8ed1e4dde1b976b267b6953998c664a" +
-                "79ec6c6578706572696d656e74616cf50037"
+    private val legalTokenBytecode = "60806040526005600260006101000a81548160ff021916908360ff1602" +
+            "1790555034801561002c57600080fd5b50604051610c72380380610c728339810180604052606081101" +
+            "561004f57600080fd5b8101908080519060200190929190805164010000000081111561007157600080" +
+            "fd5b8281019050602081018481111561008757600080fd5b81518560018202830111640100000000821" +
+            "117156100a457600080fd5b505092919060200180516401000000008111156100c057600080fd5b8281" +
+            "01905060208101848111156100d657600080fd5b8151856001820283011164010000000082111715610" +
+            "0f357600080fd5b5050929190505050600260009054906101000a900460ff1660ff16600a0a83026003" +
+            "81905550600354600460003373ffffffffffffffffffffffffffffffffffffffff1673fffffffffffff" +
+            "fffffffffffffffffffffffffff16815260200190815260200160002081905550816000908051906020" +
+            "0190610175929190610195565b50806001908051906020019061018c929190610195565b50505050610" +
+            "23a565b828054600181600116156101000203166002900490600052602060002090601f016020900481" +
+            "019282601f106101d657805160ff1916838001178555610204565b82800160010185558215610204579" +
+            "182015b828111156102035782518255916020019190600101906101e8565b5b50905061021191906102" +
+            "15565b5090565b61023791905b8082111561023357600081600090555060010161021b565b5090565b9" +
+            "0565b610a29806102496000396000f3fe608060405260043610610088576000357c0100000000000000" +
+            "0000000000000000000000000000000000000000009004806306fdde031461008d57806318160ddd146" +
+            "1011d57806323b872dd14610148578063313ce567146101db57806370a082311461020c57806395d89b" +
+            "4114610271578063a9059cbb14610301578063dd62ed3e14610374575b600080fd5b348015610099576" +
+            "00080fd5b506100a26103f9565b60405180806020018281038252838181518152602001915080519060" +
+            "20019080838360005b838110156100e25780820151818401526020810190506100c7565b50505050905" +
+            "090810190601f16801561010f5780820380516001836020036101000a031916815260200191505b5092" +
+            "50505060405180910390f35b34801561012957600080fd5b50610132610497565b60405180828152602" +
+            "00191505060405180910390f35b34801561015457600080fd5b506101c1600480360360608110156101" +
+            "6b57600080fd5b81019080803573ffffffffffffffffffffffffffffffffffffffff1690602001909291" +
+            "90803573ffffffffffffffffffffffffffffffffffffffff16906020019092919080359060200190929" +
+            "19050505061049d565b604051808215151515815260200191505060405180910390f35b3480156101e" +
+            "757600080fd5b506101f06105ca565b604051808260ff1660ff16815260200191505060405180910390" +
+            "f35b34801561021857600080fd5b5061025b6004803603602081101561022f57600080fd5b810190808" +
+            "03573ffffffffffffffffffffffffffffffffffffffff1690602001909291905050506105dd565b6040" +
+            "518082815260200191505060405180910390f35b34801561027d57600080fd5b506102866105f5565b6" +
+            "040518080602001828103825283818151815260200191508051906020019080838360005b8381101561" +
+            "02c65780820151818401526020810190506102ab565b50505050905090810190601f1680156102f35780" +
+            "820380516001836020036101000a031916815260200191505b509250505060405180910390f35b34801" +
+            "561030d57600080fd5b5061035a6004803603604081101561032457600080fd5b81019080803573fffff" +
+            "fffffffffffffffffffffffffffffffffff169060200190929190803590602001909291905050506106" +
+            "93565b604051808215151515815260200191505060405180910390f35b34801561038057600080fd5b50" +
+            "6103e36004803603604081101561039757600080fd5b81019080803573ffffffffffffffffffffffffff" +
+            "ffffffffffffff169060200190929190803573ffffffffffffffffffffffffffffffffffffffff1690602" +
+            "001909291905050506106aa565b6040518082815260200191505060405180910390f35b6000805460018" +
+            "1600116156101000203166002900480601f016020809104026020016040519081016040528092919081" +
+            "81526020018280546001816001161561010002031660029004801561048f5780601f106104645761010" +
+            "080835404028352916020019161048f565b820191906000526020600020905b81548152906001019060" +
+            "200180831161047257829003601f168201915b505050505081565b60035481565b6000600560008573f" +
+            "fffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff" +
+            "16815260200190815260200160002060003373ffffffffffffffffffffffffffffffffffffffff1673fff" +
+            "fffffffffffffffffffffffffffffffffffff16815260200190815260200160002054821115151561052" +
+            "a57600080fd5b81600560008673ffffffffffffffffffffffffffffffffffffffff1673fffffffffffff" +
+            "fffffffffffffffffffffffffff16815260200190815260200160002060003373fffffffffffffffffff" +
+            "fffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152" +
+            "602001600020600082825403925050819055506105bf8484846106cf565b600190509392505050565b60" +
+            "0260009054906101000a900460ff1681565b60046020528060005260406000206000915090505481565" +
+            "b60018054600181600116156101000203166002900480601f0160208091040260200160405190810160" +
+            "4052809291908181526020018280546001816001161561010002031660029004801561068b5780601f1" +
+            "06106605761010080835404028352916020019161068b565b820191906000526020600020905b8154815" +
+            "2906001019060200180831161066e57829003601f168201915b505050505081565b60006106a03384846" +
+            "106cf565b6001905092915050565b6005602052816000526040600020602052806000526040600020600" +
+            "091509150505481565b600073ffffffffffffffffffffffffffffffffffffffff168273fffffffffffff" +
+            "fffffffffffffffffffffffffff161415151561070b57600080fd5b80600460008573ffffffffffffff" +
+            "ffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190" +
+            "8152602001600020541015151561075957600080fd5b600460008373ffffffffffffffffffffffffffff" +
+            "ffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000" +
+            "205481600460008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffff" +
+            "ffffffffffffffffff1681526020019081526020016000205401101515156107e857600080fd5b600060" +
+            "0460008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffff" +
+            "ffffffffff16815260200190815260200160002054600460008673fffffffffffffffffffffffffffff" +
+            "fffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002" +
+            "05401905081600460008673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffff" +
+            "ffffffffffffffffffffffff16815260200190815260200160002060008282540392505081905550816" +
+            "00460008573ffffffffffffffffffffffffffffffffffffffff1673fffffffffffffffffffffffffffff" +
+            "fffffffffff168152602001908152602001600020600082825401925050819055508273fffffffffffff" +
+            "fffffffffffffffffffffffffff168473ffffffffffffffffffffffffffffffffffffffff167fddf252a" +
+            "d1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef84604051808281526020019150" +
+            "5060405180910390a380600460008573ffffffffffffffffffffffffffffffffffffffff1673ffffffff" +
+            "ffffffffffffffffffffffffffffffff16815260200190815260200160002054600460008773ffffffff" +
+            "ffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526" +
+            "0200190815260200160002054011415156109f757fe5b5050505056fea165627a7a723058207d7021bb" +
+            "4a32fc7065227e255004298654e202377452c0c4e83d3250f11a38ca002900000000000000000000000" +
+            "00000000000000000000000000000000005f5e100000000000000000000000000000000000000000000" +
+            "000000000000000000006000000000000000000000000000000000000000000000000000000000000000" +
+            "a0000000000000000000000000000000000000000000000000000000000000000b53696d706c65546f6" +
+            "b656e000000000000000000000000000000000000000000000000000000000000000000000000000000" +
+            "000000000000000000000000000353544e0000000000000000000000000000000000000000000000000" +
+            "000000000"
 
     private val illegalContractId = "1.16.-1"
     private val illegalHistoryItemId = "1.17.-1"
@@ -541,7 +597,7 @@ class EchoFrameworkTest {
         val futureSubscription = FutureTask<List<Log>>()
 
         framework.subscribeOnContractLogs(
-            legalContractIdForLogs,
+            legalContractId,
             listener = object : UpdateListener<List<Log>> {
                 override fun onUpdate(data: List<Log>) {
                     futureSubscription.setComplete(data)
@@ -553,7 +609,7 @@ class EchoFrameworkTest {
         thread {
             Thread.sleep(1000)
             callContractWithEmptyParams(
-                legalContractIdForLogs,
+                legalContractId,
                 "logTestArray",
                 framework,
                 EmptyCallback()
@@ -578,7 +634,7 @@ class EchoFrameworkTest {
         val futureSubscription = FutureTask<List<Log>>()
 
         framework.subscribeOnContractLogs(
-            legalContractIdForLogs,
+            legalContractId,
             listener = object : UpdateListener<List<Log>> {
                 override fun onUpdate(data: List<Log>) {
                     futureSubscription.setComplete(data)
@@ -590,7 +646,7 @@ class EchoFrameworkTest {
         thread {
             Thread.sleep(1000)
             callContractWithEmptyParams(
-                legalContractIdForLogs,
+                legalContractId,
                 "logTest",
                 framework,
                 EmptyCallback()
@@ -600,7 +656,7 @@ class EchoFrameworkTest {
         val contractResult = future.get()
         assertNotNull(contractResult)
 
-        val updateResult = futureSubscription.get()
+        val updateResult = futureSubscription.get(30, TimeUnit.SECONDS)
         assertNotNull(updateResult)
         assert(updateResult!!.isNotEmpty())
     }
@@ -616,7 +672,7 @@ class EchoFrameworkTest {
             password = password,
             assetId = legalAssetId,
             feeAsset = legalAssetId,
-            contractId = contractId,
+            contractId = legalContractId,
             methodName = methodName,
             methodParams = listOf(),
             broadcastCallback = sentCallback
@@ -698,7 +754,7 @@ class EchoFrameworkTest {
         val futureFee = FutureTask<String>()
 
         framework.getFeeForContractOperation(
-            userNameOrId = login,
+            userNameOrId = accountId,
             contractId = legalContractId,
             methodName = "testReturn",
             methodParams = listOf(),
@@ -847,7 +903,7 @@ class EchoFrameworkTest {
         framework.issueAsset(
             login,
             password,
-            asset = "1.3.2",
+            asset = "1.3.6",
             amount = "1",
             destinationIdOrName = login,
             message = "Do it",
@@ -871,7 +927,7 @@ class EchoFrameworkTest {
             password,
             assetId = legalAssetId,
             feeAsset = legalAssetId,
-            byteCode = legalContractParamsBytecode,
+            byteCode = legalTokenBytecode,
             broadcastCallback = broadcastFuture.completeCallback(),
             resultCallback = future.completeCallback()
         )
@@ -918,7 +974,7 @@ class EchoFrameworkTest {
             password,
             assetId = legalAssetId,
             feeAsset = legalAssetId,
-            contractId = legalContractIdForLogs,
+            contractId = "1.16.22",
             methodName = "logTest",
             methodParams = listOf(),
             broadcastCallback = broadcastFuture.completeCallback(),
@@ -954,7 +1010,7 @@ class EchoFrameworkTest {
             assetId = legalAssetId,
             feeAsset = legalAssetId,
             contractId = legalContractId,
-            methodName = "transfer",
+            methodName = "testReturn",
             methodParams = listOf(),
             broadcastCallback = broadcastFuture.completeCallback(),
             resultCallback = future.completeCallback()
@@ -1115,7 +1171,7 @@ class EchoFrameworkTest {
     }
 
     @Test
-    fun getContractResultTest() {
+    fun getRegularContractResultTest() {
         val framework = initFramework()
 
         if (connect(framework) == false) Assert.fail("Connection error")
@@ -1123,12 +1179,33 @@ class EchoFrameworkTest {
         val future = FutureTask<ContractResult>()
 
         framework.getContractResult(
-            historyId = "1.17.72",
+            historyId = "1.17.290",
             callback = future.completeCallback()
         )
 
         val contractResult = future.get()
         assertNotNull(contractResult)
+
+        assertNotNull(contractResult?.toRegular())
+    }
+
+    @Test
+    fun getContractResultx86Test() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<ContractResult>()
+
+        framework.getContractResult(
+            historyId = "1.17.1",
+            callback = future.completeCallback()
+        )
+
+        val contractResult = future.get()
+        assertNotNull(contractResult)
+
+        assertNotNull(contractResult?.toX86())
     }
 
     @Test
@@ -1140,7 +1217,7 @@ class EchoFrameworkTest {
         val future = FutureTask<List<Log>>()
 
         framework.getContractLogs(
-            contractId = "1.16.47",
+            contractId = "1.16.22",
             fromBlock = "0",
             toBlock = "9999999",
             callback = future.completeCallback()
@@ -1151,7 +1228,7 @@ class EchoFrameworkTest {
         assert(contractResult!!.isNotEmpty())
     }
 
-    @Test
+    @Test(expected = LocalException::class)
     fun getContractResultFailureTest() {
         val framework = initFramework()
 
@@ -1164,7 +1241,7 @@ class EchoFrameworkTest {
             future.completeCallback()
         )
 
-        assertTrue(future.get()?.execRes?.newAddress == "")
+        future.get()
     }
 
     @Test
@@ -1221,15 +1298,32 @@ class EchoFrameworkTest {
     }
 
     @Test
-    fun getContractTest() {
+    fun getRegularContractTest() {
         val framework = initFramework()
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
-        val future = FutureTask<String>()
+        val future = FutureTask<ContractStruct>()
 
         framework.getContract(
             legalContractId,
+            future.completeCallback()
+        )
+
+        val contractResult = future.get()
+        assertNotNull(contractResult)
+    }
+
+    @Test
+    fun getx86ContractTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<ContractStruct>()
+
+        framework.getContract(
+            "1.16.1",
             future.completeCallback()
         )
 
@@ -1243,7 +1337,7 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
-        val future = FutureTask<String>()
+        val future = FutureTask<ContractStruct>()
 
         framework.getContract(
             illegalContractId,

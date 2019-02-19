@@ -1,8 +1,6 @@
 package org.echo.mobile.framework.facade
 
 import org.echo.mobile.framework.Callback
-import org.echo.mobile.framework.DEFAULT_GAS_LIMIT
-import org.echo.mobile.framework.DEFAULT_GAS_PRICE
 import org.echo.mobile.framework.model.contract.input.InputValue
 
 /**

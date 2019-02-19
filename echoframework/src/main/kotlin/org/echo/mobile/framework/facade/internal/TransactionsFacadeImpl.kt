@@ -5,9 +5,12 @@ import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
 import org.echo.mobile.framework.exception.AccountNotFoundException
 import org.echo.mobile.framework.exception.LocalException
-import org.echo.mobile.framework.exception.NotFoundException
 import org.echo.mobile.framework.facade.TransactionsFacade
-import org.echo.mobile.framework.model.*
+import org.echo.mobile.framework.model.Account
+import org.echo.mobile.framework.model.Asset
+import org.echo.mobile.framework.model.AssetAmount
+import org.echo.mobile.framework.model.AuthorityType
+import org.echo.mobile.framework.model.Transaction
 import org.echo.mobile.framework.model.operations.TransferOperationBuilder
 import org.echo.mobile.framework.processResult
 import org.echo.mobile.framework.service.DatabaseApiService
@@ -45,9 +48,9 @@ class TransactionsFacadeImpl(
         databaseApiService.getFullAccounts(listOf(nameOrId, toNameOrId), false)
             .value { accountsMap ->
                 fromAccount = accountsMap[nameOrId]?.account
-                        ?: throw AccountNotFoundException("Unable to find required account $nameOrId")
+                    ?: throw AccountNotFoundException("Unable to find required account $nameOrId")
                 toAccount = accountsMap[toNameOrId]?.account
-                        ?: throw AccountNotFoundException("Unable to find required account $toNameOrId")
+                    ?: throw AccountNotFoundException("Unable to find required account $toNameOrId")
             }
             .error { accountsError ->
                 throw LocalException("Error occurred during accounts request", accountsError)

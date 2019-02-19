@@ -29,7 +29,7 @@ import java.io.Serializable
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
-import java.util.*
+import java.util.Arrays
 
 /**
  * A Sha256Hash just wraps a byte[] so that equals and hashcode work correctly, allowing it to be used as keys in a

@@ -47,7 +47,7 @@ class ListAssetsSocketOperation(
         val jsonTree = parser.parse(json)
 
         val result = jsonTree.asJsonObject.get(RESULT_KEY)?.asJsonArray
-                ?: return emptyList()
+            ?: return emptyList()
 
         val gson = GsonBuilder()
             .registerTypeAdapter(
