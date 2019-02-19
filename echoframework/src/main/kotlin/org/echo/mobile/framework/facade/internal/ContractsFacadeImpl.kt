@@ -51,8 +51,6 @@ class ContractsFacadeImpl(
         feeAsset: String?,
         byteCode: String,
         params: List<InputValue>,
-        gasLimit: Long,
-        gasPrice: Long,
         broadcastCallback: Callback<Boolean>,
         resultCallback: Callback<String>?
     ) {
@@ -78,8 +76,6 @@ class ContractsFacadeImpl(
             val contractOperation = ContractCreateOperationBuilder()
                 .setAsset(assetId)
                 .setRegistrar(registrar)
-                .setGas(gasLimit)
-                .setGasPrice(gasPrice)
                 .setContractCode(byteCode + constructorParams)
                 .build()
 
@@ -140,8 +136,6 @@ class ContractsFacadeImpl(
         methodName: String,
         methodParams: List<InputValue>,
         value: String,
-        gasLimit: Long,
-        gasPrice: Long,
         broadcastCallback: Callback<Boolean>,
         resultCallback: Callback<String>?
     ) {
@@ -165,8 +159,6 @@ class ContractsFacadeImpl(
 
             val contractOperation = ContractCallOperationBuilder()
                 .setRegistrar(registrar)
-                .setGas(gasLimit)
-                .setGasPrice(gasPrice)
                 .setReceiver(contractId)
                 .setContractCode(contractCode)
                 .setValue(AssetAmount(UnsignedLong.valueOf(value), Asset(assetId)))

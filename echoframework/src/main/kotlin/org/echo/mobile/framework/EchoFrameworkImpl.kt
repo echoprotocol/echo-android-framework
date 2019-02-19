@@ -439,8 +439,6 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         feeAsset: String?,
         byteCode: String,
         params: List<InputValue>,
-        gasLimit: Long,
-        gasPrice: Long,
         broadcastCallback: Callback<Boolean>,
         resultCallback: Callback<String>?
     ) = dispatch(Runnable {
@@ -451,8 +449,6 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             feeAsset,
             byteCode,
             params,
-            gasLimit,
-            gasPrice,
             broadcastCallback.wrapOriginal(),
             resultCallback?.wrapOriginal()
         )
@@ -467,8 +463,6 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         methodName: String,
         methodParams: List<InputValue>,
         value: String,
-        gasLimit: Long,
-        gasPrice: Long,
         broadcastCallback: Callback<Boolean>,
         resultCallback: Callback<String>?
     ) = dispatch(Runnable {
@@ -481,8 +475,6 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             methodName,
             methodParams,
             value,
-            gasLimit,
-            gasPrice,
             broadcastCallback.wrapOriginal(),
             resultCallback?.wrapOriginal()
         )

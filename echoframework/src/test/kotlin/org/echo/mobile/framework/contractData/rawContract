@@ -1,0 +1,39 @@
+contract TestContract{
+
+    int private count = 0;
+
+    event Logger(string anyLog);
+
+    function testReturn() public payable returns (address) {
+        return msg.sender;
+    }
+
+    function testAddressParameter(address addr) public returns (address) {
+        return addr;
+    }
+
+    function testStringParameter(string memory str) public returns (string memory){
+        return str;
+    }
+
+    function incrementCounter() public {
+        count += 1;
+    }
+
+    function decrementCounter() public {
+        count -= 1;
+    }
+
+    function getCount() public view returns (int) {
+        return count;
+    }
+
+    function logTest() public{
+        emit Logger("log event");
+    }
+
+    function logTestArray() public{
+        emit Logger("log event first");
+        emit Logger("log event second");
+    }
+}

@@ -12,10 +12,13 @@ import org.echo.mobile.framework.model.Block
 import org.echo.mobile.framework.model.DynamicGlobalProperties
 import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.contract.ContractInfo
-import org.echo.mobile.framework.model.contract.ContractResult
-import org.echo.mobile.framework.model.contract.ContractStruct
+import org.echo.mobile.framework.model.contract.ContractResultx86
+import org.echo.mobile.framework.model.contract.ContractType
 import org.echo.mobile.framework.model.contract.ExecRes
+import org.echo.mobile.framework.model.contract.RegularContractResult
 import org.echo.mobile.framework.model.contract.TrReceipt
+import org.echo.mobile.framework.model.contract.toRegular
+import org.echo.mobile.framework.model.contract.toX86
 import org.echo.mobile.framework.model.network.Echodevnet
 import org.echo.mobile.framework.model.socketoperations.FullAccountsSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetAssetsSocketOperation
@@ -318,8 +321,8 @@ class DatabaseApiServiceTest {
     }
 
     @Test
-    fun getContractResultTest() {
-        val response = ContractResult(ExecRes(excepted = "Done"), TrReceipt())
+    fun getRegularContractResultTest() {
+        val response = RegularContractResult(ExecRes(excepted = "Done"), TrReceipt())
 
         val socketCoreComponent = ServiceSocketCoreComponentMock(response)
 
@@ -328,7 +331,32 @@ class DatabaseApiServiceTest {
         databaseApiService.getContractResult("")
             .value { result ->
                 assertNotNull(result)
-                assertEquals(result.execRes.excepted, response.execRes.excepted)
+                assertEquals(result.contractType, ContractType.REGULAR.ordinal)
+
+                val regularResult = result.toRegular()
+                assertNotNull(regularResult)
+
+                assertEquals(regularResult!!.execRes.excepted, response.execRes.excepted)
+            }
+            .error { fail() }
+    }
+
+    @Test
+    fun getContractResultx86Test() {
+        val response = ContractResultx86(output = "Done")
+
+        val socketCoreComponent = ServiceSocketCoreComponentMock(response)
+
+        val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, Echodevnet())
+
+        databaseApiService.getContractResult("")
+            .value { result ->
+                assertNotNull(result)
+                assertEquals(result.contractType, ContractType.X86.ordinal)
+
+                val result86 = result.toX86()
+                assertNotNull(result86)
+                assertEquals(result86!!.output, response.output)
             }
             .error { fail() }
     }
