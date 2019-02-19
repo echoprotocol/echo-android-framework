@@ -1320,7 +1320,7 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
-        val future = FutureTask<String>()
+        val future = FutureTask<ContractStruct>()
 
         framework.getContract(
             "1.16.1",
