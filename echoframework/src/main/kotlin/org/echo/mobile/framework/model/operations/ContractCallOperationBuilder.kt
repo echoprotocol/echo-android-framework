@@ -8,7 +8,6 @@ import org.echo.mobile.framework.model.Asset
 import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.contract.Contract
 import org.echo.mobile.framework.support.Builder
-import org.echo.mobile.framework.support.toUnsignedLong
 
 /**
  * Represents builder for [ContractCreateOperation].
@@ -22,8 +21,6 @@ class ContractCallOperationBuilder : Builder<ContractCallOperation> {
     private var registrar: Account? = null
     private var callee: Contract? = null
     private var value: AssetAmount? = null
-    private var gasPrice: UnsignedLong? = null
-    private var gas: UnsignedLong? = null
     private var code: String? = null
 
     /**
@@ -63,42 +60,6 @@ class ContractCallOperationBuilder : Builder<ContractCallOperation> {
     }
 
     /**
-     * Sets gas price for contract operation
-     * @param gasPrice Gas price for operation
-     */
-    fun setGasPrice(gasPrice: UnsignedLong): ContractCallOperationBuilder {
-        this.gasPrice = gasPrice
-        return this
-    }
-
-    /**
-     * Sets gas price for contract operation
-     * @param gasPrice Gas price for operation
-     */
-    fun setGasPrice(gasPrice: Long): ContractCallOperationBuilder {
-        this.gasPrice = gasPrice.toUnsignedLong()
-        return this
-    }
-
-    /**
-     * Sets gas for contract operation
-     * @param gas Gas for operation
-     */
-    fun setGas(gas: UnsignedLong): ContractCallOperationBuilder {
-        this.gas = gas
-        return this
-    }
-
-    /**
-     * Sets gas for contract operation
-     * @param gas Gas for operation
-     */
-    fun setGas(gas: Long): ContractCallOperationBuilder {
-        this.gas = gas.toUnsignedLong()
-        return this
-    }
-
-    /**
      * Sets code for contract if [receiver] is not set
      * @param code Code for contract operation
      */
@@ -112,8 +73,6 @@ class ContractCallOperationBuilder : Builder<ContractCallOperation> {
         checkContractCode(code)
 
         val value = this.value ?: AssetAmount(UnsignedLong.ZERO, Asset(ECHO_ASSET_ID))
-        val gasPrice = this.gasPrice ?: UnsignedLong.ZERO
-        val gas = this.gas ?: UnsignedLong.ZERO
         val registrar = this.registrar!!
         val code = this.code!!
 
@@ -122,12 +81,10 @@ class ContractCallOperationBuilder : Builder<ContractCallOperation> {
                 registrar,
                 callee!!,
                 value,
-                gasPrice,
-                gas,
                 code,
                 fee = nullSafeFee
             )
-        } ?: ContractCallOperation(registrar, callee!!, value, gasPrice, gas, code)
+        } ?: ContractCallOperation(registrar, callee!!, value, code)
     }
 
     private fun checkRegistrar(account: Account?) {

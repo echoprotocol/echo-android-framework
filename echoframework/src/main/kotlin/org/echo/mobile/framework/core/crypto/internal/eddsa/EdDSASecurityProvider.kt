@@ -23,7 +23,7 @@ class EdDSASecurityProvider :
     private fun setup() {
         this["KeyFactory.EdDSA"] = "jp.co.soramitsu.crypto.ed25519.KeyFactory"
         this["KeyPairGenerator.EdDSA"] =
-                "org.echo.mobile.framework.core.crypto.internal.addsa.KeyPairGenerator"
+            "org.echo.mobile.framework.core.crypto.internal.addsa.KeyPairGenerator"
         this["Signature.NONEwithEdDSA"] = "jp.co.soramitsu.crypto.ed25519.EdDSAEngine"
         this["Alg.Alias.KeyFactory.1.3.101.112"] = "EdDSA"
         this["Alg.Alias.KeyFactory.OID.1.3.101.112"] = "EdDSA"

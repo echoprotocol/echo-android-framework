@@ -32,7 +32,8 @@ fun encryptAES(input: ByteArray, key: ByteArray): ByteArray? {
     val result = key.sha512hash()
 
     val ivBytes = ByteArray(IV_SIZE)
-    System.arraycopy(result,
+    System.arraycopy(
+        result,
         SKS_SIZE, ivBytes, 0,
         IV_SIZE
     )
@@ -65,7 +66,8 @@ fun decryptAES(input: ByteArray, key: ByteArray): ByteArray? {
     val result = key.sha512hash()
 
     val ivBytes = ByteArray(IV_SIZE)
-    System.arraycopy(result,
+    System.arraycopy(
+        result,
         SKS_SIZE, ivBytes, 0,
         IV_SIZE
     )

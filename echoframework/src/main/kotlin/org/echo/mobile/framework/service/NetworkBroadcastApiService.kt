@@ -1,7 +1,6 @@
 package org.echo.mobile.framework.service
 
 import org.echo.mobile.framework.model.Transaction
-import org.echo.mobile.framework.model.TransactionResult
 import org.echo.mobile.framework.support.Result
 
 /**

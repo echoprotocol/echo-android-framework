@@ -1,6 +1,10 @@
 package org.echo.mobile.framework.core.socket.internal
 
-import com.neovisionaries.ws.client.*
+import com.neovisionaries.ws.client.WebSocket
+import com.neovisionaries.ws.client.WebSocketAdapter
+import com.neovisionaries.ws.client.WebSocketException
+import com.neovisionaries.ws.client.WebSocketFactory
+import com.neovisionaries.ws.client.WebSocketFrame
 import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent
 import org.echo.mobile.framework.core.socket.SocketMessenger
 import org.echo.mobile.framework.core.socket.SocketMessengerListener

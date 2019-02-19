@@ -135,8 +135,8 @@ class ContractsFragment : BaseFragment() {
                 object : Callback<ContractResult> {
                     override fun onSuccess(result: ContractResult) {
                         updateStatus(
-                            "expected: ${result.execRes.excepted}, " +
-                                    "output: ${result.execRes.output}", true
+                            "expected: $result, " +
+                                    "output: $result", true
                         )
                     }
 

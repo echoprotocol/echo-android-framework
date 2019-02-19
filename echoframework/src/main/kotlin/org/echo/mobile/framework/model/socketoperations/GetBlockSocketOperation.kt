@@ -51,10 +51,11 @@ class GetBlockSocketOperation(
         val parser = JsonParser()
         val jsonTree = parser.parse(json)
 
-        val result = jsonTree.asJsonObject.get(RESULT_KEY)?.asJsonObject ?: return null
+        val result = jsonTree.asJsonObject.get(RESULT_KEY)
+        if (!result.isJsonObject) return null
 
         return configureGson().fromJson<Block>(
-            result,
+            result.asJsonObject,
             Block::class.java
         )
     }

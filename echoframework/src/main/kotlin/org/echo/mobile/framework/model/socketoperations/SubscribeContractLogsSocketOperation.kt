@@ -7,7 +7,6 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonParser
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.model.Log
-import org.echo.mobile.framework.support.toJsonObject
 
 /**
  * Register subscription callback to contract logs.

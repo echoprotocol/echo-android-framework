@@ -1,7 +1,6 @@
 package org.echo.mobile.framework.service
 
 import org.echo.mobile.framework.AccountListener
-import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.FullAccount
 
 /**

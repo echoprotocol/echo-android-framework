@@ -1,6 +1,5 @@
 package org.echo.mobile.framework.model.socketoperations
 
-import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonParser
@@ -46,8 +45,9 @@ class GetContractResultSocketOperation(
 
         if (resultArray == null || resultArray.size() < 2) return null
 
+        val resultType = resultArray.get(0).asJsonPrimitive.asInt
         val result = resultArray.get(1).asJsonObject
 
-        return Gson().fromJson<ContractResult>(result, type)
+        return ContractResult(resultType, result.toString())
     }
 }

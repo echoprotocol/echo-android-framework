@@ -1,11 +1,10 @@
 package org.echo.mobile.framework.facade
 
 import org.echo.mobile.framework.Callback
-import org.echo.mobile.framework.DEFAULT_GAS_LIMIT
-import org.echo.mobile.framework.DEFAULT_GAS_PRICE
 import org.echo.mobile.framework.model.Log
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
+import org.echo.mobile.framework.model.contract.ContractStruct
 import org.echo.mobile.framework.model.contract.input.InputValue
 import java.math.BigInteger
 
@@ -25,9 +24,6 @@ interface ContractsFacade {
      * @param feeAsset              Asset for fee pay
      * @param byteCode              Bytecode of the created contract
      * @param params                Params for contract constructor
-     * @param gasLimit              Gas limit for contract operation
-     * @param gasPrice              One gas price for contract operation
-     *
      * @param broadcastCallback     Callback for result of operation broadcast
      * @param resultCallback        Callback for retrieving result of operation (not required).
      *                              Retrieves result of transactions if exists -
@@ -41,8 +37,6 @@ interface ContractsFacade {
         feeAsset: String?,
         byteCode: String,
         params: List<InputValue> = listOf(),
-        gasLimit: Long = DEFAULT_GAS_LIMIT,
-        gasPrice: Long = DEFAULT_GAS_PRICE,
         broadcastCallback: Callback<Boolean>,
         resultCallback: Callback<String>? = null
     )
@@ -58,8 +52,6 @@ interface ContractsFacade {
      * @param methodName            Name of called method
      * @param methodParams          Parameters of calling method
      * @param value                 Amount for payable methods
-     * @param gasLimit              Gas limit for contract operation
-     * @param gasPrice              One gas price for contract operation
      * @param broadcastCallback     Callback for result of operation deploying
      * @param resultCallback        Callback for retrieving result of operation (not required).
      *                              Retrieves result of transactions if exists -
@@ -75,8 +67,6 @@ interface ContractsFacade {
         methodName: String,
         methodParams: List<InputValue>,
         value: String = BigInteger.ZERO.toString(),
-        gasLimit: Long = DEFAULT_GAS_LIMIT,
-        gasPrice: Long = DEFAULT_GAS_PRICE,
         broadcastCallback: Callback<Boolean>,
         resultCallback: Callback<String>? = null
     )
@@ -139,6 +129,6 @@ interface ContractsFacade {
      *
      * @param contractId Id of contract
      */
-    fun getContract(contractId: String, callback: Callback<String>)
+    fun getContract(contractId: String, callback: Callback<ContractStruct>)
 
 }

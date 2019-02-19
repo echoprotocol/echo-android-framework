@@ -3,7 +3,6 @@ package org.echo.mobile.framework.model.socketoperations
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import org.echo.mobile.framework.Callback
-import org.echo.mobile.framework.ILLEGAL_ID
 import org.echo.mobile.framework.model.Account
 
 /**

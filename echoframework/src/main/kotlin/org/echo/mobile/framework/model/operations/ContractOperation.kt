@@ -15,8 +15,6 @@ import org.echo.mobile.framework.model.contract.ContractResult
 abstract class ContractOperation @JvmOverloads constructor(
     var registrar: Account,
     val value: AssetAmount,
-    val gasPrice: UnsignedLong,
-    val gas: UnsignedLong,
     val code: String,
     override var fee: AssetAmount = AssetAmount(UnsignedLong.ZERO),
     operationType: OperationType
@@ -44,8 +42,6 @@ abstract class ContractOperation @JvmOverloads constructor(
         const val KEY_REGISTRAR = "registrar"
         const val KEY_RECEIVER = "callee"
         const val KEY_VALUE = "value"
-        const val KEY_GAS_PRICE = "gasPrice"
-        const val KEY_GAS = "gas"
         const val KEY_CODE = "code"
         const val KEY_ACCURACY = "eth_accuracy"
         const val KEY_SUPPORTED_ASSET = "supported_asset_id"

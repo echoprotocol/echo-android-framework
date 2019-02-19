@@ -26,7 +26,8 @@ object Checksum {
             doFinal(checksum, 0)
         }
 
-        return checksum.copyOfRange(0,
+        return checksum.copyOfRange(
+            0,
             CHECKSUM_SIZE
         )
     }
