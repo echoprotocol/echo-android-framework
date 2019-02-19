@@ -1298,7 +1298,7 @@ class EchoFrameworkTest {
     }
 
     @Test
-    fun getContractTest() {
+    fun getRegularContractTest() {
         val framework = initFramework()
 
         if (connect(framework) == false) Assert.fail("Connection error")
@@ -1307,6 +1307,23 @@ class EchoFrameworkTest {
 
         framework.getContract(
             legalContractId,
+            future.completeCallback()
+        )
+
+        val contractResult = future.get()
+        assertNotNull(contractResult)
+    }
+
+    @Test
+    fun getx86ContractTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<String>()
+
+        framework.getContract(
+            "1.16.1",
             future.completeCallback()
         )
 
