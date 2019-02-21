@@ -23,7 +23,7 @@ class RoleDependentSeedProvider : SeedProvider {
         private val roleNameRegistry = hashMapOf(
             AuthorityType.ACTIVE to "active",
             AuthorityType.OWNER to "owner",
-            AuthorityType.KEY to "memo"
+            AuthorityType.MEMO to "memo"
         )
 
         override fun convert(source: AuthorityType): String {

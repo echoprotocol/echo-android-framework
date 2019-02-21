@@ -37,16 +37,16 @@ abstract class BaseTransactionsFacade(
 
     protected fun checkOwnerAccount(name: String, password: String, account: Account) {
         val ownerAddress =
-            cryptoCoreComponent.getAddress(name, password, AuthorityType.OWNER)
+            cryptoCoreComponent.getAddress(name, password, AuthorityType.ACTIVE)
 
-        val isKeySame = account.isEqualsByKey(ownerAddress, AuthorityType.OWNER)
+        val isKeySame = account.isEqualsByKey(ownerAddress, AuthorityType.ACTIVE)
         if (!isKeySame) {
             throw LocalException("Owner account checking exception")
         }
     }
 
     protected fun memoKey(name: String, password: String) =
-        cryptoCoreComponent.getPrivateKey(name, password, AuthorityType.KEY)
+        cryptoCoreComponent.getPrivateKey(name, password, AuthorityType.ACTIVE)
 
     protected fun generateMemo(
         privateKey: ByteArray,
