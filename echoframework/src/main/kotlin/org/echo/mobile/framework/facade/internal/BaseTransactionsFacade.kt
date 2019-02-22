@@ -45,6 +45,17 @@ abstract class BaseTransactionsFacade(
         }
     }
 
+    protected fun checkOwnerAccount(wif: String, account: Account) {
+        val privateKey = cryptoCoreComponent.decodeFromWif(wif)
+        val publicKey = cryptoCoreComponent.derivePublicKeyFromPrivate(privateKey)
+        val address = cryptoCoreComponent.getAddressFromPublicKey(publicKey)
+
+        val isKeySame = account.isEqualsByKey(address, AuthorityType.ACTIVE)
+        if (!isKeySame) {
+            throw LocalException("Owner account checking exception")
+        }
+    }
+
     protected fun memoKey(name: String, password: String) =
         cryptoCoreComponent.getPrivateKey(name, password, AuthorityType.ACTIVE)
 

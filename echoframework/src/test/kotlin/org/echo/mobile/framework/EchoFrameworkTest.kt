@@ -1,19 +1,23 @@
 package org.echo.mobile.framework
 
+import com.google.common.primitives.UnsignedLong
 import org.echo.mobile.framework.exception.LocalException
+import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.Asset
+import org.echo.mobile.framework.model.AssetAmount
+import org.echo.mobile.framework.model.AssetOptions
 import org.echo.mobile.framework.model.Balance
+import org.echo.mobile.framework.model.BitassetOptions
 import org.echo.mobile.framework.model.Block
 import org.echo.mobile.framework.model.BlockData
 import org.echo.mobile.framework.model.DynamicGlobalProperties
 import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.HistoryResponse
 import org.echo.mobile.framework.model.Log
+import org.echo.mobile.framework.model.Price
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
-import org.echo.mobile.framework.model.contract.ContractResultx86
 import org.echo.mobile.framework.model.contract.ContractStruct
-import org.echo.mobile.framework.model.contract.RegularContractResult
 import org.echo.mobile.framework.model.contract.input.AccountAddressInputValueType
 import org.echo.mobile.framework.model.contract.input.ContractAddressInputValueType
 import org.echo.mobile.framework.model.contract.input.InputValue
@@ -48,7 +52,7 @@ class EchoFrameworkTest {
     private fun initFramework(): EchoFramework {
         return EchoFramework.create(
             Settings.Configurator()
-                .setUrl("ws://195.201.164.54:63101")
+                .setUrl("wss://devnet.echo-dev.io/ws")
                 .setNetworkType(Echodevnet())
                 .setReturnOnMainThread(false)
                 .setApis(
@@ -61,12 +65,13 @@ class EchoFrameworkTest {
         )
     }
 
-    private val legalContractId = "1.16.26"
-    private val legalTokenId = "1.16.124"
-    private val accountId = "1.2.16"
+    private val legalContractId = "1.16.12"
+    private val legalTokenId = "1.16.18"
+    private val accountId = "1.2.14"
     private val login = "dima"
     private val password = "dima"
-    private val secondAccountId = "1.2.17"
+    private val wif = "5J3UbadSyzzcQQ7HEfTr2brhJJpHhx3NsMzrvgzfysBesutNRCm"
+    private val secondAccountId = "1.2.15"
     private val secondLogin = "daria"
     private val secondPassword = "daria"
     private val legalAssetId = "1.3.0"
@@ -312,6 +317,23 @@ class EchoFrameworkTest {
     }
 
     @Test
+    fun getAccountByWifTest() {
+        val framework = initFramework()
+
+        val futureAccounts = FutureTask<List<FullAccount>>()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        framework.getAccountsByWif(
+            "5J3UbadSyzzcQQ7HEfTr2brhJJpHhx3NsMzrvgzfysBesutNRCm",
+            futureAccounts.completeCallback()
+        )
+
+        val accounts = futureAccounts.get()
+        Assert.assertTrue(accounts?.isNotEmpty() == true)
+    }
+
+    @Test
     fun checkAccountReservedTest() {
         val framework = initFramework()
 
@@ -397,7 +419,7 @@ class EchoFrameworkTest {
         if (connect(framework) == false) Assert.fail("Connection error")
 
         framework.changePassword(
-            "testacc", "testacc", "testacc",
+            login, password, password,
             object : Callback<Any> {
                 override fun onSuccess(result: Any) {
                     futureChangePassword.setComplete(true)
@@ -702,6 +724,28 @@ class EchoFrameworkTest {
     }
 
     @Test
+    fun transferWithWifTest() {
+        val framework = initFramework()
+
+        val futureTransfer = FutureTask<Boolean>()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        framework.sendTransferOperationWithWif(
+            login,
+            wif,
+            toNameOrId = secondLogin,
+            amount = "1",
+            asset = legalAssetId,
+            feeAsset = legalAssetId,
+            message = "Memasik",
+            callback = futureTransfer.completeCallback()
+        )
+
+        assertTrue(futureTransfer.get() ?: false)
+    }
+
+    @Test
     fun getRequiredFeeTransferOperationTest() {
         val framework = initFramework()
 
@@ -712,6 +756,28 @@ class EchoFrameworkTest {
         framework.getFeeForTransferOperation(
             login,
             password,
+            secondLogin,
+            amount = "10000",
+            asset = legalAssetId,
+            feeAsset = legalAssetId,
+            message = "Memasiki",
+            callback = futureFee.completeCallback()
+        )
+
+        assertNotNull(futureFee.get())
+    }
+
+    @Test
+    fun getRequiredFeeTransferOperationWithWifTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val futureFee = FutureTask<String>()
+
+        framework.getFeeForTransferOperationWithWif(
+            login,
+            wif,
             secondLogin,
             amount = "10000",
             asset = legalAssetId,
@@ -851,38 +917,34 @@ class EchoFrameworkTest {
 //        val futureAsset = FutureTask<String>()
 //        val broadcastFuture = FutureTask<Boolean>()
 //
-//        val asset = Asset("").apply {
-//            symbol = "TESTASSET"
-//            precision = 4
-//            issuer = Account(accountId)
-////            setBtsOptions(
-////                BitassetOptions(
-////                    86400, 7, 86400,
-////                    100, 2000
-////                )
-////            )
-//
-//            predictionMarket = false
-//        }
-//
-//        val options =
-//            AssetOptions(
-//                UnsignedLong.valueOf(100000000000),
-//                0.toLong(),
-//                UnsignedLong.ZERO,
-//                AssetOptions.ALLOW_COMITEE_PROVIDE_FEEDS,
-//                AssetOptions.ALLOW_COMITEE_PROVIDE_FEEDS,
-//                Price().apply {
-//                    this.quote = AssetAmount(UnsignedLong.valueOf(1), Asset("1.3.1"))
-//                    this.base = AssetAmount(UnsignedLong.valueOf(1), Asset("1.3.0"))
-//                },
-//                "description"
-//            )
-//
-//        asset.assetOptions = options
+//        val asset = configureAsset()
 //
 //        framework.createAsset(
-//            login, password,
+//            login,
+//            password,
+//            asset,
+//            broadcastFuture.completeCallback(),
+//            futureAsset.completeCallback()
+//        )
+//
+//        assertTrue(broadcastFuture.get() ?: false)
+//        assertTrue(futureAsset.get()?.startsWith("1.3.") ?: false)
+//    }
+//
+//
+//    @Test
+//    fun createAssetWithWifTest() {
+//        val framework = initFramework()
+//
+//        if (connect(framework) == false) Assert.fail("Connection error")
+//
+//        val futureAsset = FutureTask<String>()
+//        val broadcastFuture = FutureTask<Boolean>()
+//
+//        val asset = configureAsset()
+//
+//        framework.createAssetWithWif(
+//            login, wif,
 //            asset,
 //            broadcastFuture.completeCallback(),
 //            futureAsset.completeCallback()
@@ -937,6 +999,29 @@ class EchoFrameworkTest {
     }
 
     @Test
+    fun createContractWithWifTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val broadcastFuture = FutureTask<Boolean>()
+        val future = FutureTask<String>()
+
+        framework.createContractWithWif(
+            login,
+            wif,
+            assetId = legalAssetId,
+            feeAsset = legalAssetId,
+            byteCode = legalTokenBytecode,
+            broadcastCallback = broadcastFuture.completeCallback(),
+            resultCallback = future.completeCallback()
+        )
+
+        assertTrue(broadcastFuture.get() ?: false)
+        assertTrue(future.get()?.startsWith("1.17.") ?: false)
+    }
+
+    @Test
     fun createContractWithParametersTest() {
         val framework = initFramework()
 
@@ -974,7 +1059,32 @@ class EchoFrameworkTest {
             password,
             assetId = legalAssetId,
             feeAsset = legalAssetId,
-            contractId = "1.16.22",
+            contractId = legalContractId,
+            methodName = "logTest",
+            methodParams = listOf(),
+            broadcastCallback = broadcastFuture.completeCallback(),
+            resultCallback = future.completeCallback()
+        )
+
+        assertTrue(broadcastFuture.get() ?: false)
+        assertTrue(future.get()?.startsWith("1.17.") ?: false)
+    }
+
+    @Test
+    fun callContractWithWifTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val broadcastFuture = FutureTask<Boolean>()
+        val future = FutureTask<String>()
+
+        framework.callContractWithWif(
+            login,
+            wif,
+            assetId = legalAssetId,
+            feeAsset = legalAssetId,
+            contractId = legalContractId,
             methodName = "logTest",
             methodParams = listOf(),
             broadcastCallback = broadcastFuture.completeCallback(),
@@ -1179,7 +1289,7 @@ class EchoFrameworkTest {
         val future = FutureTask<ContractResult>()
 
         framework.getContractResult(
-            historyId = "1.17.290",
+            historyId = "1.17.41",
             callback = future.completeCallback()
         )
 
@@ -1198,7 +1308,7 @@ class EchoFrameworkTest {
         val future = FutureTask<ContractResult>()
 
         framework.getContractResult(
-            historyId = "1.17.1",
+            historyId = "1.17.0",
             callback = future.completeCallback()
         )
 
@@ -1217,7 +1327,7 @@ class EchoFrameworkTest {
         val future = FutureTask<List<Log>>()
 
         framework.getContractLogs(
-            contractId = "1.16.22",
+            contractId = legalContractId,
             fromBlock = "0",
             toBlock = "9999999",
             callback = future.completeCallback()
@@ -1414,6 +1524,40 @@ class EchoFrameworkTest {
         })
 
         return futureConnect.get()
+    }
+
+    private fun configureAsset(): Asset {
+        val asset = Asset("").apply {
+            symbol = "ANDRASSET"
+            precision = 4
+            issuer = Account(accountId)
+            setBtsOptions(
+                BitassetOptions(
+                    86400, 7, 86400,
+                    100, 2000
+                )
+            )
+
+            predictionMarket = false
+        }
+
+        val options =
+            AssetOptions(
+                UnsignedLong.valueOf(100000000000),
+                0.toLong(),
+                UnsignedLong.ZERO,
+                AssetOptions.ALLOW_COMITEE_PROVIDE_FEEDS,
+                AssetOptions.ALLOW_COMITEE_PROVIDE_FEEDS,
+                Price().apply {
+                    this.quote = AssetAmount(UnsignedLong.valueOf(1), Asset("1.3.1"))
+                    this.base = AssetAmount(UnsignedLong.valueOf(1), Asset("1.3.0"))
+                },
+                "description"
+            )
+
+        asset.assetOptions = options
+
+        return asset
     }
 
 }

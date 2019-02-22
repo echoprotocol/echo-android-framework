@@ -59,6 +59,20 @@ interface AccountsService {
         namesOrIds: List<String>,
         subscribe: Boolean
     ): Result<Exception, Map<String, FullAccount>>
+
+    /**
+     * Fetches accounts associated with private keys in wifs format [wifs]
+     *
+     * Calls [callback]'s success method with map, contains pairs wif -> accounts list, associated with this wif
+     */
+    fun getAccountsByWif(wifs: List<String>, callback: Callback<Map<String, List<FullAccount>>>)
+
+    /**
+     * Fetches accounts associated with private keys in wifs format [wifs]
+     *
+     * Returns map, contains pairs wif -> accounts list, associated with this wif
+     */
+    fun getAccountsByWif(wifs: List<String>): Result<LocalException, Map<String, List<FullAccount>>>
 }
 
 /**

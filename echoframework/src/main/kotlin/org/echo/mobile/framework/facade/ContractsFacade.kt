@@ -42,6 +42,32 @@ interface ContractsFacade {
     )
 
     /**
+     * Creates contract on blockchain
+     *
+     * @param registrarNameOrId     Name or id of account that creates the contract
+     * @param wif                   Account's private key in wif format
+     * @param assetId               Asset of contract
+     * @param feeAsset              Asset for fee pay
+     * @param byteCode              Bytecode of the created contract
+     * @param params                Params for contract constructor
+     * @param broadcastCallback     Callback for result of operation broadcast
+     * @param resultCallback        Callback for retrieving result of operation (not required).
+     *                              Retrieves result of transactions if exists -
+     *                              history id which contains call contract result,
+     *                              if not exists - empty string
+     */
+    fun createContractWithWif(
+        registrarNameOrId: String,
+        wif: String,
+        assetId: String,
+        feeAsset: String?,
+        byteCode: String,
+        params: List<InputValue> = listOf(),
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<String>? = null
+    )
+
+    /**
      * Calls to contract on blockchain
      *
      * @param userNameOrId          Name or id of account that calls the contract
@@ -61,6 +87,36 @@ interface ContractsFacade {
     fun callContract(
         userNameOrId: String,
         password: String,
+        assetId: String,
+        feeAsset: String?,
+        contractId: String,
+        methodName: String,
+        methodParams: List<InputValue>,
+        value: String = BigInteger.ZERO.toString(),
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<String>? = null
+    )
+
+    /**
+     * Calls to contract on blockchain
+     *
+     * @param userNameOrId          Name or id of account that calls the contract
+     * @param wif                   Account's private key in wif format
+     * @param assetId               Asset of contract
+     * @param feeAsset              Asset for fee pay
+     * @param contractId            Id of called contract
+     * @param methodName            Name of called method
+     * @param methodParams          Parameters of calling method
+     * @param value                 Amount for payable methods
+     * @param broadcastCallback     Callback for result of operation deploying
+     * @param resultCallback        Callback for retrieving result of operation (not required).
+     *                              Retrieves result of transactions if exists -
+     *                              history id which contains call contract result,
+     *                              if not exists - empty string
+     */
+    fun callContractWithWif(
+        userNameOrId: String,
+        wif: String,
         assetId: String,
         feeAsset: String?,
         contractId: String,

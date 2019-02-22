@@ -7,9 +7,11 @@ import org.echo.mobile.framework.exception.AccountNotFoundException
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.exception.NotFoundException
 import org.echo.mobile.framework.facade.ContractsFacade
+import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.Asset
 import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.AuthorityType
+import org.echo.mobile.framework.model.BaseOperation
 import org.echo.mobile.framework.model.Log
 import org.echo.mobile.framework.model.Transaction
 import org.echo.mobile.framework.model.TransactionResult
@@ -54,14 +56,9 @@ class ContractsFacadeImpl(
         broadcastCallback: Callback<Boolean>,
         resultCallback: Callback<String>?
     ) {
-
         val callId: String
         try {
-
-            val accountsMap =
-                databaseApiService.getFullAccounts(listOf(registrarNameOrId), false).dematerialize()
-            val registrar = accountsMap[registrarNameOrId]?.account
-                ?: throw AccountNotFoundException("Unable to find required account $registrarNameOrId")
+            val registrar = findRegistrar(registrarNameOrId)
 
             checkOwnerAccount(registrar.name, password, registrar)
 
@@ -71,28 +68,16 @@ class ContractsFacadeImpl(
                 AuthorityType.ACTIVE
             )
 
-            val constructorParams = ContractInputEncoder().encode("", params)
-
-            val contractOperation = ContractCreateOperationBuilder()
-                .setAsset(assetId)
-                .setRegistrar(registrar)
-                .setContractCode(byteCode + constructorParams)
-                .build()
-
-            val blockData = databaseApiService.getBlockData()
-            val chainId = getChainId()
-            val fees = getFees(listOf(contractOperation), feeAsset ?: assetId)
-
-            val transaction = Transaction(blockData, listOf(contractOperation), chainId).apply {
-                setFees(fees)
-                addPrivateKey(privateKey)
-            }
-
-            callId = networkBroadcastApiService.broadcastTransactionWithCallback(transaction)
-                .dematerialize().toString()
+            callId = createContract(
+                registrar,
+                privateKey,
+                assetId,
+                feeAsset,
+                byteCode,
+                params
+            )
 
             broadcastCallback.onSuccess(true)
-
         } catch (ex: Exception) {
             broadcastCallback.onError(ex as? LocalException ?: LocalException(ex))
             return
@@ -103,29 +88,43 @@ class ContractsFacadeImpl(
         }
     }
 
-    private fun retrieveTransactionResult(
-        callId: String,
-        callback: Callback<String>,
-        default: String? = null
+    override fun createContractWithWif(
+        registrarNameOrId: String,
+        wif: String,
+        assetId: String,
+        feeAsset: String?,
+        byteCode: String,
+        params: List<InputValue>,
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<String>?
     ) {
+        val callId: String
         try {
-            val future = FutureTask<TransactionResult>()
-            notifiedTransactionsHelper.subscribeOnTransactionResult(
-                callId,
-                future.completeCallback()
+            val registrar = findRegistrar(registrarNameOrId)
+
+            checkOwnerAccount(wif, registrar)
+
+            val privateKey = cryptoCoreComponent.decodeFromWif(wif)
+
+            callId = createContract(
+                registrar,
+                privateKey,
+                assetId,
+                feeAsset,
+                byteCode,
+                params
             )
 
-            val result = future.get()?.trx?.operationsWithResults?.values?.firstOrNull()
-                ?: default
-                ?: throw NotFoundException("Result of operation not found.")
-
-            callback.onSuccess(result)
-
+            broadcastCallback.onSuccess(true)
         } catch (ex: Exception) {
-            callback.onError(ex as? LocalException ?: LocalException(ex))
+            broadcastCallback.onError(ex as? LocalException ?: LocalException(ex))
+            return
+        }
+
+        resultCallback?.let {
+            retrieveTransactionResult(callId, it)
         }
     }
-
 
     override fun callContract(
         userNameOrId: String,
@@ -141,11 +140,7 @@ class ContractsFacadeImpl(
     ) {
         val callId: String
         try {
-            val accountsMap =
-                databaseApiService.getFullAccounts(listOf(userNameOrId), false).dematerialize()
-
-            val registrar = accountsMap[userNameOrId]?.account
-                ?: throw LocalException("Unable to find required account $userNameOrId")
+            val registrar = findRegistrar(userNameOrId)
 
             checkOwnerAccount(registrar.name, password, registrar)
 
@@ -155,34 +150,64 @@ class ContractsFacadeImpl(
                 AuthorityType.ACTIVE
             )
 
-            val contractCode = ContractInputEncoder().encode(methodName, methodParams)
-
-            val contractOperation = ContractCallOperationBuilder()
-                .setRegistrar(registrar)
-                .setReceiver(contractId)
-                .setContractCode(contractCode)
-                .setValue(AssetAmount(UnsignedLong.valueOf(value), Asset(assetId)))
-                .build()
-
-            val blockData = databaseApiService.getBlockData()
-            val chainId = getChainId()
-            val fees = getFees(listOf(contractOperation), feeAsset ?: assetId)
-
-            val transaction = Transaction(blockData, listOf(contractOperation), chainId).apply {
-                setFees(fees)
-                addPrivateKey(privateKey)
-            }
-
-            callId = networkBroadcastApiService.broadcastTransactionWithCallback(transaction)
-                .dematerialize().toString()
+            callId = callContract(
+                registrar,
+                privateKey,
+                assetId,
+                feeAsset,
+                contractId,
+                methodName,
+                methodParams,
+                value
+            )
 
             broadcastCallback.onSuccess(true)
-
         } catch (ex: Exception) {
             broadcastCallback.onError(ex as? LocalException ?: LocalException(ex))
             return
         }
 
+        resultCallback?.let {
+            retrieveTransactionResult(callId, it, default = "")
+        }
+    }
+
+    override fun callContractWithWif(
+        userNameOrId: String,
+        wif: String,
+        assetId: String,
+        feeAsset: String?,
+        contractId: String,
+        methodName: String,
+        methodParams: List<InputValue>,
+        value: String,
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<String>?
+    ) {
+        val callId: String
+        try {
+            val registrar = findRegistrar(userNameOrId)
+
+            checkOwnerAccount(wif, registrar)
+
+            val privateKey = cryptoCoreComponent.decodeFromWif(wif)
+
+            callId = callContract(
+                registrar,
+                privateKey,
+                assetId,
+                feeAsset,
+                contractId,
+                methodName,
+                methodParams,
+                value
+            )
+
+            broadcastCallback.onSuccess(true)
+        } catch (ex: Exception) {
+            broadcastCallback.onError(ex as? LocalException ?: LocalException(ex))
+            return
+        }
 
         resultCallback?.let {
             retrieveTransactionResult(callId, it, default = "")
@@ -234,5 +259,97 @@ class ContractsFacadeImpl(
 
     override fun getContract(contractId: String, callback: Callback<ContractStruct>) =
         callback.processResult(databaseApiService.getContract(contractId))
+
+    private fun findRegistrar(nameOrId: String): Account {
+        val accountsMap =
+            databaseApiService.getFullAccounts(listOf(nameOrId), false).dematerialize()
+        return accountsMap[nameOrId]?.account
+            ?: throw AccountNotFoundException("Unable to find required account $nameOrId")
+    }
+
+    private fun createContract(
+        registrar: Account,
+        privateKey: ByteArray,
+        assetId: String,
+        feeAsset: String?,
+        byteCode: String,
+        params: List<InputValue>
+    ): String {
+        val constructorParams = ContractInputEncoder().encode("", params)
+
+        val contractOperation = ContractCreateOperationBuilder()
+            .setAsset(assetId)
+            .setRegistrar(registrar)
+            .setContractCode(byteCode + constructorParams)
+            .build()
+
+        val transaction = buildTransaction(privateKey, assetId, feeAsset, contractOperation)
+
+        return networkBroadcastApiService.broadcastTransactionWithCallback(transaction)
+            .dematerialize().toString()
+    }
+
+    private fun callContract(
+        registrar: Account,
+        privateKey: ByteArray,
+        assetId: String,
+        feeAsset: String?,
+        contractId: String,
+        methodName: String,
+        methodParams: List<InputValue>,
+        value: String
+    ): String {
+        val contractCode = ContractInputEncoder().encode(methodName, methodParams)
+
+        val contractOperation = ContractCallOperationBuilder()
+            .setRegistrar(registrar)
+            .setReceiver(contractId)
+            .setContractCode(contractCode)
+            .setValue(AssetAmount(UnsignedLong.valueOf(value), Asset(assetId)))
+            .build()
+
+        val transaction = buildTransaction(privateKey, assetId, feeAsset, contractOperation)
+
+        return networkBroadcastApiService.broadcastTransactionWithCallback(transaction)
+            .dematerialize().toString()
+    }
+
+    private fun buildTransaction(
+        privateKey: ByteArray,
+        assetId: String,
+        feeAsset: String?,
+        operation: BaseOperation
+    ): Transaction {
+        val blockData = databaseApiService.getBlockData()
+        val chainId = getChainId()
+        val fees = getFees(listOf(operation), feeAsset ?: assetId)
+
+        return Transaction(blockData, listOf(operation), chainId).apply {
+            setFees(fees)
+            addPrivateKey(privateKey)
+        }
+    }
+
+    private fun retrieveTransactionResult(
+        callId: String,
+        callback: Callback<String>,
+        default: String? = null
+    ) {
+        try {
+            val future = FutureTask<TransactionResult>()
+            notifiedTransactionsHelper.subscribeOnTransactionResult(
+                callId,
+                future.completeCallback()
+            )
+
+            val result = future.get()?.trx?.operationsWithResults?.values?.firstOrNull()
+                ?: default
+                ?: throw NotFoundException("Result of operation not found.")
+
+            callback.onSuccess(result)
+        } catch (ex: Exception) {
+            callback.onError(ex as? LocalException ?: LocalException(ex))
+        }
+    }
 
 }

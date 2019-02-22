@@ -8,6 +8,7 @@ import org.echo.mobile.framework.exception.AccountNotFoundException
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.exception.NotFoundException
 import org.echo.mobile.framework.facade.AssetsFacade
+import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.Asset
 import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.AuthorityType
@@ -41,37 +42,18 @@ class AssetsFacadeImpl(
         broadcastCallback: Callback<Boolean>,
         resultCallback: Callback<String>?
     ) {
-
         val callId: String
         try {
             val privateKey = cryptoCoreComponent.getPrivateKey(
                 name, password, AuthorityType.ACTIVE
             )
 
-            val accountsMap =
-                databaseApiService.getFullAccounts(listOf(name), false).dematerialize()
-
-            val account = accountsMap[name]?.account
-                ?: throw AccountNotFoundException("Unable to find required account $name")
+            val account = findAccount(name)
 
             checkOwnerAccount(account.name, password, account)
-
-            val blockData = databaseApiService.getBlockData()
-            val chainId = getChainId()
-
-            val operation = CreateAssetOperation(asset)
-            val fees = getFees(listOf(operation), ECHO_ASSET_ID)
-
-            val transaction = Transaction(blockData, listOf(operation), chainId).apply {
-                setFees(fees)
-                addPrivateKey(privateKey)
-            }
-
-            callId = networkBroadcastApiService.broadcastTransactionWithCallback(transaction)
-                .dematerialize().toString()
+            callId = createAsset(privateKey, asset)
 
             broadcastCallback.onSuccess(true)
-
         } catch (ex: Exception) {
             broadcastCallback.onError(ex as? LocalException ?: LocalException(ex))
             return
@@ -80,6 +62,52 @@ class AssetsFacadeImpl(
         resultCallback?.let {
             retrieveTransactionResult(callId, it)
         }
+    }
+
+    override fun createAssetWithWif(
+        name: String,
+        wif: String,
+        asset: Asset,
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<String>?
+    ) {
+        val callId: String
+        try {
+            val privateKey = cryptoCoreComponent.decodeFromWif(wif)
+
+            val account = findAccount(name)
+
+            checkOwnerAccount(wif, account)
+            callId = createAsset(privateKey, asset)
+
+            broadcastCallback.onSuccess(true)
+        } catch (ex: Exception) {
+            broadcastCallback.onError(ex as? LocalException ?: LocalException(ex))
+            return
+        }
+
+        resultCallback?.let {
+            retrieveTransactionResult(callId, it)
+        }
+    }
+
+    private fun createAsset(
+        privateKey: ByteArray,
+        asset: Asset
+    ): String {
+        val blockData = databaseApiService.getBlockData()
+        val chainId = getChainId()
+
+        val operation = CreateAssetOperation(asset)
+        val fees = getFees(listOf(operation), ECHO_ASSET_ID)
+
+        val transaction = Transaction(blockData, listOf(operation), chainId).apply {
+            setFees(fees)
+            addPrivateKey(privateKey)
+        }
+
+        return networkBroadcastApiService.broadcastTransactionWithCallback(transaction)
+            .dematerialize().toString()
     }
 
     private fun retrieveTransactionResult(callId: String, callback: Callback<String>) {
@@ -155,4 +183,11 @@ class AssetsFacadeImpl(
 
     override fun lookupAssetsSymbols(symbolsOrIds: List<String>, callback: Callback<List<Asset>>) =
         databaseApiService.lookupAssetsSymbols(symbolsOrIds, callback)
+
+    private fun findAccount(nameOrId: String): Account {
+        val accountsMap =
+            databaseApiService.getFullAccounts(listOf(nameOrId), false).dematerialize()
+        return accountsMap[nameOrId]?.account
+            ?: throw AccountNotFoundException("Unable to find required account $nameOrId")
+    }
 }

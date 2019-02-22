@@ -5,8 +5,10 @@ import org.echo.mobile.bitcoinj.ECKey
 import org.echo.mobile.bitcoinj.Sha256Hash
 import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
 import org.echo.mobile.framework.core.crypto.EchorandKeyProvider
+import org.echo.mobile.framework.core.crypto.WifProcessor
 import org.echo.mobile.framework.core.crypto.internal.eddsa.key.KeyPairCryptoAdapter
 import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent
+import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.model.AuthorityType
 import org.echo.mobile.framework.model.Transaction
 import org.echo.mobile.framework.model.network.Network
@@ -33,7 +35,11 @@ import java.util.Arrays
  * @author Daria Pechkovskaya
  * @author Dmitriy Bushuev
  */
-class CryptoCoreComponentImpl(network: Network, keyPairCryptoAdapter: KeyPairCryptoAdapter) :
+class CryptoCoreComponentImpl @JvmOverloads constructor(
+    network: Network,
+    keyPairCryptoAdapter: KeyPairCryptoAdapter,
+    private val wifProcessor: WifProcessor = DefaultWifProcessor(true)
+) :
     CryptoCoreComponent {
 
     private val seedProvider = RoleDependentSeedProvider()
@@ -63,6 +69,16 @@ class CryptoCoreComponentImpl(network: Network, keyPairCryptoAdapter: KeyPairCry
         val seedString = generateSeed(userName, password, authorityType)
         return ECKey.fromPrivate(createPrivateKey(seedString)).getPrivKeyBytes()
     }
+
+    override fun derivePublicKeyFromPrivate(privateKey: ByteArray): ByteArray =
+        try {
+            ECKey.fromPrivate(privateKey).pubKey
+        } catch (exception: Exception) {
+            throw LocalException("Public key derivation error", exception)
+        }
+
+    override fun getAddressFromPublicKey(publicKey: ByteArray): String =
+        ecKeyConverter.convert(ECKey.fromPublicOnly(publicKey))
 
     override fun getEchorandKey(userName: String, password: String): String {
         val seedString = echorandSeed(userName, password)
@@ -172,6 +188,10 @@ class CryptoCoreComponentImpl(network: Network, keyPairCryptoAdapter: KeyPairCry
 
         return plaintext
     }
+
+    override fun encodeToWif(source: ByteArray): String = wifProcessor.encodeToWif(source)
+
+    override fun decodeFromWif(source: String): ByteArray = wifProcessor.decodeFromWif(source)
 
     private fun echorandSeed(userName: String, password: String) =
         userName + ECHORAND_KEY_SEED_PART + password

@@ -30,7 +30,7 @@ complexity:
     includeStaticDeclarations: false
   LargeClass:
     active: true
-    threshold: 500
+    threshold: 700
   LongMethod:
     active: true
     threshold: 100
@@ -44,7 +44,7 @@ complexity:
   TooManyFunctions:
     active: true
     thresholdInFiles: 20
-    thresholdInClasses: 40
+    thresholdInClasses: 60
     thresholdInInterfaces: 20
     thresholdInObjects: 20
     thresholdInEnums: 20
@@ -342,7 +342,7 @@ style:
     active: false
   ThrowsCount:
     active: true
-    max: 2
+    max: 3
   TrailingWhitespace:
     active: false
   UnnecessaryAbstractClass:

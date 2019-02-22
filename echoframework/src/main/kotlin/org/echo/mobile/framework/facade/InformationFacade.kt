@@ -21,6 +21,14 @@ interface InformationFacade {
      */
     fun getAccount(nameOrId: String, callback: Callback<FullAccount>)
 
+
+    /**
+     * Fetches accounts associated with private key in wif format [wif]
+     *
+     * Calls [callback]'s success method with list, contains all received accounts
+     */
+    fun getAccountsByWif(wif: String, callback: Callback<List<FullAccount>>)
+
     /**
      * Checks whether account with [nameOrId] already exists
      *

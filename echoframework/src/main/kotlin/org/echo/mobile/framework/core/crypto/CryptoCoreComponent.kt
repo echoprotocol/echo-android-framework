@@ -23,6 +23,16 @@ interface CryptoCoreComponent {
     fun getPrivateKey(userName: String, password: String, authorityType: AuthorityType): ByteArray
 
     /**
+     * Derives public key from raw private key bytes
+     */
+    fun derivePublicKeyFromPrivate(privateKey: ByteArray): ByteArray
+
+    /**
+     * Transforms public key raw bytes to account address format
+     */
+    fun getAddressFromPublicKey(publicKey: ByteArray): String
+
+    /**
      * Generates echorand key using [userName] and [password]
      */
     fun getEchorandKey(userName: String, password: String): String
@@ -62,5 +72,15 @@ interface CryptoCoreComponent {
         privateKey: ByteArray, publicKey: ByteArray, nonce: BigInteger,
         message: ByteArray
     ): String
+
+    /**
+     * Encodes private key in raw string representation to wif format
+     */
+    fun encodeToWif(source: ByteArray): String
+
+    /**
+     * Decodes private key in wif format [source] to the raw bytes representation
+     */
+    fun decodeFromWif(source: String): ByteArray
 
 }

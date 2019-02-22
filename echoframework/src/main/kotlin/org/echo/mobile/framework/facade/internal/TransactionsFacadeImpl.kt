@@ -11,6 +11,7 @@ import org.echo.mobile.framework.model.Asset
 import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.AuthorityType
 import org.echo.mobile.framework.model.Transaction
+import org.echo.mobile.framework.model.operations.TransferOperation
 import org.echo.mobile.framework.model.operations.TransferOperationBuilder
 import org.echo.mobile.framework.processResult
 import org.echo.mobile.framework.service.DatabaseApiService
@@ -42,13 +43,71 @@ class TransactionsFacadeImpl(
         message: String?,
         callback: Callback<Boolean>
     ) = callback.processResult {
+        val (fromAccount, toAccount) = getParticipantsPair(nameOrId, toNameOrId)
+
+        checkOwnerAccount(fromAccount.name, password, fromAccount)
+
+        val privateKey = cryptoCoreComponent.getPrivateKey(
+            fromAccount.name,
+            password,
+            AuthorityType.ACTIVE
+        )
+
+        val memoPrivateKey = memoKey(fromAccount.name, password)
+        val memo = generateMemo(memoPrivateKey, fromAccount, toAccount, message)
+
+        val transfer = TransferOperationBuilder()
+            .setFrom(fromAccount)
+            .setTo(toAccount)
+            .setAmount(AssetAmount(UnsignedLong.valueOf(amount.toLong()), Asset(asset)))
+            .setMemo(memo)
+            .build()
+
+        val transaction = configureTransaction(transfer, privateKey, asset, feeAsset)
+
+        networkBroadcastApiService.broadcastTransaction(transaction).dematerialize()
+    }
+
+    override fun sendTransferOperationWithWif(
+        nameOrId: String,
+        wif: String,
+        toNameOrId: String,
+        amount: String,
+        asset: String,
+        feeAsset: String?,
+        message: String?,
+        callback: Callback<Boolean>
+    ) = callback.processResult {
+        val (fromAccount, toAccount) = getParticipantsPair(nameOrId, toNameOrId)
+
+        checkOwnerAccount(wif, fromAccount)
+
+        val privateKey = cryptoCoreComponent.decodeFromWif(wif)
+        val memo = generateMemo(privateKey, fromAccount, toAccount, message)
+
+        val transfer = TransferOperationBuilder()
+            .setFrom(fromAccount)
+            .setTo(toAccount)
+            .setAmount(AssetAmount(UnsignedLong.valueOf(amount.toLong()), Asset(asset)))
+            .setMemo(memo)
+            .build()
+
+        val transaction = configureTransaction(transfer, privateKey, asset, feeAsset)
+
+        networkBroadcastApiService.broadcastTransaction(transaction).dematerialize()
+    }
+
+    private fun getParticipantsPair(
+        fromNameOrId: String,
+        toNameOrId: String
+    ): Pair<Account, Account> {
         var toAccount: Account? = null
         var fromAccount: Account? = null
 
-        databaseApiService.getFullAccounts(listOf(nameOrId, toNameOrId), false)
+        databaseApiService.getFullAccounts(listOf(fromNameOrId, toNameOrId), false)
             .value { accountsMap ->
-                fromAccount = accountsMap[nameOrId]?.account
-                    ?: throw AccountNotFoundException("Unable to find required account $nameOrId")
+                fromAccount = accountsMap[fromNameOrId]?.account
+                    ?: throw AccountNotFoundException("Unable to find required account $fromNameOrId")
                 toAccount = accountsMap[toNameOrId]?.account
                     ?: throw AccountNotFoundException("Unable to find required account $toNameOrId")
             }
@@ -56,30 +115,17 @@ class TransactionsFacadeImpl(
                 throw LocalException("Error occurred during accounts request", accountsError)
             }
 
-        checkOwnerAccount(fromAccount!!.name, password, fromAccount!!)
+        return Pair(fromAccount!!, toAccount!!)
+    }
 
-        val privateKey =
-            cryptoCoreComponent.getPrivateKey(
-                fromAccount!!.name,
-                password,
-                AuthorityType.ACTIVE
-            )
-
-        val memoPrivateKey = memoKey(fromAccount!!.name, password)
-        val memo = generateMemo(memoPrivateKey, fromAccount!!, toAccount!!, message)
-
-        val transfer = TransferOperationBuilder()
-            .setFrom(fromAccount!!)
-            .setTo(toAccount!!)
-            .setAmount(AssetAmount(UnsignedLong.valueOf(amount.toLong()), Asset(asset)))
-            .setMemo(memo)
-            .build()
-
+    private fun configureTransaction(
+        transfer: TransferOperation, privateKey: ByteArray, asset: String, feeAsset: String?
+    ): Transaction {
         val blockData = databaseApiService.getBlockData()
         val chainId = getChainId()
         val fees = getFees(listOf(transfer), feeAsset ?: asset)
 
-        val transaction = Transaction(
+        return Transaction(
             blockData,
             listOf(transfer),
             chainId
@@ -87,8 +133,6 @@ class TransactionsFacadeImpl(
             setFees(fees)
             addPrivateKey(privateKey)
         }
-
-        networkBroadcastApiService.broadcastTransaction(transaction).dematerialize()
     }
 
 }

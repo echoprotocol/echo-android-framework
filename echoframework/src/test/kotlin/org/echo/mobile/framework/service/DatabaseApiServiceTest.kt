@@ -2,6 +2,8 @@ package org.echo.mobile.framework.service
 
 import com.google.common.primitives.UnsignedLong
 import org.echo.mobile.framework.Callback
+import org.echo.mobile.framework.core.crypto.internal.CryptoCoreComponentImpl
+import org.echo.mobile.framework.core.crypto.internal.eddsa.key.IrohaKeyPairCryptoAdapter
 import org.echo.mobile.framework.core.socket.SocketCoreComponent
 import org.echo.mobile.framework.core.socket.SocketMessengerListener
 import org.echo.mobile.framework.core.socket.SocketState
@@ -43,6 +45,12 @@ class DatabaseApiServiceTest {
     private lateinit var fullAccountsResponse: Map<String, FullAccount>
     private lateinit var dynamicGlobalPropertiesResponse: DynamicGlobalProperties
     private lateinit var blockResponse: Block
+    private val cryptoCorComponnet by lazy {
+        CryptoCoreComponentImpl(
+            Echodevnet(),
+            IrohaKeyPairCryptoAdapter()
+        )
+    }
 
     @Before
     fun setUp() {
@@ -71,7 +79,8 @@ class DatabaseApiServiceTest {
     fun getFullAccountsTest() {
         val socketCoreComponent = DatabaseApiServiceSocketCoreComponentMock()
 
-        val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, Echodevnet())
+        val databaseApiService =
+            DatabaseApiServiceImpl(socketCoreComponent, cryptoCorComponnet, Echodevnet())
 
         databaseApiService.getFullAccounts(
             listOf("1.2.18", "1.2.19"),
@@ -95,7 +104,8 @@ class DatabaseApiServiceTest {
     fun getFullAccountsErrorTest() {
         val socketCoreComponent = ServiceSocketCoreComponentMock(null)
 
-        val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, Echodevnet())
+        val databaseApiService =
+            DatabaseApiServiceImpl(socketCoreComponent, cryptoCorComponnet, Echodevnet())
 
         databaseApiService.getFullAccounts(
             listOf("1.2.18", "1.2.19"),
@@ -117,7 +127,8 @@ class DatabaseApiServiceTest {
     fun getFullAccountsResultTest() {
         val socketCoreComponent = DatabaseApiServiceSocketCoreComponentMock()
 
-        val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, Echodevnet())
+        val databaseApiService =
+            DatabaseApiServiceImpl(socketCoreComponent, cryptoCorComponnet, Echodevnet())
 
         databaseApiService.getFullAccounts(
             listOf("1.2.18", "1.2.19"),
@@ -133,7 +144,8 @@ class DatabaseApiServiceTest {
     fun getFullAccountsResultErrorTest() {
         val socketCoreComponent = ServiceSocketCoreComponentMock(null)
 
-        val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, Echodevnet())
+        val databaseApiService =
+            DatabaseApiServiceImpl(socketCoreComponent, cryptoCorComponnet, Echodevnet())
 
         databaseApiService.getFullAccounts(
             listOf("1.2.18", "1.2.19"),
@@ -151,7 +163,8 @@ class DatabaseApiServiceTest {
         val chainId = "chainId"
         val socketCoreComponent = ServiceSocketCoreComponentMock(chainId)
 
-        val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, Echodevnet())
+        val databaseApiService =
+            DatabaseApiServiceImpl(socketCoreComponent, cryptoCorComponnet, Echodevnet())
 
         databaseApiService.getChainId()
             .value { id ->
@@ -165,7 +178,8 @@ class DatabaseApiServiceTest {
     fun getDynamicGlobalPropertiesTest() {
         val socketCoreComponent = ServiceSocketCoreComponentMock(dynamicGlobalPropertiesResponse)
 
-        val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, Echodevnet())
+        val databaseApiService =
+            DatabaseApiServiceImpl(socketCoreComponent, cryptoCorComponnet, Echodevnet())
 
         databaseApiService.getDynamicGlobalProperties()
             .value { result ->
@@ -179,7 +193,8 @@ class DatabaseApiServiceTest {
     fun getBlockDataTest() {
         val socketCoreComponent = ServiceSocketCoreComponentMock(dynamicGlobalPropertiesResponse)
 
-        val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, Echodevnet())
+        val databaseApiService =
+            DatabaseApiServiceImpl(socketCoreComponent, cryptoCorComponnet, Echodevnet())
 
         val blockData = databaseApiService.getBlockData()
 
@@ -190,7 +205,8 @@ class DatabaseApiServiceTest {
     fun getBlockTest() {
         val socketCoreComponent = ServiceSocketCoreComponentMock(blockResponse)
 
-        val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, Echodevnet())
+        val databaseApiService =
+            DatabaseApiServiceImpl(socketCoreComponent, cryptoCorComponnet, Echodevnet())
 
         databaseApiService.getBlock("1.2.3", object : Callback<Block> {
             override fun onSuccess(result: Block) {
@@ -209,7 +225,8 @@ class DatabaseApiServiceTest {
     fun getBlockErrorTest() {
         val socketCoreComponent = ServiceSocketCoreComponentMock(null)
 
-        val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, Echodevnet())
+        val databaseApiService =
+            DatabaseApiServiceImpl(socketCoreComponent, cryptoCorComponnet, Echodevnet())
 
         databaseApiService.getBlock("1.2.3", object : Callback<Block> {
             override fun onSuccess(result: Block) {
@@ -227,7 +244,8 @@ class DatabaseApiServiceTest {
     fun getBlockResultTest() {
         val socketCoreComponent = ServiceSocketCoreComponentMock(blockResponse)
 
-        val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, Echodevnet())
+        val databaseApiService =
+            DatabaseApiServiceImpl(socketCoreComponent, cryptoCorComponnet, Echodevnet())
 
         databaseApiService.getBlock("1.2.3")
             .value { result ->
@@ -241,7 +259,8 @@ class DatabaseApiServiceTest {
     fun getBlockResultErrorTest() {
         val socketCoreComponent = ServiceSocketCoreComponentMock(null)
 
-        val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, Echodevnet())
+        val databaseApiService =
+            DatabaseApiServiceImpl(socketCoreComponent, cryptoCorComponnet, Echodevnet())
 
         databaseApiService.getBlock("1.2.3")
             .value {
@@ -260,7 +279,8 @@ class DatabaseApiServiceTest {
         )
         val socketCoreComponent = ServiceSocketCoreComponentMock(fees)
 
-        val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, Echodevnet())
+        val databaseApiService =
+            DatabaseApiServiceImpl(socketCoreComponent, cryptoCorComponnet, Echodevnet())
 
         databaseApiService.getRequiredFees(listOf(), Asset("1.3.0"))
             .value { result ->
@@ -275,7 +295,8 @@ class DatabaseApiServiceTest {
     fun getRequiredFeesErrorTest() {
         val socketCoreComponent = ServiceSocketCoreComponentMock(null)
 
-        val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, Echodevnet())
+        val databaseApiService =
+            DatabaseApiServiceImpl(socketCoreComponent, cryptoCorComponnet, Echodevnet())
 
         databaseApiService.getRequiredFees(listOf(), Asset("1.3.0"))
             .value { fail() }
@@ -291,7 +312,8 @@ class DatabaseApiServiceTest {
 
         val socketCoreComponent = ServiceSocketCoreComponentMock(response)
 
-        val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, Echodevnet())
+        val databaseApiService =
+            DatabaseApiServiceImpl(socketCoreComponent, cryptoCorComponnet, Echodevnet())
 
         databaseApiService.callContractNoChangingState(
             "", "", "", ""
@@ -307,7 +329,8 @@ class DatabaseApiServiceTest {
     fun callContractNoChangingStateErrorTest() {
         val socketCoreComponent = ServiceSocketCoreComponentMock(null)
 
-        val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, Echodevnet())
+        val databaseApiService =
+            DatabaseApiServiceImpl(socketCoreComponent, cryptoCorComponnet, Echodevnet())
 
         databaseApiService.callContractNoChangingState(
             "", "", "", ""
@@ -328,7 +351,8 @@ class DatabaseApiServiceTest {
 
         val socketCoreComponent = ServiceSocketCoreComponentMock(response)
 
-        val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, Echodevnet())
+        val databaseApiService =
+            DatabaseApiServiceImpl(socketCoreComponent, cryptoCorComponnet, Echodevnet())
 
         databaseApiService.getContractResult("")
             .value { result ->
@@ -350,7 +374,8 @@ class DatabaseApiServiceTest {
 
         val socketCoreComponent = ServiceSocketCoreComponentMock(response)
 
-        val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, Echodevnet())
+        val databaseApiService =
+            DatabaseApiServiceImpl(socketCoreComponent, cryptoCorComponnet, Echodevnet())
 
         databaseApiService.getContractResult("")
             .value { result ->
@@ -368,7 +393,8 @@ class DatabaseApiServiceTest {
     fun getContractResultErrorTest() {
         val socketCoreComponent = ServiceSocketCoreComponentMock(null)
 
-        val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, Echodevnet())
+        val databaseApiService =
+            DatabaseApiServiceImpl(socketCoreComponent, cryptoCorComponnet, Echodevnet())
 
         databaseApiService.getContractResult("")
             .value { fail() }
@@ -383,7 +409,8 @@ class DatabaseApiServiceTest {
 
         val socketCoreComponent = ServiceSocketCoreComponentMock(response)
 
-        val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, Echodevnet())
+        val databaseApiService =
+            DatabaseApiServiceImpl(socketCoreComponent, cryptoCorComponnet, Echodevnet())
 
         databaseApiService.getAllContracts()
             .value { result ->
@@ -398,7 +425,8 @@ class DatabaseApiServiceTest {
     fun getAllContractsErrorTest() {
         val socketCoreComponent = ServiceSocketCoreComponentMock(null)
 
-        val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, Echodevnet())
+        val databaseApiService =
+            DatabaseApiServiceImpl(socketCoreComponent, cryptoCorComponnet, Echodevnet())
 
         databaseApiService.getAllContracts()
             .value { fail() }
@@ -413,7 +441,8 @@ class DatabaseApiServiceTest {
 
         val socketCoreComponent = ServiceSocketCoreComponentMock(response)
 
-        val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, Echodevnet())
+        val databaseApiService =
+            DatabaseApiServiceImpl(socketCoreComponent, cryptoCorComponnet, Echodevnet())
 
         databaseApiService.getContracts(listOf())
             .value { result ->
@@ -428,7 +457,12 @@ class DatabaseApiServiceTest {
     fun getContractsErrorTest() {
         val socketCoreComponent = ServiceSocketCoreComponentMock(null)
 
-        val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, Echodevnet())
+        val databaseApiService =
+            DatabaseApiServiceImpl(
+                socketCoreComponent,
+                cryptoCorComponnet,
+                Echodevnet()
+            )
 
         databaseApiService.getContracts(listOf())
             .value { fail() }
@@ -443,7 +477,8 @@ class DatabaseApiServiceTest {
 
         val socketCoreComponent = ServiceSocketCoreComponentMock(response)
 
-        val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, Echodevnet())
+        val databaseApiService =
+            DatabaseApiServiceImpl(socketCoreComponent, cryptoCorComponnet, Echodevnet())
 
         databaseApiService.getContract("")
             .value { result ->
@@ -457,7 +492,8 @@ class DatabaseApiServiceTest {
     fun getContractErrorTest() {
         val socketCoreComponent = ServiceSocketCoreComponentMock(null)
 
-        val databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, Echodevnet())
+        val databaseApiService =
+            DatabaseApiServiceImpl(socketCoreComponent, cryptoCorComponnet, Echodevnet())
 
         databaseApiService.getContract("")
             .value { fail() }
