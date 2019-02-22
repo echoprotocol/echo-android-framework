@@ -39,11 +39,26 @@ interface AssetsFacade {
     )
 
     /**
-     * Issues [asset] from [issuerNameOrId] account to [destinationIdOrName] account
+     * Issues [asset] from [issuerNameOrId] account to [destinationIdOrName] account using source
+     * account [password] for signature
      */
     fun issueAsset(
         issuerNameOrId: String,
         password: String,
+        asset: String,
+        amount: String,
+        destinationIdOrName: String,
+        message: String?,
+        callback: Callback<Boolean>
+    )
+
+    /**
+     * Issues [asset] from [issuerNameOrId] account to [destinationIdOrName] account using source
+     * account [wif] for signature
+     */
+    fun issueAssetWithWif(
+        issuerNameOrId: String,
+        wif: String,
         asset: String,
         amount: String,
         destinationIdOrName: String,

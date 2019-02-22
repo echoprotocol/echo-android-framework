@@ -3,22 +3,15 @@ package org.echo.mobile.framework.facade.internal
 import com.google.common.primitives.UnsignedLong
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
-import org.echo.mobile.framework.exception.AccountNotFoundException
-import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.facade.TransactionsFacade
-import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.Asset
 import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.AuthorityType
-import org.echo.mobile.framework.model.Transaction
-import org.echo.mobile.framework.model.operations.TransferOperation
 import org.echo.mobile.framework.model.operations.TransferOperationBuilder
 import org.echo.mobile.framework.processResult
 import org.echo.mobile.framework.service.DatabaseApiService
 import org.echo.mobile.framework.service.NetworkBroadcastApiService
 import org.echo.mobile.framework.support.dematerialize
-import org.echo.mobile.framework.support.error
-import org.echo.mobile.framework.support.value
 
 /**
  * Implementation of [TransactionsFacade]
@@ -95,44 +88,6 @@ class TransactionsFacadeImpl(
         val transaction = configureTransaction(transfer, privateKey, asset, feeAsset)
 
         networkBroadcastApiService.broadcastTransaction(transaction).dematerialize()
-    }
-
-    private fun getParticipantsPair(
-        fromNameOrId: String,
-        toNameOrId: String
-    ): Pair<Account, Account> {
-        var toAccount: Account? = null
-        var fromAccount: Account? = null
-
-        databaseApiService.getFullAccounts(listOf(fromNameOrId, toNameOrId), false)
-            .value { accountsMap ->
-                fromAccount = accountsMap[fromNameOrId]?.account
-                    ?: throw AccountNotFoundException("Unable to find required account $fromNameOrId")
-                toAccount = accountsMap[toNameOrId]?.account
-                    ?: throw AccountNotFoundException("Unable to find required account $toNameOrId")
-            }
-            .error { accountsError ->
-                throw LocalException("Error occurred during accounts request", accountsError)
-            }
-
-        return Pair(fromAccount!!, toAccount!!)
-    }
-
-    private fun configureTransaction(
-        transfer: TransferOperation, privateKey: ByteArray, asset: String, feeAsset: String?
-    ): Transaction {
-        val blockData = databaseApiService.getBlockData()
-        val chainId = getChainId()
-        val fees = getFees(listOf(transfer), feeAsset ?: asset)
-
-        return Transaction(
-            blockData,
-            listOf(transfer),
-            chainId
-        ).apply {
-            setFees(fees)
-            addPrivateKey(privateKey)
-        }
     }
 
 }

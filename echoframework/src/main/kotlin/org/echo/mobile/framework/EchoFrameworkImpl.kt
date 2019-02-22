@@ -402,6 +402,26 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         )
     })
 
+    override fun issueAssetWithWif(
+        issuerNameOrId: String,
+        wif: String,
+        asset: String,
+        amount: String,
+        destinationIdOrName: String,
+        message: String?,
+        callback: Callback<Boolean>
+    ) = dispatch(Runnable {
+        assetsFacade.issueAssetWithWif(
+            issuerNameOrId,
+            wif,
+            asset,
+            amount,
+            destinationIdOrName,
+            message,
+            callback
+        )
+    })
+
     override fun listAssets(
         lowerBound: String,
         limit: Int,

@@ -136,15 +136,7 @@ class AssetsFacadeImpl(
         message: String?,
         callback: Callback<Boolean>
     ) = callback.processResult {
-        val accountsMap =
-            databaseApiService.getFullAccounts(listOf(issuerNameOrId, destinationIdOrName), false)
-                .dematerialize()
-
-        val issuer = accountsMap[issuerNameOrId]?.account
-            ?: throw AccountNotFoundException("Unable to find required account $issuerNameOrId")
-
-        val target = accountsMap[destinationIdOrName]?.account
-            ?: throw AccountNotFoundException("Unable to find required account $destinationIdOrName")
+        val (issuer, target) = getParticipantsPair(issuerNameOrId, destinationIdOrName)
 
         checkOwnerAccount(issuer.name, password, issuer)
 
@@ -163,14 +155,34 @@ class AssetsFacadeImpl(
         val memoPrivateKey = memoKey(issuerNameOrId, password)
         operation.memo = generateMemo(memoPrivateKey, issuer, target, message)
 
-        val blockData = databaseApiService.getBlockData()
-        val chainId = getChainId()
-        val fees = getFees(listOf(operation), ECHO_ASSET_ID)
+        val transaction = configureTransaction(operation, privateKey, asset, ECHO_ASSET_ID)
 
-        val transaction = Transaction(blockData, listOf(operation), chainId).apply {
-            setFees(fees)
-            addPrivateKey(privateKey)
-        }
+        networkBroadcastApiService.broadcastTransaction(transaction).dematerialize()
+    }
+
+    override fun issueAssetWithWif(
+        issuerNameOrId: String,
+        wif: String,
+        asset: String,
+        amount: String,
+        destinationIdOrName: String,
+        message: String?,
+        callback: Callback<Boolean>
+    ) = callback.processResult {
+        val (issuer, target) = getParticipantsPair(issuerNameOrId, destinationIdOrName)
+
+        checkOwnerAccount(wif, issuer)
+
+        val operation = IssueAssetOperationBuilder()
+            .setIssuer(issuer)
+            .setAmount(AssetAmount(UnsignedLong.valueOf(amount.toLong()), Asset(asset)))
+            .setDestination(target)
+            .build()
+
+        val privateKey = cryptoCoreComponent.decodeFromWif(wif)
+        operation.memo = generateMemo(privateKey, issuer, target, message)
+
+        val transaction = configureTransaction(operation, privateKey, asset, ECHO_ASSET_ID)
 
         networkBroadcastApiService.broadcastTransaction(transaction).dematerialize()
     }

@@ -161,35 +161,6 @@ class FeeFacadeImpl(
         fees.first().amount.toString()
     })
 
-    private fun getParticipantsPair(
-        fromNameOrId: String,
-        toNameOrId: String
-    ): Pair<Account, Account> {
-        var toAccount: Account? = null
-        var fromAccount: Account? = null
-
-        databaseApiService.getFullAccounts(listOf(fromNameOrId, toNameOrId), false)
-            .value { accountsMap ->
-                toAccount = accountsMap[toNameOrId]?.account
-                fromAccount = accountsMap[fromNameOrId]?.account
-            }
-            .error { accountsError ->
-                throw LocalException("Error occurred during accounts request", accountsError)
-            }
-
-        if (toAccount == null || fromAccount == null) {
-            LOGGER.log(
-                """Unable to find accounts for transfer.
-                    |Source = $fromNameOrId
-                    |Target = $toNameOrId
-                """.trimMargin()
-            )
-            throw AccountNotFoundException("Unable to find required accounts: source = $fromNameOrId, target = $toNameOrId")
-        }
-
-        return Pair(fromAccount!!, toAccount!!)
-    }
-
     private fun buildTransaction(
         fromAccount: Account,
         toAccount: Account,

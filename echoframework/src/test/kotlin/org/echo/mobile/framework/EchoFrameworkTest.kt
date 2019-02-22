@@ -976,6 +976,27 @@ class EchoFrameworkTest {
     }
 
     @Test
+    fun issueAssetWithWifTest() {
+        val framework = initFramework()
+
+        val futureIssue = FutureTask<Boolean>()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        framework.issueAssetWithWif(
+            login,
+            wif,
+            asset = "1.3.6",
+            amount = "1",
+            destinationIdOrName = login,
+            message = "Do it",
+            callback = futureIssue.completeCallback()
+        )
+
+        assertTrue(futureIssue.get() ?: false)
+    }
+
+    @Test
     fun createContractTest() {
         val framework = initFramework()
 
