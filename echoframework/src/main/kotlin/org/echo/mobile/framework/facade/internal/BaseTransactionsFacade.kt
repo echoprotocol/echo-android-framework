@@ -2,6 +2,8 @@ package org.echo.mobile.framework.facade.internal
 
 import org.echo.mobile.framework.ECHO_ASSET_ID
 import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
+import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent
+import org.echo.mobile.framework.exception.AccountNotFoundException
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.Address
@@ -10,9 +12,12 @@ import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.AuthorityType
 import org.echo.mobile.framework.model.BaseOperation
 import org.echo.mobile.framework.model.Memo
+import org.echo.mobile.framework.model.Transaction
 import org.echo.mobile.framework.model.isEqualsByKey
 import org.echo.mobile.framework.service.DatabaseApiService
 import org.echo.mobile.framework.support.dematerialize
+import org.echo.mobile.framework.support.error
+import org.echo.mobile.framework.support.value
 import java.math.BigInteger
 
 /**
@@ -37,16 +42,27 @@ abstract class BaseTransactionsFacade(
 
     protected fun checkOwnerAccount(name: String, password: String, account: Account) {
         val ownerAddress =
-            cryptoCoreComponent.getAddress(name, password, AuthorityType.OWNER)
+            cryptoCoreComponent.getAddress(name, password, AuthorityType.ACTIVE)
 
-        val isKeySame = account.isEqualsByKey(ownerAddress, AuthorityType.OWNER)
+        val isKeySame = account.isEqualsByKey(ownerAddress, AuthorityType.ACTIVE)
+        if (!isKeySame) {
+            throw LocalException("Owner account checking exception")
+        }
+    }
+
+    protected fun checkOwnerAccount(wif: String, account: Account) {
+        val privateKey = cryptoCoreComponent.decodeFromWif(wif)
+        val publicKey = cryptoCoreComponent.derivePublicKeyFromPrivate(privateKey)
+        val address = cryptoCoreComponent.getAddressFromPublicKey(publicKey)
+
+        val isKeySame = account.isEqualsByKey(address, AuthorityType.ACTIVE)
         if (!isKeySame) {
             throw LocalException("Owner account checking exception")
         }
     }
 
     protected fun memoKey(name: String, password: String) =
-        cryptoCoreComponent.getPrivateKey(name, password, AuthorityType.KEY)
+        cryptoCoreComponent.getPrivateKey(name, password, AuthorityType.ACTIVE)
 
     protected fun generateMemo(
         privateKey: ByteArray,
@@ -71,6 +87,48 @@ abstract class BaseTransactionsFacade(
         }
 
         return Memo()
+    }
+
+    protected fun getParticipantsPair(
+        fromNameOrId: String,
+        toNameOrId: String
+    ): Pair<Account, Account> {
+        var toAccount: Account? = null
+        var fromAccount: Account? = null
+
+        databaseApiService.getFullAccounts(listOf(fromNameOrId, toNameOrId), false)
+            .value { accountsMap ->
+                fromAccount = accountsMap[fromNameOrId]?.account
+                    ?: throw AccountNotFoundException("Unable to find required account $fromNameOrId")
+                toAccount = accountsMap[toNameOrId]?.account
+                    ?: throw AccountNotFoundException("Unable to find required account $toNameOrId")
+            }
+            .error { accountsError ->
+                throw LocalException("Error occurred during accounts request", accountsError)
+            }
+
+        return Pair(fromAccount!!, toAccount!!)
+    }
+
+    protected fun configureTransaction(
+        transfer: BaseOperation, privateKey: ByteArray, asset: String, feeAsset: String?
+    ): Transaction {
+        val blockData = databaseApiService.getBlockData()
+        val chainId = getChainId()
+        val fees = getFees(listOf(transfer), feeAsset ?: asset)
+
+        return Transaction(
+            blockData,
+            listOf(transfer),
+            chainId
+        ).apply {
+            setFees(fees)
+            addPrivateKey(privateKey)
+        }
+    }
+
+    companion object {
+        private val LOGGER = LoggerCoreComponent.create(BaseTransactionsFacade::class.java.name)
     }
 
 }

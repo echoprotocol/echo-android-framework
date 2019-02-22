@@ -101,7 +101,8 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             socketCoreComponent,
             settings.network
         )
-        databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, settings.network)
+        databaseApiService =
+            DatabaseApiServiceImpl(socketCoreComponent, settings.cryptoComponent, settings.network)
         networkBroadcastApiService =
             NetworkBroadcastApiServiceImpl(socketCoreComponent, settings.cryptoComponent)
         cryptoApiService = CryptoApiServiceImpl(socketCoreComponent)
@@ -127,7 +128,10 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             settings.network
         )
         feeFacade = FeeFacadeImpl(databaseApiService, settings.cryptoComponent)
-        informationFacade = InformationFacadeImpl(databaseApiService, accountHistoryApiService)
+        informationFacade = InformationFacadeImpl(
+            databaseApiService,
+            accountHistoryApiService
+        )
         subscriptionFacade = SubscriptionFacadeImpl(
             socketCoreComponent,
             databaseApiService,
@@ -219,6 +223,28 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         )
     })
 
+    override fun getFeeForTransferOperationWithWif(
+        fromNameOrId: String,
+        wif: String,
+        toNameOrId: String,
+        amount: String,
+        asset: String,
+        feeAsset: String?,
+        message: String?,
+        callback: Callback<String>
+    ) = dispatch(Runnable {
+        feeFacade.getFeeForTransferOperationWithWif(
+            fromNameOrId,
+            wif,
+            toNameOrId,
+            amount,
+            asset,
+            feeAsset,
+            message,
+            callback.wrapOriginal()
+        )
+    })
+
     override fun getFeeForContractOperation(
         userNameOrId: String,
         contractId: String,
@@ -242,6 +268,11 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
     override fun getAccount(nameOrId: String, callback: Callback<FullAccount>) =
         dispatch(Runnable {
             informationFacade.getAccount(nameOrId, callback.wrapOriginal())
+        })
+
+    override fun getAccountsByWif(wif: String, callback: Callback<List<FullAccount>>) =
+        dispatch(Runnable {
+            informationFacade.getAccountsByWif(wif, callback.wrapOriginal())
         })
 
     override fun checkAccountReserved(
@@ -337,6 +368,20 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         )
     })
 
+    override fun createAssetWithWif(
+        name: String,
+        wif: String,
+        asset: Asset,
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<String>?
+    ) = dispatch(Runnable {
+        assetsFacade.createAssetWithWif(
+            name, wif,
+            asset,
+            broadcastCallback.wrapOriginal(), resultCallback?.wrapOriginal()
+        )
+    })
+
     override fun issueAsset(
         issuerNameOrId: String,
         password: String,
@@ -349,6 +394,26 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         assetsFacade.issueAsset(
             issuerNameOrId,
             password,
+            asset,
+            amount,
+            destinationIdOrName,
+            message,
+            callback
+        )
+    })
+
+    override fun issueAssetWithWif(
+        issuerNameOrId: String,
+        wif: String,
+        asset: String,
+        amount: String,
+        destinationIdOrName: String,
+        message: String?,
+        callback: Callback<Boolean>
+    ) = dispatch(Runnable {
+        assetsFacade.issueAssetWithWif(
+            issuerNameOrId,
+            wif,
             asset,
             amount,
             destinationIdOrName,
@@ -417,6 +482,28 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         )
     })
 
+    override fun sendTransferOperationWithWif(
+        nameOrId: String,
+        wif: String,
+        toNameOrId: String,
+        amount: String,
+        asset: String,
+        feeAsset: String?,
+        message: String?,
+        callback: Callback<Boolean>
+    ) {
+        transactionsFacade.sendTransferOperationWithWif(
+            nameOrId,
+            wif,
+            toNameOrId,
+            amount,
+            asset,
+            feeAsset,
+            message,
+            callback.wrapOriginal()
+        )
+    }
+
     override fun getAccountHistory(
         nameOrId: String,
         transactionStartId: String,
@@ -455,6 +542,28 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         )
     })
 
+    override fun createContractWithWif(
+        registrarNameOrId: String,
+        wif: String,
+        assetId: String,
+        feeAsset: String?,
+        byteCode: String,
+        params: List<InputValue>,
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<String>?
+    ) = dispatch(Runnable {
+        contractsFacade.createContractWithWif(
+            registrarNameOrId,
+            wif,
+            assetId,
+            feeAsset,
+            byteCode,
+            params,
+            broadcastCallback.wrapOriginal(),
+            resultCallback?.wrapOriginal()
+        )
+    })
+
     override fun callContract(
         userNameOrId: String,
         password: String,
@@ -470,6 +579,32 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         contractsFacade.callContract(
             userNameOrId,
             password,
+            assetId,
+            feeAsset,
+            contractId,
+            methodName,
+            methodParams,
+            value,
+            broadcastCallback.wrapOriginal(),
+            resultCallback?.wrapOriginal()
+        )
+    })
+
+    override fun callContractWithWif(
+        userNameOrId: String,
+        wif: String,
+        assetId: String,
+        feeAsset: String?,
+        contractId: String,
+        methodName: String,
+        methodParams: List<InputValue>,
+        value: String,
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<String>?
+    ) = dispatch(Runnable {
+        contractsFacade.callContractWithWif(
+            userNameOrId,
+            wif,
             assetId,
             feeAsset,
             contractId,

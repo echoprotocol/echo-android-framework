@@ -3,6 +3,7 @@ before_script:
 
 stages:
   - build
+  - test
   - checkstyle
   - docgen
   - publish
@@ -28,6 +29,18 @@ build_release:
     - master
   script:
     - ./gradlew :echoframework:assembleRelease --stacktrace
+
+unit_test:
+  stage: test
+  only:
+    - release
+    - master
+  script:
+    - ./gradlew :echoframework:testReleaseUnitTest --stacktrace
+  artifacts:
+    expire_in: 4 hours
+    paths:
+      - echoframework/build/reports/tests
 
 code_analysis:
   stage: checkstyle

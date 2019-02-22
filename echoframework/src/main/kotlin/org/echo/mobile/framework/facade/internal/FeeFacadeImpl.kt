@@ -44,32 +44,12 @@ class FeeFacadeImpl(
         message: String?,
         callback: Callback<String>
     ) = callback.processResult(Result {
-        var toAccount: Account? = null
-        var fromAccount: Account? = null
+        val (fromAccount, toAccount) = getParticipantsPair(fromNameOrId, toNameOrId)
 
-        databaseApiService.getFullAccounts(listOf(fromNameOrId, toNameOrId), false)
-            .value { accountsMap ->
-                toAccount = accountsMap[toNameOrId]?.account
-                fromAccount = accountsMap[fromNameOrId]?.account
-            }
-            .error { accountsError ->
-                throw LocalException("Error occurred during accounts request", accountsError)
-            }
+        val memoPrivateKey = memoKey(fromAccount.name, password)
+        val memo = generateMemo(memoPrivateKey, fromAccount, toAccount, message)
 
-        if (toAccount == null || fromAccount == null) {
-            LOGGER.log(
-                """Unable to find accounts for transfer.
-                    |Source = $fromNameOrId
-                    |Target = $toNameOrId
-                """.trimMargin()
-            )
-            throw AccountNotFoundException("Unable to find required accounts: source = $fromNameOrId, target = $toNameOrId")
-        }
-
-        val memoPrivateKey = memoKey(fromAccount!!.name, password)
-        val memo = generateMemo(memoPrivateKey, fromAccount!!, toAccount!!, message)
-
-        val transfer = buildTransaction(fromAccount!!, toAccount!!, amount, asset, memo)
+        val transfer = buildTransaction(fromAccount, toAccount, amount, asset, memo)
 
         getFees(listOf(transfer), feeAsset ?: asset)
     }.map { fees ->
@@ -89,19 +69,40 @@ class FeeFacadeImpl(
         fees.first().amount.toString()
     })
 
-    private fun buildTransaction(
-        fromAccount: Account,
-        toAccount: Account,
+    override fun getFeeForTransferOperationWithWif(
+        fromNameOrId: String,
+        wif: String,
+        toNameOrId: String,
         amount: String,
         asset: String,
-        memo: Memo
-    ) = TransferOperationBuilder()
-        .setFrom(fromAccount)
-        .setTo(toAccount)
-        .setAmount(AssetAmount(UnsignedLong.valueOf(amount.toLong()), Asset(asset)))
-        .setMemo(memo)
-        .build()
+        feeAsset: String?,
+        message: String?,
+        callback: Callback<String>
+    ) = callback.processResult(Result {
+        val (fromAccount, toAccount) = getParticipantsPair(fromNameOrId, toNameOrId)
 
+        val memoPrivateKey = cryptoCoreComponent.decodeFromWif(wif)
+        val memo = generateMemo(memoPrivateKey, fromAccount, toAccount, message)
+
+        val transfer = buildTransaction(fromAccount, toAccount, amount, asset, memo)
+
+        getFees(listOf(transfer), feeAsset ?: asset)
+    }.map { fees ->
+        if (fees.isEmpty()) {
+            LOGGER.log(
+                """Empty fee list for required operation.
+                            |Source = $fromNameOrId
+                            |Target = $toNameOrId
+                            |Amount = $amount
+                            |Asset = $asset
+                            |Fee asset = $feeAsset
+                        """
+            )
+            throw LocalException("Unable to get fee for specified operation")
+        }
+
+        fees.first().amount.toString()
+    })
 
     override fun getFeeForContractOperation(
         userNameOrId: String,
@@ -160,6 +161,18 @@ class FeeFacadeImpl(
         fees.first().amount.toString()
     })
 
+    private fun buildTransaction(
+        fromAccount: Account,
+        toAccount: Account,
+        amount: String,
+        asset: String,
+        memo: Memo
+    ) = TransferOperationBuilder()
+        .setFrom(fromAccount)
+        .setTo(toAccount)
+        .setAmount(AssetAmount(UnsignedLong.valueOf(amount.toLong()), Asset(asset)))
+        .setMemo(memo)
+        .build()
 
     companion object {
         private val LOGGER = LoggerCoreComponent.create(FeeFacadeImpl::class.java.name)

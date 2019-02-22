@@ -2,6 +2,7 @@ package org.echo.mobile.framework.service.internal
 
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.ILLEGAL_ID
+import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
 import org.echo.mobile.framework.core.mapper.ObjectMapper
 import org.echo.mobile.framework.core.socket.SocketCoreComponent
 import org.echo.mobile.framework.exception.LocalException
@@ -32,6 +33,7 @@ import org.echo.mobile.framework.model.socketoperations.GetContractLogsSocketOpe
 import org.echo.mobile.framework.model.socketoperations.GetContractResultSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetContractSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetContractsSocketOperation
+import org.echo.mobile.framework.model.socketoperations.GetKeyReferencesSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetObjectsSocketOperation
 import org.echo.mobile.framework.model.socketoperations.ListAssetsSocketOperation
 import org.echo.mobile.framework.model.socketoperations.LookupAssetsSymbolsSocketOperation
@@ -56,6 +58,7 @@ import java.util.concurrent.TimeUnit
  */
 class DatabaseApiServiceImpl(
     private val socketCoreComponent: SocketCoreComponent,
+    private val cryptoCoreComponent: CryptoCoreComponent,
     private val network: Network
 ) : DatabaseApiService {
 
@@ -101,6 +104,93 @@ class DatabaseApiServiceImpl(
         return future.wrapResult(mapOf())
     }
 
+    override fun getAccountsByWif(
+        wifs: List<String>,
+        callback: Callback<Map<String, List<FullAccount>>>
+    ) {
+        val keys = wifs.map { wif ->
+            val privateKey = cryptoCoreComponent.decodeFromWif(wif)
+            val publicKey = cryptoCoreComponent.derivePublicKeyFromPrivate(privateKey)
+            cryptoCoreComponent.getAddressFromPublicKey(publicKey)
+        }
+
+        val getKeyReferencesSocketOperation = GetKeyReferencesSocketOperation(
+            id,
+            keys,
+            network,
+            socketCoreComponent.currentId,
+            object : Callback<Map<String, List<String>>> {
+                override fun onSuccess(result: Map<String, List<String>>) {
+                    val requiredAccounts = result.values.flatten()
+
+                    receiveRequiredAccountsByWifs(wifs, keys, requiredAccounts, result, callback)
+                }
+
+                override fun onError(error: LocalException) {
+                    callback.onError(error)
+                }
+
+            }
+        )
+
+        socketCoreComponent.emit(getKeyReferencesSocketOperation)
+    }
+
+    private fun receiveRequiredAccountsByWifs(
+        wifs: List<String>,
+        keys: List<String>,
+        requiredAccounts: List<String>,
+        accountsIdsMap: Map<String, List<String>>,
+        callback: Callback<Map<String, List<FullAccount>>>
+    ) {
+        getFullAccounts(
+            requiredAccounts,
+            false,
+            object : Callback<Map<String, FullAccount>> {
+                override fun onSuccess(result: Map<String, FullAccount>) {
+                    val resultMap =
+                        accountsByWifMap(wifs, keys, accountsIdsMap, result)
+
+                    callback.onSuccess(resultMap)
+                }
+
+                override fun onError(error: LocalException) {
+                    callback.onSuccess(mapOf())
+                }
+            })
+    }
+
+    private fun accountsByWifMap(
+        wifs: List<String>,
+        keys: List<String>,
+        accountsIdsMap: Map<String, List<String>>,
+        receivedAccounts: Map<String, FullAccount>
+    ): Map<String, List<FullAccount>> {
+        val resultMap = hashMapOf<String, List<FullAccount>>()
+
+        accountsIdsMap.forEach { (key, accountIds) ->
+            val wif = wifs[keys.indexOf(key)]
+            val accounts = mutableListOf<FullAccount>()
+
+            accountIds.distinct().forEach { id ->
+                val account = receivedAccounts[id]
+                account?.let { accounts.add(it) }
+            }
+
+            resultMap[wif] = accounts
+        }
+
+        return resultMap
+    }
+
+    override fun getAccountsByWif(wifs: List<String>): Result<LocalException, Map<String, List<FullAccount>>> {
+        val accountFuture = FutureTask<Map<String, List<FullAccount>>>()
+
+        getAccountsByWif(wifs, accountFuture.completeCallback())
+
+        return accountFuture.wrapResult()
+    }
+
     private fun fillAccounts(
         accounts: Map<String, FullAccount>,
         callback: Callback<Map<String, FullAccount>>
@@ -139,6 +229,11 @@ class DatabaseApiServiceImpl(
         assets: List<Asset>,
         callback: Callback<Map<String, FullAccount>>
     ) {
+        if (assets.isEmpty()) {
+            callback.onSuccess(accounts)
+            return
+        }
+
         accounts.values.forEach { fullAccount ->
             fullAccount.balances?.forEach { balance ->
                 balance.asset =

@@ -47,7 +47,8 @@ class CryptoCoreComponentTest {
     @Before
     fun setUp() {
         network = Echodevnet()
-        cryptoCoreComponent = CryptoCoreComponentImpl(network,
+        cryptoCoreComponent = CryptoCoreComponentImpl(
+            network,
             NaCLKeyPairCryptoAdapter()
         )
     }

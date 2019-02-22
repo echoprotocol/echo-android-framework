@@ -61,6 +61,12 @@ class InformationFacadeImpl(
                 callback.onError(LocalException(error.message, error))
             })
 
+    override fun getAccountsByWif(wif: String, callback: Callback<List<FullAccount>>) {
+        databaseApiService.getAccountsByWif(listOf(wif))
+            .value { accountsMap -> callback.onSuccess(accountsMap[wif]?.toList() ?: listOf()) }
+            .error { error -> callback.onError(error) }
+    }
+
     override fun checkAccountReserved(nameOrId: String, callback: Callback<Boolean>) =
         findAccount(nameOrId,
             { fullAccount ->

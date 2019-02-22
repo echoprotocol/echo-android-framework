@@ -96,6 +96,13 @@ class SettingsTest {
     }
 
     private class TestCryptoComponent : CryptoCoreComponent {
+        override fun derivePublicKeyFromPrivate(privateKey: ByteArray): ByteArray = byteArrayOf(1)
+
+        override fun getAddressFromPublicKey(publicKey: ByteArray): String = ""
+
+        override fun encodeToWif(source: ByteArray): String = ""
+
+        override fun decodeFromWif(source: String): ByteArray = byteArrayOf(1)
 
         override fun getRawEchorandKey(userName: String, password: String): ByteArray =
             byteArrayOf(0)

@@ -167,7 +167,7 @@ fun Account.isEqualsByKey(key: String, authorityType: AuthorityType): Boolean =
     when (authorityType) {
         AuthorityType.OWNER -> isKeyExist(key, owner)
         AuthorityType.ACTIVE -> isKeyExist(key, active)
-        AuthorityType.KEY -> {
+        AuthorityType.MEMO -> {
             options.memoKey?.address == key
         }
     }

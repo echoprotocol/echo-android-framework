@@ -46,10 +46,10 @@ class AuthenticationFacadeImpl(
         databaseApiService.getFullAccounts(listOf(name), false)
             .map { accountsMap -> accountsMap[name] }
             .value { account ->
-                val address = cryptoCoreComponent.getAddress(name, password, AuthorityType.OWNER)
+                val address = cryptoCoreComponent.getAddress(name, password, AuthorityType.ACTIVE)
 
                 val isKeySame =
-                    account?.account?.isEqualsByKey(address, AuthorityType.OWNER) ?: false
+                    account?.account?.isEqualsByKey(address, AuthorityType.ACTIVE) ?: false
                 if (isKeySame) {
                     callback.onSuccess(account!!)
                     return
@@ -83,7 +83,7 @@ class AuthenticationFacadeImpl(
         val chainId = getChainId()
 
         val privateKey =
-            cryptoCoreComponent.getPrivateKey(name, oldPassword, AuthorityType.OWNER)
+            cryptoCoreComponent.getPrivateKey(name, oldPassword, AuthorityType.ACTIVE)
         val fees = getFees(listOf(operation))
 
         val transaction = Transaction(blockData, listOf(operation), chainId).apply {
@@ -112,14 +112,14 @@ class AuthenticationFacadeImpl(
         val accountsResult = databaseApiService.getFullAccounts(listOf(name), false)
 
         val ownerAddress =
-            cryptoCoreComponent.getAddress(name, password, AuthorityType.OWNER)
+            cryptoCoreComponent.getAddress(name, password, AuthorityType.ACTIVE)
 
         val account = accountsResult
             .map { accountsMap -> accountsMap[name] }
             .map { fullAccount -> fullAccount?.account }
             .dematerialize()
 
-        val isKeySame = account?.isEqualsByKey(ownerAddress, AuthorityType.OWNER) ?: false
+        val isKeySame = account?.isEqualsByKey(ownerAddress, AuthorityType.ACTIVE) ?: false
 
         return if (isKeySame) {
             account!!.getObjectId()
@@ -159,13 +159,9 @@ class AuthenticationFacadeImpl(
         name: String,
         password: String
     ): Triple<String, String, String> {
-        val ownerKey = cryptoCoreComponent.getAddress(name, password, AuthorityType.OWNER)
-        val activeKey =
-            cryptoCoreComponent.getAddress(name, password, AuthorityType.ACTIVE)
-        val memoKey =
-            cryptoCoreComponent.getAddress(name, password, AuthorityType.KEY)
+        val key = cryptoCoreComponent.getAddress(name, password, AuthorityType.ACTIVE)
 
-        return Triple(ownerKey, activeKey, memoKey)
+        return Triple(key, key, key)
     }
 
     companion object {

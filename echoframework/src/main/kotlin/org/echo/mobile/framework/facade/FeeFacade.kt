@@ -33,6 +33,28 @@ interface FeeFacade {
     )
 
     /**
+     * Counts required fee for defined transaction settings
+     *
+     * @param fromNameOrId  Source account name or id
+     * @param wif           Account's private key in wif format
+     * @param toNameOrId    Target account name or id
+     * @param amount        Amount value of transfer
+     * @param asset         Specific asset type id
+     * @param feeAsset      Asset for fee calculating
+     * @param callback      Listener of operation results
+     */
+    fun getFeeForTransferOperationWithWif(
+        fromNameOrId: String,
+        wif: String,
+        toNameOrId: String,
+        amount: String,
+        asset: String,
+        feeAsset: String?,
+        message: String?,
+        callback: Callback<String>
+    )
+
+    /**
      * Counts required fee for defined operation settings
      *
      * @param userNameOrId  Source account name or id

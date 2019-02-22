@@ -25,11 +25,40 @@ interface AssetsFacade {
     )
 
     /**
-     * Issues [asset] from [issuerNameOrId] account to [destinationIdOrName] account
+     * Creates [asset] with required parameters using [name] account's [wif] for transaction signing
+     *
+     * @param broadcastCallback Callback for result of operation broadcast
+     * @param resultCallback Callback for retrieving result of operation  (not required)
+     */
+    fun createAssetWithWif(
+        name: String,
+        wif: String,
+        asset: Asset,
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<String>? = null
+    )
+
+    /**
+     * Issues [asset] from [issuerNameOrId] account to [destinationIdOrName] account using source
+     * account [password] for signature
      */
     fun issueAsset(
         issuerNameOrId: String,
         password: String,
+        asset: String,
+        amount: String,
+        destinationIdOrName: String,
+        message: String?,
+        callback: Callback<Boolean>
+    )
+
+    /**
+     * Issues [asset] from [issuerNameOrId] account to [destinationIdOrName] account using source
+     * account [wif] for signature
+     */
+    fun issueAssetWithWif(
+        issuerNameOrId: String,
+        wif: String,
         asset: String,
         amount: String,
         destinationIdOrName: String,

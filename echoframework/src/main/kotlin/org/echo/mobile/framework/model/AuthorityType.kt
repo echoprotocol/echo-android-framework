@@ -14,9 +14,12 @@ enum class AuthorityType {
     OWNER,
 
     /**
-     * Hey that is able to perform normal operations
+     * Key that is able to perform normal operations
      */
     ACTIVE,
 
-    KEY
+    /**
+     * Key that is able to encrypt\decrypt transaction memo
+     */
+    MEMO
 }
