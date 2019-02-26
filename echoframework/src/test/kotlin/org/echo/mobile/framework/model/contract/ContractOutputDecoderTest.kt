@@ -5,6 +5,7 @@ import org.echo.mobile.framework.model.contract.output.AddressOutputValueType
 import org.echo.mobile.framework.model.contract.output.BooleanOutputValueType
 import org.echo.mobile.framework.model.contract.output.ContractAddressOutputValueType
 import org.echo.mobile.framework.model.contract.output.ContractOutputDecoder
+import org.echo.mobile.framework.model.contract.output.EthContractAddressOutputValueType
 import org.echo.mobile.framework.model.contract.output.FixedArrayOutputValueType
 import org.echo.mobile.framework.model.contract.output.FixedBytesOutputValueType
 import org.echo.mobile.framework.model.contract.output.ListValueType
@@ -135,6 +136,20 @@ class ContractOutputDecoderTest {
         assertEquals(value.toString(), "1.16.16803")
     }
 
+    @Test
+    fun decodeEchContractAddressTest() {
+        val source =
+            "000000000000000000000000ca35b7d915458ef540ade6068dfe2f44e8fa733c".toByteArray()
+        val target =
+            "0xca35b7d915458ef540ade6068dfe2f44e8fa733c"
+
+        val decoder = ContractOutputDecoder()
+        val result = decoder.decode(source, listOf(EthContractAddressOutputValueType()))
+
+        val value = result.first().value
+        assertNotNull(value)
+        assertEquals(value.toString(), target)
+    }
 
     @Test
     fun decodeAddressListTest() {

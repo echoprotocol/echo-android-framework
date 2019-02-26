@@ -24,10 +24,10 @@ class GlobalProperties {
     var parameters: Parameters? = null
 
     @SerializedName("active_committee_members")
-    private val active_committee_members: List<String>? = null
+    private val activeCommitteeMembers: List<String>? = null
 
     @SerializedName("active_witnesses")
-    private val active_witnesses: List<String>? = null
+    private val activeWitnesses: List<String>? = null
 }
 
 /**
@@ -42,7 +42,7 @@ class Parameters {
     @SerializedName("maximum_asset_whitelist_authorities")
     private val maximumAssetWhitelistAuthorities: String? = null
     @SerializedName("maximum_proposal_lifetime")
-    private val maximum_Proposal_Lifetime: String? = null
+    private val maximumProposalLifetime: String? = null
     @SerializedName("witness_pay_per_block")
     private val witnessPayPerBlock: String? = null
     @SerializedName("block_interval")
@@ -118,6 +118,9 @@ class CurrentFees {
  */
 class FeeParameters(var parameters: List<FeeParameter>? = null) {
 
+    /**
+     * Json deserializer for [FeeParameters] class objects
+     */
     class Deserializer : JsonDeserializer<FeeParameters> {
 
         override fun deserialize(

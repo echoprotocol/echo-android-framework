@@ -137,18 +137,39 @@ class ContractAddressOutputValueType : AddressOutputValueType() {
         if (isFull) {
             startFormatRange = SLICE_SIZE / 2
             endFormatRange = SLICE_SIZE
-
         } else {
             startFormatRange = CONTRACT_ADDRESS_SIZE - SLICE_SIZE / 2 -
                     CONTRACT_ADDRESS_PREFIX.length
             endFormatRange = CONTRACT_ADDRESS_SIZE
         }
 
-
         val address = String(source.copyOfRange(startFormatRange, endFormatRange))
             .toLong(NUMBER_RADIX).toString()
 
         return Pair(PREFIX + address, source.copyOfRange(endFormatRange, source.size))
+    }
+}
+
+/**
+ * Implementation of [OutputValueType] for ethereum contract address types
+ */
+class EthContractAddressOutputValueType : OutputValueType {
+
+    companion object {
+        const val CONTRACT_ADDRESS_SIZE = 40
+        const val ETH_PREFIX_PREFIX = "0x"
+    }
+
+    override fun decode(source: ByteArray): Pair<Any, ByteArray> {
+        val startFormatRange: Int = SLICE_SIZE - CONTRACT_ADDRESS_SIZE
+        val endFormatRange: Int = SLICE_SIZE
+
+        val ethAddressHex = String(source.copyOfRange(startFormatRange, endFormatRange))
+
+        return Pair(
+            ETH_PREFIX_PREFIX + ethAddressHex,
+            source.copyOfRange(endFormatRange, source.size)
+        )
     }
 }
 
