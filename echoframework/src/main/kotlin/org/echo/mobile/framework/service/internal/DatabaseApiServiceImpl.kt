@@ -13,6 +13,7 @@ import org.echo.mobile.framework.model.Block
 import org.echo.mobile.framework.model.BlockData
 import org.echo.mobile.framework.model.DynamicGlobalProperties
 import org.echo.mobile.framework.model.FullAccount
+import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.GrapheneObject
 import org.echo.mobile.framework.model.Log
 import org.echo.mobile.framework.model.Transaction
@@ -33,6 +34,7 @@ import org.echo.mobile.framework.model.socketoperations.GetContractLogsSocketOpe
 import org.echo.mobile.framework.model.socketoperations.GetContractResultSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetContractSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetContractsSocketOperation
+import org.echo.mobile.framework.model.socketoperations.GetGlobalPropertiesSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetKeyReferencesSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetObjectsSocketOperation
 import org.echo.mobile.framework.model.socketoperations.ListAssetsSocketOperation
@@ -292,6 +294,15 @@ class DatabaseApiServiceImpl(
 
     override fun getDynamicGlobalProperties(callback: Callback<DynamicGlobalProperties>) {
         val blockDataOperation = BlockDataSocketOperation(
+            id,
+            socketCoreComponent.currentId,
+            callback
+        )
+        socketCoreComponent.emit(blockDataOperation)
+    }
+
+    override fun getGlobalProperties(callback: Callback<GlobalProperties>) {
+        val blockDataOperation = GetGlobalPropertiesSocketOperation(
             id,
             socketCoreComponent.currentId,
             callback

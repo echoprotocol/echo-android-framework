@@ -12,6 +12,7 @@ import org.echo.mobile.framework.model.Block
 import org.echo.mobile.framework.model.BlockData
 import org.echo.mobile.framework.model.DynamicGlobalProperties
 import org.echo.mobile.framework.model.FullAccount
+import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.HistoryResponse
 import org.echo.mobile.framework.model.Log
 import org.echo.mobile.framework.model.Price
@@ -1528,6 +1529,20 @@ class EchoFrameworkTest {
         framework.databaseApiService.getChainId(future.completeCallback())
 
         assertNotNull(future.get())
+    }
+
+    @Test
+    fun getGlobalPropertiesTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<GlobalProperties>()
+
+        framework.getGlobalProperties(future.completeCallback())
+
+        val properties = future.get()
+        assertNotNull(properties)
     }
 
     private fun connect(framework: EchoFramework): Boolean? {

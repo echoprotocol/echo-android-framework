@@ -12,6 +12,7 @@ import org.echo.mobile.framework.model.Balance
 import org.echo.mobile.framework.model.BaseOperation
 import org.echo.mobile.framework.model.Block
 import org.echo.mobile.framework.model.FullAccount
+import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.HistoricalTransfer
 import org.echo.mobile.framework.model.HistoryResponse
 import org.echo.mobile.framework.model.HistoryResult
@@ -96,6 +97,9 @@ class InformationFacadeImpl(
             { error ->
                 callback.onError(LocalException(error.message, error))
             })
+
+    override fun getGlobalProperties(callback: Callback<GlobalProperties>) =
+        databaseApiService.getGlobalProperties(callback)
 
     private fun findAccount(
         nameOrId: String,
