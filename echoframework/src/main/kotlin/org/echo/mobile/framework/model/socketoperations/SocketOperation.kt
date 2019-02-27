@@ -51,7 +51,8 @@ enum class SocketOperationKeys(val key: String) {
     SUBSCRIBE_CONTRACT_LOGS("subscribe_contract_logs"),
     CALL_CONTRACT_NO_CHANGING_STATE("call_contract_no_changing_state"),
     GET_CONTRACTS("get_contracts"),
-    GET_CONTRACT("get_contract");
+    GET_CONTRACT("get_contract"),
+    GET_GLOBAL_PROPERTIES("get_global_properties");
 
     override fun toString(): String = this.key
 }

@@ -26,6 +26,7 @@ import org.echo.mobile.framework.model.Balance
 import org.echo.mobile.framework.model.Block
 import org.echo.mobile.framework.model.DynamicGlobalProperties
 import org.echo.mobile.framework.model.FullAccount
+import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.HistoryResponse
 import org.echo.mobile.framework.model.Log
 import org.echo.mobile.framework.model.contract.ContractInfo
@@ -290,6 +291,11 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
     ) =
         dispatch(Runnable {
             informationFacade.getBalance(nameOrId, asset, callback.wrapOriginal())
+        })
+
+    override fun getGlobalProperties(callback: Callback<GlobalProperties>) =
+        dispatch(Runnable {
+            informationFacade.getGlobalProperties(callback.wrapOriginal())
         })
 
     override fun subscribeOnAccount(
@@ -590,6 +596,30 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         )
     })
 
+    override fun callContract(
+        userNameOrId: String,
+        password: String,
+        assetId: String,
+        feeAsset: String?,
+        contractId: String,
+        code: String,
+        value: String,
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<String>?
+    ) = dispatch(Runnable {
+        contractsFacade.callContract(
+            userNameOrId,
+            password,
+            assetId,
+            feeAsset,
+            contractId,
+            code,
+            value,
+            broadcastCallback.wrapOriginal(),
+            resultCallback?.wrapOriginal()
+        )
+    })
+
     override fun callContractWithWif(
         userNameOrId: String,
         wif: String,
@@ -610,6 +640,30 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             contractId,
             methodName,
             methodParams,
+            value,
+            broadcastCallback.wrapOriginal(),
+            resultCallback?.wrapOriginal()
+        )
+    })
+
+    override fun callContractWithWif(
+        userNameOrId: String,
+        wif: String,
+        assetId: String,
+        feeAsset: String?,
+        contractId: String,
+        code: String,
+        value: String,
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<String>?
+    ) = dispatch(Runnable {
+        contractsFacade.callContractWithWif(
+            userNameOrId,
+            wif,
+            assetId,
+            feeAsset,
+            contractId,
+            code,
             value,
             broadcastCallback.wrapOriginal(),
             resultCallback?.wrapOriginal()

@@ -3,6 +3,7 @@ package org.echo.mobile.framework.facade
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.model.Balance
 import org.echo.mobile.framework.model.FullAccount
+import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.HistoryResponse
 
 /**
@@ -63,5 +64,10 @@ interface InformationFacade {
         limit: Int,
         callback: Callback<HistoryResponse>
     )
+
+    /**
+     * Retrieves blockchain current configuration parameters
+     */
+    fun getGlobalProperties(callback: Callback<GlobalProperties>)
 
 }

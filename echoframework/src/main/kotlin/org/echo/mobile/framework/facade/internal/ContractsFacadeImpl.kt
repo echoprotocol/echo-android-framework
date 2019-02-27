@@ -138,6 +138,37 @@ class ContractsFacadeImpl(
         broadcastCallback: Callback<Boolean>,
         resultCallback: Callback<String>?
     ) {
+        val contractCode = try {
+            ContractInputEncoder().encode(methodName, methodParams)
+        } catch (exception: Exception) {
+            broadcastCallback.onError(exception as? LocalException ?: LocalException(exception))
+            return
+        }
+
+        callContract(
+            userNameOrId,
+            password,
+            assetId,
+            feeAsset,
+            contractId,
+            contractCode,
+            value,
+            broadcastCallback,
+            resultCallback
+        )
+    }
+
+    override fun callContract(
+        userNameOrId: String,
+        password: String,
+        assetId: String,
+        feeAsset: String?,
+        contractId: String,
+        code: String,
+        value: String,
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<String>?
+    ) {
         val callId: String
         try {
             val registrar = findRegistrar(userNameOrId)
@@ -156,8 +187,7 @@ class ContractsFacadeImpl(
                 assetId,
                 feeAsset,
                 contractId,
-                methodName,
-                methodParams,
+                code,
                 value
             )
 
@@ -184,6 +214,37 @@ class ContractsFacadeImpl(
         broadcastCallback: Callback<Boolean>,
         resultCallback: Callback<String>?
     ) {
+        val contractCode = try {
+            ContractInputEncoder().encode(methodName, methodParams)
+        } catch (exception: Exception) {
+            broadcastCallback.onError(exception as? LocalException ?: LocalException(exception))
+            return
+        }
+
+        callContractWithWif(
+            userNameOrId,
+            wif,
+            assetId,
+            feeAsset,
+            contractId,
+            contractCode,
+            value,
+            broadcastCallback,
+            resultCallback
+        )
+    }
+
+    override fun callContractWithWif(
+        userNameOrId: String,
+        wif: String,
+        assetId: String,
+        feeAsset: String?,
+        contractId: String,
+        code: String,
+        value: String,
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<String>?
+    ) {
         val callId: String
         try {
             val registrar = findRegistrar(userNameOrId)
@@ -198,8 +259,7 @@ class ContractsFacadeImpl(
                 assetId,
                 feeAsset,
                 contractId,
-                methodName,
-                methodParams,
+                code,
                 value
             )
 
@@ -222,7 +282,6 @@ class ContractsFacadeImpl(
         methodParams: List<InputValue>,
         callback: Callback<String>
     ) = callback.processResult {
-
         val accountsMap =
             databaseApiService.getFullAccounts(listOf(userNameOrId), false).dematerialize()
 
@@ -295,16 +354,13 @@ class ContractsFacadeImpl(
         assetId: String,
         feeAsset: String?,
         contractId: String,
-        methodName: String,
-        methodParams: List<InputValue>,
+        code: String,
         value: String
     ): String {
-        val contractCode = ContractInputEncoder().encode(methodName, methodParams)
-
         val contractOperation = ContractCallOperationBuilder()
             .setRegistrar(registrar)
             .setReceiver(contractId)
-            .setContractCode(contractCode)
+            .setContractCode(code)
             .setValue(AssetAmount(UnsignedLong.valueOf(value), Asset(assetId)))
             .build()
 

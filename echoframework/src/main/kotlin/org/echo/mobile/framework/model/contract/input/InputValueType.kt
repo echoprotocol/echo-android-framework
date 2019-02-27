@@ -176,6 +176,34 @@ class ContractAddressInputValueType : InputValueType {
 
 }
 
+/**
+ * Implementation of [InputValueType] for ethereum contract address types.
+ */
+class EthContractAddressInputValueType(override var name: String) : InputValueType {
+
+    override var encodingContext: EncodingContext? = null
+
+    companion object {
+        const val CONTRACT_ADDRESS_SIZE = 40
+        const val ETH_PREFIX_PREFIX = "0x"
+    }
+
+    override fun encode(source: String): String {
+        var addressHex = source.toByteArray()
+
+        if (addressHex.size > CONTRACT_ADDRESS_SIZE) {
+            addressHex = addressHex.copyOfRange(ETH_PREFIX_PREFIX.length, addressHex.size)
+        }
+
+        return appendEthContractAddressPattern(String(addressHex))
+    }
+
+    private fun appendEthContractAddressPattern(value: String): String {
+        val prefix = HASH_PATTERN.substring(0, INPUT_SLICE_SIZE * 2 - value.length)
+        return prefix + value
+    }
+
+}
 
 /**
  * Implementation of [InputValueType] for fixed bytes types
