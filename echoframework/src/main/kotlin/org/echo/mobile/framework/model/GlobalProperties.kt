@@ -24,10 +24,10 @@ class GlobalProperties {
     var parameters: Parameters? = null
 
     @SerializedName("active_committee_members")
-    private val activeCommitteeMembers: List<String>? = null
+    val activeCommitteeMembers: List<String>? = null
 
     @SerializedName("active_witnesses")
-    private val activeWitnesses: List<String>? = null
+    val activeWitnesses: List<String>? = null
 }
 
 /**
@@ -36,69 +36,69 @@ class GlobalProperties {
 class Parameters {
 
     @SerializedName("maximum_asset_feed_publishers")
-    private val maximumAssetFeedPublishers: String? = null
+    val maximumAssetFeedPublishers: String? = null
     @SerializedName("maximum_witness_count")
-    private val maximumWitnessCount: String? = null
+    val maximumWitnessCount: String? = null
     @SerializedName("maximum_asset_whitelist_authorities")
-    private val maximumAssetWhitelistAuthorities: String? = null
+    val maximumAssetWhitelistAuthorities: String? = null
     @SerializedName("maximum_proposal_lifetime")
-    private val maximumProposalLifetime: String? = null
+    val maximumProposalLifetime: String? = null
     @SerializedName("witness_pay_per_block")
-    private val witnessPayPerBlock: String? = null
+    val witnessPayPerBlock: String? = null
     @SerializedName("block_interval")
-    private val blockInterval: String? = null
+    val blockInterval: String? = null
     @SerializedName("maintenance_skip_slots")
-    private val maintenanceSkipSlots: String? = null
+    val maintenanceSkipSlots: String? = null
     @SerializedName("maximum_time_until_expiration")
-    private val maximumTimeUntilExpiration: String? = null
+    val maximumTimeUntilExpiration: String? = null
     @SerializedName("max_predicate_opcode")
-    private val maxPredicateOpcode: String? = null
+    val maxPredicateOpcode: String? = null
     @SerializedName("echorand_config")
-    private val echorandConfig: EchorandConfig? = null
+    val echorandConfig: EchorandConfig? = null
     @SerializedName("reserve_percent_of_fee")
-    private val reservePercentOfFee: String? = null
+    val reservePercentOfFee: String? = null
     @SerializedName("max_authority_depth")
-    private val maxAuthorityDepth: String? = null
+    val maxAuthorityDepth: String? = null
     @SerializedName("committee_proposal_review_period")
-    private val committeeProposalReviewPeriod: String? = null
+    val committeeProposalReviewPeriod: String? = null
     @SerializedName("account_fee_scale_bitshifts")
-    private val accountFeeScaleBitshifts: String? = null
+    val accountFeeScaleBitshifts: String? = null
     @SerializedName("sidechain_config")
-    private val sidechainConfig: SidechainConfig? = null
+    val sidechainConfig: SidechainConfig? = null
     @SerializedName("count_non_member_votes")
-    private val countNonMemberVotes: String? = null
+    val countNonMemberVotes: String? = null
     @SerializedName("gas_price")
-    private val gasPrice: GasPrice? = null
+    val gasPrice: GasPrice? = null
     @SerializedName("fee_liquidation_threshold")
-    private val feeLiquidationThreshold: String? = null
+    val feeLiquidationThreshold: String? = null
     @SerializedName("maximum_transaction_size")
-    private val maximumTransactionSize: String? = null
+    val maximumTransactionSize: String? = null
     @SerializedName("maximum_block_size")
-    private val maximumBlockSize: String? = null
+    val maximumBlockSize: String? = null
     @SerializedName("worker_budget_per_day")
-    private val workerBudgetPerDay: String? = null
+    val workerBudgetPerDay: String? = null
     @SerializedName("maximum_authority_membership")
-    private val maximumAuthorityMembership: String? = null
+    val maximumAuthorityMembership: String? = null
     @SerializedName("maximum_committee_count")
-    private val maximumCommitteeCount: String? = null
+    val maximumCommitteeCount: String? = null
     @SerializedName("accounts_per_fee_scale")
-    private val accountsPerFeeScale: String? = null
+    val accountsPerFeeScale: String? = null
     @SerializedName("allow_non_member_whitelists")
-    private val allowNonMemberWhitelists: String? = null
+    val allowNonMemberWhitelists: String? = null
     @SerializedName("extensions")
-    private val extensions: Array<String>? = null
+    val extensions: Array<String>? = null
     @SerializedName("cashback_vesting_threshold")
-    private val cashbackVestingThreshold: String? = null
+    val cashbackVestingThreshold: String? = null
     @SerializedName("current_fees")
-    private val currentFees: CurrentFees? = null
+    val currentFees: CurrentFees? = null
     @SerializedName("cashback_vesting_period_seconds")
-    private val cashbackVestingPeriodSeconds: String? = null
+    val cashbackVestingPeriodSeconds: String? = null
     @SerializedName("maintenance_interval")
-    private val maintenanceInterval: String? = null
+    val maintenanceInterval: String? = null
     @SerializedName("network_percent_of_fee")
-    private val networkPercentOfFee: String? = null
+    val networkPercentOfFee: String? = null
     @SerializedName("lifetime_referrer_percent_of_fee")
-    private val lifetimeReferrerPercentOfFee: String? = null
+    val lifetimeReferrerPercentOfFee: String? = null
 
 }
 
