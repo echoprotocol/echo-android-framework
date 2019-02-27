@@ -21,6 +21,7 @@ import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
 import org.echo.mobile.framework.model.contract.input.AccountAddressInputValueType
 import org.echo.mobile.framework.model.contract.input.ContractAddressInputValueType
+import org.echo.mobile.framework.model.contract.input.ContractInputEncoder
 import org.echo.mobile.framework.model.contract.input.InputValue
 import org.echo.mobile.framework.model.contract.input.StringInputValueType
 import org.echo.mobile.framework.model.contract.toRegular
@@ -1093,6 +1094,32 @@ class EchoFrameworkTest {
     }
 
     @Test
+    fun callContractUsingCodeTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val broadcastFuture = FutureTask<Boolean>()
+        val future = FutureTask<String>()
+
+        val contractCode = ContractInputEncoder().encode("logTest", listOf())
+
+        framework.callContract(
+            login,
+            password,
+            assetId = legalAssetId,
+            feeAsset = legalAssetId,
+            contractId = legalContractId,
+            code = contractCode,
+            broadcastCallback = broadcastFuture.completeCallback(),
+            resultCallback = future.completeCallback()
+        )
+
+        assertTrue(broadcastFuture.get() ?: false)
+        assertTrue(future.get()?.startsWith("1.17.") ?: false)
+    }
+
+    @Test
     fun callContractWithWifTest() {
         val framework = initFramework()
 
@@ -1109,6 +1136,32 @@ class EchoFrameworkTest {
             contractId = legalContractId,
             methodName = "logTest",
             methodParams = listOf(),
+            broadcastCallback = broadcastFuture.completeCallback(),
+            resultCallback = future.completeCallback()
+        )
+
+        assertTrue(broadcastFuture.get() ?: false)
+        assertTrue(future.get()?.startsWith("1.17.") ?: false)
+    }
+
+    @Test
+    fun callContractWithWifUsingCodeTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val broadcastFuture = FutureTask<Boolean>()
+        val future = FutureTask<String>()
+
+        val contractCode = ContractInputEncoder().encode("logTest", listOf())
+
+        framework.callContractWithWif(
+            login,
+            wif,
+            assetId = legalAssetId,
+            feeAsset = legalAssetId,
+            contractId = legalContractId,
+            code = contractCode,
             broadcastCallback = broadcastFuture.completeCallback(),
             resultCallback = future.completeCallback()
         )

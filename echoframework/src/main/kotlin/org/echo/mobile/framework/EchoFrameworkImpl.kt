@@ -596,6 +596,30 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         )
     })
 
+    override fun callContract(
+        userNameOrId: String,
+        password: String,
+        assetId: String,
+        feeAsset: String?,
+        contractId: String,
+        code: String,
+        value: String,
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<String>?
+    ) = dispatch(Runnable {
+        contractsFacade.callContract(
+            userNameOrId,
+            password,
+            assetId,
+            feeAsset,
+            contractId,
+            code,
+            value,
+            broadcastCallback.wrapOriginal(),
+            resultCallback?.wrapOriginal()
+        )
+    })
+
     override fun callContractWithWif(
         userNameOrId: String,
         wif: String,
@@ -616,6 +640,30 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             contractId,
             methodName,
             methodParams,
+            value,
+            broadcastCallback.wrapOriginal(),
+            resultCallback?.wrapOriginal()
+        )
+    })
+
+    override fun callContractWithWif(
+        userNameOrId: String,
+        wif: String,
+        assetId: String,
+        feeAsset: String?,
+        contractId: String,
+        code: String,
+        value: String,
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<String>?
+    ) = dispatch(Runnable {
+        contractsFacade.callContractWithWif(
+            userNameOrId,
+            wif,
+            assetId,
+            feeAsset,
+            contractId,
+            code,
             value,
             broadcastCallback.wrapOriginal(),
             resultCallback?.wrapOriginal()

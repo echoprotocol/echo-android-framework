@@ -68,7 +68,7 @@ interface ContractsFacade {
     )
 
     /**
-     * Calls to contract on blockchain
+     * Calls to contract on blockchain using account password
      *
      * @param userNameOrId          Name or id of account that calls the contract
      * @param password              Password from account for transaction signature
@@ -98,7 +98,37 @@ interface ContractsFacade {
     )
 
     /**
-     * Calls to contract on blockchain
+     * Calls to contract on blockchain using account password
+     *
+     * Required valid [code] for contract call
+     *
+     * @param userNameOrId          Name or id of account that calls the contract
+     * @param password              Password from account for transaction signature
+     * @param assetId               Asset of contract
+     * @param feeAsset              Asset for fee pay
+     * @param contractId            Id of called contract
+     * @param code                  Valid code for contract call
+     * @param value                 Amount for payable methods
+     * @param broadcastCallback     Callback for result of operation deploying
+     * @param resultCallback        Callback for retrieving result of operation (not required).
+     *                              Retrieves result of transactions if exists -
+     *                              history id which contains call contract result,
+     *                              if not exists - empty string
+     */
+    fun callContract(
+        userNameOrId: String,
+        password: String,
+        assetId: String,
+        feeAsset: String?,
+        contractId: String,
+        code: String,
+        value: String = BigInteger.ZERO.toString(),
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<String>? = null
+    )
+
+    /**
+     * Calls to contract on blockchain using account private key wif
      *
      * @param userNameOrId          Name or id of account that calls the contract
      * @param wif                   Account's private key in wif format
@@ -122,6 +152,36 @@ interface ContractsFacade {
         contractId: String,
         methodName: String,
         methodParams: List<InputValue>,
+        value: String = BigInteger.ZERO.toString(),
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<String>? = null
+    )
+
+    /**
+     * Calls to contract on blockchain using account private key wif
+     *
+     * Required valid [code] for contract call
+     *
+     * @param userNameOrId          Name or id of account that calls the contract
+     * @param wif                   Account's private key in wif format
+     * @param assetId               Asset of contract
+     * @param feeAsset              Asset for fee pay
+     * @param contractId            Id of called contract
+     * @param code                  Valid code for contract call
+     * @param value                 Amount for payable methods
+     * @param broadcastCallback     Callback for result of operation deploying
+     * @param resultCallback        Callback for retrieving result of operation (not required).
+     *                              Retrieves result of transactions if exists -
+     *                              history id which contains call contract result,
+     *                              if not exists - empty string
+     */
+    fun callContractWithWif(
+        userNameOrId: String,
+        wif: String,
+        assetId: String,
+        feeAsset: String?,
+        contractId: String,
+        code: String,
         value: String = BigInteger.ZERO.toString(),
         broadcastCallback: Callback<Boolean>,
         resultCallback: Callback<String>? = null
