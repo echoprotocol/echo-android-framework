@@ -10,6 +10,7 @@ import org.echo.mobile.framework.model.Block
 import org.echo.mobile.framework.model.BlockData
 import org.echo.mobile.framework.model.DynamicGlobalProperties
 import org.echo.mobile.framework.model.FullAccount
+import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.GrapheneObject
 import org.echo.mobile.framework.model.Log
 import org.echo.mobile.framework.model.contract.ContractInfo
@@ -101,6 +102,11 @@ interface GlobalsService {
      * Retrieves current blockchain block data
      */
     fun getDynamicGlobalProperties(callback: Callback<DynamicGlobalProperties>)
+
+    /**
+     * Retrieves blockchain current configuration parameters
+     */
+    fun getGlobalProperties(callback: Callback<GlobalProperties>)
 
 }
 
