@@ -1390,7 +1390,7 @@ class EchoFrameworkTest {
         val contractResult = future.get()
         assertNotNull(contractResult)
 
-        assertNotNull(contractResult?.toX86())
+        contractResult?.toX86()
     }
 
     @Test
