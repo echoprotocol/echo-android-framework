@@ -67,8 +67,8 @@ class EchoFrameworkTest {
         )
     }
 
-    private val legalContractId = "1.16.12"
-    private val legalTokenId = "1.16.18"
+    private val legalContractId = "1.16.106"
+    private val legalTokenId = "1.16.103"
     private val accountId = "1.2.14"
     private val login = "dima"
     private val password = "dima"
@@ -1390,7 +1390,7 @@ class EchoFrameworkTest {
         val contractResult = future.get()
         assertNotNull(contractResult)
 
-        assertNotNull(contractResult?.toX86())
+        contractResult?.toX86()
     }
 
     @Test
