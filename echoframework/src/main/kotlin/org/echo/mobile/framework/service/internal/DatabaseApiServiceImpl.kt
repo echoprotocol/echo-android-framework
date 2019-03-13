@@ -16,6 +16,7 @@ import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.GrapheneObject
 import org.echo.mobile.framework.model.Log
+import org.echo.mobile.framework.model.SidechainTransfer
 import org.echo.mobile.framework.model.Transaction
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
@@ -37,6 +38,7 @@ import org.echo.mobile.framework.model.socketoperations.GetContractsSocketOperat
 import org.echo.mobile.framework.model.socketoperations.GetGlobalPropertiesSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetKeyReferencesSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetObjectsSocketOperation
+import org.echo.mobile.framework.model.socketoperations.GetSidechainTransfersSocketOperation
 import org.echo.mobile.framework.model.socketoperations.ListAssetsSocketOperation
 import org.echo.mobile.framework.model.socketoperations.LookupAssetsSymbolsSocketOperation
 import org.echo.mobile.framework.model.socketoperations.QueryContractSocketOperation
@@ -558,5 +560,14 @@ class DatabaseApiServiceImpl(
         socketCoreComponent.emit(customSocketOperation)
 
         return futureTask.wrapResult()
+    }
+
+    override fun getSidechainTransfers(
+        ethAddress: String,
+        callback: Callback<List<SidechainTransfer>>
+    ) {
+        val operation = GetSidechainTransfersSocketOperation(id, ethAddress, callback = callback)
+
+        socketCoreComponent.emit(operation)
     }
 }

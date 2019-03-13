@@ -16,6 +16,7 @@ import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.HistoryResponse
 import org.echo.mobile.framework.model.Log
 import org.echo.mobile.framework.model.Price
+import org.echo.mobile.framework.model.SidechainTransfer
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
@@ -1593,6 +1594,20 @@ class EchoFrameworkTest {
         val future = FutureTask<GlobalProperties>()
 
         framework.getGlobalProperties(future.completeCallback())
+
+        val properties = future.get()
+        assertNotNull(properties)
+    }
+
+    @Test
+    fun getSidechainTransfersTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<List<SidechainTransfer>>()
+
+        framework.getSidechainTransfers("0x46Ba2677a1c982B329A81f60Cf90fBA2E8CA9fA8", future.completeCallback())
 
         val properties = future.get()
         assertNotNull(properties)
