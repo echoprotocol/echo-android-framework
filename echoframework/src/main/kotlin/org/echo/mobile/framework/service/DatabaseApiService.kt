@@ -13,6 +13,7 @@ import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.GrapheneObject
 import org.echo.mobile.framework.model.Log
+import org.echo.mobile.framework.model.SidechainTransfer
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
@@ -27,7 +28,7 @@ import org.echo.mobile.framework.support.Result
  */
 interface DatabaseApiService : ApiService, AccountsService, GlobalsService,
     AuthorityAndValidationService, BlocksAndTransactionsService, ContractsService, AssetsService,
-    SubscriptionService, ObjectsService, CustomOperationService
+    SubscriptionService, ObjectsService, CustomOperationService, SidechainService
 
 /**
  * Encapsulates logic, associated with data from account from blockchain database API
@@ -300,5 +301,17 @@ interface ObjectsService {
         ids: List<String>,
         mapper: ObjectMapper<T>
     ): Result<Exception, List<T>>
+
+}
+
+/**
+ * Encapsulates logic, associated with sidechain information processing
+ */
+interface SidechainService {
+
+    /**
+     * Retrieves sidechain transfers list associated with [ethAddress]
+     */
+    fun getSidechainTransfers(ethAddress: String, callback: Callback<List<SidechainTransfer>>)
 
 }
