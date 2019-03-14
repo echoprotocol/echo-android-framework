@@ -32,6 +32,7 @@ enum class SocketOperationKeys(val key: String) {
     ACCOUNT_HISTORY("get_account_history"),
     ASSETS("get_assets"),
     LIST_ASSETS("list_assets"),
+    SIDECHAIN_TRANSFERS("get_sidechain_transfers"),
     LOOKUP_ASSETS_SYMBOLS("lookup_asset_symbols"),
     REGISTER_ACCOUNT("register_account"),
     BLOCK("get_block"),

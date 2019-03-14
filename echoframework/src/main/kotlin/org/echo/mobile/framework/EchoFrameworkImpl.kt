@@ -29,6 +29,7 @@ import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.HistoryResponse
 import org.echo.mobile.framework.model.Log
+import org.echo.mobile.framework.model.SidechainTransfer
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
@@ -359,6 +360,13 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         dispatch(Runnable {
             subscriptionFacade.unsubscribeFromBlock(callback)
         })
+
+    override fun getSidechainTransfers(
+        ethAddress: String,
+        callback: Callback<List<SidechainTransfer>>
+    ) = dispatch(Runnable {
+        informationFacade.getSidechainTransfers(ethAddress, callback)
+    })
 
     override fun createAsset(
         name: String,

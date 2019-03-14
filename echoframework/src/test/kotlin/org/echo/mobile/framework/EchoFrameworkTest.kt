@@ -1,6 +1,8 @@
 package org.echo.mobile.framework
 
 import com.google.common.primitives.UnsignedLong
+import com.google.gson.GsonBuilder
+import org.echo.mobile.framework.core.mapper.ObjectMapper
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.Asset
@@ -16,6 +18,7 @@ import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.HistoryResponse
 import org.echo.mobile.framework.model.Log
 import org.echo.mobile.framework.model.Price
+import org.echo.mobile.framework.model.SidechainTransfer
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
@@ -34,6 +37,7 @@ import org.echo.mobile.framework.support.Settings
 import org.echo.mobile.framework.support.concurrent.future.FutureTask
 import org.echo.mobile.framework.support.concurrent.future.completeCallback
 import org.echo.mobile.framework.support.concurrent.future.wrapResult
+import org.echo.mobile.framework.support.dematerialize
 import org.echo.mobile.framework.support.fold
 import org.junit.Assert
 import org.junit.Assert.assertEquals
@@ -1596,6 +1600,48 @@ class EchoFrameworkTest {
 
         val properties = future.get()
         assertNotNull(properties)
+    }
+
+    @Test
+    fun getSidechainTransfersTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<List<SidechainTransfer>>()
+
+        framework.getSidechainTransfers(
+            "0x46Ba2677a1c982B329A81f60Cf90fBA2E8CA9fA8",
+            future.completeCallback()
+        )
+
+        val transfers = future.get()
+        assertNotNull(transfers)
+    }
+
+    @Test
+    fun getObjectTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val transferId = "1.19.2"
+
+        val sidechainTransferResult = framework.databaseApiService.getObjects(
+            listOf(transferId),
+            object : ObjectMapper<SidechainTransfer> {
+
+                override fun map(data: String): SidechainTransfer? {
+                    val gson = GsonBuilder().create()
+
+                    return gson.fromJson(data, SidechainTransfer::class.java)
+                }
+
+            })
+
+        assertNotNull(sidechainTransferResult)
+        assertNotNull(sidechainTransferResult.dematerialize())
+        assertEquals(transferId, sidechainTransferResult.dematerialize()[0].getObjectId())
     }
 
     private fun connect(framework: EchoFramework): Boolean? {

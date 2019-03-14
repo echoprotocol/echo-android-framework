@@ -16,6 +16,7 @@ import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.HistoricalTransfer
 import org.echo.mobile.framework.model.HistoryResponse
 import org.echo.mobile.framework.model.HistoryResult
+import org.echo.mobile.framework.model.SidechainTransfer
 import org.echo.mobile.framework.model.operations.AccountCreateOperation
 import org.echo.mobile.framework.model.operations.AccountUpdateOperation
 import org.echo.mobile.framework.model.operations.ContractCallOperation
@@ -28,6 +29,8 @@ import org.echo.mobile.framework.model.operations.TransferOperation
 import org.echo.mobile.framework.processResult
 import org.echo.mobile.framework.service.AccountHistoryApiService
 import org.echo.mobile.framework.service.DatabaseApiService
+import org.echo.mobile.framework.support.EthAddressValidator
+import org.echo.mobile.framework.support.EthAddressValidator.ADDRESS_PREFIX
 import org.echo.mobile.framework.support.Result
 import org.echo.mobile.framework.support.Result.Error
 import org.echo.mobile.framework.support.Result.Value
@@ -100,6 +103,19 @@ class InformationFacadeImpl(
 
     override fun getGlobalProperties(callback: Callback<GlobalProperties>) =
         databaseApiService.getGlobalProperties(callback)
+
+    override fun getSidechainTransfers(
+        ethAddress: String,
+        callback: Callback<List<SidechainTransfer>>
+    ) {
+        if (!EthAddressValidator.isAddressValid(ethAddress)) {
+            throw LocalException("Invalid ethereum address $ethAddress")
+        }
+
+        val processedAddress = ethAddress.replace(ADDRESS_PREFIX, "").toLowerCase()
+
+        databaseApiService.getSidechainTransfers(processedAddress, callback)
+    }
 
     private fun findAccount(
         nameOrId: String,
