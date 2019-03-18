@@ -1,6 +1,20 @@
 package org.echo.mobile.framework.model.contract
 
-import org.echo.mobile.framework.model.contract.input.*
+import org.echo.mobile.framework.exception.LocalException
+import org.echo.mobile.framework.model.contract.input.AccountAddressInputValueType
+import org.echo.mobile.framework.model.contract.input.AddressInputValueType
+import org.echo.mobile.framework.model.contract.input.BooleanInputValueType
+import org.echo.mobile.framework.model.contract.input.BytesInputValueType
+import org.echo.mobile.framework.model.contract.input.ContractAddressInputValueType
+import org.echo.mobile.framework.model.contract.input.ContractInputEncoder
+import org.echo.mobile.framework.model.contract.input.DynamicArrayInputValueType
+import org.echo.mobile.framework.model.contract.input.DynamicStringArrayValueType
+import org.echo.mobile.framework.model.contract.input.EthContractAddressInputValueType
+import org.echo.mobile.framework.model.contract.input.FixedArrayInputValueType
+import org.echo.mobile.framework.model.contract.input.FixedBytesInputValueType
+import org.echo.mobile.framework.model.contract.input.InputValue
+import org.echo.mobile.framework.model.contract.input.NumberInputValueType
+import org.echo.mobile.framework.model.contract.input.StringInputValueType
 import org.junit.Assert
 import org.junit.Test
 
@@ -69,7 +83,49 @@ class ContractInputEncoderTest {
         val result = "e4dc2aa40000000000000000000000000000000000000000000000000000000000000012"
 
         val encoded =
+            contractInputEncoder.encode(
+                function,
+                listOf(InputValue(AddressInputValueType(), "1.2.18"))
+            )
+
+        Assert.assertEquals(result, encoded)
+    }
+
+    @Test(expected = LocalException::class)
+    fun encodeFunctionWithAddressFailureTest() {
+        val function = "totalSupply"
+        val result = "e4dc2aa40000000000000000000000000000000000000000000000000000000000000012"
+
+        val encoded =
             contractInputEncoder.encode(function, listOf(InputValue(AddressInputValueType(), "18")))
+
+        Assert.assertEquals(result, encoded)
+    }
+
+    @Test
+    fun encodeFunctionWithAccountAddressTest() {
+        val function = "totalSupply"
+        val result = "e4dc2aa40000000000000000000000000000000000000000000000000000000000000012"
+
+        val encoded =
+            contractInputEncoder.encode(
+                function,
+                listOf(InputValue(AccountAddressInputValueType(), "1.2.18"))
+            )
+
+        Assert.assertEquals(result, encoded)
+    }
+
+    @Test
+    fun encodeFunctionWithContractAddressTest() {
+        val function = "totalSupply"
+        val result = "e4dc2aa40000000000000000000000000100000000000000000000000000000000000012"
+
+        val encoded =
+            contractInputEncoder.encode(
+                function,
+                listOf(InputValue(ContractAddressInputValueType(), "1.16.18"))
+            )
 
         Assert.assertEquals(result, encoded)
     }
@@ -105,6 +161,33 @@ class ContractInputEncoderTest {
         Assert.assertEquals(result, encoded)
     }
 
+
+    @Test
+    fun encodeEthContractAddressTest() {
+        val decoded = "000000000000000000000000ca35b7d915458ef540ade6068dfe2f44e8fa733c"
+        val target = "0xca35b7d915458ef540ade6068dfe2f44e8fa733c"
+
+        val params = listOf(
+            InputValue(EthContractAddressInputValueType("address"), target)
+        )
+
+        val encoded = contractInputEncoder.encodeArguments(params)
+        Assert.assertEquals(encoded, decoded)
+    }
+
+    @Test
+    fun encodeEthContractAddressWithoutPrefixTest() {
+        val decoded = "000000000000000000000000ca35b7d915458ef540ade6068dfe2f44e8fa733c"
+        val target = "ca35b7d915458ef540ade6068dfe2f44e8fa733c"
+
+        val params = listOf(
+            InputValue(EthContractAddressInputValueType("address"), target)
+        )
+
+        val encoded = contractInputEncoder.encodeArguments(params)
+        Assert.assertEquals(encoded, decoded)
+    }
+
     @Test
     fun encodeUIntAndStringAndAddressTest() {
         val function = "totalSupply"
@@ -116,7 +199,7 @@ class ContractInputEncoderTest {
         val params = listOf(
             InputValue(NumberInputValueType("uint"), "123"),
             InputValue(StringInputValueType(), "Hello, World!"),
-            InputValue(AddressInputValueType(), "18")
+            InputValue(AddressInputValueType(), "1.2.18")
         )
 
         val encoded = contractInputEncoder.encode(function, params)

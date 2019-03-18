@@ -10,7 +10,7 @@ import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent
 import org.echo.mobile.framework.support.parse
 import java.io.Serializable
 import java.lang.reflect.Type
-import java.util.*
+import java.util.Date
 
 /**
  * Represents account model in Graphene blockchain
@@ -80,12 +80,12 @@ class DynamicGlobalProperties(
                 .asString.parse(catch = { LOGGER.log("Error during parsing DGP date", it) })
 
             dynamicGlobalProperties.nextMaintenanceDate =
-                    jsonObject.get(DynamicGlobalProperties.KEY_NEXT_MAINTENANCE_TIME)
-                        .asString.parse {
-                        LOGGER.log(
-                            "Error during parsing DGP next maintenance date", it
-                        )
-                    }
+                jsonObject.get(DynamicGlobalProperties.KEY_NEXT_MAINTENANCE_TIME)
+                    .asString.parse {
+                    LOGGER.log(
+                        "Error during parsing DGP next maintenance date", it
+                    )
+                }
 
 
             return dynamicGlobalProperties

@@ -1,7 +1,6 @@
 package org.echo.mobile.framework.model
 
 import com.google.gson.annotations.Expose
-import java.io.Serializable
 
 /**
  * Includes classes, represents response with error from blockchain

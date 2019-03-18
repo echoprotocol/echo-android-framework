@@ -1,6 +1,6 @@
 package org.echo.mobile.framework.model.contract.input
 
-import org.echo.mobile.bitcoinj.Base58
+import org.echo.mobile.framework.exception.LocalException
 import org.spongycastle.util.encoders.Hex
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -97,7 +97,9 @@ class NumberInputValueType(override var name: String) : InputValueType {
 }
 
 /**
- * Implementation of [InputValueType] for address types
+ * Implementation of [InputValueType] for any address types.
+ * Can encode only prefixed addresses.  For example, account address: 1.2.1.
+ * If address is not clear, throws exception.
  */
 class AddressInputValueType : InputValueType {
 
@@ -105,14 +107,100 @@ class AddressInputValueType : InputValueType {
 
     override var name: String = "address"
 
-    override fun encode(source: String): String = if (source.length == 34) {
-        appendAddressPattern(Hex.toHexString(Base58.decode(source)).substring(2, 42))
-    } else {
-        appendNumericPattern(convertToByteCode(BigDecimal(source).toBigInteger()))
+    override fun encode(source: String): String = when {
+
+        source.startsWith(AccountAddressInputValueType.PREFIX) -> {
+            AccountAddressInputValueType().encode(source)
+        }
+        source.startsWith(ContractAddressInputValueType.PREFIX) -> {
+            ContractAddressInputValueType().encode(source)
+        }
+        else -> {
+            throw LocalException("Unable to determine address type for value: $source")
+        }
     }
 
-    private fun appendAddressPattern(value: String): String {
-        return HASH_PATTERN.substring(value.length) + value
+}
+
+/**
+ * Implementation of [InputValueType] for account address types.
+ * Can encode addresses with account prefix "1.2." and without it.
+ */
+class AccountAddressInputValueType : InputValueType {
+
+    override var encodingContext: EncodingContext? = null
+
+    override var name: String = "address"
+
+    companion object {
+        const val PREFIX = "1.2."
+    }
+
+    override fun encode(source: String): String {
+        val encodeSource = if (source.startsWith(PREFIX)) source.removePrefix(PREFIX) else source
+        return appendNumericPattern(convertToByteCode(BigDecimal(encodeSource).toBigInteger()))
+    }
+}
+
+/**
+ * Implementation of [InputValueType] for contract address types.
+ * Can decode addresses with contract prefix "1.16." and without it.
+ */
+class ContractAddressInputValueType : InputValueType {
+
+    override var encodingContext: EncodingContext? = null
+
+    override var name: String = "address"
+
+    companion object {
+        const val PREFIX = "1.16."
+        const val CONTRACT_ADDRESS_SIZE = 40
+        const val CONTRACT_ADDRESS_PREFIX = "01"
+    }
+
+    override fun encode(source: String): String {
+        val encodeSource = if (source.startsWith(PREFIX)) source.removePrefix(PREFIX) else source
+
+        return appendContractAddressPattern(
+            CONTRACT_ADDRESS_PREFIX,
+            convertToByteCode(BigDecimal(encodeSource).toBigInteger())
+        )
+    }
+
+    private fun appendContractAddressPattern(prefix: String, value: String): String {
+        val valueHash = HASH_PATTERN.substring(0, CONTRACT_ADDRESS_SIZE - value.length) + value
+        val prefixedHash = prefix + valueHash.substring(prefix.length, valueHash.length)
+
+        return HASH_PATTERN.substring(0, HASH_PATTERN.length - prefixedHash.length) + prefixedHash
+    }
+
+}
+
+/**
+ * Implementation of [InputValueType] for ethereum contract address types.
+ */
+class EthContractAddressInputValueType(override var name: String) : InputValueType {
+
+    override var encodingContext: EncodingContext? = null
+
+    companion object {
+        const val CONTRACT_ADDRESS_SIZE = 40
+        const val ETH_PREFIX_PREFIX = "0x"
+    }
+
+    override fun encode(source: String): String {
+        var addressHex = source.toByteArray()
+
+        if (addressHex.size > CONTRACT_ADDRESS_SIZE) {
+            addressHex = addressHex.copyOfRange(ETH_PREFIX_PREFIX.length, addressHex.size)
+        }
+
+        return appendEthContractAddressPattern(String(addressHex))
+    }
+
+    private fun appendEthContractAddressPattern(value: String): String {
+        val prefix = HASH_PATTERN.substring(0, INPUT_SLICE_SIZE * 2 - value.length)
+        return prefix + value
     }
 
 }
@@ -160,7 +248,7 @@ class BytesInputValueType : InputValueType {
         with(encodingContext!!) {
             appendDynamicDataPart(appendStringPattern(source))
             dynamicParametersOffset =
-                    encodingContext!!.dynamicParametersOffset + length + INPUT_SLICE_SIZE
+                encodingContext!!.dynamicParametersOffset + length + INPUT_SLICE_SIZE
         }
 
         return appendNumericPattern(convertToByteCode(currOffset))
@@ -211,7 +299,7 @@ class DynamicArrayInputValueType(private val itemType: InputValueType) : InputVa
         val count = parameters.size
 
         encodingContext!!.dynamicParametersOffset =
-                currOffset + count * INPUT_SLICE_SIZE + INPUT_SLICE_SIZE
+            currOffset + count * INPUT_SLICE_SIZE + INPUT_SLICE_SIZE
 
         var encodedParameters = ""
         encodedParameters += appendNumericPattern(count.toString())
@@ -246,7 +334,7 @@ class DynamicStringArrayValueType : InputValueType {
         val count = parameters.size
 
         encodingContext!!.dynamicParametersOffset =
-                currOffset + count * INPUT_SLICE_SIZE + INPUT_SLICE_SIZE
+            currOffset + count * INPUT_SLICE_SIZE + INPUT_SLICE_SIZE
 
         var encodedParameters = ""
         encodedParameters += appendNumericPattern(count.toString())
@@ -280,7 +368,7 @@ class FixedArrayInputValueType(private val size: Int, private val itemType: Inpu
         val parameters = source.toArrayParameters()
 
         encodingContext!!.dynamicParametersOffset =
-                currOffset + size * INPUT_SLICE_SIZE + INPUT_SLICE_SIZE
+            currOffset + size * INPUT_SLICE_SIZE + INPUT_SLICE_SIZE
 
         var encodedParameters = ""
         encodedParameters += appendNumericPattern(size.toString())

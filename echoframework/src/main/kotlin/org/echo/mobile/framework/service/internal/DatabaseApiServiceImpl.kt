@@ -2,15 +2,49 @@ package org.echo.mobile.framework.service.internal
 
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.ILLEGAL_ID
+import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
 import org.echo.mobile.framework.core.mapper.ObjectMapper
 import org.echo.mobile.framework.core.socket.SocketCoreComponent
 import org.echo.mobile.framework.exception.LocalException
-import org.echo.mobile.framework.model.*
+import org.echo.mobile.framework.model.Asset
+import org.echo.mobile.framework.model.AssetAmount
+import org.echo.mobile.framework.model.BaseOperation
+import org.echo.mobile.framework.model.Block
+import org.echo.mobile.framework.model.BlockData
+import org.echo.mobile.framework.model.DynamicGlobalProperties
+import org.echo.mobile.framework.model.FullAccount
+import org.echo.mobile.framework.model.GlobalProperties
+import org.echo.mobile.framework.model.GrapheneObject
+import org.echo.mobile.framework.model.Log
+import org.echo.mobile.framework.model.SidechainTransfer
+import org.echo.mobile.framework.model.Transaction
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
 import org.echo.mobile.framework.model.network.Network
-import org.echo.mobile.framework.model.socketoperations.*
+import org.echo.mobile.framework.model.socketoperations.BlockDataSocketOperation
+import org.echo.mobile.framework.model.socketoperations.CancelAllSubscriptionsSocketOperation
+import org.echo.mobile.framework.model.socketoperations.CustomOperation
+import org.echo.mobile.framework.model.socketoperations.CustomSocketOperation
+import org.echo.mobile.framework.model.socketoperations.FullAccountsSocketOperation
+import org.echo.mobile.framework.model.socketoperations.GetAllContractsSocketOperation
+import org.echo.mobile.framework.model.socketoperations.GetAssetsSocketOperation
+import org.echo.mobile.framework.model.socketoperations.GetBlockSocketOperation
+import org.echo.mobile.framework.model.socketoperations.GetChainIdSocketOperation
+import org.echo.mobile.framework.model.socketoperations.GetContractLogsSocketOperation
+import org.echo.mobile.framework.model.socketoperations.GetContractResultSocketOperation
+import org.echo.mobile.framework.model.socketoperations.GetContractSocketOperation
+import org.echo.mobile.framework.model.socketoperations.GetContractsSocketOperation
+import org.echo.mobile.framework.model.socketoperations.GetGlobalPropertiesSocketOperation
+import org.echo.mobile.framework.model.socketoperations.GetKeyReferencesSocketOperation
+import org.echo.mobile.framework.model.socketoperations.GetObjectsSocketOperation
+import org.echo.mobile.framework.model.socketoperations.GetSidechainTransfersSocketOperation
+import org.echo.mobile.framework.model.socketoperations.ListAssetsSocketOperation
+import org.echo.mobile.framework.model.socketoperations.LookupAssetsSymbolsSocketOperation
+import org.echo.mobile.framework.model.socketoperations.QueryContractSocketOperation
+import org.echo.mobile.framework.model.socketoperations.RequiredFeesSocketOperation
+import org.echo.mobile.framework.model.socketoperations.SetSubscribeCallbackSocketOperation
+import org.echo.mobile.framework.model.socketoperations.SubscribeContractLogsSocketOperation
 import org.echo.mobile.framework.service.DatabaseApiService
 import org.echo.mobile.framework.support.Result
 import org.echo.mobile.framework.support.concurrent.future.FutureTask
@@ -28,6 +62,7 @@ import java.util.concurrent.TimeUnit
  */
 class DatabaseApiServiceImpl(
     private val socketCoreComponent: SocketCoreComponent,
+    private val cryptoCoreComponent: CryptoCoreComponent,
     private val network: Network
 ) : DatabaseApiService {
 
@@ -50,7 +85,12 @@ class DatabaseApiServiceImpl(
                 }
 
                 override fun onError(error: LocalException) {
-                    callback.onError(error)
+                    callback.onError(
+                        LocalException(
+                            "Error occurred during accounts request",
+                            error
+                        )
+                    )
                 }
 
             },
@@ -66,6 +106,93 @@ class DatabaseApiServiceImpl(
         val future = FutureTask<Map<String, FullAccount>>()
         getFullAccounts(namesOrIds, subscribe, future.completeCallback())
         return future.wrapResult(mapOf())
+    }
+
+    override fun getAccountsByWif(
+        wifs: List<String>,
+        callback: Callback<Map<String, List<FullAccount>>>
+    ) {
+        val keys = wifs.map { wif ->
+            val privateKey = cryptoCoreComponent.decodeFromWif(wif)
+            val publicKey = cryptoCoreComponent.derivePublicKeyFromPrivate(privateKey)
+            cryptoCoreComponent.getAddressFromPublicKey(publicKey)
+        }
+
+        val getKeyReferencesSocketOperation = GetKeyReferencesSocketOperation(
+            id,
+            keys,
+            network,
+            socketCoreComponent.currentId,
+            object : Callback<Map<String, List<String>>> {
+                override fun onSuccess(result: Map<String, List<String>>) {
+                    val requiredAccounts = result.values.flatten()
+
+                    receiveRequiredAccountsByWifs(wifs, keys, requiredAccounts, result, callback)
+                }
+
+                override fun onError(error: LocalException) {
+                    callback.onError(error)
+                }
+
+            }
+        )
+
+        socketCoreComponent.emit(getKeyReferencesSocketOperation)
+    }
+
+    private fun receiveRequiredAccountsByWifs(
+        wifs: List<String>,
+        keys: List<String>,
+        requiredAccounts: List<String>,
+        accountsIdsMap: Map<String, List<String>>,
+        callback: Callback<Map<String, List<FullAccount>>>
+    ) {
+        getFullAccounts(
+            requiredAccounts,
+            false,
+            object : Callback<Map<String, FullAccount>> {
+                override fun onSuccess(result: Map<String, FullAccount>) {
+                    val resultMap =
+                        accountsByWifMap(wifs, keys, accountsIdsMap, result)
+
+                    callback.onSuccess(resultMap)
+                }
+
+                override fun onError(error: LocalException) {
+                    callback.onSuccess(mapOf())
+                }
+            })
+    }
+
+    private fun accountsByWifMap(
+        wifs: List<String>,
+        keys: List<String>,
+        accountsIdsMap: Map<String, List<String>>,
+        receivedAccounts: Map<String, FullAccount>
+    ): Map<String, List<FullAccount>> {
+        val resultMap = hashMapOf<String, List<FullAccount>>()
+
+        accountsIdsMap.forEach { (key, accountIds) ->
+            val wif = wifs[keys.indexOf(key)]
+            val accounts = mutableListOf<FullAccount>()
+
+            accountIds.distinct().forEach { id ->
+                val account = receivedAccounts[id]
+                account?.let { accounts.add(it) }
+            }
+
+            resultMap[wif] = accounts
+        }
+
+        return resultMap
+    }
+
+    override fun getAccountsByWif(wifs: List<String>): Result<LocalException, Map<String, List<FullAccount>>> {
+        val accountFuture = FutureTask<Map<String, List<FullAccount>>>()
+
+        getAccountsByWif(wifs, accountFuture.completeCallback())
+
+        return accountFuture.wrapResult()
     }
 
     private fun fillAccounts(
@@ -106,11 +233,16 @@ class DatabaseApiServiceImpl(
         assets: List<Asset>,
         callback: Callback<Map<String, FullAccount>>
     ) {
+        if (assets.isEmpty()) {
+            callback.onSuccess(accounts)
+            return
+        }
+
         accounts.values.forEach { fullAccount ->
             fullAccount.balances?.forEach { balance ->
                 balance.asset =
-                        assets.find { asset -> asset.getObjectId() == balance.asset?.getObjectId() } ?:
-                        balance.asset
+                    assets.find { asset -> asset.getObjectId() == balance.asset?.getObjectId() }
+                        ?: balance.asset
             }
 
             val filledAssets = mutableListOf<Asset>()
@@ -164,6 +296,15 @@ class DatabaseApiServiceImpl(
 
     override fun getDynamicGlobalProperties(callback: Callback<DynamicGlobalProperties>) {
         val blockDataOperation = BlockDataSocketOperation(
+            id,
+            socketCoreComponent.currentId,
+            callback
+        )
+        socketCoreComponent.emit(blockDataOperation)
+    }
+
+    override fun getGlobalProperties(callback: Callback<GlobalProperties>) {
+        val blockDataOperation = GetGlobalPropertiesSocketOperation(
             id,
             socketCoreComponent.currentId,
             callback
@@ -233,6 +374,24 @@ class DatabaseApiServiceImpl(
         socketCoreComponent.emit(operation)
     }
 
+    override fun lookupAssetsSymbols(symbolsOrIds: List<String>, callback: Callback<List<Asset>>) {
+        val operation = LookupAssetsSymbolsSocketOperation(
+            id,
+            symbolsOrIds.toTypedArray(),
+            callId = socketCoreComponent.currentId,
+            callback = callback
+        )
+
+        socketCoreComponent.emit(operation)
+    }
+
+    override fun lookupAssetsSymbols(symbolsOrIds: List<String>): Result<LocalException, List<Asset>> {
+        val future = FutureTask<List<Asset>>()
+        lookupAssetsSymbols(symbolsOrIds, future.completeCallback())
+
+        return future.wrapResult()
+    }
+
     override fun callContractNoChangingState(
         contractId: String,
         registrarNameOrId: String,
@@ -267,6 +426,23 @@ class DatabaseApiServiceImpl(
         return future.wrapResult()
     }
 
+    override fun getContractLogs(
+        contractId: String,
+        fromBlock: String,
+        toBlock: String
+    ): Result<LocalException, List<Log>> {
+        val futureTask = FutureTask<List<Log>>()
+        val operation = GetContractLogsSocketOperation(
+            id,
+            contractId, fromBlock, toBlock,
+            callId = socketCoreComponent.currentId,
+            callback = futureTask.completeCallback()
+        )
+        socketCoreComponent.emit(operation)
+
+        return futureTask.wrapResult()
+    }
+
     override fun getAllContracts(): Result<LocalException, List<ContractInfo>> {
         val future = FutureTask<List<ContractInfo>>()
         val operation = GetAllContractsSocketOperation(
@@ -297,6 +473,25 @@ class DatabaseApiServiceImpl(
         val operation = GetContractSocketOperation(
             id,
             contractId,
+            callId = socketCoreComponent.currentId,
+            callback = future.completeCallback()
+        )
+        socketCoreComponent.emit(operation)
+
+        return future.wrapResult()
+    }
+
+    override fun subscribeContractLogs(
+        contractId: String,
+        fromBlock: String,
+        toBlock: String
+    ): Result<LocalException, List<Log>> {
+        val future = FutureTask<List<Log>>()
+        val operation = SubscribeContractLogsSocketOperation(
+            id,
+            contractId,
+            fromBlock,
+            toBlock,
             callId = socketCoreComponent.currentId,
             callback = future.completeCallback()
         )
@@ -342,5 +537,37 @@ class DatabaseApiServiceImpl(
         socketCoreComponent.emit(operation)
 
         return future.wrapResult()
+    }
+
+    override fun <T> callCustomOperation(operation: CustomOperation<T>, callback: Callback<T>) {
+        val customSocketOperation = CustomSocketOperation(
+            id,
+            socketCoreComponent.currentId,
+            operation,
+            callback
+        )
+        socketCoreComponent.emit(customSocketOperation)
+    }
+
+    override fun <T> callCustomOperation(operation: CustomOperation<T>): Result<LocalException, T> {
+        val futureTask = FutureTask<T>()
+        val customSocketOperation = CustomSocketOperation(
+            id,
+            socketCoreComponent.currentId,
+            operation,
+            futureTask.completeCallback()
+        )
+        socketCoreComponent.emit(customSocketOperation)
+
+        return futureTask.wrapResult()
+    }
+
+    override fun getSidechainTransfers(
+        ethAddress: String,
+        callback: Callback<List<SidechainTransfer>>
+    ) {
+        val operation = GetSidechainTransfersSocketOperation(id, ethAddress, callback = callback)
+
+        socketCoreComponent.emit(operation)
     }
 }

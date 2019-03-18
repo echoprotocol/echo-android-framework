@@ -2,7 +2,11 @@ package org.echo.mobile.framework.model
 
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.UnsignedLong
-import com.google.gson.*
+import com.google.gson.JsonArray
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonElement
+import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 import org.echo.mobile.framework.support.Int64
 import org.echo.mobile.framework.support.Uint16

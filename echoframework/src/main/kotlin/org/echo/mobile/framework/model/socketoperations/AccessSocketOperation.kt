@@ -4,7 +4,6 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonParser
 import org.echo.mobile.framework.Callback
-import org.echo.mobile.framework.ILLEGAL_ID
 
 /**
  * Represents blockchain call for access to blockchain apis
@@ -48,4 +47,5 @@ enum class AccessSocketOperationType(val key: String) {
     NETWORK_BROADCAST("network_broadcast"),
     HISTORY("history"),
     CRYPTO("crypto"),
+    REGISTRATION("registration")
 }

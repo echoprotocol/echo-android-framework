@@ -3,7 +3,9 @@ package org.echo.mobile.framework.facade
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.model.Balance
 import org.echo.mobile.framework.model.FullAccount
+import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.HistoryResponse
+import org.echo.mobile.framework.model.SidechainTransfer
 
 /**
  * Encapsulates logic, associated with receiving blockchain information processes
@@ -20,6 +22,14 @@ interface InformationFacade {
      *                 Receives success result only when required account exists
      */
     fun getAccount(nameOrId: String, callback: Callback<FullAccount>)
+
+
+    /**
+     * Fetches accounts associated with private key in wif format [wif]
+     *
+     * Calls [callback]'s success method with list, contains all received accounts
+     */
+    fun getAccountsByWif(wif: String, callback: Callback<List<FullAccount>>)
 
     /**
      * Checks whether account with [nameOrId] already exists
@@ -55,5 +65,15 @@ interface InformationFacade {
         limit: Int,
         callback: Callback<HistoryResponse>
     )
+
+    /**
+     * Retrieves blockchain current configuration parameters
+     */
+    fun getGlobalProperties(callback: Callback<GlobalProperties>)
+
+    /**
+     * Retrieves sidechain transfers list associated with [ethAddress]
+     */
+    fun getSidechainTransfers(ethAddress: String, callback: Callback<List<SidechainTransfer>>)
 
 }

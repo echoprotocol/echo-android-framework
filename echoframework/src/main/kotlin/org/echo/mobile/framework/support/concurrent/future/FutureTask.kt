@@ -1,7 +1,11 @@
 package org.echo.mobile.framework.support.concurrent.future
 
 import org.echo.mobile.framework.exception.LocalException
-import java.util.concurrent.*
+import java.util.concurrent.CancellationException
+import java.util.concurrent.ExecutionException
+import java.util.concurrent.Semaphore
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeoutException
 
 /**
  * Realization of cancellable future

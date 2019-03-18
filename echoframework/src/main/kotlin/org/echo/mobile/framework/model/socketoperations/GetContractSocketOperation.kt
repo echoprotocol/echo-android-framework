@@ -1,11 +1,9 @@
 package org.echo.mobile.framework.model.socketoperations
 
-import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonParser
 import org.echo.mobile.framework.Callback
-import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractStruct
 
 /**
@@ -43,34 +41,20 @@ class GetContractSocketOperation(
         }
 
         try {
-            val result = jsonTree.asJsonObject.get(RESULT_KEY)!!.asJsonObject
+            val result = jsonTree.asJsonObject.get(RESULT_KEY)!!.asJsonArray
 
-            val gson = Gson()
+            val contractType = result[0].asInt
+            val contractCode = result[1]?.asJsonObject?.get(CONTRACT_CODE_KEY)?.asString ?: ""
 
-            val contractInfo = gson.fromJson<ContractInfo>(
-                result.get(ContractStruct.KEY_CONTRACT_INFO),
-                ContractInfo::class.java
-            )
-            val code = result.get(ContractStruct.KEY_CODE).asJsonPrimitive.asString
-
-            val storage = result.get(ContractStruct.KEY_STORAGE).asJsonArray
-            val storageMap = hashMapOf<String, String>()
-
-            val size = storage?.size() ?: 0
-            for (i in 0 until size) {
-                val subArray = storage!!.get(i).asJsonArray
-                val id = subArray.get(0).asString
-                val value = subArray.get(1).asString
-                value?.let { nonNullValue ->
-                    storageMap[id] = nonNullValue
-                }
-            }
-
-            return ContractStruct(contractInfo, code, storageMap)
+            return ContractStruct(contractType, contractCode)
         } catch (ex: Exception) {
             ex.printStackTrace()
         }
 
         return null
+    }
+
+    companion object {
+        private const val CONTRACT_CODE_KEY = "code"
     }
 }

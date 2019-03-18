@@ -1,7 +1,7 @@
 package org.echo.mobile.framework.service
 
 /**
- * Encapsulates login for services of blockchain API
+ * Encapsulates logic for services of blockchain API
  *
  * @author Daria Pechkovskaya
  */

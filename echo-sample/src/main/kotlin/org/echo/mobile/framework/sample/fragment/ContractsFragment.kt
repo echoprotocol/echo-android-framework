@@ -68,10 +68,11 @@ class ContractsFragment : BaseFragment() {
                 etName.text.toString(),
                 etPassword.text.toString(),
                 ECHO_ASSET_ID,
+                null,
                 etBytecode.text.toString(),
-                callback = object : Callback<Boolean> {
+                broadcastCallback = object : Callback<Boolean> {
                     override fun onSuccess(result: Boolean) {
-                        updateStatus("Contract creation succeed", true)
+                        updateStatus("Contract creation broadcasted", true)
                     }
 
                     override fun onError(error: LocalException) {
@@ -89,12 +90,13 @@ class ContractsFragment : BaseFragment() {
                 etNameCall.text.toString(),
                 etPasswordCall.text.toString(),
                 ECHO_ASSET_ID,
+                null,
                 etContractId.text.toString(),
                 etMethodName.text.toString(),
                 parseContractParams(etMethodParams.text.toString()),
-                callback = object : Callback<Boolean> {
+                broadcastCallback = object : Callback<Boolean> {
                     override fun onSuccess(result: Boolean) {
-                        updateStatus("Contract called succeed", true)
+                        updateStatus("Contract called broadcasted", true)
                     }
 
                     override fun onError(error: LocalException) {
@@ -133,8 +135,8 @@ class ContractsFragment : BaseFragment() {
                 object : Callback<ContractResult> {
                     override fun onSuccess(result: ContractResult) {
                         updateStatus(
-                            "expected: ${result.execRes.excepted}, " +
-                                    "output: ${result.execRes.output}", true
+                            "expected: $result, " +
+                                    "output: $result", true
                         )
                     }
 

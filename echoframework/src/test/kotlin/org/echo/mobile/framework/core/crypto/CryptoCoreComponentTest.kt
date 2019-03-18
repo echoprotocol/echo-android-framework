@@ -3,13 +3,23 @@ package org.echo.mobile.framework.core.crypto
 import com.google.common.primitives.UnsignedLong
 import org.echo.mobile.bitcoinj.ECKey
 import org.echo.mobile.framework.core.crypto.internal.CryptoCoreComponentImpl
-import org.echo.mobile.framework.model.*
+import org.echo.mobile.framework.core.crypto.internal.eddsa.key.NaCLKeyPairCryptoAdapter
+import org.echo.mobile.framework.model.Account
+import org.echo.mobile.framework.model.Address
+import org.echo.mobile.framework.model.Asset
+import org.echo.mobile.framework.model.AssetAmount
+import org.echo.mobile.framework.model.AuthorityType
+import org.echo.mobile.framework.model.BlockData
+import org.echo.mobile.framework.model.Transaction
 import org.echo.mobile.framework.model.network.Echodevnet
 import org.echo.mobile.framework.model.network.Network
 import org.echo.mobile.framework.model.operations.TransferOperation
 import org.echo.mobile.framework.model.operations.TransferOperationBuilder
 import org.echo.mobile.framework.support.crypto.Signature.SIGN_DATA_BYTES
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import java.math.BigInteger
@@ -37,7 +47,10 @@ class CryptoCoreComponentTest {
     @Before
     fun setUp() {
         network = Echodevnet()
-        cryptoCoreComponent = CryptoCoreComponentImpl(network)
+        cryptoCoreComponent = CryptoCoreComponentImpl(
+            network,
+            NaCLKeyPairCryptoAdapter()
+        )
     }
 
     @Test

@@ -101,25 +101,30 @@ class AccountSubscriptionManagerImpl(private val network: Network) :
      */
     @SuppressWarnings("ReturnCount")
     override fun processEvent(event: String): List<String> {
-        val params = event.toJsonObject()?.getAsJsonArray(PARAMS_KEY) ?: return listOf()
+        try {
+            val params = event.toJsonObject()?.getAsJsonArray(PARAMS_KEY) ?: return listOf()
 
-        if (params.size() == 0) {
-            return listOf()
+            if (params.size() == 0) {
+                return listOf()
+            }
+
+            val firstParam = params[1].asJsonArray
+
+            if (firstParam.size() == 0) {
+                return listOf()
+            }
+
+            val statisticArray = firstParam[0].asJsonArray
+
+            if (statisticArray.size() == 0) {
+                return listOf()
+            }
+
+            return parseIdFromStatistic(statisticArray)
+
+        } catch (ex: Exception) {
+            return emptyList()
         }
-
-        val firstParam = params[1].asJsonArray
-
-        if (firstParam.size() == 0) {
-            return listOf()
-        }
-
-        val statisticArray = firstParam[0].asJsonArray
-
-        if (statisticArray.size() == 0) {
-            return listOf()
-        }
-
-        return parseIdFromStatistic(statisticArray)
     }
 
     private fun parseIdFromStatistic(statisticArray: JsonArray): List<String> {

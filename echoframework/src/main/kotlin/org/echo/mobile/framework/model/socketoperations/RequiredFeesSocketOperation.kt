@@ -6,7 +6,6 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonParser
 import com.google.gson.reflect.TypeToken
 import org.echo.mobile.framework.Callback
-import org.echo.mobile.framework.ILLEGAL_ID
 import org.echo.mobile.framework.model.Asset
 import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.BaseOperation

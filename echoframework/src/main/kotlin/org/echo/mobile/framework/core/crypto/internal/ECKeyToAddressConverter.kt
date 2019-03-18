@@ -2,8 +2,8 @@ package org.echo.mobile.framework.core.crypto.internal
 
 import org.echo.mobile.bitcoinj.Base58
 import org.echo.mobile.bitcoinj.ECKey
-import org.echo.mobile.framework.support.crypto.Checksum
 import org.echo.mobile.framework.support.Converter
+import org.echo.mobile.framework.support.crypto.Checksum
 
 /**
  * Converts ECKey to address representation

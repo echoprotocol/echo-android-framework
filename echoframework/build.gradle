@@ -9,7 +9,6 @@ android {
     def globalConfiguration = rootProject.extensions.getByName("ext")
 
     compileSdkVersion globalConfiguration["androidCompileSdkVersion"]
-    buildToolsVersion globalConfiguration["androidBuildToolsVersion"]
 
     defaultConfig {
         minSdkVersion globalConfiguration["androidMinSdkVersion"]
@@ -34,7 +33,6 @@ android {
 dependencies {
     //Tests
     testImplementation libraryDependencies.jUnit
-    androidTestImplementation libraryDependencies.testRunner
 
     //Kotlin
     implementation libraryDependencies.kotlin
@@ -44,6 +42,7 @@ dependencies {
     implementation libraryDependencies.socket
     implementation libraryDependencies.guava
     implementation libraryDependencies.spongycastle
+    implementation libraryDependencies.eddsaIroha
 
     //Code analysis
     detekt libraryDependencies.detekt
@@ -76,10 +75,16 @@ task analyzeCode(type: JavaExec) {
     def input = "$projectDir/src"
     def config = "$rootDir/config/detekt-ruleset.yml"
     def filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
-    def params = ['-i', input, '-c', config, '-f', filters]
+    def output = "html:$buildDir/reports/detekt"
+    def params = ['-i', input, '-c', config, '-f', filters, '-r', output]
     args(params)
 }
 
 check.dependsOn(analyzeCode)
 
 apply from: "$rootDir/config/publish.gradle"
+
+task copyJavaDocs(type: Copy) {
+    from "${buildDir}/javadoc"
+    into "${rootDir}/docs"
+}

@@ -3,7 +3,17 @@ package org.echo.mobile.framework.service
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.core.mapper.ObjectMapper
 import org.echo.mobile.framework.exception.LocalException
-import org.echo.mobile.framework.model.*
+import org.echo.mobile.framework.model.Asset
+import org.echo.mobile.framework.model.AssetAmount
+import org.echo.mobile.framework.model.BaseOperation
+import org.echo.mobile.framework.model.Block
+import org.echo.mobile.framework.model.BlockData
+import org.echo.mobile.framework.model.DynamicGlobalProperties
+import org.echo.mobile.framework.model.FullAccount
+import org.echo.mobile.framework.model.GlobalProperties
+import org.echo.mobile.framework.model.GrapheneObject
+import org.echo.mobile.framework.model.Log
+import org.echo.mobile.framework.model.SidechainTransfer
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
@@ -18,7 +28,7 @@ import org.echo.mobile.framework.support.Result
  */
 interface DatabaseApiService : ApiService, AccountsService, GlobalsService,
     AuthorityAndValidationService, BlocksAndTransactionsService, ContractsService, AssetsService,
-    SubscriptionService, ObjectsService
+    SubscriptionService, ObjectsService, CustomOperationService, SidechainService
 
 /**
  * Encapsulates logic, associated with data from account from blockchain database API
@@ -51,6 +61,20 @@ interface AccountsService {
         namesOrIds: List<String>,
         subscribe: Boolean
     ): Result<Exception, Map<String, FullAccount>>
+
+    /**
+     * Fetches accounts associated with private keys in wifs format [wifs]
+     *
+     * Calls [callback]'s success method with map, contains pairs wif -> accounts list, associated with this wif
+     */
+    fun getAccountsByWif(wifs: List<String>, callback: Callback<Map<String, List<FullAccount>>>)
+
+    /**
+     * Fetches accounts associated with private keys in wifs format [wifs]
+     *
+     * Returns map, contains pairs wif -> accounts list, associated with this wif
+     */
+    fun getAccountsByWif(wifs: List<String>): Result<LocalException, Map<String, List<FullAccount>>>
 }
 
 /**
@@ -79,6 +103,11 @@ interface GlobalsService {
      * Retrieves current blockchain block data
      */
     fun getDynamicGlobalProperties(callback: Callback<DynamicGlobalProperties>)
+
+    /**
+     * Retrieves blockchain current configuration parameters
+     */
+    fun getGlobalProperties(callback: Callback<GlobalProperties>)
 
 }
 
@@ -155,6 +184,16 @@ interface AssetsService {
      */
     fun getAssets(assetIds: List<String>): Result<LocalException, List<Asset>>
 
+    /**
+     * Query list of assets by it's [symbolsOrIds]
+     */
+    fun lookupAssetsSymbols(symbolsOrIds: List<String>, callback: Callback<List<Asset>>)
+
+    /**
+     * Query list of assets by it's [symbolsOrIds] and wraps with [Result]
+     */
+    fun lookupAssetsSymbols(symbolsOrIds: List<String>): Result<LocalException, List<Asset>>
+
 }
 
 /**
@@ -185,6 +224,19 @@ interface ContractsService {
     fun getContractResult(historyId: String): Result<LocalException, ContractResult>
 
     /**
+     * Return list of contract logs
+     *
+     * @param contractId   Contract id for fetching logs
+     * @param fromBlock    Number of the earliest block to retrieve
+     * @param toBlock      Number of the most recent block to retrieve
+     */
+    fun getContractLogs(
+        contractId: String,
+        fromBlock: String,
+        toBlock: String
+    ): Result<LocalException, List<Log>>
+
+    /**
      * Returns all contracts from blockchain
      */
     fun getAllContracts(): Result<LocalException, List<ContractInfo>>
@@ -197,11 +249,12 @@ interface ContractsService {
     fun getContracts(contractIds: List<String>): Result<LocalException, List<ContractInfo>>
 
     /**
-     * Return full information about contract
+     * Returns contract code by [contractId]
      *
      * @param contractId Id of contract
      */
     fun getContract(contractId: String): Result<LocalException, ContractStruct>
+
 }
 
 /**
@@ -220,6 +273,18 @@ interface SubscriptionService {
      */
     fun unsubscribe(callback: Callback<Boolean>)
 
+    /**
+     * Subscribes to listening contract logs
+     *
+     * @param contractId   Contract id for fetching logs
+     * @param fromBlock    Number of the earliest block to retrieve
+     * @param toBlock      Number of the most recent block to retrieve
+     */
+    fun subscribeContractLogs(
+        contractId: String,
+        fromBlock: String,
+        toBlock: String
+    ): Result<LocalException, List<Log>>
 }
 
 /**
@@ -236,5 +301,17 @@ interface ObjectsService {
         ids: List<String>,
         mapper: ObjectMapper<T>
     ): Result<Exception, List<T>>
+
+}
+
+/**
+ * Encapsulates logic, associated with sidechain information processing
+ */
+interface SidechainService {
+
+    /**
+     * Retrieves sidechain transfers list associated with [ethAddress]
+     */
+    fun getSidechainTransfers(ethAddress: String, callback: Callback<List<SidechainTransfer>>)
 
 }

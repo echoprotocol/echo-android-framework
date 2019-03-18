@@ -4,6 +4,7 @@ import org.spongycastle.util.encoders.Hex
 
 private const val NUMBER_RADIX = 16
 private const val SLICE_SIZE = 64
+private const val ADDRESS_TYPE_SIZE = 2
 
 /**
  * Describes functionality for contract result decoder
@@ -26,7 +27,7 @@ open class NumberOutputValueType : OutputValueType {
 
     override fun decode(source: ByteArray): Pair<Any, ByteArray> {
         val sourceSlice = source.take(SLICE_SIZE)
-        val value = String(sourceSlice.toByteArray()).toLong(NUMBER_RADIX)
+        val value = String(sourceSlice.toByteArray()).toBigInteger(NUMBER_RADIX)
         return Pair(value, source.copyOfRange(SLICE_SIZE, source.size))
     }
 
@@ -81,16 +82,95 @@ class StringOutputValueType : OutputValueType {
 
 
 /**
- * Implementation of [OutputValueType] for address types
+ * Implementation of [OutputValueType] for all address types.
+ * Decodes prefixed address values. For example, account address: 1.2.1.
+ * If address is not clear, throws exception.
  */
-class AddressOutputValueType : OutputValueType {
+open class AddressOutputValueType : OutputValueType {
 
     override fun decode(source: ByteArray): Pair<Any, ByteArray> {
-        val address = String(source.copyOfRange(0, SLICE_SIZE)).toLong(NUMBER_RADIX)
-
-        return Pair(address, source.copyOfRange(SLICE_SIZE, source.size))
+        return try {
+            AccountAddressOutputValueType().decode(source)
+        } catch (ex: NumberFormatException) {
+            ContractAddressOutputValueType().decode(source)
+        }
     }
 
+}
+
+/**
+ * Implementation of [OutputValueType] for account address types.
+ * Can decode addresses with account prefix "1.2." and without it.
+ */
+class AccountAddressOutputValueType : AddressOutputValueType() {
+
+    companion object {
+        const val PREFIX = "1.2."
+    }
+
+    override fun decode(source: ByteArray): Pair<Any, ByteArray> {
+        val address = String(source.copyOfRange(0, SLICE_SIZE))
+            .toLong(NUMBER_RADIX).toString()
+        return Pair(PREFIX + address, source.copyOfRange(SLICE_SIZE, source.size))
+    }
+}
+
+/**
+ * Implementation of [OutputValueType] for contract address types
+ * Can decode addresses with contract prefix "1.16." and without it.
+ */
+class ContractAddressOutputValueType : AddressOutputValueType() {
+
+    companion object {
+        const val PREFIX = "1.16."
+        const val CONTRACT_ADDRESS_SIZE = 40
+        const val CONTRACT_ADDRESS_PREFIX = "01"
+    }
+
+    override fun decode(source: ByteArray): Pair<Any, ByteArray> {
+        val startFormatRange: Int
+        val endFormatRange: Int
+
+        val isFull = source.size >= SLICE_SIZE &&
+                String(source.copyOfRange(0, SLICE_SIZE)).indexOf(CONTRACT_ADDRESS_PREFIX) > 0
+
+        if (isFull) {
+            startFormatRange = SLICE_SIZE / 2
+            endFormatRange = SLICE_SIZE
+        } else {
+            startFormatRange = CONTRACT_ADDRESS_SIZE - SLICE_SIZE / 2 -
+                    CONTRACT_ADDRESS_PREFIX.length
+            endFormatRange = CONTRACT_ADDRESS_SIZE
+        }
+
+        val address = String(source.copyOfRange(startFormatRange, endFormatRange))
+            .toLong(NUMBER_RADIX).toString()
+
+        return Pair(PREFIX + address, source.copyOfRange(endFormatRange, source.size))
+    }
+}
+
+/**
+ * Implementation of [OutputValueType] for ethereum contract address types
+ */
+class EthContractAddressOutputValueType : OutputValueType {
+
+    companion object {
+        const val CONTRACT_ADDRESS_SIZE = 40
+        const val ETH_PREFIX_PREFIX = "0x"
+    }
+
+    override fun decode(source: ByteArray): Pair<Any, ByteArray> {
+        val startFormatRange: Int = SLICE_SIZE - CONTRACT_ADDRESS_SIZE
+        val endFormatRange: Int = SLICE_SIZE
+
+        val ethAddressHex = String(source.copyOfRange(startFormatRange, endFormatRange))
+
+        return Pair(
+            ETH_PREFIX_PREFIX + ethAddressHex,
+            source.copyOfRange(endFormatRange, source.size)
+        )
+    }
 }
 
 /**
@@ -106,7 +186,7 @@ class FixedArrayOutputValueType(private val size: Int, private val itemType: Out
     private fun processList(listSource: ByteArray, count: Int): Pair<List<Any>, ByteArray> {
         var sourceResult = listSource
         val result = mutableListOf<Any>()
-        (0 until count).forEach {
+        (0 until count).forEach { _ ->
             val candidate = itemType.decode(sourceResult)
             result.add(candidate.first)
             sourceResult = candidate.second
@@ -154,7 +234,7 @@ class ListValueType(private val itemType: OutputValueType) : OutputValueType {
     private fun processList(listSource: ByteArray, count: Int): Pair<List<Any>, ByteArray> {
         var sourceResult = listSource
         val result = mutableListOf<Any>()
-        (0 until count).forEach {
+        (0 until count).forEach { _ ->
             val candidate = itemType.decode(sourceResult)
             result.add(candidate.first)
             sourceResult = candidate.second

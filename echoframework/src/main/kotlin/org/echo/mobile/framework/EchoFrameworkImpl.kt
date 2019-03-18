@@ -1,25 +1,64 @@
 package org.echo.mobile.framework
 
+import org.echo.mobile.framework.core.crypto.internal.eddsa.EdDSASecurityProvider
 import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent
 import org.echo.mobile.framework.core.mapper.internal.MapperCoreComponentImpl
 import org.echo.mobile.framework.core.socket.internal.SocketCoreComponentImpl
-import org.echo.mobile.framework.facade.*
-import org.echo.mobile.framework.facade.internal.*
-import org.echo.mobile.framework.model.*
-import org.echo.mobile.framework.model.contract.Contract
+import org.echo.mobile.framework.facade.AssetsFacade
+import org.echo.mobile.framework.facade.AuthenticationFacade
+import org.echo.mobile.framework.facade.ContractsFacade
+import org.echo.mobile.framework.facade.FeeFacade
+import org.echo.mobile.framework.facade.InformationFacade
+import org.echo.mobile.framework.facade.InitializerFacade
+import org.echo.mobile.framework.facade.SubscriptionFacade
+import org.echo.mobile.framework.facade.TransactionsFacade
+import org.echo.mobile.framework.facade.internal.AssetsFacadeImpl
+import org.echo.mobile.framework.facade.internal.AuthenticationFacadeImpl
+import org.echo.mobile.framework.facade.internal.ContractsFacadeImpl
+import org.echo.mobile.framework.facade.internal.FeeFacadeImpl
+import org.echo.mobile.framework.facade.internal.InformationFacadeImpl
+import org.echo.mobile.framework.facade.internal.InitializerFacadeImpl
+import org.echo.mobile.framework.facade.internal.NotifiedTransactionsHelper
+import org.echo.mobile.framework.facade.internal.SubscriptionFacadeImpl
+import org.echo.mobile.framework.facade.internal.TransactionsFacadeImpl
+import org.echo.mobile.framework.model.Asset
+import org.echo.mobile.framework.model.Balance
+import org.echo.mobile.framework.model.Block
+import org.echo.mobile.framework.model.DynamicGlobalProperties
+import org.echo.mobile.framework.model.FullAccount
+import org.echo.mobile.framework.model.GlobalProperties
+import org.echo.mobile.framework.model.HistoryResponse
+import org.echo.mobile.framework.model.Log
+import org.echo.mobile.framework.model.SidechainTransfer
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
 import org.echo.mobile.framework.model.contract.input.InputValue
-import org.echo.mobile.framework.service.*
-import org.echo.mobile.framework.service.internal.*
+import org.echo.mobile.framework.service.AccountHistoryApiService
+import org.echo.mobile.framework.service.CryptoApiService
+import org.echo.mobile.framework.service.DatabaseApiService
+import org.echo.mobile.framework.service.LoginApiService
+import org.echo.mobile.framework.service.NetworkBroadcastApiService
+import org.echo.mobile.framework.service.RegistrationApiService
+import org.echo.mobile.framework.service.UpdateListener
+import org.echo.mobile.framework.service.internal.AccountHistoryApiServiceImpl
+import org.echo.mobile.framework.service.internal.CryptoApiServiceImpl
+import org.echo.mobile.framework.service.internal.DatabaseApiServiceImpl
+import org.echo.mobile.framework.service.internal.LoginApiServiceImpl
+import org.echo.mobile.framework.service.internal.NetworkBroadcastApiServiceImpl
+import org.echo.mobile.framework.service.internal.RegistrationApiServiceImpl
 import org.echo.mobile.framework.support.Settings
-import org.echo.mobile.framework.support.concurrent.*
+import org.echo.mobile.framework.support.concurrent.Dispatcher
+import org.echo.mobile.framework.support.concurrent.ExecutorServiceDispatcher
+import org.echo.mobile.framework.support.concurrent.MainThreadAccountListener
+import org.echo.mobile.framework.support.concurrent.MainThreadCallback
+import org.echo.mobile.framework.support.concurrent.MainThreadUpdateListener
+import java.security.Security
 
 /**
  * Implementation of [EchoFramework] base library API
  *
- * Delegates all logic to specific facades/
+ * Delegates all logic to specific facades
  *
  * All methods and services can lead to error if you use them without associated initialized api id,
  * that eou need to specify in [Settings] before library initialization
@@ -33,6 +72,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
     override val networkBroadcastApiService: NetworkBroadcastApiService
     override val cryptoApiService: CryptoApiService
     override val loginService: LoginApiService
+    override val registrationService: RegistrationApiService
 
     private val initializerFacade: InitializerFacade
     private val authenticationFacade: AuthenticationFacade
@@ -50,6 +90,8 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
      * Initializes and setups all facades with required dependencies
      */
     init {
+        Security.addProvider(EdDSASecurityProvider())
+
         LoggerCoreComponent.logLevel = settings.logLevel
         returnOnMainThread = settings.returnOnMainThread
 
@@ -61,11 +103,13 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             socketCoreComponent,
             settings.network
         )
-        databaseApiService = DatabaseApiServiceImpl(socketCoreComponent, settings.network)
+        databaseApiService =
+            DatabaseApiServiceImpl(socketCoreComponent, settings.cryptoComponent, settings.network)
         networkBroadcastApiService =
-                NetworkBroadcastApiServiceImpl(socketCoreComponent, settings.cryptoComponent)
+            NetworkBroadcastApiServiceImpl(socketCoreComponent, settings.cryptoComponent)
         cryptoApiService = CryptoApiServiceImpl(socketCoreComponent)
         loginService = LoginApiServiceImpl(socketCoreComponent)
+        registrationService = RegistrationApiServiceImpl(socketCoreComponent)
 
         initializerFacade = InitializerFacadeImpl(
             socketCoreComponent,
@@ -75,16 +119,21 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             databaseApiService,
             cryptoApiService,
             accountHistoryApiService,
-            networkBroadcastApiService
+            networkBroadcastApiService,
+            registrationService
         )
         authenticationFacade = AuthenticationFacadeImpl(
             databaseApiService,
             networkBroadcastApiService,
+            registrationService,
             settings.cryptoComponent,
             settings.network
         )
         feeFacade = FeeFacadeImpl(databaseApiService, settings.cryptoComponent)
-        informationFacade = InformationFacadeImpl(databaseApiService, accountHistoryApiService)
+        informationFacade = InformationFacadeImpl(
+            databaseApiService,
+            accountHistoryApiService
+        )
         subscriptionFacade = SubscriptionFacadeImpl(
             socketCoreComponent,
             databaseApiService,
@@ -95,15 +144,24 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             networkBroadcastApiService,
             settings.cryptoComponent
         )
+
+        val notifiedTransactionsHelper =
+            NotifiedTransactionsHelper(
+                socketCoreComponent,
+                settings.network
+            )
+
         assetsFacade = AssetsFacadeImpl(
             databaseApiService,
             networkBroadcastApiService,
-            settings.cryptoComponent
+            settings.cryptoComponent,
+            notifiedTransactionsHelper
         )
         contractsFacade = ContractsFacadeImpl(
             databaseApiService,
             networkBroadcastApiService,
-            settings.cryptoComponent
+            settings.cryptoComponent,
+            notifiedTransactionsHelper
         )
     }
 
@@ -136,6 +194,15 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         )
     })
 
+    override fun register(userName: String, password: String, callback: Callback<Boolean>) =
+        dispatch(Runnable {
+            authenticationFacade.register(
+                userName,
+                password,
+                callback.wrapOriginal()
+            )
+        })
+
     override fun getFeeForTransferOperation(
         fromNameOrId: String,
         password: String,
@@ -158,19 +225,96 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         )
     })
 
+    override fun getFeeForTransferOperationWithWif(
+        fromNameOrId: String,
+        wif: String,
+        toNameOrId: String,
+        amount: String,
+        asset: String,
+        feeAsset: String?,
+        message: String?,
+        callback: Callback<String>
+    ) = dispatch(Runnable {
+        feeFacade.getFeeForTransferOperationWithWif(
+            fromNameOrId,
+            wif,
+            toNameOrId,
+            amount,
+            asset,
+            feeAsset,
+            message,
+            callback.wrapOriginal()
+        )
+    })
+
+    override fun getFeeForContractOperation(
+        userNameOrId: String,
+        contractId: String,
+        methodName: String,
+        methodParams: List<InputValue>,
+        assetId: String,
+        feeAsset: String?,
+        callback: Callback<String>
+    ) = dispatch(Runnable {
+        feeFacade.getFeeForContractOperation(
+            userNameOrId,
+            contractId,
+            methodName,
+            methodParams,
+            assetId,
+            feeAsset,
+            callback.wrapOriginal()
+        )
+    })
+
+    override fun getFeeForContractOperation(
+        userNameOrId: String,
+        contractId: String,
+        code: String,
+        assetId: String,
+        feeAsset: String?,
+        callback: Callback<String>
+    ) = dispatch(Runnable {
+        feeFacade.getFeeForContractOperation(
+            userNameOrId,
+            contractId,
+            code,
+            assetId,
+            feeAsset,
+            callback.wrapOriginal()
+        )
+    })
+
     override fun getAccount(nameOrId: String, callback: Callback<FullAccount>) =
         dispatch(Runnable {
             informationFacade.getAccount(nameOrId, callback.wrapOriginal())
         })
 
-    override fun checkAccountReserved(nameOrId: String, callback: Callback<Boolean>) =
+    override fun getAccountsByWif(wif: String, callback: Callback<List<FullAccount>>) =
+        dispatch(Runnable {
+            informationFacade.getAccountsByWif(wif, callback.wrapOriginal())
+        })
+
+    override fun checkAccountReserved(
+        nameOrId: String,
+        callback: Callback<Boolean>
+    ) =
         dispatch(Runnable {
             informationFacade.checkAccountReserved(nameOrId, callback.wrapOriginal())
         })
 
-    override fun getBalance(nameOrId: String, asset: String, callback: Callback<Balance>) =
+    override fun getBalance(
+        nameOrId: String,
+        asset: String,
+        callback: Callback<Balance>
+    ) =
         dispatch(Runnable {
             informationFacade.getBalance(nameOrId, asset, callback.wrapOriginal())
+        })
+
+    override fun getGlobalProperties(callback: Callback<GlobalProperties>) =
+        dispatch(Runnable {
+            informationFacade.getGlobalProperties(callback.wrapOriginal())
         })
 
     override fun subscribeOnAccount(
@@ -185,7 +329,10 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         )
     })
 
-    override fun subscribeOnBlock(listener: UpdateListener<Block>, callback: Callback<Boolean>) =
+    override fun subscribeOnBlock(
+        listener: UpdateListener<Block>,
+        callback: Callback<Boolean>
+    ) =
         dispatch(Runnable {
             subscriptionFacade.subscribeOnBlock(
                 listener.wrapOriginal(),
@@ -203,43 +350,67 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         )
     })
 
-    override fun subscribeOnContract(
+    override fun subscribeOnContractLogs(
         contractId: String,
-        listener: UpdateListener<Contract>,
+        listener: UpdateListener<List<Log>>,
         callback: Callback<Boolean>
     ) = dispatch(Runnable {
-        subscriptionFacade.subscribeOnContract(
-            contractId,
-            listener.wrapOriginal(),
-            callback.wrapOriginal()
-        )
+        subscriptionFacade.subscribeOnContractLogs(contractId, listener, callback)
     })
 
-    override fun unsubscribeFromContract(contractId: String, callback: Callback<Boolean>) =
+    override fun unsubscribeFromContractLogs(
+        contractId: String,
+        callback: Callback<Boolean>
+    ) =
         dispatch(Runnable {
-            subscriptionFacade.unsubscribeFromContract(
+            subscriptionFacade.unsubscribeFromContractLogs(
                 contractId,
                 callback.wrapOriginal()
             )
         })
 
     override fun unsubscribeFromBlockchainData(callback: Callback<Boolean>) =
-        dispatch(Runnable { subscriptionFacade.unsubscribeFromBlockchainData(callback) })
+        dispatch(Runnable {
+            subscriptionFacade.unsubscribeFromBlockchainData(callback)
+        })
 
     override fun unsubscribeFromBlock(callback: Callback<Boolean>) =
-        dispatch(Runnable { subscriptionFacade.unsubscribeFromBlock(callback) })
+        dispatch(Runnable {
+            subscriptionFacade.unsubscribeFromBlock(callback)
+        })
+
+    override fun getSidechainTransfers(
+        ethAddress: String,
+        callback: Callback<List<SidechainTransfer>>
+    ) = dispatch(Runnable {
+        informationFacade.getSidechainTransfers(ethAddress, callback)
+    })
 
     override fun createAsset(
         name: String,
         password: String,
         asset: Asset,
-        callback: Callback<Boolean>
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<String>?
     ) = dispatch(Runnable {
         assetsFacade.createAsset(
-            name,
-            password,
+            name, password,
             asset,
-            callback
+            broadcastCallback.wrapOriginal(), resultCallback?.wrapOriginal()
+        )
+    })
+
+    override fun createAssetWithWif(
+        name: String,
+        wif: String,
+        asset: Asset,
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<String>?
+    ) = dispatch(Runnable {
+        assetsFacade.createAssetWithWif(
+            name, wif,
+            asset,
+            broadcastCallback.wrapOriginal(), resultCallback?.wrapOriginal()
         )
     })
 
@@ -263,19 +434,57 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         )
     })
 
-    override fun listAssets(lowerBound: String, limit: Int, callback: Callback<List<Asset>>) =
+    override fun issueAssetWithWif(
+        issuerNameOrId: String,
+        wif: String,
+        asset: String,
+        amount: String,
+        destinationIdOrName: String,
+        message: String?,
+        callback: Callback<Boolean>
+    ) = dispatch(Runnable {
+        assetsFacade.issueAssetWithWif(
+            issuerNameOrId,
+            wif,
+            asset,
+            amount,
+            destinationIdOrName,
+            message,
+            callback
+        )
+    })
+
+    override fun listAssets(
+        lowerBound: String,
+        limit: Int,
+        callback: Callback<List<Asset>>
+    ) =
         dispatch(Runnable {
             assetsFacade.listAssets(lowerBound, limit, callback)
         })
 
-    override fun getAssets(assetIds: List<String>, callback: Callback<List<Asset>>) =
+    override fun getAssets(
+        assetIds: List<String>,
+        callback: Callback<List<Asset>>
+    ) =
         dispatch(Runnable {
             assetsFacade.getAssets(assetIds, callback)
         })
 
-    override fun unsubscribeFromAccount(nameOrId: String, callback: Callback<Boolean>) =
+    override fun lookupAssetsSymbols(symbolsOrIds: List<String>, callback: Callback<List<Asset>>) =
         dispatch(Runnable {
-            subscriptionFacade.unsubscribeFromAccount(nameOrId, callback.wrapOriginal())
+            assetsFacade.lookupAssetsSymbols(symbolsOrIds, callback)
+        })
+
+    override fun unsubscribeFromAccount(
+        nameOrId: String,
+        callback: Callback<Boolean>
+    ) =
+        dispatch(Runnable {
+            subscriptionFacade.unsubscribeFromAccount(
+                nameOrId,
+                callback.wrapOriginal()
+            )
         })
 
     override fun unsubscribeAll(callback: Callback<Boolean>) =
@@ -305,6 +514,28 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         )
     })
 
+    override fun sendTransferOperationWithWif(
+        nameOrId: String,
+        wif: String,
+        toNameOrId: String,
+        amount: String,
+        asset: String,
+        feeAsset: String?,
+        message: String?,
+        callback: Callback<Boolean>
+    ) {
+        transactionsFacade.sendTransferOperationWithWif(
+            nameOrId,
+            wif,
+            toNameOrId,
+            amount,
+            asset,
+            feeAsset,
+            message,
+            callback.wrapOriginal()
+        )
+    }
+
     override fun getAccountHistory(
         nameOrId: String,
         transactionStartId: String,
@@ -325,19 +556,43 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         registrarNameOrId: String,
         password: String,
         assetId: String,
+        feeAsset: String?,
         byteCode: String,
-        gasLimit: Long,
-        gasPrice: Long,
-        callback: Callback<Boolean>
+        params: List<InputValue>,
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<String>?
     ) = dispatch(Runnable {
         contractsFacade.createContract(
             registrarNameOrId,
             password,
             assetId,
+            feeAsset,
             byteCode,
-            gasLimit,
-            gasPrice,
-            callback.wrapOriginal()
+            params,
+            broadcastCallback.wrapOriginal(),
+            resultCallback?.wrapOriginal()
+        )
+    })
+
+    override fun createContractWithWif(
+        registrarNameOrId: String,
+        wif: String,
+        assetId: String,
+        feeAsset: String?,
+        byteCode: String,
+        params: List<InputValue>,
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<String>?
+    ) = dispatch(Runnable {
+        contractsFacade.createContractWithWif(
+            registrarNameOrId,
+            wif,
+            assetId,
+            feeAsset,
+            byteCode,
+            params,
+            broadcastCallback.wrapOriginal(),
+            resultCallback?.wrapOriginal()
         )
     })
 
@@ -345,23 +600,99 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         userNameOrId: String,
         password: String,
         assetId: String,
+        feeAsset: String?,
         contractId: String,
         methodName: String,
         methodParams: List<InputValue>,
-        gasLimit: Long,
-        gasPrice: Long,
-        callback: Callback<Boolean>
+        value: String,
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<String>?
     ) = dispatch(Runnable {
         contractsFacade.callContract(
             userNameOrId,
             password,
             assetId,
+            feeAsset,
             contractId,
             methodName,
             methodParams,
-            gasLimit,
-            gasPrice,
-            callback.wrapOriginal()
+            value,
+            broadcastCallback.wrapOriginal(),
+            resultCallback?.wrapOriginal()
+        )
+    })
+
+    override fun callContract(
+        userNameOrId: String,
+        password: String,
+        assetId: String,
+        feeAsset: String?,
+        contractId: String,
+        code: String,
+        value: String,
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<String>?
+    ) = dispatch(Runnable {
+        contractsFacade.callContract(
+            userNameOrId,
+            password,
+            assetId,
+            feeAsset,
+            contractId,
+            code,
+            value,
+            broadcastCallback.wrapOriginal(),
+            resultCallback?.wrapOriginal()
+        )
+    })
+
+    override fun callContractWithWif(
+        userNameOrId: String,
+        wif: String,
+        assetId: String,
+        feeAsset: String?,
+        contractId: String,
+        methodName: String,
+        methodParams: List<InputValue>,
+        value: String,
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<String>?
+    ) = dispatch(Runnable {
+        contractsFacade.callContractWithWif(
+            userNameOrId,
+            wif,
+            assetId,
+            feeAsset,
+            contractId,
+            methodName,
+            methodParams,
+            value,
+            broadcastCallback.wrapOriginal(),
+            resultCallback?.wrapOriginal()
+        )
+    })
+
+    override fun callContractWithWif(
+        userNameOrId: String,
+        wif: String,
+        assetId: String,
+        feeAsset: String?,
+        contractId: String,
+        code: String,
+        value: String,
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<String>?
+    ) = dispatch(Runnable {
+        contractsFacade.callContractWithWif(
+            userNameOrId,
+            wif,
+            assetId,
+            feeAsset,
+            contractId,
+            code,
+            value,
+            broadcastCallback.wrapOriginal(),
+            resultCallback?.wrapOriginal()
         )
     })
 
@@ -383,26 +714,72 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         )
     })
 
+    override fun queryContract(
+        userNameOrId: String,
+        assetId: String,
+        contractId: String,
+        code: String,
+        callback: Callback<String>
+    ) = dispatch(Runnable {
+        contractsFacade.queryContract(
+            userNameOrId,
+            assetId,
+            contractId,
+            code,
+            callback
+        )
+    })
+
     override fun getContractResult(
         historyId: String,
         callback: Callback<ContractResult>
     ) = dispatch(Runnable {
-        contractsFacade.getContractResult(historyId, callback)
+        contractsFacade.getContractResult(
+            historyId,
+            callback
+        )
     })
 
-    override fun getContracts(contractIds: List<String>, callback: Callback<List<ContractInfo>>) =
+    override fun getContractLogs(
+        contractId: String,
+        fromBlock: String,
+        toBlock: String,
+        callback: Callback<List<Log>>
+    ) = dispatch(Runnable {
+        contractsFacade.getContractLogs(
+            contractId, fromBlock, toBlock, callback
+        )
+    })
+
+    override fun getContracts(
+        contractIds: List<String>,
+        callback: Callback<List<ContractInfo>>
+    ) =
         dispatch(Runnable {
-            contractsFacade.getContracts(contractIds, callback)
+            contractsFacade.getContracts(
+                contractIds,
+                callback
+            )
         })
 
-    override fun getAllContracts(callback: Callback<List<ContractInfo>>) =
+    override fun getAllContracts(
+        callback: Callback<List<ContractInfo>>
+    ) =
         dispatch(Runnable {
-            contractsFacade.getAllContracts(callback)
+            contractsFacade.getAllContracts(
+                callback
+            )
         })
 
-    override fun getContract(contractId: String, callback: Callback<ContractStruct>) =
+    override fun getContract(
+        contractId: String,
+        callback: Callback<ContractStruct>
+    ) =
         dispatch(Runnable {
-            contractsFacade.getContract(contractId, callback)
+            contractsFacade.getContract(
+                contractId,
+                callback
+            )
         })
 
     private fun <T> Callback<T>.wrapOriginal(): Callback<T> =
@@ -416,16 +793,24 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         if (!returnOnMainThread) {
             this
         } else {
-            MainThreadAccountListener(this)
+            MainThreadAccountListener(
+                this
+            )
         }
 
     private fun <T> UpdateListener<T>.wrapOriginal(): UpdateListener<T> =
         if (!returnOnMainThread) {
             this
         } else {
-            MainThreadUpdateListener(this)
+            MainThreadUpdateListener(
+                this
+            )
         }
 
-    private fun dispatch(job: Runnable) = dispatcher.dispatch(job)
+    private fun dispatch(
+        job: Runnable
+    ) = dispatcher.dispatch(
+        job
+    )
 
 }

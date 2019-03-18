@@ -2,20 +2,45 @@ package org.echo.mobile.framework.facade.internal
 
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent
+import org.echo.mobile.framework.exception.AccountNotFoundException
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.exception.NotFoundException
 import org.echo.mobile.framework.facade.InformationFacade
-import org.echo.mobile.framework.model.*
-import org.echo.mobile.framework.model.operations.*
+import org.echo.mobile.framework.model.Account
+import org.echo.mobile.framework.model.Asset
+import org.echo.mobile.framework.model.Balance
+import org.echo.mobile.framework.model.BaseOperation
+import org.echo.mobile.framework.model.Block
+import org.echo.mobile.framework.model.FullAccount
+import org.echo.mobile.framework.model.GlobalProperties
+import org.echo.mobile.framework.model.HistoricalTransfer
+import org.echo.mobile.framework.model.HistoryResponse
+import org.echo.mobile.framework.model.HistoryResult
+import org.echo.mobile.framework.model.SidechainTransfer
+import org.echo.mobile.framework.model.operations.AccountCreateOperation
+import org.echo.mobile.framework.model.operations.AccountUpdateOperation
+import org.echo.mobile.framework.model.operations.ContractCallOperation
+import org.echo.mobile.framework.model.operations.ContractCreateOperation
+import org.echo.mobile.framework.model.operations.ContractOperation
+import org.echo.mobile.framework.model.operations.CreateAssetOperation
+import org.echo.mobile.framework.model.operations.IssueAssetOperation
+import org.echo.mobile.framework.model.operations.OperationType
+import org.echo.mobile.framework.model.operations.TransferOperation
 import org.echo.mobile.framework.processResult
 import org.echo.mobile.framework.service.AccountHistoryApiService
 import org.echo.mobile.framework.service.DatabaseApiService
-import org.echo.mobile.framework.support.*
+import org.echo.mobile.framework.support.EthAddressValidator
+import org.echo.mobile.framework.support.EthAddressValidator.ADDRESS_PREFIX
+import org.echo.mobile.framework.support.Result
 import org.echo.mobile.framework.support.Result.Error
 import org.echo.mobile.framework.support.Result.Value
 import org.echo.mobile.framework.support.concurrent.future.FutureTask
 import org.echo.mobile.framework.support.concurrent.future.completeCallback
 import org.echo.mobile.framework.support.concurrent.future.wrapResult
+import org.echo.mobile.framework.support.error
+import org.echo.mobile.framework.support.map
+import org.echo.mobile.framework.support.parse
+import org.echo.mobile.framework.support.value
 
 /**
  * Implementation of [InformationFacade]
@@ -34,11 +59,17 @@ class InformationFacadeImpl(
             { fullAccount ->
                 fullAccount?.let { notNullAccount ->
                     callback.onSuccess(notNullAccount)
-                } ?: callback.onError(NotFoundException("Account not found."))
+                } ?: callback.onError(AccountNotFoundException("Account not found."))
             },
             { error ->
                 callback.onError(LocalException(error.message, error))
             })
+
+    override fun getAccountsByWif(wif: String, callback: Callback<List<FullAccount>>) {
+        databaseApiService.getAccountsByWif(listOf(wif))
+            .value { accountsMap -> callback.onSuccess(accountsMap[wif]?.toList() ?: listOf()) }
+            .error { error -> callback.onError(error) }
+    }
 
     override fun checkAccountReserved(nameOrId: String, callback: Callback<Boolean>) =
         findAccount(nameOrId,
@@ -70,6 +101,22 @@ class InformationFacadeImpl(
                 callback.onError(LocalException(error.message, error))
             })
 
+    override fun getGlobalProperties(callback: Callback<GlobalProperties>) =
+        databaseApiService.getGlobalProperties(callback)
+
+    override fun getSidechainTransfers(
+        ethAddress: String,
+        callback: Callback<List<SidechainTransfer>>
+    ) {
+        if (!EthAddressValidator.isAddressValid(ethAddress)) {
+            throw LocalException("Invalid ethereum address $ethAddress")
+        }
+
+        val processedAddress = ethAddress.replace(ADDRESS_PREFIX, "").toLowerCase()
+
+        databaseApiService.getSidechainTransfers(processedAddress, callback)
+    }
+
     private fun findAccount(
         nameOrId: String,
         success: (FullAccount?) -> Unit,
@@ -95,7 +142,7 @@ class InformationFacadeImpl(
         } else {
             Error(LocalException("Account balances are empty."))
         }
-    } ?: Error(NotFoundException("Account not found."))
+    } ?: Error(AccountNotFoundException("Account not found."))
 
     override fun getAccountHistory(
         nameOrId: String,
@@ -193,9 +240,18 @@ class InformationFacadeImpl(
                         accountsRegistry
                     )
 
-                OperationType.CONTRACT_OPERATION ->
+                OperationType.CONTRACT_CREATE_OPERATION ->
                     processContractOperation(
-                        operation as ContractOperation,
+                        operation as ContractCreateOperation,
+                        transaction.result,
+                        accountsRegistry,
+                        assetsRegistry
+                    )
+
+                OperationType.CONTRACT_CALL_OPERATION ->
+                    processContractOperation(
+                        operation as ContractCallOperation,
+                        transaction.result,
                         accountsRegistry,
                         assetsRegistry
                     )
@@ -252,10 +308,12 @@ class InformationFacadeImpl(
         accountRegistry: MutableMap<String, Account>,
         assetsRegistry: MutableList<Asset>
     ) {
-        val createdAssetId = operation.asset.getObjectId()
+        val createdAssetSymbol = operation.asset.symbol
 
-        getAsset(createdAssetId, assetsRegistry)?.let { notNullAsset ->
-            operation.asset = notNullAsset
+        if (createdAssetSymbol != null) {
+            getAssetBySymbol(createdAssetSymbol, assetsRegistry)?.let { notNullAsset ->
+                operation.asset = notNullAsset
+            }
         }
 
         val accountId = operation.asset.issuer?.getObjectId() ?: return
@@ -310,13 +368,14 @@ class InformationFacadeImpl(
 
     private fun processContractOperation(
         operation: ContractOperation,
+        historyResult: HistoryResult?,
         accountRegistry: MutableMap<String, Account>,
         assetsRegistry: MutableList<Asset>
     ) {
-        val assetId = operation.asset.getObjectId()
+        val assetId = operation.value.asset.getObjectId()
 
         getAsset(assetId, assetsRegistry)?.let { notNullAsset ->
-            operation.asset = notNullAsset
+            operation.value.asset = notNullAsset
         }
 
         val registrar = operation.registrar.getObjectId()
@@ -325,6 +384,13 @@ class InformationFacadeImpl(
 
         accountRegistry[registrar]?.let { notNullAccount ->
             operation.registrar = notNullAccount
+        }
+
+        historyResult?.objectId?.let { resultId ->
+            databaseApiService.getContractResult(resultId)
+                .value { contractResult ->
+                    operation.contractResult = contractResult
+                }
         }
     }
 
@@ -346,6 +412,23 @@ class InformationFacadeImpl(
         databaseApiService.getAssets(listOf(assetId))
             .value { assets ->
                 assets.find { it.getObjectId() == assetId }?.let { notNullAsset ->
+                    assetsRegistry.add(notNullAsset)
+                    return notNullAsset
+                }
+            }
+        return null
+    }
+
+    private fun getAssetBySymbol(symbol: String, assetsRegistry: MutableList<Asset>): Asset? {
+        val cachedAsset = assetsRegistry.find { it.symbol == symbol }
+
+        cachedAsset?.let { notNullCachedAsset ->
+            return notNullCachedAsset
+        }
+
+        databaseApiService.lookupAssetsSymbols(listOf(symbol))
+            .value { assets ->
+                assets.find { it.symbol == symbol }?.let { notNullAsset ->
                     assetsRegistry.add(notNullAsset)
                     return notNullAsset
                 }

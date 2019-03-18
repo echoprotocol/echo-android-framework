@@ -124,14 +124,14 @@ class Asset(id: String) : GrapheneObject(id), ByteSerializable {
     }
 
     companion object {
-       const val ISSUER_KEY = "issuer"
-       const val PRECISION_KEY = "precision"
-       const val SYMBOL_KEY = "symbol"
-       const val DYNAMIC_ASSET_DATA_ID_KEY = "dynamic_asset_data_id"
-       const val OPTIONS_KEY = "options"
-       const val BITASSET_DATA_ID_KEY = "bitasset_data_id"
-       const val BITASSETS_OPTIONS_KEY = "bitasset_opts"
-       const val PREDICTION_MARKET_KEY = "is_prediction_market"
+        const val ISSUER_KEY = "issuer"
+        const val PRECISION_KEY = "precision"
+        const val SYMBOL_KEY = "symbol"
+        const val DYNAMIC_ASSET_DATA_ID_KEY = "dynamic_asset_data_id"
+        const val OPTIONS_KEY = "options"
+        const val BITASSET_DATA_ID_KEY = "bitasset_data_id"
+        const val BITASSETS_OPTIONS_KEY = "bitasset_opts"
+        const val PREDICTION_MARKET_KEY = "is_prediction_market"
     }
 
 }

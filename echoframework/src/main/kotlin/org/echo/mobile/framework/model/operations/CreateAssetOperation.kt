@@ -2,8 +2,21 @@ package org.echo.mobile.framework.model.operations
 
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.UnsignedLong
-import com.google.gson.*
-import org.echo.mobile.framework.model.*
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonArray
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonElement
+import com.google.gson.JsonObject
+import com.google.gson.JsonParseException
+import com.google.gson.JsonSerializationContext
+import com.google.gson.JsonSerializer
+import org.echo.mobile.framework.model.Account
+import org.echo.mobile.framework.model.Asset
+import org.echo.mobile.framework.model.AssetAmount
+import org.echo.mobile.framework.model.AssetOptions
+import org.echo.mobile.framework.model.BaseOperation
+import org.echo.mobile.framework.model.BitassetOptions
 import java.lang.reflect.Type
 
 /**
@@ -115,7 +128,7 @@ class CreateAssetOperation @JvmOverloads constructor(
     companion object {
         private const val OPTIONS_KEY = "common_options"
         private const val EXTENSIONS_KEY = "extensions"
-        private const val DEFAULT_ASSET_ID = "1.3.1"
+        private const val DEFAULT_ASSET_ID = "1.3.0"
     }
 
 }

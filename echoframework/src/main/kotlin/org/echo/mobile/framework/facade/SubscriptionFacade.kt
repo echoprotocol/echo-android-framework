@@ -4,7 +4,7 @@ import org.echo.mobile.framework.AccountListener
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.model.Block
 import org.echo.mobile.framework.model.DynamicGlobalProperties
-import org.echo.mobile.framework.model.contract.Contract
+import org.echo.mobile.framework.model.Log
 import org.echo.mobile.framework.service.UpdateListener
 
 /**
@@ -13,6 +13,13 @@ import org.echo.mobile.framework.service.UpdateListener
  * @author Dmitriy Bushuev
  */
 interface SubscriptionFacade {
+
+    companion object {
+        /**
+         * Default block number for define subscriptions
+         */
+        const val DEFAULT_BLOCK_NUMBER = "0"
+    }
 
     /**
      * Subscribe [listener] on account changing events
@@ -46,12 +53,14 @@ interface SubscriptionFacade {
     )
 
     /**
-     * Subscribe [listener] on dynamic contract changes
+     * Subscribe [listener] on contract logs
      * [callback] is needed for subscription process result events notifying
+     *
+     * @param contractId Contract id for subscribe to logs
      */
-    fun subscribeOnContract(
+    fun subscribeOnContractLogs(
         contractId: String,
-        listener: UpdateListener<Contract>,
+        listener: UpdateListener<List<Log>>,
         callback: Callback<Boolean>
     )
 
@@ -77,7 +86,7 @@ interface SubscriptionFacade {
      * @param callback Listener of unsubscribing process state
      *                 Receives true if unsubscribing succeed, otherwise false\error (if occurred)
      */
-    fun unsubscribeFromContract(contractId: String, callback: Callback<Boolean>)
+    fun unsubscribeFromContractLogs(contractId: String, callback: Callback<Boolean>)
 
     /**
      * Unsubscribe listeners from observing account event changes with id = [nameOrId]

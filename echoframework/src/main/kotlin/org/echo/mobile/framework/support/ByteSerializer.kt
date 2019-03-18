@@ -61,7 +61,7 @@ fun <K, V> Map<K, V>.serialize(
 ): ByteArray {
     val sizeBytes = byteArrayOf(size.toByte())
     var bytes = byteArrayOf()
-    forEach { key, value ->
+    forEach { (key, value) ->
         bytes += keyToBytes(key)
         bytes += valueToBytes(value)
     }

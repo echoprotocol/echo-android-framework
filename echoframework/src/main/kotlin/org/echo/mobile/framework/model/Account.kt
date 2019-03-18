@@ -9,7 +9,7 @@ import org.echo.mobile.framework.TIME_DATE_FORMAT
 import java.lang.reflect.Type
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 /**
  * Represents account model in Graphene blockchain
@@ -95,9 +95,9 @@ class Account : GrapheneObject, GrapheneSerializable {
                 lifetimeReferrer = jsonAccount.get(KEY_LIFETIME_REFERRER).asString
                 networkFeePercentage = jsonAccount.get(KEY_NETWORK_FEE_PERCENTAGE).asLong
                 lifetimeReferrerFeePercentage =
-                        jsonAccount.get(KEY_LIFETIME_REFERRER_FEE_PERCENTAGE).asLong
+                    jsonAccount.get(KEY_LIFETIME_REFERRER_FEE_PERCENTAGE).asLong
                 referrerRewardsPercentage =
-                        jsonAccount.get(KEY_REFERRER_REWARD_PERCENTAGE).asLong
+                    jsonAccount.get(KEY_REFERRER_REWARD_PERCENTAGE).asLong
                 owner = getAuthority(context!!, jsonAccount, KEY_OWNER)
                 active = getAuthority(context, jsonAccount, KEY_ACTIVE)
                 options = getOptions(context, jsonAccount)
@@ -167,7 +167,7 @@ fun Account.isEqualsByKey(key: String, authorityType: AuthorityType): Boolean =
     when (authorityType) {
         AuthorityType.OWNER -> isKeyExist(key, owner)
         AuthorityType.ACTIVE -> isKeyExist(key, active)
-        AuthorityType.KEY -> {
+        AuthorityType.MEMO -> {
             options.memoKey?.address == key
         }
     }

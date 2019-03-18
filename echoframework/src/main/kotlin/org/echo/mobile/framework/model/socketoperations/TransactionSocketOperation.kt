@@ -27,9 +27,8 @@ class TransactionSocketOperation(
     override fun createParameters(): JsonElement =
         JsonArray().apply {
             add(apiId)
-            add(SocketOperationKeys.TRANSACTION_WITH_CALLBACK.key)
+            add(SocketOperationKeys.BROADCAST_TRANSACTION.key)
             add(JsonArray().apply {
-                add(callId)
                 add(transaction.jsonWithSignature())
             })
         }

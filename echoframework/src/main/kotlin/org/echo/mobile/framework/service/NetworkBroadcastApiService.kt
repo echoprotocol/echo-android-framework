@@ -10,7 +10,7 @@ import org.echo.mobile.framework.support.Result
  *
  * @author Dmitriy Bushuev
  */
-interface NetworkBroadcastApiService : ApiService, TransactionsService
+interface NetworkBroadcastApiService : ApiService, TransactionsService, CustomOperationService
 
 /**
  * Encapsulates logic, associated with transactions
@@ -22,6 +22,14 @@ interface TransactionsService {
      *
      * @param transaction Transaction to broadcast
      */
-    fun broadcastTransactionWithCallback(transaction: Transaction): Result<Exception, Boolean>
+    fun broadcastTransaction(transaction: Transaction): Result<Exception, Boolean>
+
+    /**
+     * Broadcast a [transaction] to the network with callback from blockchain.
+     *
+     * @param transaction Transaction to broadcast.
+     * @return Id of call to network
+     */
+    fun broadcastTransactionWithCallback(transaction: Transaction): Result<Exception, Int>
 
 }

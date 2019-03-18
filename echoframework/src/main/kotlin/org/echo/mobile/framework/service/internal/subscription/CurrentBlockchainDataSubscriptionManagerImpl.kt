@@ -3,7 +3,6 @@ package org.echo.mobile.framework.service.internal.subscription
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
-import com.google.gson.JsonParseException
 import org.echo.mobile.framework.core.mapper.ObjectMapper
 import org.echo.mobile.framework.model.DynamicGlobalProperties
 import org.echo.mobile.framework.service.CurrentBlockchainDataSubscriptionManager
@@ -52,7 +51,7 @@ class CurrentBlockchainDataSubscriptionManagerImpl : CurrentBlockchainDataSubscr
                     ?: return null
 
             return mapper.map(dynamicGlobalPropertiesJson.toString())
-        } catch (ex: JsonParseException) {
+        } catch (ex: Exception) {
             return null
         }
     }

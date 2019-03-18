@@ -32,6 +32,9 @@ enum class SocketOperationKeys(val key: String) {
     ACCOUNT_HISTORY("get_account_history"),
     ASSETS("get_assets"),
     LIST_ASSETS("list_assets"),
+    SIDECHAIN_TRANSFERS("get_sidechain_transfers"),
+    LOOKUP_ASSETS_SYMBOLS("lookup_asset_symbols"),
+    REGISTER_ACCOUNT("register_account"),
     BLOCK("get_block"),
     CHAIN_ID("get_chain_id"),
     CONTRACT_RESULT("get_contract_result"),
@@ -42,11 +45,15 @@ enum class SocketOperationKeys(val key: String) {
     SET_BLOCK_APPLIED_CALLBACK("set_block_applied_callback"),
     CANCEL_ALL_SUBSCRIPTIONS("cancel_all_subscriptions"),
     TRANSACTION_WITH_CALLBACK("broadcast_transaction_with_callback"),
+    BROADCAST_TRANSACTION("broadcast_transaction"),
     GET_ALL_CONTRACTS("get_all_contracts"),
     GET_CONTRACT_RESULT("get_contract_result"),
+    GET_CONTRACT_LOGS("get_contract_logs"),
+    SUBSCRIBE_CONTRACT_LOGS("subscribe_contract_logs"),
     CALL_CONTRACT_NO_CHANGING_STATE("call_contract_no_changing_state"),
     GET_CONTRACTS("get_contracts"),
-    GET_CONTRACT("get_contract");
+    GET_CONTRACT("get_contract"),
+    GET_GLOBAL_PROPERTIES("get_global_properties");
 
     override fun toString(): String = this.key
 }

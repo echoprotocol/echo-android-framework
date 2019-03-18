@@ -65,6 +65,7 @@ class SocketCoreComponentImpl(
             operation?.let { notNullOperation ->
                 error?.let { notNullError ->
                     with(ResponseSocketException(notNullError.data.message)) {
+                        LOGGER.log("Response error. Response = $event", this)
                         notNullOperation.callback.onError(this)
                     }
                 } ?: mapData(event, notNullOperation)
@@ -100,7 +101,7 @@ class SocketCoreComponentImpl(
 
             //event to all active operations about disconnection
             val error = SocketConnectionException("Socket is disconnected.")
-            operationsMap.forEach { _, operation ->
+            operationsMap.forEach { (_, operation) ->
                 operation.callback.onError(error)
             }
             operationsMap.clear()

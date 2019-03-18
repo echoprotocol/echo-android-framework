@@ -1,12 +1,16 @@
 package org.echo.mobile.framework.model
 
 import com.google.common.primitives.Bytes
-import com.google.gson.*
+import com.google.gson.JsonArray
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonElement
+import com.google.gson.JsonObject
+import org.echo.mobile.framework.exception.MalformedAddressException
+import org.echo.mobile.framework.model.network.Network
 import org.echo.mobile.framework.support.Uint16
 import org.echo.mobile.framework.support.Uint32
 import org.echo.mobile.framework.support.serialize
-import org.echo.mobile.framework.exception.MalformedAddressException
-import org.echo.mobile.framework.model.network.Network
 import java.lang.reflect.Type
 
 /**
@@ -80,7 +84,7 @@ class Authority @JvmOverloads constructor(
             addProperty(KEY_WEIGHT_THRESHOLD, weightThreshold)
 
             val keyAuthArray = JsonArray().apply {
-                keyAuthorities.forEach { publicKey, weight ->
+                keyAuthorities.forEach { (publicKey, weight) ->
                     val subArray = JsonArray()
                     val address = Address(publicKey)
                     subArray.add(address.toString())
@@ -90,7 +94,7 @@ class Authority @JvmOverloads constructor(
             }
 
             val accountAuthArray = JsonArray().apply {
-                accountAuthorities.forEach { account, weight ->
+                accountAuthorities.forEach { (account, weight) ->
                     val subArray = JsonArray()
                     subArray.add(account.toString())
                     subArray.add(weight) //keyAuthorities?

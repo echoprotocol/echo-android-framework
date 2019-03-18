@@ -30,13 +30,13 @@ complexity:
     includeStaticDeclarations: false
   LargeClass:
     active: true
-    threshold: 200
+    threshold: 700
   LongMethod:
     active: true
-    threshold: 20
+    threshold: 100
   LongParameterList:
     active: true
-    threshold: 10
+    threshold: 15
     ignoreDefaultParameters: false
   NestedBlockDepth:
     active: true
@@ -44,7 +44,7 @@ complexity:
   TooManyFunctions:
     active: true
     thresholdInFiles: 20
-    thresholdInClasses: 35
+    thresholdInClasses: 60
     thresholdInInterfaces: 20
     thresholdInObjects: 20
     thresholdInEnums: 20
@@ -315,7 +315,7 @@ style:
   NestedClassesVisibility:
     active: false
   NewLineAtEndOfFile:
-    active: true
+    active: false
   NoTabs:
     active: false
   OptionalAbstractKeyword:
@@ -342,7 +342,7 @@ style:
     active: false
   ThrowsCount:
     active: true
-    max: 2
+    max: 3
   TrailingWhitespace:
     active: false
   UnnecessaryAbstractClass:
