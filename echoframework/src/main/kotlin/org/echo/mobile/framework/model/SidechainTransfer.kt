@@ -11,6 +11,7 @@ class SidechainTransfer(
     id: String,
     @SerializedName("transfer_id")
     val transferId: Long,
+    val amount: String,
     val receiver: String,
     val signatures: String,
     @SerializedName("withdraw_code")

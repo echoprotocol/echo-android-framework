@@ -1,4 +1,4 @@
-[ ![Download](https://api.bintray.com/packages/echo/mobile/android-framework-stable/images/download.svg?version=2.0.7) ](https://bintray.com/echo/mobile/android-framework-stable/2.0.7/link)
+[ ![Download](https://api.bintray.com/packages/echo/mobile/android-framework-stable/images/download.svg?version=3.0.2) ](https://bintray.com/echo/mobile/android-framework-stable/3.0.2/link)
 
 # echo-android-framework (echo-android-framework)
 
@@ -9,7 +9,7 @@ Pure Kotlin Echo framework for Android mobile development. Can be used to work w
 This framework can be obtained through gradle dependency:
 
 ```
-implementation 'org.echo.mobile:echoframework:2.0.7'
+implementation 'org.echo.mobile:echoframework:3.0.2'
 ```
 
 Or maven dependency:
@@ -18,7 +18,7 @@ Or maven dependency:
 <dependency>
   <groupId>org.echo.mobile</groupId>
   <artifactId>echoframework</artifactId>
-  <version>2.0.7</version>
+  <version>3.0.2</version>
   <type>pom</type>
 </dependency>
 ```

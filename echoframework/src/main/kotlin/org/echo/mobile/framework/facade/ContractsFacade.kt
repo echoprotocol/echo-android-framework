@@ -207,6 +207,23 @@ interface ContractsFacade {
     )
 
     /**
+     * Calls contract method without changing state of blockchain
+     *
+     * @param userNameOrId Name or id of account that calls the contract
+     * @param contractId   Id of called contract
+     * @param assetId      Asset of contract
+     * @param code         Valid code for contract query
+     * @param callback     Listener of operation results.
+     */
+    fun queryContract(
+        userNameOrId: String,
+        assetId: String,
+        contractId: String,
+        code: String,
+        callback: Callback<String>
+    )
+
+    /**
      * Return result of contract operation call
      *
      * @param historyId History operation id

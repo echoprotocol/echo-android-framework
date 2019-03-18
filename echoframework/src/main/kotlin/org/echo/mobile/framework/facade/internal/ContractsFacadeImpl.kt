@@ -282,11 +282,7 @@ class ContractsFacadeImpl(
         methodParams: List<InputValue>,
         callback: Callback<String>
     ) = callback.processResult {
-        val accountsMap =
-            databaseApiService.getFullAccounts(listOf(userNameOrId), false).dematerialize()
-
-        val registrar = accountsMap[userNameOrId]?.account
-            ?: throw LocalException("Unable to find required account $userNameOrId")
+        val registrar = findRegistrar(userNameOrId)
 
         val contractCode = ContractInputEncoder().encode(methodName, methodParams)
 
@@ -295,6 +291,23 @@ class ContractsFacadeImpl(
             registrar.getObjectId(),
             assetId,
             contractCode
+        ).dematerialize()
+    }
+
+    override fun queryContract(
+        userNameOrId: String,
+        assetId: String,
+        contractId: String,
+        code: String,
+        callback: Callback<String>
+    ) = callback.processResult {
+        val registrar = findRegistrar(userNameOrId)
+
+        databaseApiService.callContractNoChangingState(
+            contractId,
+            registrar.getObjectId(),
+            assetId,
+            code
         ).dematerialize()
     }
 
