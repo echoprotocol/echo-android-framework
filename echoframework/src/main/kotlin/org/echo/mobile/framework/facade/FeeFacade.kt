@@ -75,4 +75,23 @@ interface FeeFacade {
         callback: Callback<String>
     )
 
+    /**
+     * Counts required fee for defined operation settings
+     *
+     * @param userNameOrId  Source account name or id
+     * @param contractId    Id of contract for method calling
+     * @param code          Valid code for contract query
+     * @param assetId       Specific asset type id
+     * @param feeAsset      Asset for fee calculating
+     * @param callback      Listener of operation results
+     */
+    fun getFeeForContractOperation(
+        userNameOrId: String,
+        contractId: String,
+        code: String,
+        assetId: String,
+        feeAsset: String?,
+        callback: Callback<String>
+    )
+
 }

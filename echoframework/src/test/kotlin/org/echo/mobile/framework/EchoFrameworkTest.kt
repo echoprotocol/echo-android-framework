@@ -838,6 +838,26 @@ class EchoFrameworkTest {
         assertNotNull(futureFee.get())
     }
 
+    @Test
+    fun getRequiredContractOperationFeeWithCodeTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val futureFee = FutureTask<String>()
+
+        framework.getFeeForContractOperation(
+            userNameOrId = accountId,
+            contractId = legalContractId,
+            code = "e13a7716",
+            assetId = legalAssetId,
+            feeAsset = legalAssetId,
+            callback = futureFee.completeCallback()
+        )
+
+        assertNotNull(futureFee.get())
+    }
+
     @Test(expected = LocalException::class)
     fun getRequiredContractOperationFeeFailureTest() {
         val framework = initFramework()
@@ -1331,6 +1351,26 @@ class EchoFrameworkTest {
                     accountId
                 )
             ),
+            callback = future.completeCallback()
+        )
+
+        assertNotNull(future.get())
+        assert(future.get()!!.isNotEmpty())
+    }
+
+    @Test
+    fun queryContractWithCodeTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<String>()
+
+        framework.queryContract(
+            login,
+            legalAssetId,
+            contractId = legalTokenId,
+            code = "70a08231000000000000000000000000000000000000000000000000000000000000000e",
             callback = future.completeCallback()
         )
 
