@@ -267,6 +267,24 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         )
     })
 
+    override fun getFeeForContractOperation(
+        userNameOrId: String,
+        contractId: String,
+        code: String,
+        assetId: String,
+        feeAsset: String?,
+        callback: Callback<String>
+    ) = dispatch(Runnable {
+        feeFacade.getFeeForContractOperation(
+            userNameOrId,
+            contractId,
+            code,
+            assetId,
+            feeAsset,
+            callback.wrapOriginal()
+        )
+    })
+
     override fun getAccount(nameOrId: String, callback: Callback<FullAccount>) =
         dispatch(Runnable {
             informationFacade.getAccount(nameOrId, callback.wrapOriginal())
@@ -692,6 +710,22 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             contractId,
             methodName,
             methodParams,
+            callback
+        )
+    })
+
+    override fun queryContract(
+        userNameOrId: String,
+        assetId: String,
+        contractId: String,
+        code: String,
+        callback: Callback<String>
+    ) = dispatch(Runnable {
+        contractsFacade.queryContract(
+            userNameOrId,
+            assetId,
+            contractId,
+            code,
             callback
         )
     })

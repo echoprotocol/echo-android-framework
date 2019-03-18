@@ -13,6 +13,7 @@ import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.Memo
 import org.echo.mobile.framework.model.contract.input.ContractInputEncoder
 import org.echo.mobile.framework.model.contract.input.InputValue
+import org.echo.mobile.framework.model.operations.ContractCallOperation
 import org.echo.mobile.framework.model.operations.ContractCallOperationBuilder
 import org.echo.mobile.framework.model.operations.TransferOperationBuilder
 import org.echo.mobile.framework.processResult
@@ -113,34 +114,10 @@ class FeeFacadeImpl(
         feeAsset: String?,
         callback: Callback<String>
     ) = callback.processResult(Result {
-
-        var account: Account? = null
-
-        databaseApiService.getFullAccounts(listOf(userNameOrId), false)
-            .value { accountsMap ->
-                account = accountsMap[userNameOrId]?.account
-            }
-            .error { accountsError ->
-                throw LocalException("Error occurred during accounts request", accountsError)
-            }
-
-        if (account == null) {
-            LOGGER.log(
-                """Unable to find accounts for contract call.
-                    |Caller = $account
-                """.trimMargin()
-            )
-            throw AccountNotFoundException("Unable to find required accounts: caller = $account")
-        }
-
         val contractCode = ContractInputEncoder().encode(methodName, methodParams)
 
-        val contractOperation = ContractCallOperationBuilder()
-            .setFee(AssetAmount(UnsignedLong.ZERO, Asset(assetId)))
-            .setRegistrar(account!!)
-            .setReceiver(contractId)
-            .setContractCode(contractCode)
-            .build()
+        val contractOperation =
+            configureContractTransaction(userNameOrId, contractId, contractCode, assetId)
 
         getFees(listOf(contractOperation), feeAsset ?: assetId)
 
@@ -152,6 +129,35 @@ class FeeFacadeImpl(
                             |Target = $contractId
                             |Method name = $methodName
                             |Method params = ${methodParams.joinToString()}
+                            |Fee asset = ${feeAsset ?: assetId}
+                        """
+            )
+            throw LocalException("Unable to get fee for specified operation")
+        }
+
+        fees.first().amount.toString()
+    })
+
+    override fun getFeeForContractOperation(
+        userNameOrId: String,
+        contractId: String,
+        code: String,
+        assetId: String,
+        feeAsset: String?,
+        callback: Callback<String>
+    ) = callback.processResult(Result {
+        val contractOperation =
+            configureContractTransaction(userNameOrId, contractId, code, assetId)
+
+        getFees(listOf(contractOperation), feeAsset ?: assetId)
+
+    }.map { fees ->
+        if (fees.isEmpty()) {
+            LOGGER.log(
+                """Empty fee list for required operation.
+                            |Caller = $userNameOrId
+                            |Target = $contractId
+                            |Code = $code
                             |Fee asset = ${feeAsset ?: assetId}
                         """
             )
@@ -173,6 +179,39 @@ class FeeFacadeImpl(
         .setAmount(AssetAmount(UnsignedLong.valueOf(amount.toLong()), Asset(asset)))
         .setMemo(memo)
         .build()
+
+    private fun configureContractTransaction(
+        userNameOrId: String,
+        contractId: String,
+        code: String,
+        assetId: String
+    ): ContractCallOperation {
+        var account: Account? = null
+
+        databaseApiService.getFullAccounts(listOf(userNameOrId), false)
+            .value { accountsMap ->
+                account = accountsMap[userNameOrId]?.account
+            }
+            .error { accountsError ->
+                throw LocalException("Error occurred during accounts request", accountsError)
+            }
+
+        if (account == null) {
+            LOGGER.log(
+                """Unable to find accounts for contract call.
+                    |Caller = $account
+                """.trimMargin()
+            )
+            throw AccountNotFoundException("Unable to find required accounts: caller = $account")
+        }
+
+        return ContractCallOperationBuilder()
+            .setFee(AssetAmount(UnsignedLong.ZERO, Asset(assetId)))
+            .setRegistrar(account!!)
+            .setReceiver(contractId)
+            .setContractCode(code)
+            .build()
+    }
 
     companion object {
         private val LOGGER = LoggerCoreComponent.create(FeeFacadeImpl::class.java.name)
