@@ -250,6 +250,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
     override fun getFeeForContractOperation(
         userNameOrId: String,
         contractId: String,
+        amount: String,
         methodName: String,
         methodParams: List<InputValue>,
         assetId: String,
@@ -259,6 +260,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         feeFacade.getFeeForContractOperation(
             userNameOrId,
             contractId,
+            amount,
             methodName,
             methodParams,
             assetId,
@@ -270,6 +272,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
     override fun getFeeForContractOperation(
         userNameOrId: String,
         contractId: String,
+        amount: String,
         code: String,
         assetId: String,
         feeAsset: String?,
@@ -278,6 +281,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         feeFacade.getFeeForContractOperation(
             userNameOrId,
             contractId,
+            amount,
             code,
             assetId,
             feeAsset,

@@ -108,6 +108,7 @@ class FeeFacadeImpl(
     override fun getFeeForContractOperation(
         userNameOrId: String,
         contractId: String,
+        amount: String,
         methodName: String,
         methodParams: List<InputValue>,
         assetId: String,
@@ -117,7 +118,7 @@ class FeeFacadeImpl(
         val contractCode = ContractInputEncoder().encode(methodName, methodParams)
 
         val contractOperation =
-            configureContractTransaction(userNameOrId, contractId, contractCode, assetId)
+            configureContractTransaction(userNameOrId, contractId, amount, contractCode, assetId)
 
         getFees(listOf(contractOperation), feeAsset ?: assetId)
 
@@ -141,13 +142,14 @@ class FeeFacadeImpl(
     override fun getFeeForContractOperation(
         userNameOrId: String,
         contractId: String,
+        amount: String,
         code: String,
         assetId: String,
         feeAsset: String?,
         callback: Callback<String>
     ) = callback.processResult(Result {
         val contractOperation =
-            configureContractTransaction(userNameOrId, contractId, code, assetId)
+            configureContractTransaction(userNameOrId, contractId, amount, code, assetId)
 
         getFees(listOf(contractOperation), feeAsset ?: assetId)
 
@@ -183,6 +185,7 @@ class FeeFacadeImpl(
     private fun configureContractTransaction(
         userNameOrId: String,
         contractId: String,
+        amount: String,
         code: String,
         assetId: String
     ): ContractCallOperation {
@@ -210,6 +213,7 @@ class FeeFacadeImpl(
             .setRegistrar(account!!)
             .setReceiver(contractId)
             .setContractCode(code)
+            .setValue(AssetAmount(UnsignedLong.valueOf(amount), Asset(assetId)))
             .build()
     }
 

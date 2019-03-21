@@ -828,6 +828,7 @@ class EchoFrameworkTest {
         framework.getFeeForContractOperation(
             userNameOrId = accountId,
             contractId = legalContractId,
+            amount = "0",
             methodName = "testReturn",
             methodParams = listOf(),
             assetId = legalAssetId,
@@ -849,6 +850,7 @@ class EchoFrameworkTest {
         framework.getFeeForContractOperation(
             userNameOrId = accountId,
             contractId = legalContractId,
+            amount = "0",
             code = "e13a7716",
             assetId = legalAssetId,
             feeAsset = legalAssetId,
@@ -869,6 +871,7 @@ class EchoFrameworkTest {
         framework.getFeeForContractOperation(
             userNameOrId = login,
             contractId = legalContractId,
+            amount = "0",
             methodName = "testReturn",
             methodParams = listOf(),
             assetId = legalAssetId,
