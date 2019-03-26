@@ -61,8 +61,8 @@ enum class OperationType {
     EXECUTE_BID_OPERATION,          //VIRTUAL
     CONTRACT_CREATE_OPERATION,
     CONTRACT_CALL_OPERATION,
-    CONTRACT_OPERATION,
-    CONTRACT_TRANSFER_OPERATION     //VIRTUAL
+    CONTRACT_TRANSFER_OPERATION,
+    CHANGE_SIDECHAIN_CONFIG_OPERATION
 }
 
 /**
@@ -82,7 +82,7 @@ class OperationTypeToClassConverter : Converter<Int, Class<*>?> {
             OperationType.ACCOUNT_CREATE_OPERATION.ordinal to AccountCreateOperation::class.java,
             OperationType.CONTRACT_CREATE_OPERATION.ordinal to ContractCreateOperation::class.java,
             OperationType.CONTRACT_CALL_OPERATION.ordinal to ContractCallOperation::class.java,
-            OperationType.CONTRACT_TRANSFER_OPERATION to ContractTransferOperation::class.java
+            OperationType.CONTRACT_TRANSFER_OPERATION.ordinal to ContractTransferOperation::class.java
         )
     }
 
