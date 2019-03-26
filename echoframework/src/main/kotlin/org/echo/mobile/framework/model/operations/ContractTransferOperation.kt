@@ -34,7 +34,7 @@ class ContractTransferOperation
 constructor(
     override var fee: AssetAmount = AssetAmount(UnsignedLong.ZERO),
     val from: Contract,
-    val to: Account,
+    var to: Account,
     val amount: AssetAmount
 
 ) : BaseOperation(OperationType.CONTRACT_TRANSFER_OPERATION) {
