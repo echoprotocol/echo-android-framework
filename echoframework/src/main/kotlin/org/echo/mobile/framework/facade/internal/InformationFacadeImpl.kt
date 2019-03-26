@@ -22,6 +22,7 @@ import org.echo.mobile.framework.model.operations.AccountUpdateOperation
 import org.echo.mobile.framework.model.operations.ContractCallOperation
 import org.echo.mobile.framework.model.operations.ContractCreateOperation
 import org.echo.mobile.framework.model.operations.ContractOperation
+import org.echo.mobile.framework.model.operations.ContractTransferOperation
 import org.echo.mobile.framework.model.operations.CreateAssetOperation
 import org.echo.mobile.framework.model.operations.IssueAssetOperation
 import org.echo.mobile.framework.model.operations.OperationType
@@ -255,6 +256,12 @@ class InformationFacadeImpl(
                         accountsRegistry,
                         assetsRegistry
                     )
+                OperationType.CONTRACT_TRANSFER_OPERATION ->
+                    processContractTransferOperation(
+                        operation as ContractTransferOperation,
+                        accountsRegistry,
+                        assetsRegistry
+                    )
 
                 else -> {
                 }
@@ -391,6 +398,26 @@ class InformationFacadeImpl(
                 .value { contractResult ->
                     operation.contractResult = contractResult
                 }
+        }
+    }
+
+    private fun processContractTransferOperation(
+        operation: ContractTransferOperation,
+        accountRegistry: MutableMap<String, Account>,
+        assetsRegistry: MutableList<Asset>
+    ) {
+        val assetId = operation.amount.asset.getObjectId()
+
+        getAsset(assetId, assetsRegistry)?.let { notNullAsset ->
+            operation.amount.asset = notNullAsset
+        }
+
+        val toAccount = operation.to.getObjectId()
+
+        fillAccounts(listOf(toAccount), accountRegistry)
+
+        accountRegistry[toAccount]?.let { notNullAccount ->
+            operation.to = notNullAccount
         }
     }
 

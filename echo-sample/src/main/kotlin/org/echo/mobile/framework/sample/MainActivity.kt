@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity(), ProgressListener {
 
     companion object {
         const val ECHO_URL = "wss://echo-devnet-node.pixelplex.io/"
-        const val new_url = "ws://195.201.164.54:6311"
+        const val new_url = "wss://devnet.echo-dev.io/ws"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
