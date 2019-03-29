@@ -9,6 +9,7 @@ import org.echo.mobile.framework.core.socket.internal.SocketMessengerImpl
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.model.network.Echodevnet
 import org.echo.mobile.framework.model.network.Network
+import java.math.BigDecimal
 
 /**
  * Settings for library initialization
@@ -22,7 +23,8 @@ class Settings private constructor(
     val apis: Set<Api>,
     val returnOnMainThread: Boolean,
     val network: Network,
-    val logLevel: LogLevel
+    val logLevel: LogLevel,
+    val feeRatio: BigDecimal
 ) {
 
     /**
@@ -37,6 +39,7 @@ class Settings private constructor(
         private var returnOnMainThread: Boolean = false
         private var network: Network? = null
         private var logLevel: LogLevel = LogLevel.INFO
+        private var feeRatio: BigDecimal = BigDecimal.ONE
 
         /**
          * Defines url for socket connection.
@@ -110,6 +113,16 @@ class Settings private constructor(
         }
 
         /**
+         * Defines ratio for fee used in library
+         *
+         * @param ratio Ratio for fee
+         */
+        fun setFeeRatio(ratio: BigDecimal): Configurator {
+            this.feeRatio = ratio
+            return this
+        }
+
+        /**
          * Create settings with configurations
          *
          * @return settings for library initialization
@@ -135,7 +148,8 @@ class Settings private constructor(
                 apis,
                 returnOnMainThread,
                 network,
-                logLevel
+                logLevel,
+                feeRatio.abs()
             )
         }
     }

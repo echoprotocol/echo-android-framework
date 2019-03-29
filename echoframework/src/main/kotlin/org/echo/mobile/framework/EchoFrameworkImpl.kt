@@ -47,6 +47,7 @@ import org.echo.mobile.framework.service.internal.DatabaseApiServiceImpl
 import org.echo.mobile.framework.service.internal.LoginApiServiceImpl
 import org.echo.mobile.framework.service.internal.NetworkBroadcastApiServiceImpl
 import org.echo.mobile.framework.service.internal.RegistrationApiServiceImpl
+import org.echo.mobile.framework.support.FeeRatioProvider
 import org.echo.mobile.framework.support.Settings
 import org.echo.mobile.framework.support.concurrent.Dispatcher
 import org.echo.mobile.framework.support.concurrent.ExecutorServiceDispatcher
@@ -161,7 +162,8 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             databaseApiService,
             networkBroadcastApiService,
             settings.cryptoComponent,
-            notifiedTransactionsHelper
+            notifiedTransactionsHelper,
+            FeeRatioProvider(settings.feeRatio)
         )
     }
 
