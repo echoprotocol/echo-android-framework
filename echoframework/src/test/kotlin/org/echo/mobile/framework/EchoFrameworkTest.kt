@@ -877,7 +877,7 @@ class EchoFrameworkTest {
             methodName = "testReturn",
             methodParams = listOf(),
             assetId = legalAssetId,
-            feeAsset = "1.3.123",
+            feeAsset = "1.3.123123123",
             callback = futureFee.completeCallback()
         )
 
