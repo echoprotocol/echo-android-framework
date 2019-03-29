@@ -46,6 +46,7 @@ import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import java.math.BigDecimal
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.thread
 
@@ -55,7 +56,7 @@ import kotlin.concurrent.thread
  * @author Dmitriy Bushuev
  */
 class EchoFrameworkTest {
-    private fun initFramework(): EchoFramework {
+    private fun initFramework(ratio: BigDecimal = BigDecimal.ONE): EchoFramework {
         return EchoFramework.create(
             Settings.Configurator()
                 .setUrl("wss://devnet.echo-dev.io/ws")
@@ -67,6 +68,7 @@ class EchoFrameworkTest {
                     Api.ACCOUNT_HISTORY,
                     Api.REGISTRATION
                 )
+                .setFeeRatio(ratio)
                 .configure()
         )
     }
@@ -1027,7 +1029,7 @@ class EchoFrameworkTest {
 
     @Test
     fun createContractTest() {
-        val framework = initFramework()
+        val framework = initFramework(BigDecimal.valueOf(100))
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
@@ -1098,6 +1100,31 @@ class EchoFrameworkTest {
     @Test
     fun callContractTest() {
         val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val broadcastFuture = FutureTask<Boolean>()
+        val future = FutureTask<String>()
+
+        framework.callContract(
+            login,
+            password,
+            assetId = legalAssetId,
+            feeAsset = legalAssetId,
+            contractId = legalContractId,
+            methodName = "logTest",
+            methodParams = listOf(),
+            broadcastCallback = broadcastFuture.completeCallback(),
+            resultCallback = future.completeCallback()
+        )
+
+        assertTrue(broadcastFuture.get() ?: false)
+        assertTrue(future.get()?.startsWith("1.17.") ?: false)
+    }
+
+    @Test
+    fun callContractWithRatioTest() {
+        val framework = initFramework(BigDecimal.valueOf(100))
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
