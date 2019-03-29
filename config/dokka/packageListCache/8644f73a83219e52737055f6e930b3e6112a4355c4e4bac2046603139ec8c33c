@@ -8,6 +8,7 @@ android.app.admin
 android.app.assist
 android.app.backup
 android.app.job
+android.app.role
 android.app.slice
 android.app.usage
 android.appwidget
@@ -26,6 +27,7 @@ android.graphics.drawable
 android.graphics.drawable.shapes
 android.graphics.fonts
 android.graphics.pdf
+android.graphics.text
 android.hardware
 android.hardware.biometrics
 android.hardware.camera2
@@ -54,6 +56,7 @@ android.net.http
 android.net.nsd
 android.net.rtp
 android.net.sip
+android.net.ssl
 android.net.wifi
 android.net.wifi.aware
 android.net.wifi.hotspot2
@@ -99,6 +102,7 @@ android.telecom
 android.telephony
 android.telephony.cdma
 android.telephony.data
+android.telephony.emergency
 android.telephony.euicc
 android.telephony.gsm
 android.telephony.mbms
@@ -118,6 +122,7 @@ android.view.accessibility
 android.view.animation
 android.view.autofill
 android.view.inputmethod
+android.view.inspector
 android.view.textclassifier
 android.view.textservice
 android.webkit
