@@ -1697,7 +1697,7 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
-        val transferId = "1.19.2"
+        val transferId = "1.19.0"
 
         val sidechainTransferResult = framework.databaseApiService.getObjects(
             listOf(transferId),
