@@ -30,7 +30,8 @@ class SocketResponseResult<T>(
  */
 data class Error(
     @Expose val code: Int,
-    @Expose val data: ErrorData
+    @Expose val data: ErrorData,
+    @Expose val message: String
 )
 
 /**
