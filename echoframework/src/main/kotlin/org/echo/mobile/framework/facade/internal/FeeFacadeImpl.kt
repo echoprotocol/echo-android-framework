@@ -18,10 +18,12 @@ import org.echo.mobile.framework.model.operations.ContractCallOperationBuilder
 import org.echo.mobile.framework.model.operations.TransferOperationBuilder
 import org.echo.mobile.framework.processResult
 import org.echo.mobile.framework.service.DatabaseApiService
+import org.echo.mobile.framework.support.Provider
 import org.echo.mobile.framework.support.Result
 import org.echo.mobile.framework.support.error
 import org.echo.mobile.framework.support.map
 import org.echo.mobile.framework.support.value
+import java.math.RoundingMode
 
 /**
  * Implementation of [FeeFacade]
@@ -32,7 +34,8 @@ import org.echo.mobile.framework.support.value
  */
 class FeeFacadeImpl(
     private val databaseApiService: DatabaseApiService,
-    private val cryptoCoreComponent: CryptoCoreComponent
+    private val cryptoCoreComponent: CryptoCoreComponent,
+    private val feeRatioProvider: Provider<Double>
 ) : BaseTransactionsFacade(databaseApiService, cryptoCoreComponent), FeeFacade {
 
     override fun getFeeForTransferOperation(
@@ -136,7 +139,7 @@ class FeeFacadeImpl(
             throw LocalException("Unable to get fee for specified operation")
         }
 
-        fees.first().amount.toString()
+        multiplyFee(fees.first(), feeRatioProvider.provide()).toString()
     })
 
     override fun getFeeForContractOperation(
@@ -166,8 +169,11 @@ class FeeFacadeImpl(
             throw LocalException("Unable to get fee for specified operation")
         }
 
-        fees.first().amount.toString()
+        multiplyFee(fees.first(), feeRatioProvider.provide()).toString()
     })
+
+    private fun multiplyFee(rawFee: AssetAmount, feeRatio: Double): AssetAmount =
+        rawFee.multiplyBy(feeRatio, RoundingMode.FLOOR)
 
     private fun buildTransaction(
         fromAccount: Account,
