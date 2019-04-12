@@ -130,7 +130,10 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             settings.cryptoComponent,
             settings.network
         )
-        feeFacade = FeeFacadeImpl(databaseApiService, settings.cryptoComponent)
+
+        val feeRatioProvider = FeeRatioProvider(settings.feeRatio)
+
+        feeFacade = FeeFacadeImpl(databaseApiService, settings.cryptoComponent, feeRatioProvider)
         informationFacade = InformationFacadeImpl(
             databaseApiService,
             accountHistoryApiService
@@ -163,7 +166,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             networkBroadcastApiService,
             settings.cryptoComponent,
             notifiedTransactionsHelper,
-            FeeRatioProvider(settings.feeRatio)
+            feeRatioProvider
         )
     }
 
