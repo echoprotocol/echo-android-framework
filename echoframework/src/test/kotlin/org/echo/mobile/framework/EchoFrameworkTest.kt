@@ -442,29 +442,29 @@ class EchoFrameworkTest {
         assertTrue(futureChangePassword.get() ?: false)
     }
 
-//    @Test
-//    fun registrationTest() {
-//        val framework = initFramework()
-//
-//        val futureChangePassword = FutureTask<Boolean>()
-//
-//        if (connect(framework) == false) Assert.fail("Connection error")
-//
-//        framework.register(
-//            "daria", "daria",
-//            object : Callback<Boolean> {
-//                override fun onSuccess(result: Boolean) {
-//                    futureChangePassword.setComplete(true)
-//                }
-//
-//                override fun onError(error: LocalException) {
-//                    futureChangePassword.setComplete(false)
-//                }
-//
-//            })
-//
-//        assertTrue(futureChangePassword.get() ?: false)
-//    }
+    @Test
+    fun registrationTest() {
+        val framework = initFramework()
+
+        val futureChangePassword = FutureTask<Boolean>()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        framework.register(
+            "daria", "daria",
+            object : Callback<Boolean> {
+                override fun onSuccess(result: Boolean) {
+                    futureChangePassword.setComplete(true)
+                }
+
+                override fun onError(error: LocalException) {
+                    futureChangePassword.setComplete(false)
+                }
+
+            })
+
+        assertTrue(futureChangePassword.get() ?: false)
+    }
 
     @Test
     fun subscriptionByIdTest() {
