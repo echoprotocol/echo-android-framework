@@ -59,7 +59,6 @@ class DatabaseApiServiceTest {
             id = "2.1.0",
             headBlockId = "000033affe5ec1c922b4666f3e754233b31af00e",
             date = Date(),
-            currentWitness = "1.6.6",
             nextMaintenanceDate = Date(),
             recentSlotsFilled = "340282366920938463463374607431768211455",
             lastBudgetTime = "budgetTime"
