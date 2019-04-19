@@ -73,8 +73,8 @@ class EchoFrameworkTest {
         )
     }
 
-    private val legalContractId = "1.16.106"
-    private val legalTokenId = "1.16.103"
+    private val legalContractId = "1.14.106"
+    private val legalTokenId = "1.14.103"
     private val accountId = "1.2.14"
     private val login = "dima"
     private val password = "dima"
@@ -227,8 +227,10 @@ class EchoFrameworkTest {
             "000000000000000000000000000353544e0000000000000000000000000000000000000000000000000" +
             "000000000"
 
-    private val illegalContractId = "1.16.-1"
-    private val illegalHistoryItemId = "1.17.-1"
+    private val illegalContractId = "1.14.-1"
+    private val illegalHistoryItemId = "1.15.-1"
+
+    private val validContractPrefix = "1.15."
 
     @Test
     fun connectTest() {
@@ -247,8 +249,8 @@ class EchoFrameworkTest {
 
         framework.getAccountHistory(
             accountId,
-            "1.11.1",
-            "1.11.20000",
+            "1.10.1",
+            "1.10.20000",
             100,
             futureHistory.completeCallback()
         )
@@ -391,10 +393,10 @@ class EchoFrameworkTest {
     }
 
     @Test
-    fun accountHistoryByIdTest() = getAccountHistory(accountId)
+    fun accountHistoryByIdTest() = getAccountHistory("1.2.7")
 
     @Test
-    fun accountHistoryByNameTest() = getAccountHistory("dima")
+    fun accountHistoryByNameTest() = getAccountHistory("init1")
 
     private fun getAccountHistory(nameOrId: String) {
         val framework = initFramework()
@@ -405,9 +407,9 @@ class EchoFrameworkTest {
 
         framework.getAccountHistory(
             nameOrId,
-            "1.11.1",
-            "1.11.0",
-            100,
+            "1.10.0",
+            "1.10.0",
+            20,
             futureAccountHistory.completeCallback()
         )
 
@@ -1047,7 +1049,7 @@ class EchoFrameworkTest {
         )
 
         assertTrue(broadcastFuture.get() ?: false)
-        assertTrue(future.get()?.startsWith("1.17.") ?: false)
+        assertTrue(future.get()?.startsWith(validContractPrefix) ?: false)
     }
 
     @Test
@@ -1070,7 +1072,7 @@ class EchoFrameworkTest {
         )
 
         assertTrue(broadcastFuture.get() ?: false)
-        assertTrue(future.get()?.startsWith("1.17.") ?: false)
+        assertTrue(future.get()?.startsWith(validContractPrefix) ?: false)
     }
 
     @Test
@@ -1094,7 +1096,7 @@ class EchoFrameworkTest {
         )
 
         assertTrue(broadcastFuture.get() ?: false)
-        assertTrue(future.get()?.startsWith("1.17.") ?: false)
+        assertTrue(future.get()?.startsWith(validContractPrefix) ?: false)
     }
 
     @Test
@@ -1119,7 +1121,7 @@ class EchoFrameworkTest {
         )
 
         assertTrue(broadcastFuture.get() ?: false)
-        assertTrue(future.get()?.startsWith("1.17.") ?: false)
+        assertTrue(future.get()?.startsWith(validContractPrefix) ?: false)
     }
 
     @Test
@@ -1144,7 +1146,7 @@ class EchoFrameworkTest {
         )
 
         assertTrue(broadcastFuture.get() ?: false)
-        assertTrue(future.get()?.startsWith("1.17.") ?: false)
+        assertTrue(future.get()?.startsWith(validContractPrefix) ?: false)
     }
 
     @Test
@@ -1170,7 +1172,7 @@ class EchoFrameworkTest {
         )
 
         assertTrue(broadcastFuture.get() ?: false)
-        assertTrue(future.get()?.startsWith("1.17.") ?: false)
+        assertTrue(future.get()?.startsWith(validContractPrefix) ?: false)
     }
 
     @Test
@@ -1195,7 +1197,7 @@ class EchoFrameworkTest {
         )
 
         assertTrue(broadcastFuture.get() ?: false)
-        assertTrue(future.get()?.startsWith("1.17.") ?: false)
+        assertTrue(future.get()?.startsWith(validContractPrefix) ?: false)
     }
 
     @Test
@@ -1221,7 +1223,7 @@ class EchoFrameworkTest {
         )
 
         assertTrue(broadcastFuture.get() ?: false)
-        assertTrue(future.get()?.startsWith("1.17.") ?: false)
+        assertTrue(future.get()?.startsWith(validContractPrefix) ?: false)
     }
 
     @Test
@@ -1256,7 +1258,7 @@ class EchoFrameworkTest {
         )
 
         assertTrue(broadcastFuture.get() ?: false)
-        assertTrue(future.get(15, TimeUnit.SECONDS)?.startsWith("1.17.") ?: false)
+        assertTrue(future.get(15, TimeUnit.SECONDS)?.startsWith(validContractPrefix) ?: false)
     }
 
     @Test
@@ -1282,7 +1284,7 @@ class EchoFrameworkTest {
         )
 
         assertTrue(broadcastFuture.get() ?: false)
-        assertTrue(future.get()?.startsWith("1.17.") ?: false)
+        assertTrue(future.get()?.startsWith(validContractPrefix) ?: false)
     }
 
     @Test
@@ -1308,7 +1310,7 @@ class EchoFrameworkTest {
         )
 
         assertTrue(broadcastFuture.get() ?: false)
-        assertTrue(future.get()?.startsWith("1.17.") ?: false)
+        assertTrue(future.get()?.startsWith(validContractPrefix) ?: false)
     }
 
     @Test
@@ -1334,7 +1336,7 @@ class EchoFrameworkTest {
         )
 
         assertTrue(broadcastFuture.get() ?: false)
-        assertTrue(future.get()?.startsWith("1.17.") ?: false)
+        assertTrue(future.get()?.startsWith(validContractPrefix) ?: false)
     }
 
     @Test(expected = LocalException::class)
@@ -1438,7 +1440,7 @@ class EchoFrameworkTest {
         val future = FutureTask<ContractResult>()
 
         framework.getContractResult(
-            historyId = "1.17.41",
+            historyId = validContractPrefix + "41",
             callback = future.completeCallback()
         )
 
@@ -1457,7 +1459,7 @@ class EchoFrameworkTest {
         val future = FutureTask<ContractResult>()
 
         framework.getContractResult(
-            historyId = "1.17.0",
+            historyId = validContractPrefix + "0",
             callback = future.completeCallback()
         )
 

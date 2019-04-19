@@ -26,6 +26,9 @@ class Account : GrapheneObject, GrapheneSerializable {
     lateinit var active: Authority
 
     @Expose
+    lateinit var edKey: String
+
+    @Expose
     lateinit var options: AccountOptions
 
     @Expose
@@ -96,6 +99,7 @@ class Account : GrapheneObject, GrapheneSerializable {
                 referrerRewardsPercentage =
                     jsonAccount.get(KEY_REFERRER_REWARD_PERCENTAGE).asLong
                 active = getAuthority(context!!, jsonAccount, KEY_ACTIVE)
+                edKey = jsonAccount.get(KEY_ED_KEY).asString
                 options = getOptions(context, jsonAccount)
                 statistics = jsonAccount.get(KEY_STATISTICS).asString
             }
@@ -146,6 +150,7 @@ class Account : GrapheneObject, GrapheneSerializable {
         const val KEY_REFERRER_REWARD_PERCENTAGE = "referrer_rewards_percentage"
         const val KEY_NAME = "name"
         const val KEY_ACTIVE = "active"
+        const val KEY_ED_KEY = "ed_key"
         const val KEY_OPTIONS = "options"
         const val KEY_STATISTICS = "statistics"
     }
