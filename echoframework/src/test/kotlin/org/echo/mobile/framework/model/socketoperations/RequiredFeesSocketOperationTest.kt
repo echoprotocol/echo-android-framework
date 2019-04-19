@@ -33,14 +33,12 @@ class RequiredFeesSocketOperationTest {
     private fun buildOperation(): AccountUpdateOperation {
         val fee = AssetAmount(UnsignedLong.ONE)
         val account = Account("1.2.23215")
-        val owner = Authority(2)
-        val active = Authority(3)
+        val active = Authority(2)
         val options = AccountOptions(PublicKey(ECKey.fromPublicOnly(ECKey().pubKeyPoint).pubKey))
 
         return AccountUpdateOperationBuilder()
             .setFee(fee)
             .setAccount(account)
-            .setOwner(owner)
             .setActive(active)
             .setOptions(options)
             .build()

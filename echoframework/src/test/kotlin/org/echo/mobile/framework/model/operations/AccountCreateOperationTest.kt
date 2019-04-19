@@ -40,7 +40,6 @@ class AccountCreateOperationTest {
         assertNotNull(transferObject.get(AccountCreateOperation.KEY_REFERRER))
         assertNotNull(transferObject.get(AccountCreateOperation.KEY_REFERRER_PERCENT))
         assertNotNull(transferObject.get(AccountCreateOperation.KEY_ACTIVE))
-        assertNotNull(transferObject.get(AccountCreateOperation.KEY_OWNER))
         assertNotNull(transferObject.get(AccountCreateOperation.KEY_OPTIONS))
         assertNotNull(transferObject.get(AccountCreateOperation.KEY_EXTENSIONS))
     }
@@ -52,8 +51,7 @@ class AccountCreateOperationTest {
 
     private fun buildOperation(): AccountCreateOperation {
         val fee = AssetAmount(UnsignedLong.ONE)
-        val owner = Authority(2)
-        val active = Authority(3)
+        val active = Authority(2)
         val options = AccountOptions(PublicKey(ECKey.fromPublicOnly(ECKey().pubKeyPoint).pubKey))
 
         return AccountCreateOperationBuilder()
@@ -61,7 +59,6 @@ class AccountCreateOperationTest {
             .setRegistrar("registrar")
             .setReferrer("referrer")
             .setReferrerPercent(5)
-            .setOwner(owner)
             .setActive(active)
             .setEdKey("")
             .setOptions(options)

@@ -137,8 +137,7 @@ class Authority @JvmOverloads constructor(
      * {
      *   "weight_threshold": 1,
      *   "account_auths": [],
-     *   "key_auths": [["BTS6yoiaoC4p23n31AV4GnMy5QDh5yUQEUmU4PmNxRQPGg7jjPkBq",1]],
-     *   "address_auths": []
+     *   "key_auths": [["BTS6yoiaoC4p23n31AV4GnMy5QDh5yUQEUmU4PmNxRQPGg7jjPkBq",1]]
      * }
      */
     class Deserializer(val network: Network) : JsonDeserializer<Authority> {

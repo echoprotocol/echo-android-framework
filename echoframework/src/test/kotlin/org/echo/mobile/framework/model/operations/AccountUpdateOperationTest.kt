@@ -34,7 +34,6 @@ class AccountUpdateOperationTest {
         val accountUpdateObject = json[1].asJsonObject
 
         assertNotNull(accountUpdateObject.get(BaseOperation.KEY_FEE))
-        assertNotNull(accountUpdateObject.get(AccountUpdateOperation.KEY_OWNER))
         assertNotNull(accountUpdateObject.get(AccountUpdateOperation.KEY_ACTIVE))
         assertNotNull(accountUpdateObject.get(AccountUpdateOperation.KEY_ACCOUNT))
         assertNotNull(accountUpdateObject.get(AccountUpdateOperation.KEY_NEW_OPTIONS))
@@ -49,19 +48,6 @@ class AccountUpdateOperationTest {
                                 "asset_id":"1.3.0"
                             },
                             "account":"1.2.23215",
-                            "owner":{
-                                    "weight_threshold":1,
-                                    "account_auths":[
-                                ],
-                                "key_auths":[
-                                    [
-                                        "TEST6S6ZdMzJxn3kvRHhaK5f3MGELCj76r9yXYhE3CH9NoUDszLtiP",
-                                        1
-                                    ]
-                                ],
-                                "address_auths":[
-                                ]
-                            },
                             ed_key: "a08fd46ee534e62d08e577a84a28601903d424bdf288be45644ece293672943e",
                             "active":{
                                     "weight_threshold":1,
@@ -101,7 +87,6 @@ class AccountUpdateOperationTest {
         Assert.assertTrue(transfer.fee.amount == UnsignedLong.valueOf(13771))
         Assert.assertTrue(transfer.account.getObjectId() == "1.2.23215")
         Assert.assertTrue(transfer.newOptionsOption.isSet)
-        Assert.assertTrue(transfer.ownerOption.isSet)
         Assert.assertTrue(transfer.activeOption.isSet)
     }
 
@@ -119,14 +104,12 @@ class AccountUpdateOperationTest {
     private fun buildOperation(): AccountUpdateOperation {
         val fee = AssetAmount(UnsignedLong.ONE)
         val account = Account("1.2.23215")
-        val owner = Authority(2)
-        val active = Authority(3)
+        val active = Authority(2)
         val options = AccountOptions(PublicKey(ECKey.fromPublicOnly(ECKey().pubKeyPoint).pubKey))
 
         return AccountUpdateOperationBuilder()
             .setFee(fee)
             .setAccount(account)
-            .setOwner(owner)
             .setActive(active)
             .setOptions(options)
             .build()

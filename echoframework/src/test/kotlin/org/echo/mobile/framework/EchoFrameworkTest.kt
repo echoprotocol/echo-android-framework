@@ -318,7 +318,7 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
-        framework.getAccount(login, futureAccount.completeCallback())
+        framework.getAccount("init1", futureAccount.completeCallback())
 
         val account = futureAccount.get()
         assertTrue(account != null)
@@ -349,7 +349,7 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
-        framework.checkAccountReserved(login, futureCheckReserved.completeCallback())
+        framework.checkAccountReserved("init1", futureCheckReserved.completeCallback())
 
         assertTrue(futureCheckReserved.get() ?: false)
 

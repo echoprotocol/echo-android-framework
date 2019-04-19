@@ -17,7 +17,6 @@ class AccountUpdateOperationBuilder : Builder<AccountUpdateOperation> {
 
     private var fee: AssetAmount? = null
     private var account: Account? = null
-    private var owner: Authority? = null
     private var active: Authority? = null
     private var edKey: String? = null
     private var newOptions: AccountOptions? = null
@@ -37,15 +36,6 @@ class AccountUpdateOperationBuilder : Builder<AccountUpdateOperation> {
      */
     fun setAccount(account: Account): AccountUpdateOperationBuilder {
         this.account = account
-        return this
-    }
-
-    /**
-     * Sets new owner [Authority] for account
-     * @param owner New owner [Authority] for account
-     */
-    fun setOwner(owner: Authority): AccountUpdateOperationBuilder {
-        this.owner = owner
         return this
     }
 
@@ -77,11 +67,11 @@ class AccountUpdateOperationBuilder : Builder<AccountUpdateOperation> {
 
     override fun build(): AccountUpdateOperation {
         checkAccount(account)
-        checkAuthoritiesAccountOptions(owner, active, newOptions)
+        checkAuthoritiesAccountOptions(active, newOptions)
 
         return fee?.let { nullSafeFee ->
-            AccountUpdateOperation(account!!, owner, active, edKey, newOptions, nullSafeFee)
-        } ?: AccountUpdateOperation(account!!, owner, active, edKey, newOptions)
+            AccountUpdateOperation(account!!, active, edKey, newOptions, nullSafeFee)
+        } ?: AccountUpdateOperation(account!!, active, edKey, newOptions)
     }
 
     private fun checkAccount(account: Account?) {
@@ -90,11 +80,10 @@ class AccountUpdateOperationBuilder : Builder<AccountUpdateOperation> {
     }
 
     private fun checkAuthoritiesAccountOptions(
-        owner: Authority?,
         active: Authority?,
         accountOptions: AccountOptions?
     ) {
-        if (owner == null && active == null && accountOptions == null) {
+        if (active == null && accountOptions == null) {
             throw MalformedOperationException("This operation requires at least either an authority or account options change")
         }
     }

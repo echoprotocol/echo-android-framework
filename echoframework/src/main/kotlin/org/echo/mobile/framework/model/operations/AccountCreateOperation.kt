@@ -39,24 +39,14 @@ class AccountCreateOperation
     var registrar: Account,
     var referrer: Account,
     val referrerPercent: Int = 0,
-    owner: Authority,
     active: Authority,
     private val edKey: String,
     options: AccountOptions,
     override var fee: AssetAmount = AssetAmount(UnsignedLong.ZERO)
 ) : BaseOperation(OperationType.ACCOUNT_CREATE_OPERATION) {
 
-    private var owner = Optional(owner)
     private var active = Optional(active)
     private var options = Optional(options)
-
-    /**
-     * Updates owner value
-     * @param owner New owner value
-     */
-    fun setOwner(owner: Authority) {
-        this.owner = Optional(owner)
-    }
 
     /**
      * Updates active value
@@ -90,7 +80,6 @@ class AccountCreateOperation
             addProperty(KEY_REFERRER, referrer.toJsonString())
             addProperty(KEY_REFERRER_PERCENT, referrerPercent)
 
-            if (owner.isSet) add(KEY_OWNER, owner.toJsonObject())
             if (active.isSet) add(KEY_ACTIVE, active.toJsonObject())
 
             addProperty(KEY_ACTIVE, edKey)
@@ -110,7 +99,6 @@ class AccountCreateOperation
         val registrar = registrar.toBytes()
         val referrer = referrer.toBytes()
         val referrerPercent = byteArrayOf(referrerPercent.toByte())
-        val ownerBytes = owner.toBytes()
         val activeBytes = active.toBytes()
         val edKeyBytes = edKey.toByteArray()
         val newOptionsBytes = options.toBytes()
@@ -121,7 +109,6 @@ class AccountCreateOperation
             referrer,
             referrerPercent,
             nameBytes,
-            ownerBytes,
             activeBytes,
             edKeyBytes,
             newOptionsBytes,
@@ -147,8 +134,6 @@ class AccountCreateOperation
             val registrar = Account(jsonObject.get(KEY_REGISTRAR).asString)
 
             // Deserializing Authority objects
-            val owner =
-                context.deserialize<Authority>(jsonObject.get(KEY_OWNER), Authority::class.java)
             val active =
                 context.deserialize<Authority>(jsonObject.get(KEY_ACTIVE), Authority::class.java)
             val edKey = jsonObject.get(KEY_ED_KEY).asString
@@ -168,7 +153,6 @@ class AccountCreateOperation
                 registrar,
                 referrer,
                 0,
-                owner,
                 active,
                 edKey,
                 options,
@@ -183,7 +167,6 @@ class AccountCreateOperation
         const val KEY_REGISTRAR = "registrar"
         const val KEY_REFERRER = "referrer"
         const val KEY_REFERRER_PERCENT = "referrer_percent"
-        const val KEY_OWNER = "owner"
         const val KEY_ACTIVE = "active"
         const val KEY_ED_KEY = "ed_key"
         const val KEY_OPTIONS = "options"

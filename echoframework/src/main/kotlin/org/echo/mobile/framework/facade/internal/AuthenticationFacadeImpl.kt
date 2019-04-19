@@ -95,6 +95,7 @@ class AuthenticationFacadeImpl(
     }
 
     override fun register(userName: String, password: String, callback: Callback<Boolean>) {
+        //remove owner field in newer versions
         val (owner, active, memo) = generateAccountKeys(userName, password)
         val echorandKey = cryptoCoreComponent.getEchorandKey(userName, password)
 
@@ -133,13 +134,11 @@ class AuthenticationFacadeImpl(
         name: String,
         newPassword: String
     ): AccountUpdateOperation {
-        val (owner, active, memo) = generateAccountKeys(name, newPassword)
+        val (active, memo) = generateAccountKeys(name, newPassword)
         val echorandKey = Hex.toHexString(cryptoCoreComponent.getRawEchorandKey(name, newPassword))
 
         val address = Address(memo, network)
 
-        val ownerAuthority =
-            Authority(1, hashMapOf(Address(owner, network).pubKey to 1L), hashMapOf())
         val activeAuthority =
             Authority(1, hashMapOf(Address(active, network).pubKey to 1L), hashMapOf())
 
@@ -149,12 +148,12 @@ class AuthenticationFacadeImpl(
         return AccountUpdateOperationBuilder()
             .setOptions(newOptions)
             .setAccount(account)
-            .setOwner(ownerAuthority)
             .setActive(activeAuthority)
             .setEdKey(echorandKey)
             .build()
     }
 
+    //change to Pair in newer versions
     private fun generateAccountKeys(
         name: String,
         password: String
