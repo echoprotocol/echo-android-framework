@@ -16,9 +16,7 @@ import java.lang.reflect.Type
 class Block(
     var previous: String,
     var timestamp: String,
-    var witness: String,
     var transactionMerkleRoot: String,
-    var witnessSignature: String,
     var transactions: List<Transaction>
 ) {
 
@@ -38,9 +36,7 @@ class Block(
             // Parsing block data information
             val previous = jsonObject.get(KEY_PREVIOUS).asString
             val timestamp = jsonObject.get(KEY_TIMESTAMP).asString
-            val witness = jsonObject.get(KEY_WITNESS).asString
             val transactionMerkleRoot = jsonObject.get(KEY_TRANSACTION_MERKLE_ROOT).asString
-            val witnessSignature = jsonObject.get(KEY_WITNESS_SIGNATURE).asString
 
             // Parsing operation list
             val transactions = mutableListOf<Transaction>()
@@ -61,9 +57,7 @@ class Block(
             return Block(
                 previous,
                 timestamp,
-                witness,
                 transactionMerkleRoot,
-                witnessSignature,
                 transactions
             )
         }
@@ -72,9 +66,7 @@ class Block(
     companion object {
         private const val KEY_PREVIOUS = "previous"
         private const val KEY_TIMESTAMP = "timestamp"
-        private const val KEY_WITNESS = "witness"
         private const val KEY_TRANSACTION_MERKLE_ROOT = "transaction_merkle_root"
-        private const val KEY_WITNESS_SIGNATURE = "witness_signature"
         private const val KEY_TRANSACTIONS = "transactions"
     }
 
