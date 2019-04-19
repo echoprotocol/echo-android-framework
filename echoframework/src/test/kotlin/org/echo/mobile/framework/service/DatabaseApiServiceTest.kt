@@ -404,38 +404,6 @@ class DatabaseApiServiceTest {
     }
 
     @Test
-    fun getAllContractsTest() {
-        val response = listOf(ContractInfo("1.16.1", "2.20.1", false))
-
-        val socketCoreComponent = ServiceSocketCoreComponentMock(response)
-
-        val databaseApiService =
-            DatabaseApiServiceImpl(socketCoreComponent, cryptoCoreComponent, Echodevnet())
-
-        databaseApiService.getAllContracts()
-            .value { result ->
-                assertNotNull(result)
-                assert(result.isNotEmpty())
-                assertEquals(result.first().getObjectId(), response.first().getObjectId())
-            }
-            .error { fail() }
-    }
-
-    @Test
-    fun getAllContractsErrorTest() {
-        val socketCoreComponent = ServiceSocketCoreComponentMock(null)
-
-        val databaseApiService =
-            DatabaseApiServiceImpl(socketCoreComponent, cryptoCoreComponent, Echodevnet())
-
-        databaseApiService.getAllContracts()
-            .value { fail() }
-            .error { error ->
-                assertNotNull(error)
-            }
-    }
-
-    @Test
     fun getContractsTest() {
         val response = listOf(ContractInfo("1.16.1", "2.20.1", false))
 

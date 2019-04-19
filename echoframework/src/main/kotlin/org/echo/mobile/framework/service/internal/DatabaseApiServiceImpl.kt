@@ -27,7 +27,6 @@ import org.echo.mobile.framework.model.socketoperations.CancelAllSubscriptionsSo
 import org.echo.mobile.framework.model.socketoperations.CustomOperation
 import org.echo.mobile.framework.model.socketoperations.CustomSocketOperation
 import org.echo.mobile.framework.model.socketoperations.FullAccountsSocketOperation
-import org.echo.mobile.framework.model.socketoperations.GetAllContractsSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetAssetsSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetBlockSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetChainIdSocketOperation
@@ -441,18 +440,6 @@ class DatabaseApiServiceImpl(
         socketCoreComponent.emit(operation)
 
         return futureTask.wrapResult()
-    }
-
-    override fun getAllContracts(): Result<LocalException, List<ContractInfo>> {
-        val future = FutureTask<List<ContractInfo>>()
-        val operation = GetAllContractsSocketOperation(
-            id,
-            callId = socketCoreComponent.currentId,
-            callback = future.completeCallback()
-        )
-        socketCoreComponent.emit(operation)
-
-        return future.wrapResult()
     }
 
     override fun getContracts(contractIds: List<String>): Result<LocalException, List<ContractInfo>> {

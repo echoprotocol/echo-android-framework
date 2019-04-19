@@ -1504,23 +1504,6 @@ class EchoFrameworkTest {
     }
 
     @Test
-    fun getAllContractsTest() {
-        val framework = initFramework()
-
-        if (connect(framework) == false) Assert.fail("Connection error")
-
-        val future = FutureTask<List<ContractInfo>>()
-
-        framework.getAllContracts(
-            future.completeCallback()
-        )
-
-        val contractResult = future.get()
-        assertNotNull(contractResult)
-        assert(contractResult!!.isNotEmpty())
-    }
-
-    @Test
     fun getContractsTest() {
         val framework = initFramework()
 

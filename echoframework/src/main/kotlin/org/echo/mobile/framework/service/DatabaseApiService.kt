@@ -237,11 +237,6 @@ interface ContractsService {
     ): Result<LocalException, List<Log>>
 
     /**
-     * Returns all contracts from blockchain
-     */
-    fun getAllContracts(): Result<LocalException, List<ContractInfo>>
-
-    /**
      * Returns contracts by ids
      *
      * @param contractIds List of contracts ids

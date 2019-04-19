@@ -29,7 +29,6 @@ import org.echo.mobile.framework.support.Provider
 import org.echo.mobile.framework.support.concurrent.future.FutureTask
 import org.echo.mobile.framework.support.concurrent.future.completeCallback
 import org.echo.mobile.framework.support.dematerialize
-import java.math.BigDecimal
 import java.math.RoundingMode
 
 /**
@@ -329,9 +328,6 @@ class ContractsFacadeImpl(
         callback: Callback<List<ContractInfo>>
     ) =
         callback.processResult(databaseApiService.getContracts(contractIds))
-
-    override fun getAllContracts(callback: Callback<List<ContractInfo>>) =
-        callback.processResult(databaseApiService.getAllContracts())
 
     override fun getContract(contractId: String, callback: Callback<ContractStruct>) =
         callback.processResult(databaseApiService.getContract(contractId))

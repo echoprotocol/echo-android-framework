@@ -253,11 +253,6 @@ interface ContractsFacade {
     fun getContracts(contractIds: List<String>, callback: Callback<List<ContractInfo>>)
 
     /**
-     * Returns all existing contracts from blockchain
-     */
-    fun getAllContracts(callback: Callback<List<ContractInfo>>)
-
-    /**
      * Return contract code by [contractId]
      *
      * @param contractId Id of contract

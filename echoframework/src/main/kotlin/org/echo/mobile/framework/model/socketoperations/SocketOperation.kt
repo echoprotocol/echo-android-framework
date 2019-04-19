@@ -46,7 +46,6 @@ enum class SocketOperationKeys(val key: String) {
     CANCEL_ALL_SUBSCRIPTIONS("cancel_all_subscriptions"),
     TRANSACTION_WITH_CALLBACK("broadcast_transaction_with_callback"),
     BROADCAST_TRANSACTION("broadcast_transaction"),
-    GET_ALL_CONTRACTS("get_all_contracts"),
     GET_CONTRACT_RESULT("get_contract_result"),
     GET_CONTRACT_LOGS("get_contract_logs"),
     SUBSCRIBE_CONTRACT_LOGS("subscribe_contract_logs"),
