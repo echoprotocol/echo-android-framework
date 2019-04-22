@@ -32,7 +32,7 @@ class AssetsFacadeImpl(
     private val databaseApiService: DatabaseApiService,
     private val networkBroadcastApiService: NetworkBroadcastApiService,
     private val cryptoCoreComponent: CryptoCoreComponent,
-    private val notifiedTransactionsHelper: NotifiedTransactionsHelper
+    private val notifiedTransactionsHelper: NotificationsHelper<TransactionResult>
 ) : BaseTransactionsFacade(databaseApiService, cryptoCoreComponent), AssetsFacade {
 
     override fun createAsset(
@@ -113,7 +113,7 @@ class AssetsFacadeImpl(
     private fun retrieveTransactionResult(callId: String, callback: Callback<String>) {
         try {
             val future = FutureTask<TransactionResult>()
-            notifiedTransactionsHelper.subscribeOnTransactionResult(
+            notifiedTransactionsHelper.subscribeOnResult(
                 callId,
                 future.completeCallback()
             )

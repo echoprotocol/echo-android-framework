@@ -1,26 +1,27 @@
 package org.echo.mobile.framework.core.crypto.internal
 
 import org.echo.mobile.bitcoinj.Base58
-import org.echo.mobile.framework.core.crypto.EchorandKeyProvider
-import org.echo.mobile.framework.core.crypto.internal.EchorandKeyProviderImpl.Companion.ECHORAND_KEY_PREFIX
+import org.echo.mobile.bitcoinj.ECKey
+import org.echo.mobile.framework.core.crypto.EdDSAKeyProvider
+import org.echo.mobile.framework.core.crypto.internal.EdDSAKeyProviderImpl.Companion.EDDSA_KEY_PREFIX
 import org.echo.mobile.framework.core.crypto.internal.eddsa.key.KeyPairCryptoAdapter
 import org.echo.mobile.framework.exception.LocalException
 
 /**
- * [EchorandKeyProvider] implementation based on realisations of [KeyPairCryptoAdapter]
+ * [EdDSAKeyProvider] implementation based on realisations of [KeyPairCryptoAdapter]
  *
  * Returns public key of generated key pair encoded in base58. Added specified [prefix].
- * Default prefix - [ECHORAND_KEY_PREFIX]
+ * Default prefix - [EDDSA_KEY_PREFIX]
  *
  * Wraps all errors in [LocalException]
  *
  * @author Dmitriy Bushuev
  */
-class EchorandKeyProviderImpl(
+class EdDSAKeyProviderImpl(
     private val keyPairCryptoAdapter: KeyPairCryptoAdapter,
-    private val prefix: String = ECHORAND_KEY_PREFIX
+    private val prefix: String = EDDSA_KEY_PREFIX
 ) :
-    EchorandKeyProvider {
+    EdDSAKeyProvider {
 
     override fun provide(seed: ByteArray): String =
         wrapError { prefix + Base58.encode(keyPairCryptoAdapter.keyPair(seed).first) }
@@ -38,8 +39,23 @@ class EchorandKeyProviderImpl(
             throw LocalException("Error occurred during eddsa key generation", exception)
         }
 
+    override fun provideFromPublic(key: ECKey): String =
+        wrapError {
+            val pubKey = getPubKey(key)
+
+            prefix + Base58.encode(keyPairCryptoAdapter.keyPair(pubKey).first)
+        }
+
+    private fun getPubKey(key: ECKey): ByteArray =
+        if (key.isCompressed) {
+            key.pubKey
+        } else {
+            val compressedKey = ECKey.fromPublicOnly(ECKey.compressPoint(key.pubKeyPoint))
+            compressedKey.pubKey
+        }
+
     companion object {
-        private const val ECHORAND_KEY_PREFIX = "DET"
+        private const val EDDSA_KEY_PREFIX = "DET"
     }
 
 }

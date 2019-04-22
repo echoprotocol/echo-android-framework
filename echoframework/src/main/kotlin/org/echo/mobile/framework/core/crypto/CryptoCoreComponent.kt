@@ -13,14 +13,24 @@ import java.util.ArrayList
 interface CryptoCoreComponent {
 
     /**
-     * Generates unique address string from username and password
+     * Generates unique address string from username and password by EcDSA algorithm
      */
     fun getAddress(userName: String, password: String, authorityType: AuthorityType): String
 
     /**
-     * Generates private elliptic curve key for transaction signing
+     * Generates unique address string from username and password by EdDSA algorithm
+     */
+    fun getEdDSAAddress(userName: String, password: String, authorityType: AuthorityType): String
+
+    /**
+     * Generates private elliptic curve key for transaction signing by EcDSA algorithm
      */
     fun getPrivateKey(userName: String, password: String, authorityType: AuthorityType): ByteArray
+
+    /**
+     * Generates private elliptic curve key for transaction signing by EdDSA algorithm
+     */
+    fun getEdDSAPrivateKey(userName: String, password: String, authorityType: AuthorityType): ByteArray
 
     /**
      * Derives public key from raw private key bytes
@@ -28,9 +38,14 @@ interface CryptoCoreComponent {
     fun derivePublicKeyFromPrivate(privateKey: ByteArray): ByteArray
 
     /**
-     * Transforms public key raw bytes to account address format
+     * Transforms public key raw bytes to account address format by EcDSA algorithm
      */
     fun getAddressFromPublicKey(publicKey: ByteArray): String
+
+    /**
+     * Transforms public key raw bytes to account address format by EdDSA algorithm
+     */
+    fun getEdDSAAddressFromPublicKey(publicKey: ByteArray): String
 
     /**
      * Generates echorand key using [userName] and [password]

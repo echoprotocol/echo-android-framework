@@ -1,6 +1,6 @@
 package org.echo.mobile.framework.service
 
-import org.echo.mobile.framework.Callback
+import org.echo.mobile.framework.support.Result
 
 /**
  * Encapsulates logic, associated with blockchain registration API
@@ -12,14 +12,13 @@ interface RegistrationApiService : ApiService {
     /**
      * Registration on blockchain node.
      *
-     * @param callback Listener of call result. Return true if call succeed, otherwise false
+     * @return Call [Result]. Return true if call succeed, otherwise false
      */
     fun register(
         accountName: String,
         keyOwner: String,
         keyActive: String,
         keyMemo: String,
-        echorandKey: String,
-        callback: Callback<Boolean>
-    )
+        echorandKey: String
+    ): Result<Exception, Int>
 }

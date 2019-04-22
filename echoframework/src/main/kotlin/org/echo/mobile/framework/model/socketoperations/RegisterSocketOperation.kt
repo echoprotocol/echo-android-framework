@@ -18,8 +18,8 @@ class RegisterSocketOperation(
     private val keyMemo: String,
     private val echorandKey: String,
     callId: Int,
-    callback: Callback<Boolean>
-) : SocketOperation<Boolean>(SocketMethodType.CALL, callId, Boolean::class.java, callback) {
+    callback: Callback<Int>
+) : SocketOperation<Int>(SocketMethodType.CALL, callId, Int::class.java, callback) {
 
     override fun createParameters(): JsonElement =
         JsonArray().apply {
@@ -27,6 +27,7 @@ class RegisterSocketOperation(
             add(SocketOperationKeys.REGISTER_ACCOUNT.key)
 
             add(JsonArray().apply {
+                add(callId)
                 add(accountName)
                 add(keyOwner)
                 add(keyActive)
@@ -35,8 +36,8 @@ class RegisterSocketOperation(
             })
         }
 
-    override fun fromJson(json: String): Boolean? {
-        return json.toJsonObject()?.has(RESULT_KEY) ?: false
+    override fun fromJson(json: String): Int? {
+        return json.toJsonObject()?.has(RESULT_KEY)?.let { callId } ?: -1
     }
 
 }

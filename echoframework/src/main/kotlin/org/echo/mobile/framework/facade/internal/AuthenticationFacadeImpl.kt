@@ -5,6 +5,7 @@ import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
 import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent
 import org.echo.mobile.framework.exception.AccountNotFoundException
 import org.echo.mobile.framework.exception.LocalException
+import org.echo.mobile.framework.exception.NotFoundException
 import org.echo.mobile.framework.facade.AuthenticationFacade
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.AccountOptions
@@ -12,7 +13,9 @@ import org.echo.mobile.framework.model.Address
 import org.echo.mobile.framework.model.Authority
 import org.echo.mobile.framework.model.AuthorityType
 import org.echo.mobile.framework.model.FullAccount
+import org.echo.mobile.framework.model.RegistrationResult
 import org.echo.mobile.framework.model.Transaction
+import org.echo.mobile.framework.model.TransactionResult
 import org.echo.mobile.framework.model.isEqualsByKey
 import org.echo.mobile.framework.model.network.Network
 import org.echo.mobile.framework.model.operations.AccountUpdateOperation
@@ -21,6 +24,8 @@ import org.echo.mobile.framework.processResult
 import org.echo.mobile.framework.service.DatabaseApiService
 import org.echo.mobile.framework.service.NetworkBroadcastApiService
 import org.echo.mobile.framework.service.RegistrationApiService
+import org.echo.mobile.framework.support.concurrent.future.FutureTask
+import org.echo.mobile.framework.support.concurrent.future.completeCallback
 import org.echo.mobile.framework.support.dematerialize
 import org.echo.mobile.framework.support.error
 import org.echo.mobile.framework.support.map
@@ -39,14 +44,16 @@ class AuthenticationFacadeImpl(
     private val networkBroadcastApiService: NetworkBroadcastApiService,
     private val registrationApiService: RegistrationApiService,
     private val cryptoCoreComponent: CryptoCoreComponent,
-    private val network: Network
+    private val network: Network,
+    private val notificationsHelper: NotificationsHelper<RegistrationResult>
 ) : BaseTransactionsFacade(databaseApiService, cryptoCoreComponent), AuthenticationFacade {
 
     override fun isOwnedBy(name: String, password: String, callback: Callback<FullAccount>) {
         databaseApiService.getFullAccounts(listOf(name), false)
             .map { accountsMap -> accountsMap[name] }
             .value { account ->
-                val address = cryptoCoreComponent.getAddress(name, password, AuthorityType.ACTIVE)
+                val address =
+                    cryptoCoreComponent.getEdDSAAddress(name, password, AuthorityType.ACTIVE)
 
                 val isKeySame =
                     account?.account?.isEqualsByKey(address, AuthorityType.ACTIVE) ?: false
@@ -95,18 +102,41 @@ class AuthenticationFacadeImpl(
     }
 
     override fun register(userName: String, password: String, callback: Callback<Boolean>) {
-        //remove owner field in newer versions
-        val (owner, active, memo) = generateAccountKeys(userName, password)
-        val echorandKey = cryptoCoreComponent.getEchorandKey(userName, password)
+        try {
+            val active =
+                cryptoCoreComponent.getEdDSAAddress(userName, password, AuthorityType.ACTIVE)
+            val memo = cryptoCoreComponent.getAddress(userName, password, AuthorityType.ACTIVE)
 
-        registrationApiService.register(
-            userName,
-            owner,
-            active,
-            memo,
-            echorandKey,
-            callback
+            val echorandKey = cryptoCoreComponent.getEchorandKey(userName, password)
+
+            val callId = registrationApiService.register(
+                userName,
+                active,
+                active,
+                memo,
+                echorandKey
+            ).dematerialize().toString()
+
+            retrieveTransactionResult(callId, callback)
+        } catch (ex: Exception) {
+            callback.onError(LocalException("Can't register account", cause = ex))
+        }
+    }
+
+    private fun retrieveTransactionResult(
+        callId: String,
+        callback: Callback<Boolean>
+    ) {
+        val future = FutureTask<RegistrationResult>()
+        notificationsHelper.subscribeOnResult(
+            callId,
+            future.completeCallback()
         )
+
+        future.get()
+            ?: throw NotFoundException("Result of operation not found.")
+
+        callback.onSuccess(true)
     }
 
     private fun getAccountId(name: String, password: String): String {

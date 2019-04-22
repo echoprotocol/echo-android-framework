@@ -42,7 +42,7 @@ class ContractsFacadeImpl(
     private val databaseApiService: DatabaseApiService,
     private val networkBroadcastApiService: NetworkBroadcastApiService,
     private val cryptoCoreComponent: CryptoCoreComponent,
-    private val notifiedTransactionsHelper: NotifiedTransactionsHelper,
+    private val notifiedTransactionsHelper: NotificationsHelper<TransactionResult>,
     private val feeRatioProvider: Provider<Double>
 ) : BaseTransactionsFacade(
     databaseApiService,
@@ -424,7 +424,7 @@ class ContractsFacadeImpl(
     ) {
         try {
             val future = FutureTask<TransactionResult>()
-            notifiedTransactionsHelper.subscribeOnTransactionResult(
+            notifiedTransactionsHelper.subscribeOnResult(
                 callId,
                 future.completeCallback()
             )
