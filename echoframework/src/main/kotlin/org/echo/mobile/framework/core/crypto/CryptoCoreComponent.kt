@@ -38,6 +38,11 @@ interface CryptoCoreComponent {
     fun derivePublicKeyFromPrivate(privateKey: ByteArray): ByteArray
 
     /**
+     * Derives public key from raw private key bytes  by EdDSA algorithm
+     */
+    fun deriveEdDSAPublicKeyFromPrivate(privateKey: ByteArray): ByteArray
+
+    /**
      * Transforms public key raw bytes to account address format by EcDSA algorithm
      */
     fun getAddressFromPublicKey(publicKey: ByteArray): String

@@ -1,7 +1,4 @@
 package org.echo.mobile.framework.core.crypto
-
-import org.echo.mobile.bitcoinj.ECKey
-
 /**
  * Describes functionality of echorand key generation for account registration
  *
@@ -14,21 +11,26 @@ interface EdDSAKeyProvider {
      *
      * [seed] size = 32 bytes !
      */
-    fun provide(seed: ByteArray): String
+    fun provideAddress(seed: ByteArray): String
 
     /**
      * Generates key in base58 representation using random seed
      */
-    fun provide(): String
+    fun provideAddress(): String
 
     /**
      * Generates key in raw representation
      */
-    fun provideRaw(seed: ByteArray): ByteArray
+    fun providePublicKeyRaw(seed: ByteArray): ByteArray
 
     /**
-     * Generates key from public [ECKey]
+     * Generates private key in raw representation
      */
-    fun provideFromPublic(key: ECKey): String
+    fun providePrivateKeyRaw(seed: ByteArray): ByteArray
+
+    /**
+     * Generates address from public key [ByteArray]
+     */
+    fun provideAddressFromPublicKey(key: ByteArray): String
 
 }

@@ -11,10 +11,10 @@ import com.google.gson.JsonObject
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.AccountOptions
 import org.echo.mobile.framework.model.AssetAmount
-import org.echo.mobile.framework.model.Authority
 import org.echo.mobile.framework.model.BaseOperation
 import org.echo.mobile.framework.model.Optional
-import org.spongycastle.util.encoders.Hex
+import org.echo.mobile.framework.model.eddsa.EdAddress
+import org.echo.mobile.framework.model.eddsa.EdAuthority
 import java.lang.reflect.Type
 
 /**
@@ -25,7 +25,7 @@ import java.lang.reflect.Type
  */
 class AccountUpdateOperation @JvmOverloads constructor(
     var account: Account,
-    active: Authority?,
+    active: EdAuthority?,
     private val edKey: String?,
     newOptions: AccountOptions?,
     override var fee: AssetAmount = AssetAmount(UnsignedLong.ZERO)
@@ -38,7 +38,7 @@ class AccountUpdateOperation @JvmOverloads constructor(
      * Updates active value
      * @param active New active value
      */
-    fun setActive(active: Authority) {
+    fun setActive(active: EdAuthority) {
         this.activeOption = Optional(active)
     }
 
@@ -56,7 +56,7 @@ class AccountUpdateOperation @JvmOverloads constructor(
         val activeBytes = activeOption.toBytes()
 
         val edKeyBytes = edKey?.let {
-            byteArrayOf(1) + Hex.decode(edKey)
+            byteArrayOf(1) + EdAddress(edKey).pubKey.key
         } ?: byteArrayOf(0)
 
         val newOptionsBytes = newOptionsOption.toBytes()
@@ -127,9 +127,9 @@ class AccountUpdateOperation @JvmOverloads constructor(
         private fun parseActive(
             operationObject: JsonObject,
             deserializer: JsonDeserializationContext?
-        ) = deserializer?.deserialize<Authority>(
+        ) = deserializer?.deserialize<EdAuthority>(
             operationObject.get(KEY_ACTIVE),
-            Authority::class.java
+            EdAuthority::class.java
         )
 
         private fun parseNewOptions(

@@ -44,7 +44,7 @@ class AssetsFacadeImpl(
     ) {
         val callId: String
         try {
-            val privateKey = cryptoCoreComponent.getPrivateKey(
+            val privateKey = cryptoCoreComponent.getEdDSAPrivateKey(
                 name, password, AuthorityType.ACTIVE
             )
 
@@ -146,7 +146,7 @@ class AssetsFacadeImpl(
             .setDestination(target)
             .build()
 
-        val privateKey = cryptoCoreComponent.getPrivateKey(
+        val privateKey = cryptoCoreComponent.getEdDSAPrivateKey(
             issuerNameOrId,
             password,
             AuthorityType.ACTIVE

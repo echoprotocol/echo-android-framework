@@ -113,8 +113,8 @@ class DatabaseApiServiceImpl(
     ) {
         val keys = wifs.map { wif ->
             val privateKey = cryptoCoreComponent.decodeFromWif(wif)
-            val publicKey = cryptoCoreComponent.derivePublicKeyFromPrivate(privateKey)
-            cryptoCoreComponent.getAddressFromPublicKey(publicKey)
+            val publicKey = cryptoCoreComponent.deriveEdDSAPublicKeyFromPrivate(privateKey)
+            cryptoCoreComponent.getEdDSAAddressFromPublicKey(publicKey)
         }
 
         val getKeyReferencesSocketOperation = GetKeyReferencesSocketOperation(

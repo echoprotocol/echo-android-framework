@@ -3,6 +3,8 @@ package org.echo.mobile.framework.model.socketoperations
 import com.google.common.primitives.UnsignedLong
 import org.echo.mobile.bitcoinj.ECKey
 import org.echo.mobile.framework.model.*
+import org.echo.mobile.framework.model.eddsa.EdAuthority
+import org.echo.mobile.framework.model.PublicKey
 import org.echo.mobile.framework.model.operations.AccountUpdateOperation
 import org.echo.mobile.framework.model.operations.AccountUpdateOperationBuilder
 import org.echo.mobile.framework.support.EmptyCallback
@@ -33,7 +35,7 @@ class RequiredFeesSocketOperationTest {
     private fun buildOperation(): AccountUpdateOperation {
         val fee = AssetAmount(UnsignedLong.ONE)
         val account = Account("1.2.23215")
-        val active = Authority(2)
+        val active = EdAuthority(1)
         val options = AccountOptions(PublicKey(ECKey.fromPublicOnly(ECKey().pubKeyPoint).pubKey))
 
         return AccountUpdateOperationBuilder()

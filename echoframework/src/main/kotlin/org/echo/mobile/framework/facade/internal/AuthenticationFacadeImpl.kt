@@ -10,12 +10,12 @@ import org.echo.mobile.framework.facade.AuthenticationFacade
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.AccountOptions
 import org.echo.mobile.framework.model.Address
-import org.echo.mobile.framework.model.Authority
 import org.echo.mobile.framework.model.AuthorityType
 import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.RegistrationResult
 import org.echo.mobile.framework.model.Transaction
-import org.echo.mobile.framework.model.TransactionResult
+import org.echo.mobile.framework.model.eddsa.EdAddress
+import org.echo.mobile.framework.model.eddsa.EdAuthority
 import org.echo.mobile.framework.model.isEqualsByKey
 import org.echo.mobile.framework.model.network.Network
 import org.echo.mobile.framework.model.operations.AccountUpdateOperation
@@ -30,7 +30,6 @@ import org.echo.mobile.framework.support.dematerialize
 import org.echo.mobile.framework.support.error
 import org.echo.mobile.framework.support.map
 import org.echo.mobile.framework.support.value
-import org.spongycastle.util.encoders.Hex
 
 /**
  * Implementation of [AuthenticationFacade]
@@ -90,7 +89,7 @@ class AuthenticationFacadeImpl(
         val chainId = getChainId()
 
         val privateKey =
-            cryptoCoreComponent.getPrivateKey(name, oldPassword, AuthorityType.ACTIVE)
+            cryptoCoreComponent.getEdDSAPrivateKey(name, oldPassword, AuthorityType.ACTIVE)
         val fees = getFees(listOf(operation))
 
         val transaction = Transaction(blockData, listOf(operation), chainId).apply {
@@ -143,7 +142,7 @@ class AuthenticationFacadeImpl(
         val accountsResult = databaseApiService.getFullAccounts(listOf(name), false)
 
         val ownerAddress =
-            cryptoCoreComponent.getAddress(name, password, AuthorityType.ACTIVE)
+            cryptoCoreComponent.getEdDSAAddress(name, password, AuthorityType.ACTIVE)
 
         val account = accountsResult
             .map { accountsMap -> accountsMap[name] }
@@ -164,15 +163,20 @@ class AuthenticationFacadeImpl(
         name: String,
         newPassword: String
     ): AccountUpdateOperation {
-        val (active, memo) = generateAccountKeys(name, newPassword)
-        val echorandKey = Hex.toHexString(cryptoCoreComponent.getRawEchorandKey(name, newPassword))
+        val active = cryptoCoreComponent.getEdDSAAddress(name, newPassword, AuthorityType.ACTIVE)
+        val memoKey = cryptoCoreComponent.getAddress(name, newPassword, AuthorityType.ACTIVE)
 
-        val address = Address(memo, network)
+        val echorandKey = cryptoCoreComponent.getEchorandKey(name, newPassword)
 
         val activeAuthority =
-            Authority(1, hashMapOf(Address(active, network).pubKey to 1L), hashMapOf())
+            EdAuthority(
+                1,
+                hashMapOf(EdAddress(active).pubKey to 1L),
+                hashMapOf()
+            )
 
-        val newOptions = AccountOptions(address.pubKey)
+        val memoAddress = Address(memoKey, network)
+        val newOptions = AccountOptions(memoAddress.pubKey)
         val account = Account(id)
 
         return AccountUpdateOperationBuilder()
@@ -181,16 +185,6 @@ class AuthenticationFacadeImpl(
             .setActive(activeAuthority)
             .setEdKey(echorandKey)
             .build()
-    }
-
-    //change to Pair in newer versions
-    private fun generateAccountKeys(
-        name: String,
-        password: String
-    ): Triple<String, String, String> {
-        val key = cryptoCoreComponent.getAddress(name, password, AuthorityType.ACTIVE)
-
-        return Triple(key, key, key)
     }
 
     companion object {

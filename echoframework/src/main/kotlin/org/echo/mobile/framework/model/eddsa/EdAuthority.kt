@@ -1,4 +1,4 @@
-package org.echo.mobile.framework.model
+package org.echo.mobile.framework.model.eddsa
 
 import com.google.common.primitives.Bytes
 import com.google.gson.JsonArray
@@ -7,7 +7,9 @@ import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import org.echo.mobile.framework.exception.MalformedAddressException
-import org.echo.mobile.framework.model.network.Network
+import org.echo.mobile.framework.model.Account
+import org.echo.mobile.framework.model.Extensions
+import org.echo.mobile.framework.model.GrapheneSerializable
 import org.echo.mobile.framework.support.Uint16
 import org.echo.mobile.framework.support.Uint32
 import org.echo.mobile.framework.support.serialize
@@ -15,13 +17,13 @@ import java.lang.reflect.Type
 
 /**
  * Class used to represent the weighted set of keys and accounts that must approve operations.
- * Uses EcDSA algorithm.
+ * Uses EdDSA algorithm.
  *
  * @author Dmitriy Bushuev
  */
-class Authority @JvmOverloads constructor(
+class EdAuthority @JvmOverloads constructor(
     var weightThreshold: Int = 1,
-    var keyAuthorities: Map<PublicKey, Long> = mapOf(),
+    var keyAuthorities: Map<EdPublicKey, Long> = mapOf(),
     var accountAuthorities: Map<Account, Long> = mapOf()
 ) : GrapheneSerializable {
 
@@ -31,7 +33,7 @@ class Authority @JvmOverloads constructor(
     /**
      * @return: Returns a list of public keys linked to this authority
      */
-    val keyAuthList: List<PublicKey>
+    val keyAuthList: List<EdPublicKey>
         get() = keyAuthorities.keys.toList()
 
     /**
@@ -86,7 +88,7 @@ class Authority @JvmOverloads constructor(
             val keyAuthArray = JsonArray().apply {
                 keyAuthorities.forEach { (publicKey, weight) ->
                     val subArray = JsonArray()
-                    val address = Address(publicKey)
+                    val address = EdAddress(publicKey)
                     subArray.add(address.toString())
                     subArray.add(weight)
                     add(subArray)
@@ -107,7 +109,7 @@ class Authority @JvmOverloads constructor(
         }
 
     override fun equals(other: Any?): Boolean {
-        if (other == null || other !is Authority) {
+        if (other == null || other !is EdAuthority) {
             return false
         }
 
@@ -141,13 +143,13 @@ class Authority @JvmOverloads constructor(
      *   "key_auths": [["DETHV1WK9KNWskGnuFSkgbL63cfh82xWhExF5gdNxPM9FTe",1]]
      * }
      */
-    class Deserializer(private val network: Network) : JsonDeserializer<Authority> {
+    class Deserializer : JsonDeserializer<EdAuthority> {
 
         override fun deserialize(
             json: JsonElement?,
             typeOfT: Type?,
             context: JsonDeserializationContext?
-        ): Authority? {
+        ): EdAuthority? {
 
             if (json == null || !json.isJsonObject) {
                 return null
@@ -159,13 +161,13 @@ class Authority @JvmOverloads constructor(
             val keyAuthArray = baseObject.getAsJsonArray(KEY_KEY_AUTHS)
             val accountAuthArray = baseObject.getAsJsonArray(KEY_ACCOUNT_AUTHS)
 
-            val keyAuthMap = HashMap<PublicKey, Long>()
+            val keyAuthMap = HashMap<EdPublicKey, Long>()
             for (i in 0 until keyAuthArray.size()) {
                 val subArray = keyAuthArray.get(i).asJsonArray
                 val addr = subArray.get(0).asString
                 val weight = subArray.get(1).asLong
                 try {
-                    keyAuthMap[Address(addr, network).pubKey] = weight
+                    keyAuthMap[EdAddress(addr).pubKey] = weight
                 } catch (e: MalformedAddressException) {
                     System.out.println("MalformedAddressException. Msg: " + e.message)
                 }
@@ -181,7 +183,7 @@ class Authority @JvmOverloads constructor(
                 accountAuthMap[userAccount] = weight
             }
 
-            return Authority(
+            return EdAuthority(
                 weightThreshold,
                 keyAuthMap,
                 accountAuthMap

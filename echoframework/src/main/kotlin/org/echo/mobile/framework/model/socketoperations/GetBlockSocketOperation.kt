@@ -9,10 +9,10 @@ import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.AccountOptions
 import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.AssetOptions
-import org.echo.mobile.framework.model.Authority
 import org.echo.mobile.framework.model.Block
 import org.echo.mobile.framework.model.Memo
 import org.echo.mobile.framework.model.Transaction
+import org.echo.mobile.framework.model.eddsa.EdAuthority
 import org.echo.mobile.framework.model.network.Network
 import org.echo.mobile.framework.model.operations.AccountCreateOperation
 import org.echo.mobile.framework.model.operations.AccountUpdateOperation
@@ -107,7 +107,7 @@ class GetBlockSocketOperation(
             IssueAssetOperation.IssueAssetDeserializer()
         )
         registerTypeAdapter(AssetAmount::class.java, AssetAmount.Deserializer())
-        registerTypeAdapter(Authority::class.java, Authority.Deserializer(network))
+        registerTypeAdapter(EdAuthority::class.java, EdAuthority.Deserializer())
         registerTypeAdapter(Account::class.java, Account.Deserializer())
         registerTypeAdapter(AccountOptions::class.java, AccountOptions.Deserializer(network))
     }.create()

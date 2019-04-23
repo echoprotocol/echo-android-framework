@@ -4,8 +4,8 @@ import com.google.common.primitives.UnsignedLong
 import org.echo.mobile.bitcoinj.ECKey
 import org.echo.mobile.framework.model.AccountOptions
 import org.echo.mobile.framework.model.AssetAmount
-import org.echo.mobile.framework.model.Authority
 import org.echo.mobile.framework.model.BaseOperation
+import org.echo.mobile.framework.model.eddsa.EdAuthority
 import org.echo.mobile.framework.model.PublicKey
 import org.junit.Assert
 import org.junit.Assert.assertNotNull
@@ -51,8 +51,14 @@ class AccountCreateOperationTest {
 
     private fun buildOperation(): AccountCreateOperation {
         val fee = AssetAmount(UnsignedLong.ONE)
-        val active = Authority(2)
-        val options = AccountOptions(PublicKey(ECKey.fromPublicOnly(ECKey().pubKeyPoint).pubKey))
+        val active = EdAuthority(2)
+        val options = AccountOptions(
+            PublicKey(
+                ECKey.fromPublicOnly(
+                    ECKey().pubKeyPoint
+                ).pubKey
+            )
+        )
 
         return AccountCreateOperationBuilder()
             .setAccountName("testName")

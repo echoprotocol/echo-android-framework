@@ -9,9 +9,9 @@ import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.AccountOptions
 import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.AssetOptions
-import org.echo.mobile.framework.model.Authority
 import org.echo.mobile.framework.model.HistoricalTransfer
 import org.echo.mobile.framework.model.HistoryResponse
+import org.echo.mobile.framework.model.eddsa.EdAuthority
 import org.echo.mobile.framework.model.Memo
 import org.echo.mobile.framework.model.network.Network
 import org.echo.mobile.framework.model.operations.AccountCreateOperation
@@ -120,13 +120,13 @@ class GetAccountHistorySocketOperation(
             IssueAssetOperation.IssueAssetDeserializer()
         )
         registerTypeAdapter(AssetAmount::class.java, AssetAmount.Deserializer())
-        registerTypeAdapter(Authority::class.java, Authority.Deserializer(network))
+        registerTypeAdapter(EdAuthority::class.java, EdAuthority.Deserializer())
         registerTypeAdapter(Account::class.java, Account.Deserializer())
         registerTypeAdapter(AccountOptions::class.java, AccountOptions.Deserializer(network))
     }.create()
 
     companion object {
-        const val DEFAULT_HISTORY_ID = "1.11.0"
+        const val DEFAULT_HISTORY_ID = "1.10.0"
         const val DEFAULT_LIMIT = 100
     }
 

@@ -11,11 +11,12 @@ import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.AuthorityType
 import org.echo.mobile.framework.model.BlockData
 import org.echo.mobile.framework.model.Transaction
+import org.echo.mobile.framework.model.eddsa.EdAddress
 import org.echo.mobile.framework.model.network.Echodevnet
 import org.echo.mobile.framework.model.network.Network
 import org.echo.mobile.framework.model.operations.TransferOperation
 import org.echo.mobile.framework.model.operations.TransferOperationBuilder
-import org.echo.mobile.framework.support.crypto.Signature.SIGN_DATA_BYTES
+import org.echo.mobile.framework.support.crypto.EdDSASignature.SIGN_DATA_BYTES
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNotNull
@@ -54,7 +55,7 @@ class CryptoCoreComponentTest {
     }
 
     @Test
-    fun addressEqualityTest() {
+    fun addressesIsEqual() {
         val firstAddress = cryptoCoreComponent.getAddress(name, password, authorityType)
         val secondAddress = cryptoCoreComponent.getAddress(name, password, authorityType)
 
@@ -74,6 +75,27 @@ class CryptoCoreComponentTest {
     }
 
     @Test
+    fun edDSAAddressesIsEqual() {
+        val firstAddress = cryptoCoreComponent.getEdDSAAddress(name, password, authorityType)
+        val secondAddress = cryptoCoreComponent.getEdDSAAddress(name, password, authorityType)
+
+        assertEquals(firstAddress, secondAddress)
+
+        val secondName = "secondTestName"
+        val secondPassword = "secondTestPassword"
+
+        val thirdAddress =
+            cryptoCoreComponent.getEdDSAAddress(secondName, secondPassword, authorityType)
+
+        assertNotEquals(firstAddress, thirdAddress)
+
+        val firstAccountAddress = EdAddress(firstAddress)
+        val secondAccountAddress = EdAddress(thirdAddress)
+
+        assertNotEquals(firstAccountAddress.pubKey, secondAccountAddress.pubKey)
+    }
+
+    @Test
     fun privateKeyTest() {
         val privateKey = cryptoCoreComponent.getPrivateKey(name, password, authorityType)
 
@@ -81,8 +103,31 @@ class CryptoCoreComponentTest {
     }
 
     @Test
+    fun edDSAPrivateKeyTest() {
+        val privateKey = cryptoCoreComponent.getEdDSAPrivateKey(name, password, authorityType)
+
+        assertTrue(ECKey.fromPrivate(privateKey).hasPrivKey())
+    }
+
+    @Test
     fun signatureLengthTest() {
         val privateKey = cryptoCoreComponent.getPrivateKey(name, password, authorityType)
+
+        val transferOperation = buildOperation()
+        val transaction = Transaction(
+            BlockData(5, 123L, 2342355235L),
+            listOf(transferOperation),
+            "39f5e2ede1f8bc1a3a54a7914414e3779e33193f1f5693510e73cb7a87617447"
+        ).apply { addPrivateKey(privateKey) }
+
+        val signature = cryptoCoreComponent.signTransaction(transaction)
+
+        assertTrue(signature[0].size == SIGN_DATA_BYTES)
+    }
+
+    @Test
+    fun edDSASignatureLengthTest() {
+        val privateKey = cryptoCoreComponent.getEdDSAPrivateKey(name, password, authorityType)
 
         val transferOperation = buildOperation()
         val transaction = Transaction(
@@ -108,11 +153,8 @@ class CryptoCoreComponentTest {
         val privateKey =
             cryptoCoreComponent.getPrivateKey(secondName, secondPassword, AuthorityType.ACTIVE)
         val publicKey = Address(
-            cryptoCoreComponent.getAddress(
-                name,
-                password,
-                AuthorityType.ACTIVE
-            ), network
+            cryptoCoreComponent.getAddress(name, password, AuthorityType.ACTIVE),
+            network
         ).pubKey.key
 
         val decrypted =
@@ -129,10 +171,9 @@ class CryptoCoreComponentTest {
             cryptoCoreComponent.getPrivateKey("wrongName", "wrongPassword", AuthorityType.ACTIVE)
         val publicKey = Address(
             cryptoCoreComponent.getAddress(
-                "wrongName1",
-                "wrongPassword1",
-                AuthorityType.ACTIVE
-            ), network
+                "wrongName1", "wrongPassword1", AuthorityType.ACTIVE
+            ),
+            network
         ).pubKey.key
 
         val decrypted =
@@ -144,11 +185,8 @@ class CryptoCoreComponentTest {
     private fun encrypt(): ByteArray {
         val privateKey = cryptoCoreComponent.getPrivateKey(name, password, AuthorityType.ACTIVE)
         val publicKey = Address(
-            cryptoCoreComponent.getAddress(
-                secondName,
-                secondPassword,
-                AuthorityType.ACTIVE
-            ), network
+            cryptoCoreComponent.getAddress(secondName, secondPassword, AuthorityType.ACTIVE),
+            network
         ).pubKey.key
 
         val encrypted =
@@ -169,6 +207,27 @@ class CryptoCoreComponentTest {
             .setFee(fee)
             .setAmount(amount)
             .build()
+    }
+
+    @Test
+    fun encodeToWifSuccess() {
+        val privKey = cryptoCoreComponent.getEdDSAPrivateKey("daria", "daria", AuthorityType.ACTIVE)
+
+        val encodedWif = cryptoCoreComponent.encodeToWif(privKey)
+
+        assertEquals("5J9YnfSUx6GnweorDEswRNAFcBzsZrQoJLkfqKLzXwBdRvjmoz1", encodedWif)
+    }
+
+    @Test
+    fun decodeToWifSuccess() {
+        val wifKey = "5J9YnfSUx6GnweorDEswRNAFcBzsZrQoJLkfqKLzXwBdRvjmoz1"
+
+        val decodedWif = cryptoCoreComponent.decodeFromWif(wifKey).joinToString()
+
+        assertEquals(
+            "43, -68, -75, 90, 0, -125, 40, -6, -41, -101, -37, -55, 30, -71, 99, -92, 3, 40, -86, 60, -35, -12, 71, -68, 73, -122, -65, 69, 117, -109, 19, -20",
+            decodedWif
+        )
     }
 
 }

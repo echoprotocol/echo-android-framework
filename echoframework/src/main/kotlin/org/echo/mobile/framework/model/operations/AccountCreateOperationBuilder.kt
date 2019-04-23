@@ -4,7 +4,7 @@ import org.echo.mobile.framework.exception.MalformedOperationException
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.AccountOptions
 import org.echo.mobile.framework.model.AssetAmount
-import org.echo.mobile.framework.model.Authority
+import org.echo.mobile.framework.model.eddsa.EdAuthority
 import org.echo.mobile.framework.support.Builder
 
 /**
@@ -20,7 +20,7 @@ class AccountCreateOperationBuilder : Builder<AccountCreateOperation> {
     private var referrer: String? = null
     private var referrerPercent: Int = 0
     private var fee: AssetAmount? = null
-    private var active: Authority? = null
+    private var active: EdAuthority? = null
     private var edKey: String? = null
     private var options: AccountOptions? = null
 
@@ -76,11 +76,11 @@ class AccountCreateOperationBuilder : Builder<AccountCreateOperation> {
     }
 
     /**
-     * Sets new active [Authority] for account
+     * Sets new active [EdAuthority] for account
      *
-     * @param active New active [Authority] for account
+     * @param active New active [EdAuthority] for account
      */
-    fun setActive(active: Authority): AccountCreateOperationBuilder {
+    fun setActive(active: EdAuthority): AccountCreateOperationBuilder {
         this.active = active
         return this
     }
@@ -149,7 +149,7 @@ class AccountCreateOperationBuilder : Builder<AccountCreateOperation> {
     }
 
     private fun checkAuthoritiesAccountOptions(
-        active: Authority?,
+        active: EdAuthority?,
         accountOptions: AccountOptions?
     ) {
         if (active == null && accountOptions == null) {

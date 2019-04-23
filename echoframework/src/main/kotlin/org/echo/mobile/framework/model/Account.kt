@@ -6,14 +6,14 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.annotations.Expose
 import org.echo.mobile.framework.TIME_DATE_FORMAT
+import org.echo.mobile.framework.model.eddsa.EdAuthority
 import java.lang.reflect.Type
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 /**
- * Represents account model in Graphene blockchain
- * [Account model documentation](https://dev-doc.myecho.app/classgraphene_1_1chain_1_1account__object.html)
+ * Represents account model in blockchain
  *
  * @author Dmitriy Bushuev
  */
@@ -23,7 +23,7 @@ class Account : GrapheneObject, GrapheneSerializable {
     lateinit var name: String
 
     @Expose
-    lateinit var active: Authority
+    lateinit var active: EdAuthority
 
     @Expose
     lateinit var edKey: String
@@ -124,8 +124,8 @@ class Account : GrapheneObject, GrapheneSerializable {
             context: JsonDeserializationContext,
             jsonAccount: JsonObject,
             key: String
-        ): Authority =
-            context.deserialize<Authority>(jsonAccount.get(key), Authority::class.java)
+        ): EdAuthority =
+            context.deserialize<EdAuthority>(jsonAccount.get(key), EdAuthority::class.java)
 
         private fun getDate(jsonAccount: JsonObject): Long {
             val dateFormat = SimpleDateFormat(TIME_DATE_FORMAT, Locale.getDefault())
@@ -171,7 +171,7 @@ fun Account.isEqualsByKey(key: String, authorityType: AuthorityType): Boolean =
         }
     }
 
-private fun isKeyExist(address: String, authority: Authority): Boolean {
+private fun isKeyExist(address: String, authority: EdAuthority): Boolean {
     val foundKey = authority.keyAuthorities.keys.find { pubKey ->
         pubKey.address == address
     }
