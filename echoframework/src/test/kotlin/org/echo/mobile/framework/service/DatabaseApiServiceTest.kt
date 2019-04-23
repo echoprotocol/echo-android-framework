@@ -8,6 +8,7 @@ import org.echo.mobile.framework.core.socket.SocketCoreComponent
 import org.echo.mobile.framework.core.socket.SocketMessengerListener
 import org.echo.mobile.framework.core.socket.SocketState
 import org.echo.mobile.framework.exception.LocalException
+import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.Asset
 import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.Block
@@ -66,7 +67,9 @@ class DatabaseApiServiceTest {
         blockResponse = Block(
             "000000ea71c0589dc4f1db03fa38d38675b538f3",
             "2018-08-02T14:42:30",
+            Account("1.2.0"),
             "0000000000000000000000000000000000000000",
+            "5",
             listOf()
         )
     }
