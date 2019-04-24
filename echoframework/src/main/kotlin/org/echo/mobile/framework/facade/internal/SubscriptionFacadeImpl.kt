@@ -149,7 +149,7 @@ class SubscriptionFacadeImpl(
 
             if (!blockSubscriptionManager.containListeners()) {
                 getCurrentBlockchainData()
-                    .value { _ ->
+                    .value {
                         blockSubscriptionManager.addListener(listener)
                         callback.onSuccess(subscribed)
                     }

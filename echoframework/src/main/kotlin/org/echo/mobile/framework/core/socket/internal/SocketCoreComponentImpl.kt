@@ -64,7 +64,7 @@ class SocketCoreComponentImpl(
 
             operation?.let { notNullOperation ->
                 error?.let { notNullError ->
-                    with(ResponseSocketException(notNullError.data.message)) {
+                    with(ResponseSocketException(notNullError.message)) {
                         LOGGER.log("Response error. Response = $event", this)
                         notNullOperation.callback.onError(this)
                     }

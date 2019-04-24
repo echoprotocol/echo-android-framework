@@ -74,6 +74,8 @@ class GetBlockSocketOperationTest {
                         "timestamp": "2018-08-10T14:27:55",
                         "witness": "1.6.10",
                         "transaction_merkle_root": "0c8015ab0d5471216cb0ab3052e0b7b7d115ca3e",
+                        "round": "0c8015ab0d5471216cb0ab3052e0b7b7d115ca3e",
+                        "rand": "0c8015ab0d5471216cb0ab3052e0b7b7d115ca3e",
                         "state_root_hash": "8a0250a64258890c789893006acafb51ae544a575457afa77d3e11c2b0847a6a",
                         "result_root_hash": "288912bd68b41a96fefa5d537dbd51411ee066450dc01cd017c01eea977cc491",
                         "extensions": [],
