@@ -17,6 +17,8 @@ class Block(
     var previous: String,
     var timestamp: String,
     var witness: String,
+    var round: String,
+    var rand: String,
     var transactionMerkleRoot: String,
     var witnessSignature: String,
     var transactions: List<Transaction>
@@ -39,6 +41,8 @@ class Block(
             val previous = jsonObject.get(KEY_PREVIOUS).asString
             val timestamp = jsonObject.get(KEY_TIMESTAMP).asString
             val witness = jsonObject.get(KEY_WITNESS).asString
+            val round = jsonObject.get(KEY_ROUND).asString
+            val rand = jsonObject.get(KEY_RAND).asString
             val transactionMerkleRoot = jsonObject.get(KEY_TRANSACTION_MERKLE_ROOT).asString
             val witnessSignature = jsonObject.get(KEY_WITNESS_SIGNATURE).asString
 
@@ -62,6 +66,8 @@ class Block(
                 previous,
                 timestamp,
                 witness,
+                round,
+                rand,
                 transactionMerkleRoot,
                 witnessSignature,
                 transactions
@@ -76,6 +82,8 @@ class Block(
         private const val KEY_TRANSACTION_MERKLE_ROOT = "transaction_merkle_root"
         private const val KEY_WITNESS_SIGNATURE = "witness_signature"
         private const val KEY_TRANSACTIONS = "transactions"
+        private const val KEY_ROUND = "round"
+        private const val KEY_RAND = "rand"
     }
 
 }
