@@ -82,6 +82,9 @@ class AuthenticationFacadeImpl(
         val account =
             databaseApiService.getFullAccounts(listOf(accountId), false).dematerialize()
 
+        operation.newOptionsOption.field?.votingAccount =
+            account[accountId]?.account!!.options.votingAccount
+
         operation.newOptionsOption.field?.delegatingAccount =
             account[accountId]?.account!!.options.delegatingAccount
 

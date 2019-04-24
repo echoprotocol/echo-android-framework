@@ -56,7 +56,7 @@ class AccountUpdateOperation @JvmOverloads constructor(
         val activeBytes = activeOption.toBytes()
 
         val edKeyBytes = edKey?.let {
-            byteArrayOf(1) + EdAddress(edKey).pubKey.key
+            byteArrayOf(1) + EdAddress(edKey).pubKey.toBytes()
         } ?: byteArrayOf(0)
 
         val newOptionsBytes = newOptionsOption.toBytes()
