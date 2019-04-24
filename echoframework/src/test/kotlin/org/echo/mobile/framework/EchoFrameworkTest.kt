@@ -616,7 +616,6 @@ class EchoFrameworkTest {
         assertTrue(futureSubscriptionResult.get() ?: false)
     }
 
-
     @Test
     fun subscribeContractLogsArrayTest() {
         val framework = initFramework()
