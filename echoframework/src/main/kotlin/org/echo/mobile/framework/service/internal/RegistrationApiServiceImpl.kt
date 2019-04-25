@@ -39,18 +39,6 @@ class RegistrationApiServiceImpl(private val socketCoreComponent: SocketCoreComp
             echorandKey,
             callId = socketCoreComponent.currentId,
             callback = future.completeCallback())
-//            callback = object : Callback<Boolean> {
-//
-//                override fun onSuccess(result: Boolean) {
-//                    callback.onSuccess(result)
-//                }
-//
-//                override fun onError(error: LocalException) {
-//                    callback.onError(RegistrationException("Can't register account", error))
-//                }
-//
-//            }
-//        )
         socketCoreComponent.emit(fullAccountsOperation)
 
         return future.wrapResult()

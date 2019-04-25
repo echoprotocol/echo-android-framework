@@ -25,10 +25,10 @@ object EdDSASignature {
     private const val CHECKING_BYTE = 0x80
 
     /**
-     * Obtains a signature of transaction. Please note that due to the current reliance on
-     * bitcoinj to generate the signatures, and due to the fact that it uses deterministic
-     * ecdsa signatures, we are slightly modifying the expiration time of the transaction while
-     * we look for a signature that will be accepted by the graphene network.
+     * Obtains a signature of transaction. Please note that due to the fact that it uses
+     * deterministic EdDSA signatures, we are slightly modifying the expiration time of
+     * the transaction while we look for a signature that will be accepted by
+     * the graphene network.
      *
      * This should then be called before any other serialization method.
      *
