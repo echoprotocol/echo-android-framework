@@ -32,7 +32,7 @@ class AccountOptions : GrapheneSerializable {
 
     var committeeCount: Int = 0
 
-    var votes: Array<String> = arrayOf()
+    var votes: Array<Vote> = arrayOf()
 
     private val extensions = Extensions()
 
@@ -57,7 +57,7 @@ class AccountOptions : GrapheneSerializable {
             val committeeCountBytes = Uint16.serialize(committeeCount)
 
             // Vote's array length
-            val votesBytes = votes.serialize { vote -> vote.toByteArray() }
+            val votesBytes = votes.serialize { vote -> vote.toBytes() }
 
             // Account options's extensions
             val extensionsBytes = extensions.toBytes()
@@ -83,7 +83,7 @@ class AccountOptions : GrapheneSerializable {
             addProperty(KEY_DELEGATING_ACCOUNT, delegatingAccount.getObjectId())
 
             val votesArray = JsonArray().apply {
-                votes.forEach { vote -> add(vote) }
+                votes.forEach { vote -> add(vote.toString()) }
             }
 
             add(KEY_VOTES, votesArray)

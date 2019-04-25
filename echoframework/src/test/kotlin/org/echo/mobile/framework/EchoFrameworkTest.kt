@@ -430,7 +430,7 @@ class EchoFrameworkTest {
         if (connect(framework) == false) Assert.fail("Connection error")
 
         framework.changePassword(
-            "daria", "daria", "daria1",
+            "daria", "daria", "daria",
             object : Callback<Any> {
                 override fun onSuccess(result: Any) {
                     futureChangePassword.setComplete(true)

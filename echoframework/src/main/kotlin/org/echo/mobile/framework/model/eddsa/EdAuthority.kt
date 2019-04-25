@@ -27,8 +27,7 @@ class EdAuthority @JvmOverloads constructor(
     var accountAuthorities: Map<Account, Long> = mapOf()
 ) : GrapheneSerializable {
 
-    private val extensions: Extensions =
-        Extensions()
+    private val extensions: Extensions = Extensions()
 
     /**
      * @return: Returns a list of public keys linked to this authority
@@ -64,15 +63,11 @@ class EdAuthority @JvmOverloads constructor(
                     keyToBytes = { account -> account.toBytes() },
                     valueToBytes = { value -> Uint16.serialize(value) })
 
-            // Adding number of extensions
-            val extensionsBytes = extensions.toBytes()
-
             return Bytes.concat(
                 authsSizeBytes,
                 weightThresholdBytes,
                 accountAuthoritiesBytes,
-                keyAuthoritiesBytes,
-                extensionsBytes
+                keyAuthoritiesBytes
             )
         }
 
