@@ -16,8 +16,9 @@ class Block(
     var previous: String,
     var timestamp: String,
     var account: Account,
-    var transactionMerkleRoot: String,
     var round: String,
+    var rand: String,
+    var transactionMerkleRoot: String,
     var transactions: List<Transaction>
 ) {
 
@@ -37,9 +38,10 @@ class Block(
             // Parsing block data information
             val previous = jsonObject.get(KEY_PREVIOUS).asString
             val timestamp = jsonObject.get(KEY_TIMESTAMP).asString
+            val round = jsonObject.get(KEY_ROUND).asString
+            val rand = jsonObject.get(KEY_RAND).asString
             val transactionMerkleRoot = jsonObject.get(KEY_TRANSACTION_MERKLE_ROOT).asString
             val account = Account(jsonObject.get(KEY_ACCOUNT).asString)
-            val round = jsonObject.get(KEY_ROUND).asString
 
             // Parsing operation list
             val transactions = mutableListOf<Transaction>()
@@ -61,8 +63,9 @@ class Block(
                 previous,
                 timestamp,
                 account,
-                transactionMerkleRoot,
                 round,
+                rand,
+                transactionMerkleRoot,
                 transactions
             )
         }
@@ -71,10 +74,11 @@ class Block(
     companion object {
         private const val KEY_PREVIOUS = "previous"
         private const val KEY_TIMESTAMP = "timestamp"
-        private const val KEY_ROUND = "round"
         private const val KEY_ACCOUNT = "account"
         private const val KEY_TRANSACTION_MERKLE_ROOT = "transaction_merkle_root"
         private const val KEY_TRANSACTIONS = "transactions"
+        private const val KEY_ROUND = "round"
+        private const val KEY_RAND = "rand"
     }
 
 }
