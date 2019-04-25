@@ -16,7 +16,7 @@ object EdDSASignature {
     private const val HEADER_BYTES = 1
     private const val R_BYTES = 32
     private const val S_BYTES = 32
-    const val SIGN_DATA_BYTES = HEADER_BYTES + R_BYTES + S_BYTES
+    const val SIGN_DATA_BYTES = R_BYTES + S_BYTES
 
     private const val HEADER_POS = 0
     private const val R_BYTES_POS = HEADER_POS + HEADER_BYTES

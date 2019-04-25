@@ -44,6 +44,7 @@ import org.echo.mobile.framework.model.socketoperations.QueryContractSocketOpera
 import org.echo.mobile.framework.model.socketoperations.RequiredFeesSocketOperation
 import org.echo.mobile.framework.model.socketoperations.SetSubscribeCallbackSocketOperation
 import org.echo.mobile.framework.model.socketoperations.SubscribeContractLogsSocketOperation
+import org.echo.mobile.framework.model.socketoperations.SubscribeContractsSocketOperation
 import org.echo.mobile.framework.service.DatabaseApiService
 import org.echo.mobile.framework.support.Result
 import org.echo.mobile.framework.support.concurrent.future.FutureTask
@@ -479,6 +480,20 @@ class DatabaseApiServiceImpl(
             contractId,
             fromBlock,
             toBlock,
+            callId = socketCoreComponent.currentId,
+            callback = future.completeCallback()
+        )
+        socketCoreComponent.emit(operation)
+
+        return future.wrapResult()
+    }
+
+    override fun subscribeContracts(contractIds: List<String>): Result<LocalException, Boolean> {
+        val future = FutureTask<Boolean>()
+
+        val operation = SubscribeContractsSocketOperation(
+            id,
+            contractIds,
             callId = socketCoreComponent.currentId,
             callback = future.completeCallback()
         )

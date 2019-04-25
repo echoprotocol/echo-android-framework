@@ -12,15 +12,18 @@ import org.echo.mobile.framework.model.Block
 import org.echo.mobile.framework.model.DynamicGlobalProperties
 import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.Log
+import org.echo.mobile.framework.model.contract.ContractBalance
 import org.echo.mobile.framework.model.network.Network
 import org.echo.mobile.framework.service.AccountSubscriptionManager
 import org.echo.mobile.framework.service.BlockSubscriptionManager
+import org.echo.mobile.framework.service.ContractBalancesSubscriptionManager
 import org.echo.mobile.framework.service.ContractSubscriptionManager
 import org.echo.mobile.framework.service.CurrentBlockchainDataSubscriptionManager
 import org.echo.mobile.framework.service.DatabaseApiService
 import org.echo.mobile.framework.service.UpdateListener
 import org.echo.mobile.framework.service.internal.subscription.AccountSubscriptionManagerImpl
 import org.echo.mobile.framework.service.internal.subscription.BlockSubscriptionManagerImpl
+import org.echo.mobile.framework.service.internal.subscription.ContractBalancesSubscriptionManagerImpl
 import org.echo.mobile.framework.service.internal.subscription.ContractSubscriptionManagerImpl
 import org.echo.mobile.framework.service.internal.subscription.CurrentBlockchainDataSubscriptionManagerImpl
 import org.echo.mobile.framework.support.Result
@@ -66,8 +69,12 @@ class SubscriptionFacadeImpl(
         CurrentBlockchainDataSubscriptionManagerImpl()
     }
 
-    private val contractSubscriptionManager: ContractSubscriptionManager by lazy {
+    private val contractLogSubscriptionManager: ContractSubscriptionManager by lazy {
         ContractSubscriptionManagerImpl()
+    }
+
+    private val contractsSubscriptionManager: ContractBalancesSubscriptionManager by lazy {
+        ContractBalancesSubscriptionManagerImpl()
     }
 
     override fun subscribeOnAccount(
@@ -172,10 +179,10 @@ class SubscriptionFacadeImpl(
         synchronized(this) {
             subscribeGlobal(callback)
 
-            if (!contractSubscriptionManager.registered(contractId)) {
+            if (!contractLogSubscriptionManager.registered(contractId)) {
                 databaseApiService.subscribeContractLogs(contractId, "0", "0")
                     .value {
-                        contractSubscriptionManager.registerListener(contractId, listener)
+                        contractLogSubscriptionManager.registerListener(contractId, listener)
                         callback.onSuccess(subscribed)
                     }
                     .error { error ->
@@ -183,9 +190,29 @@ class SubscriptionFacadeImpl(
                         callback.onError(LocalException(error))
                     }
             } else {
-                contractSubscriptionManager.registerListener(contractId, listener)
+                contractLogSubscriptionManager.registerListener(contractId, listener)
                 callback.onSuccess(subscribed)
             }
+        }
+    }
+
+    override fun subscribeOnContracts(
+        contractIds: List<String>,
+        listener: UpdateListener<Map<String, List<ContractBalance>>>,
+        callback: Callback<Boolean>
+    ) {
+        synchronized(this) {
+            subscribeGlobal(callback)
+
+            databaseApiService.subscribeContracts(contractIds)
+                .value {
+                    contractsSubscriptionManager.addListener(listener)
+                    callback.onSuccess(subscribed)
+                }
+                .error { error ->
+                    LOGGER.log("Subscription contracts request error", error)
+                    callback.onError(LocalException(error))
+                }
         }
     }
 
@@ -266,11 +293,24 @@ class SubscriptionFacadeImpl(
     }
 
     override fun unsubscribeFromContractLogs(contractId: String, callback: Callback<Boolean>) {
-        if (!contractSubscriptionManager.registered(contractId)) {
+        if (!contractLogSubscriptionManager.registered(contractId)) {
             LOGGER.log("No listeners found for contract $contractId changes")
             callback.onError(LocalException("No listeners found for contract $contractId changes"))
         } else {
-            contractSubscriptionManager.removeListeners(contractId)
+            contractLogSubscriptionManager.removeListeners(contractId)
+            callback.onSuccess(true)
+        }
+    }
+
+    override fun unsubscribeFromContracts(
+        listener: UpdateListener<Map<String, List<ContractBalance>>>,
+        callback: Callback<Boolean>
+    ) {
+        if (!contractsSubscriptionManager.registered(listener)) {
+            LOGGER.log("Listener not found")
+            callback.onError(LocalException("Listener not found"))
+        } else {
+            contractsSubscriptionManager.removeListener(listener)
             callback.onSuccess(true)
         }
     }
@@ -286,7 +326,8 @@ class SubscriptionFacadeImpl(
                         accountSubscriptionManager.clear()
                         blockSubscriptionManager.clear()
                         blockcnainDataSubscriptionManager.clear()
-                        contractSubscriptionManager.clear()
+                        contractLogSubscriptionManager.clear()
+                        contractsSubscriptionManager.clear()
                         callback.onSuccess(result)
                     }
                     .error { error ->
@@ -319,6 +360,8 @@ class SubscriptionFacadeImpl(
         accountSubscriptionManager.clear()
         blockSubscriptionManager.clear()
         blockcnainDataSubscriptionManager.clear()
+        contractLogSubscriptionManager.clear()
+        contractsSubscriptionManager.clear()
         socketCoreComponent.off(socketMessengerListener)
     }
 
@@ -340,8 +383,12 @@ class SubscriptionFacadeImpl(
                 processAccountData(event)
             }
 
-            if (contractSubscriptionManager.containsListeners()) {
+            if (contractLogSubscriptionManager.containsListeners()) {
                 processContractLogs(event)
+            }
+
+            if (contractsSubscriptionManager.containsListeners()) {
+                processContractsChanges(event)
             }
         }
 
@@ -371,11 +418,17 @@ class SubscriptionFacadeImpl(
         }
 
         private fun processContractLogs(event: String) {
-            val contractLogs = contractSubscriptionManager.processEvent(event)
+            val contractLogs = contractLogSubscriptionManager.processEvent(event)
             contractLogs.forEach { (contractId, logs) ->
-                contractSubscriptionManager.notify(contractId, logs)
+                contractLogSubscriptionManager.notify(contractId, logs)
             }
 
+        }
+
+        private fun processContractsChanges(event: String) {
+            contractsSubscriptionManager.processEvent(event)?.let { contractsChanges ->
+                contractsSubscriptionManager.notify(contractsChanges)
+            }
         }
 
         override fun onFailure(error: Throwable) = resetState()

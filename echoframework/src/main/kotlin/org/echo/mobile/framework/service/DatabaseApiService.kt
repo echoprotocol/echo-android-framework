@@ -280,6 +280,13 @@ interface SubscriptionService {
         fromBlock: String,
         toBlock: String
     ): Result<LocalException, List<Log>>
+
+    /**
+     * Subscribes to listening contracts changes
+     *
+     * @param contractIds Ids of contracts for listening
+     */
+    fun subscribeContracts(contractIds: List<String>): Result<LocalException, Boolean>
 }
 
 /**

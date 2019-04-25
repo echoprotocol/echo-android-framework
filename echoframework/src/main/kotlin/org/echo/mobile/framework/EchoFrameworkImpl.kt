@@ -29,9 +29,8 @@ import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.HistoryResponse
 import org.echo.mobile.framework.model.Log
-import org.echo.mobile.framework.model.RegistrationResult
 import org.echo.mobile.framework.model.SidechainTransfer
-import org.echo.mobile.framework.model.TransactionResult
+import org.echo.mobile.framework.model.contract.ContractBalance
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
@@ -377,6 +376,14 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         subscriptionFacade.subscribeOnContractLogs(contractId, listener, callback)
     })
 
+    override fun subscribeOnContracts(
+        contractIds: List<String>,
+        listener: UpdateListener<Map<String, List<ContractBalance>>>,
+        callback: Callback<Boolean>
+    ) = dispatch(Runnable {
+        subscriptionFacade.subscribeOnContracts(contractIds, listener, callback)
+    })
+
     override fun unsubscribeFromContractLogs(
         contractId: String,
         callback: Callback<Boolean>
@@ -384,6 +391,17 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         dispatch(Runnable {
             subscriptionFacade.unsubscribeFromContractLogs(
                 contractId,
+                callback.wrapOriginal()
+            )
+        })
+
+    override fun unsubscribeFromContracts(
+        listener: UpdateListener<Map<String, List<ContractBalance>>>,
+        callback: Callback<Boolean>
+    ) =
+        dispatch(Runnable {
+            subscriptionFacade.unsubscribeFromContracts(
+                listener,
                 callback.wrapOriginal()
             )
         })

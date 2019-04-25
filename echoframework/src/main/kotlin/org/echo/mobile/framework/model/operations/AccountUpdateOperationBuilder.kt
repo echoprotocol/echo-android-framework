@@ -67,7 +67,7 @@ class AccountUpdateOperationBuilder : Builder<AccountUpdateOperation> {
 
     override fun build(): AccountUpdateOperation {
         checkAccount(account)
-        checkAuthoritiesAccountOptions(active, newOptions)
+        checkAuthoritiesAccountOptions(active)
 
         return fee?.let { nullSafeFee ->
             AccountUpdateOperation(account!!, active, edKey, newOptions, nullSafeFee)
@@ -80,10 +80,9 @@ class AccountUpdateOperationBuilder : Builder<AccountUpdateOperation> {
     }
 
     private fun checkAuthoritiesAccountOptions(
-        active: EdAuthority?,
-        accountOptions: AccountOptions?
+        active: EdAuthority?
     ) {
-        if (active == null && accountOptions == null) {
+        if (active == null) {
             throw MalformedOperationException("This operation requires at least either an authority or account options change")
         }
     }

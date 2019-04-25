@@ -3,6 +3,7 @@ package org.echo.mobile.framework.core.crypto
 import com.google.common.primitives.UnsignedLong
 import org.echo.mobile.bitcoinj.ECKey
 import org.echo.mobile.framework.core.crypto.internal.CryptoCoreComponentImpl
+import org.echo.mobile.framework.core.crypto.internal.eddsa.EdDSASecurityProvider
 import org.echo.mobile.framework.core.crypto.internal.eddsa.key.NaCLKeyPairCryptoAdapter
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.Address
@@ -24,6 +25,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import java.math.BigInteger
+import java.security.Security
 
 /**
  * Test cases for [CryptoCoreComponentImpl]
@@ -52,6 +54,8 @@ class CryptoCoreComponentTest {
             network,
             NaCLKeyPairCryptoAdapter()
         )
+
+        Security.addProvider(EdDSASecurityProvider())
     }
 
     @Test
@@ -122,23 +126,7 @@ class CryptoCoreComponentTest {
 
         val signature = cryptoCoreComponent.signTransaction(transaction)
 
-        assertTrue(signature[0].size == SIGN_DATA_BYTES)
-    }
-
-    @Test
-    fun edDSASignatureLengthTest() {
-        val privateKey = cryptoCoreComponent.getEdDSAPrivateKey(name, password, authorityType)
-
-        val transferOperation = buildOperation()
-        val transaction = Transaction(
-            BlockData(5, 123L, 2342355235L),
-            listOf(transferOperation),
-            "39f5e2ede1f8bc1a3a54a7914414e3779e33193f1f5693510e73cb7a87617447"
-        ).apply { addPrivateKey(privateKey) }
-
-        val signature = cryptoCoreComponent.signTransaction(transaction)
-
-        assertTrue(signature[0].size == SIGN_DATA_BYTES)
+        assertEquals(SIGN_DATA_BYTES, signature[0].size)
     }
 
     @Test

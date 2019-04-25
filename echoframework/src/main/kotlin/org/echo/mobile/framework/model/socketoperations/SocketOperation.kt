@@ -49,6 +49,7 @@ enum class SocketOperationKeys(val key: String) {
     GET_CONTRACT_RESULT("get_contract_result"),
     GET_CONTRACT_LOGS("get_contract_logs"),
     SUBSCRIBE_CONTRACT_LOGS("subscribe_contract_logs"),
+    SUBSCRIBE_CONTRACTS("subscribe_contracts"),
     CALL_CONTRACT_NO_CHANGING_STATE("call_contract_no_changing_state"),
     GET_CONTRACTS("get_contracts"),
     GET_CONTRACT("get_contract"),
