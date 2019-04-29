@@ -564,6 +564,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
     override fun createContract(
         registrarNameOrId: String,
         password: String,
+        value: String,
         assetId: String,
         feeAsset: String?,
         byteCode: String,
@@ -574,6 +575,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         contractsFacade.createContract(
             registrarNameOrId,
             password,
+            value,
             assetId,
             feeAsset,
             byteCode,
@@ -586,6 +588,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
     override fun createContractWithWif(
         registrarNameOrId: String,
         wif: String,
+        value: String,
         assetId: String,
         feeAsset: String?,
         byteCode: String,
@@ -596,6 +599,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         contractsFacade.createContractWithWif(
             registrarNameOrId,
             wif,
+            value,
             assetId,
             feeAsset,
             byteCode,

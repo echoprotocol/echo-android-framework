@@ -26,6 +26,7 @@
 //import org.echo.mobile.framework.model.contract.input.ContractAddressInputValueType
 //import org.echo.mobile.framework.model.contract.input.ContractInputEncoder
 //import org.echo.mobile.framework.model.contract.input.InputValue
+//import org.echo.mobile.framework.model.contract.input.NumberInputValueType
 //import org.echo.mobile.framework.model.contract.input.StringInputValueType
 //import org.echo.mobile.framework.model.contract.toRegular
 //import org.echo.mobile.framework.model.contract.toX86
@@ -47,6 +48,7 @@
 //import org.junit.Assert.assertTrue
 //import org.junit.Test
 //import java.math.BigDecimal
+//import java.math.BigInteger
 //import java.util.concurrent.TimeUnit
 //import kotlin.concurrent.thread
 //
@@ -772,7 +774,9 @@
 //            callback = futureFee.completeCallback()
 //        )
 //
-//        assertNotNull(futureFee.get())
+//        val rawFee = futureFee.get()
+//        val fee = BigInteger(rawFee)
+//        assertNotNull(fee)
 //    }
 //
 //    @Test
@@ -794,7 +798,9 @@
 //            callback = futureFee.completeCallback()
 //        )
 //
-//        assertNotNull(futureFee.get())
+//        val rawFee = futureFee.get()
+//        val fee = BigInteger(rawFee)
+//        assertNotNull(fee)
 //    }
 //
 //    @Test(expected = LocalException::class)
@@ -829,16 +835,26 @@
 //
 //        framework.getFeeForContractOperation(
 //            userNameOrId = accountId,
-//            contractId = legalContractId,
+//            contractId = "1.16.1",
 //            amount = "0",
-//            methodName = "testReturn",
-//            methodParams = listOf(),
+//            methodName = "transfer",
+//            methodParams = listOf(
+//                InputValue(AccountAddressInputValueType(), accountId),
+//                InputValue(
+//                    NumberInputValueType("uint256"),
+//                    "0"
+//                )
+//            ),
 //            assetId = legalAssetId,
 //            feeAsset = legalAssetId,
-//            callback = futureFee.completeCallback()
+//            callback = futureFee.completeCallback(errorBlock = {ex ->
+//                ex.printStackTrace()
+//            })
 //        )
 //
-//        assertNotNull(futureFee.get())
+//        val rawFee = futureFee.get()
+//        val fee = BigInteger(rawFee)
+//        assertNotNull(fee)
 //    }
 //
 //    @Test
@@ -859,7 +875,9 @@
 //            callback = futureFee.completeCallback()
 //        )
 //
-//        assertNotNull(futureFee.get())
+//        val rawFee = futureFee.get()
+//        val fee = BigInteger(rawFee)
+//        assertNotNull(fee)
 //    }
 //
 //    @Test(expected = LocalException::class)
