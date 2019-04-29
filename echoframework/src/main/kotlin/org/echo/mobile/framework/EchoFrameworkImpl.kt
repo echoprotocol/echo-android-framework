@@ -105,7 +105,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             settings.network
         )
         databaseApiService =
-            DatabaseApiServiceImpl(socketCoreComponent, settings.cryptoComponent, settings.network)
+            DatabaseApiServiceImpl(socketCoreComponent, settings.network)
         networkBroadcastApiService =
             NetworkBroadcastApiServiceImpl(socketCoreComponent, settings.cryptoComponent)
         cryptoApiService = CryptoApiServiceImpl(socketCoreComponent)
@@ -124,49 +124,48 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             registrationService
         )
         authenticationFacade = AuthenticationFacadeImpl(
-            databaseApiService,
             networkBroadcastApiService,
             registrationService,
-            settings.cryptoComponent,
-            settings.network
+            settings.network,
+            databaseApiService,
+            settings.cryptoComponent
         )
 
         val feeRatioProvider = FeeRatioProvider(settings.feeRatio)
 
-        feeFacade = FeeFacadeImpl(databaseApiService, settings.cryptoComponent, feeRatioProvider)
+        feeFacade = FeeFacadeImpl(feeRatioProvider, databaseApiService, settings.cryptoComponent)
         informationFacade = InformationFacadeImpl(
             databaseApiService,
+            settings.cryptoComponent,
             accountHistoryApiService
         )
         subscriptionFacade = SubscriptionFacadeImpl(
             socketCoreComponent,
             databaseApiService,
+            settings.cryptoComponent,
             settings.network
         )
         transactionsFacade = TransactionsFacadeImpl(
-            databaseApiService,
             networkBroadcastApiService,
-            settings.cryptoComponent
+            settings.cryptoComponent,
+            databaseApiService
         )
 
         val notifiedTransactionsHelper =
-            NotifiedTransactionsManager(
-                socketCoreComponent,
-                settings.network
-            )
+            NotifiedTransactionsManager(socketCoreComponent, settings.network)
 
         assetsFacade = AssetsFacadeImpl(
-            databaseApiService,
             networkBroadcastApiService,
-            settings.cryptoComponent,
-            notifiedTransactionsHelper
+            notifiedTransactionsHelper,
+            databaseApiService,
+            settings.cryptoComponent
         )
         contractsFacade = ContractsFacadeImpl(
-            databaseApiService,
             networkBroadcastApiService,
-            settings.cryptoComponent,
             notifiedTransactionsHelper,
-            feeRatioProvider
+            feeRatioProvider,
+            databaseApiService,
+            settings.cryptoComponent
         )
     }
 
