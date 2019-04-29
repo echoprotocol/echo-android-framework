@@ -14,13 +14,6 @@ import org.echo.mobile.framework.service.UpdateListener
  */
 interface SubscriptionFacade {
 
-    companion object {
-        /**
-         * Default block number for define subscriptions
-         */
-        const val DEFAULT_BLOCK_NUMBER = "0"
-    }
-
     /**
      * Subscribe [listener] on account changing events
      *

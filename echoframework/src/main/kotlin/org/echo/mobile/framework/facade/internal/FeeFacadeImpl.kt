@@ -7,6 +7,7 @@ import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent
 import org.echo.mobile.framework.exception.AccountNotFoundException
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.facade.FeeFacade
+import org.echo.mobile.framework.facade.TransactionFacadeExtension
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.Asset
 import org.echo.mobile.framework.model.AssetAmount
@@ -33,10 +34,10 @@ import java.math.RoundingMode
  * @author Dmitriy Bushuev
  */
 class FeeFacadeImpl(
-    private val databaseApiService: DatabaseApiService,
-    private val cryptoCoreComponent: CryptoCoreComponent,
-    private val feeRatioProvider: Provider<Double>
-) : BaseTransactionsFacade(databaseApiService, cryptoCoreComponent), FeeFacade {
+    private val feeRatioProvider: Provider<Double>,
+    override val databaseApiService: DatabaseApiService,
+    override val cryptoCoreComponent: CryptoCoreComponent
+) : FeeFacade, TransactionFacadeExtension {
 
     override fun getFeeForTransferOperation(
         fromNameOrId: String,

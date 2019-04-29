@@ -3,6 +3,7 @@ package org.echo.mobile.framework.facade.internal
 import com.google.common.primitives.UnsignedLong
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
+import org.echo.mobile.framework.facade.TransactionFacadeExtension
 import org.echo.mobile.framework.facade.TransactionsFacade
 import org.echo.mobile.framework.model.Asset
 import org.echo.mobile.framework.model.AssetAmount
@@ -21,10 +22,10 @@ import org.echo.mobile.framework.support.dematerialize
  * @author Dmitriy Bushuev
  */
 class TransactionsFacadeImpl(
-    private val databaseApiService: DatabaseApiService,
     private val networkBroadcastApiService: NetworkBroadcastApiService,
-    private val cryptoCoreComponent: CryptoCoreComponent
-) : BaseTransactionsFacade(databaseApiService, cryptoCoreComponent), TransactionsFacade {
+    override val cryptoCoreComponent: CryptoCoreComponent,
+    override val databaseApiService: DatabaseApiService
+) : TransactionsFacade, TransactionFacadeExtension {
 
     override fun sendTransferOperation(
         nameOrId: String,

@@ -130,3 +130,13 @@ fun <E : Exception, V> Result<E, V>.dematerialize(): V =
         is Result.Error -> throw error
         is Result.Value -> value
     }
+
+/**
+ * Unwraps success result value or returns default
+ */
+fun <E : Exception, V> Result<E, V>.getOrDefault(default: V): V =
+    when (this) {
+        is Result.Error -> default
+        is Result.Value -> value
+    }
+

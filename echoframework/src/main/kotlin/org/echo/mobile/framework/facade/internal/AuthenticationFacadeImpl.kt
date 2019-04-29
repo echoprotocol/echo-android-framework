@@ -6,6 +6,8 @@ import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent
 import org.echo.mobile.framework.exception.AccountNotFoundException
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.facade.AuthenticationFacade
+import org.echo.mobile.framework.facade.InformationFacadeExtension
+import org.echo.mobile.framework.facade.TransactionFacadeExtension
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.AccountOptions
 import org.echo.mobile.framework.model.Address
@@ -23,6 +25,7 @@ import org.echo.mobile.framework.service.NetworkBroadcastApiService
 import org.echo.mobile.framework.service.RegistrationApiService
 import org.echo.mobile.framework.support.dematerialize
 import org.echo.mobile.framework.support.error
+import org.echo.mobile.framework.support.flatMap
 import org.echo.mobile.framework.support.map
 import org.echo.mobile.framework.support.value
 import org.spongycastle.util.encoders.Hex
@@ -35,15 +38,16 @@ import org.spongycastle.util.encoders.Hex
  * @author Dmitriy Bushuev
  */
 class AuthenticationFacadeImpl(
-    private val databaseApiService: DatabaseApiService,
     private val networkBroadcastApiService: NetworkBroadcastApiService,
     private val registrationApiService: RegistrationApiService,
-    private val cryptoCoreComponent: CryptoCoreComponent,
-    private val network: Network
-) : BaseTransactionsFacade(databaseApiService, cryptoCoreComponent), AuthenticationFacade {
+    private val network: Network,
+    override val databaseApiService: DatabaseApiService,
+    override val cryptoCoreComponent: CryptoCoreComponent
+) : AuthenticationFacade, TransactionFacadeExtension, InformationFacadeExtension {
 
     override fun isOwnedBy(name: String, password: String, callback: Callback<FullAccount>) {
         databaseApiService.getFullAccounts(listOf(name), false)
+            .flatMap { accountsMap -> fillAccounts(accountsMap) }
             .map { accountsMap -> accountsMap[name] }
             .value { account ->
                 val address = cryptoCoreComponent.getAddress(name, password, AuthorityType.ACTIVE)
@@ -79,7 +83,7 @@ class AuthenticationFacadeImpl(
         operation.newOptionsOption.field?.delegatingAccount =
             account[accountId]?.account!!.options.delegatingAccount
 
-        val blockData = databaseApiService.getBlockData()
+        val blockData = getBlockData()
         val chainId = getChainId()
 
         val privateKey =

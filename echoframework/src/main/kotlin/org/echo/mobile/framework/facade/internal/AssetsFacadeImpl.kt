@@ -8,6 +8,8 @@ import org.echo.mobile.framework.exception.AccountNotFoundException
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.exception.NotFoundException
 import org.echo.mobile.framework.facade.AssetsFacade
+import org.echo.mobile.framework.facade.InformationFacadeExtension
+import org.echo.mobile.framework.facade.TransactionFacadeExtension
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.Asset
 import org.echo.mobile.framework.model.AssetAmount
@@ -22,6 +24,7 @@ import org.echo.mobile.framework.service.NetworkBroadcastApiService
 import org.echo.mobile.framework.support.concurrent.future.FutureTask
 import org.echo.mobile.framework.support.concurrent.future.completeCallback
 import org.echo.mobile.framework.support.dematerialize
+import org.echo.mobile.framework.support.flatMap
 
 /**
  * Implementation of [AssetsFacade]
@@ -29,11 +32,11 @@ import org.echo.mobile.framework.support.dematerialize
  * @author Dmitriy Bushuev
  */
 class AssetsFacadeImpl(
-    private val databaseApiService: DatabaseApiService,
     private val networkBroadcastApiService: NetworkBroadcastApiService,
-    private val cryptoCoreComponent: CryptoCoreComponent,
-    private val notifiedTransactionsHelper: NotifiedTransactionsHelper
-) : BaseTransactionsFacade(databaseApiService, cryptoCoreComponent), AssetsFacade {
+    private val notifiedTransactionsManager: NotifiedTransactionsManager,
+    override val databaseApiService: DatabaseApiService,
+    override val cryptoCoreComponent: CryptoCoreComponent
+) : AssetsFacade, TransactionFacadeExtension, InformationFacadeExtension {
 
     override fun createAsset(
         name: String,
@@ -95,7 +98,7 @@ class AssetsFacadeImpl(
         privateKey: ByteArray,
         asset: Asset
     ): String {
-        val blockData = databaseApiService.getBlockData()
+        val blockData = getBlockData()
         val chainId = getChainId()
 
         val operation = CreateAssetOperation(asset)
@@ -113,7 +116,7 @@ class AssetsFacadeImpl(
     private fun retrieveTransactionResult(callId: String, callback: Callback<String>) {
         try {
             val future = FutureTask<TransactionResult>()
-            notifiedTransactionsHelper.subscribeOnTransactionResult(
+            notifiedTransactionsManager.subscribeOnTransactionResult(
                 callId,
                 future.completeCallback()
             )
@@ -197,9 +200,12 @@ class AssetsFacadeImpl(
         databaseApiService.lookupAssetsSymbols(symbolsOrIds, callback)
 
     private fun findAccount(nameOrId: String): Account {
-        val accountsMap =
-            databaseApiService.getFullAccounts(listOf(nameOrId), false).dematerialize()
-        return accountsMap[nameOrId]?.account
+        val filledAccounts =
+            databaseApiService.getFullAccounts(listOf(nameOrId), false)
+                .flatMap { accountsMap -> fillAccounts(accountsMap) }
+                .dematerialize()
+
+        return filledAccounts[nameOrId]?.account
             ?: throw AccountNotFoundException("Unable to find required account $nameOrId")
     }
 }

@@ -14,7 +14,7 @@ import org.echo.mobile.framework.support.toJsonObject
  *
  * @author Daria Pechkovskaya
  */
-class NotifiedTransactionsHelper(
+class NotifiedTransactionsManager(
     private val socketCoreComponent: SocketCoreComponent,
     private val network: Network
 ) {

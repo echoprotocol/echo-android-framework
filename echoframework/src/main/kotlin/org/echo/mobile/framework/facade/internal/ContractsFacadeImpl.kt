@@ -7,6 +7,8 @@ import org.echo.mobile.framework.exception.AccountNotFoundException
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.exception.NotFoundException
 import org.echo.mobile.framework.facade.ContractsFacade
+import org.echo.mobile.framework.facade.InformationFacadeExtension
+import org.echo.mobile.framework.facade.TransactionFacadeExtension
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.Asset
 import org.echo.mobile.framework.model.AssetAmount
@@ -29,7 +31,6 @@ import org.echo.mobile.framework.support.Provider
 import org.echo.mobile.framework.support.concurrent.future.FutureTask
 import org.echo.mobile.framework.support.concurrent.future.completeCallback
 import org.echo.mobile.framework.support.dematerialize
-import java.math.BigDecimal
 import java.math.RoundingMode
 
 /**
@@ -40,15 +41,12 @@ import java.math.RoundingMode
  * @author Daria Pechkovskaya
  */
 class ContractsFacadeImpl(
-    private val databaseApiService: DatabaseApiService,
     private val networkBroadcastApiService: NetworkBroadcastApiService,
-    private val cryptoCoreComponent: CryptoCoreComponent,
-    private val notifiedTransactionsHelper: NotifiedTransactionsHelper,
-    private val feeRatioProvider: Provider<Double>
-) : BaseTransactionsFacade(
-    databaseApiService,
-    cryptoCoreComponent
-), ContractsFacade {
+    private val notifiedTransactionsManager: NotifiedTransactionsManager,
+    private val feeRatioProvider: Provider<Double>,
+    override val databaseApiService: DatabaseApiService,
+    override val cryptoCoreComponent: CryptoCoreComponent
+) : ContractsFacade, TransactionFacadeExtension, InformationFacadeExtension {
 
     override fun createContract(
         registrarNameOrId: String,
@@ -400,7 +398,7 @@ class ContractsFacadeImpl(
         operation: BaseOperation,
         feeRatio: Double? = null
     ): Transaction {
-        val blockData = databaseApiService.getBlockData()
+        val blockData = getBlockData()
         val chainId = getChainId()
         val rawFees = getFees(listOf(operation), feeAsset ?: assetId)
 
@@ -428,7 +426,7 @@ class ContractsFacadeImpl(
     ) {
         try {
             val future = FutureTask<TransactionResult>()
-            notifiedTransactionsHelper.subscribeOnTransactionResult(
+            notifiedTransactionsManager.subscribeOnTransactionResult(
                 callId,
                 future.completeCallback()
             )

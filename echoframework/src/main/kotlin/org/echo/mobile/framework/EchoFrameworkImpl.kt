@@ -18,7 +18,7 @@ import org.echo.mobile.framework.facade.internal.ContractsFacadeImpl
 import org.echo.mobile.framework.facade.internal.FeeFacadeImpl
 import org.echo.mobile.framework.facade.internal.InformationFacadeImpl
 import org.echo.mobile.framework.facade.internal.InitializerFacadeImpl
-import org.echo.mobile.framework.facade.internal.NotifiedTransactionsHelper
+import org.echo.mobile.framework.facade.internal.NotifiedTransactionsManager
 import org.echo.mobile.framework.facade.internal.SubscriptionFacadeImpl
 import org.echo.mobile.framework.facade.internal.TransactionsFacadeImpl
 import org.echo.mobile.framework.model.Asset
@@ -150,7 +150,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         )
 
         val notifiedTransactionsHelper =
-            NotifiedTransactionsHelper(
+            NotifiedTransactionsManager(
                 socketCoreComponent,
                 settings.network
             )

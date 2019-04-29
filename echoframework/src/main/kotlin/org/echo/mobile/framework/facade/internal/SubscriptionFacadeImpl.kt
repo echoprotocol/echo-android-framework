@@ -2,11 +2,13 @@ package org.echo.mobile.framework.facade.internal
 
 import org.echo.mobile.framework.AccountListener
 import org.echo.mobile.framework.Callback
+import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
 import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent
 import org.echo.mobile.framework.core.socket.SocketCoreComponent
 import org.echo.mobile.framework.core.socket.SocketMessengerListener
 import org.echo.mobile.framework.exception.AccountNotFoundException
 import org.echo.mobile.framework.exception.LocalException
+import org.echo.mobile.framework.facade.InformationFacadeExtension
 import org.echo.mobile.framework.facade.SubscriptionFacade
 import org.echo.mobile.framework.model.Block
 import org.echo.mobile.framework.model.DynamicGlobalProperties
@@ -27,8 +29,10 @@ import org.echo.mobile.framework.support.Result
 import org.echo.mobile.framework.support.concurrent.future.FutureTask
 import org.echo.mobile.framework.support.concurrent.future.completeCallback
 import org.echo.mobile.framework.support.concurrent.future.wrapResult
+import org.echo.mobile.framework.support.dematerialize
 import org.echo.mobile.framework.support.error
 import org.echo.mobile.framework.support.flatMap
+import org.echo.mobile.framework.support.getOrDefault
 import org.echo.mobile.framework.support.map
 import org.echo.mobile.framework.support.mapError
 import org.echo.mobile.framework.support.toJsonObject
@@ -41,9 +45,10 @@ import org.echo.mobile.framework.support.value
  */
 class SubscriptionFacadeImpl(
     private val socketCoreComponent: SocketCoreComponent,
-    private val databaseApiService: DatabaseApiService,
+    override val databaseApiService: DatabaseApiService,
+    override val cryptoCoreComponent: CryptoCoreComponent,
     private val network: Network
-) : SubscriptionFacade {
+) : SubscriptionFacade, InformationFacadeExtension {
 
     private val socketMessengerListener by lazy {
         SubscriptionListener()
@@ -388,8 +393,10 @@ class SubscriptionFacadeImpl(
         private inner class FullAccountSubscriptionCallback(private val accountIds: List<String>) :
             Callback<Map<String, FullAccount>> {
             override fun onSuccess(result: Map<String, FullAccount>) {
+                val filledAccounts = fillAccounts(result).getOrDefault(mapOf())
+
                 accountIds.forEach { accountId ->
-                    val account = result[accountId] ?: return
+                    val account = filledAccounts[accountId] ?: return
 
                     accountSubscriptionManager.notify(account)
                 }

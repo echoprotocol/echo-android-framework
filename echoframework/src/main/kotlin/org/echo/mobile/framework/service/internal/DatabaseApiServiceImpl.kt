@@ -62,7 +62,6 @@ import java.util.concurrent.TimeUnit
  */
 class DatabaseApiServiceImpl(
     private val socketCoreComponent: SocketCoreComponent,
-    private val cryptoCoreComponent: CryptoCoreComponent,
     private val network: Network
 ) : DatabaseApiService {
 
@@ -81,7 +80,7 @@ class DatabaseApiServiceImpl(
             callback = object : Callback<Map<String, FullAccount>> {
 
                 override fun onSuccess(result: Map<String, FullAccount>) {
-                    fillAccounts(result, callback)
+                    callback.onSuccess(result)
                 }
 
                 override fun onError(error: LocalException) {
@@ -108,156 +107,6 @@ class DatabaseApiServiceImpl(
         return future.wrapResult(mapOf())
     }
 
-    override fun getAccountsByWif(
-        wifs: List<String>,
-        callback: Callback<Map<String, List<FullAccount>>>
-    ) {
-        val keys = wifs.map { wif ->
-            val privateKey = cryptoCoreComponent.decodeFromWif(wif)
-            val publicKey = cryptoCoreComponent.derivePublicKeyFromPrivate(privateKey)
-            cryptoCoreComponent.getAddressFromPublicKey(publicKey)
-        }
-
-        val getKeyReferencesSocketOperation = GetKeyReferencesSocketOperation(
-            id,
-            keys,
-            network,
-            socketCoreComponent.currentId,
-            object : Callback<Map<String, List<String>>> {
-                override fun onSuccess(result: Map<String, List<String>>) {
-                    val requiredAccounts = result.values.flatten()
-
-                    receiveRequiredAccountsByWifs(wifs, keys, requiredAccounts, result, callback)
-                }
-
-                override fun onError(error: LocalException) {
-                    callback.onError(error)
-                }
-
-            }
-        )
-
-        socketCoreComponent.emit(getKeyReferencesSocketOperation)
-    }
-
-    private fun receiveRequiredAccountsByWifs(
-        wifs: List<String>,
-        keys: List<String>,
-        requiredAccounts: List<String>,
-        accountsIdsMap: Map<String, List<String>>,
-        callback: Callback<Map<String, List<FullAccount>>>
-    ) {
-        getFullAccounts(
-            requiredAccounts,
-            false,
-            object : Callback<Map<String, FullAccount>> {
-                override fun onSuccess(result: Map<String, FullAccount>) {
-                    val resultMap =
-                        accountsByWifMap(wifs, keys, accountsIdsMap, result)
-
-                    callback.onSuccess(resultMap)
-                }
-
-                override fun onError(error: LocalException) {
-                    callback.onSuccess(mapOf())
-                }
-            })
-    }
-
-    private fun accountsByWifMap(
-        wifs: List<String>,
-        keys: List<String>,
-        accountsIdsMap: Map<String, List<String>>,
-        receivedAccounts: Map<String, FullAccount>
-    ): Map<String, List<FullAccount>> {
-        val resultMap = hashMapOf<String, List<FullAccount>>()
-
-        accountsIdsMap.forEach { (key, accountIds) ->
-            val wif = wifs[keys.indexOf(key)]
-            val accounts = mutableListOf<FullAccount>()
-
-            accountIds.distinct().forEach { id ->
-                val account = receivedAccounts[id]
-                account?.let { accounts.add(it) }
-            }
-
-            resultMap[wif] = accounts
-        }
-
-        return resultMap
-    }
-
-    override fun getAccountsByWif(wifs: List<String>): Result<LocalException, Map<String, List<FullAccount>>> {
-        val accountFuture = FutureTask<Map<String, List<FullAccount>>>()
-
-        getAccountsByWif(wifs, accountFuture.completeCallback())
-
-        return accountFuture.wrapResult()
-    }
-
-    private fun fillAccounts(
-        accounts: Map<String, FullAccount>,
-        callback: Callback<Map<String, FullAccount>>
-    ) {
-        val requiredAssets = getRequiredAssets(accounts.values)
-        getAssets(requiredAssets.toList(), object : Callback<List<Asset>> {
-
-            override fun onSuccess(result: List<Asset>) {
-                fillAssets(accounts, result, callback)
-            }
-
-            override fun onError(error: LocalException) {
-                callback.onError(error)
-            }
-
-        })
-    }
-
-    private fun getRequiredAssets(accounts: Collection<FullAccount>): List<String> {
-        val requiredAssets = mutableSetOf<String>()
-
-        accounts.forEach { fullAccount ->
-            val balanceAssets =
-                fullAccount.balances?.map { it.asset!!.getObjectId() } ?: emptyList()
-            val accountAssets = fullAccount.assets?.map { it.getObjectId() } ?: emptyList()
-
-            requiredAssets.addAll(balanceAssets)
-            requiredAssets.addAll(accountAssets)
-        }
-
-        return requiredAssets.toList()
-    }
-
-    private fun fillAssets(
-        accounts: Map<String, FullAccount>,
-        assets: List<Asset>,
-        callback: Callback<Map<String, FullAccount>>
-    ) {
-        if (assets.isEmpty()) {
-            callback.onSuccess(accounts)
-            return
-        }
-
-        accounts.values.forEach { fullAccount ->
-            fullAccount.balances?.forEach { balance ->
-                balance.asset =
-                    assets.find { asset -> asset.getObjectId() == balance.asset?.getObjectId() }
-                        ?: balance.asset
-            }
-
-            val filledAssets = mutableListOf<Asset>()
-            fullAccount.assets?.forEach { asset ->
-                val candidate =
-                    assets.find { it.getObjectId() == asset.getObjectId() } ?: asset
-                filledAssets.add(candidate)
-            }
-
-            fullAccount.assets = filledAssets
-        }
-
-        callback.onSuccess(accounts)
-    }
-
     override fun getChainId(): Result<Exception, String> {
         val future = FutureTask<String>()
         getChainId(future.completeCallback())
@@ -272,19 +121,6 @@ class DatabaseApiServiceImpl(
             callback = callback
         )
         socketCoreComponent.emit(chainIdOperation)
-    }
-
-    override fun getBlockData(): BlockData {
-        val dynamicProperties = getDynamicGlobalProperties().dematerialize()
-        val expirationTime = TimeUnit.MILLISECONDS.toSeconds(dynamicProperties.date!!.time) +
-                Transaction.DEFAULT_EXPIRATION_TIME
-        val headBlockId = dynamicProperties.headBlockId
-        val headBlockNumber = dynamicProperties.headBlockNumber
-        return BlockData(headBlockNumber, headBlockId, expirationTime)
-    }
-
-    override fun getBlockData(callback: Callback<BlockData>) {
-        callback.onSuccess(getBlockData())
     }
 
     override fun getDynamicGlobalProperties(): Result<Exception, DynamicGlobalProperties> {
@@ -569,5 +405,20 @@ class DatabaseApiServiceImpl(
         val operation = GetSidechainTransfersSocketOperation(id, ethAddress, callback = callback)
 
         socketCoreComponent.emit(operation)
+    }
+
+    override fun getKeyReferences(keys: List<String>): Result<Exception, Map<String, List<String>>> {
+        val futureTask = FutureTask<Map<String, List<String>>>()
+        val getKeyReferencesSocketOperation = GetKeyReferencesSocketOperation(
+            id,
+            keys,
+            network,
+            socketCoreComponent.currentId,
+            futureTask.completeCallback()
+        )
+
+        socketCoreComponent.emit(getKeyReferencesSocketOperation)
+
+        return futureTask.wrapResult()
     }
 }

@@ -1,9 +1,10 @@
-package org.echo.mobile.framework.facade.internal
+package org.echo.mobile.framework.facade
 
+import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.ECHO_ASSET_ID
 import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
-import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent
 import org.echo.mobile.framework.exception.AccountNotFoundException
+import org.echo.mobile.framework.exception.AuthenticationException
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.Address
@@ -11,6 +12,7 @@ import org.echo.mobile.framework.model.Asset
 import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.AuthorityType
 import org.echo.mobile.framework.model.BaseOperation
+import org.echo.mobile.framework.model.BlockData
 import org.echo.mobile.framework.model.Memo
 import org.echo.mobile.framework.model.Transaction
 import org.echo.mobile.framework.model.isEqualsByKey
@@ -19,52 +21,100 @@ import org.echo.mobile.framework.support.dematerialize
 import org.echo.mobile.framework.support.error
 import org.echo.mobile.framework.support.value
 import java.math.BigInteger
+import java.util.concurrent.TimeUnit
 
 /**
- * Includes base logic for transactions assembly
+ * Includes default logic for transactions assembly
  *
  * @author Daria Pechkovskaya
  */
-abstract class BaseTransactionsFacade(
-    private val databaseApiService: DatabaseApiService,
-    private val cryptoCoreComponent: CryptoCoreComponent
-) {
+interface TransactionFacadeExtension {
 
-    protected fun getChainId(): String = databaseApiService.getChainId().dematerialize()
+    /**
+     * Used for api requests processing.
+     */
+    val databaseApiService: DatabaseApiService
 
-    protected fun getFees(
+    /**
+     * Used for keys processing.
+     */
+    val cryptoCoreComponent: CryptoCoreComponent
+
+    /**
+     * Retrieves blockchain chain id
+     * @return chain id string
+     */
+    fun getChainId(): String = databaseApiService.getChainId().dematerialize()
+
+    /**
+     * Retrieves required fee by asset for each operation
+     *
+     * @param operations Operations for getting fee
+     * @param asset Asset type for fee paying
+     *
+     * @return [AssetAmount] fees for each operation
+     */
+    fun getFees(
         operations: List<BaseOperation>,
         asset: Asset = Asset(ECHO_ASSET_ID)
     ): List<AssetAmount> = databaseApiService.getRequiredFees(operations, asset).dematerialize()
 
-    protected fun getFees(operations: List<BaseOperation>, assetId: String): List<AssetAmount> =
-        databaseApiService.getRequiredFees(operations, Asset(assetId)).dematerialize()
+    /**
+     * Retrieves required fee by asset for each operation
+     *
+     * @param operations Operations for getting fee
+     * @param assetId Id of asset type for fee paying
+     *
+     * @return [AssetAmount] fees for each operation
+     */
+    fun getFees(operations: List<BaseOperation>, assetId: String): List<AssetAmount> =
+        getFees(operations, Asset(assetId))
 
-    protected fun checkOwnerAccount(name: String, password: String, account: Account) {
+    /**
+     * Check if [account] is owned by [name] and [password].
+     *
+     * Throws [AuthenticationException] if account is not owned.
+     */
+    fun checkOwnerAccount(name: String, password: String, account: Account) {
         val ownerAddress =
             cryptoCoreComponent.getAddress(name, password, AuthorityType.ACTIVE)
 
         val isKeySame = account.isEqualsByKey(ownerAddress, AuthorityType.ACTIVE)
         if (!isKeySame) {
-            throw LocalException("Owner account checking exception")
+            throw AuthenticationException("Owner account checking exception")
         }
     }
 
-    protected fun checkOwnerAccount(wif: String, account: Account) {
+    /**
+     * Check if [account] is owned by [wif].
+     *
+     * Throws [AuthenticationException] if account is not owned.
+     */
+    fun checkOwnerAccount(wif: String, account: Account) {
         val privateKey = cryptoCoreComponent.decodeFromWif(wif)
         val publicKey = cryptoCoreComponent.derivePublicKeyFromPrivate(privateKey)
         val address = cryptoCoreComponent.getAddressFromPublicKey(publicKey)
 
         val isKeySame = account.isEqualsByKey(address, AuthorityType.ACTIVE)
         if (!isKeySame) {
-            throw LocalException("Owner account checking exception")
+            throw AuthenticationException("Owner account checking exception")
         }
     }
 
-    protected fun memoKey(name: String, password: String) =
+    /**
+     * Retrieves memo key by [name] and [password]
+     *
+     * @return String of memo key
+     */
+    fun memoKey(name: String, password: String) =
         cryptoCoreComponent.getPrivateKey(name, password, AuthorityType.ACTIVE)
 
-    protected fun generateMemo(
+    /**
+     * Encrypts [message] by [privateKey] for accessing only for [fromAccount] and [toAccount]
+     *
+     * @return [Memo] blockchain object
+     */
+    fun generateMemo(
         privateKey: ByteArray,
         fromAccount: Account,
         toAccount: Account,
@@ -89,7 +139,10 @@ abstract class BaseTransactionsFacade(
         return Memo()
     }
 
-    protected fun getParticipantsPair(
+    /**
+     * Retrieves [Account] pair of transaction participants by accounts names or ids
+     */
+    fun getParticipantsPair(
         fromNameOrId: String,
         toNameOrId: String
     ): Pair<Account, Account> {
@@ -110,16 +163,19 @@ abstract class BaseTransactionsFacade(
         return Pair(fromAccount!!, toAccount!!)
     }
 
-    protected fun configureTransaction(
-        transfer: BaseOperation, privateKey: ByteArray, asset: String, feeAsset: String?
+    /**
+     * Builds transaction for blockchain [operation] call
+     */
+    fun configureTransaction(
+        operation: BaseOperation, privateKey: ByteArray, asset: String, feeAsset: String?
     ): Transaction {
-        val blockData = databaseApiService.getBlockData()
+        val blockData = getBlockData()
         val chainId = getChainId()
-        val fees = getFees(listOf(transfer), feeAsset ?: asset)
+        val fees = getFees(listOf(operation), feeAsset ?: asset)
 
         return Transaction(
             blockData,
-            listOf(transfer),
+            listOf(operation),
             chainId
         ).apply {
             setFees(fees)
@@ -127,8 +183,25 @@ abstract class BaseTransactionsFacade(
         }
     }
 
-    companion object {
-        private val LOGGER = LoggerCoreComponent.create(BaseTransactionsFacade::class.java.name)
+    /**
+     * Retrieves base block information
+     *
+     * @return current block data
+     */
+    fun getBlockData(): BlockData {
+        val dynamicProperties = databaseApiService.getDynamicGlobalProperties().dematerialize()
+        val expirationTime = TimeUnit.MILLISECONDS.toSeconds(dynamicProperties.date!!.time) +
+                Transaction.DEFAULT_EXPIRATION_TIME
+        val headBlockId = dynamicProperties.headBlockId
+        val headBlockNumber = dynamicProperties.headBlockNumber
+        return BlockData(headBlockNumber, headBlockId, expirationTime)
+    }
+
+    /**
+     * Retrieves base block information
+     */
+    fun getBlockData(callback: Callback<BlockData>) {
+        callback.onSuccess(getBlockData())
     }
 
 }

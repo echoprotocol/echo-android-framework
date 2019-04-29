@@ -1,11 +1,13 @@
 package org.echo.mobile.framework.facade.internal
 
 import org.echo.mobile.framework.Callback
+import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
 import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent
 import org.echo.mobile.framework.exception.AccountNotFoundException
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.exception.NotFoundException
 import org.echo.mobile.framework.facade.InformationFacade
+import org.echo.mobile.framework.facade.InformationFacadeExtension
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.Asset
 import org.echo.mobile.framework.model.Balance
@@ -39,6 +41,7 @@ import org.echo.mobile.framework.support.concurrent.future.FutureTask
 import org.echo.mobile.framework.support.concurrent.future.completeCallback
 import org.echo.mobile.framework.support.concurrent.future.wrapResult
 import org.echo.mobile.framework.support.error
+import org.echo.mobile.framework.support.flatMap
 import org.echo.mobile.framework.support.map
 import org.echo.mobile.framework.support.parse
 import org.echo.mobile.framework.support.value
@@ -51,9 +54,10 @@ import org.echo.mobile.framework.support.value
  * @author Dmitriy Bushuev
  */
 class InformationFacadeImpl(
-    private val databaseApiService: DatabaseApiService,
+    override val databaseApiService: DatabaseApiService,
+    override val cryptoCoreComponent: CryptoCoreComponent,
     private val accountHistoryApiService: AccountHistoryApiService
-) : InformationFacade {
+) : InformationFacade, InformationFacadeExtension {
 
     override fun getAccount(nameOrId: String, callback: Callback<FullAccount>) =
         findAccount(nameOrId,
@@ -67,7 +71,7 @@ class InformationFacadeImpl(
             })
 
     override fun getAccountsByWif(wif: String, callback: Callback<List<FullAccount>>) {
-        databaseApiService.getAccountsByWif(listOf(wif))
+        getAccountsByWif(listOf(wif))
             .value { accountsMap -> callback.onSuccess(accountsMap[wif]?.toList() ?: listOf()) }
             .error { error -> callback.onError(error) }
     }
@@ -124,7 +128,8 @@ class InformationFacadeImpl(
         failure: (Exception) -> Unit
     ) {
         databaseApiService.getFullAccounts(listOf(nameOrId), false)
-            .map { accountMap -> accountMap[nameOrId] }
+            .flatMap { accountsMap -> fillAccounts(accountsMap) }
+            .map { filledAccounts -> filledAccounts[nameOrId] }
             .value { account -> success(account) }
             .error { error -> failure(error) }
     }
@@ -469,8 +474,9 @@ class InformationFacadeImpl(
         }
 
         databaseApiService.getFullAccounts(ids, false)
-            .value { accountsMap ->
-                accountsMap.forEach { (key, value) ->
+            .flatMap { accountsMap -> fillAccounts(accountsMap) }
+            .value { filledAccounts ->
+                filledAccounts.forEach { (key, value) ->
                     value.account?.let { account ->
                         accountsRegistry[key] = account
                     }

@@ -28,7 +28,7 @@ import org.echo.mobile.framework.support.Result
  */
 interface DatabaseApiService : ApiService, AccountsService, GlobalsService,
     AuthorityAndValidationService, BlocksAndTransactionsService, ContractsService, AssetsService,
-    SubscriptionService, ObjectsService, CustomOperationService, SidechainService
+    SubscriptionService, ObjectsService, CustomOperationService, SidechainService, KeysService
 
 /**
  * Encapsulates logic, associated with data from account from blockchain database API
@@ -62,19 +62,6 @@ interface AccountsService {
         subscribe: Boolean
     ): Result<Exception, Map<String, FullAccount>>
 
-    /**
-     * Fetches accounts associated with private keys in wifs format [wifs]
-     *
-     * Calls [callback]'s success method with map, contains pairs wif -> accounts list, associated with this wif
-     */
-    fun getAccountsByWif(wifs: List<String>, callback: Callback<Map<String, List<FullAccount>>>)
-
-    /**
-     * Fetches accounts associated with private keys in wifs format [wifs]
-     *
-     * Returns map, contains pairs wif -> accounts list, associated with this wif
-     */
-    fun getAccountsByWif(wifs: List<String>): Result<LocalException, Map<String, List<FullAccount>>>
 }
 
 /**
@@ -117,7 +104,7 @@ interface GlobalsService {
 interface AuthorityAndValidationService {
 
     /**
-     * Retrieves required fee by asset for ech operation
+     * Retrieves required fee by asset for each operation
      *
      * @param operations Operations for getting fee
      * @param asset Asset type for fee paying
@@ -134,18 +121,6 @@ interface AuthorityAndValidationService {
  * Encapsulates logic, associated with blocks and transactions information from Database API
  */
 interface BlocksAndTransactionsService {
-
-    /**
-     * Retrieves base block information
-     *
-     * @return current block data
-     */
-    fun getBlockData(): BlockData
-
-    /**
-     * Retrieves base block information
-     */
-    fun getBlockData(callback: Callback<BlockData>)
 
     /**
      * Retrieves full signed block
@@ -313,5 +288,17 @@ interface SidechainService {
      * Retrieves sidechain transfers list associated with [ethAddress]
      */
     fun getSidechainTransfers(ethAddress: String, callback: Callback<List<SidechainTransfer>>)
+
+}
+
+/**
+ * Encapsulates logic, associated with keys on blockchain
+ */
+interface KeysService {
+
+    /**
+     * Retrieves any references of [keys] on blockchain
+     */
+    fun getKeyReferences(keys: List<String>): Result<Exception, Map<String, List<String>>>
 
 }
