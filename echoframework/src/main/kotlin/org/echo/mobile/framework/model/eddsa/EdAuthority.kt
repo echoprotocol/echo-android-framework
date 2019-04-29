@@ -27,8 +27,6 @@ class EdAuthority @JvmOverloads constructor(
     var accountAuthorities: Map<Account, Long> = mapOf()
 ) : GrapheneSerializable {
 
-    private val extensions: Extensions = Extensions()
-
     /**
      * @return: Returns a list of public keys linked to this authority
      */
@@ -100,7 +98,6 @@ class EdAuthority @JvmOverloads constructor(
 
             add(KEY_KEY_AUTHS, keyAuthArray)
             add(KEY_ACCOUNT_AUTHS, accountAuthArray)
-            add(KEY_EXTENSIONS, extensions.toJsonObject())
         }
 
     override fun equals(other: Any?): Boolean {
