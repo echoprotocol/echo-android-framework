@@ -5,6 +5,7 @@ import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.model.Block
 import org.echo.mobile.framework.model.DynamicGlobalProperties
 import org.echo.mobile.framework.model.Log
+import org.echo.mobile.framework.model.contract.ContractBalance
 import org.echo.mobile.framework.service.UpdateListener
 
 /**
@@ -13,13 +14,6 @@ import org.echo.mobile.framework.service.UpdateListener
  * @author Dmitriy Bushuev
  */
 interface SubscriptionFacade {
-
-    companion object {
-        /**
-         * Default block number for define subscriptions
-         */
-        const val DEFAULT_BLOCK_NUMBER = "0"
-    }
 
     /**
      * Subscribe [listener] on account changing events
@@ -65,6 +59,18 @@ interface SubscriptionFacade {
     )
 
     /**
+     * Subscribe [listener] on contracts changes
+     * [callback] is needed for subscription process result events notifying
+     *
+     * @param [contractIds] Ids of contracts for subscribe to changes
+     */
+    fun subscribeOnContracts(
+        contractIds: List<String>,
+        listener: UpdateListener<Map<String, List<ContractBalance>>>,
+        callback: Callback<Boolean>
+    )
+
+    /**
      * Unsubscribe listeners from observing block adding event
      *
      * @param callback Listener of unsubscribing process state
@@ -81,12 +87,23 @@ interface SubscriptionFacade {
     fun unsubscribeFromBlockchainData(callback: Callback<Boolean>)
 
     /**
-     * Unsubscribe listeners from observing contract [contractId] changes
+     * Unsubscribe listeners from observing contract [contractId] logs changes
      *
      * @param callback Listener of unsubscribing process state
      *                 Receives true if unsubscribing succeed, otherwise false\error (if occurred)
      */
     fun unsubscribeFromContractLogs(contractId: String, callback: Callback<Boolean>)
+
+    /**
+     * Unsubscribe [listener] from contracts observing
+     *
+     * @param callback Listener of unsubscribing process state
+     *                 Receives true if unsubscribing succeed, otherwise false\error (if occurred)
+     */
+    fun unsubscribeFromContracts(
+        listener: UpdateListener<Map<String, List<ContractBalance>>>,
+        callback: Callback<Boolean>
+    )
 
     /**
      * Unsubscribe listeners from observing account event changes with id = [nameOrId]

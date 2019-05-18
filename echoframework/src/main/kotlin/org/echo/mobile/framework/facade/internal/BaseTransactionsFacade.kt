@@ -42,7 +42,7 @@ abstract class BaseTransactionsFacade(
 
     protected fun checkOwnerAccount(name: String, password: String, account: Account) {
         val ownerAddress =
-            cryptoCoreComponent.getAddress(name, password, AuthorityType.ACTIVE)
+            cryptoCoreComponent.getEdDSAAddress(name, password, AuthorityType.ACTIVE)
 
         val isKeySame = account.isEqualsByKey(ownerAddress, AuthorityType.ACTIVE)
         if (!isKeySame) {
@@ -52,8 +52,8 @@ abstract class BaseTransactionsFacade(
 
     protected fun checkOwnerAccount(wif: String, account: Account) {
         val privateKey = cryptoCoreComponent.decodeFromWif(wif)
-        val publicKey = cryptoCoreComponent.derivePublicKeyFromPrivate(privateKey)
-        val address = cryptoCoreComponent.getAddressFromPublicKey(publicKey)
+        val publicKey = cryptoCoreComponent.deriveEdDSAPublicKeyFromPrivate(privateKey)
+        val address = cryptoCoreComponent.getEdDSAAddressFromPublicKey(publicKey)
 
         val isKeySame = account.isEqualsByKey(address, AuthorityType.ACTIVE)
         if (!isKeySame) {

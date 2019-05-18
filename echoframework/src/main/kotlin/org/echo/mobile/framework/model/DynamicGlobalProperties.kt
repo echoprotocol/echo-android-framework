@@ -24,10 +24,9 @@ class DynamicGlobalProperties(
     @SerializedName(KEY_HEAD_BLOCK_NUMBER) @Expose val headBlockNumber: Long = 0,
     @SerializedName(KEY_HEAD_BLOCK_ID) @Expose val headBlockId: String,
     var date: Date?,
-    @SerializedName(KEY_CURRENT_WITNESS) @Expose val currentWitness: String,
     var nextMaintenanceDate: Date?,
     @SerializedName(KEY_LAST_BUDGET_TIME) @Expose val lastBudgetTime: String,
-    @SerializedName(KEY_WITNESS_BUDGET) @Expose val witnessBudget: Long = 0,
+    @SerializedName(KEY_COMMITTEE_BUDGET) @Expose val committeeBudget: Long = 0,
     @SerializedName(KEY_ACCOUNTS_REGISTERED_THIS_INTERVAL) @Expose val accountsRegisteredThisInterval: Long = 0,
     @SerializedName(KEY_RECENTLY_MISSED_COUNT) @Expose val recentlyMissedCount: Long = 0,
     @SerializedName(KEY_CURRENT_ASLOT) @Expose val currentAslot: Long = 0,
@@ -41,10 +40,9 @@ class DynamicGlobalProperties(
         const val KEY_HEAD_BLOCK_NUMBER = "head_block_number"
         const val KEY_HEAD_BLOCK_ID = "head_block_id"
         const val KEY_TIME = "time"
-        const val KEY_CURRENT_WITNESS = "current_witness"
         const val KEY_NEXT_MAINTENANCE_TIME = "next_maintenance_time"
         const val KEY_LAST_BUDGET_TIME = "last_budget_time"
-        const val KEY_WITNESS_BUDGET = "witness_budget"
+        const val KEY_COMMITTEE_BUDGET = "committee_budget"
         const val KEY_ACCOUNTS_REGISTERED_THIS_INTERVAL = "accounts_registered_this_interval"
         const val KEY_RECENTLY_MISSED_COUNT = "recently_missed_count"
         const val KEY_CURRENT_ASLOT = "current_aslot"
@@ -76,11 +74,11 @@ class DynamicGlobalProperties(
                 DynamicGlobalProperties::class.java
             )
 
-            dynamicGlobalProperties.date = jsonObject.get(DynamicGlobalProperties.KEY_TIME)
+            dynamicGlobalProperties.date = jsonObject.get(KEY_TIME)
                 .asString.parse(catch = { LOGGER.log("Error during parsing DGP date", it) })
 
             dynamicGlobalProperties.nextMaintenanceDate =
-                jsonObject.get(DynamicGlobalProperties.KEY_NEXT_MAINTENANCE_TIME)
+                jsonObject.get(KEY_NEXT_MAINTENANCE_TIME)
                     .asString.parse {
                     LOGGER.log(
                         "Error during parsing DGP next maintenance date", it

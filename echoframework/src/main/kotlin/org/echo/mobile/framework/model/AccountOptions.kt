@@ -30,11 +30,9 @@ class AccountOptions : GrapheneSerializable {
 
     var delegatingAccount: Account = Account(Account.PROXY_TO_SELF)
 
-    var witnessCount: Int = 0
-
     var committeeCount: Int = 0
 
-    var votes: Array<String> = arrayOf()
+    var votes: Array<Vote> = arrayOf()
 
     private val extensions = Extensions()
 
@@ -55,14 +53,11 @@ class AccountOptions : GrapheneSerializable {
             // Adding delegating account
             val delegatingAccountBytes = delegatingAccount.toBytes()
 
-            // Adding num_witness
-            val witnessCountBytes = Uint16.serialize(witnessCount)
-
             // Adding num_committee
             val committeeCountBytes = Uint16.serialize(committeeCount)
 
             // Vote's array length
-            val votesBytes = votes.serialize { vote -> vote.toByteArray() }
+            val votesBytes = votes.serialize { vote -> vote.toBytes() }
 
             // Account options's extensions
             val extensionsBytes = extensions.toBytes()
@@ -71,7 +66,6 @@ class AccountOptions : GrapheneSerializable {
                 memoBytes,
                 votingAccountBytes,
                 delegatingAccountBytes,
-                witnessCountBytes,
                 committeeCountBytes,
                 votesBytes,
                 extensionsBytes
@@ -85,12 +79,11 @@ class AccountOptions : GrapheneSerializable {
         JsonObject().apply {
             addProperty(KEY_MEMO_KEY, Address(memoKey!!).toString())
             addProperty(KEY_NUM_COMMITTEE, committeeCount)
-            addProperty(KEY_NUM_WITNESS, witnessCount)
             addProperty(KEY_VOTING_ACCOUNT, votingAccount.getObjectId())
             addProperty(KEY_DELEGATING_ACCOUNT, delegatingAccount.getObjectId())
 
             val votesArray = JsonArray().apply {
-                votes.forEach { vote -> add(vote) }
+                votes.forEach { vote -> add(vote.toString()) }
             }
 
             add(KEY_VOTES, votesArray)
@@ -124,7 +117,6 @@ class AccountOptions : GrapheneSerializable {
             }.apply {
                 votingAccount = Account(jsonAccountOptions.get(KEY_VOTING_ACCOUNT).asString)
                 delegatingAccount = Account(jsonAccountOptions.get(KEY_DELEGATING_ACCOUNT).asString)
-                witnessCount = jsonAccountOptions.get(KEY_NUM_WITNESS).asInt
                 committeeCount = jsonAccountOptions.get(KEY_NUM_COMMITTEE).asInt
             }
         }
@@ -135,7 +127,6 @@ class AccountOptions : GrapheneSerializable {
 
         const val KEY_MEMO_KEY = "memo_key"
         const val KEY_NUM_COMMITTEE = "num_committee"
-        const val KEY_NUM_WITNESS = "num_witness"
         const val KEY_VOTES = "votes"
         const val KEY_VOTING_ACCOUNT = "voting_account"
         const val KEY_DELEGATING_ACCOUNT = "delegating_account"

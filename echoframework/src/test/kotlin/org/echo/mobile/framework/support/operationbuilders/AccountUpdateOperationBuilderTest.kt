@@ -6,7 +6,7 @@ import org.echo.mobile.framework.exception.MalformedOperationException
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.AccountOptions
 import org.echo.mobile.framework.model.AssetAmount
-import org.echo.mobile.framework.model.Authority
+import org.echo.mobile.framework.model.eddsa.EdAuthority
 import org.echo.mobile.framework.model.PublicKey
 import org.echo.mobile.framework.model.operations.AccountUpdateOperation
 import org.echo.mobile.framework.model.operations.AccountUpdateOperationBuilder
@@ -35,14 +35,14 @@ class AccountUpdateOperationBuilderTest {
     private fun buildOperation(): AccountUpdateOperation {
         val fee = AssetAmount(UnsignedLong.ONE)
         val account = Account("1.2.23215")
-        val owner = Authority(2)
-        val active = Authority(3)
-        val options = AccountOptions(PublicKey(ECKey.fromPublicOnly(ECKey().pubKeyPoint).pubKey))
+        val active = EdAuthority(1)
+        val options = AccountOptions(
+            PublicKey(ECKey.fromPublicOnly(ECKey().pubKeyPoint).pubKey)
+        )
 
         return AccountUpdateOperationBuilder()
             .setFee(fee)
             .setAccount(account)
-            .setOwner(owner)
             .setActive(active)
             .setEdKey("")
             .setOptions(options)

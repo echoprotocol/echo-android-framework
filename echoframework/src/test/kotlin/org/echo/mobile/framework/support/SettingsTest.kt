@@ -98,7 +98,11 @@ class SettingsTest {
     private class TestCryptoComponent : CryptoCoreComponent {
         override fun derivePublicKeyFromPrivate(privateKey: ByteArray): ByteArray = byteArrayOf(1)
 
+        override fun deriveEdDSAPublicKeyFromPrivate(privateKey: ByteArray): ByteArray = byteArrayOf(1)
+
         override fun getAddressFromPublicKey(publicKey: ByteArray): String = ""
+
+        override fun getEdDSAAddressFromPublicKey(publicKey: ByteArray): String = ""
 
         override fun encodeToWif(source: ByteArray): String = ""
 
@@ -129,7 +133,21 @@ class SettingsTest {
             authorityType: AuthorityType
         ): String = "test"
 
+        override fun getEdDSAAddress(
+            userName: String,
+            password: String,
+            authorityType: AuthorityType
+        ): String = "test"
+
         override fun getPrivateKey(
+            userName: String,
+            password: String,
+            authorityType: AuthorityType
+        ): ByteArray = ECKey.fromPrivate(
+            BigInteger("0")
+        ).getPrivKeyBytes()
+
+        override fun getEdDSAPrivateKey(
             userName: String,
             password: String,
             authorityType: AuthorityType

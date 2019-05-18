@@ -18,7 +18,7 @@ import org.echo.mobile.framework.facade.internal.ContractsFacadeImpl
 import org.echo.mobile.framework.facade.internal.FeeFacadeImpl
 import org.echo.mobile.framework.facade.internal.InformationFacadeImpl
 import org.echo.mobile.framework.facade.internal.InitializerFacadeImpl
-import org.echo.mobile.framework.facade.internal.NotifiedTransactionsHelper
+import org.echo.mobile.framework.facade.internal.NotificationsHelper
 import org.echo.mobile.framework.facade.internal.SubscriptionFacadeImpl
 import org.echo.mobile.framework.facade.internal.TransactionsFacadeImpl
 import org.echo.mobile.framework.model.Asset
@@ -30,6 +30,7 @@ import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.HistoryResponse
 import org.echo.mobile.framework.model.Log
 import org.echo.mobile.framework.model.SidechainTransfer
+import org.echo.mobile.framework.model.contract.ContractBalance
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
@@ -47,6 +48,8 @@ import org.echo.mobile.framework.service.internal.DatabaseApiServiceImpl
 import org.echo.mobile.framework.service.internal.LoginApiServiceImpl
 import org.echo.mobile.framework.service.internal.NetworkBroadcastApiServiceImpl
 import org.echo.mobile.framework.service.internal.RegistrationApiServiceImpl
+import org.echo.mobile.framework.service.internal.subscription.RegistrationSubscriptionManagerImpl
+import org.echo.mobile.framework.service.internal.subscription.TransactionSubscriptionManagerImpl
 import org.echo.mobile.framework.support.FeeRatioProvider
 import org.echo.mobile.framework.support.Settings
 import org.echo.mobile.framework.support.concurrent.Dispatcher
@@ -123,12 +126,19 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             networkBroadcastApiService,
             registrationService
         )
+
+        val registrationNotificationsHelper = NotificationsHelper(
+            socketCoreComponent,
+            RegistrationSubscriptionManagerImpl()
+        )
+
         authenticationFacade = AuthenticationFacadeImpl(
             databaseApiService,
             networkBroadcastApiService,
             registrationService,
             settings.cryptoComponent,
-            settings.network
+            settings.network,
+            registrationNotificationsHelper
         )
 
         val feeRatioProvider = FeeRatioProvider(settings.feeRatio)
@@ -149,11 +159,10 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             settings.cryptoComponent
         )
 
+        val transactionSubscriptionManager = TransactionSubscriptionManagerImpl(settings.network)
+
         val notifiedTransactionsHelper =
-            NotifiedTransactionsHelper(
-                socketCoreComponent,
-                settings.network
-            )
+            NotificationsHelper(socketCoreComponent, transactionSubscriptionManager)
 
         assetsFacade = AssetsFacadeImpl(
             databaseApiService,
@@ -367,6 +376,14 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         subscriptionFacade.subscribeOnContractLogs(contractId, listener, callback)
     })
 
+    override fun subscribeOnContracts(
+        contractIds: List<String>,
+        listener: UpdateListener<Map<String, List<ContractBalance>>>,
+        callback: Callback<Boolean>
+    ) = dispatch(Runnable {
+        subscriptionFacade.subscribeOnContracts(contractIds, listener, callback)
+    })
+
     override fun unsubscribeFromContractLogs(
         contractId: String,
         callback: Callback<Boolean>
@@ -374,6 +391,17 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         dispatch(Runnable {
             subscriptionFacade.unsubscribeFromContractLogs(
                 contractId,
+                callback.wrapOriginal()
+            )
+        })
+
+    override fun unsubscribeFromContracts(
+        listener: UpdateListener<Map<String, List<ContractBalance>>>,
+        callback: Callback<Boolean>
+    ) =
+        dispatch(Runnable {
+            subscriptionFacade.unsubscribeFromContracts(
+                listener,
                 callback.wrapOriginal()
             )
         })
@@ -771,15 +799,6 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         dispatch(Runnable {
             contractsFacade.getContracts(
                 contractIds,
-                callback
-            )
-        })
-
-    override fun getAllContracts(
-        callback: Callback<List<ContractInfo>>
-    ) =
-        dispatch(Runnable {
-            contractsFacade.getAllContracts(
                 callback
             )
         })

@@ -3,6 +3,7 @@ package org.echo.mobile.framework.model.operations
 import com.google.common.primitives.UnsignedLong
 import com.google.gson.GsonBuilder
 import org.echo.mobile.framework.model.*
+import org.echo.mobile.framework.model.eddsa.EdAuthority
 import org.echo.mobile.framework.model.network.Testnet
 import org.junit.Assert
 import org.junit.Assert.assertTrue
@@ -72,7 +73,7 @@ class TransferOperationTest {
             TransferOperation.TransferDeserializer()
         )
         registerTypeAdapter(AssetAmount::class.java, AssetAmount.Deserializer())
-        registerTypeAdapter(Authority::class.java, Authority.Deserializer(Testnet()))
+        registerTypeAdapter(EdAuthority::class.java, EdAuthority.Deserializer())
         registerTypeAdapter(Account::class.java, Account.Deserializer())
         registerTypeAdapter(AccountOptions::class.java, AccountOptions.Deserializer(Testnet()))
     }.create()

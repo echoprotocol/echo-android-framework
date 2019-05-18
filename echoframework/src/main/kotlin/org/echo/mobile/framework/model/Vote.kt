@@ -33,7 +33,7 @@ class Vote : ByteSerializable {
     override fun toString(): String = "$type:$instance"
 
     override fun toBytes(): ByteArray {
-        return byteArrayOf(instance.toByte(), type.toByte())
+        return byteArrayOf(0) + instance.toByte() + byteArrayOf(0) + type.toByte()
     }
 
     companion object {

@@ -67,84 +67,86 @@ class GetBlockSocketOperationTest {
     }
 
     val result = """{
-                      "id": 108,
+                      "id": 6,
                       "jsonrpc": "2.0",
                       "result": {
-                        "previous": "000045648cadccbd88fb91a3d4ee44ed995d48f9",
-                        "timestamp": "2018-08-10T14:27:55",
-                        "witness": "1.6.10",
-                        "transaction_merkle_root": "0c8015ab0d5471216cb0ab3052e0b7b7d115ca3e",
-                        "round": "0c8015ab0d5471216cb0ab3052e0b7b7d115ca3e",
-                        "rand": "0c8015ab0d5471216cb0ab3052e0b7b7d115ca3e",
-                        "state_root_hash": "8a0250a64258890c789893006acafb51ae544a575457afa77d3e11c2b0847a6a",
-                        "result_root_hash": "288912bd68b41a96fefa5d537dbd51411ee066450dc01cd017c01eea977cc491",
+                        "previous": "00028b0289fea4607aaf9564031eb10bec13a549",
+                        "timestamp": "2019-04-24T08:25:12",
+                        "account": "1.2.12",
+                        "transaction_merkle_root": "34e64b73ac1fd5e146e4033aed1ea3011d99152f",
+                        "vm_root": "e3054d080d1dce5eb5905b7641806399ad9dfa4627a7f3f811fa48459b3035cc.5f15d8519e6ea1d967b645eeb0b73269f93b0f8b9bca71ac94f320e629db09d3 0.9a71ff66a2f503e4e96c4e9a2521d6a710f2d373b422332029da170d78fa1a68",
+                        "round": 166659,
                         "extensions": [],
-                        "witness_signature": "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
-                        "ed_signature": "029ee9c3e31eab6d655f416cfa11f8cb70a030444669e6c70e40612ac50ddca0e30862f2e52329a0c014a0191b4d2e45d6d531453bf6c82a5896ec7907d33804",
-                        "verifications": [
-                          [
-                            "1.6.1",
-                            "e1c7b4452af5d4c0992adde610561a69f876decc5e04e64b70a2bdfdbc4e4d0aff1ef5e3f426492f4f4dd71ffdf9ae347c25b3e6e37b382adf17a49a3686df00"
+                        "ed_signature": "18f5c5b77248d71f33f521f06f32e077b1c203a601cef0241724dc6c9277c0ddd6510ca0229179c0bc934fd8541fc16b57b9a8abf51e0773776f3bb13e0d880e",
+                        "rand": "9ac4c73efeead66584877038963918c27477b831f4f5f302dc322fa63ea13337",
+                        "cert": {
+                          "_rand": "9ac4c73efeead66584877038963918c27477b831f4f5f302dc322fa63ea13337",
+                          "_block_hash": "00028b030c68ba19b5a8a32860c14e1ce04dd7a0",
+                          "_producer": 12,
+                          "_signatures": [
+                            {
+                              "_step": 4,
+                              "_value": 0,
+                              "_signer": 11,
+                              "_bba_sign": "c2aaadb03d637f0bfb514b7fd6fa3a6d3b65dd867dd3118163de1a46c0f05dcee63bd1bd6bfc41f3b688570cf84ccd93a59ec17a77e731ad5cccf7b9fa2ec106"
+                            },
+                            {
+                              "_step": 4,
+                              "_value": 0,
+                              "_signer": 12,
+                              "_bba_sign": "431a882c9a4e74e3b11972c2d5c3888bba3017452473c1d925fc21d68b4aba82b0b29f981c660ea70685452f623f4222bbddd0e21081a5aa8c6aa588d6287808"
+                            },
+                            {
+                              "_step": 4,
+                              "_value": 0,
+                              "_signer": 6,
+                              "_bba_sign": "d1aab4380a5704468780b8e6ab96ab28c14bd996990ea3010c776bed2130994593ff91f1b08002bec239a00d5ed9452a36a26fa93b4ae463333dc3e09f0a3c0f"
+                            },
+                            {
+                              "_step": 4,
+                              "_value": 0,
+                              "_signer": 41,
+                              "_bba_sign": "431a882c9a4e74e3b11972c2d5c3888bba3017452473c1d925fc21d68b4aba82b0b29f981c660ea70685452f623f4222bbddd0e21081a5aa8c6aa588d6287808"
+                            },
+                            {
+                              "_step": 4,
+                              "_value": 0,
+                              "_signer": 15,
+                              "_bba_sign": "431a882c9a4e74e3b11972c2d5c3888bba3017452473c1d925fc21d68b4aba82b0b29f981c660ea70685452f623f4222bbddd0e21081a5aa8c6aa588d6287808"
+                            }
                           ]
-                        ],
+                        },
                         "transactions": [
                           {
-                            "ref_block_num": 17764,
-                            "ref_block_prefix": 3184307596,
-                            "expiration": "2018-08-10T14:28:32",
+                            "ref_block_num": 35585,
+                            "ref_block_prefix": 1513105665,
+                            "expiration": "2019-04-24T08:25:55",
                             "operations": [
                               [
-                                6,
+                                41,
                                 {
                                   "fee": {
-                                    "amount": 2013476,
+                                    "amount": 124,
                                     "asset_id": "1.3.0"
                                   },
-                                  "account": "1.2.18",
-                                  "owner": {
-                                    "weight_threshold": 1,
-                                    "account_auths": [],
-                                    "key_auths": [
-                                      [
-                                        "ECHO6r8aCcMXqYbV1hCVh9ny7Xx3eXCqiaR1wjPH1Atra4JyLDL9mK",
-                                        1
-                                      ]
-                                    ],
-                                    "address_auths": []
+                                  "registrar": "1.2.16",
+                                  "value": {
+                                    "amount": 0,
+                                    "asset_id": "1.3.0"
                                   },
-                                  "active": {
-                                    "weight_threshold": 1,
-                                    "account_auths": [],
-                                    "key_auths": [
-                                      [
-                                        "ECHO5xiJsHy6r2m4XBJiRHmpMUqJHrNjzw3aJe6KE5gzwFn1mwKUR9",
-                                        1
-                                      ]
-                                    ],
-                                    "address_auths": []
-                                  },
-                                  "ed_key": "edKey",
-                                  "new_options": {
-                                    "memo_key": "ECHO5xiJsHy6r2m4XBJiRHmpMUqJHrNjzw3aJe6KE5gzwFn1mwKUR9",
-                                    "voting_account": "1.2.5",
-                                    "delegating_account": "1.2.12",
-                                    "num_witness": 0,
-                                    "num_committee": 0,
-                                    "votes": [],
-                                    "extensions": []
-                                  },
-                                  "extensions": {}
+                                  "code": "1361c394",
+                                  "callee": "1.14.0"
                                 }
                               ]
                             ],
                             "extensions": [],
                             "signatures": [
-                              "1f18d73c5f21d390d67786ecaba001664f40248fd1dcc09356619d73f117b2c6484e97e4f5b609b43f1a0c3327a85ab64d8afef54d563b9f300cab828cc70e0f82"
+                              "5d5390479b0b90c7850ce9157f5dc9c0039acca9c3606fb54c2fcbf7555d1ffd2815b08e426e2bb6f81e9fac4d0da9cdde6ef6b0436d0469c79f46b64475e100"
                             ],
                             "operation_results": [
                               [
-                                0,
-                                {}
+                                1,
+                                "1.15.8"
                               ]
                             ]
                           }
