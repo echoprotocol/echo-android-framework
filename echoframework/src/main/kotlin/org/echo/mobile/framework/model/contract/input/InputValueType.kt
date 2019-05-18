@@ -144,7 +144,7 @@ class AccountAddressInputValueType : InputValueType {
 
 /**
  * Implementation of [InputValueType] for contract address types.
- * Can decode addresses with contract prefix "1.16." and without it.
+ * Can decode addresses with contract prefix "1.14." and without it.
  */
 class ContractAddressInputValueType : InputValueType {
 
@@ -153,7 +153,7 @@ class ContractAddressInputValueType : InputValueType {
     override var name: String = "address"
 
     companion object {
-        const val PREFIX = "1.16."
+        const val PREFIX = "1.14."
         const val CONTRACT_ADDRESS_SIZE = 40
         const val CONTRACT_ADDRESS_PREFIX = "01"
     }

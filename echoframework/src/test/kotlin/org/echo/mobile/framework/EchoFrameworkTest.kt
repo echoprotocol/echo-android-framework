@@ -7,7 +7,6 @@ import org.echo.mobile.framework.model.Asset
 import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.AssetOptions
 import org.echo.mobile.framework.model.Balance
-import org.echo.mobile.framework.model.BitassetOptions
 import org.echo.mobile.framework.model.Block
 import org.echo.mobile.framework.model.BlockData
 import org.echo.mobile.framework.model.DynamicGlobalProperties
@@ -69,13 +68,13 @@ class EchoFrameworkTest {
         )
     }
 
-    private val legalContractId = "1.14.106"
-    private val legalTokenId = "1.14.103"
-    private val accountId = "1.2.14"
+    private val legalContractId = "1.14.38"
+    private val legalTokenId = "1.14.45"
+    private val accountId = "1.2.49"
     private val login = "dima"
     private val password = "dima"
     private val wif = "5J3UbadSyzzcQQ7HEfTr2brhJJpHhx3NsMzrvgzfysBesutNRCm"
-    private val secondAccountId = "1.2.15"
+    private val secondAccountId = "1.2.50"
     private val secondLogin = "daria"
     private val secondPassword = "daria"
     private val legalAssetId = "1.3.0"
@@ -509,7 +508,7 @@ class EchoFrameworkTest {
         val futureSubscriptionById = FutureTask<FullAccount>()
         val futureSubscriptionResult = FutureTask<Boolean>()
 
-        framework.subscribeOnAccount("1.2.16", object : AccountListener {
+        framework.subscribeOnAccount(secondAccountId, object : AccountListener {
 
             override fun onChange(updatedAccount: FullAccount) {
                 futureSubscriptionById.setComplete(updatedAccount)
@@ -660,7 +659,7 @@ class EchoFrameworkTest {
         val futureSubscription = FutureTask<Map<String, List<ContractBalance>>>()
 
         framework.subscribeOnContracts(
-            listOf("1.14.4", "1.14.1"),
+            listOf(legalContractId),
             listener = object : UpdateListener<Map<String, List<ContractBalance>>> {
                 override fun onUpdate(data: Map<String, List<ContractBalance>>) {
                     futureSubscription.setComplete(data)
@@ -672,7 +671,7 @@ class EchoFrameworkTest {
         thread {
             Thread.sleep(1000)
             callContractWithEmptyParams(
-                "1.14.4",
+                legalContractId,
                 "logTestArray",
                 framework,
                 EmptyCallback()
@@ -687,81 +686,79 @@ class EchoFrameworkTest {
         assert(updateResult!!.isNotEmpty())
     }
 
-    //todo (not working on chain)
-//    @Test
-//    fun subscribeContractLogsArrayTest() {
-//        val framework = initFramework()
-//
-//        if (connect(framework) == false) Assert.fail("Connection error")
-//
-//        val future = FutureTask<Boolean>()
-//        val futureSubscription = FutureTask<List<Log>>()
-//
-//        framework.subscribeOnContractLogs(
-//            "1.14.4",
-//            listener = object : UpdateListener<List<Log>> {
-//                override fun onUpdate(data: List<Log>) {
-//                    futureSubscription.setComplete(data)
-//                }
-//            },
-//            callback = future.completeCallback()
-//        )
-//
-//        thread {
-//            Thread.sleep(1000)
-//            callContractWithEmptyParams(
-//                "1.14.4",
-//                "logTestArray",
-//                framework,
-//                EmptyCallback()
-//            )
-//        }
-//
-//        val contractResult = future.get(1, TimeUnit.MINUTES)
-//        assertNotNull(contractResult)
-//
-//        val updateResult = futureSubscription.get(1, TimeUnit.MINUTES)
-//        assertNotNull(updateResult)
-//        assert(updateResult!!.isNotEmpty())
-//    }
+    @Test
+    fun subscribeContractLogsArrayTest() {
+        val framework = initFramework()
 
-    //todo (not working on chain)
-//    @Test
-//    fun subscribeContractLogsTest() {
-//        val framework = initFramework()
-//
-//        if (connect(framework) == false) Assert.fail("Connection error")
-//
-//        val future = FutureTask<Boolean>()
-//        val futureSubscription = FutureTask<List<Log>>()
-//
-//        framework.subscribeOnContractLogs(
-//            "1.14.0",
-//            listener = object : UpdateListener<List<Log>> {
-//                override fun onUpdate(data: List<Log>) {
-//                    futureSubscription.setComplete(data)
-//                }
-//            },
-//            callback = future.completeCallback()
-//        )
-//
-//        thread {
-//            Thread.sleep(1000)
-//            callContractWithEmptyParams(
-//                "1.14.0",
-//                "logTest",
-//                framework,
-//                EmptyCallback()
-//            )
-//        }
-//
-//        val contractResult = future.get()
-//        assertNotNull(contractResult)
-//
-//        val updateResult = futureSubscription.get(30, TimeUnit.SECONDS)
-//        assertNotNull(updateResult)
-//        assert(updateResult!!.isNotEmpty())
-//    }
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<Boolean>()
+        val futureSubscription = FutureTask<List<Log>>()
+
+        framework.subscribeOnContractLogs(
+            legalContractId,
+            listener = object : UpdateListener<List<Log>> {
+                override fun onUpdate(data: List<Log>) {
+                    futureSubscription.setComplete(data)
+                }
+            },
+            callback = future.completeCallback()
+        )
+
+        thread {
+            Thread.sleep(1000)
+            callContractWithEmptyParams(
+                legalContractId,
+                "logTestArray",
+                framework,
+                EmptyCallback()
+            )
+        }
+
+        val contractResult = future.get(1, TimeUnit.MINUTES)
+        assertNotNull(contractResult)
+
+        val updateResult = futureSubscription.get(1, TimeUnit.MINUTES)
+        assertNotNull(updateResult)
+        assert(updateResult!!.isNotEmpty())
+    }
+
+    @Test
+    fun subscribeContractLogsTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<Boolean>()
+        val futureSubscription = FutureTask<List<Log>>()
+
+        framework.subscribeOnContractLogs(
+            legalContractId,
+            listener = object : UpdateListener<List<Log>> {
+                override fun onUpdate(data: List<Log>) {
+                    futureSubscription.setComplete(data)
+                }
+            },
+            callback = future.completeCallback()
+        )
+
+        thread {
+            Thread.sleep(1000)
+            callContractWithEmptyParams(
+                legalContractId,
+                "logTest",
+                framework,
+                EmptyCallback()
+            )
+        }
+
+        val contractResult = future.get()
+        assertNotNull(contractResult)
+
+        val updateResult = futureSubscription.get(30, TimeUnit.SECONDS)
+        assertNotNull(updateResult)
+        assert(updateResult!!.isNotEmpty())
+    }
 
     private fun callContractWithEmptyParams(
         contractId: String,
@@ -900,8 +897,8 @@ class EchoFrameworkTest {
         val futureFee = FutureTask<String>()
 
         framework.getFeeForContractOperation(
-            userNameOrId = "1.2.16",
-            contractId = "1.14.0",
+            userNameOrId = accountId,
+            contractId = legalContractId,
             amount = "0",
             methodName = "testReturn",
             methodParams = listOf(),
@@ -923,7 +920,7 @@ class EchoFrameworkTest {
 
         framework.getFeeForContractOperation(
             userNameOrId = "1.2.16",
-            contractId = "1.14.0",
+            contractId = legalContractId,
             amount = "0",
             code = "e13a7716",
             assetId = legalAssetId,
@@ -1068,7 +1065,7 @@ class EchoFrameworkTest {
         framework.issueAsset(
             "daria",
             "daria",
-            asset = "1.3.6",
+            asset = "1.3.3",
             amount = "100",
             destinationIdOrName = "daria",
             message = "Do it",
@@ -1089,7 +1086,7 @@ class EchoFrameworkTest {
         framework.issueAssetWithWif(
             "daria",
             "5J9YnfSUx6GnweorDEswRNAFcBzsZrQoJLkfqKLzXwBdRvjmoz1",
-            asset = "1.3.6",
+            asset = "1.3.3",
             amount = "1",
             destinationIdOrName = "daria",
             message = "Do it",
@@ -1113,7 +1110,7 @@ class EchoFrameworkTest {
             "daria",
             assetId = "1.3.0",
             feeAsset = "1.3.0",
-            byteCode = legalContractParamsBytecode,
+            byteCode = legalTokenBytecode,
             broadcastCallback = broadcastFuture.completeCallback(),
             resultCallback = future.completeCallback()
         )
@@ -1183,7 +1180,7 @@ class EchoFrameworkTest {
             "daria",
             assetId = "1.3.0",
             feeAsset = "1.3.0",
-            contractId = "1.14.0",
+            contractId = legalContractId,
             methodName = "logTest",
             methodParams = listOf(),
             broadcastCallback = broadcastFuture.completeCallback(),
@@ -1208,7 +1205,7 @@ class EchoFrameworkTest {
             "daria",
             assetId = "1.3.0",
             feeAsset = "1.3.0",
-            contractId = "1.14.0",
+            contractId = legalContractId,
             methodName = "logTest",
             methodParams = listOf(),
             broadcastCallback = broadcastFuture.completeCallback(),
@@ -1235,7 +1232,7 @@ class EchoFrameworkTest {
             "daria",
             assetId = "1.3.0",
             feeAsset = "1.3.0",
-            contractId = "1.14.0",
+            contractId = legalContractId,
             code = contractCode,
             broadcastCallback = broadcastFuture.completeCallback(),
             resultCallback = future.completeCallback()
@@ -1259,7 +1256,7 @@ class EchoFrameworkTest {
             "5J9YnfSUx6GnweorDEswRNAFcBzsZrQoJLkfqKLzXwBdRvjmoz1",
             assetId = "1.3.0",
             feeAsset = "1.3.0",
-            contractId = "1.14.0",
+            contractId = legalContractId,
             methodName = "logTest",
             methodParams = listOf(),
             broadcastCallback = broadcastFuture.completeCallback(),
@@ -1286,7 +1283,7 @@ class EchoFrameworkTest {
             "5J9YnfSUx6GnweorDEswRNAFcBzsZrQoJLkfqKLzXwBdRvjmoz1",
             assetId = legalAssetId,
             feeAsset = legalAssetId,
-            contractId = "1.14.1",
+            contractId = legalContractId,
             code = contractCode,
             broadcastCallback = broadcastFuture.completeCallback(),
             resultCallback = future.completeCallback()
@@ -1320,7 +1317,7 @@ class EchoFrameworkTest {
             "daria",
             assetId = legalAssetId,
             feeAsset = legalAssetId,
-            contractId = "1.14.1",
+            contractId = legalContractId,
             methodName = "testReturn",
             methodParams = listOf(),
             broadcastCallback = broadcastFuture.completeCallback(),
@@ -1345,7 +1342,7 @@ class EchoFrameworkTest {
             "daria",
             legalAssetId,
             legalAssetId,
-            "1.14.0",
+            legalContractId,
             "testReturn",
             listOf(),
             "1000",
@@ -1372,7 +1369,7 @@ class EchoFrameworkTest {
             "daria", "daria",
             assetId = legalAssetId,
             feeAsset = legalAssetId,
-            contractId = "1.14.0",
+            contractId = legalContractId,
             methodName = "testAddressParameter",
             methodParams = listOf(InputValue(AccountAddressInputValueType(), address)),
             broadcastCallback = broadcastFuture.completeCallback(),
@@ -1396,7 +1393,7 @@ class EchoFrameworkTest {
             "daria", "daria",
             assetId = legalAssetId,
             feeAsset = legalAssetId,
-            contractId = "1.14.0",
+            contractId = legalContractId,
             methodName = "testStringParameter",
             methodParams = listOf(
                 InputValue(StringInputValueType(), "door123")
@@ -1445,7 +1442,7 @@ class EchoFrameworkTest {
         framework.queryContract(
             "daria",
             legalAssetId,
-            contractId = "1.14.3",
+            contractId = legalTokenId,
             methodName = "balanceOf",
             methodParams = listOf(
                 InputValue(
@@ -1471,7 +1468,7 @@ class EchoFrameworkTest {
         framework.queryContract(
             "daria",
             legalAssetId,
-            contractId = "1.14.3",
+            contractId = legalTokenId,
             code = "70a08231000000000000000000000000000000000000000000000000000000000000000e",
             callback = future.completeCallback()
         )
@@ -1549,7 +1546,7 @@ class EchoFrameworkTest {
         val future = FutureTask<List<Log>>()
 
         framework.getContractLogs(
-            contractId = "1.14.0",
+            contractId = legalContractId,
             fromBlock = "0",
             toBlock = "9999999",
             callback = future.completeCallback()
@@ -1585,7 +1582,7 @@ class EchoFrameworkTest {
         val future = FutureTask<List<ContractInfo>>()
 
         framework.getContracts(
-            listOf("1.14.0"),
+            listOf(legalContractId),
             future.completeCallback()
         )
 
@@ -1621,7 +1618,7 @@ class EchoFrameworkTest {
         val future = FutureTask<ContractStruct>()
 
         framework.getContract(
-            "1.14.0",
+            legalContractId,
             future.completeCallback()
         )
 
@@ -1794,13 +1791,13 @@ class EchoFrameworkTest {
         val asset = Asset("").apply {
             symbol = "TIASSET"
             precision = 4
-            issuer = Account("1.2.16")
-            setBtsOptions(
-                BitassetOptions(
-                    86400, 7, 86400,
-                    100, 2000
-                )
-            )
+            issuer = Account("1.2.50")
+//            setBtsOptions(
+//                BitassetOptions(
+//                    86400, 7, 86400,
+//                    100, 2000
+//                )
+//            )
 
             predictionMarket = false
         }

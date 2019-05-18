@@ -119,12 +119,12 @@ class ContractInputEncoderTest {
     @Test
     fun encodeFunctionWithContractAddressTest() {
         val function = "totalSupply"
-        val result = "e4dc2aa40000000000000000000000000100000000000000000000000000000000000012"
+        val result = "e4dc2aa4000000000000000000000000010000000000000000000000000000000000002d"
 
         val encoded =
             contractInputEncoder.encode(
                 function,
-                listOf(InputValue(ContractAddressInputValueType(), "1.16.18"))
+                listOf(InputValue(ContractAddressInputValueType(), "1.14.45"))
             )
 
         Assert.assertEquals(result, encoded)
