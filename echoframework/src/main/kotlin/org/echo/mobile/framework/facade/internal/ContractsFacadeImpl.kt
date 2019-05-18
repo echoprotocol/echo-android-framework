@@ -52,6 +52,7 @@ class ContractsFacadeImpl(
     override fun createContract(
         registrarNameOrId: String,
         password: String,
+        value: String,
         assetId: String,
         feeAsset: String?,
         byteCode: String,
@@ -74,6 +75,7 @@ class ContractsFacadeImpl(
             callId = createContract(
                 registrar,
                 privateKey,
+                value,
                 assetId,
                 feeAsset,
                 byteCode,
@@ -94,6 +96,7 @@ class ContractsFacadeImpl(
     override fun createContractWithWif(
         registrarNameOrId: String,
         wif: String,
+        value: String,
         assetId: String,
         feeAsset: String?,
         byteCode: String,
@@ -112,6 +115,7 @@ class ContractsFacadeImpl(
             callId = createContract(
                 registrar,
                 privateKey,
+                value,
                 assetId,
                 feeAsset,
                 byteCode,
@@ -342,6 +346,7 @@ class ContractsFacadeImpl(
     private fun createContract(
         registrar: Account,
         privateKey: ByteArray,
+        value: String,
         assetId: String,
         feeAsset: String?,
         byteCode: String,
@@ -351,6 +356,7 @@ class ContractsFacadeImpl(
 
         val contractOperation = ContractCreateOperationBuilder()
             .setAsset(assetId)
+            .setValue(UnsignedLong.valueOf(value))
             .setRegistrar(registrar)
             .setContractCode(byteCode + constructorParams)
             .build()

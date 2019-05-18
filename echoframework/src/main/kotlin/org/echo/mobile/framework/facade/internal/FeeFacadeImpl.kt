@@ -139,7 +139,7 @@ class FeeFacadeImpl(
             throw LocalException("Unable to get fee for specified operation")
         }
 
-        multiplyFee(fees.first(), feeRatioProvider.provide()).toString()
+        multiplyFee(fees.first(), feeRatioProvider.provide()).amount.toString()
     })
 
     override fun getFeeForContractOperation(
@@ -169,7 +169,7 @@ class FeeFacadeImpl(
             throw LocalException("Unable to get fee for specified operation")
         }
 
-        multiplyFee(fees.first(), feeRatioProvider.provide()).toString()
+        multiplyFee(fees.first(), feeRatioProvider.provide()).amount.toString()
     })
 
     private fun multiplyFee(rawFee: AssetAmount, feeRatio: Double): AssetAmount =
