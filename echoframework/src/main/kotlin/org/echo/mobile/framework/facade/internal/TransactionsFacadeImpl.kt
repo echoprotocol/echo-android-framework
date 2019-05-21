@@ -40,7 +40,7 @@ class TransactionsFacadeImpl(
 
         checkOwnerAccount(fromAccount.name, password, fromAccount)
 
-        val privateKey = cryptoCoreComponent.getPrivateKey(
+        val privateKey = cryptoCoreComponent.getEdDSAPrivateKey(
             fromAccount.name,
             password,
             AuthorityType.ACTIVE

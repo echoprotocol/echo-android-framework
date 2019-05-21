@@ -5,18 +5,19 @@ import org.echo.mobile.framework.core.socket.SocketCoreComponent
 import org.echo.mobile.framework.core.socket.SocketMessengerListener
 import org.echo.mobile.framework.model.TransactionResult
 import org.echo.mobile.framework.model.network.Network
+import org.echo.mobile.framework.service.NotifiedSubscriptionManager
 import org.echo.mobile.framework.service.TransactionSubscriptionManager
 import org.echo.mobile.framework.service.internal.subscription.TransactionSubscriptionManagerImpl
 import org.echo.mobile.framework.support.toJsonObject
 
 /**
- * Includes logic for notified transactions assembly
+ * Includes logic for notified data assembly
  *
  * @author Daria Pechkovskaya
  */
-class NotifiedTransactionsHelper(
+class NotificationsHelper<T>(
     private val socketCoreComponent: SocketCoreComponent,
-    private val network: Network
+    private val manager: NotifiedSubscriptionManager<T>
 ) {
 
     @Volatile
@@ -26,16 +27,12 @@ class NotifiedTransactionsHelper(
         SubscriptionListener()
     }
 
-    private val transactionSubscriptionManager: TransactionSubscriptionManager by lazy {
-        TransactionSubscriptionManagerImpl(network)
-    }
-
     /**
      * Subscribes on notifying transaction result by [callId]
      */
-    fun subscribeOnTransactionResult(callId: String, callback: Callback<TransactionResult>) {
+    fun subscribeOnResult(callId: String, callback: Callback<T>) {
         subscribeSocket()
-        transactionSubscriptionManager.register(callId, callback)
+        manager.register(callId, callback)
     }
 
     private fun subscribeSocket() {
@@ -53,7 +50,7 @@ class NotifiedTransactionsHelper(
                 return
             }
 
-            transactionSubscriptionManager.tryProcessEvent(event)
+            manager.tryProcessEvent(event)
         }
 
         override fun onFailure(error: Throwable) = resetState()
@@ -66,7 +63,7 @@ class NotifiedTransactionsHelper(
     private fun resetState() {
         subscribed = false
         socketCoreComponent.off(socketMessengerListener)
-        transactionSubscriptionManager.clear()
+        manager.clear()
     }
 
 

@@ -23,7 +23,7 @@ class ObjectTypeTest {
         assertEquals("1.2.0", accountObject.genericObjectId)
         assertEquals("1.4.0", forceSettlementObject.genericObjectId)
         assertEquals("2.0.0", globalPropertiesObject.genericObjectId)
-        assertEquals("2.14.0", specialAuthorityObject.genericObjectId)
+        assertEquals("2.13.0", specialAuthorityObject.genericObjectId)
     }
 
     @Test

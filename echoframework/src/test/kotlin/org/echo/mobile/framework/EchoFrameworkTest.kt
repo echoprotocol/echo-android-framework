@@ -1,24 +1,22 @@
 //package org.echo.mobile.framework
 //
 //import com.google.common.primitives.UnsignedLong
-//import com.google.gson.GsonBuilder
-//import org.echo.mobile.framework.core.mapper.ObjectMapper
 //import org.echo.mobile.framework.exception.LocalException
 //import org.echo.mobile.framework.model.Account
 //import org.echo.mobile.framework.model.Asset
 //import org.echo.mobile.framework.model.AssetAmount
 //import org.echo.mobile.framework.model.AssetOptions
 //import org.echo.mobile.framework.model.Balance
-//import org.echo.mobile.framework.model.BitassetOptions
 //import org.echo.mobile.framework.model.Block
 //import org.echo.mobile.framework.model.BlockData
 //import org.echo.mobile.framework.model.DynamicGlobalProperties
+//import org.echo.mobile.framework.model.EthAddress
 //import org.echo.mobile.framework.model.FullAccount
 //import org.echo.mobile.framework.model.GlobalProperties
 //import org.echo.mobile.framework.model.HistoryResponse
 //import org.echo.mobile.framework.model.Log
 //import org.echo.mobile.framework.model.Price
-//import org.echo.mobile.framework.model.SidechainTransfer
+//import org.echo.mobile.framework.model.contract.ContractBalance
 //import org.echo.mobile.framework.model.contract.ContractInfo
 //import org.echo.mobile.framework.model.contract.ContractResult
 //import org.echo.mobile.framework.model.contract.ContractStruct
@@ -26,10 +24,8 @@
 //import org.echo.mobile.framework.model.contract.input.ContractAddressInputValueType
 //import org.echo.mobile.framework.model.contract.input.ContractInputEncoder
 //import org.echo.mobile.framework.model.contract.input.InputValue
-//import org.echo.mobile.framework.model.contract.input.NumberInputValueType
 //import org.echo.mobile.framework.model.contract.input.StringInputValueType
 //import org.echo.mobile.framework.model.contract.toRegular
-//import org.echo.mobile.framework.model.contract.toX86
 //import org.echo.mobile.framework.model.network.Echodevnet
 //import org.echo.mobile.framework.service.UpdateListener
 //import org.echo.mobile.framework.support.Api
@@ -38,7 +34,6 @@
 //import org.echo.mobile.framework.support.concurrent.future.FutureTask
 //import org.echo.mobile.framework.support.concurrent.future.completeCallback
 //import org.echo.mobile.framework.support.concurrent.future.wrapResult
-//import org.echo.mobile.framework.support.dematerialize
 //import org.echo.mobile.framework.support.fold
 //import org.junit.Assert
 //import org.junit.Assert.assertEquals
@@ -48,7 +43,6 @@
 //import org.junit.Assert.assertTrue
 //import org.junit.Test
 //import java.math.BigDecimal
-//import java.math.BigInteger
 //import java.util.concurrent.TimeUnit
 //import kotlin.concurrent.thread
 //
@@ -75,13 +69,13 @@
 //        )
 //    }
 //
-//    private val legalContractId = "1.16.106"
-//    private val legalTokenId = "1.16.103"
-//    private val accountId = "1.2.14"
+//    private val legalContractId = "1.14.1"
+//    private val legalTokenId = "1.14.0"
+//    private val accountId = "1.2.22"
 //    private val login = "dima"
 //    private val password = "dima"
 //    private val wif = "5J3UbadSyzzcQQ7HEfTr2brhJJpHhx3NsMzrvgzfysBesutNRCm"
-//    private val secondAccountId = "1.2.15"
+//    private val secondAccountId = "1.2.23"
 //    private val secondLogin = "daria"
 //    private val secondPassword = "daria"
 //    private val legalAssetId = "1.3.0"
@@ -229,8 +223,10 @@
 //            "000000000000000000000000000353544e0000000000000000000000000000000000000000000000000" +
 //            "000000000"
 //
-//    private val illegalContractId = "1.16.-1"
-//    private val illegalHistoryItemId = "1.17.-1"
+//    private val illegalContractId = "1.14.-1"
+//    private val illegalHistoryItemId = "1.15.-1"
+//
+//    private val validContractPrefix = "1.15."
 //
 //    @Test
 //    fun connectTest() {
@@ -249,9 +245,9 @@
 //
 //        framework.getAccountHistory(
 //            accountId,
-//            "1.11.1",
-//            "1.11.20000",
-//            100,
+//            "1.10.0",
+//            "1.10.0",
+//            20,
 //            futureHistory.completeCallback()
 //        )
 //
@@ -278,7 +274,7 @@
 //    }
 //
 //    @Test
-//    fun isOwnedByTest() {
+//    fun isOwnedBySuccess() {
 //        val framework = initFramework()
 //
 //        val futureLogin = FutureTask<FullAccount>()
@@ -286,28 +282,37 @@
 //        if (connect(framework) == false) Assert.fail("Connection error")
 //
 //        framework.isOwnedBy(
-//            login,
-//            password,
+//            "daria",
+//            "daria",
 //            futureLogin.completeCallback()
 //        )
 //
 //        val account = futureLogin.get()
 //        assertTrue(account != null)
+//    }
+//
+//    @Test
+//    fun isOwnedByFailure() {
+//        val framework = initFramework()
 //
 //        val futureLoginFailure = FutureTask<FullAccount>()
 //
+//        if (connect(framework) == false) Assert.fail("Connection error")
+//
 //        framework.isOwnedBy(
-//            login,
+//            "daria",
 //            "WrongPassword",
 //            futureLoginFailure.completeCallback()
 //        )
 //
 //        var accountFail: FullAccount? = null
 //
-//        futureLoginFailure.wrapResult<Exception, FullAccount>().fold({ foundAccount ->
-//            accountFail = foundAccount
-//        }, {
-//        })
+//        futureLoginFailure.wrapResult<Exception, FullAccount>(1, TimeUnit.MINUTES)
+//            .fold({ foundAccount ->
+//                accountFail = foundAccount
+//            }, {
+//                accountFail = null
+//            })
 //
 //        assertTrue(accountFail == null)
 //    }
@@ -320,7 +325,7 @@
 //
 //        if (connect(framework) == false) Assert.fail("Connection error")
 //
-//        framework.getAccount(login, futureAccount.completeCallback())
+//        framework.getAccount("dima", futureAccount.completeCallback())
 //
 //        val account = futureAccount.get()
 //        assertTrue(account != null)
@@ -335,12 +340,12 @@
 //        if (connect(framework) == false) Assert.fail("Connection error")
 //
 //        framework.getAccountsByWif(
-//            "5J3UbadSyzzcQQ7HEfTr2brhJJpHhx3NsMzrvgzfysBesutNRCm",
+//            "5J9YnfSUx6GnweorDEswRNAFcBzsZrQoJLkfqKLzXwBdRvjmoz1",
 //            futureAccounts.completeCallback()
 //        )
 //
 //        val accounts = futureAccounts.get()
-//        Assert.assertTrue(accounts?.isNotEmpty() == true)
+//        assertTrue(accounts?.isNotEmpty() == true)
 //    }
 //
 //    @Test
@@ -351,7 +356,7 @@
 //
 //        if (connect(framework) == false) Assert.fail("Connection error")
 //
-//        framework.checkAccountReserved(login, futureCheckReserved.completeCallback())
+//        framework.checkAccountReserved("init1", futureCheckReserved.completeCallback())
 //
 //        assertTrue(futureCheckReserved.get() ?: false)
 //
@@ -370,7 +375,7 @@
 //
 //        if (connect(framework) == false) Assert.fail("Connection error")
 //
-//        framework.getBalance(login, legalAssetId, futureBalanceExistent.completeCallback())
+//        framework.getBalance("init1", legalAssetId, futureBalanceExistent.completeCallback())
 //
 //        assertTrue(futureBalanceExistent.get() != null)
 //    }
@@ -396,7 +401,7 @@
 //    fun accountHistoryByIdTest() = getAccountHistory(accountId)
 //
 //    @Test
-//    fun accountHistoryByNameTest() = getAccountHistory("dima")
+//    fun accountHistoryByNameTest() = getAccountHistory("vsharaev")
 //
 //    private fun getAccountHistory(nameOrId: String) {
 //        val framework = initFramework()
@@ -407,9 +412,9 @@
 //
 //        framework.getAccountHistory(
 //            nameOrId,
-//            "1.11.1",
-//            "1.11.0",
-//            100,
+//            "1.10.0",
+//            "1.10.0",
+//            20,
 //            futureAccountHistory.completeCallback()
 //        )
 //
@@ -429,13 +434,14 @@
 //        if (connect(framework) == false) Assert.fail("Connection error")
 //
 //        framework.changePassword(
-//            login, password, password,
+//            "daria", "daria", "daria",
 //            object : Callback<Any> {
 //                override fun onSuccess(result: Any) {
 //                    futureChangePassword.setComplete(true)
 //                }
 //
 //                override fun onError(error: LocalException) {
+//                    error.printStackTrace()
 //                    futureChangePassword.setComplete(false)
 //                }
 //
@@ -445,28 +451,215 @@
 //    }
 //
 ////    @Test
-////    fun registrationTest() {
+////    fun generateEthereumTest() {
 ////        val framework = initFramework()
 ////
 ////        val futureChangePassword = FutureTask<Boolean>()
+////        val resultChangePassword = FutureTask<TransactionResult>()
+////
+////        if (connect(framework) == false) Assert.fail("Connection error")
+////
+////        framework.generateEthereumAddress(
+////            "daria",
+////            "daria",
+////            object : Callback<Boolean> {
+////                override fun onSuccess(result: Boolean) {
+////                    futureChangePassword.setComplete(result)
+////                }
+////
+////                override fun onError(error: LocalException) {
+////                    error.printStackTrace()
+////                    futureChangePassword.setComplete(error)
+////                }
+////
+////            },
+////            object : Callback<TransactionResult> {
+////                override fun onSuccess(result: TransactionResult) {
+////                    resultChangePassword.setComplete(result)
+////                }
+////
+////                override fun onError(error: LocalException) {
+////                    resultChangePassword.setComplete(error)
+////                }
+////
+////            }
+////        )
+////
+////        assertNotNull(futureChangePassword.get() ?: false)
+////
+////        val result = resultChangePassword.get()
+////        assertNotNull(result ?: false)
+////    }
+////
+////    @Test
+////    fun generateEthereumWithWifTest() {
+////        val framework = initFramework()
+////
+////        val futureChangePassword = FutureTask<Boolean>()
+////        val resultChangePassword = FutureTask<TransactionResult>()
+////
+////        if (connect(framework) == false) Assert.fail("Connection error")
+////
+////        framework.generateEthereumAddressWithWif(
+////            "daria1",
+////            "5Kk1A68mrEXsUekCoymmK7W6oZ4JL9RfiQMPNy1ZgbZquNKqamb",
+////            object : Callback<Boolean> {
+////                override fun onSuccess(result: Boolean) {
+////                    futureChangePassword.setComplete(result)
+////                }
+////
+////                override fun onError(error: LocalException) {
+////                    error.printStackTrace()
+////                    futureChangePassword.setComplete(error)
+////                }
+////
+////            },
+////            object : Callback<TransactionResult> {
+////                override fun onSuccess(result: TransactionResult) {
+////                    resultChangePassword.setComplete(result)
+////                }
+////
+////                override fun onError(error: LocalException) {
+////                    resultChangePassword.setComplete(error)
+////                }
+////
+////            }
+////        )
+////
+////        assertNotNull(futureChangePassword.get() ?: false)
+////
+////        val result = resultChangePassword.get()
+////        assertNotNull(result ?: false)
+////    }
+//
+//    @Test
+//    fun getEthereumTest() {
+//        val framework = initFramework()
+//
+//        val futureChangePassword = FutureTask<List<EthAddress>>()
+//
+//        if (connect(framework) == false) Assert.fail("Connection error")
+//
+//        framework.getEthereumAddresses(
+//            "daria1",
+//            object : Callback<List<EthAddress>> {
+//                override fun onSuccess(result: List<EthAddress>) {
+//                    futureChangePassword.setComplete(result)
+//                }
+//
+//                override fun onError(error: LocalException) {
+//                    error.printStackTrace()
+//                    futureChangePassword.setComplete(error)
+//                }
+//
+//            })
+//
+//        assertNotNull(futureChangePassword.get() ?: false)
+//    }
+////
+////    @Test
+////    fun withdrawEthereumTest() {
+////        val framework = initFramework()
+////
+////        val futureChangePassword = FutureTask<Boolean>()
+////        val futureResult = FutureTask<TransactionResult>()
+////
+////        if (connect(framework) == false) Assert.fail("Connection error")
+////
+////        framework.ethWithdraw(
+////            "vsharaev","vsharaev","d28224c2cfa050bff674160274e0d41742c7ec43","1", "1.3.0",
+////            object : Callback<Boolean> {
+////                override fun onSuccess(result: Boolean) {
+////                    futureChangePassword.setComplete(result)
+////                }
+////
+////                override fun onError(error: LocalException) {
+////                    error.printStackTrace()
+////                    futureChangePassword.setComplete(error)
+////                }
+////
+////            }, futureResult.completeCallback())
+////
+////        val result = futureResult.get()
+////        assertNotNull(result ?: false)
+////    }
+////
+////    @Test
+////    fun withdrawEthereumWithWifTest() {
+////        val framework = initFramework()
+////
+////        val futureChangePassword = FutureTask<Boolean>()
+////        val futureResult = FutureTask<TransactionResult>()
+////
+////        if (connect(framework) == false) Assert.fail("Connection error")
+////
+////        framework.ethWithdrawWithWif(
+////            "vsharaev","5KjC8BiryoxUNz3dEY2ZWQK5ssmD84JgRGemVWwxfNgiPoxcaVa","d28224c2cfa050bff674160274e0d41742c7ec43","1", "1.3.0",
+////            object : Callback<Boolean> {
+////                override fun onSuccess(result: Boolean) {
+////                    futureChangePassword.setComplete(result)
+////                }
+////
+////                override fun onError(error: LocalException) {
+////                    error.printStackTrace()
+////                    futureChangePassword.setComplete(error)
+////                }
+////
+////            }, futureResult.completeCallback())
+////
+////        val result = futureResult.get()
+////        assertNotNull(result ?: false)
+////    }
+////
+////    @Test
+////    fun registrationTest() {
+////        val framework = initFramework()
+////
+////        val futureRegistration = FutureTask<Boolean>()
 ////
 ////        if (connect(framework) == false) Assert.fail("Connection error")
 ////
 ////        framework.register(
-////            "daria", "daria",
+////            "daria1", "daria1",
 ////            object : Callback<Boolean> {
 ////                override fun onSuccess(result: Boolean) {
-////                    futureChangePassword.setComplete(true)
+////                    futureRegistration.setComplete(true)
 ////                }
 ////
 ////                override fun onError(error: LocalException) {
-////                    futureChangePassword.setComplete(false)
+////                    futureRegistration.setComplete(false)
 ////                }
 ////
 ////            })
 ////
-////        assertTrue(futureChangePassword.get() ?: false)
+////        val registered = futureRegistration.get() ?: false
+////
+////        assertTrue(registered)
 ////    }
+//
+//    @Test
+//    fun registrationFailureTest() {
+//        val framework = initFramework()
+//
+//        val futureChangePassword = FutureTask<Boolean>()
+//
+//        if (connect(framework) == false) Assert.fail("Connection error")
+//
+//        framework.register(
+//            "init1", "init1",
+//            object : Callback<Boolean> {
+//                override fun onSuccess(result: Boolean) {
+//                    futureChangePassword.setComplete(true)
+//                }
+//
+//                override fun onError(error: LocalException) {
+//                    futureChangePassword.setComplete(false)
+//                }
+//
+//            })
+//
+//        assertFalse(futureChangePassword.get() ?: false)
+//    }
 //
 //    @Test
 //    fun subscriptionByIdTest() {
@@ -477,7 +670,7 @@
 //        val futureSubscriptionById = FutureTask<FullAccount>()
 //        val futureSubscriptionResult = FutureTask<Boolean>()
 //
-//        framework.subscribeOnAccount(accountId, object : AccountListener {
+//        framework.subscribeOnAccount(secondAccountId, object : AccountListener {
 //
 //            override fun onChange(updatedAccount: FullAccount) {
 //                futureSubscriptionById.setComplete(updatedAccount)
@@ -490,8 +683,8 @@
 //            sendAmount(framework, EmptyCallback())
 //        }
 //
-//        assertNotNull(futureSubscriptionById.get())
-//        assertTrue(futureSubscriptionResult.get() ?: false)
+//        assertNotNull(futureSubscriptionById.get(1, TimeUnit.MINUTES))
+//        assertTrue(futureSubscriptionResult.get(1, TimeUnit.MINUTES) ?: false)
 //    }
 //
 //    @Test
@@ -503,7 +696,7 @@
 //        val futureSubscriptionByName = FutureTask<FullAccount>()
 //        val futureSubscriptionResult = FutureTask<Boolean>()
 //
-//        framework.subscribeOnAccount(login, object : AccountListener {
+//        framework.subscribeOnAccount("daria", object : AccountListener {
 //            override fun onChange(updatedAccount: FullAccount) {
 //                futureSubscriptionByName.setComplete(updatedAccount)
 //            }
@@ -515,18 +708,18 @@
 //            sendAmount(framework, EmptyCallback())
 //        }
 //
-//        assertNotNull(futureSubscriptionByName.get())
-//        assertTrue(futureSubscriptionResult.get() ?: false)
+//        assertNotNull(futureSubscriptionByName.get(1, TimeUnit.MINUTES))
+//        assertTrue(futureSubscriptionResult.get(1, TimeUnit.MINUTES) ?: false)
 //    }
 //
 //    private fun sendAmount(framework: EchoFramework, callback: Callback<Boolean>) {
 //        framework.sendTransferOperation(
-//            login,
-//            password,
-//            toNameOrId = secondLogin,
+//            "daria",
+//            "daria",
+//            toNameOrId = "dima",
 //            amount = "1",
-//            asset = legalAssetId,
-//            feeAsset = legalAssetId,
+//            asset = "1.3.0",
+//            feeAsset = "1.3.0",
 //            message = null,
 //            callback = callback
 //        )
@@ -549,7 +742,7 @@
 //            }
 //        }, futureSubscriptionBlockchainDataResult.completeCallback())
 //
-//        framework.subscribeOnAccount(login, object : AccountListener {
+//        framework.subscribeOnAccount("daria", object : AccountListener {
 //            override fun onChange(updatedAccount: FullAccount) {
 //                futureSubscriptionByName.setComplete(updatedAccount)
 //            }
@@ -563,11 +756,11 @@
 //            futureSubscriptionBlockchainData.cancel()
 //        }
 //
-//        assertNotNull(futureSubscriptionBlockchainData.get())
-//        assertTrue(futureSubscriptionBlockchainDataResult.get() ?: false)
+//        assertNotNull(futureSubscriptionBlockchainData.get(1, TimeUnit.MINUTES))
+//        assertTrue(futureSubscriptionBlockchainDataResult.get(1, TimeUnit.MINUTES) ?: false)
 //
-//        assertNotNull(futureSubscriptionByName.get())
-//        assertTrue(futureSubscriptionAccountResult.get() ?: false)
+//        assertNotNull(futureSubscriptionByName.get(1, TimeUnit.MINUTES))
+//        assertTrue(futureSubscriptionAccountResult.get(1, TimeUnit.MINUTES) ?: false)
 //    }
 //
 //    @Test
@@ -618,6 +811,42 @@
 //        assertTrue(futureSubscriptionResult.get() ?: false)
 //    }
 //
+//    @Test
+//    fun subscribeContractsTest() {
+//        val framework = initFramework()
+//
+//        if (connect(framework) == false) Assert.fail("Connection error")
+//
+//        val future = FutureTask<Boolean>()
+//        val futureSubscription = FutureTask<Map<String, List<ContractBalance>>>()
+//
+//        framework.subscribeOnContracts(
+//            listOf(legalContractId),
+//            listener = object : UpdateListener<Map<String, List<ContractBalance>>> {
+//                override fun onUpdate(data: Map<String, List<ContractBalance>>) {
+//                    futureSubscription.setComplete(data)
+//                }
+//            },
+//            callback = future.completeCallback()
+//        )
+//
+//        thread {
+//            Thread.sleep(1000)
+//            callContractWithEmptyParams(
+//                legalContractId,
+//                "logTestArray",
+//                framework,
+//                EmptyCallback()
+//            )
+//        }
+//
+//        val contractResult = future.get(1, TimeUnit.MINUTES)
+//        assertNotNull(contractResult)
+//
+//        val updateResult = futureSubscription.get(1, TimeUnit.MINUTES)
+//        assertNotNull(updateResult)
+//        assert(updateResult!!.isNotEmpty())
+//    }
 //
 //    @Test
 //    fun subscribeContractLogsArrayTest() {
@@ -648,10 +877,10 @@
 //            )
 //        }
 //
-//        val contractResult = future.get()
+//        val contractResult = future.get(1, TimeUnit.MINUTES)
 //        assertNotNull(contractResult)
 //
-//        val updateResult = futureSubscription.get()
+//        val updateResult = futureSubscription.get(1, TimeUnit.MINUTES)
 //        assertNotNull(updateResult)
 //        assert(updateResult!!.isNotEmpty())
 //    }
@@ -700,11 +929,11 @@
 //        sentCallback: Callback<Boolean>
 //    ) {
 //        framework.callContract(
-//            userNameOrId = login,
-//            password = password,
+//            userNameOrId = "daria",
+//            password = "daria",
 //            assetId = legalAssetId,
 //            feeAsset = legalAssetId,
-//            contractId = legalContractId,
+//            contractId = contractId,
 //            methodName = methodName,
 //            methodParams = listOf(),
 //            broadcastCallback = sentCallback
@@ -720,12 +949,12 @@
 //        if (connect(framework) == false) Assert.fail("Connection error")
 //
 //        framework.sendTransferOperation(
-//            login,
-//            password,
-//            toNameOrId = secondLogin,
+//            "daria",
+//            "daria",
+//            toNameOrId = "dima",
 //            amount = "1",
-//            asset = legalAssetId,
-//            feeAsset = legalAssetId,
+//            asset = "1.3.0",
+//            feeAsset = "1.3.0",
 //            message = "Memasik",
 //            callback = futureTransfer.completeCallback()
 //        )
@@ -742,12 +971,12 @@
 //        if (connect(framework) == false) Assert.fail("Connection error")
 //
 //        framework.sendTransferOperationWithWif(
-//            login,
-//            wif,
-//            toNameOrId = secondLogin,
+//            "daria",
+//            "5J9YnfSUx6GnweorDEswRNAFcBzsZrQoJLkfqKLzXwBdRvjmoz1",
+//            toNameOrId = "dima",
 //            amount = "1",
-//            asset = legalAssetId,
-//            feeAsset = legalAssetId,
+//            asset = "1.3.0",
+//            feeAsset = "1.3.0",
 //            message = "Memasik",
 //            callback = futureTransfer.completeCallback()
 //        )
@@ -764,19 +993,17 @@
 //        val futureFee = FutureTask<String>()
 //
 //        framework.getFeeForTransferOperation(
-//            login,
-//            password,
-//            secondLogin,
+//            "daria",
+//            "daria",
+//            "dima",
 //            amount = "10000",
-//            asset = legalAssetId,
-//            feeAsset = legalAssetId,
+//            asset = "1.3.0",
+//            feeAsset = "1.3.0",
 //            message = "Memasiki",
 //            callback = futureFee.completeCallback()
 //        )
 //
-//        val rawFee = futureFee.get()
-//        val fee = BigInteger(rawFee)
-//        assertNotNull(fee)
+//        assertNotNull(futureFee.get())
 //    }
 //
 //    @Test
@@ -788,19 +1015,17 @@
 //        val futureFee = FutureTask<String>()
 //
 //        framework.getFeeForTransferOperationWithWif(
-//            login,
-//            wif,
-//            secondLogin,
+//            "daria",
+//            "5J9YnfSUx6GnweorDEswRNAFcBzsZrQoJLkfqKLzXwBdRvjmoz1",
+//            "dima",
 //            amount = "10000",
-//            asset = legalAssetId,
-//            feeAsset = legalAssetId,
+//            asset = "1.3.0",
+//            feeAsset = "1.3.0",
 //            message = "Memasiki",
 //            callback = futureFee.completeCallback()
 //        )
 //
-//        val rawFee = futureFee.get()
-//        val fee = BigInteger(rawFee)
-//        assertNotNull(fee)
+//        assertNotNull(futureFee.get())
 //    }
 //
 //    @Test(expected = LocalException::class)
@@ -835,26 +1060,16 @@
 //
 //        framework.getFeeForContractOperation(
 //            userNameOrId = accountId,
-//            contractId = "1.16.1",
+//            contractId = legalContractId,
 //            amount = "0",
-//            methodName = "transfer",
-//            methodParams = listOf(
-//                InputValue(AccountAddressInputValueType(), accountId),
-//                InputValue(
-//                    NumberInputValueType("uint256"),
-//                    "0"
-//                )
-//            ),
+//            methodName = "testReturn",
+//            methodParams = listOf(),
 //            assetId = legalAssetId,
 //            feeAsset = legalAssetId,
-//            callback = futureFee.completeCallback(errorBlock = {ex ->
-//                ex.printStackTrace()
-//            })
+//            callback = futureFee.completeCallback()
 //        )
 //
-//        val rawFee = futureFee.get()
-//        val fee = BigInteger(rawFee)
-//        assertNotNull(fee)
+//        assertNotNull(futureFee.get())
 //    }
 //
 //    @Test
@@ -866,7 +1081,7 @@
 //        val futureFee = FutureTask<String>()
 //
 //        framework.getFeeForContractOperation(
-//            userNameOrId = accountId,
+//            userNameOrId = "1.2.16",
 //            contractId = legalContractId,
 //            amount = "0",
 //            code = "e13a7716",
@@ -875,9 +1090,7 @@
 //            callback = futureFee.completeCallback()
 //        )
 //
-//        val rawFee = futureFee.get()
-//        val fee = BigInteger(rawFee)
-//        assertNotNull(fee)
+//        assertNotNull(futureFee.get())
 //    }
 //
 //    @Test(expected = LocalException::class)
@@ -969,8 +1182,8 @@
 ////        val asset = configureAsset()
 ////
 ////        framework.createAsset(
-////            login,
-////            password,
+////            secondLogin,
+////            secondPassword,
 ////            asset,
 ////            broadcastFuture.completeCallback(),
 ////            futureAsset.completeCallback()
@@ -979,8 +1192,7 @@
 ////        assertTrue(broadcastFuture.get() ?: false)
 ////        assertTrue(futureAsset.get()?.startsWith("1.3.") ?: false)
 ////    }
-////
-////
+//
 ////    @Test
 ////    fun createAssetWithWifTest() {
 ////        val framework = initFramework()
@@ -993,7 +1205,8 @@
 ////        val asset = configureAsset()
 ////
 ////        framework.createAssetWithWif(
-////            login, wif,
+////            "daria",
+////            "5J9YnfSUx6GnweorDEswRNAFcBzsZrQoJLkfqKLzXwBdRvjmoz1",
 ////            asset,
 ////            broadcastFuture.completeCallback(),
 ////            futureAsset.completeCallback()
@@ -1012,11 +1225,11 @@
 //        if (connect(framework) == false) Assert.fail("Connection error")
 //
 //        framework.issueAsset(
-//            login,
-//            password,
-//            asset = "1.3.6",
-//            amount = "1",
-//            destinationIdOrName = login,
+//            "daria",
+//            "daria",
+//            asset = "1.3.2",
+//            amount = "100",
+//            destinationIdOrName = "daria",
 //            message = "Do it",
 //            callback = futureIssue.completeCallback()
 //        )
@@ -1033,11 +1246,11 @@
 //        if (connect(framework) == false) Assert.fail("Connection error")
 //
 //        framework.issueAssetWithWif(
-//            login,
-//            wif,
-//            asset = "1.3.6",
+//            "daria",
+//            "5J9YnfSUx6GnweorDEswRNAFcBzsZrQoJLkfqKLzXwBdRvjmoz1",
+//            asset = "1.3.2",
 //            amount = "1",
-//            destinationIdOrName = login,
+//            destinationIdOrName = "daria",
 //            message = "Do it",
 //            callback = futureIssue.completeCallback()
 //        )
@@ -1057,15 +1270,15 @@
 //        framework.createContract(
 //            login,
 //            password,
-//            assetId = legalAssetId,
-//            feeAsset = legalAssetId,
-//            byteCode = legalTokenBytecode,
+//            assetId = "1.3.0",
+//            feeAsset = "1.3.0",
+//            byteCode = legalContractParamsBytecode,
 //            broadcastCallback = broadcastFuture.completeCallback(),
 //            resultCallback = future.completeCallback()
 //        )
 //
 //        assertTrue(broadcastFuture.get() ?: false)
-//        assertTrue(future.get()?.startsWith("1.17.") ?: false)
+//        assertTrue(future.get()?.startsWith(validContractPrefix) ?: false)
 //    }
 //
 //    @Test
@@ -1078,17 +1291,17 @@
 //        val future = FutureTask<String>()
 //
 //        framework.createContractWithWif(
-//            login,
-//            wif,
-//            assetId = legalAssetId,
-//            feeAsset = legalAssetId,
+//            "daria",
+//            "5J9YnfSUx6GnweorDEswRNAFcBzsZrQoJLkfqKLzXwBdRvjmoz1",
+//            assetId = "1.3.0",
+//            feeAsset = "1.3.0",
 //            byteCode = legalTokenBytecode,
 //            broadcastCallback = broadcastFuture.completeCallback(),
 //            resultCallback = future.completeCallback()
 //        )
 //
 //        assertTrue(broadcastFuture.get() ?: false)
-//        assertTrue(future.get()?.startsWith("1.17.") ?: false)
+//        assertTrue(future.get()?.startsWith(validContractPrefix) ?: false)
 //    }
 //
 //    @Test
@@ -1101,10 +1314,10 @@
 //        val future = FutureTask<String>()
 //
 //        framework.createContract(
-//            login,
-//            password,
-//            assetId = legalAssetId,
-//            feeAsset = legalAssetId,
+//            "daria",
+//            "daria",
+//            assetId = "1.3.0",
+//            feeAsset = "1.3.0",
 //            byteCode = legalContractWithParamsBytecode,
 //            params = listOf(InputValue(ContractAddressInputValueType(), "2587")),
 //            broadcastCallback = broadcastFuture.completeCallback(),
@@ -1112,7 +1325,7 @@
 //        )
 //
 //        assertTrue(broadcastFuture.get() ?: false)
-//        assertTrue(future.get()?.startsWith("1.17.") ?: false)
+//        assertTrue(future.get()?.startsWith(validContractPrefix) ?: false)
 //    }
 //
 //    @Test
@@ -1125,10 +1338,10 @@
 //        val future = FutureTask<String>()
 //
 //        framework.callContract(
-//            login,
-//            password,
-//            assetId = legalAssetId,
-//            feeAsset = legalAssetId,
+//            "daria",
+//            "daria",
+//            assetId = "1.3.0",
+//            feeAsset = "1.3.0",
 //            contractId = legalContractId,
 //            methodName = "logTest",
 //            methodParams = listOf(),
@@ -1137,7 +1350,7 @@
 //        )
 //
 //        assertTrue(broadcastFuture.get() ?: false)
-//        assertTrue(future.get()?.startsWith("1.17.") ?: false)
+//        assertTrue(future.get()?.startsWith(validContractPrefix) ?: false)
 //    }
 //
 //    @Test
@@ -1150,10 +1363,10 @@
 //        val future = FutureTask<String>()
 //
 //        framework.callContract(
-//            login,
-//            password,
-//            assetId = legalAssetId,
-//            feeAsset = legalAssetId,
+//            "daria",
+//            "daria",
+//            assetId = "1.3.0",
+//            feeAsset = "1.3.0",
 //            contractId = legalContractId,
 //            methodName = "logTest",
 //            methodParams = listOf(),
@@ -1162,7 +1375,7 @@
 //        )
 //
 //        assertTrue(broadcastFuture.get() ?: false)
-//        assertTrue(future.get()?.startsWith("1.17.") ?: false)
+//        assertTrue(future.get()?.startsWith(validContractPrefix) ?: false)
 //    }
 //
 //    @Test
@@ -1177,10 +1390,10 @@
 //        val contractCode = ContractInputEncoder().encode("logTest", listOf())
 //
 //        framework.callContract(
-//            login,
-//            password,
-//            assetId = legalAssetId,
-//            feeAsset = legalAssetId,
+//            "daria",
+//            "daria",
+//            assetId = "1.3.0",
+//            feeAsset = "1.3.0",
 //            contractId = legalContractId,
 //            code = contractCode,
 //            broadcastCallback = broadcastFuture.completeCallback(),
@@ -1188,7 +1401,7 @@
 //        )
 //
 //        assertTrue(broadcastFuture.get() ?: false)
-//        assertTrue(future.get()?.startsWith("1.17.") ?: false)
+//        assertTrue(future.get()?.startsWith(validContractPrefix) ?: false)
 //    }
 //
 //    @Test
@@ -1201,10 +1414,10 @@
 //        val future = FutureTask<String>()
 //
 //        framework.callContractWithWif(
-//            login,
-//            wif,
-//            assetId = legalAssetId,
-//            feeAsset = legalAssetId,
+//            "daria",
+//            "5J9YnfSUx6GnweorDEswRNAFcBzsZrQoJLkfqKLzXwBdRvjmoz1",
+//            assetId = "1.3.0",
+//            feeAsset = "1.3.0",
 //            contractId = legalContractId,
 //            methodName = "logTest",
 //            methodParams = listOf(),
@@ -1213,7 +1426,7 @@
 //        )
 //
 //        assertTrue(broadcastFuture.get() ?: false)
-//        assertTrue(future.get()?.startsWith("1.17.") ?: false)
+//        assertTrue(future.get()?.startsWith(validContractPrefix) ?: false)
 //    }
 //
 //    @Test
@@ -1228,8 +1441,8 @@
 //        val contractCode = ContractInputEncoder().encode("logTest", listOf())
 //
 //        framework.callContractWithWif(
-//            login,
-//            wif,
+//            "daria",
+//            "5J9YnfSUx6GnweorDEswRNAFcBzsZrQoJLkfqKLzXwBdRvjmoz1",
 //            assetId = legalAssetId,
 //            feeAsset = legalAssetId,
 //            contractId = legalContractId,
@@ -1239,7 +1452,7 @@
 //        )
 //
 //        assertTrue(broadcastFuture.get() ?: false)
-//        assertTrue(future.get()?.startsWith("1.17.") ?: false)
+//        assertTrue(future.get()?.startsWith(validContractPrefix) ?: false)
 //    }
 //
 //    @Test
@@ -1262,8 +1475,8 @@
 //        val future = FutureTask<String>()
 //
 //        framework.callContract(
-//            login,
-//            password,
+//            "daria",
+//            "daria",
 //            assetId = legalAssetId,
 //            feeAsset = legalAssetId,
 //            contractId = legalContractId,
@@ -1274,7 +1487,7 @@
 //        )
 //
 //        assertTrue(broadcastFuture.get() ?: false)
-//        assertTrue(future.get(15, TimeUnit.SECONDS)?.startsWith("1.17.") ?: false)
+//        assertTrue(future.get(15, TimeUnit.SECONDS)?.startsWith(validContractPrefix) ?: false)
 //    }
 //
 //    @Test
@@ -1287,8 +1500,8 @@
 //        val future = FutureTask<String>()
 //
 //        framework.callContract(
-//            login,
-//            password,
+//            "daria",
+//            "daria",
 //            legalAssetId,
 //            legalAssetId,
 //            legalContractId,
@@ -1300,7 +1513,7 @@
 //        )
 //
 //        assertTrue(broadcastFuture.get() ?: false)
-//        assertTrue(future.get()?.startsWith("1.17.") ?: false)
+//        assertTrue(future.get()?.startsWith(validContractPrefix) ?: false)
 //    }
 //
 //    @Test
@@ -1315,7 +1528,7 @@
 //        val address = accountId
 //
 //        framework.callContract(
-//            login, password,
+//            "daria", "daria",
 //            assetId = legalAssetId,
 //            feeAsset = legalAssetId,
 //            contractId = legalContractId,
@@ -1326,7 +1539,7 @@
 //        )
 //
 //        assertTrue(broadcastFuture.get() ?: false)
-//        assertTrue(future.get()?.startsWith("1.17.") ?: false)
+//        assertTrue(future.get()?.startsWith(validContractPrefix) ?: false)
 //    }
 //
 //    @Test
@@ -1339,7 +1552,7 @@
 //        val future = FutureTask<String>()
 //
 //        framework.callContract(
-//            login, password,
+//            "daria", "daria",
 //            assetId = legalAssetId,
 //            feeAsset = legalAssetId,
 //            contractId = legalContractId,
@@ -1352,7 +1565,7 @@
 //        )
 //
 //        assertTrue(broadcastFuture.get() ?: false)
-//        assertTrue(future.get()?.startsWith("1.17.") ?: false)
+//        assertTrue(future.get()?.startsWith(validContractPrefix) ?: false)
 //    }
 //
 //    @Test(expected = LocalException::class)
@@ -1365,8 +1578,8 @@
 //        val future = FutureTask<String>()
 //
 //        framework.callContract(
-//            login,
-//            password,
+//            "daria",
+//            "daria",
 //            assetId = legalAssetId,
 //            feeAsset = legalAssetId,
 //            contractId = illegalContractId,
@@ -1389,14 +1602,14 @@
 //        val future = FutureTask<String>()
 //
 //        framework.queryContract(
-//            login,
+//            "daria",
 //            legalAssetId,
 //            contractId = legalTokenId,
 //            methodName = "balanceOf",
 //            methodParams = listOf(
 //                InputValue(
 //                    AccountAddressInputValueType(),
-//                    accountId
+//                    "1.2.16"
 //                )
 //            ),
 //            callback = future.completeCallback()
@@ -1415,7 +1628,7 @@
 //        val future = FutureTask<String>()
 //
 //        framework.queryContract(
-//            login,
+//            "daria",
 //            legalAssetId,
 //            contractId = legalTokenId,
 //            code = "70a08231000000000000000000000000000000000000000000000000000000000000000e",
@@ -1435,8 +1648,8 @@
 //        val future = FutureTask<String>()
 //
 //        framework.queryContract(
-//            login,
-//            assetId = legalAssetId,
+//            "daria",
+//            assetId = "1.3.0",
 //            contractId = illegalContractId,
 //            methodName = "testReturn",
 //            methodParams = listOf(),
@@ -1456,7 +1669,7 @@
 //        val future = FutureTask<ContractResult>()
 //
 //        framework.getContractResult(
-//            historyId = "1.17.41",
+//            historyId = "1.15.1",
 //            callback = future.completeCallback()
 //        )
 //
@@ -1466,24 +1679,25 @@
 //        assertNotNull(contractResult?.toRegular())
 //    }
 //
-//    @Test
-//    fun getContractResultx86Test() {
-//        val framework = initFramework()
-//
-//        if (connect(framework) == false) Assert.fail("Connection error")
-//
-//        val future = FutureTask<ContractResult>()
-//
-//        framework.getContractResult(
-//            historyId = "1.17.0",
-//            callback = future.completeCallback()
-//        )
-//
-//        val contractResult = future.get()
-//        assertNotNull(contractResult)
-//
-//        contractResult?.toX86()
-//    }
+//    //change on newer versions
+////    @Test
+////    fun getContractResultx86Test() {
+////        val framework = initFramework()
+////
+////        if (connect(framework) == false) Assert.fail("Connection error")
+////
+////        val future = FutureTask<ContractResult>()
+////
+////        framework.getContractResult(
+////            historyId = validContractPrefix + "0",
+////            callback = future.completeCallback()
+////        )
+////
+////        val contractResult = future.get()
+////        assertNotNull(contractResult)
+////
+////        contractResult?.toX86()
+////    }
 //
 //    @Test
 //    fun getContractLogsTest() {
@@ -1519,23 +1733,6 @@
 //        )
 //
 //        future.get()
-//    }
-//
-//    @Test
-//    fun getAllContractsTest() {
-//        val framework = initFramework()
-//
-//        if (connect(framework) == false) Assert.fail("Connection error")
-//
-//        val future = FutureTask<List<ContractInfo>>()
-//
-//        framework.getAllContracts(
-//            future.completeCallback()
-//        )
-//
-//        val contractResult = future.get()
-//        assertNotNull(contractResult)
-//        assert(contractResult!!.isNotEmpty())
 //    }
 //
 //    @Test
@@ -1591,22 +1788,23 @@
 //        assertNotNull(contractResult)
 //    }
 //
-//    @Test
-//    fun getx86ContractTest() {
-//        val framework = initFramework()
-//
-//        if (connect(framework) == false) Assert.fail("Connection error")
-//
-//        val future = FutureTask<ContractStruct>()
-//
-//        framework.getContract(
-//            "1.16.1",
-//            future.completeCallback()
-//        )
-//
-//        val contractResult = future.get()
-//        assertNotNull(contractResult)
-//    }
+//    //change in newer versions
+////    @Test
+////    fun getx86ContractTest() {
+////        val framework = initFramework()
+////
+////        if (connect(framework) == false) Assert.fail("Connection error")
+////
+////        val future = FutureTask<ContractStruct>()
+////
+////        framework.getContract(
+////            "1.14.1",
+////            future.completeCallback()
+////        )
+////
+////        val contractResult = future.get()
+////        assertNotNull(contractResult)
+////    }
 //
 //    @Test(expected = LocalException::class)
 //    fun getContractFailureTest() {
@@ -1690,47 +1888,49 @@
 //        assertNotNull(properties)
 //    }
 //
-//    @Test
-//    fun getSidechainTransfersTest() {
-//        val framework = initFramework()
+//    //change in newer versions
+////    @Test
+////    fun getSidechainTransfersTest() {
+////        val framework = initFramework()
+////
+////        if (connect(framework) == false) Assert.fail("Connection error")
+////
+////        val future = FutureTask<List<SidechainTransfer>>()
+////
+////        framework.getSidechainTransfers(
+////            "0x46Ba2677a1c982B329A81f60Cf90fBA2E8CA9fA8",
+////            future.completeCallback()
+////        )
+////
+////        val transfers = future.get()
+////        assertNotNull(transfers)
+////    }
 //
-//        if (connect(framework) == false) Assert.fail("Connection error")
-//
-//        val future = FutureTask<List<SidechainTransfer>>()
-//
-//        framework.getSidechainTransfers(
-//            "0x46Ba2677a1c982B329A81f60Cf90fBA2E8CA9fA8",
-//            future.completeCallback()
-//        )
-//
-//        val transfers = future.get()
-//        assertNotNull(transfers)
-//    }
-//
-//    @Test
-//    fun getObjectTest() {
-//        val framework = initFramework()
-//
-//        if (connect(framework) == false) Assert.fail("Connection error")
-//
-//        val transferId = "1.19.2"
-//
-//        val sidechainTransferResult = framework.databaseApiService.getObjects(
-//            listOf(transferId),
-//            object : ObjectMapper<SidechainTransfer> {
-//
-//                override fun map(data: String): SidechainTransfer? {
-//                    val gson = GsonBuilder().create()
-//
-//                    return gson.fromJson(data, SidechainTransfer::class.java)
-//                }
-//
-//            })
-//
-//        assertNotNull(sidechainTransferResult)
-//        assertNotNull(sidechainTransferResult.dematerialize())
-//        assertEquals(transferId, sidechainTransferResult.dematerialize()[0].getObjectId())
-//    }
+//    //change in newer versions
+////    @Test
+////    fun getObjectTest() {
+////        val framework = initFramework()
+////
+////        if (connect(framework) == false) Assert.fail("Connection error")
+////
+////        val transferId = "1.19.2"
+////
+////        val sidechainTransferResult = framework.databaseApiService.getObjects(
+////            listOf(transferId),
+////            object : ObjectMapper<SidechainTransfer> {
+////
+////                override fun map(data: String): SidechainTransfer? {
+////                    val gson = GsonBuilder().create()
+////
+////                    return gson.fromJson(data, SidechainTransfer::class.java)
+////                }
+////
+////            })
+////
+////        assertNotNull(sidechainTransferResult)
+////        assertNotNull(sidechainTransferResult.dematerialize())
+////        assertEquals(transferId, sidechainTransferResult.dematerialize()[0].getObjectId())
+////    }
 //
 //    private fun connect(framework: EchoFramework): Boolean? {
 //        val futureConnect = FutureTask<Boolean>()
@@ -1751,15 +1951,15 @@
 //
 //    private fun configureAsset(): Asset {
 //        val asset = Asset("").apply {
-//            symbol = "ANDRASSET"
+//            symbol = "TIASSET"
 //            precision = 4
-//            issuer = Account(accountId)
-//            setBtsOptions(
-//                BitassetOptions(
-//                    86400, 7, 86400,
-//                    100, 2000
-//                )
-//            )
+//            issuer = Account(secondAccountId)
+////            setBtsOptions(
+////                BitassetOptions(
+////                    86400, 7, 86400,
+////                    100, 2000
+////                )
+////            )
 //
 //            predictionMarket = false
 //        }

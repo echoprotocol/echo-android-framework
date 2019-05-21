@@ -2,6 +2,7 @@ package org.echo.mobile.framework.service
 
 import com.google.common.primitives.UnsignedLong
 import org.echo.mobile.framework.core.crypto.internal.CryptoCoreComponentImpl
+import org.echo.mobile.framework.core.crypto.internal.eddsa.EdDSASecurityProvider
 import org.echo.mobile.framework.core.crypto.internal.eddsa.key.NaCLKeyPairCryptoAdapter
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.model.Account
@@ -22,6 +23,7 @@ import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Test
 import org.spongycastle.util.encoders.Hex
+import java.security.Security
 
 /**
  * Test cases for [NetworkBroadcastApiService]
@@ -58,6 +60,8 @@ class NetworkBroadcastApiServiceTest {
             listOf(transfer),
             chainId
         ).apply { addPrivateKey(privateKey) }
+
+        Security.addProvider(EdDSASecurityProvider())
     }
 
     @Test
