@@ -2,7 +2,6 @@ package org.echo.mobile.framework.facade.internal
 
 import org.echo.mobile.framework.ECHO_ASSET_ID
 import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
-import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent
 import org.echo.mobile.framework.exception.AccountNotFoundException
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.model.Account
@@ -42,7 +41,7 @@ abstract class BaseTransactionsFacade(
 
     protected fun checkOwnerAccount(name: String, password: String, account: Account) {
         val ownerAddress =
-            cryptoCoreComponent.getAddress(name, password, AuthorityType.ACTIVE)
+            cryptoCoreComponent.getEdDSAAddress(name, password, AuthorityType.ACTIVE)
 
         val isKeySame = account.isEqualsByKey(ownerAddress, AuthorityType.ACTIVE)
         if (!isKeySame) {
@@ -52,8 +51,8 @@ abstract class BaseTransactionsFacade(
 
     protected fun checkOwnerAccount(wif: String, account: Account) {
         val privateKey = cryptoCoreComponent.decodeFromWif(wif)
-        val publicKey = cryptoCoreComponent.derivePublicKeyFromPrivate(privateKey)
-        val address = cryptoCoreComponent.getAddressFromPublicKey(publicKey)
+        val publicKey = cryptoCoreComponent.deriveEdDSAPublicKeyFromPrivate(privateKey)
+        val address = cryptoCoreComponent.getEdDSAAddressFromPublicKey(publicKey)
 
         val isKeySame = account.isEqualsByKey(address, AuthorityType.ACTIVE)
         if (!isKeySame) {
@@ -125,10 +124,6 @@ abstract class BaseTransactionsFacade(
             setFees(fees)
             addPrivateKey(privateKey)
         }
-    }
-
-    companion object {
-        private val LOGGER = LoggerCoreComponent.create(BaseTransactionsFacade::class.java.name)
     }
 
 }

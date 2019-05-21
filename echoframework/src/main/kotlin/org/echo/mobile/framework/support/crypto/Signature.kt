@@ -9,7 +9,8 @@ import org.echo.mobile.framework.model.Transaction
 import java.util.ArrayList
 
 /**
- * Object used to transaction signing
+ * Object used to transaction signing.
+ * Uses EcDSA sign algorithm.
  *
  * @author Daria Pechkovskaya
  */

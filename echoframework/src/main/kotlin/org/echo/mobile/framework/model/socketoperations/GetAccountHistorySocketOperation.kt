@@ -9,9 +9,9 @@ import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.AccountOptions
 import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.AssetOptions
-import org.echo.mobile.framework.model.Authority
 import org.echo.mobile.framework.model.HistoricalTransfer
 import org.echo.mobile.framework.model.HistoryResponse
+import org.echo.mobile.framework.model.eddsa.EdAuthority
 import org.echo.mobile.framework.model.Memo
 import org.echo.mobile.framework.model.network.Network
 import org.echo.mobile.framework.model.operations.AccountCreateOperation
@@ -20,8 +20,10 @@ import org.echo.mobile.framework.model.operations.ContractCallOperation
 import org.echo.mobile.framework.model.operations.ContractCreateOperation
 import org.echo.mobile.framework.model.operations.ContractTransferOperation
 import org.echo.mobile.framework.model.operations.CreateAssetOperation
+import org.echo.mobile.framework.model.operations.GenerateEthereumAddressOperation
 import org.echo.mobile.framework.model.operations.IssueAssetOperation
 import org.echo.mobile.framework.model.operations.TransferOperation
+import org.echo.mobile.framework.model.operations.WithdrawEthereumOperation
 
 /**
  * Get operations relevant to the specified account.
@@ -119,14 +121,22 @@ class GetAccountHistorySocketOperation(
             IssueAssetOperation::class.java,
             IssueAssetOperation.IssueAssetDeserializer()
         )
+        registerTypeAdapter(
+            GenerateEthereumAddressOperation::class.java,
+            GenerateEthereumAddressOperation.GenerateEthereumAddressDeserializer()
+        )
+        registerTypeAdapter(
+            WithdrawEthereumOperation::class.java,
+            WithdrawEthereumOperation.WithdrawEthereumOperationDeserializer()
+        )
         registerTypeAdapter(AssetAmount::class.java, AssetAmount.Deserializer())
-        registerTypeAdapter(Authority::class.java, Authority.Deserializer(network))
+        registerTypeAdapter(EdAuthority::class.java, EdAuthority.Deserializer())
         registerTypeAdapter(Account::class.java, Account.Deserializer())
         registerTypeAdapter(AccountOptions::class.java, AccountOptions.Deserializer(network))
     }.create()
 
     companion object {
-        const val DEFAULT_HISTORY_ID = "1.11.0"
+        const val DEFAULT_HISTORY_ID = "1.10.0"
         const val DEFAULT_LIMIT = 100
     }
 

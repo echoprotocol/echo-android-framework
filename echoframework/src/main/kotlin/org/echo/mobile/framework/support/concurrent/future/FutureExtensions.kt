@@ -7,6 +7,7 @@ import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.support.Result
 import org.echo.mobile.framework.support.toError
 import org.echo.mobile.framework.support.toValue
+import java.util.concurrent.TimeUnit
 
 /**
  * Wraps future task result in [Result]
@@ -14,6 +15,19 @@ import org.echo.mobile.framework.support.toValue
  * Future result must be not null
  */
 fun <E : Exception, T> FutureTask<T>.wrapResult(): Result<E, T> =
+    try {
+        val result = get()
+        result!!.toValue()
+    } catch (exception: Exception) {
+        (exception as E).toError()
+    }
+
+/**
+ * Wraps future task result in [Result] with [timeout]
+ *
+ * Future result must be not null
+ */
+fun <E : Exception, T> FutureTask<T>.wrapResult(timeout: Long, unit: TimeUnit): Result<E, T> =
     try {
         val result = get()
         result!!.toValue()

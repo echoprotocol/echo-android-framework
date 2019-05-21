@@ -4,7 +4,7 @@ import org.echo.mobile.framework.exception.MalformedOperationException
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.AccountOptions
 import org.echo.mobile.framework.model.AssetAmount
-import org.echo.mobile.framework.model.Authority
+import org.echo.mobile.framework.model.eddsa.EdAuthority
 import org.echo.mobile.framework.support.Builder
 
 /**
@@ -17,8 +17,7 @@ class AccountUpdateOperationBuilder : Builder<AccountUpdateOperation> {
 
     private var fee: AssetAmount? = null
     private var account: Account? = null
-    private var owner: Authority? = null
-    private var active: Authority? = null
+    private var active: EdAuthority? = null
     private var edKey: String? = null
     private var newOptions: AccountOptions? = null
 
@@ -41,19 +40,10 @@ class AccountUpdateOperationBuilder : Builder<AccountUpdateOperation> {
     }
 
     /**
-     * Sets new owner [Authority] for account
-     * @param owner New owner [Authority] for account
+     * Sets new active [EdAuthority] for account
+     * @param active New active [EdAuthority] for account
      */
-    fun setOwner(owner: Authority): AccountUpdateOperationBuilder {
-        this.owner = owner
-        return this
-    }
-
-    /**
-     * Sets new active [Authority] for account
-     * @param active New active [Authority] for account
-     */
-    fun setActive(active: Authority): AccountUpdateOperationBuilder {
+    fun setActive(active: EdAuthority): AccountUpdateOperationBuilder {
         this.active = active
         return this
     }
@@ -77,11 +67,11 @@ class AccountUpdateOperationBuilder : Builder<AccountUpdateOperation> {
 
     override fun build(): AccountUpdateOperation {
         checkAccount(account)
-        checkAuthoritiesAccountOptions(owner, active, newOptions)
+        checkAuthoritiesAccountOptions(active)
 
         return fee?.let { nullSafeFee ->
-            AccountUpdateOperation(account!!, owner, active, edKey, newOptions, nullSafeFee)
-        } ?: AccountUpdateOperation(account!!, owner, active, edKey, newOptions)
+            AccountUpdateOperation(account!!, active, edKey, newOptions, nullSafeFee)
+        } ?: AccountUpdateOperation(account!!, active, edKey, newOptions)
     }
 
     private fun checkAccount(account: Account?) {
@@ -90,11 +80,9 @@ class AccountUpdateOperationBuilder : Builder<AccountUpdateOperation> {
     }
 
     private fun checkAuthoritiesAccountOptions(
-        owner: Authority?,
-        active: Authority?,
-        accountOptions: AccountOptions?
+        active: EdAuthority?
     ) {
-        if (owner == null && active == null && accountOptions == null) {
+        if (active == null) {
             throw MalformedOperationException("This operation requires at least either an authority or account options change")
         }
     }

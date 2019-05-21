@@ -67,6 +67,7 @@ class ContractsFragment : BaseFragment() {
             lib?.createContract(
                 etName.text.toString(),
                 etPassword.text.toString(),
+                "1",
                 ECHO_ASSET_ID,
                 null,
                 etBytecode.text.toString(),

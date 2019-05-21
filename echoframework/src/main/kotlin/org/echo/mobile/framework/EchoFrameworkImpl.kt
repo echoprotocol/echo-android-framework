@@ -10,6 +10,7 @@ import org.echo.mobile.framework.facade.ContractsFacade
 import org.echo.mobile.framework.facade.FeeFacade
 import org.echo.mobile.framework.facade.InformationFacade
 import org.echo.mobile.framework.facade.InitializerFacade
+import org.echo.mobile.framework.facade.SidechainFacade
 import org.echo.mobile.framework.facade.SubscriptionFacade
 import org.echo.mobile.framework.facade.TransactionsFacade
 import org.echo.mobile.framework.facade.internal.AssetsFacadeImpl
@@ -18,18 +19,21 @@ import org.echo.mobile.framework.facade.internal.ContractsFacadeImpl
 import org.echo.mobile.framework.facade.internal.FeeFacadeImpl
 import org.echo.mobile.framework.facade.internal.InformationFacadeImpl
 import org.echo.mobile.framework.facade.internal.InitializerFacadeImpl
-import org.echo.mobile.framework.facade.internal.NotifiedTransactionsHelper
+import org.echo.mobile.framework.facade.internal.NotificationsHelper
+import org.echo.mobile.framework.facade.internal.SidechainFacadeImpl
 import org.echo.mobile.framework.facade.internal.SubscriptionFacadeImpl
 import org.echo.mobile.framework.facade.internal.TransactionsFacadeImpl
 import org.echo.mobile.framework.model.Asset
 import org.echo.mobile.framework.model.Balance
 import org.echo.mobile.framework.model.Block
 import org.echo.mobile.framework.model.DynamicGlobalProperties
+import org.echo.mobile.framework.model.EthAddress
 import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.HistoryResponse
 import org.echo.mobile.framework.model.Log
-import org.echo.mobile.framework.model.SidechainTransfer
+import org.echo.mobile.framework.model.TransactionResult
+import org.echo.mobile.framework.model.contract.ContractBalance
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
@@ -47,6 +51,8 @@ import org.echo.mobile.framework.service.internal.DatabaseApiServiceImpl
 import org.echo.mobile.framework.service.internal.LoginApiServiceImpl
 import org.echo.mobile.framework.service.internal.NetworkBroadcastApiServiceImpl
 import org.echo.mobile.framework.service.internal.RegistrationApiServiceImpl
+import org.echo.mobile.framework.service.internal.subscription.RegistrationSubscriptionManagerImpl
+import org.echo.mobile.framework.service.internal.subscription.TransactionSubscriptionManagerImpl
 import org.echo.mobile.framework.support.FeeRatioProvider
 import org.echo.mobile.framework.support.Settings
 import org.echo.mobile.framework.support.concurrent.Dispatcher
@@ -83,6 +89,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
     private val transactionsFacade: TransactionsFacade
     private val assetsFacade: AssetsFacade
     private val contractsFacade: ContractsFacade
+    private val sidechainFacade: SidechainFacade
 
     private val dispatcher: Dispatcher by lazy { ExecutorServiceDispatcher() }
     private var returnOnMainThread = false
@@ -123,12 +130,20 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             networkBroadcastApiService,
             registrationService
         )
+
+        val regularSubscriptionManager = RegistrationSubscriptionManagerImpl()
+        val registrationNotificationsHelper = NotificationsHelper(
+            socketCoreComponent,
+            regularSubscriptionManager
+        )
+
         authenticationFacade = AuthenticationFacadeImpl(
             databaseApiService,
             networkBroadcastApiService,
             registrationService,
             settings.cryptoComponent,
-            settings.network
+            settings.network,
+            registrationNotificationsHelper
         )
 
         val feeRatioProvider = FeeRatioProvider(settings.feeRatio)
@@ -149,11 +164,10 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             settings.cryptoComponent
         )
 
+        val transactionSubscriptionManager = TransactionSubscriptionManagerImpl(settings.network)
+
         val notifiedTransactionsHelper =
-            NotifiedTransactionsHelper(
-                socketCoreComponent,
-                settings.network
-            )
+            NotificationsHelper(socketCoreComponent, transactionSubscriptionManager)
 
         assetsFacade = AssetsFacadeImpl(
             databaseApiService,
@@ -167,6 +181,15 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             settings.cryptoComponent,
             notifiedTransactionsHelper,
             feeRatioProvider
+        )
+
+        val notifiedEthAddressHelper =
+            NotificationsHelper(socketCoreComponent, transactionSubscriptionManager)
+        sidechainFacade = SidechainFacadeImpl(
+            databaseApiService,
+            networkBroadcastApiService,
+            settings.cryptoComponent,
+            notifiedEthAddressHelper
         )
     }
 
@@ -367,6 +390,14 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         subscriptionFacade.subscribeOnContractLogs(contractId, listener, callback)
     })
 
+    override fun subscribeOnContracts(
+        contractIds: List<String>,
+        listener: UpdateListener<Map<String, List<ContractBalance>>>,
+        callback: Callback<Boolean>
+    ) = dispatch(Runnable {
+        subscriptionFacade.subscribeOnContracts(contractIds, listener, callback)
+    })
+
     override fun unsubscribeFromContractLogs(
         contractId: String,
         callback: Callback<Boolean>
@@ -374,6 +405,17 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         dispatch(Runnable {
             subscriptionFacade.unsubscribeFromContractLogs(
                 contractId,
+                callback.wrapOriginal()
+            )
+        })
+
+    override fun unsubscribeFromContracts(
+        listener: UpdateListener<Map<String, List<ContractBalance>>>,
+        callback: Callback<Boolean>
+    ) =
+        dispatch(Runnable {
+            subscriptionFacade.unsubscribeFromContracts(
+                listener,
                 callback.wrapOriginal()
             )
         })
@@ -387,13 +429,6 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         dispatch(Runnable {
             subscriptionFacade.unsubscribeFromBlock(callback)
         })
-
-    override fun getSidechainTransfers(
-        ethAddress: String,
-        callback: Callback<List<SidechainTransfer>>
-    ) = dispatch(Runnable {
-        informationFacade.getSidechainTransfers(ethAddress, callback)
-    })
 
     override fun createAsset(
         name: String,
@@ -764,6 +799,80 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         )
     })
 
+    override fun generateEthereumAddress(
+        accountNameOrId: String,
+        password: String,
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<TransactionResult>?
+    ) =
+        dispatch(Runnable {
+            sidechainFacade.generateEthereumAddress(
+                accountNameOrId, password, broadcastCallback, resultCallback
+            )
+        })
+
+    override fun generateEthereumAddressWithWif(
+        accountNameOrId: String,
+        wif: String,
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<TransactionResult>?
+    ) =
+        dispatch(Runnable {
+            sidechainFacade.generateEthereumAddressWithWif(
+                accountNameOrId, wif, broadcastCallback, resultCallback
+            )
+        })
+
+    override fun ethWithdraw(
+        accountNameOrId: String,
+        password: String,
+        ethAddress: String,
+        value: String,
+        feeAsset: String,
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<TransactionResult>?
+    ) =
+        dispatch(Runnable {
+            sidechainFacade.ethWithdraw(
+                accountNameOrId,
+                password,
+                ethAddress,
+                value,
+                feeAsset,
+                broadcastCallback,
+                resultCallback
+            )
+        })
+
+    override fun ethWithdrawWithWif(
+        accountNameOrId: String,
+        wif: String,
+        ethAddress: String,
+        value: String,
+        feeAsset: String,
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<TransactionResult>?
+    ) =
+        dispatch(Runnable {
+            sidechainFacade.ethWithdrawWithWif(
+                accountNameOrId,
+                wif,
+                ethAddress,
+                value,
+                feeAsset,
+                broadcastCallback,
+                resultCallback
+            )
+        })
+
+    override fun getEthereumAddresses(
+        accountNameOrId: String,
+        callback: Callback<List<EthAddress>>
+    ) =
+        dispatch(Runnable {
+            sidechainFacade.getEthereumAddresses(accountNameOrId, callback)
+        })
+
     override fun getContracts(
         contractIds: List<String>,
         callback: Callback<List<ContractInfo>>
@@ -771,15 +880,6 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         dispatch(Runnable {
             contractsFacade.getContracts(
                 contractIds,
-                callback
-            )
-        })
-
-    override fun getAllContracts(
-        callback: Callback<List<ContractInfo>>
-    ) =
-        dispatch(Runnable {
-            contractsFacade.getAllContracts(
                 callback
             )
         })

@@ -18,6 +18,7 @@ org.echo.mobile.framework.model
 org.echo.mobile.framework.model.contract
 org.echo.mobile.framework.model.contract.input
 org.echo.mobile.framework.model.contract.output
+org.echo.mobile.framework.model.eddsa
 org.echo.mobile.framework.model.network
 org.echo.mobile.framework.model.operations
 org.echo.mobile.framework.model.socketoperations

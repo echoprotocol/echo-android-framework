@@ -104,8 +104,8 @@ class InformationFragment : BaseFragment() {
             progressListener?.toggle(true)
             lib?.getAccountHistory(
                 etName.text.toString(),
-                "1.11.0",
-                "1.11.0",
+                "1.10.0",
+                "1.10.0",
                 10,
                 object : Callback<HistoryResponse> {
                     override fun onSuccess(result: HistoryResponse) {

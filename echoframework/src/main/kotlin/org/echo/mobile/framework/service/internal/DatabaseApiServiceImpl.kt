@@ -12,11 +12,11 @@ import org.echo.mobile.framework.model.BaseOperation
 import org.echo.mobile.framework.model.Block
 import org.echo.mobile.framework.model.BlockData
 import org.echo.mobile.framework.model.DynamicGlobalProperties
+import org.echo.mobile.framework.model.EthAddress
 import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.GrapheneObject
 import org.echo.mobile.framework.model.Log
-import org.echo.mobile.framework.model.SidechainTransfer
 import org.echo.mobile.framework.model.Transaction
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
@@ -27,7 +27,6 @@ import org.echo.mobile.framework.model.socketoperations.CancelAllSubscriptionsSo
 import org.echo.mobile.framework.model.socketoperations.CustomOperation
 import org.echo.mobile.framework.model.socketoperations.CustomSocketOperation
 import org.echo.mobile.framework.model.socketoperations.FullAccountsSocketOperation
-import org.echo.mobile.framework.model.socketoperations.GetAllContractsSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetAssetsSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetBlockSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetChainIdSocketOperation
@@ -35,16 +34,17 @@ import org.echo.mobile.framework.model.socketoperations.GetContractLogsSocketOpe
 import org.echo.mobile.framework.model.socketoperations.GetContractResultSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetContractSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetContractsSocketOperation
+import org.echo.mobile.framework.model.socketoperations.GetEthereumAddressesSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetGlobalPropertiesSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetKeyReferencesSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetObjectsSocketOperation
-import org.echo.mobile.framework.model.socketoperations.GetSidechainTransfersSocketOperation
 import org.echo.mobile.framework.model.socketoperations.ListAssetsSocketOperation
 import org.echo.mobile.framework.model.socketoperations.LookupAssetsSymbolsSocketOperation
 import org.echo.mobile.framework.model.socketoperations.QueryContractSocketOperation
 import org.echo.mobile.framework.model.socketoperations.RequiredFeesSocketOperation
 import org.echo.mobile.framework.model.socketoperations.SetSubscribeCallbackSocketOperation
 import org.echo.mobile.framework.model.socketoperations.SubscribeContractLogsSocketOperation
+import org.echo.mobile.framework.model.socketoperations.SubscribeContractsSocketOperation
 import org.echo.mobile.framework.service.DatabaseApiService
 import org.echo.mobile.framework.support.Result
 import org.echo.mobile.framework.support.concurrent.future.FutureTask
@@ -65,6 +65,7 @@ class DatabaseApiServiceImpl(
     private val cryptoCoreComponent: CryptoCoreComponent,
     private val network: Network
 ) : DatabaseApiService {
+
 
     override var id: Int = ILLEGAL_ID
 
@@ -114,8 +115,8 @@ class DatabaseApiServiceImpl(
     ) {
         val keys = wifs.map { wif ->
             val privateKey = cryptoCoreComponent.decodeFromWif(wif)
-            val publicKey = cryptoCoreComponent.derivePublicKeyFromPrivate(privateKey)
-            cryptoCoreComponent.getAddressFromPublicKey(publicKey)
+            val publicKey = cryptoCoreComponent.deriveEdDSAPublicKeyFromPrivate(privateKey)
+            cryptoCoreComponent.getEdDSAAddressFromPublicKey(publicKey)
         }
 
         val getKeyReferencesSocketOperation = GetKeyReferencesSocketOperation(
@@ -162,6 +163,20 @@ class DatabaseApiServiceImpl(
                     callback.onSuccess(mapOf())
                 }
             })
+    }
+
+    override fun getEthereumAddresses(
+        accountId: String,
+        callback: Callback<List<EthAddress>>
+    ) {
+        val operation = GetEthereumAddressesSocketOperation(
+            id,
+            accountId,
+            socketCoreComponent.currentId,
+            callback
+        )
+
+        socketCoreComponent.emit(operation)
     }
 
     private fun accountsByWifMap(
@@ -443,18 +458,6 @@ class DatabaseApiServiceImpl(
         return futureTask.wrapResult()
     }
 
-    override fun getAllContracts(): Result<LocalException, List<ContractInfo>> {
-        val future = FutureTask<List<ContractInfo>>()
-        val operation = GetAllContractsSocketOperation(
-            id,
-            callId = socketCoreComponent.currentId,
-            callback = future.completeCallback()
-        )
-        socketCoreComponent.emit(operation)
-
-        return future.wrapResult()
-    }
-
     override fun getContracts(contractIds: List<String>): Result<LocalException, List<ContractInfo>> {
         val future = FutureTask<List<ContractInfo>>()
         val operation = GetContractsSocketOperation(
@@ -492,6 +495,20 @@ class DatabaseApiServiceImpl(
             contractId,
             fromBlock,
             toBlock,
+            callId = socketCoreComponent.currentId,
+            callback = future.completeCallback()
+        )
+        socketCoreComponent.emit(operation)
+
+        return future.wrapResult()
+    }
+
+    override fun subscribeContracts(contractIds: List<String>): Result<LocalException, Boolean> {
+        val future = FutureTask<Boolean>()
+
+        val operation = SubscribeContractsSocketOperation(
+            id,
+            contractIds,
             callId = socketCoreComponent.currentId,
             callback = future.completeCallback()
         )
@@ -560,14 +577,5 @@ class DatabaseApiServiceImpl(
         socketCoreComponent.emit(customSocketOperation)
 
         return futureTask.wrapResult()
-    }
-
-    override fun getSidechainTransfers(
-        ethAddress: String,
-        callback: Callback<List<SidechainTransfer>>
-    ) {
-        val operation = GetSidechainTransfersSocketOperation(id, ethAddress, callback = callback)
-
-        socketCoreComponent.emit(operation)
     }
 }
