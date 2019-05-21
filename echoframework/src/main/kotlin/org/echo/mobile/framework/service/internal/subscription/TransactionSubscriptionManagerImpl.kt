@@ -21,8 +21,10 @@ import org.echo.mobile.framework.model.operations.ContractCallOperation
 import org.echo.mobile.framework.model.operations.ContractCreateOperation
 import org.echo.mobile.framework.model.operations.ContractTransferOperation
 import org.echo.mobile.framework.model.operations.CreateAssetOperation
+import org.echo.mobile.framework.model.operations.GenerateEthereumAddressOperation
 import org.echo.mobile.framework.model.operations.IssueAssetOperation
 import org.echo.mobile.framework.model.operations.TransferOperation
+import org.echo.mobile.framework.model.operations.WithdrawEthereumOperation
 import org.echo.mobile.framework.service.TransactionSubscriptionManager
 import org.echo.mobile.framework.support.toJsonObject
 import java.util.concurrent.ConcurrentHashMap
@@ -118,6 +120,14 @@ class TransactionSubscriptionManagerImpl(network: Network) : TransactionSubscrip
         registerTypeAdapter(
             IssueAssetOperation::class.java,
             IssueAssetOperation.IssueAssetDeserializer()
+        )
+        registerTypeAdapter(
+            GenerateEthereumAddressOperation::class.java,
+            GenerateEthereumAddressOperation.GenerateEthereumAddressDeserializer()
+        )
+        registerTypeAdapter(
+            WithdrawEthereumOperation::class.java,
+            WithdrawEthereumOperation.WithdrawEthereumOperationDeserializer()
         )
         registerTypeAdapter(AssetAmount::class.java, AssetAmount.Deserializer())
         registerTypeAdapter(EdAuthority::class.java, EdAuthority.Deserializer())

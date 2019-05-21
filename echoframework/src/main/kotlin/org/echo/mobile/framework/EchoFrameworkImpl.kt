@@ -10,6 +10,7 @@ import org.echo.mobile.framework.facade.ContractsFacade
 import org.echo.mobile.framework.facade.FeeFacade
 import org.echo.mobile.framework.facade.InformationFacade
 import org.echo.mobile.framework.facade.InitializerFacade
+import org.echo.mobile.framework.facade.SidechainFacade
 import org.echo.mobile.framework.facade.SubscriptionFacade
 import org.echo.mobile.framework.facade.TransactionsFacade
 import org.echo.mobile.framework.facade.internal.AssetsFacadeImpl
@@ -19,17 +20,19 @@ import org.echo.mobile.framework.facade.internal.FeeFacadeImpl
 import org.echo.mobile.framework.facade.internal.InformationFacadeImpl
 import org.echo.mobile.framework.facade.internal.InitializerFacadeImpl
 import org.echo.mobile.framework.facade.internal.NotificationsHelper
+import org.echo.mobile.framework.facade.internal.SidechainFacadeImpl
 import org.echo.mobile.framework.facade.internal.SubscriptionFacadeImpl
 import org.echo.mobile.framework.facade.internal.TransactionsFacadeImpl
 import org.echo.mobile.framework.model.Asset
 import org.echo.mobile.framework.model.Balance
 import org.echo.mobile.framework.model.Block
 import org.echo.mobile.framework.model.DynamicGlobalProperties
+import org.echo.mobile.framework.model.EthAddress
 import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.HistoryResponse
 import org.echo.mobile.framework.model.Log
-import org.echo.mobile.framework.model.SidechainTransfer
+import org.echo.mobile.framework.model.TransactionResult
 import org.echo.mobile.framework.model.contract.ContractBalance
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
@@ -86,6 +89,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
     private val transactionsFacade: TransactionsFacade
     private val assetsFacade: AssetsFacade
     private val contractsFacade: ContractsFacade
+    private val sidechainFacade: SidechainFacade
 
     private val dispatcher: Dispatcher by lazy { ExecutorServiceDispatcher() }
     private var returnOnMainThread = false
@@ -127,9 +131,10 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             registrationService
         )
 
+        val regularSubscriptionManager = RegistrationSubscriptionManagerImpl()
         val registrationNotificationsHelper = NotificationsHelper(
             socketCoreComponent,
-            RegistrationSubscriptionManagerImpl()
+            regularSubscriptionManager
         )
 
         authenticationFacade = AuthenticationFacadeImpl(
@@ -176,6 +181,15 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             settings.cryptoComponent,
             notifiedTransactionsHelper,
             feeRatioProvider
+        )
+
+        val notifiedEthAddressHelper =
+            NotificationsHelper(socketCoreComponent, transactionSubscriptionManager)
+        sidechainFacade = SidechainFacadeImpl(
+            databaseApiService,
+            networkBroadcastApiService,
+            settings.cryptoComponent,
+            notifiedEthAddressHelper
         )
     }
 
@@ -415,13 +429,6 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         dispatch(Runnable {
             subscriptionFacade.unsubscribeFromBlock(callback)
         })
-
-    override fun getSidechainTransfers(
-        ethAddress: String,
-        callback: Callback<List<SidechainTransfer>>
-    ) = dispatch(Runnable {
-        informationFacade.getSidechainTransfers(ethAddress, callback)
-    })
 
     override fun createAsset(
         name: String,
@@ -791,6 +798,80 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             contractId, fromBlock, toBlock, callback
         )
     })
+
+    override fun generateEthereumAddress(
+        accountNameOrId: String,
+        password: String,
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<TransactionResult>?
+    ) =
+        dispatch(Runnable {
+            sidechainFacade.generateEthereumAddress(
+                accountNameOrId, password, broadcastCallback, resultCallback
+            )
+        })
+
+    override fun generateEthereumAddressWithWif(
+        accountNameOrId: String,
+        wif: String,
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<TransactionResult>?
+    ) =
+        dispatch(Runnable {
+            sidechainFacade.generateEthereumAddressWithWif(
+                accountNameOrId, wif, broadcastCallback, resultCallback
+            )
+        })
+
+    override fun ethWithdraw(
+        accountNameOrId: String,
+        password: String,
+        ethAddress: String,
+        value: String,
+        feeAsset: String,
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<TransactionResult>?
+    ) =
+        dispatch(Runnable {
+            sidechainFacade.ethWithdraw(
+                accountNameOrId,
+                password,
+                ethAddress,
+                value,
+                feeAsset,
+                broadcastCallback,
+                resultCallback
+            )
+        })
+
+    override fun ethWithdrawWithWif(
+        accountNameOrId: String,
+        wif: String,
+        ethAddress: String,
+        value: String,
+        feeAsset: String,
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<TransactionResult>?
+    ) =
+        dispatch(Runnable {
+            sidechainFacade.ethWithdrawWithWif(
+                accountNameOrId,
+                wif,
+                ethAddress,
+                value,
+                feeAsset,
+                broadcastCallback,
+                resultCallback
+            )
+        })
+
+    override fun getEthereumAddresses(
+        accountNameOrId: String,
+        callback: Callback<List<EthAddress>>
+    ) =
+        dispatch(Runnable {
+            sidechainFacade.getEthereumAddresses(accountNameOrId, callback)
+        })
 
     override fun getContracts(
         contractIds: List<String>,

@@ -53,7 +53,9 @@ enum class SocketOperationKeys(val key: String) {
     CALL_CONTRACT_NO_CHANGING_STATE("call_contract_no_changing_state"),
     GET_CONTRACTS("get_contracts"),
     GET_CONTRACT("get_contract"),
-    GET_GLOBAL_PROPERTIES("get_global_properties");
+    GENERATE_ETHEREUM_ADDRESS("generate_eth_address"),
+    GET_GLOBAL_PROPERTIES("get_global_properties"),
+    GET_ACCOUNT_ADDRESSES("get_eth_address");
 
     override fun toString(): String = this.key
 }
