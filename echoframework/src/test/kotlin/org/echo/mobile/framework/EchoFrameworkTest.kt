@@ -10,6 +10,7 @@ import org.echo.mobile.framework.model.Balance
 import org.echo.mobile.framework.model.Block
 import org.echo.mobile.framework.model.BlockData
 import org.echo.mobile.framework.model.DynamicGlobalProperties
+import org.echo.mobile.framework.model.EthAddress
 import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.HistoryResponse
@@ -68,13 +69,13 @@ class EchoFrameworkTest {
         )
     }
 
-    private val legalContractId = "1.14.38"
-    private val legalTokenId = "1.14.45"
-    private val accountId = "1.2.49"
+    private val legalContractId = "1.14.1"
+    private val legalTokenId = "1.14.0"
+    private val accountId = "1.2.22"
     private val login = "dima"
     private val password = "dima"
     private val wif = "5J3UbadSyzzcQQ7HEfTr2brhJJpHhx3NsMzrvgzfysBesutNRCm"
-    private val secondAccountId = "1.2.50"
+    private val secondAccountId = "1.2.23"
     private val secondLogin = "daria"
     private val secondPassword = "daria"
     private val legalAssetId = "1.3.0"
@@ -344,7 +345,7 @@ class EchoFrameworkTest {
         )
 
         val accounts = futureAccounts.get()
-        Assert.assertTrue(accounts?.isNotEmpty() == true)
+        assertTrue(accounts?.isNotEmpty() == true)
     }
 
     @Test
@@ -397,10 +398,10 @@ class EchoFrameworkTest {
     }
 
     @Test
-    fun accountHistoryByIdTest() = getAccountHistory("1.2.7")
+    fun accountHistoryByIdTest() = getAccountHistory(accountId)
 
     @Test
-    fun accountHistoryByNameTest() = getAccountHistory("init1")
+    fun accountHistoryByNameTest() = getAccountHistory("vsharaev")
 
     private fun getAccountHistory(nameOrId: String) {
         val framework = initFramework()
@@ -450,6 +451,167 @@ class EchoFrameworkTest {
     }
 
 //    @Test
+//    fun generateEthereumTest() {
+//        val framework = initFramework()
+//
+//        val futureChangePassword = FutureTask<Boolean>()
+//        val resultChangePassword = FutureTask<TransactionResult>()
+//
+//        if (connect(framework) == false) Assert.fail("Connection error")
+//
+//        framework.generateEthereumAddress(
+//            "daria",
+//            "daria",
+//            object : Callback<Boolean> {
+//                override fun onSuccess(result: Boolean) {
+//                    futureChangePassword.setComplete(result)
+//                }
+//
+//                override fun onError(error: LocalException) {
+//                    error.printStackTrace()
+//                    futureChangePassword.setComplete(error)
+//                }
+//
+//            },
+//            object : Callback<TransactionResult> {
+//                override fun onSuccess(result: TransactionResult) {
+//                    resultChangePassword.setComplete(result)
+//                }
+//
+//                override fun onError(error: LocalException) {
+//                    resultChangePassword.setComplete(error)
+//                }
+//
+//            }
+//        )
+//
+//        assertNotNull(futureChangePassword.get() ?: false)
+//
+//        val result = resultChangePassword.get()
+//        assertNotNull(result ?: false)
+//    }
+//
+//    @Test
+//    fun generateEthereumWithWifTest() {
+//        val framework = initFramework()
+//
+//        val futureChangePassword = FutureTask<Boolean>()
+//        val resultChangePassword = FutureTask<TransactionResult>()
+//
+//        if (connect(framework) == false) Assert.fail("Connection error")
+//
+//        framework.generateEthereumAddressWithWif(
+//            "daria1",
+//            "5Kk1A68mrEXsUekCoymmK7W6oZ4JL9RfiQMPNy1ZgbZquNKqamb",
+//            object : Callback<Boolean> {
+//                override fun onSuccess(result: Boolean) {
+//                    futureChangePassword.setComplete(result)
+//                }
+//
+//                override fun onError(error: LocalException) {
+//                    error.printStackTrace()
+//                    futureChangePassword.setComplete(error)
+//                }
+//
+//            },
+//            object : Callback<TransactionResult> {
+//                override fun onSuccess(result: TransactionResult) {
+//                    resultChangePassword.setComplete(result)
+//                }
+//
+//                override fun onError(error: LocalException) {
+//                    resultChangePassword.setComplete(error)
+//                }
+//
+//            }
+//        )
+//
+//        assertNotNull(futureChangePassword.get() ?: false)
+//
+//        val result = resultChangePassword.get()
+//        assertNotNull(result ?: false)
+//    }
+
+    @Test
+    fun getEthereumTest() {
+        val framework = initFramework()
+
+        val futureChangePassword = FutureTask<List<EthAddress>>()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        framework.getEthereumAddresses(
+            "daria1",
+            object : Callback<List<EthAddress>> {
+                override fun onSuccess(result: List<EthAddress>) {
+                    futureChangePassword.setComplete(result)
+                }
+
+                override fun onError(error: LocalException) {
+                    error.printStackTrace()
+                    futureChangePassword.setComplete(error)
+                }
+
+            })
+
+        assertNotNull(futureChangePassword.get() ?: false)
+    }
+//
+//    @Test
+//    fun withdrawEthereumTest() {
+//        val framework = initFramework()
+//
+//        val futureChangePassword = FutureTask<Boolean>()
+//        val futureResult = FutureTask<TransactionResult>()
+//
+//        if (connect(framework) == false) Assert.fail("Connection error")
+//
+//        framework.ethWithdraw(
+//            "vsharaev","vsharaev","d28224c2cfa050bff674160274e0d41742c7ec43","1", "1.3.0",
+//            object : Callback<Boolean> {
+//                override fun onSuccess(result: Boolean) {
+//                    futureChangePassword.setComplete(result)
+//                }
+//
+//                override fun onError(error: LocalException) {
+//                    error.printStackTrace()
+//                    futureChangePassword.setComplete(error)
+//                }
+//
+//            }, futureResult.completeCallback())
+//
+//        val result = futureResult.get()
+//        assertNotNull(result ?: false)
+//    }
+//
+//    @Test
+//    fun withdrawEthereumWithWifTest() {
+//        val framework = initFramework()
+//
+//        val futureChangePassword = FutureTask<Boolean>()
+//        val futureResult = FutureTask<TransactionResult>()
+//
+//        if (connect(framework) == false) Assert.fail("Connection error")
+//
+//        framework.ethWithdrawWithWif(
+//            "vsharaev","5KjC8BiryoxUNz3dEY2ZWQK5ssmD84JgRGemVWwxfNgiPoxcaVa","d28224c2cfa050bff674160274e0d41742c7ec43","1", "1.3.0",
+//            object : Callback<Boolean> {
+//                override fun onSuccess(result: Boolean) {
+//                    futureChangePassword.setComplete(result)
+//                }
+//
+//                override fun onError(error: LocalException) {
+//                    error.printStackTrace()
+//                    futureChangePassword.setComplete(error)
+//                }
+//
+//            }, futureResult.completeCallback())
+//
+//        val result = futureResult.get()
+//        assertNotNull(result ?: false)
+//    }
+//
+//    @Test
 //    fun registrationTest() {
 //        val framework = initFramework()
 //
@@ -458,7 +620,7 @@ class EchoFrameworkTest {
 //        if (connect(framework) == false) Assert.fail("Connection error")
 //
 //        framework.register(
-//            "test12", "test12",
+//            "daria1", "daria1",
 //            object : Callback<Boolean> {
 //                override fun onSuccess(result: Boolean) {
 //                    futureRegistration.setComplete(true)
@@ -1020,8 +1182,8 @@ class EchoFrameworkTest {
 //        val asset = configureAsset()
 //
 //        framework.createAsset(
-//            "daria",
-//            "daria",
+//            secondLogin,
+//            secondPassword,
 //            asset,
 //            broadcastFuture.completeCallback(),
 //            futureAsset.completeCallback()
@@ -1065,7 +1227,7 @@ class EchoFrameworkTest {
         framework.issueAsset(
             "daria",
             "daria",
-            asset = "1.3.3",
+            asset = "1.3.2",
             amount = "100",
             destinationIdOrName = "daria",
             message = "Do it",
@@ -1086,7 +1248,7 @@ class EchoFrameworkTest {
         framework.issueAssetWithWif(
             "daria",
             "5J9YnfSUx6GnweorDEswRNAFcBzsZrQoJLkfqKLzXwBdRvjmoz1",
-            asset = "1.3.3",
+            asset = "1.3.2",
             amount = "1",
             destinationIdOrName = "daria",
             message = "Do it",
@@ -1106,11 +1268,11 @@ class EchoFrameworkTest {
         val future = FutureTask<String>()
 
         framework.createContract(
-            "daria",
-            "daria",
+            login,
+            password,
             assetId = "1.3.0",
             feeAsset = "1.3.0",
-            byteCode = legalTokenBytecode,
+            byteCode = legalContractParamsBytecode,
             broadcastCallback = broadcastFuture.completeCallback(),
             resultCallback = future.completeCallback()
         )
@@ -1507,7 +1669,7 @@ class EchoFrameworkTest {
         val future = FutureTask<ContractResult>()
 
         framework.getContractResult(
-            historyId = "1.15.22",
+            historyId = "1.15.1",
             callback = future.completeCallback()
         )
 
@@ -1791,7 +1953,7 @@ class EchoFrameworkTest {
         val asset = Asset("").apply {
             symbol = "TIASSET"
             precision = 4
-            issuer = Account("1.2.50")
+            issuer = Account(secondAccountId)
 //            setBtsOptions(
 //                BitassetOptions(
 //                    86400, 7, 86400,

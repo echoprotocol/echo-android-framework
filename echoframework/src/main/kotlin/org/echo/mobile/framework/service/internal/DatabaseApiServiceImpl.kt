@@ -12,11 +12,11 @@ import org.echo.mobile.framework.model.BaseOperation
 import org.echo.mobile.framework.model.Block
 import org.echo.mobile.framework.model.BlockData
 import org.echo.mobile.framework.model.DynamicGlobalProperties
+import org.echo.mobile.framework.model.EthAddress
 import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.GrapheneObject
 import org.echo.mobile.framework.model.Log
-import org.echo.mobile.framework.model.SidechainTransfer
 import org.echo.mobile.framework.model.Transaction
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
@@ -34,10 +34,10 @@ import org.echo.mobile.framework.model.socketoperations.GetContractLogsSocketOpe
 import org.echo.mobile.framework.model.socketoperations.GetContractResultSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetContractSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetContractsSocketOperation
+import org.echo.mobile.framework.model.socketoperations.GetEthereumAddressesSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetGlobalPropertiesSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetKeyReferencesSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetObjectsSocketOperation
-import org.echo.mobile.framework.model.socketoperations.GetSidechainTransfersSocketOperation
 import org.echo.mobile.framework.model.socketoperations.ListAssetsSocketOperation
 import org.echo.mobile.framework.model.socketoperations.LookupAssetsSymbolsSocketOperation
 import org.echo.mobile.framework.model.socketoperations.QueryContractSocketOperation
@@ -65,6 +65,7 @@ class DatabaseApiServiceImpl(
     private val cryptoCoreComponent: CryptoCoreComponent,
     private val network: Network
 ) : DatabaseApiService {
+
 
     override var id: Int = ILLEGAL_ID
 
@@ -162,6 +163,20 @@ class DatabaseApiServiceImpl(
                     callback.onSuccess(mapOf())
                 }
             })
+    }
+
+    override fun getEthereumAddresses(
+        accountId: String,
+        callback: Callback<List<EthAddress>>
+    ) {
+        val operation = GetEthereumAddressesSocketOperation(
+            id,
+            accountId,
+            socketCoreComponent.currentId,
+            callback
+        )
+
+        socketCoreComponent.emit(operation)
     }
 
     private fun accountsByWifMap(
@@ -562,14 +577,5 @@ class DatabaseApiServiceImpl(
         socketCoreComponent.emit(customSocketOperation)
 
         return futureTask.wrapResult()
-    }
-
-    override fun getSidechainTransfers(
-        ethAddress: String,
-        callback: Callback<List<SidechainTransfer>>
-    ) {
-        val operation = GetSidechainTransfersSocketOperation(id, ethAddress, callback = callback)
-
-        socketCoreComponent.emit(operation)
     }
 }

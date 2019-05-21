@@ -9,11 +9,11 @@ import org.echo.mobile.framework.model.BaseOperation
 import org.echo.mobile.framework.model.Block
 import org.echo.mobile.framework.model.BlockData
 import org.echo.mobile.framework.model.DynamicGlobalProperties
+import org.echo.mobile.framework.model.EthAddress
 import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.GrapheneObject
 import org.echo.mobile.framework.model.Log
-import org.echo.mobile.framework.model.SidechainTransfer
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
@@ -28,7 +28,7 @@ import org.echo.mobile.framework.support.Result
  */
 interface DatabaseApiService : ApiService, AccountsService, GlobalsService,
     AuthorityAndValidationService, BlocksAndTransactionsService, ContractsService, AssetsService,
-    SubscriptionService, ObjectsService, CustomOperationService, SidechainService
+    SubscriptionService, ObjectsService, CustomOperationService
 
 /**
  * Encapsulates logic, associated with data from account from blockchain database API
@@ -75,6 +75,11 @@ interface AccountsService {
      * Returns map, contains pairs wif -> accounts list, associated with this wif
      */
     fun getAccountsByWif(wifs: List<String>): Result<LocalException, Map<String, List<FullAccount>>>
+
+    /**
+     * Fetches addresses list [EthAddress] for required account [accountId]
+     */
+    fun getEthereumAddresses(accountId: String, callback: Callback<List<EthAddress>>)
 }
 
 /**
@@ -303,17 +308,5 @@ interface ObjectsService {
         ids: List<String>,
         mapper: ObjectMapper<T>
     ): Result<Exception, List<T>>
-
-}
-
-/**
- * Encapsulates logic, associated with sidechain information processing
- */
-interface SidechainService {
-
-    /**
-     * Retrieves sidechain transfers list associated with [ethAddress]
-     */
-    fun getSidechainTransfers(ethAddress: String, callback: Callback<List<SidechainTransfer>>)
 
 }

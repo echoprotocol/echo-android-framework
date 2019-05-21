@@ -54,7 +54,16 @@ enum class OperationType {
     EXECUTE_BID_OPERATION,          //VIRTUAL
     CONTRACT_CREATE_OPERATION,
     CONTRACT_CALL_OPERATION,
-    CONTRACT_TRANSFER_OPERATION
+    CONTRACT_TRANSFER_OPERATION,
+    CHANGE_SIDECHAIN_CONFIG_OPERATION, // temporary operation for tests
+    ACCOUNT_ADDRESS_CREATE_OPERATION,
+    TRANSFER_TO_ADDRESS_OPERATION,
+    GENERATE_ETH_ADDRESS_OPERATION,
+    CREATE_ETH_ADDRESS_OPERATION,
+    DEPOSIT_ETH_OPERATION,
+    WITHDRAW_ETH_OPERATION,
+    APPROVE_WITHDRAW_ETH_OPERATION
+
 }
 
 /**
@@ -74,7 +83,9 @@ class OperationTypeToClassConverter : Converter<Int, Class<*>?> {
             OperationType.ACCOUNT_CREATE_OPERATION.ordinal to AccountCreateOperation::class.java,
             OperationType.CONTRACT_CREATE_OPERATION.ordinal to ContractCreateOperation::class.java,
             OperationType.CONTRACT_CALL_OPERATION.ordinal to ContractCallOperation::class.java,
-            OperationType.CONTRACT_TRANSFER_OPERATION.ordinal to ContractTransferOperation::class.java
+            OperationType.CONTRACT_TRANSFER_OPERATION.ordinal to ContractTransferOperation::class.java,
+            OperationType.GENERATE_ETH_ADDRESS_OPERATION.ordinal to GenerateEthereumAddressOperation::class.java,
+            OperationType.WITHDRAW_ETH_OPERATION.ordinal to WithdrawEthereumOperation::class.java
         )
     }
 

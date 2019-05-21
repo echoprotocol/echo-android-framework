@@ -16,7 +16,6 @@ import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.HistoricalTransfer
 import org.echo.mobile.framework.model.HistoryResponse
 import org.echo.mobile.framework.model.HistoryResult
-import org.echo.mobile.framework.model.SidechainTransfer
 import org.echo.mobile.framework.model.operations.AccountCreateOperation
 import org.echo.mobile.framework.model.operations.AccountUpdateOperation
 import org.echo.mobile.framework.model.operations.ContractCallOperation
@@ -24,14 +23,14 @@ import org.echo.mobile.framework.model.operations.ContractCreateOperation
 import org.echo.mobile.framework.model.operations.ContractOperation
 import org.echo.mobile.framework.model.operations.ContractTransferOperation
 import org.echo.mobile.framework.model.operations.CreateAssetOperation
+import org.echo.mobile.framework.model.operations.GenerateEthereumAddressOperation
 import org.echo.mobile.framework.model.operations.IssueAssetOperation
 import org.echo.mobile.framework.model.operations.OperationType
 import org.echo.mobile.framework.model.operations.TransferOperation
+import org.echo.mobile.framework.model.operations.WithdrawEthereumOperation
 import org.echo.mobile.framework.processResult
 import org.echo.mobile.framework.service.AccountHistoryApiService
 import org.echo.mobile.framework.service.DatabaseApiService
-import org.echo.mobile.framework.support.EthAddressValidator
-import org.echo.mobile.framework.support.EthAddressValidator.ADDRESS_PREFIX
 import org.echo.mobile.framework.support.Result
 import org.echo.mobile.framework.support.Result.Error
 import org.echo.mobile.framework.support.Result.Value
@@ -104,19 +103,6 @@ class InformationFacadeImpl(
 
     override fun getGlobalProperties(callback: Callback<GlobalProperties>) =
         databaseApiService.getGlobalProperties(callback)
-
-    override fun getSidechainTransfers(
-        ethAddress: String,
-        callback: Callback<List<SidechainTransfer>>
-    ) {
-        if (!EthAddressValidator.isAddressValid(ethAddress)) {
-            throw LocalException("Invalid ethereum address $ethAddress")
-        }
-
-        val processedAddress = ethAddress.replace(ADDRESS_PREFIX, "").toLowerCase()
-
-        databaseApiService.getSidechainTransfers(processedAddress, callback)
-    }
 
     private fun findAccount(
         nameOrId: String,
@@ -261,6 +247,16 @@ class InformationFacadeImpl(
                         operation as ContractTransferOperation,
                         accountsRegistry,
                         assetsRegistry
+                    )
+                OperationType.GENERATE_ETH_ADDRESS_OPERATION ->
+                    processGenerateEthAddressOperation(
+                        operation as GenerateEthereumAddressOperation,
+                        accountsRegistry
+                    )
+                OperationType.WITHDRAW_ETH_OPERATION ->
+                    processWithdrawEthOperation(
+                        operation as WithdrawEthereumOperation,
+                        accountsRegistry
                     )
 
                 else -> {
@@ -418,6 +414,32 @@ class InformationFacadeImpl(
 
         accountRegistry[toAccount]?.let { notNullAccount ->
             operation.to = notNullAccount
+        }
+    }
+
+    private fun processGenerateEthAddressOperation(
+        operation: GenerateEthereumAddressOperation,
+        accountRegistry: MutableMap<String, Account>
+    ) {
+        val account = operation.account.getObjectId()
+
+        fillAccounts(listOf(account), accountRegistry)
+
+        accountRegistry[account]?.let { notNullAccount ->
+            operation.account = notNullAccount
+        }
+    }
+
+    private fun processWithdrawEthOperation(
+        operation: WithdrawEthereumOperation,
+        accountRegistry: MutableMap<String, Account>
+    ) {
+        val account = operation.account.getObjectId()
+
+        fillAccounts(listOf(account), accountRegistry)
+
+        accountRegistry[account]?.let { notNullAccount ->
+            operation.account = notNullAccount
         }
     }
 

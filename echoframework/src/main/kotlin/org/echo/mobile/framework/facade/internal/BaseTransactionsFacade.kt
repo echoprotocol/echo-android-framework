@@ -2,7 +2,6 @@ package org.echo.mobile.framework.facade.internal
 
 import org.echo.mobile.framework.ECHO_ASSET_ID
 import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
-import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent
 import org.echo.mobile.framework.exception.AccountNotFoundException
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.model.Account
@@ -125,10 +124,6 @@ abstract class BaseTransactionsFacade(
             setFees(fees)
             addPrivateKey(privateKey)
         }
-    }
-
-    companion object {
-        private val LOGGER = LoggerCoreComponent.create(BaseTransactionsFacade::class.java.name)
     }
 
 }
