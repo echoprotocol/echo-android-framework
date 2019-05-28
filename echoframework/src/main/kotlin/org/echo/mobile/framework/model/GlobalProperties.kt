@@ -214,22 +214,24 @@ class GasPrice {
  * Describes all sidechain's configs
  */
 class SidechainConfig {
-    @SerializedName("echo_transfer_ready_topic")
-    var echoTransferReadyTopic: String? = null
-    @SerializedName("echo_vote_method")
-    var echoVoteMethod: String? = null
-    @SerializedName("echo_sign_method")
-    var echoSignMethod: String? = null
-    @SerializedName("echo_contract_id")
-    var echoContractId: String? = null
-    @SerializedName("eth_transfer_topic")
-    var ethTransferTopic: String? = null
-    @SerializedName("eth_committee_method")
-    var ethCommitteeMethod: String? = null
-    @SerializedName("echo_transfer_topic")
-    var echoTransferTopic: String? = null
     @SerializedName("eth_contract_address")
     var ethContractAddress: String? = null
+    @SerializedName("eth_committee_update_method")
+    var ethCommitteeUpdateMethod: Method? = null
+    @SerializedName("eth_gen_address_method")
+    var echoGenAddressMethod: Method? = null
+    @SerializedName("eth_withdraw_method")
+    var ethWithdrawMethod: Method? = null
+    @SerializedName("ETH_asset_id")
+    var ethAssetId: String? = null
+    @SerializedName("eth_deposit_topic")
+    var ethDepositTopic: String? = null
+    @SerializedName("eth_gen_address_topic")
+    var ethGenerateAddressTopic: String? = null
+    @SerializedName("eth_withdraw_topic")
+    var ethWithdrawTopic: String? = null
+    @SerializedName("eth_committee_updated_topic")
+    var ethCommitteeUpdateTopic: String? = null
 
 }
 
@@ -251,5 +253,9 @@ class EchorandConfig {
     var maxBbaSteps: String? = null
     @SerializedName("_creator_count")
     var creatorCount: String? = null
+}
 
+class Method {
+    var method: String? = null
+    var gas: Long? = null
 }
