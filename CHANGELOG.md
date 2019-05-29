@@ -1,4 +1,4 @@
-# CHANGELOG 3.1
+# CHANGELOG 3.9
 
 ## Authority
 Owner Authority was removed from the network. 
