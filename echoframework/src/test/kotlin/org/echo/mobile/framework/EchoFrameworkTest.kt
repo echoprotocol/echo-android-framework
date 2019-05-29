@@ -55,7 +55,7 @@ class EchoFrameworkTest {
     private fun initFramework(ratio: BigDecimal = BigDecimal.ONE): EchoFramework {
         return EchoFramework.create(
             Settings.Configurator()
-                .setUrl("wss://devnet.echo-dev.io/ws")
+                .setUrl("ws://devnet.echo-dev.io/ws")
                 .setNetworkType(Echodevnet())
                 .setReturnOnMainThread(false)
                 .setApis(
