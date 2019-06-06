@@ -13,9 +13,7 @@ import org.echo.mobile.framework.support.toJsonObject
 class RegisterSocketOperation(
     override val apiId: Int,
     private val accountName: String,
-    private val keyOwner: String,
     private val keyActive: String,
-    private val keyMemo: String,
     private val echorandKey: String,
     callId: Int,
     callback: Callback<Int>
@@ -29,9 +27,7 @@ class RegisterSocketOperation(
             add(JsonArray().apply {
                 add(callId)
                 add(accountName)
-                add(keyOwner)
                 add(keyActive)
-                add(keyMemo)
                 add(echorandKey)
             })
         }

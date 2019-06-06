@@ -16,9 +16,7 @@ interface RegistrationApiService : ApiService {
      */
     fun register(
         accountName: String,
-        keyOwner: String,
         keyActive: String,
-        keyMemo: String,
         echorandKey: String
     ): Result<Exception, Int>
 }

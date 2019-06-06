@@ -199,7 +199,7 @@ class CryptoCoreComponentTest {
 
     @Test
     fun encodeToWifSuccess() {
-        val privKey = cryptoCoreComponent.getEdDSAPrivateKey("daria", "daria", AuthorityType.ACTIVE)
+        val privKey = cryptoCoreComponent.getEdDSAPrivateKey("dima", "dima", AuthorityType.ACTIVE)
 
         val encodedWif = cryptoCoreComponent.encodeToWif(privKey)
 

@@ -45,7 +45,7 @@ class EdDSAKeyProviderImpl(
         wrapError { prefix + Base58.encode(key) }
 
     companion object {
-        private const val EDDSA_KEY_PREFIX = "DET"
+        private const val EDDSA_KEY_PREFIX = "ECHO"
     }
 
 }

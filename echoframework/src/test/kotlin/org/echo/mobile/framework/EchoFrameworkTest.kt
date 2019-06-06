@@ -16,7 +16,9 @@ import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.HistoryResponse
 import org.echo.mobile.framework.model.Log
 import org.echo.mobile.framework.model.Price
+import org.echo.mobile.framework.model.TransactionResult
 import org.echo.mobile.framework.model.contract.ContractBalance
+import org.echo.mobile.framework.model.contract.ContractFee
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
@@ -69,13 +71,13 @@ class EchoFrameworkTest {
         )
     }
 
-    private val legalContractId = "1.14.1"
-    private val legalTokenId = "1.14.0"
-    private val accountId = "1.2.22"
+    private val legalContractId = "1.14.0"
+    private val legalTokenId = "1.14.1"
+    private val accountId = "1.2.16"
     private val login = "dima"
     private val password = "dima"
     private val wif = "5J3UbadSyzzcQQ7HEfTr2brhJJpHhx3NsMzrvgzfysBesutNRCm"
-    private val secondAccountId = "1.2.23"
+    private val secondAccountId = "1.2.19"
     private val secondLogin = "daria"
     private val secondPassword = "daria"
     private val legalAssetId = "1.3.0"
@@ -325,7 +327,7 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
-        framework.getAccount("dima", futureAccount.completeCallback())
+        framework.getAccount("daria", futureAccount.completeCallback())
 
         val account = futureAccount.get()
         assertTrue(account != null)
@@ -398,10 +400,10 @@ class EchoFrameworkTest {
     }
 
     @Test
-    fun accountHistoryByIdTest() = getAccountHistory(accountId)
+    fun accountHistoryByIdTest() = getAccountHistory("1.2.8")
 
     @Test
-    fun accountHistoryByNameTest() = getAccountHistory("vsharaev")
+    fun accountHistoryByNameTest() = getAccountHistory(login)
 
     private fun getAccountHistory(nameOrId: String) {
         val framework = initFramework()
@@ -536,25 +538,25 @@ class EchoFrameworkTest {
     fun getEthereumTest() {
         val framework = initFramework()
 
-        val futureChangePassword = FutureTask<List<EthAddress>>()
+        val futureEthereum = FutureTask<List<EthAddress>>()
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
         framework.getEthereumAddresses(
-            "daria1",
+            login,
             object : Callback<List<EthAddress>> {
                 override fun onSuccess(result: List<EthAddress>) {
-                    futureChangePassword.setComplete(result)
+                    futureEthereum.setComplete(result)
                 }
 
                 override fun onError(error: LocalException) {
                     error.printStackTrace()
-                    futureChangePassword.setComplete(error)
+                    futureEthereum.setComplete(error)
                 }
 
             })
 
-        assertNotNull(futureChangePassword.get() ?: false)
+        assertNotNull(futureEthereum.get() ?: false)
     }
 //
 //    @Test
@@ -1056,7 +1058,7 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
-        val futureFee = FutureTask<String>()
+        val futureFee = FutureTask<ContractFee>()
 
         framework.getFeeForContractOperation(
             userNameOrId = accountId,
@@ -1078,7 +1080,7 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
-        val futureFee = FutureTask<String>()
+        val futureFee = FutureTask<ContractFee>()
 
         framework.getFeeForContractOperation(
             userNameOrId = "1.2.16",
@@ -1099,7 +1101,7 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
-        val futureFee = FutureTask<String>()
+        val futureFee = FutureTask<ContractFee>()
 
         framework.getFeeForContractOperation(
             userNameOrId = login,
@@ -1228,7 +1230,7 @@ class EchoFrameworkTest {
             "daria",
             "daria",
             asset = "1.3.2",
-            amount = "100",
+            amount = "1",
             destinationIdOrName = "daria",
             message = "Do it",
             callback = futureIssue.completeCallback()
@@ -1416,8 +1418,8 @@ class EchoFrameworkTest {
         framework.callContractWithWif(
             "daria",
             "5J9YnfSUx6GnweorDEswRNAFcBzsZrQoJLkfqKLzXwBdRvjmoz1",
-            assetId = "1.3.0",
-            feeAsset = "1.3.0",
+            assetId = legalAssetId,
+            feeAsset =legalAssetId,
             contractId = legalContractId,
             methodName = "logTest",
             methodParams = listOf(),
@@ -1669,7 +1671,7 @@ class EchoFrameworkTest {
         val future = FutureTask<ContractResult>()
 
         framework.getContractResult(
-            historyId = "1.15.1",
+            historyId = "1.15.0",
             callback = future.completeCallback()
         )
 

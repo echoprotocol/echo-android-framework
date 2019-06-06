@@ -77,7 +77,7 @@ class GenerateEthereumAddressOperation constructor(
     }
 
     companion object {
-        private const val ACCOUNT_ID_KEY = "account_id"
+        private const val ACCOUNT_ID_KEY = "account"
     }
 
 }

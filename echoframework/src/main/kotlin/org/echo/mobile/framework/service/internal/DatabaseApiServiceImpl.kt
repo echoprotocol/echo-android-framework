@@ -18,6 +18,7 @@ import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.GrapheneObject
 import org.echo.mobile.framework.model.Log
 import org.echo.mobile.framework.model.Transaction
+import org.echo.mobile.framework.model.contract.ContractFee
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
@@ -41,6 +42,7 @@ import org.echo.mobile.framework.model.socketoperations.GetObjectsSocketOperatio
 import org.echo.mobile.framework.model.socketoperations.ListAssetsSocketOperation
 import org.echo.mobile.framework.model.socketoperations.LookupAssetsSymbolsSocketOperation
 import org.echo.mobile.framework.model.socketoperations.QueryContractSocketOperation
+import org.echo.mobile.framework.model.socketoperations.RequiredContractFeesSocketOperation
 import org.echo.mobile.framework.model.socketoperations.RequiredFeesSocketOperation
 import org.echo.mobile.framework.model.socketoperations.SetSubscribeCallbackSocketOperation
 import org.echo.mobile.framework.model.socketoperations.SubscribeContractLogsSocketOperation
@@ -364,6 +366,22 @@ class DatabaseApiServiceImpl(
 
         return future.wrapResult()
     }
+
+    override fun getRequiredContractFees(
+        operations: List<BaseOperation>,
+        asset: Asset
+    ): Result<Exception, List<ContractFee>> {
+        val future = FutureTask<List<ContractFee>>()
+        val requiredFeesOperation = RequiredContractFeesSocketOperation(
+            id,
+            operations,
+            asset,
+            callId = socketCoreComponent.currentId,
+            callback = future.completeCallback()
+        )
+        socketCoreComponent.emit(requiredFeesOperation)
+
+        return future.wrapResult()    }
 
     override fun listAssets(lowerBound: String, limit: Int, callback: Callback<List<Asset>>) {
         val operation = ListAssetsSocketOperation(id, lowerBound, limit, callback = callback)

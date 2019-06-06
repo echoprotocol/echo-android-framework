@@ -14,6 +14,7 @@ import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.GrapheneObject
 import org.echo.mobile.framework.model.Log
+import org.echo.mobile.framework.model.contract.ContractFee
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
@@ -133,6 +134,19 @@ interface AuthorityAndValidationService {
         operations: List<BaseOperation>,
         asset: Asset
     ): Result<Exception, List<AssetAmount>>
+
+    /**
+     * Retrieves required fee by asset for ech operation
+     *
+     * @param operations Operations for getting fee
+     * @param asset Asset type for fee paying
+     *
+     * @return [AssetAmount] fees for each operation
+     */
+    fun getRequiredContractFees(
+        operations: List<BaseOperation>,
+        asset: Asset
+    ): Result<Exception, List<ContractFee>>
 }
 
 /**

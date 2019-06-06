@@ -1,6 +1,7 @@
 package org.echo.mobile.framework.facade
 
 import org.echo.mobile.framework.Callback
+import org.echo.mobile.framework.model.contract.ContractFee
 import org.echo.mobile.framework.model.contract.input.InputValue
 
 /**
@@ -74,7 +75,7 @@ interface FeeFacade {
         methodParams: List<InputValue>,
         assetId: String,
         feeAsset: String?,
-        callback: Callback<String>
+        callback: Callback<ContractFee>
     )
 
     /**
@@ -95,7 +96,7 @@ interface FeeFacade {
         code: String,
         assetId: String,
         feeAsset: String?,
-        callback: Callback<String>
+        callback: Callback<ContractFee>
     )
 
 }
