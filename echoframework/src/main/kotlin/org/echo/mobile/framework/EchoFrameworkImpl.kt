@@ -34,6 +34,7 @@ import org.echo.mobile.framework.model.HistoryResponse
 import org.echo.mobile.framework.model.Log
 import org.echo.mobile.framework.model.TransactionResult
 import org.echo.mobile.framework.model.contract.ContractBalance
+import org.echo.mobile.framework.model.contract.ContractFee
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
@@ -283,7 +284,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         methodParams: List<InputValue>,
         assetId: String,
         feeAsset: String?,
-        callback: Callback<String>
+        callback: Callback<ContractFee>
     ) = dispatch(Runnable {
         feeFacade.getFeeForContractOperation(
             userNameOrId,
@@ -304,7 +305,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         code: String,
         assetId: String,
         feeAsset: String?,
-        callback: Callback<String>
+        callback: Callback<ContractFee>
     ) = dispatch(Runnable {
         feeFacade.getFeeForContractOperation(
             userNameOrId,
@@ -865,12 +866,12 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             )
         })
 
-    override fun getEthereumAddresses(
+    override fun getEthereumAddress(
         accountNameOrId: String,
-        callback: Callback<List<EthAddress>>
+        callback: Callback<EthAddress>
     ) =
         dispatch(Runnable {
-            sidechainFacade.getEthereumAddresses(accountNameOrId, callback)
+            sidechainFacade.getEthereumAddress(accountNameOrId, callback)
         })
 
     override fun getContracts(

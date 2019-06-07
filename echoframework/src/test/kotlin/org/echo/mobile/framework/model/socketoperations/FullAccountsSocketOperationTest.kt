@@ -91,7 +91,7 @@ class FullAccountsSocketOperationTest {
                                               ]
                                             ]
                                           },
-                                          "ed_key": "DETF4YvRrSmG4sCsyDtScBVKQ3b1iEdsfXhCabLL8ABJi8e",
+                                          "echorand_key": "DETF4YvRrSmG4sCsyDtScBVKQ3b1iEdsfXhCabLL8ABJi8e",
                                           "options": {
                                             "memo_key": "TEST7X8qQCdssWbVdbwQq6n94m6fP6B7oAWuqZyyNVLnuDQxoBTUfd",
                                             "voting_account": "1.2.5",

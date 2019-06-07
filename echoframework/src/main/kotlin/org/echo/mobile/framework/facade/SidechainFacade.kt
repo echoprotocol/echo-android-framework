@@ -74,9 +74,9 @@ interface SidechainFacade {
     /**
      * Retrieves [EthAddress] list for required account [accountNameOrId]
      */
-    fun getEthereumAddresses(
+    fun getEthereumAddress(
         accountNameOrId: String,
-        callback: Callback<List<EthAddress>>
+        callback: Callback<EthAddress>
     )
 
 }

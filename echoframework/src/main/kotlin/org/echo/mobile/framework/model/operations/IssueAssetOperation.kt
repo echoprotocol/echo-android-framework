@@ -14,7 +14,6 @@ import com.google.gson.JsonSerializer
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.BaseOperation
-import org.echo.mobile.framework.model.Memo
 import java.lang.reflect.Type
 
 /**
@@ -29,21 +28,17 @@ class IssueAssetOperation @JvmOverloads constructor(
     override var fee: AssetAmount = AssetAmount(UnsignedLong.ZERO)
 ) : BaseOperation(OperationType.ASSET_ISSUE_OPERATION) {
 
-    var memo = Memo()
-
     override fun toBytes(): ByteArray {
         val feeBytes = fee.toBytes()
         val issuerBytes = issuer.toBytes()
         val assetToIssueBytes = assetToIssue.toBytes()
         val issueToAccountBytes = issueToAccount.toBytes()
-        val memoBytes = memo.toBytes()
         val extensions = extensions.toBytes()
         return Bytes.concat(
             feeBytes,
             issuerBytes,
             assetToIssueBytes,
             issueToAccountBytes,
-            memoBytes,
             extensions
         )
     }
@@ -64,8 +59,6 @@ class IssueAssetOperation @JvmOverloads constructor(
             addProperty(ISSUER_KEY, issuer.getObjectId())
             add(ASSET_TO_ISSUE_KEY, assetToIssue.toJsonObject())
             addProperty(ISSUE_TO_ACCOUNT_KEY, issueToAccount.getObjectId())
-            if (memo.byteMessage != null)
-                add(KEY_MEMO, memo.toJsonObject())
             add(KEY_EXTENSIONS, extensions.toJsonObject())
         }
         add(jsonObject)
@@ -138,12 +131,7 @@ class IssueAssetOperation @JvmOverloads constructor(
                 amount,
                 issueTarget,
                 fee
-            ).apply {
-                if (jsonObject.has(KEY_MEMO)) {
-                    this.memo =
-                        context.deserialize<Memo>(jsonObject.get(KEY_MEMO), Memo::class.java)
-                }
-            }
+            )
         }
     }
 

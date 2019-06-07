@@ -11,6 +11,8 @@ import org.echo.mobile.framework.model.Asset
 import org.echo.mobile.framework.model.Balance
 import org.echo.mobile.framework.model.BaseOperation
 import org.echo.mobile.framework.model.Block
+import org.echo.mobile.framework.model.EthDepositMapper
+import org.echo.mobile.framework.model.EthWithdrawMapper
 import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.HistoricalTransfer
@@ -26,6 +28,8 @@ import org.echo.mobile.framework.model.operations.CreateAssetOperation
 import org.echo.mobile.framework.model.operations.GenerateEthereumAddressOperation
 import org.echo.mobile.framework.model.operations.IssueAssetOperation
 import org.echo.mobile.framework.model.operations.OperationType
+import org.echo.mobile.framework.model.operations.SidechainBurnSocketOperation
+import org.echo.mobile.framework.model.operations.SidechainIssueSocketOperation
 import org.echo.mobile.framework.model.operations.TransferOperation
 import org.echo.mobile.framework.model.operations.WithdrawEthereumOperation
 import org.echo.mobile.framework.processResult
@@ -258,6 +262,18 @@ class InformationFacadeImpl(
                         operation as WithdrawEthereumOperation,
                         accountsRegistry
                     )
+                OperationType.SIDECHAIN_ISSUE_OPERATION ->
+                    processSidechainIssueOperation(
+                        operation as SidechainIssueSocketOperation,
+                        accountsRegistry,
+                        assetsRegistry
+                    )
+                OperationType.SIDECHAIN_BURN_OPERATION ->
+                    processSidechainBurnOperation(
+                        operation as SidechainBurnSocketOperation,
+                        accountsRegistry,
+                        assetsRegistry
+                    )
 
                 else -> {
                 }
@@ -441,6 +457,62 @@ class InformationFacadeImpl(
         accountRegistry[account]?.let { notNullAccount ->
             operation.account = notNullAccount
         }
+    }
+
+    private fun processSidechainIssueOperation(
+        operation: SidechainIssueSocketOperation,
+        accountRegistry: MutableMap<String, Account>,
+        assetsRegistry: MutableList<Asset>
+    ) {
+        val account = operation.account.getObjectId()
+
+        fillAccounts(listOf(account), accountRegistry)
+
+        accountRegistry[account]?.let { notNullAccount ->
+            operation.account = notNullAccount
+        }
+
+        val assetId = operation.value.asset.getObjectId()
+
+        getAsset(assetId, assetsRegistry)?.let { notNullAsset ->
+            operation.value.asset = notNullAsset
+        }
+
+        val withdrawId = operation.deposit.getObjectId()
+        databaseApiService.getObjects(listOf(withdrawId), EthDepositMapper())
+            .value { deposits ->
+                deposits.find { it.getObjectId() == withdrawId }?.let {
+                    operation.deposit = it
+                }
+            }
+    }
+
+    private fun processSidechainBurnOperation(
+        operation: SidechainBurnSocketOperation,
+        accountRegistry: MutableMap<String, Account>,
+        assetsRegistry: MutableList<Asset>
+    ) {
+        val account = operation.account.getObjectId()
+
+        fillAccounts(listOf(account), accountRegistry)
+
+        accountRegistry[account]?.let { notNullAccount ->
+            operation.account = notNullAccount
+        }
+
+        val assetId = operation.value.asset.getObjectId()
+
+        getAsset(assetId, assetsRegistry)?.let { notNullAsset ->
+            operation.value.asset = notNullAsset
+        }
+
+        val withdrawId = operation.withdraw.getObjectId()
+        databaseApiService.getObjects(listOf(withdrawId), EthWithdrawMapper())
+            .value { withdraws ->
+                withdraws.find { it.getObjectId() == withdrawId }?.let {
+                    operation.withdraw = it
+                }
+            }
     }
 
     private fun fillFeeAssets(operation: BaseOperation, assetsRegistry: MutableList<Asset>) {

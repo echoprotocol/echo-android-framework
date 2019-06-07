@@ -16,7 +16,6 @@ class TransferOperationBuilder : Builder<TransferOperation> {
     private var to: Account? = null
     private var transferAmount: AssetAmount? = null
     private var fee: AssetAmount? = null
-    private var transferMemo: Memo? = null
 
     /**
      * Defines source account of transfer operation
@@ -50,14 +49,6 @@ class TransferOperationBuilder : Builder<TransferOperation> {
         return this
     }
 
-    /**
-     * Defines fee value of transfer operation
-     */
-    fun setMemo(memo: Memo): TransferOperationBuilder {
-        this.transferMemo = memo
-        return this
-    }
-
     override fun build(): TransferOperation {
         when {
             from == null -> throw MalformedOperationException("Missing source account information")
@@ -69,6 +60,6 @@ class TransferOperationBuilder : Builder<TransferOperation> {
             TransferOperation(from!!, to!!, transferAmount!!, fee!!)
         } else {
             TransferOperation(from!!, to!!, transferAmount!!)
-        }.apply { memo = transferMemo ?: Memo() }
+        }
     }
 }

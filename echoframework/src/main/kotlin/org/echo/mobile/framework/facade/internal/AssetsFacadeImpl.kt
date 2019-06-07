@@ -152,9 +152,6 @@ class AssetsFacadeImpl(
             AuthorityType.ACTIVE
         )
 
-        val memoPrivateKey = memoKey(issuerNameOrId, password)
-        operation.memo = generateMemo(memoPrivateKey, issuer, target, message)
-
         val transaction = configureTransaction(operation, privateKey, asset, ECHO_ASSET_ID)
 
         networkBroadcastApiService.broadcastTransaction(transaction).dematerialize()
@@ -180,7 +177,6 @@ class AssetsFacadeImpl(
             .build()
 
         val privateKey = cryptoCoreComponent.decodeFromWif(wif)
-        operation.memo = generateMemo(privateKey, issuer, target, message)
 
         val transaction = configureTransaction(operation, privateKey, asset, ECHO_ASSET_ID)
 

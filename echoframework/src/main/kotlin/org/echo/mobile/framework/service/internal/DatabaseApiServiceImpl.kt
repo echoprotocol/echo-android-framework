@@ -18,6 +18,7 @@ import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.GrapheneObject
 import org.echo.mobile.framework.model.Log
 import org.echo.mobile.framework.model.Transaction
+import org.echo.mobile.framework.model.contract.ContractFee
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
@@ -34,13 +35,14 @@ import org.echo.mobile.framework.model.socketoperations.GetContractLogsSocketOpe
 import org.echo.mobile.framework.model.socketoperations.GetContractResultSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetContractSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetContractsSocketOperation
-import org.echo.mobile.framework.model.socketoperations.GetEthereumAddressesSocketOperation
+import org.echo.mobile.framework.model.socketoperations.GetEthereumAddressSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetGlobalPropertiesSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetKeyReferencesSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetObjectsSocketOperation
 import org.echo.mobile.framework.model.socketoperations.ListAssetsSocketOperation
 import org.echo.mobile.framework.model.socketoperations.LookupAssetsSymbolsSocketOperation
 import org.echo.mobile.framework.model.socketoperations.QueryContractSocketOperation
+import org.echo.mobile.framework.model.socketoperations.RequiredContractFeesSocketOperation
 import org.echo.mobile.framework.model.socketoperations.RequiredFeesSocketOperation
 import org.echo.mobile.framework.model.socketoperations.SetSubscribeCallbackSocketOperation
 import org.echo.mobile.framework.model.socketoperations.SubscribeContractLogsSocketOperation
@@ -165,11 +167,11 @@ class DatabaseApiServiceImpl(
             })
     }
 
-    override fun getEthereumAddresses(
+    override fun getEthereumAddress(
         accountId: String,
-        callback: Callback<List<EthAddress>>
+        callback: Callback<EthAddress>
     ) {
-        val operation = GetEthereumAddressesSocketOperation(
+        val operation = GetEthereumAddressSocketOperation(
             id,
             accountId,
             socketCoreComponent.currentId,
@@ -354,6 +356,23 @@ class DatabaseApiServiceImpl(
     ): Result<Exception, List<AssetAmount>> {
         val future = FutureTask<List<AssetAmount>>()
         val requiredFeesOperation = RequiredFeesSocketOperation(
+            id,
+            operations,
+            asset,
+            callId = socketCoreComponent.currentId,
+            callback = future.completeCallback()
+        )
+        socketCoreComponent.emit(requiredFeesOperation)
+
+        return future.wrapResult()
+    }
+
+    override fun getRequiredContractFees(
+        operations: List<BaseOperation>,
+        asset: Asset
+    ): Result<Exception, List<ContractFee>> {
+        val future = FutureTask<List<ContractFee>>()
+        val requiredFeesOperation = RequiredContractFeesSocketOperation(
             id,
             operations,
             asset,

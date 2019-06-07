@@ -23,9 +23,7 @@ class RegistrationApiServiceImpl(private val socketCoreComponent: SocketCoreComp
 
     override fun register(
         accountName: String,
-        keyOwner: String,
         keyActive: String,
-        keyMemo: String,
         echorandKey: String
     ): Result<Exception, Int> {
         val future = FutureTask<Int>()
@@ -33,9 +31,7 @@ class RegistrationApiServiceImpl(private val socketCoreComponent: SocketCoreComp
         val fullAccountsOperation = RegisterSocketOperation(
             id,
             accountName,
-            keyOwner,
             keyActive,
-            keyMemo,
             echorandKey,
             callId = socketCoreComponent.currentId,
             callback = future.completeCallback())

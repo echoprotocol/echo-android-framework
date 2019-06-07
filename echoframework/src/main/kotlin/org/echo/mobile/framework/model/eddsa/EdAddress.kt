@@ -30,7 +30,7 @@ class EdAddress {
     override fun toString(): String = prefix + Base58.encode(pubKey.toBytes())
 
     companion object {
-        const val DET_PREFIX = "DET"
+        const val DET_PREFIX = "ECHO"
     }
 
 }

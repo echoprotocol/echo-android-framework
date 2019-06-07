@@ -211,12 +211,12 @@ class SidechainFacadeImpl(
         }
     }
 
-    override fun getEthereumAddresses(
+    override fun getEthereumAddress(
         accountNameOrId: String,
-        callback: Callback<List<EthAddress>>
+        callback: Callback<EthAddress>
     ) {
         val id = findAccount(accountNameOrId).getObjectId()
-        databaseApiService.getEthereumAddresses(id, callback)
+        databaseApiService.getEthereumAddress(id, callback)
     }
 
     private fun findAccount(nameOrId: String): Account {

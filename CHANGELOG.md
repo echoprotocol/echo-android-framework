@@ -1,4 +1,31 @@
-# CHANGELOG 3.1
+# CHANGELOG 3.1.0
+
+### Changes
+
+* Account - removed owner Authority
+* AccountOptions - removed memo
+* Public keys prefix - ECHO
+* Added new virtual operations to account history
+
+
+## Operations
+Fixed OperationType enum to actual
+### Added 
+* RequiredContractFeesSocketOperation
+* SidechainBurnSocketOperation (virtual)
+* SidechainIssueSocketOperation (virtual)
+
+
+## Objects
+Fixed GlobalProperties and EthAddress models
+### Added 
+* ContractFee
+
+## Tests
+Updated tests according to changed methods
+
+
+# CHANGELOG 3.0.9
 
 ## Authority
 Owner Authority was removed from the network. 

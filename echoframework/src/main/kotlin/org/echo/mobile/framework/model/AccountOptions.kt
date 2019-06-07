@@ -24,8 +24,6 @@ import java.lang.reflect.Type
  */
 class AccountOptions : GrapheneSerializable {
 
-    var memoKey: PublicKey? = null
-
     var votingAccount: Account = Account(Account.PROXY_TO_SELF)
 
     var delegatingAccount: Account = Account(Account.PROXY_TO_SELF)
@@ -36,16 +34,7 @@ class AccountOptions : GrapheneSerializable {
 
     private val extensions = Extensions()
 
-    constructor()
-
-    constructor(memoKey: PublicKey) {
-        this.memoKey = memoKey
-    }
-
-    override fun toBytes(): ByteArray =
-        memoKey?.let { memo ->
-            // Adding memo key
-            val memoBytes = memo.toBytes()
+    override fun toBytes(): ByteArray {
 
             // Adding voting account
             val votingAccountBytes = votingAccount.toBytes()
@@ -62,22 +51,19 @@ class AccountOptions : GrapheneSerializable {
             // Account options's extensions
             val extensionsBytes = extensions.toBytes()
 
-            Bytes.concat(
-                memoBytes,
+            return Bytes.concat(
                 votingAccountBytes,
                 delegatingAccountBytes,
                 committeeCountBytes,
                 votesBytes,
                 extensionsBytes
             )
-
-        } ?: byteArrayOf(0)
+        }
 
     override fun toJsonString(): String? = null
 
     override fun toJsonObject(): JsonElement? =
         JsonObject().apply {
-            addProperty(KEY_MEMO_KEY, Address(memoKey!!).toString())
             addProperty(KEY_NUM_COMMITTEE, committeeCount)
             addProperty(KEY_VOTING_ACCOUNT, votingAccount.getObjectId())
             addProperty(KEY_DELEGATING_ACCOUNT, delegatingAccount.getObjectId())
@@ -108,9 +94,7 @@ class AccountOptions : GrapheneSerializable {
             val jsonAccountOptions = json.asJsonObject
 
             return try {
-                val memoKeyString = jsonAccountOptions.get(KEY_MEMO_KEY).asString
-                val address = Address(memoKeyString, network)
-                AccountOptions(address.pubKey)
+                AccountOptions()
             } catch (e: MalformedAddressException) {
                 LOGGER.log("Invalid address deserialization", e)
                 AccountOptions()
@@ -125,7 +109,6 @@ class AccountOptions : GrapheneSerializable {
     companion object {
         private val LOGGER = LoggerCoreComponent.create(AccountOptions::class.java.name)
 
-        const val KEY_MEMO_KEY = "memo_key"
         const val KEY_NUM_COMMITTEE = "num_committee"
         const val KEY_VOTES = "votes"
         const val KEY_VOTING_ACCOUNT = "voting_account"

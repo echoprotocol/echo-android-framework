@@ -36,9 +36,7 @@ class AccountUpdateOperationBuilderTest {
         val fee = AssetAmount(UnsignedLong.ONE)
         val account = Account("1.2.23215")
         val active = EdAuthority(1)
-        val options = AccountOptions(
-            PublicKey(ECKey.fromPublicOnly(ECKey().pubKeyPoint).pubKey)
-        )
+        val options = AccountOptions()
 
         return AccountUpdateOperationBuilder()
             .setFee(fee)

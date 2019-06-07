@@ -52,13 +52,7 @@ class AccountCreateOperationTest {
     private fun buildOperation(): AccountCreateOperation {
         val fee = AssetAmount(UnsignedLong.ONE)
         val active = EdAuthority(2)
-        val options = AccountOptions(
-            PublicKey(
-                ECKey.fromPublicOnly(
-                    ECKey().pubKeyPoint
-                ).pubKey
-            )
-        )
+        val options = AccountOptions()
 
         return AccountCreateOperationBuilder()
             .setAccountName("testName")

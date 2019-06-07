@@ -153,7 +153,7 @@ class AccountUpdateOperation @JvmOverloads constructor(
     companion object {
         const val KEY_ACCOUNT = "account"
         const val KEY_ACTIVE = "active"
-        const val KEY_ED_KEY = "ed_key"
+        const val KEY_ED_KEY = "echorand_key"
         const val KEY_NEW_OPTIONS = "new_options"
         const val KEY_EXTENSIONS = "extensions"
     }
