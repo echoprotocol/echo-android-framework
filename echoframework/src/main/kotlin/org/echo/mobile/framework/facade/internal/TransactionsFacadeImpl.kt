@@ -33,7 +33,6 @@ class TransactionsFacadeImpl(
         amount: String,
         asset: String,
         feeAsset: String?,
-        message: String?,
         callback: Callback<Boolean>
     ) = callback.processResult {
         val (fromAccount, toAccount) = getParticipantsPair(nameOrId, toNameOrId)
@@ -64,7 +63,6 @@ class TransactionsFacadeImpl(
         amount: String,
         asset: String,
         feeAsset: String?,
-        message: String?,
         callback: Callback<Boolean>
     ) = callback.processResult {
         val (fromAccount, toAccount) = getParticipantsPair(nameOrId, toNameOrId)

@@ -10,6 +10,7 @@
 
 ## Operations
 Fixed OperationType enum to actual
+Removed message from transfer operation
 ### Added 
 * RequiredContractFeesSocketOperation
 * SidechainBurnSocketOperation (virtual)
