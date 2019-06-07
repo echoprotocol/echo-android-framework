@@ -53,7 +53,7 @@ class AccountUpdateOperationTest {
                                 "asset_id":"1.3.0"
                             },
                             "account":"1.2.23215",
-                            ed_key: "a08fd46ee534e62d08e577a84a28601903d424bdf288be45644ece293672943e",
+                            echorand_key: "a08fd46ee534e62d08e577a84a28601903d424bdf288be45644ece293672943e",
                             "active":{
                                     "weight_threshold":1,
                                     "account_auths":[
