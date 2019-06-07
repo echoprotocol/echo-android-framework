@@ -16,7 +16,6 @@ class IssueAssetOperationBuilder : Builder<IssueAssetOperation> {
     private var destination: Account? = null
     private var issueAmount: AssetAmount? = null
     private var fee: AssetAmount? = null
-    private var transferMemo: Memo? = null
 
     /**
      * Defines source account of issue operation
@@ -50,14 +49,6 @@ class IssueAssetOperationBuilder : Builder<IssueAssetOperation> {
         return this
     }
 
-    /**
-     * Defines fee value of issue operation
-     */
-    fun setMemo(memo: Memo): IssueAssetOperationBuilder {
-        this.transferMemo = memo
-        return this
-    }
-
     override fun build(): IssueAssetOperation {
         when {
             issuer == null -> throw MalformedOperationException("Missing source account information")
@@ -69,7 +60,7 @@ class IssueAssetOperationBuilder : Builder<IssueAssetOperation> {
             IssueAssetOperation(issuer!!, issueAmount!!, destination!!, fee!!)
         } else {
             IssueAssetOperation(issuer!!, issueAmount!!, destination!!)
-        }.apply { memo = transferMemo ?: Memo() }
+        }
     }
 
 }

@@ -33,7 +33,6 @@ class TransactionsFacadeImpl(
         amount: String,
         asset: String,
         feeAsset: String?,
-        message: String?,
         callback: Callback<Boolean>
     ) = callback.processResult {
         val (fromAccount, toAccount) = getParticipantsPair(nameOrId, toNameOrId)
@@ -46,14 +45,10 @@ class TransactionsFacadeImpl(
             AuthorityType.ACTIVE
         )
 
-        val memoPrivateKey = memoKey(fromAccount.name, password)
-        val memo = generateMemo(memoPrivateKey, fromAccount, toAccount, message)
-
         val transfer = TransferOperationBuilder()
             .setFrom(fromAccount)
             .setTo(toAccount)
             .setAmount(AssetAmount(UnsignedLong.valueOf(amount.toLong()), Asset(asset)))
-            .setMemo(memo)
             .build()
 
         val transaction = configureTransaction(transfer, privateKey, asset, feeAsset)
@@ -68,7 +63,6 @@ class TransactionsFacadeImpl(
         amount: String,
         asset: String,
         feeAsset: String?,
-        message: String?,
         callback: Callback<Boolean>
     ) = callback.processResult {
         val (fromAccount, toAccount) = getParticipantsPair(nameOrId, toNameOrId)
@@ -76,13 +70,11 @@ class TransactionsFacadeImpl(
         checkOwnerAccount(wif, fromAccount)
 
         val privateKey = cryptoCoreComponent.decodeFromWif(wif)
-        val memo = generateMemo(privateKey, fromAccount, toAccount, message)
 
         val transfer = TransferOperationBuilder()
             .setFrom(fromAccount)
             .setTo(toAccount)
             .setAmount(AssetAmount(UnsignedLong.valueOf(amount.toLong()), Asset(asset)))
-            .setMemo(memo)
             .build()
 
         val transaction = configureTransaction(transfer, privateKey, asset, feeAsset)

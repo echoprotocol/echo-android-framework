@@ -53,7 +53,7 @@ class AccountUpdateOperationTest {
                                 "asset_id":"1.3.0"
                             },
                             "account":"1.2.23215",
-                            ed_key: "a08fd46ee534e62d08e577a84a28601903d424bdf288be45644ece293672943e",
+                            echorand_key: "a08fd46ee534e62d08e577a84a28601903d424bdf288be45644ece293672943e",
                             "active":{
                                     "weight_threshold":1,
                                     "account_auths":[
@@ -110,9 +110,7 @@ class AccountUpdateOperationTest {
         val fee = AssetAmount(UnsignedLong.ONE)
         val account = Account("1.2.23215")
         val active = EdAuthority(1)
-        val options = AccountOptions(
-            PublicKey(ECKey.fromPublicOnly(ECKey().pubKeyPoint).pubKey)
-        )
+        val options = AccountOptions()
 
         return AccountUpdateOperationBuilder()
             .setFee(fee)

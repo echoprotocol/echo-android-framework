@@ -12,10 +12,5 @@ enum class AuthorityType {
     /**
      * Key that is able to perform normal operations
      */
-    ACTIVE,
-
-    /**
-     * Key that is able to encrypt\decrypt transaction memo
-     */
-    MEMO
+    ACTIVE
 }

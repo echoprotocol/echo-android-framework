@@ -171,7 +171,7 @@ class AccountCreateOperation
         const val KEY_REFERRER = "referrer"
         const val KEY_REFERRER_PERCENT = "referrer_percent"
         const val KEY_ACTIVE = "active"
-        const val KEY_ED_KEY = "ed_key"
+        const val KEY_ED_KEY = "echorand_key"
         const val KEY_OPTIONS = "options"
         const val KEY_EXTENSIONS = "extensions"
     }

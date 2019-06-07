@@ -9,7 +9,6 @@ import org.echo.mobile.framework.exception.NotFoundException
 import org.echo.mobile.framework.facade.AuthenticationFacade
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.AccountOptions
-import org.echo.mobile.framework.model.Address
 import org.echo.mobile.framework.model.AuthorityType
 import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.RegistrationResult
@@ -107,15 +106,12 @@ class AuthenticationFacadeImpl(
         try {
             val active =
                 cryptoCoreComponent.getEdDSAAddress(userName, password, AuthorityType.ACTIVE)
-            val memo = cryptoCoreComponent.getAddress(userName, password, AuthorityType.ACTIVE)
 
             val echorandKey = cryptoCoreComponent.getEchorandKey(userName, password)
 
             val callId = registrationApiService.register(
                 userName,
                 active,
-                active,
-                memo,
                 echorandKey
             ).dematerialize().toString()
 
@@ -167,7 +163,6 @@ class AuthenticationFacadeImpl(
         newPassword: String
     ): AccountUpdateOperation {
         val active = cryptoCoreComponent.getEdDSAAddress(name, newPassword, AuthorityType.ACTIVE)
-        val memoKey = cryptoCoreComponent.getAddress(name, newPassword, AuthorityType.ACTIVE)
 
         val echorandKey = cryptoCoreComponent.getEchorandKey(name, newPassword)
 
@@ -178,8 +173,7 @@ class AuthenticationFacadeImpl(
                 hashMapOf()
             )
 
-        val memoAddress = Address(memoKey, network)
-        val newOptions = AccountOptions(memoAddress.pubKey)
+        val newOptions = AccountOptions()
         val account = Account(id)
 
         return AccountUpdateOperationBuilder()

@@ -13,7 +13,6 @@ import com.google.gson.JsonSerializer
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.BaseOperation
-import org.echo.mobile.framework.model.Memo
 import java.lang.reflect.Type
 
 /**
@@ -30,16 +29,14 @@ class TransferOperation @JvmOverloads constructor(
 
     var from: Account? = from
     var to: Account? = to
-    var memo = Memo()
 
     override fun toBytes(): ByteArray {
         val feeBytes = fee.toBytes()
         val fromBytes = from!!.toBytes()
         val toBytes = to!!.toBytes()
         val amountBytes = transferAmount.toBytes()
-        val memoBytes = memo.toBytes()
         val extensions = extensions.toBytes()
-        return feeBytes + fromBytes + toBytes + amountBytes + memoBytes + extensions
+        return feeBytes + fromBytes + toBytes + amountBytes + extensions
     }
 
     override fun toJsonString(): String {
@@ -58,8 +55,6 @@ class TransferOperation @JvmOverloads constructor(
             addProperty(KEY_FROM, from!!.toJsonString())
             addProperty(KEY_TO, to!!.toJsonString())
             add(KEY_AMOUNT, transferAmount.toJsonObject())
-            if (memo.byteMessage != null)
-                add(KEY_MEMO, memo.toJsonObject())
             add(KEY_EXTENSIONS, extensions.toJsonObject())
         }
         add(jsonObject)
@@ -134,12 +129,7 @@ class TransferOperation @JvmOverloads constructor(
                 to,
                 amount,
                 fee
-            ).apply {
-                if (jsonObject.has(KEY_MEMO)) {
-                    this.memo =
-                        context.deserialize<Memo>(jsonObject.get(KEY_MEMO), Memo::class.java)
-                }
-            }
+            )
         }
     }
 
@@ -147,7 +137,6 @@ class TransferOperation @JvmOverloads constructor(
         const val KEY_AMOUNT = "amount"
         const val KEY_FROM = "from"
         const val KEY_TO = "to"
-        const val KEY_MEMO = "memo"
         const val KEY_EXTENSIONS = "extensions"
     }
 }

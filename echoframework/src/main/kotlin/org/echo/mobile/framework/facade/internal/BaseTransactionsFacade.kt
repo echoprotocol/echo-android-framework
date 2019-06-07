@@ -5,19 +5,17 @@ import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
 import org.echo.mobile.framework.exception.AccountNotFoundException
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.model.Account
-import org.echo.mobile.framework.model.Address
 import org.echo.mobile.framework.model.Asset
 import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.AuthorityType
 import org.echo.mobile.framework.model.BaseOperation
-import org.echo.mobile.framework.model.Memo
 import org.echo.mobile.framework.model.Transaction
+import org.echo.mobile.framework.model.contract.ContractFee
 import org.echo.mobile.framework.model.isEqualsByKey
 import org.echo.mobile.framework.service.DatabaseApiService
 import org.echo.mobile.framework.support.dematerialize
 import org.echo.mobile.framework.support.error
 import org.echo.mobile.framework.support.value
-import java.math.BigInteger
 
 /**
  * Includes base logic for transactions assembly
@@ -39,6 +37,12 @@ abstract class BaseTransactionsFacade(
     protected fun getFees(operations: List<BaseOperation>, assetId: String): List<AssetAmount> =
         databaseApiService.getRequiredFees(operations, Asset(assetId)).dematerialize()
 
+    protected fun getContractFees(
+        operations: List<BaseOperation>,
+        assetId: String
+    ): List<ContractFee> =
+        databaseApiService.getRequiredContractFees(operations, Asset(assetId)).dematerialize()
+
     protected fun checkOwnerAccount(name: String, password: String, account: Account) {
         val ownerAddress =
             cryptoCoreComponent.getEdDSAAddress(name, password, AuthorityType.ACTIVE)
@@ -58,34 +62,6 @@ abstract class BaseTransactionsFacade(
         if (!isKeySame) {
             throw LocalException("Owner account checking exception")
         }
-    }
-
-    protected fun memoKey(name: String, password: String) =
-        cryptoCoreComponent.getPrivateKey(name, password, AuthorityType.ACTIVE)
-
-    protected fun generateMemo(
-        privateKey: ByteArray,
-        fromAccount: Account,
-        toAccount: Account,
-        message: String?
-    ): Memo {
-        if (message != null) {
-            val encryptedMessage = cryptoCoreComponent.encryptMessage(
-                privateKey,
-                toAccount.options.memoKey!!.key,
-                BigInteger.ZERO,
-                message
-            )
-
-            return Memo(
-                Address(fromAccount.options.memoKey!!),
-                Address(toAccount.options.memoKey!!),
-                BigInteger.ZERO,
-                encryptedMessage ?: ByteArray(0)
-            )
-        }
-
-        return Memo()
     }
 
     protected fun getParticipantsPair(

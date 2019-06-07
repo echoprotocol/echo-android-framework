@@ -15,7 +15,7 @@ ext {
     gitUrl = 'https://github.com/echoprotocol/echo-android-framework'
     siteUrl = 'https://echo.org'
 
-    libraryVersion = '3.0.9'
+    libraryVersion = '3.1.0'
 
     firstDeveloperId = 'd.bushuev'
     firstDeveloperName = 'Dmitriy Bushuev'

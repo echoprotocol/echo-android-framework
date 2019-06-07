@@ -361,7 +361,10 @@ class ContractsFacadeImpl(
             .setContractCode(byteCode + constructorParams)
             .build()
 
-        val transaction = buildTransaction(privateKey, assetId, feeAsset, contractOperation)
+        val rawFees =
+            getFees(listOf(contractOperation), feeAsset ?: assetId)
+
+        val transaction = buildTransaction(privateKey, rawFees, contractOperation)
 
         return networkBroadcastApiService.broadcastTransactionWithCallback(transaction)
             .dematerialize().toString()
@@ -383,10 +386,12 @@ class ContractsFacadeImpl(
             .setValue(AssetAmount(UnsignedLong.valueOf(value), Asset(assetId)))
             .build()
 
+        val rawFees =
+            getContractFees(listOf(contractOperation), feeAsset ?: assetId).map { it.fee }
+
         val transaction = buildTransaction(
             privateKey,
-            assetId,
-            feeAsset,
+            rawFees,
             contractOperation,
             feeRatioProvider.provide()
         )
@@ -397,18 +402,16 @@ class ContractsFacadeImpl(
 
     private fun buildTransaction(
         privateKey: ByteArray,
-        assetId: String,
-        feeAsset: String?,
+        fees: List<AssetAmount>,
         operation: BaseOperation,
         feeRatio: Double? = null
     ): Transaction {
         val blockData = databaseApiService.getBlockData()
         val chainId = getChainId()
-        val rawFees = getFees(listOf(operation), feeAsset ?: assetId)
 
         val ratioFees = feeRatio?.let { ratio ->
-            multiplyFees(rawFees.toMutableList(), ratio)
-        } ?: rawFees
+            multiplyFees(fees.toMutableList(), ratio)
+        } ?: fees
 
         return Transaction(blockData, listOf(operation), chainId).apply {
             setFees(ratioFees)

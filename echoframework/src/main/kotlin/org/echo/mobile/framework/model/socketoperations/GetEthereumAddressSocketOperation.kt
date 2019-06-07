@@ -4,26 +4,25 @@ import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonParser
-import com.google.gson.reflect.TypeToken
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.model.EthAddress
 
 /**
- * Retrieves ethereum addresses list for required account
+ * Retrieves ethereum address for required account
  *
  * @param accountId Required account id
  *
  * @author Dmitriy Bushuev
  */
-class GetEthereumAddressesSocketOperation(
+class GetEthereumAddressSocketOperation(
     override val apiId: Int,
     val accountId: String,
     callId: Int,
-    callback: Callback<List<EthAddress>>
-) : SocketOperation<List<EthAddress>>(
+    callback: Callback<EthAddress>
+) : SocketOperation<EthAddress>(
     SocketMethodType.CALL,
     callId,
-    listOf<EthAddress>().javaClass,
+    EthAddress::class.java,
     callback
 ) {
 
@@ -36,20 +35,17 @@ class GetEthereumAddressesSocketOperation(
             })
         }
 
-    override fun fromJson(json: String): List<EthAddress> {
+    override fun fromJson(json: String): EthAddress? {
         val parser = JsonParser()
         val jsonTree = parser.parse(json)
 
-        val addresses = mutableListOf<EthAddress>()
-
-        if (!jsonTree.isJsonObject || jsonTree.asJsonObject.get(RESULT_KEY) == null) {
-            return addresses
+        if (!jsonTree.isJsonObject || jsonTree.asJsonObject.get(RESULT_KEY).isJsonNull) {
+            return null
         }
 
-        val responseType = object : TypeToken<List<EthAddress>>() {}.type
-        val result = jsonTree.asJsonObject.get(RESULT_KEY)?.asJsonArray
+        val result = jsonTree.asJsonObject.get(RESULT_KEY)
 
-        return Gson().fromJson(result, responseType)
+        return Gson().fromJson(result, EthAddress::class.java)
     }
 
 }

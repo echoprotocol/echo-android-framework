@@ -222,6 +222,8 @@ class SidechainConfig {
     var echoGenAddressMethod: Method? = null
     @SerializedName("eth_withdraw_method")
     var ethWithdrawMethod: Method? = null
+    @SerializedName("eth_update_addr_method")
+    var ethUpdateAddressMethod: Method? = null
     @SerializedName("ETH_asset_id")
     var ethAssetId: String? = null
     @SerializedName("eth_deposit_topic")
@@ -255,6 +257,9 @@ class EchorandConfig {
     var creatorCount: String? = null
 }
 
+/**
+ * Describes sidechain method informationstructure
+ */
 class Method {
     var method: String? = null
     var gas: Long? = null
