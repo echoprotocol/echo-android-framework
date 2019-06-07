@@ -35,7 +35,7 @@ import org.echo.mobile.framework.model.socketoperations.GetContractLogsSocketOpe
 import org.echo.mobile.framework.model.socketoperations.GetContractResultSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetContractSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetContractsSocketOperation
-import org.echo.mobile.framework.model.socketoperations.GetEthereumAddressesSocketOperation
+import org.echo.mobile.framework.model.socketoperations.GetEthereumAddressSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetGlobalPropertiesSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetKeyReferencesSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetObjectsSocketOperation
@@ -167,11 +167,11 @@ class DatabaseApiServiceImpl(
             })
     }
 
-    override fun getEthereumAddresses(
+    override fun getEthereumAddress(
         accountId: String,
-        callback: Callback<List<EthAddress>>
+        callback: Callback<EthAddress>
     ) {
-        val operation = GetEthereumAddressesSocketOperation(
+        val operation = GetEthereumAddressSocketOperation(
             id,
             accountId,
             socketCoreComponent.currentId,
@@ -381,7 +381,8 @@ class DatabaseApiServiceImpl(
         )
         socketCoreComponent.emit(requiredFeesOperation)
 
-        return future.wrapResult()    }
+        return future.wrapResult()
+    }
 
     override fun listAssets(lowerBound: String, limit: Int, callback: Callback<List<Asset>>) {
         val operation = ListAssetsSocketOperation(id, lowerBound, limit, callback = callback)

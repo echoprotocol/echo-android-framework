@@ -8,6 +8,7 @@ import com.google.gson.annotations.SerializedName
  * @author Dmitriy Bushuev
  */
 data class EthAddress(
+    val id: String,
     @SerializedName("account") val accountId: String,
     @SerializedName("eth_addr") val address: String,
     @SerializedName("is_approved") val isApproved: Boolean,

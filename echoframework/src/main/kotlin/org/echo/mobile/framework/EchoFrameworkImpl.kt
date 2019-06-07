@@ -866,12 +866,12 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             )
         })
 
-    override fun getEthereumAddresses(
+    override fun getEthereumAddress(
         accountNameOrId: String,
-        callback: Callback<List<EthAddress>>
+        callback: Callback<EthAddress>
     ) =
         dispatch(Runnable {
-            sidechainFacade.getEthereumAddresses(accountNameOrId, callback)
+            sidechainFacade.getEthereumAddress(accountNameOrId, callback)
         })
 
     override fun getContracts(

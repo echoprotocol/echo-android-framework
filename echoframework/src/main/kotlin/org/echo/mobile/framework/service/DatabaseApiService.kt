@@ -80,7 +80,7 @@ interface AccountsService {
     /**
      * Fetches addresses list [EthAddress] for required account [accountId]
      */
-    fun getEthereumAddresses(accountId: String, callback: Callback<List<EthAddress>>)
+    fun getEthereumAddress(accountId: String, callback: Callback<EthAddress>)
 }
 
 /**
