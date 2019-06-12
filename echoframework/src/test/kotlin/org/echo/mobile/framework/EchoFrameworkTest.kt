@@ -571,7 +571,7 @@ class EchoFrameworkTest {
         if (connect(framework) == false) Assert.fail("Connection error")
 
         framework.ethWithdraw(
-            "daria","daria","0x46Ba2677a1c982B329A81f60Cf90fBA2E8CA9fA8","1", "1.3.0",
+            "daria", "daria", "0x46Ba2677a1c982B329A81f60Cf90fBA2E8CA9fA8", "1", "1.3.0",
             object : Callback<Boolean> {
                 override fun onSuccess(result: Boolean) {
                     futureChangePassword.setComplete(result)
@@ -582,7 +582,8 @@ class EchoFrameworkTest {
                     futureChangePassword.setComplete(error)
                 }
 
-            }, futureResult.completeCallback())
+            }, futureResult.completeCallback()
+        )
 
         val result = futureResult.get()
         assertNotNull(result ?: false)
@@ -724,7 +725,6 @@ class EchoFrameworkTest {
             amount = "1",
             asset = "1.3.0",
             feeAsset = "1.3.0",
-            message = null,
             callback = callback
         )
     }
@@ -959,7 +959,6 @@ class EchoFrameworkTest {
             amount = "1",
             asset = "1.3.0",
             feeAsset = "1.3.0",
-            message = "Memasik",
             callback = futureTransfer.completeCallback()
         )
 
@@ -981,7 +980,6 @@ class EchoFrameworkTest {
             amount = "1",
             asset = "1.3.0",
             feeAsset = "1.3.0",
-            message = "Memasik",
             callback = futureTransfer.completeCallback()
         )
 

@@ -546,7 +546,6 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         amount: String,
         asset: String,
         feeAsset: String?,
-        message: String?,
         callback: Callback<Boolean>
     ) = dispatch(Runnable {
         transactionsFacade.sendTransferOperation(
@@ -556,7 +555,6 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             amount,
             asset,
             feeAsset,
-            message,
             callback.wrapOriginal()
         )
     })
@@ -568,7 +566,6 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         amount: String,
         asset: String,
         feeAsset: String?,
-        message: String?,
         callback: Callback<Boolean>
     ) {
         transactionsFacade.sendTransferOperationWithWif(
@@ -578,7 +575,6 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             amount,
             asset,
             feeAsset,
-            message,
             callback.wrapOriginal()
         )
     }

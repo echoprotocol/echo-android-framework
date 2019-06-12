@@ -203,7 +203,7 @@ class CryptoCoreComponentTest {
 
         val encodedWif = cryptoCoreComponent.encodeToWif(privKey)
 
-        assertEquals("5J9YnfSUx6GnweorDEswRNAFcBzsZrQoJLkfqKLzXwBdRvjmoz1", encodedWif)
+        assertEquals("5J3UbadSyzzcQQ7HEfTr2brhJJpHhx3NsMzrvgzfysBesutNRCm", encodedWif)
     }
 
     @Test
