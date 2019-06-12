@@ -2,6 +2,8 @@ package org.echo.mobile.framework.facade
 
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.model.EthAddress
+import org.echo.mobile.framework.model.EthDeposit
+import org.echo.mobile.framework.model.EthWithdraw
 import org.echo.mobile.framework.model.TransactionResult
 
 /**
@@ -78,5 +80,15 @@ interface SidechainFacade {
         accountNameOrId: String,
         callback: Callback<EthAddress>
     )
+
+    /**
+     * Retrieves list of account's [accountNameOrId] deposits [EthDeposit]
+     */
+    fun getAccountDeposits(accountNameOrId: String, callback: Callback<List<EthDeposit>>)
+
+    /**
+     * Retrieves list of account's [accountNameOrId] withdrawals [EthWithdraw]
+     */
+    fun getAccountWithdrawals(accountNameOrId: String, callback: Callback<List<EthWithdraw>>)
 
 }

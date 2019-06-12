@@ -56,8 +56,8 @@ enum class SocketOperationKeys(val key: String) {
     GENERATE_ETHEREUM_ADDRESS("generate_eth_address"),
     GET_GLOBAL_PROPERTIES("get_global_properties"),
     GET_ACCOUNT_ADDRESSES("get_eth_address"),
-    GET_ETH_DEPOSIT("get_deposit_eth"),
-    GET_ETH_WITHDRAW("get_withdraw_eth");
+    GET_ACCOUNT_DEPOSITS("get_account_deposits"),
+    GET_ACCOUNT_WITHDRAWALS("get_account_withdrawals");
 
     override fun toString(): String = this.key
 }

@@ -13,6 +13,8 @@ import org.echo.mobile.framework.model.Block
 import org.echo.mobile.framework.model.BlockData
 import org.echo.mobile.framework.model.DynamicGlobalProperties
 import org.echo.mobile.framework.model.EthAddress
+import org.echo.mobile.framework.model.EthDeposit
+import org.echo.mobile.framework.model.EthWithdraw
 import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.GrapheneObject
@@ -28,6 +30,8 @@ import org.echo.mobile.framework.model.socketoperations.CancelAllSubscriptionsSo
 import org.echo.mobile.framework.model.socketoperations.CustomOperation
 import org.echo.mobile.framework.model.socketoperations.CustomSocketOperation
 import org.echo.mobile.framework.model.socketoperations.FullAccountsSocketOperation
+import org.echo.mobile.framework.model.socketoperations.GetAccountDepositsSocketOperation
+import org.echo.mobile.framework.model.socketoperations.GetAccountWithdrawalsSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetAssetsSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetBlockSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetChainIdSocketOperation
@@ -67,7 +71,6 @@ class DatabaseApiServiceImpl(
     private val cryptoCoreComponent: CryptoCoreComponent,
     private val network: Network
 ) : DatabaseApiService {
-
 
     override var id: Int = ILLEGAL_ID
 
@@ -538,6 +541,28 @@ class DatabaseApiServiceImpl(
 
     override fun subscribe(clearFilter: Boolean, callback: Callback<Boolean>) {
         socketCoreComponent.emit(createSubscriptionOperation(clearFilter, callback))
+    }
+
+    override fun getAccountDeposits(accountId: String, callback: Callback<List<EthDeposit>>) {
+        val operation = GetAccountDepositsSocketOperation(
+            id,
+            accountId,
+            socketCoreComponent.currentId,
+            callback
+        )
+
+        socketCoreComponent.emit(operation)
+    }
+
+    override fun getAccountWithdrawals(accountId: String, callback: Callback<List<EthWithdraw>>) {
+        val operation = GetAccountWithdrawalsSocketOperation(
+            id,
+            accountId,
+            socketCoreComponent.currentId,
+            callback
+        )
+
+        socketCoreComponent.emit(operation)
     }
 
     private fun createSubscriptionOperation(clearFilter: Boolean, callback: Callback<Boolean>) =
