@@ -1,3 +1,11 @@
+# CHANGELOG 3.1.1
+
+## Operations
+### Added 
+* GetAccountWithdrawalsSocketOperation
+* GetAccountDepositsSocketOperation
+
+
 # CHANGELOG 3.1.0
 
 ### Changes
