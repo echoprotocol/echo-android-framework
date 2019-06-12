@@ -10,6 +10,8 @@ import org.echo.mobile.framework.facade.SidechainFacade
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.AuthorityType
 import org.echo.mobile.framework.model.EthAddress
+import org.echo.mobile.framework.model.EthDeposit
+import org.echo.mobile.framework.model.EthWithdraw
 import org.echo.mobile.framework.model.Transaction
 import org.echo.mobile.framework.model.TransactionResult
 import org.echo.mobile.framework.model.operations.GenerateEthereumAddressOperation
@@ -217,6 +219,18 @@ class SidechainFacadeImpl(
     ) {
         val id = findAccount(accountNameOrId).getObjectId()
         databaseApiService.getEthereumAddress(id, callback)
+    }
+
+    override fun getAccountDeposits(accountNameOrId: String, callback: Callback<List<EthDeposit>>) {
+        val account = findAccount(accountNameOrId)
+
+        databaseApiService.getAccountDeposits(account.getObjectId(), callback)
+    }
+
+    override fun getAccountWithdrawals(accountNameOrId: String, callback: Callback<List<EthWithdraw>>) {
+        val account = findAccount(accountNameOrId)
+
+        databaseApiService.getAccountWithdrawals(account.getObjectId(), callback)
     }
 
     private fun findAccount(nameOrId: String): Account {

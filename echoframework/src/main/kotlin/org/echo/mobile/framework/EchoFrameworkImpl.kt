@@ -28,6 +28,8 @@ import org.echo.mobile.framework.model.Balance
 import org.echo.mobile.framework.model.Block
 import org.echo.mobile.framework.model.DynamicGlobalProperties
 import org.echo.mobile.framework.model.EthAddress
+import org.echo.mobile.framework.model.EthDeposit
+import org.echo.mobile.framework.model.EthWithdraw
 import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.HistoryResponse
@@ -868,6 +870,16 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
     ) =
         dispatch(Runnable {
             sidechainFacade.getEthereumAddress(accountNameOrId, callback)
+        })
+
+    override fun getAccountDeposits(accountId: String, callback: Callback<List<EthDeposit>>) =
+        dispatch(Runnable {
+            sidechainFacade.getAccountDeposits(accountId, callback)
+        })
+
+    override fun getAccountWithdrawals(accountId: String, callback: Callback<List<EthWithdraw>>) =
+        dispatch(Runnable {
+            sidechainFacade.getAccountWithdrawals(accountId, callback)
         })
 
     override fun getContracts(
