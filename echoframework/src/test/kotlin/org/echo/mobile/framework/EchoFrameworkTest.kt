@@ -11,6 +11,8 @@ import org.echo.mobile.framework.model.Block
 import org.echo.mobile.framework.model.BlockData
 import org.echo.mobile.framework.model.DynamicGlobalProperties
 import org.echo.mobile.framework.model.EthAddress
+import org.echo.mobile.framework.model.EthDeposit
+import org.echo.mobile.framework.model.EthWithdraw
 import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.HistoryResponse
@@ -1888,6 +1890,34 @@ class EchoFrameworkTest {
 
         val properties = future.get()
         assertNotNull(properties)
+    }
+
+    @Test
+    fun getAccountDepositsTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<List<EthDeposit>>()
+
+        framework.getAccountDeposits(secondLogin, future.completeCallback())
+
+        val deposits = future.get()
+        assertNotNull(deposits)
+    }
+
+    @Test
+    fun getAccountWithdrawalsTest() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<List<EthWithdraw>>()
+
+        framework.getAccountWithdrawals(secondLogin, future.completeCallback())
+
+        val deposits = future.get()
+        assertNotNull(deposits)
     }
 
     //change in newer versions

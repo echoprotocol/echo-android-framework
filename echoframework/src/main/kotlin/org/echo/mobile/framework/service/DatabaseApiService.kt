@@ -10,6 +10,8 @@ import org.echo.mobile.framework.model.Block
 import org.echo.mobile.framework.model.BlockData
 import org.echo.mobile.framework.model.DynamicGlobalProperties
 import org.echo.mobile.framework.model.EthAddress
+import org.echo.mobile.framework.model.EthDeposit
+import org.echo.mobile.framework.model.EthWithdraw
 import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.GrapheneObject
@@ -81,6 +83,16 @@ interface AccountsService {
      * Fetches addresses list [EthAddress] for required account [accountId]
      */
     fun getEthereumAddress(accountId: String, callback: Callback<EthAddress>)
+
+    /**
+     * Retrieves list of account's [accountId] deposits [EthDeposit]
+     */
+    fun getAccountDeposits(accountId: String, callback: Callback<List<EthDeposit>>)
+
+    /**
+     * Retrieves list of account's [accountId] withdrawals [EthWithdraw]
+     */
+    fun getAccountWithdrawals(accountId: String, callback: Callback<List<EthWithdraw>>)
 }
 
 /**
