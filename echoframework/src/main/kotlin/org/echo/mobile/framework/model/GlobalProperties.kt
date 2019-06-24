@@ -34,7 +34,6 @@ class GlobalProperties {
  * Blockchain global properties parameters list
  */
 class Parameters {
-
     @SerializedName("maximum_asset_feed_publishers")
     val maximumAssetFeedPublishers: String? = null
     @SerializedName("maximum_witness_count")
@@ -47,8 +46,6 @@ class Parameters {
     val witnessPayPerBlock: String? = null
     @SerializedName("block_interval")
     val blockInterval: String? = null
-    @SerializedName("maintenance_skip_slots")
-    val maintenanceSkipSlots: String? = null
     @SerializedName("maximum_time_until_expiration")
     val maximumTimeUntilExpiration: String? = null
     @SerializedName("max_predicate_opcode")

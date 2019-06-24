@@ -75,11 +75,11 @@ class EchoFrameworkTest {
 
     private val legalContractId = "1.14.0"
     private val legalTokenId = "1.14.1"
-    private val accountId = "1.2.16"
+    private val accountId = "1.2.13"
     private val login = "dima"
     private val password = "dima"
     private val wif = "5J3UbadSyzzcQQ7HEfTr2brhJJpHhx3NsMzrvgzfysBesutNRCm"
-    private val secondAccountId = "1.2.19"
+    private val secondAccountId = "1.2.14"
     private val secondLogin = "daria"
     private val secondPassword = "daria"
     private val legalAssetId = "1.3.0"
@@ -329,7 +329,7 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
-        framework.getAccount("daria", futureAccount.completeCallback())
+        framework.getAccount("vsharaev", futureAccount.completeCallback())
 
         val account = futureAccount.get()
         assertTrue(account != null)
@@ -588,34 +588,40 @@ class EchoFrameworkTest {
         val result = futureResult.get()
         assertNotNull(result ?: false)
     }
-//
-//    @Test
-//    fun withdrawEthereumWithWifTest() {
-//        val framework = initFramework()
-//
-//        val futureChangePassword = FutureTask<Boolean>()
-//        val futureResult = FutureTask<TransactionResult>()
-//
-//        if (connect(framework) == false) Assert.fail("Connection error")
-//
-//        framework.ethWithdrawWithWif(
-//            "vsharaev","5KjC8BiryoxUNz3dEY2ZWQK5ssmD84JgRGemVWwxfNgiPoxcaVa","d28224c2cfa050bff674160274e0d41742c7ec43","1", "1.3.0",
-//            object : Callback<Boolean> {
-//                override fun onSuccess(result: Boolean) {
-//                    futureChangePassword.setComplete(result)
-//                }
-//
-//                override fun onError(error: LocalException) {
-//                    error.printStackTrace()
-//                    futureChangePassword.setComplete(error)
-//                }
-//
-//            }, futureResult.completeCallback())
-//
-//        val result = futureResult.get()
-//        assertNotNull(result ?: false)
-//    }
-//
+
+    @Test
+    fun withdrawEthereumWithWifTest() {
+        val framework = initFramework()
+
+        val futureChangePassword = FutureTask<Boolean>()
+        val futureResult = FutureTask<TransactionResult>()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        framework.ethWithdrawWithWif(
+            "vsharaev",
+            "5KjC8BiryoxUNz3dEY2ZWQK5ssmD84JgRGemVWwxfNgiPoxcaVa",
+            "0x46Ba2677a1c982B329A81f60Cf90fBA2E8CA9fA8",
+            "1",
+            "1.3.0",
+            object : Callback<Boolean> {
+                override fun onSuccess(result: Boolean) {
+                    futureChangePassword.setComplete(result)
+                }
+
+                override fun onError(error: LocalException) {
+                    error.printStackTrace()
+                    futureChangePassword.setComplete(error)
+                }
+
+            },
+            futureResult.completeCallback()
+        )
+
+        val result = futureResult.get()
+        assertNotNull(result ?: false)
+    }
+
 //    @Test
 //    fun registrationTest() {
 //        val framework = initFramework()
@@ -1229,7 +1235,7 @@ class EchoFrameworkTest {
         framework.issueAsset(
             "daria",
             "daria",
-            asset = "1.3.2",
+            asset = "1.3.3",
             amount = "1",
             destinationIdOrName = "daria",
             message = "Do it",
@@ -1250,7 +1256,7 @@ class EchoFrameworkTest {
         framework.issueAssetWithWif(
             "daria",
             "5J9YnfSUx6GnweorDEswRNAFcBzsZrQoJLkfqKLzXwBdRvjmoz1",
-            asset = "1.3.2",
+            asset = "1.3.3",
             amount = "1",
             destinationIdOrName = "daria",
             message = "Do it",
@@ -1274,7 +1280,7 @@ class EchoFrameworkTest {
             password,
             assetId = "1.3.0",
             feeAsset = "1.3.0",
-            byteCode = legalContractParamsBytecode,
+            byteCode = legalTokenBytecode,
             broadcastCallback = broadcastFuture.completeCallback(),
             resultCallback = future.completeCallback()
         )
@@ -1981,7 +1987,7 @@ class EchoFrameworkTest {
 
     private fun configureAsset(): Asset {
         val asset = Asset("").apply {
-            symbol = "TIASSET"
+            symbol = "TESTASSET"
             precision = 4
             issuer = Account(secondAccountId)
 //            setBtsOptions(

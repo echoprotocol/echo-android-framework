@@ -1,4 +1,4 @@
-[ ![Download](https://api.bintray.com/packages/echo/mobile/android-framework-stable/images/download.svg?version=3.1.1) ](https://bintray.com/echo/mobile/android-framework-stable/3.1.1/link)
+[ ![Download](https://api.bintray.com/packages/echo/mobile/android-framework-stable/images/download.svg?version=3.1.2) ](https://bintray.com/echo/mobile/android-framework-stable/3.1.2/link)
 
 # echo-android-framework (echo-android-framework)
 
@@ -9,7 +9,7 @@ Pure Kotlin Echo framework for Android mobile development. Can be used to work w
 This framework can be obtained through gradle dependency:
 
 ```
-implementation 'org.echo.mobile:echoframework:3.1.1'
+implementation 'org.echo.mobile:echoframework:3.1.2'
 ```
 
 Or maven dependency:
@@ -18,7 +18,7 @@ Or maven dependency:
 <dependency>
   <groupId>org.echo.mobile</groupId>
   <artifactId>echoframework</artifactId>
-  <version>3.1.1</version>
+  <version>3.1.2</version>
   <type>pom</type>
 </dependency>
 ```
@@ -111,7 +111,7 @@ fun getHistory() {
 #### Subscribe to account
 
 ```kotlin
-fun subscribeToAccount() {
+fun subscribeOnAccount() {
     echo.subscribeOnAccount("account name or id",
                 object : AccountListener {
                     override fun onChange(updatedAccount: FullAccount) {}
@@ -152,7 +152,7 @@ fun feeForTransfer() {
                amount = "10000",
                asset = "1.3.0",
                feeAsset = "1.3.0", //optional
-               "message",          //optional
+               message = "message",          //optional
                object : Callback<String> {
                    override fun onSuccess(result: String) {}
                
@@ -226,10 +226,15 @@ fun createAsset() {
      echo.createAsset(
                 "issuer name or id", "password",
                 asset,
-                object : Callback<Boolean> {
+                broadcastCallback = object : Callback<Boolean> {
                     override fun onSuccess(result: Boolean) {}
-                
+    
                     override fun onError(error: LocalException) {}
+                },
+                resultCallback = object : Callback<String> {
+                     override fun onSuccess(result: String) {}
+                    
+                     override fun onError(error: LocalException) {}
                 }
              )        
 }
@@ -270,10 +275,15 @@ fun createContract() {
         feeAsset = "1.3.0",     // optional
         byteCode,
         params = listOf(),      // optional
-        object : Callback<Boolean> {
+        broadcastCallback = object : Callback<Boolean> {
             override fun onSuccess(result: Boolean) {}
     
             override fun onError(error: LocalException) {}
+        },
+        resultCallback = object : Callback<String> {
+             override fun onSuccess(result: String) {}
+            
+             override fun onError(error: LocalException) {}
         }
     )
 }
@@ -292,9 +302,14 @@ fun callContract() {
                 methodName = "incrementCounter",
                 methodParams = listOf(),
                 value = "1",            //optional
-                object : Callback<Boolean> {
+                broadcastCallback = object : Callback<Boolean> {
                     override fun onSuccess(result: Boolean) {}
-            
+                    
+                    override fun onError(error: LocalException) {}
+                        },
+                resultCallback = object : Callback<String> {
+                    override fun onSuccess(result: String) {}
+                            
                     override fun onError(error: LocalException) {}
                 }
             )

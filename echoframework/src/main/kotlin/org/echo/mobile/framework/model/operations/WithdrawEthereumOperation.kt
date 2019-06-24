@@ -12,7 +12,7 @@ import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.BaseOperation
 import org.echo.mobile.framework.support.Int64
-import org.echo.mobile.framework.support.serialize
+import org.spongycastle.util.encoders.Hex
 import java.lang.reflect.Type
 
 /**
@@ -34,7 +34,10 @@ class WithdrawEthereumOperation constructor(
     override fun toBytes(): ByteArray {
         val feeBytes = fee.toBytes()
         val accountIdBytes = account.toBytes()
-        val addressBytes = ethAddress.serialize()
+
+        val addressHex = Hex.decode(ethAddress)
+        val addressBytes = byteArrayOf(addressHex.count().toByte()) + addressHex
+
         val valueBytes = Int64.serialize(value)
         val extensionBytes = extensions.toBytes()
 
