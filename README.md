@@ -111,7 +111,7 @@ fun getHistory() {
 #### Subscribe to account
 
 ```kotlin
-fun subscribeToAccount() {
+fun subscribeOnAccount() {
     echo.subscribeOnAccount("account name or id",
                 object : AccountListener {
                     override fun onChange(updatedAccount: FullAccount) {}
@@ -152,7 +152,7 @@ fun feeForTransfer() {
                amount = "10000",
                asset = "1.3.0",
                feeAsset = "1.3.0", //optional
-               "message",          //optional
+               message = "message",          //optional
                object : Callback<String> {
                    override fun onSuccess(result: String) {}
                
@@ -226,10 +226,15 @@ fun createAsset() {
      echo.createAsset(
                 "issuer name or id", "password",
                 asset,
-                object : Callback<Boolean> {
+                broadcastCallback = object : Callback<Boolean> {
                     override fun onSuccess(result: Boolean) {}
-                
+    
                     override fun onError(error: LocalException) {}
+                },
+                resultCallback = object : Callback<String> {
+                     override fun onSuccess(result: String) {}
+                    
+                     override fun onError(error: LocalException) {}
                 }
              )        
 }
@@ -270,10 +275,15 @@ fun createContract() {
         feeAsset = "1.3.0",     // optional
         byteCode,
         params = listOf(),      // optional
-        object : Callback<Boolean> {
+        broadcastCallback = object : Callback<Boolean> {
             override fun onSuccess(result: Boolean) {}
     
             override fun onError(error: LocalException) {}
+        },
+        resultCallback = object : Callback<String> {
+             override fun onSuccess(result: String) {}
+            
+             override fun onError(error: LocalException) {}
         }
     )
 }
@@ -292,9 +302,14 @@ fun callContract() {
                 methodName = "incrementCounter",
                 methodParams = listOf(),
                 value = "1",            //optional
-                object : Callback<Boolean> {
+                broadcastCallback = object : Callback<Boolean> {
                     override fun onSuccess(result: Boolean) {}
-            
+                    
+                    override fun onError(error: LocalException) {}
+                        },
+                resultCallback = object : Callback<String> {
+                    override fun onSuccess(result: String) {}
+                            
                     override fun onError(error: LocalException) {}
                 }
             )

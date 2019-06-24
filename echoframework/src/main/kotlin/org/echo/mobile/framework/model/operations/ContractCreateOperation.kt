@@ -12,6 +12,7 @@ import com.google.gson.JsonSerializer
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.Asset
 import org.echo.mobile.framework.model.AssetAmount
+import org.echo.mobile.framework.model.Transaction
 import org.echo.mobile.framework.support.Uint8
 import org.echo.mobile.framework.support.serialize
 import java.lang.reflect.Type
@@ -46,6 +47,7 @@ class ContractCreateOperation @JvmOverloads constructor(
         val supportedAssetBytes = supportedAsset?.let {
             byteArrayOf(1) + supportedAsset!!.toBytes()
         } ?: byteArrayOf(0)
+        val extensionBytes = extensions.toBytes()
 
         return Bytes.concat(
             feeBytes,
@@ -53,7 +55,8 @@ class ContractCreateOperation @JvmOverloads constructor(
             valueBytes,
             codeBytes,
             echAccuracyBytes,
-            supportedAssetBytes
+            supportedAssetBytes,
+            extensionBytes
         )
     }
 
@@ -72,6 +75,7 @@ class ContractCreateOperation @JvmOverloads constructor(
                         supportedAsset!!.getObjectId()
                     )
                 }
+                add(Transaction.KEY_EXTENSIONS, extensions.toJsonObject())
             })
         }
     }
