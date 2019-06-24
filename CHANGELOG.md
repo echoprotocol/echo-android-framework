@@ -1,3 +1,12 @@
+# CHANGELOG 3.1.2
+
+### Changes
+
+* Added Extensions to ContractCallOperation, ContractCreateOperation
+
+### Tests
+Updated tests according to changed methods
+
 # CHANGELOG 3.1.1
 
 ## Operations
