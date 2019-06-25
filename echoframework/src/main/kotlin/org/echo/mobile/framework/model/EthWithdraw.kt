@@ -12,7 +12,7 @@ import org.echo.mobile.framework.core.mapper.ObjectMapper
 class EthWithdraw(
     id: String,
     val account: String = "",
-    val address: String = "",
+    @SerializedName("eth_addr") val address: String = "",
     val value: String = "",
     @SerializedName("is_approved") val isApproved: Boolean = false,
     val approves: List<String> = listOf()

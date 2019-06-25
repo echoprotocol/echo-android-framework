@@ -1,3 +1,8 @@
+# CHANGELOG 3.2.1
+
+### Fixed
+Sidechain history operations parsing
+
 # CHANGELOG 3.1.2
 
 ### Changes
