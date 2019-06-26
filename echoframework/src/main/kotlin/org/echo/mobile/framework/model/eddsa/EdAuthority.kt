@@ -1,4 +1,4 @@
-package org.echo.mobile.framework.model
+package org.echo.mobile.framework.model.eddsa
 
 import com.google.common.primitives.Bytes
 import com.google.gson.JsonArray
@@ -7,7 +7,9 @@ import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import org.echo.mobile.framework.exception.MalformedAddressException
-import org.echo.mobile.framework.model.network.Network
+import org.echo.mobile.framework.model.Account
+import org.echo.mobile.framework.model.Extensions
+import org.echo.mobile.framework.model.GrapheneSerializable
 import org.echo.mobile.framework.support.Uint16
 import org.echo.mobile.framework.support.Uint32
 import org.echo.mobile.framework.support.serialize
@@ -15,23 +17,20 @@ import java.lang.reflect.Type
 
 /**
  * Class used to represent the weighted set of keys and accounts that must approve operations.
- *
- * [Authority details](https://dev-doc.myecho.app/structgraphene_1_1chain_1_1authority.html)
+ * Uses EdDSA algorithm.
  *
  * @author Dmitriy Bushuev
  */
-class Authority @JvmOverloads constructor(
+class EdAuthority @JvmOverloads constructor(
     var weightThreshold: Int = 1,
-    var keyAuthorities: Map<PublicKey, Long> = mapOf(),
+    var keyAuthorities: Map<EdPublicKey, Long> = mapOf(),
     var accountAuthorities: Map<Account, Long> = mapOf()
 ) : GrapheneSerializable {
-
-    private val extensions: Extensions = Extensions()
 
     /**
      * @return: Returns a list of public keys linked to this authority
      */
-    val keyAuthList: List<PublicKey>
+    val keyAuthList: List<EdPublicKey>
         get() = keyAuthorities.keys.toList()
 
     /**
@@ -62,15 +61,11 @@ class Authority @JvmOverloads constructor(
                     keyToBytes = { account -> account.toBytes() },
                     valueToBytes = { value -> Uint16.serialize(value) })
 
-            // Adding number of extensions
-            val extensionsBytes = extensions.toBytes()
-
             return Bytes.concat(
                 authsSizeBytes,
                 weightThresholdBytes,
                 accountAuthoritiesBytes,
-                keyAuthoritiesBytes,
-                extensionsBytes
+                keyAuthoritiesBytes
             )
         }
 
@@ -86,7 +81,7 @@ class Authority @JvmOverloads constructor(
             val keyAuthArray = JsonArray().apply {
                 keyAuthorities.forEach { (publicKey, weight) ->
                     val subArray = JsonArray()
-                    val address = Address(publicKey)
+                    val address = EdAddress(publicKey)
                     subArray.add(address.toString())
                     subArray.add(weight)
                     add(subArray)
@@ -103,11 +98,10 @@ class Authority @JvmOverloads constructor(
 
             add(KEY_KEY_AUTHS, keyAuthArray)
             add(KEY_ACCOUNT_AUTHS, accountAuthArray)
-            add(KEY_EXTENSIONS, extensions.toJsonObject())
         }
 
     override fun equals(other: Any?): Boolean {
-        if (other == null || other !is Authority) {
+        if (other == null || other !is EdAuthority) {
             return false
         }
 
@@ -126,7 +120,8 @@ class Authority @JvmOverloads constructor(
         const val KEY_WEIGHT_THRESHOLD = "weight_threshold"
         const val KEY_ACCOUNT_AUTHS = "account_auths"
         const val KEY_KEY_AUTHS = "key_auths"
-        const val KEY_EXTENSIONS = Extensions.KEY_EXTENSIONS
+        const val KEY_EXTENSIONS =
+            Extensions.KEY_EXTENSIONS
     }
 
     /**
@@ -137,17 +132,16 @@ class Authority @JvmOverloads constructor(
      * {
      *   "weight_threshold": 1,
      *   "account_auths": [],
-     *   "key_auths": [["BTS6yoiaoC4p23n31AV4GnMy5QDh5yUQEUmU4PmNxRQPGg7jjPkBq",1]],
-     *   "address_auths": []
+     *   "key_auths": [["DETHV1WK9KNWskGnuFSkgbL63cfh82xWhExF5gdNxPM9FTe",1]]
      * }
      */
-    class Deserializer(val network: Network) : JsonDeserializer<Authority> {
+    class Deserializer : JsonDeserializer<EdAuthority> {
 
         override fun deserialize(
             json: JsonElement?,
             typeOfT: Type?,
             context: JsonDeserializationContext?
-        ): Authority? {
+        ): EdAuthority? {
 
             if (json == null || !json.isJsonObject) {
                 return null
@@ -159,13 +153,13 @@ class Authority @JvmOverloads constructor(
             val keyAuthArray = baseObject.getAsJsonArray(KEY_KEY_AUTHS)
             val accountAuthArray = baseObject.getAsJsonArray(KEY_ACCOUNT_AUTHS)
 
-            val keyAuthMap = HashMap<PublicKey, Long>()
+            val keyAuthMap = HashMap<EdPublicKey, Long>()
             for (i in 0 until keyAuthArray.size()) {
                 val subArray = keyAuthArray.get(i).asJsonArray
                 val addr = subArray.get(0).asString
                 val weight = subArray.get(1).asLong
                 try {
-                    keyAuthMap[Address(addr, network).pubKey] = weight
+                    keyAuthMap[EdAddress(addr).pubKey] = weight
                 } catch (e: MalformedAddressException) {
                     System.out.println("MalformedAddressException. Msg: " + e.message)
                 }
@@ -181,7 +175,11 @@ class Authority @JvmOverloads constructor(
                 accountAuthMap[userAccount] = weight
             }
 
-            return Authority(weightThreshold, keyAuthMap, accountAuthMap)
+            return EdAuthority(
+                weightThreshold,
+                keyAuthMap,
+                accountAuthMap
+            )
         }
     }
 

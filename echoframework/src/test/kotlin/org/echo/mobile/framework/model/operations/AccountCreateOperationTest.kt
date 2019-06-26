@@ -4,8 +4,8 @@ import com.google.common.primitives.UnsignedLong
 import org.echo.mobile.bitcoinj.ECKey
 import org.echo.mobile.framework.model.AccountOptions
 import org.echo.mobile.framework.model.AssetAmount
-import org.echo.mobile.framework.model.Authority
 import org.echo.mobile.framework.model.BaseOperation
+import org.echo.mobile.framework.model.eddsa.EdAuthority
 import org.echo.mobile.framework.model.PublicKey
 import org.junit.Assert
 import org.junit.Assert.assertNotNull
@@ -40,7 +40,6 @@ class AccountCreateOperationTest {
         assertNotNull(transferObject.get(AccountCreateOperation.KEY_REFERRER))
         assertNotNull(transferObject.get(AccountCreateOperation.KEY_REFERRER_PERCENT))
         assertNotNull(transferObject.get(AccountCreateOperation.KEY_ACTIVE))
-        assertNotNull(transferObject.get(AccountCreateOperation.KEY_OWNER))
         assertNotNull(transferObject.get(AccountCreateOperation.KEY_OPTIONS))
         assertNotNull(transferObject.get(AccountCreateOperation.KEY_EXTENSIONS))
     }
@@ -52,16 +51,14 @@ class AccountCreateOperationTest {
 
     private fun buildOperation(): AccountCreateOperation {
         val fee = AssetAmount(UnsignedLong.ONE)
-        val owner = Authority(2)
-        val active = Authority(3)
-        val options = AccountOptions(PublicKey(ECKey.fromPublicOnly(ECKey().pubKeyPoint).pubKey))
+        val active = EdAuthority(2)
+        val options = AccountOptions()
 
         return AccountCreateOperationBuilder()
             .setAccountName("testName")
             .setRegistrar("registrar")
             .setReferrer("referrer")
             .setReferrerPercent(5)
-            .setOwner(owner)
             .setActive(active)
             .setEdKey("")
             .setOptions(options)

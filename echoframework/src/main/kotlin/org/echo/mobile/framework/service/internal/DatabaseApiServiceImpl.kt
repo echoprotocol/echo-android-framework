@@ -12,12 +12,15 @@ import org.echo.mobile.framework.model.BaseOperation
 import org.echo.mobile.framework.model.Block
 import org.echo.mobile.framework.model.BlockData
 import org.echo.mobile.framework.model.DynamicGlobalProperties
+import org.echo.mobile.framework.model.EthAddress
+import org.echo.mobile.framework.model.EthDeposit
+import org.echo.mobile.framework.model.EthWithdraw
 import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.GrapheneObject
 import org.echo.mobile.framework.model.Log
-import org.echo.mobile.framework.model.SidechainTransfer
 import org.echo.mobile.framework.model.Transaction
+import org.echo.mobile.framework.model.contract.ContractFee
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
@@ -27,7 +30,8 @@ import org.echo.mobile.framework.model.socketoperations.CancelAllSubscriptionsSo
 import org.echo.mobile.framework.model.socketoperations.CustomOperation
 import org.echo.mobile.framework.model.socketoperations.CustomSocketOperation
 import org.echo.mobile.framework.model.socketoperations.FullAccountsSocketOperation
-import org.echo.mobile.framework.model.socketoperations.GetAllContractsSocketOperation
+import org.echo.mobile.framework.model.socketoperations.GetAccountDepositsSocketOperation
+import org.echo.mobile.framework.model.socketoperations.GetAccountWithdrawalsSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetAssetsSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetBlockSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetChainIdSocketOperation
@@ -35,16 +39,18 @@ import org.echo.mobile.framework.model.socketoperations.GetContractLogsSocketOpe
 import org.echo.mobile.framework.model.socketoperations.GetContractResultSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetContractSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetContractsSocketOperation
+import org.echo.mobile.framework.model.socketoperations.GetEthereumAddressSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetGlobalPropertiesSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetKeyReferencesSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetObjectsSocketOperation
-import org.echo.mobile.framework.model.socketoperations.GetSidechainTransfersSocketOperation
 import org.echo.mobile.framework.model.socketoperations.ListAssetsSocketOperation
 import org.echo.mobile.framework.model.socketoperations.LookupAssetsSymbolsSocketOperation
 import org.echo.mobile.framework.model.socketoperations.QueryContractSocketOperation
+import org.echo.mobile.framework.model.socketoperations.RequiredContractFeesSocketOperation
 import org.echo.mobile.framework.model.socketoperations.RequiredFeesSocketOperation
 import org.echo.mobile.framework.model.socketoperations.SetSubscribeCallbackSocketOperation
 import org.echo.mobile.framework.model.socketoperations.SubscribeContractLogsSocketOperation
+import org.echo.mobile.framework.model.socketoperations.SubscribeContractsSocketOperation
 import org.echo.mobile.framework.service.DatabaseApiService
 import org.echo.mobile.framework.support.Result
 import org.echo.mobile.framework.support.concurrent.future.FutureTask
@@ -114,8 +120,8 @@ class DatabaseApiServiceImpl(
     ) {
         val keys = wifs.map { wif ->
             val privateKey = cryptoCoreComponent.decodeFromWif(wif)
-            val publicKey = cryptoCoreComponent.derivePublicKeyFromPrivate(privateKey)
-            cryptoCoreComponent.getAddressFromPublicKey(publicKey)
+            val publicKey = cryptoCoreComponent.deriveEdDSAPublicKeyFromPrivate(privateKey)
+            cryptoCoreComponent.getEdDSAAddressFromPublicKey(publicKey)
         }
 
         val getKeyReferencesSocketOperation = GetKeyReferencesSocketOperation(
@@ -162,6 +168,20 @@ class DatabaseApiServiceImpl(
                     callback.onSuccess(mapOf())
                 }
             })
+    }
+
+    override fun getEthereumAddress(
+        accountId: String,
+        callback: Callback<EthAddress>
+    ) {
+        val operation = GetEthereumAddressSocketOperation(
+            id,
+            accountId,
+            socketCoreComponent.currentId,
+            callback
+        )
+
+        socketCoreComponent.emit(operation)
     }
 
     private fun accountsByWifMap(
@@ -350,6 +370,23 @@ class DatabaseApiServiceImpl(
         return future.wrapResult()
     }
 
+    override fun getRequiredContractFees(
+        operations: List<BaseOperation>,
+        asset: Asset
+    ): Result<Exception, List<ContractFee>> {
+        val future = FutureTask<List<ContractFee>>()
+        val requiredFeesOperation = RequiredContractFeesSocketOperation(
+            id,
+            operations,
+            asset,
+            callId = socketCoreComponent.currentId,
+            callback = future.completeCallback()
+        )
+        socketCoreComponent.emit(requiredFeesOperation)
+
+        return future.wrapResult()
+    }
+
     override fun listAssets(lowerBound: String, limit: Int, callback: Callback<List<Asset>>) {
         val operation = ListAssetsSocketOperation(id, lowerBound, limit, callback = callback)
 
@@ -443,18 +480,6 @@ class DatabaseApiServiceImpl(
         return futureTask.wrapResult()
     }
 
-    override fun getAllContracts(): Result<LocalException, List<ContractInfo>> {
-        val future = FutureTask<List<ContractInfo>>()
-        val operation = GetAllContractsSocketOperation(
-            id,
-            callId = socketCoreComponent.currentId,
-            callback = future.completeCallback()
-        )
-        socketCoreComponent.emit(operation)
-
-        return future.wrapResult()
-    }
-
     override fun getContracts(contractIds: List<String>): Result<LocalException, List<ContractInfo>> {
         val future = FutureTask<List<ContractInfo>>()
         val operation = GetContractsSocketOperation(
@@ -500,8 +525,44 @@ class DatabaseApiServiceImpl(
         return future.wrapResult()
     }
 
+    override fun subscribeContracts(contractIds: List<String>): Result<LocalException, Boolean> {
+        val future = FutureTask<Boolean>()
+
+        val operation = SubscribeContractsSocketOperation(
+            id,
+            contractIds,
+            callId = socketCoreComponent.currentId,
+            callback = future.completeCallback()
+        )
+        socketCoreComponent.emit(operation)
+
+        return future.wrapResult()
+    }
+
     override fun subscribe(clearFilter: Boolean, callback: Callback<Boolean>) {
         socketCoreComponent.emit(createSubscriptionOperation(clearFilter, callback))
+    }
+
+    override fun getAccountDeposits(accountId: String, callback: Callback<List<EthDeposit>>) {
+        val operation = GetAccountDepositsSocketOperation(
+            id,
+            accountId,
+            socketCoreComponent.currentId,
+            callback
+        )
+
+        socketCoreComponent.emit(operation)
+    }
+
+    override fun getAccountWithdrawals(accountId: String, callback: Callback<List<EthWithdraw>>) {
+        val operation = GetAccountWithdrawalsSocketOperation(
+            id,
+            accountId,
+            socketCoreComponent.currentId,
+            callback
+        )
+
+        socketCoreComponent.emit(operation)
     }
 
     private fun createSubscriptionOperation(clearFilter: Boolean, callback: Callback<Boolean>) =
@@ -560,14 +621,5 @@ class DatabaseApiServiceImpl(
         socketCoreComponent.emit(customSocketOperation)
 
         return futureTask.wrapResult()
-    }
-
-    override fun getSidechainTransfers(
-        ethAddress: String,
-        callback: Callback<List<SidechainTransfer>>
-    ) {
-        val operation = GetSidechainTransfersSocketOperation(id, ethAddress, callback = callback)
-
-        socketCoreComponent.emit(operation)
     }
 }

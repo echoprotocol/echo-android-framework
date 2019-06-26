@@ -5,7 +5,6 @@ import org.echo.mobile.framework.model.Balance
 import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.HistoryResponse
-import org.echo.mobile.framework.model.SidechainTransfer
 
 /**
  * Encapsulates logic, associated with receiving blockchain information processes
@@ -70,10 +69,5 @@ interface InformationFacade {
      * Retrieves blockchain current configuration parameters
      */
     fun getGlobalProperties(callback: Callback<GlobalProperties>)
-
-    /**
-     * Retrieves sidechain transfers list associated with [ethAddress]
-     */
-    fun getSidechainTransfers(ethAddress: String, callback: Callback<List<SidechainTransfer>>)
 
 }

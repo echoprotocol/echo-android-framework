@@ -8,18 +8,9 @@ package org.echo.mobile.framework.model
  * @author Dmitriy Bushuev
  */
 enum class AuthorityType {
-    /**
-     * Key that is authorized to change owner, active, and voting keys
-     */
-    OWNER,
 
     /**
      * Key that is able to perform normal operations
      */
-    ACTIVE,
-
-    /**
-     * Key that is able to encrypt\decrypt transaction memo
-     */
-    MEMO
+    ACTIVE
 }

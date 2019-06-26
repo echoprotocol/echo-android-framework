@@ -10,7 +10,7 @@ import org.echo.mobile.framework.facade.FeeFacade
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.Asset
 import org.echo.mobile.framework.model.AssetAmount
-import org.echo.mobile.framework.model.Memo
+import org.echo.mobile.framework.model.contract.ContractFee
 import org.echo.mobile.framework.model.contract.input.ContractInputEncoder
 import org.echo.mobile.framework.model.contract.input.InputValue
 import org.echo.mobile.framework.model.operations.ContractCallOperation
@@ -18,10 +18,12 @@ import org.echo.mobile.framework.model.operations.ContractCallOperationBuilder
 import org.echo.mobile.framework.model.operations.TransferOperationBuilder
 import org.echo.mobile.framework.processResult
 import org.echo.mobile.framework.service.DatabaseApiService
+import org.echo.mobile.framework.support.Provider
 import org.echo.mobile.framework.support.Result
 import org.echo.mobile.framework.support.error
 import org.echo.mobile.framework.support.map
 import org.echo.mobile.framework.support.value
+import java.math.RoundingMode
 
 /**
  * Implementation of [FeeFacade]
@@ -32,7 +34,8 @@ import org.echo.mobile.framework.support.value
  */
 class FeeFacadeImpl(
     private val databaseApiService: DatabaseApiService,
-    private val cryptoCoreComponent: CryptoCoreComponent
+    private val cryptoCoreComponent: CryptoCoreComponent,
+    private val feeRatioProvider: Provider<Double>
 ) : BaseTransactionsFacade(databaseApiService, cryptoCoreComponent), FeeFacade {
 
     override fun getFeeForTransferOperation(
@@ -47,10 +50,7 @@ class FeeFacadeImpl(
     ) = callback.processResult(Result {
         val (fromAccount, toAccount) = getParticipantsPair(fromNameOrId, toNameOrId)
 
-        val memoPrivateKey = memoKey(fromAccount.name, password)
-        val memo = generateMemo(memoPrivateKey, fromAccount, toAccount, message)
-
-        val transfer = buildTransaction(fromAccount, toAccount, amount, asset, memo)
+        val transfer = buildTransaction(fromAccount, toAccount, amount, asset)
 
         getFees(listOf(transfer), feeAsset ?: asset)
     }.map { fees ->
@@ -83,9 +83,9 @@ class FeeFacadeImpl(
         val (fromAccount, toAccount) = getParticipantsPair(fromNameOrId, toNameOrId)
 
         val memoPrivateKey = cryptoCoreComponent.decodeFromWif(wif)
-        val memo = generateMemo(memoPrivateKey, fromAccount, toAccount, message)
+//        val memo = generateMemo(memoPrivateKey, fromAccount, toAccount, message)
 
-        val transfer = buildTransaction(fromAccount, toAccount, amount, asset, memo)
+        val transfer = buildTransaction(fromAccount, toAccount, amount, asset)
 
         getFees(listOf(transfer), feeAsset ?: asset)
     }.map { fees ->
@@ -108,19 +108,19 @@ class FeeFacadeImpl(
     override fun getFeeForContractOperation(
         userNameOrId: String,
         contractId: String,
+        amount: String,
         methodName: String,
         methodParams: List<InputValue>,
         assetId: String,
         feeAsset: String?,
-        callback: Callback<String>
+        callback: Callback<ContractFee>
     ) = callback.processResult(Result {
         val contractCode = ContractInputEncoder().encode(methodName, methodParams)
 
         val contractOperation =
-            configureContractTransaction(userNameOrId, contractId, contractCode, assetId)
+            configureContractTransaction(userNameOrId, contractId, amount, contractCode, assetId)
 
-        getFees(listOf(contractOperation), feeAsset ?: assetId)
-
+        getContractFees(listOf(contractOperation), feeAsset ?: assetId)
     }.map { fees ->
         if (fees.isEmpty()) {
             LOGGER.log(
@@ -135,21 +135,22 @@ class FeeFacadeImpl(
             throw LocalException("Unable to get fee for specified operation")
         }
 
-        fees.first().amount.toString()
+        multiplyContractFee(fees.first(), feeRatioProvider.provide())
     })
 
     override fun getFeeForContractOperation(
         userNameOrId: String,
         contractId: String,
+        amount: String,
         code: String,
         assetId: String,
         feeAsset: String?,
-        callback: Callback<String>
+        callback: Callback<ContractFee>
     ) = callback.processResult(Result {
         val contractOperation =
-            configureContractTransaction(userNameOrId, contractId, code, assetId)
+            configureContractTransaction(userNameOrId, contractId, amount, code, assetId)
 
-        getFees(listOf(contractOperation), feeAsset ?: assetId)
+        getContractFees(listOf(contractOperation), feeAsset ?: assetId)
 
     }.map { fees ->
         if (fees.isEmpty()) {
@@ -164,25 +165,30 @@ class FeeFacadeImpl(
             throw LocalException("Unable to get fee for specified operation")
         }
 
-        fees.first().amount.toString()
+        multiplyContractFee(fees.first(), feeRatioProvider.provide())
     })
+
+    private fun multiplyContractFee(rawFee: ContractFee, feeRatio: Double): ContractFee {
+        val fee = rawFee.fee.multiplyBy(feeRatio, RoundingMode.FLOOR)
+        val userFee = rawFee.feeToPay.multiplyBy(feeRatio, RoundingMode.FLOOR)
+        return ContractFee(fee, userFee)
+    }
 
     private fun buildTransaction(
         fromAccount: Account,
         toAccount: Account,
         amount: String,
-        asset: String,
-        memo: Memo
+        asset: String
     ) = TransferOperationBuilder()
         .setFrom(fromAccount)
         .setTo(toAccount)
         .setAmount(AssetAmount(UnsignedLong.valueOf(amount.toLong()), Asset(asset)))
-        .setMemo(memo)
         .build()
 
     private fun configureContractTransaction(
         userNameOrId: String,
         contractId: String,
+        amount: String,
         code: String,
         assetId: String
     ): ContractCallOperation {
@@ -210,6 +216,7 @@ class FeeFacadeImpl(
             .setRegistrar(account!!)
             .setReceiver(contractId)
             .setContractCode(code)
+            .setValue(AssetAmount(UnsignedLong.valueOf(amount), Asset(assetId)))
             .build()
     }
 

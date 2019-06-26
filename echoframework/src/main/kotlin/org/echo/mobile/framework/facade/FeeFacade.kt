@@ -1,6 +1,7 @@
 package org.echo.mobile.framework.facade
 
 import org.echo.mobile.framework.Callback
+import org.echo.mobile.framework.model.contract.ContractFee
 import org.echo.mobile.framework.model.contract.input.InputValue
 
 /**
@@ -59,6 +60,7 @@ interface FeeFacade {
      *
      * @param userNameOrId  Source account name or id
      * @param contractId    Id of contract for method calling
+     * @param amount        Amount for contract call
      * @param methodName    Name of contract method for calling
      * @param methodParams  Params of contract method for calling
      * @param assetId       Specific asset type id
@@ -68,11 +70,12 @@ interface FeeFacade {
     fun getFeeForContractOperation(
         userNameOrId: String,
         contractId: String,
+        amount: String,
         methodName: String,
         methodParams: List<InputValue>,
         assetId: String,
         feeAsset: String?,
-        callback: Callback<String>
+        callback: Callback<ContractFee>
     )
 
     /**
@@ -80,6 +83,7 @@ interface FeeFacade {
      *
      * @param userNameOrId  Source account name or id
      * @param contractId    Id of contract for method calling
+     * @param amount        Amount for contract call
      * @param code          Valid code for contract query
      * @param assetId       Specific asset type id
      * @param feeAsset      Asset for fee calculating
@@ -88,10 +92,11 @@ interface FeeFacade {
     fun getFeeForContractOperation(
         userNameOrId: String,
         contractId: String,
+        amount: String,
         code: String,
         assetId: String,
         feeAsset: String?,
-        callback: Callback<String>
+        callback: Callback<ContractFee>
     )
 
 }

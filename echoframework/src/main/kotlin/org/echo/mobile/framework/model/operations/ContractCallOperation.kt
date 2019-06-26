@@ -11,6 +11,7 @@ import com.google.gson.JsonSerializationContext
 import com.google.gson.JsonSerializer
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.AssetAmount
+import org.echo.mobile.framework.model.Transaction.Companion.KEY_EXTENSIONS
 import org.echo.mobile.framework.model.contract.Contract
 import org.echo.mobile.framework.support.Uint8
 import java.lang.reflect.Type
@@ -41,9 +42,10 @@ class ContractCallOperation @JvmOverloads constructor(
         val contractBytes = callee.toBytes()
         val valueBytes = value.toBytes()
         val codeBytes = Uint8.serialize(code.length) + code.toByteArray()
+        val extensionBytes = extensions.toBytes()
 
         return Bytes.concat(
-            feeBytes, registrarBytes, valueBytes, codeBytes, contractBytes
+            feeBytes, registrarBytes, valueBytes, codeBytes, contractBytes, extensionBytes
         )
     }
 
@@ -56,6 +58,7 @@ class ContractCallOperation @JvmOverloads constructor(
                 addProperty(KEY_RECEIVER, callee.getObjectId())
                 add(KEY_VALUE, value.toJsonObject())
                 addProperty(KEY_CODE, code)
+                add(KEY_EXTENSIONS, extensions.toJsonObject())
             })
         }
     }

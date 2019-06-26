@@ -113,27 +113,27 @@ class ContractOutputDecoderTest {
     @Test
     fun decodeContractAddressTest() {
         val source =
-            "01000000000000000000000000000000000041a3".toByteArray()
+            "0100000000000000000000000000000000000000".toByteArray()
 
         val decoder = ContractOutputDecoder()
         val result = decoder.decode(source, listOf(ContractAddressOutputValueType()))
 
         val value = result.first().value
         assertNotNull(value)
-        assertEquals(value.toString(), "1.16.16803")
+        assertEquals(value.toString(), "1.14.0")
     }
 
     @Test
     fun decodeContractFullAddressTest() {
         val source =
-            "00000000000000000000000001000000000000000000000000000000000041a3".toByteArray()
+            "000000000000000000000000010000000000000000000000000000000000002d".toByteArray()
 
         val decoder = ContractOutputDecoder()
         val result = decoder.decode(source, listOf(ContractAddressOutputValueType()))
 
         val value = result.first().value
         assertNotNull(value)
-        assertEquals(value.toString(), "1.16.16803")
+        assertEquals(value.toString(), "1.14.45")
     }
 
     @Test

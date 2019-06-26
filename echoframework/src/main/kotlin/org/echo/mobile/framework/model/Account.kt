@@ -6,14 +6,14 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.annotations.Expose
 import org.echo.mobile.framework.TIME_DATE_FORMAT
+import org.echo.mobile.framework.model.eddsa.EdAuthority
 import java.lang.reflect.Type
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 /**
- * Represents account model in Graphene blockchain
- * [Account model documentation](https://dev-doc.myecho.app/classgraphene_1_1chain_1_1account__object.html)
+ * Represents account model in blockchain
  *
  * @author Dmitriy Bushuev
  */
@@ -23,10 +23,10 @@ class Account : GrapheneObject, GrapheneSerializable {
     lateinit var name: String
 
     @Expose
-    lateinit var owner: Authority
+    lateinit var active: EdAuthority
 
     @Expose
-    lateinit var active: Authority
+    lateinit var edKey: String
 
     @Expose
     lateinit var options: AccountOptions
@@ -98,8 +98,8 @@ class Account : GrapheneObject, GrapheneSerializable {
                     jsonAccount.get(KEY_LIFETIME_REFERRER_FEE_PERCENTAGE).asLong
                 referrerRewardsPercentage =
                     jsonAccount.get(KEY_REFERRER_REWARD_PERCENTAGE).asLong
-                owner = getAuthority(context!!, jsonAccount, KEY_OWNER)
-                active = getAuthority(context, jsonAccount, KEY_ACTIVE)
+                active = getAuthority(context!!, jsonAccount, KEY_ACTIVE)
+                edKey = jsonAccount.get(KEY_ECHORAND_KEY).asString
                 options = getOptions(context, jsonAccount)
                 statistics = jsonAccount.get(KEY_STATISTICS).asString
             }
@@ -124,8 +124,8 @@ class Account : GrapheneObject, GrapheneSerializable {
             context: JsonDeserializationContext,
             jsonAccount: JsonObject,
             key: String
-        ): Authority =
-            context.deserialize<Authority>(jsonAccount.get(key), Authority::class.java)
+        ): EdAuthority =
+            context.deserialize<EdAuthority>(jsonAccount.get(key), EdAuthority::class.java)
 
         private fun getDate(jsonAccount: JsonObject): Long {
             val dateFormat = SimpleDateFormat(TIME_DATE_FORMAT, Locale.getDefault())
@@ -149,8 +149,8 @@ class Account : GrapheneObject, GrapheneSerializable {
         const val KEY_LIFETIME_REFERRER_FEE_PERCENTAGE = "lifetime_referrer_fee_percentage"
         const val KEY_REFERRER_REWARD_PERCENTAGE = "referrer_rewards_percentage"
         const val KEY_NAME = "name"
-        const val KEY_OWNER = "owner"
         const val KEY_ACTIVE = "active"
+        const val KEY_ECHORAND_KEY = "echorand_key"
         const val KEY_OPTIONS = "options"
         const val KEY_STATISTICS = "statistics"
     }
@@ -165,14 +165,10 @@ class Account : GrapheneObject, GrapheneSerializable {
  */
 fun Account.isEqualsByKey(key: String, authorityType: AuthorityType): Boolean =
     when (authorityType) {
-        AuthorityType.OWNER -> isKeyExist(key, owner)
         AuthorityType.ACTIVE -> isKeyExist(key, active)
-        AuthorityType.MEMO -> {
-            options.memoKey?.address == key
-        }
     }
 
-private fun isKeyExist(address: String, authority: Authority): Boolean {
+private fun isKeyExist(address: String, authority: EdAuthority): Boolean {
     val foundKey = authority.keyAuthorities.keys.find { pubKey ->
         pubKey.address == address
     }

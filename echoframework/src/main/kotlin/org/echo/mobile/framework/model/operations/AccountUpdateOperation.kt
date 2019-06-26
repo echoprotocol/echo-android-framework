@@ -11,10 +11,10 @@ import com.google.gson.JsonObject
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.AccountOptions
 import org.echo.mobile.framework.model.AssetAmount
-import org.echo.mobile.framework.model.Authority
 import org.echo.mobile.framework.model.BaseOperation
 import org.echo.mobile.framework.model.Optional
-import org.spongycastle.util.encoders.Hex
+import org.echo.mobile.framework.model.eddsa.EdAddress
+import org.echo.mobile.framework.model.eddsa.EdAuthority
 import java.lang.reflect.Type
 
 /**
@@ -25,30 +25,20 @@ import java.lang.reflect.Type
  */
 class AccountUpdateOperation @JvmOverloads constructor(
     var account: Account,
-    owner: Authority?,
-    active: Authority?,
+    active: EdAuthority?,
     private val edKey: String?,
     newOptions: AccountOptions?,
     override var fee: AssetAmount = AssetAmount(UnsignedLong.ZERO)
 ) : BaseOperation(OperationType.ACCOUNT_UPDATE_OPERATION) {
 
-    var ownerOption = Optional(owner)
     var activeOption = Optional(active)
     var newOptionsOption = Optional(newOptions, true)
-
-    /**
-     * Updates owner value
-     * @param owner New owner value
-     */
-    fun setOwner(owner: Authority) {
-        this.ownerOption = Optional(owner)
-    }
 
     /**
      * Updates active value
      * @param active New active value
      */
-    fun setActive(active: Authority) {
+    fun setActive(active: EdAuthority) {
         this.activeOption = Optional(active)
     }
 
@@ -63,11 +53,10 @@ class AccountUpdateOperation @JvmOverloads constructor(
     override fun toBytes(): ByteArray {
         val feeBytes = fee.toBytes()
         val accountBytes = account.toBytes()
-        val ownerBytes = ownerOption.toBytes()
         val activeBytes = activeOption.toBytes()
 
         val edKeyBytes = edKey?.let {
-            byteArrayOf(1) + Hex.decode(edKey)
+            byteArrayOf(1) + EdAddress(edKey).pubKey.toBytes()
         } ?: byteArrayOf(0)
 
         val newOptionsBytes = newOptionsOption.toBytes()
@@ -75,7 +64,6 @@ class AccountUpdateOperation @JvmOverloads constructor(
         return Bytes.concat(
             feeBytes,
             accountBytes,
-            ownerBytes,
             activeBytes,
             edKeyBytes,
             newOptionsBytes,
@@ -92,7 +80,6 @@ class AccountUpdateOperation @JvmOverloads constructor(
             val accountUpdate = JsonObject().apply {
                 add(KEY_FEE, fee.toJsonObject())
                 addProperty(KEY_ACCOUNT, account.toJsonString())
-                if (ownerOption.isSet) add(KEY_OWNER, ownerOption.toJsonObject())
                 if (activeOption.isSet) add(KEY_ACTIVE, activeOption.toJsonObject())
                 if (edKey != null) addProperty(KEY_ED_KEY, edKey)
                 if (newOptionsOption.isSet) add(KEY_NEW_OPTIONS, newOptionsOption.toJsonObject())
@@ -120,7 +107,6 @@ class AccountUpdateOperation @JvmOverloads constructor(
             val operationObject = json.asJsonObject
 
             val account = createAccount(operationObject)
-            val owner = parseOwner(operationObject, context)
             val active = parseActive(operationObject, context)
             val edKey = operationObject.get(AccountCreateOperation.KEY_ED_KEY).asString
             val newOptions = parseNewOptions(operationObject, context)
@@ -128,7 +114,6 @@ class AccountUpdateOperation @JvmOverloads constructor(
 
             return AccountUpdateOperation(
                 account,
-                owner,
                 active,
                 edKey,
                 newOptions,
@@ -139,20 +124,12 @@ class AccountUpdateOperation @JvmOverloads constructor(
         private fun createAccount(operationObject: JsonObject) =
             Account(operationObject.get(KEY_ACCOUNT).asString)
 
-        private fun parseOwner(
-            operationObject: JsonObject,
-            deserializer: JsonDeserializationContext?
-        ) = deserializer?.deserialize<Authority>(
-            operationObject.get(KEY_OWNER),
-            Authority::class.java
-        )
-
         private fun parseActive(
             operationObject: JsonObject,
             deserializer: JsonDeserializationContext?
-        ) = deserializer?.deserialize<Authority>(
+        ) = deserializer?.deserialize<EdAuthority>(
             operationObject.get(KEY_ACTIVE),
-            Authority::class.java
+            EdAuthority::class.java
         )
 
         private fun parseNewOptions(
@@ -175,9 +152,8 @@ class AccountUpdateOperation @JvmOverloads constructor(
 
     companion object {
         const val KEY_ACCOUNT = "account"
-        const val KEY_OWNER = "owner"
         const val KEY_ACTIVE = "active"
-        const val KEY_ED_KEY = "ed_key"
+        const val KEY_ED_KEY = "echorand_key"
         const val KEY_NEW_OPTIONS = "new_options"
         const val KEY_EXTENSIONS = "extensions"
     }

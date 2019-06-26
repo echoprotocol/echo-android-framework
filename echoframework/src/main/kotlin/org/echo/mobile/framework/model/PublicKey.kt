@@ -5,7 +5,7 @@ import org.echo.mobile.framework.model.network.Network
 import java.io.Serializable
 
 /**
- * Encapsulates logic of working with account key/address
+ * Encapsulates logic of working with account key/address by EcDSA algorithm
  *
  * @author Dmitriy Bushuev
  */

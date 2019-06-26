@@ -4,7 +4,7 @@ import com.google.common.primitives.Bytes
 import org.echo.mobile.bitcoinj.ECKey
 import org.echo.mobile.bitcoinj.Sha256Hash
 import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
-import org.echo.mobile.framework.core.crypto.EchorandKeyProvider
+import org.echo.mobile.framework.core.crypto.EdDSAKeyProvider
 import org.echo.mobile.framework.core.crypto.WifProcessor
 import org.echo.mobile.framework.core.crypto.internal.eddsa.key.KeyPairCryptoAdapter
 import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent
@@ -14,7 +14,7 @@ import org.echo.mobile.framework.model.Transaction
 import org.echo.mobile.framework.model.network.Network
 import org.echo.mobile.framework.support.checkTrue
 import org.echo.mobile.framework.support.crypto.Checksum
-import org.echo.mobile.framework.support.crypto.Signature
+import org.echo.mobile.framework.support.crypto.EdDSASignature
 import org.echo.mobile.framework.support.crypto.decryptAES
 import org.echo.mobile.framework.support.crypto.encryptAES
 import org.echo.mobile.framework.support.hexlify
@@ -45,20 +45,29 @@ class CryptoCoreComponentImpl @JvmOverloads constructor(
     private val seedProvider = RoleDependentSeedProvider()
     private val ecKeyConverter = ECKeyToAddressConverter(network.addressPrefix)
 
-    private val echorandKeyProvider: EchorandKeyProvider by lazy {
-        EchorandKeyProviderImpl(keyPairCryptoAdapter)
+    private val edDSAKeyProvider: EdDSAKeyProvider by lazy {
+        EdDSAKeyProviderImpl(keyPairCryptoAdapter)
     }
 
     override fun getAddress(
         userName: String,
         password: String,
         authorityType: AuthorityType
-    ): String {
-        return ecKeyConverter.convert(
+    ): String =
+        ecKeyConverter.convert(
             ECKey.fromPrivate(
                 getPrivateKey(userName, password, authorityType)
             )
         )
+
+    override fun getEdDSAAddress(
+        userName: String,
+        password: String,
+        authorityType: AuthorityType
+    ): String {
+        val seedString = generateSeed(userName, password, authorityType)
+        val secretKeySeed = ECKey.fromPrivate(createPrivateKey(seedString)).getPrivKeyBytes()
+        return edDSAKeyProvider.provideAddress(secretKeySeed)
     }
 
     override fun getPrivateKey(
@@ -70,6 +79,16 @@ class CryptoCoreComponentImpl @JvmOverloads constructor(
         return ECKey.fromPrivate(createPrivateKey(seedString)).getPrivKeyBytes()
     }
 
+    override fun getEdDSAPrivateKey(
+        userName: String,
+        password: String,
+        authorityType: AuthorityType
+    ): ByteArray {
+        val seedString = generateSeed(userName, password, authorityType)
+        val secretKeySeed = ECKey.fromPrivate(createPrivateKey(seedString)).getPrivKeyBytes()
+        return edDSAKeyProvider.providePrivateKeyRaw(secretKeySeed)
+    }
+
     override fun derivePublicKeyFromPrivate(privateKey: ByteArray): ByteArray =
         try {
             ECKey.fromPrivate(privateKey).pubKey
@@ -77,19 +96,33 @@ class CryptoCoreComponentImpl @JvmOverloads constructor(
             throw LocalException("Public key derivation error", exception)
         }
 
+    override fun deriveEdDSAPublicKeyFromPrivate(privateKey: ByteArray): ByteArray =
+        try {
+            edDSAKeyProvider.providePublicKeyRaw(privateKey)
+        } catch (exception: Exception) {
+            throw LocalException("Public key derivation error", exception)
+        }
+
     override fun getAddressFromPublicKey(publicKey: ByteArray): String =
         ecKeyConverter.convert(ECKey.fromPublicOnly(publicKey))
+
+    override fun getEdDSAAddressFromPublicKey(publicKey: ByteArray): String =
+        try {
+            edDSAKeyProvider.provideAddressFromPublicKey(publicKey)
+        } catch (exception: Exception) {
+            throw LocalException("Address from public key derivation error", exception)
+        }
 
     override fun getEchorandKey(userName: String, password: String): String {
         val seedString = echorandSeed(userName, password)
         val secretKeySeed = ECKey.fromPrivate(createPrivateKey(seedString)).getPrivKeyBytes()
-        return echorandKeyProvider.provide(secretKeySeed)
+        return edDSAKeyProvider.provideAddress(secretKeySeed)
     }
 
     override fun getRawEchorandKey(userName: String, password: String): ByteArray {
         val seedString = echorandSeed(userName, password)
         val secretKeySeed = ECKey.fromPrivate(createPrivateKey(seedString)).getPrivKeyBytes()
-        return echorandKeyProvider.provideRaw(secretKeySeed)
+        return edDSAKeyProvider.providePublicKeyRaw(secretKeySeed)
     }
 
     private fun generateSeed(userName: String, password: String, authorityType: AuthorityType) =
@@ -101,7 +134,7 @@ class CryptoCoreComponentImpl @JvmOverloads constructor(
     }
 
     override fun signTransaction(transaction: Transaction): ArrayList<ByteArray> =
-        Signature.signTransaction(transaction)
+        EdDSASignature.signTransaction(transaction)
 
     override fun encryptMessage(
         privateKey: ByteArray,

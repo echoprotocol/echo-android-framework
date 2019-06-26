@@ -25,7 +25,7 @@ class GrapheneObjectTest {
         accountGrapheneObject = GrapheneObject("1.2.0")
         forceSettlementGrapheneObject = GrapheneObject("1.4.0")
         globalPropertiesGrapheneObject = GrapheneObject("2.0.0")
-        specialAuthorityGrapheneObject = GrapheneObject("2.14.0")
+        specialAuthorityGrapheneObject = GrapheneObject("2.13.0")
         nonexistentGrapheneObject = GrapheneObject("5.14.0")
     }
 
@@ -35,7 +35,7 @@ class GrapheneObjectTest {
         assertEquals("1.2.0", accountGrapheneObject.getObjectId())
         assertEquals("1.4.0", forceSettlementGrapheneObject.getObjectId())
         assertEquals("2.0.0", globalPropertiesGrapheneObject.getObjectId())
-        assertEquals("2.14.0", specialAuthorityGrapheneObject.getObjectId())
+        assertEquals("2.13.0", specialAuthorityGrapheneObject.getObjectId())
     }
 
     @Test

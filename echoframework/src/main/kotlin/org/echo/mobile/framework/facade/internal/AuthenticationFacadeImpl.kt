@@ -5,14 +5,16 @@ import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
 import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent
 import org.echo.mobile.framework.exception.AccountNotFoundException
 import org.echo.mobile.framework.exception.LocalException
+import org.echo.mobile.framework.exception.NotFoundException
 import org.echo.mobile.framework.facade.AuthenticationFacade
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.AccountOptions
-import org.echo.mobile.framework.model.Address
-import org.echo.mobile.framework.model.Authority
 import org.echo.mobile.framework.model.AuthorityType
 import org.echo.mobile.framework.model.FullAccount
+import org.echo.mobile.framework.model.RegistrationResult
 import org.echo.mobile.framework.model.Transaction
+import org.echo.mobile.framework.model.eddsa.EdAddress
+import org.echo.mobile.framework.model.eddsa.EdAuthority
 import org.echo.mobile.framework.model.isEqualsByKey
 import org.echo.mobile.framework.model.network.Network
 import org.echo.mobile.framework.model.operations.AccountUpdateOperation
@@ -21,11 +23,12 @@ import org.echo.mobile.framework.processResult
 import org.echo.mobile.framework.service.DatabaseApiService
 import org.echo.mobile.framework.service.NetworkBroadcastApiService
 import org.echo.mobile.framework.service.RegistrationApiService
+import org.echo.mobile.framework.support.concurrent.future.FutureTask
+import org.echo.mobile.framework.support.concurrent.future.completeCallback
 import org.echo.mobile.framework.support.dematerialize
 import org.echo.mobile.framework.support.error
 import org.echo.mobile.framework.support.map
 import org.echo.mobile.framework.support.value
-import org.spongycastle.util.encoders.Hex
 
 /**
  * Implementation of [AuthenticationFacade]
@@ -39,14 +42,16 @@ class AuthenticationFacadeImpl(
     private val networkBroadcastApiService: NetworkBroadcastApiService,
     private val registrationApiService: RegistrationApiService,
     private val cryptoCoreComponent: CryptoCoreComponent,
-    private val network: Network
+    private val network: Network,
+    private val notificationsHelper: NotificationsHelper<RegistrationResult>
 ) : BaseTransactionsFacade(databaseApiService, cryptoCoreComponent), AuthenticationFacade {
 
     override fun isOwnedBy(name: String, password: String, callback: Callback<FullAccount>) {
         databaseApiService.getFullAccounts(listOf(name), false)
             .map { accountsMap -> accountsMap[name] }
             .value { account ->
-                val address = cryptoCoreComponent.getAddress(name, password, AuthorityType.ACTIVE)
+                val address =
+                    cryptoCoreComponent.getEdDSAAddress(name, password, AuthorityType.ACTIVE)
 
                 val isKeySame =
                     account?.account?.isEqualsByKey(address, AuthorityType.ACTIVE) ?: false
@@ -76,6 +81,9 @@ class AuthenticationFacadeImpl(
         val account =
             databaseApiService.getFullAccounts(listOf(accountId), false).dematerialize()
 
+        operation.newOptionsOption.field?.votingAccount =
+            account[accountId]?.account!!.options.votingAccount
+
         operation.newOptionsOption.field?.delegatingAccount =
             account[accountId]?.account!!.options.delegatingAccount
 
@@ -83,7 +91,7 @@ class AuthenticationFacadeImpl(
         val chainId = getChainId()
 
         val privateKey =
-            cryptoCoreComponent.getPrivateKey(name, oldPassword, AuthorityType.ACTIVE)
+            cryptoCoreComponent.getEdDSAPrivateKey(name, oldPassword, AuthorityType.ACTIVE)
         val fees = getFees(listOf(operation))
 
         val transaction = Transaction(blockData, listOf(operation), chainId).apply {
@@ -95,24 +103,45 @@ class AuthenticationFacadeImpl(
     }
 
     override fun register(userName: String, password: String, callback: Callback<Boolean>) {
-        val (owner, active, memo) = generateAccountKeys(userName, password)
-        val echorandKey = cryptoCoreComponent.getEchorandKey(userName, password)
+        try {
+            val active =
+                cryptoCoreComponent.getEdDSAAddress(userName, password, AuthorityType.ACTIVE)
 
-        registrationApiService.register(
-            userName,
-            owner,
-            active,
-            memo,
-            echorandKey,
-            callback
+            val echorandKey = cryptoCoreComponent.getEchorandKey(userName, password)
+
+            val callId = registrationApiService.register(
+                userName,
+                active,
+                echorandKey
+            ).dematerialize().toString()
+
+            retrieveTransactionResult(callId, callback)
+        } catch (ex: Exception) {
+            callback.onError(LocalException("Can't register account", cause = ex))
+        }
+    }
+
+    private fun retrieveTransactionResult(
+        callId: String,
+        callback: Callback<Boolean>
+    ) {
+        val future = FutureTask<RegistrationResult>()
+        notificationsHelper.subscribeOnResult(
+            callId,
+            future.completeCallback()
         )
+
+        future.get()
+            ?: throw NotFoundException("Result of operation not found.")
+
+        callback.onSuccess(true)
     }
 
     private fun getAccountId(name: String, password: String): String {
         val accountsResult = databaseApiService.getFullAccounts(listOf(name), false)
 
         val ownerAddress =
-            cryptoCoreComponent.getAddress(name, password, AuthorityType.ACTIVE)
+            cryptoCoreComponent.getEdDSAAddress(name, password, AuthorityType.ACTIVE)
 
         val account = accountsResult
             .map { accountsMap -> accountsMap[name] }
@@ -133,35 +162,26 @@ class AuthenticationFacadeImpl(
         name: String,
         newPassword: String
     ): AccountUpdateOperation {
-        val (owner, active, memo) = generateAccountKeys(name, newPassword)
-        val echorandKey = Hex.toHexString(cryptoCoreComponent.getRawEchorandKey(name, newPassword))
+        val active = cryptoCoreComponent.getEdDSAAddress(name, newPassword, AuthorityType.ACTIVE)
 
-        val address = Address(memo, network)
+        val echorandKey = cryptoCoreComponent.getEchorandKey(name, newPassword)
 
-        val ownerAuthority =
-            Authority(1, hashMapOf(Address(owner, network).pubKey to 1L), hashMapOf())
         val activeAuthority =
-            Authority(1, hashMapOf(Address(active, network).pubKey to 1L), hashMapOf())
+            EdAuthority(
+                1,
+                hashMapOf(EdAddress(active).pubKey to 1L),
+                hashMapOf()
+            )
 
-        val newOptions = AccountOptions(address.pubKey)
+        val newOptions = AccountOptions()
         val account = Account(id)
 
         return AccountUpdateOperationBuilder()
             .setOptions(newOptions)
             .setAccount(account)
-            .setOwner(ownerAuthority)
             .setActive(activeAuthority)
             .setEdKey(echorandKey)
             .build()
-    }
-
-    private fun generateAccountKeys(
-        name: String,
-        password: String
-    ): Triple<String, String, String> {
-        val key = cryptoCoreComponent.getAddress(name, password, AuthorityType.ACTIVE)
-
-        return Triple(key, key, key)
     }
 
     companion object {

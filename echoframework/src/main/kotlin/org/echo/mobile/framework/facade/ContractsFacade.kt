@@ -20,6 +20,7 @@ interface ContractsFacade {
      *
      * @param registrarNameOrId     Name or id of account that creates the contract
      * @param password              Password from account for transaction signature
+     * @param value                 Payable value for contract creation
      * @param assetId               Asset of contract
      * @param feeAsset              Asset for fee pay
      * @param byteCode              Bytecode of the created contract
@@ -33,6 +34,7 @@ interface ContractsFacade {
     fun createContract(
         registrarNameOrId: String,
         password: String,
+        value: String = BigInteger.ZERO.toString(),
         assetId: String,
         feeAsset: String?,
         byteCode: String,
@@ -46,6 +48,7 @@ interface ContractsFacade {
      *
      * @param registrarNameOrId     Name or id of account that creates the contract
      * @param wif                   Account's private key in wif format
+     * @param value                 Payable value for contract creation
      * @param assetId               Asset of contract
      * @param feeAsset              Asset for fee pay
      * @param byteCode              Bytecode of the created contract
@@ -59,6 +62,7 @@ interface ContractsFacade {
     fun createContractWithWif(
         registrarNameOrId: String,
         wif: String,
+        value: String = BigInteger.ZERO.toString(),
         assetId: String,
         feeAsset: String?,
         byteCode: String,
@@ -251,11 +255,6 @@ interface ContractsFacade {
      * @param contractIds List of contracts ids
      */
     fun getContracts(contractIds: List<String>, callback: Callback<List<ContractInfo>>)
-
-    /**
-     * Returns all existing contracts from blockchain
-     */
-    fun getAllContracts(callback: Callback<List<ContractInfo>>)
 
     /**
      * Return contract code by [contractId]

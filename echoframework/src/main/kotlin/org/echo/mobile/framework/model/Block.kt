@@ -7,8 +7,7 @@ import com.google.gson.JsonParseException
 import java.lang.reflect.Type
 
 /**
- *  Represents block model in Graphene blockchain
- * [Block model details](https://dev-doc.myecho.app/structgraphene_1_1chain_1_1signed__block.html)
+ *  Represents block model in blockchain
  *
  * @author Daria Pechkovskaya
  * @author Dmitriy Bushuev
@@ -16,9 +15,10 @@ import java.lang.reflect.Type
 class Block(
     var previous: String,
     var timestamp: String,
-    var witness: String,
+    var account: Account,
+    var round: String,
+    var rand: String,
     var transactionMerkleRoot: String,
-    var witnessSignature: String,
     var transactions: List<Transaction>
 ) {
 
@@ -38,9 +38,10 @@ class Block(
             // Parsing block data information
             val previous = jsonObject.get(KEY_PREVIOUS).asString
             val timestamp = jsonObject.get(KEY_TIMESTAMP).asString
-            val witness = jsonObject.get(KEY_WITNESS).asString
+            val round = jsonObject.get(KEY_ROUND).asString
+            val rand = jsonObject.get(KEY_RAND).asString
             val transactionMerkleRoot = jsonObject.get(KEY_TRANSACTION_MERKLE_ROOT).asString
-            val witnessSignature = jsonObject.get(KEY_WITNESS_SIGNATURE).asString
+            val account = Account(jsonObject.get(KEY_ACCOUNT).asString)
 
             // Parsing operation list
             val transactions = mutableListOf<Transaction>()
@@ -61,9 +62,10 @@ class Block(
             return Block(
                 previous,
                 timestamp,
-                witness,
+                account,
+                round,
+                rand,
                 transactionMerkleRoot,
-                witnessSignature,
                 transactions
             )
         }
@@ -72,10 +74,11 @@ class Block(
     companion object {
         private const val KEY_PREVIOUS = "previous"
         private const val KEY_TIMESTAMP = "timestamp"
-        private const val KEY_WITNESS = "witness"
+        private const val KEY_ACCOUNT = "account"
         private const val KEY_TRANSACTION_MERKLE_ROOT = "transaction_merkle_root"
-        private const val KEY_WITNESS_SIGNATURE = "witness_signature"
         private const val KEY_TRANSACTIONS = "transactions"
+        private const val KEY_ROUND = "round"
+        private const val KEY_RAND = "rand"
     }
 
 }

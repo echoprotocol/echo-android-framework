@@ -106,7 +106,10 @@ class Memo : ByteSerializable, JsonSerializable {
             val toAddress = jsonObject.get(KEY_TO).asString
 
             // The nonce is always coming from the full node as a string containing a decimal number
-            val nonce = BigInteger(jsonObject.get(KEY_NONCE).asString, NONCE_RADIX)
+            val nonce = BigInteger(
+                jsonObject.get(KEY_NONCE).asString,
+                NONCE_RADIX
+            )
             val msg = jsonObject.get(KEY_MESSAGE).asString
 
             return try {

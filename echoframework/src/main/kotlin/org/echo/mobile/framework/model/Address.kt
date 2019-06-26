@@ -8,8 +8,7 @@ import org.echo.mobile.framework.support.crypto.Checksum.CHECKSUM_SIZE
 import org.echo.mobile.framework.support.crypto.Checksum.calculateChecksum
 
 /**
- * Represents account model in Graphene blockchain
- * [Address model details](https://dev-doc.myecho.app/classgraphene_1_1chain_1_1address.html)
+ * Represents EcDSA address model in blockchain
  *
  * @author Daria Pechkovskaya
  */

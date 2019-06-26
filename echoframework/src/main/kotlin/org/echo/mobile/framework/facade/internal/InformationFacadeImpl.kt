@@ -11,26 +11,30 @@ import org.echo.mobile.framework.model.Asset
 import org.echo.mobile.framework.model.Balance
 import org.echo.mobile.framework.model.BaseOperation
 import org.echo.mobile.framework.model.Block
+import org.echo.mobile.framework.model.EthDepositMapper
+import org.echo.mobile.framework.model.EthWithdrawMapper
 import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.HistoricalTransfer
 import org.echo.mobile.framework.model.HistoryResponse
 import org.echo.mobile.framework.model.HistoryResult
-import org.echo.mobile.framework.model.SidechainTransfer
 import org.echo.mobile.framework.model.operations.AccountCreateOperation
 import org.echo.mobile.framework.model.operations.AccountUpdateOperation
 import org.echo.mobile.framework.model.operations.ContractCallOperation
 import org.echo.mobile.framework.model.operations.ContractCreateOperation
 import org.echo.mobile.framework.model.operations.ContractOperation
+import org.echo.mobile.framework.model.operations.ContractTransferOperation
 import org.echo.mobile.framework.model.operations.CreateAssetOperation
+import org.echo.mobile.framework.model.operations.GenerateEthereumAddressOperation
 import org.echo.mobile.framework.model.operations.IssueAssetOperation
 import org.echo.mobile.framework.model.operations.OperationType
+import org.echo.mobile.framework.model.operations.SidechainBurnSocketOperation
+import org.echo.mobile.framework.model.operations.SidechainIssueSocketOperation
 import org.echo.mobile.framework.model.operations.TransferOperation
+import org.echo.mobile.framework.model.operations.WithdrawEthereumOperation
 import org.echo.mobile.framework.processResult
 import org.echo.mobile.framework.service.AccountHistoryApiService
 import org.echo.mobile.framework.service.DatabaseApiService
-import org.echo.mobile.framework.support.EthAddressValidator
-import org.echo.mobile.framework.support.EthAddressValidator.ADDRESS_PREFIX
 import org.echo.mobile.framework.support.Result
 import org.echo.mobile.framework.support.Result.Error
 import org.echo.mobile.framework.support.Result.Value
@@ -103,19 +107,6 @@ class InformationFacadeImpl(
 
     override fun getGlobalProperties(callback: Callback<GlobalProperties>) =
         databaseApiService.getGlobalProperties(callback)
-
-    override fun getSidechainTransfers(
-        ethAddress: String,
-        callback: Callback<List<SidechainTransfer>>
-    ) {
-        if (!EthAddressValidator.isAddressValid(ethAddress)) {
-            throw LocalException("Invalid ethereum address $ethAddress")
-        }
-
-        val processedAddress = ethAddress.replace(ADDRESS_PREFIX, "").toLowerCase()
-
-        databaseApiService.getSidechainTransfers(processedAddress, callback)
-    }
 
     private fun findAccount(
         nameOrId: String,
@@ -252,6 +243,34 @@ class InformationFacadeImpl(
                     processContractOperation(
                         operation as ContractCallOperation,
                         transaction.result,
+                        accountsRegistry,
+                        assetsRegistry
+                    )
+                OperationType.CONTRACT_TRANSFER_OPERATION ->
+                    processContractTransferOperation(
+                        operation as ContractTransferOperation,
+                        accountsRegistry,
+                        assetsRegistry
+                    )
+                OperationType.GENERATE_ETH_ADDRESS_OPERATION ->
+                    processGenerateEthAddressOperation(
+                        operation as GenerateEthereumAddressOperation,
+                        accountsRegistry
+                    )
+                OperationType.WITHDRAW_ETH_OPERATION ->
+                    processWithdrawEthOperation(
+                        operation as WithdrawEthereumOperation,
+                        accountsRegistry
+                    )
+                OperationType.SIDECHAIN_ISSUE_OPERATION ->
+                    processSidechainIssueOperation(
+                        operation as SidechainIssueSocketOperation,
+                        accountsRegistry,
+                        assetsRegistry
+                    )
+                OperationType.SIDECHAIN_BURN_OPERATION ->
+                    processSidechainBurnOperation(
+                        operation as SidechainBurnSocketOperation,
                         accountsRegistry,
                         assetsRegistry
                     )
@@ -392,6 +411,108 @@ class InformationFacadeImpl(
                     operation.contractResult = contractResult
                 }
         }
+    }
+
+    private fun processContractTransferOperation(
+        operation: ContractTransferOperation,
+        accountRegistry: MutableMap<String, Account>,
+        assetsRegistry: MutableList<Asset>
+    ) {
+        val assetId = operation.amount.asset.getObjectId()
+
+        getAsset(assetId, assetsRegistry)?.let { notNullAsset ->
+            operation.amount.asset = notNullAsset
+        }
+
+        val toAccount = operation.to.getObjectId()
+
+        fillAccounts(listOf(toAccount), accountRegistry)
+
+        accountRegistry[toAccount]?.let { notNullAccount ->
+            operation.to = notNullAccount
+        }
+    }
+
+    private fun processGenerateEthAddressOperation(
+        operation: GenerateEthereumAddressOperation,
+        accountRegistry: MutableMap<String, Account>
+    ) {
+        val account = operation.account.getObjectId()
+
+        fillAccounts(listOf(account), accountRegistry)
+
+        accountRegistry[account]?.let { notNullAccount ->
+            operation.account = notNullAccount
+        }
+    }
+
+    private fun processWithdrawEthOperation(
+        operation: WithdrawEthereumOperation,
+        accountRegistry: MutableMap<String, Account>
+    ) {
+        val account = operation.account.getObjectId()
+
+        fillAccounts(listOf(account), accountRegistry)
+
+        accountRegistry[account]?.let { notNullAccount ->
+            operation.account = notNullAccount
+        }
+    }
+
+    private fun processSidechainIssueOperation(
+        operation: SidechainIssueSocketOperation,
+        accountRegistry: MutableMap<String, Account>,
+        assetsRegistry: MutableList<Asset>
+    ) {
+        val account = operation.account.getObjectId()
+
+        fillAccounts(listOf(account), accountRegistry)
+
+        accountRegistry[account]?.let { notNullAccount ->
+            operation.account = notNullAccount
+        }
+
+        val assetId = operation.value.asset.getObjectId()
+
+        getAsset(assetId, assetsRegistry)?.let { notNullAsset ->
+            operation.value.asset = notNullAsset
+        }
+
+        val withdrawId = operation.deposit.getObjectId()
+        databaseApiService.getObjects(listOf(withdrawId), EthDepositMapper())
+            .value { deposits ->
+                deposits.find { it.getObjectId() == withdrawId }?.let {
+                    operation.deposit = it
+                }
+            }
+    }
+
+    private fun processSidechainBurnOperation(
+        operation: SidechainBurnSocketOperation,
+        accountRegistry: MutableMap<String, Account>,
+        assetsRegistry: MutableList<Asset>
+    ) {
+        val account = operation.account.getObjectId()
+
+        fillAccounts(listOf(account), accountRegistry)
+
+        accountRegistry[account]?.let { notNullAccount ->
+            operation.account = notNullAccount
+        }
+
+        val assetId = operation.value.asset.getObjectId()
+
+        getAsset(assetId, assetsRegistry)?.let { notNullAsset ->
+            operation.value.asset = notNullAsset
+        }
+
+        val withdrawId = operation.withdraw.getObjectId()
+        databaseApiService.getObjects(listOf(withdrawId), EthWithdrawMapper())
+            .value { withdraws ->
+                withdraws.find { it.getObjectId() == withdrawId }?.let {
+                    operation.withdraw = it
+                }
+            }
     }
 
     private fun fillFeeAssets(operation: BaseOperation, assetsRegistry: MutableList<Asset>) {

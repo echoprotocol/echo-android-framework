@@ -8,6 +8,7 @@ import org.echo.mobile.framework.core.socket.SocketCoreComponent
 import org.echo.mobile.framework.core.socket.SocketMessengerListener
 import org.echo.mobile.framework.core.socket.SocketState
 import org.echo.mobile.framework.exception.LocalException
+import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.Asset
 import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.Block
@@ -59,7 +60,6 @@ class DatabaseApiServiceTest {
             id = "2.1.0",
             headBlockId = "000033affe5ec1c922b4666f3e754233b31af00e",
             date = Date(),
-            currentWitness = "1.6.6",
             nextMaintenanceDate = Date(),
             recentSlotsFilled = "340282366920938463463374607431768211455",
             lastBudgetTime = "budgetTime"
@@ -67,8 +67,9 @@ class DatabaseApiServiceTest {
         blockResponse = Block(
             "000000ea71c0589dc4f1db03fa38d38675b538f3",
             "2018-08-02T14:42:30",
-            "1.6.11",
-            "405847ef0a456fdf7d8ae1aa6458a7edb6491695",
+            Account("1.2.0"),
+            "0000000000000000000000000000000000000000",
+            "5",
             "0000000000000000000000000000000000000000000000000000000" +
                     "000000000000000000000000000000000000000000000000000000000000000000000000000",
             listOf()
@@ -397,38 +398,6 @@ class DatabaseApiServiceTest {
             DatabaseApiServiceImpl(socketCoreComponent, cryptoCoreComponent, Echodevnet())
 
         databaseApiService.getContractResult("")
-            .value { fail() }
-            .error { error ->
-                assertNotNull(error)
-            }
-    }
-
-    @Test
-    fun getAllContractsTest() {
-        val response = listOf(ContractInfo("1.16.1", "2.20.1", false))
-
-        val socketCoreComponent = ServiceSocketCoreComponentMock(response)
-
-        val databaseApiService =
-            DatabaseApiServiceImpl(socketCoreComponent, cryptoCoreComponent, Echodevnet())
-
-        databaseApiService.getAllContracts()
-            .value { result ->
-                assertNotNull(result)
-                assert(result.isNotEmpty())
-                assertEquals(result.first().getObjectId(), response.first().getObjectId())
-            }
-            .error { fail() }
-    }
-
-    @Test
-    fun getAllContractsErrorTest() {
-        val socketCoreComponent = ServiceSocketCoreComponentMock(null)
-
-        val databaseApiService =
-            DatabaseApiServiceImpl(socketCoreComponent, cryptoCoreComponent, Echodevnet())
-
-        databaseApiService.getAllContracts()
             .value { fail() }
             .error { error ->
                 assertNotNull(error)

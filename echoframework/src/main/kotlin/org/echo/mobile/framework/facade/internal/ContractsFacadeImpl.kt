@@ -25,9 +25,11 @@ import org.echo.mobile.framework.model.operations.ContractCreateOperationBuilder
 import org.echo.mobile.framework.processResult
 import org.echo.mobile.framework.service.DatabaseApiService
 import org.echo.mobile.framework.service.NetworkBroadcastApiService
+import org.echo.mobile.framework.support.Provider
 import org.echo.mobile.framework.support.concurrent.future.FutureTask
 import org.echo.mobile.framework.support.concurrent.future.completeCallback
 import org.echo.mobile.framework.support.dematerialize
+import java.math.RoundingMode
 
 /**
  * Implementation of [ContractsFacade]
@@ -40,7 +42,8 @@ class ContractsFacadeImpl(
     private val databaseApiService: DatabaseApiService,
     private val networkBroadcastApiService: NetworkBroadcastApiService,
     private val cryptoCoreComponent: CryptoCoreComponent,
-    private val notifiedTransactionsHelper: NotifiedTransactionsHelper
+    private val notifiedTransactionsHelper: NotificationsHelper<TransactionResult>,
+    private val feeRatioProvider: Provider<Double>
 ) : BaseTransactionsFacade(
     databaseApiService,
     cryptoCoreComponent
@@ -49,6 +52,7 @@ class ContractsFacadeImpl(
     override fun createContract(
         registrarNameOrId: String,
         password: String,
+        value: String,
         assetId: String,
         feeAsset: String?,
         byteCode: String,
@@ -71,6 +75,7 @@ class ContractsFacadeImpl(
             callId = createContract(
                 registrar,
                 privateKey,
+                value,
                 assetId,
                 feeAsset,
                 byteCode,
@@ -91,6 +96,7 @@ class ContractsFacadeImpl(
     override fun createContractWithWif(
         registrarNameOrId: String,
         wif: String,
+        value: String,
         assetId: String,
         feeAsset: String?,
         byteCode: String,
@@ -109,6 +115,7 @@ class ContractsFacadeImpl(
             callId = createContract(
                 registrar,
                 privateKey,
+                value,
                 assetId,
                 feeAsset,
                 byteCode,
@@ -326,9 +333,6 @@ class ContractsFacadeImpl(
     ) =
         callback.processResult(databaseApiService.getContracts(contractIds))
 
-    override fun getAllContracts(callback: Callback<List<ContractInfo>>) =
-        callback.processResult(databaseApiService.getAllContracts())
-
     override fun getContract(contractId: String, callback: Callback<ContractStruct>) =
         callback.processResult(databaseApiService.getContract(contractId))
 
@@ -342,6 +346,7 @@ class ContractsFacadeImpl(
     private fun createContract(
         registrar: Account,
         privateKey: ByteArray,
+        value: String,
         assetId: String,
         feeAsset: String?,
         byteCode: String,
@@ -351,11 +356,15 @@ class ContractsFacadeImpl(
 
         val contractOperation = ContractCreateOperationBuilder()
             .setAsset(assetId)
+            .setValue(UnsignedLong.valueOf(value))
             .setRegistrar(registrar)
             .setContractCode(byteCode + constructorParams)
             .build()
 
-        val transaction = buildTransaction(privateKey, assetId, feeAsset, contractOperation)
+        val rawFees =
+            getFees(listOf(contractOperation), feeAsset ?: assetId)
+
+        val transaction = buildTransaction(privateKey, rawFees, contractOperation)
 
         return networkBroadcastApiService.broadcastTransactionWithCallback(transaction)
             .dematerialize().toString()
@@ -377,7 +386,15 @@ class ContractsFacadeImpl(
             .setValue(AssetAmount(UnsignedLong.valueOf(value), Asset(assetId)))
             .build()
 
-        val transaction = buildTransaction(privateKey, assetId, feeAsset, contractOperation)
+        val rawFees =
+            getContractFees(listOf(contractOperation), feeAsset ?: assetId).map { it.fee }
+
+        val transaction = buildTransaction(
+            privateKey,
+            rawFees,
+            contractOperation,
+            feeRatioProvider.provide()
+        )
 
         return networkBroadcastApiService.broadcastTransactionWithCallback(transaction)
             .dematerialize().toString()
@@ -385,19 +402,29 @@ class ContractsFacadeImpl(
 
     private fun buildTransaction(
         privateKey: ByteArray,
-        assetId: String,
-        feeAsset: String?,
-        operation: BaseOperation
+        fees: List<AssetAmount>,
+        operation: BaseOperation,
+        feeRatio: Double? = null
     ): Transaction {
         val blockData = databaseApiService.getBlockData()
         val chainId = getChainId()
-        val fees = getFees(listOf(operation), feeAsset ?: assetId)
+
+        val ratioFees = feeRatio?.let { ratio ->
+            multiplyFees(fees.toMutableList(), ratio)
+        } ?: fees
 
         return Transaction(blockData, listOf(operation), chainId).apply {
-            setFees(fees)
+            setFees(ratioFees)
             addPrivateKey(privateKey)
         }
     }
+
+    private fun multiplyFees(
+        rawFees: MutableList<AssetAmount>, feeRatio: Double
+    ): List<AssetAmount> =
+        rawFees.map { assetAmount ->
+            assetAmount.multiplyBy(feeRatio, RoundingMode.FLOOR)
+        }
 
     private fun retrieveTransactionResult(
         callId: String,
@@ -406,7 +433,7 @@ class ContractsFacadeImpl(
     ) {
         try {
             val future = FutureTask<TransactionResult>()
-            notifiedTransactionsHelper.subscribeOnTransactionResult(
+            notifiedTransactionsHelper.subscribeOnResult(
                 callId,
                 future.completeCallback()
             )

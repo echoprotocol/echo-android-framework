@@ -32,8 +32,6 @@ enum class OperationType {
     ASSET_SETTLE_OPERATION,
     ASSET_GLOBAL_SETTLE_OPERATION,
     ASSET_PUBLISH_FEED_OPERATION,
-    WITNESS_CREATE_OPERATION,
-    WITNESS_UPDATE_OPERATION,
     PROPOSAL_CREATE_OPERATION,
     PROPOSAL_UPDATE_OPERATION,
     PROPOSAL_DELETE_OPERATION,
@@ -46,23 +44,30 @@ enum class OperationType {
     COMMITTEE_MEMBER_UPDATE_GLOBAL_PARAMETERS_OPERATION,
     VESTING_BALANCE_CREATE_OPERATION,
     VESTING_BALANCE_WITHDRAW_OPERATION,
-    WORKER_CREATE_OPERATION,
     CUSTOM_OPERATION,
     ASSERT_OPERATION,
     BALANCE_CLAIM_OPERATION,
     OVERRIDE_TRANSFER_OPERATION,
-    TRANSFER_TO_BLIND_OPERATION,
-    BLIND_TRANSFER_OPERATION,
-    TRANSFER_FROM_BLIND_OPERATION,
     ASSET_SETTLE_CANCEL_OPERATION,  // VIRTUAL
     ASSET_CLAIM_FEES_OPERATION,
-    FBA_DISTRIBUTE_OPERATION,       //VIRTUAL
     BID_COLLATERAL_OPERATION,
     EXECUTE_BID_OPERATION,          //VIRTUAL
     CONTRACT_CREATE_OPERATION,
     CONTRACT_CALL_OPERATION,
-    CONTRACT_OPERATION,
-    CONTRACT_TRANSFER_OPERATION     //VIRTUAL
+    CONTRACT_TRANSFER_OPERATION,
+    CHANGE_SIDECHAIN_CONFIG_OPERATION, // temporary operation for tests
+    ACCOUNT_ADDRESS_CREATE_OPERATION,
+    TRANSFER_TO_ADDRESS_OPERATION,
+    GENERATE_ETH_ADDRESS_OPERATION,
+    CREATE_ETH_ADDRESS_OPERATION,
+    DEPOSIT_ETH_OPERATION,
+    WITHDRAW_ETH_OPERATION,
+    APPROVE_WITHDRAW_ETH_OPERATION,
+    CONTRACT_FUND_POOL_OPERATION,
+    CONTRACT_WHITELIST_OPERATION,
+    SIDECHAIN_ISSUE_OPERATION,          // VIRTUAL
+    SIDECHAIN_BURN_OPERATION            // VIRTUAL
+
 }
 
 /**
@@ -82,7 +87,11 @@ class OperationTypeToClassConverter : Converter<Int, Class<*>?> {
             OperationType.ACCOUNT_CREATE_OPERATION.ordinal to AccountCreateOperation::class.java,
             OperationType.CONTRACT_CREATE_OPERATION.ordinal to ContractCreateOperation::class.java,
             OperationType.CONTRACT_CALL_OPERATION.ordinal to ContractCallOperation::class.java,
-            OperationType.CONTRACT_TRANSFER_OPERATION to ContractTransferOperation::class.java
+            OperationType.CONTRACT_TRANSFER_OPERATION.ordinal to ContractTransferOperation::class.java,
+            OperationType.GENERATE_ETH_ADDRESS_OPERATION.ordinal to GenerateEthereumAddressOperation::class.java,
+            OperationType.WITHDRAW_ETH_OPERATION.ordinal to WithdrawEthereumOperation::class.java,
+            OperationType.SIDECHAIN_ISSUE_OPERATION.ordinal to SidechainIssueSocketOperation::class.java,
+            OperationType.SIDECHAIN_BURN_OPERATION.ordinal to SidechainBurnSocketOperation::class.java
         )
     }
 
