@@ -1,6 +1,8 @@
 package org.echo.mobile.framework
 
 import com.google.common.primitives.UnsignedLong
+import org.echo.mobile.framework.core.crypto.internal.CryptoCoreComponentImpl
+import org.echo.mobile.framework.core.crypto.internal.eddsa.key.IrohaKeyPairCryptoAdapter
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.Asset
@@ -231,6 +233,13 @@ class EchoFrameworkTest {
     private val illegalHistoryItemId = "1.15.-1"
 
     private val validContractPrefix = "1.15."
+
+    private val cryptoCoreComponent by lazy {
+        CryptoCoreComponentImpl(
+            Echodevnet(),
+            IrohaKeyPairCryptoAdapter()
+        )
+    }
 
     @Test
     fun connectTest() {
@@ -623,15 +632,44 @@ class EchoFrameworkTest {
     }
 
 //    @Test
-//    fun registrationTest() {
+////    fun registrationTest() {
+////        val framework = initFramework()
+////
+////        val futureRegistration = FutureTask<Boolean>()
+////
+////        if (connect(framework) == false) Assert.fail("Connection error")
+////
+////        framework.register(
+////            "daria1", "daria1",
+////            object : Callback<Boolean> {
+////                override fun onSuccess(result: Boolean) {
+////                    futureRegistration.setComplete(true)
+////                }
+////
+////                override fun onError(error: LocalException) {
+////                    futureRegistration.setComplete(false)
+////                }
+////
+////            })
+////
+////        val registered = futureRegistration.get() ?: false
+////
+////        assertTrue(registered)
+////    }
+
+//    @Test
+//    fun registrationByWifTest() {
 //        val framework = initFramework()
 //
 //        val futureRegistration = FutureTask<Boolean>()
 //
 //        if (connect(framework) == false) Assert.fail("Connection error")
 //
-//        framework.register(
-//            "daria1", "daria1",
+//        val randomPrivateKey = cryptoCoreComponent.getEdDSAPrivateKey()
+//        val wif = cryptoCoreComponent.encodeToWif(randomPrivateKey)
+//
+//        framework.registerByWif(
+//            "dimasbywif", wif,
 //            object : Callback<Boolean> {
 //                override fun onSuccess(result: Boolean) {
 //                    futureRegistration.setComplete(true)

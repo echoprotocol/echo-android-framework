@@ -31,8 +31,11 @@ class EdDSAKeyProviderImpl(
     override fun providePublicKeyRaw(seed: ByteArray): ByteArray =
         wrapError { keyPairCryptoAdapter.keyPair(seed).first }
 
-    override fun providePrivateKeyRaw(seed: ByteArray): ByteArray =
-        wrapError { keyPairCryptoAdapter.keyPair(seed).second }
+    override fun providePrivateKeyRaw(seed: ByteArray?): ByteArray =
+        wrapError {
+            (seed?.let { keyPairCryptoAdapter.keyPair(seed) }
+                ?: keyPairCryptoAdapter.keyPair()).second
+        }
 
     private fun <T> wrapError(body: () -> T): T =
         try {

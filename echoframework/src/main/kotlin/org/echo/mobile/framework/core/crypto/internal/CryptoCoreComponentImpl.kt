@@ -20,6 +20,7 @@ import org.echo.mobile.framework.support.crypto.encryptAES
 import org.echo.mobile.framework.support.hexlify
 import org.echo.mobile.framework.support.sha256hash
 import org.echo.mobile.framework.support.sha512hash
+import org.spongycastle.cms.RecipientId.password
 import org.spongycastle.util.encoders.Hex
 import java.math.BigInteger
 import java.security.NoSuchAlgorithmException
@@ -87,6 +88,10 @@ class CryptoCoreComponentImpl @JvmOverloads constructor(
         val seedString = generateSeed(userName, password, authorityType)
         val secretKeySeed = ECKey.fromPrivate(createPrivateKey(seedString)).getPrivKeyBytes()
         return edDSAKeyProvider.providePrivateKeyRaw(secretKeySeed)
+    }
+
+    override fun getEdDSAPrivateKey(): ByteArray {
+        return edDSAKeyProvider.providePrivateKeyRaw()
     }
 
     override fun derivePublicKeyFromPrivate(privateKey: ByteArray): ByteArray =

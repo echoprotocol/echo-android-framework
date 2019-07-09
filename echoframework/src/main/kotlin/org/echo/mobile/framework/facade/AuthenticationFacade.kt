@@ -41,4 +41,11 @@ interface AuthenticationFacade {
      */
     fun register(userName: String, password: String, callback: Callback<Boolean>)
 
+    /**
+     * Registers user in echo blockchain using [userName] and already generated [wif]
+     *
+     * Returns true/false according to registration result
+     */
+    fun registerByWif(userName: String, wif: String, callback: Callback<Boolean>)
+
 }
