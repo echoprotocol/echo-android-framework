@@ -47,10 +47,7 @@ class DatabaseApiServiceTest {
     private lateinit var dynamicGlobalPropertiesResponse: DynamicGlobalProperties
     private lateinit var blockResponse: Block
     private val cryptoCoreComponent by lazy {
-        CryptoCoreComponentImpl(
-            Echodevnet(),
-            IrohaKeyPairCryptoAdapter()
-        )
+        CryptoCoreComponentImpl(IrohaKeyPairCryptoAdapter())
     }
 
     @Before

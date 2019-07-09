@@ -7,7 +7,6 @@ import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.Asset
 import org.echo.mobile.framework.model.AssetAmount
-import org.echo.mobile.framework.model.AuthorityType
 import org.echo.mobile.framework.model.BaseOperation
 import org.echo.mobile.framework.model.Transaction
 import org.echo.mobile.framework.model.contract.ContractFee
@@ -43,22 +42,12 @@ abstract class BaseTransactionsFacade(
     ): List<ContractFee> =
         databaseApiService.getRequiredContractFees(operations, Asset(assetId)).dematerialize()
 
-    protected fun checkOwnerAccount(name: String, password: String, account: Account) {
-        val ownerAddress =
-            cryptoCoreComponent.getEdDSAAddress(name, password, AuthorityType.ACTIVE)
-
-        val isKeySame = account.isEqualsByKey(ownerAddress, AuthorityType.ACTIVE)
-        if (!isKeySame) {
-            throw LocalException("Owner account checking exception")
-        }
-    }
-
     protected fun checkOwnerAccount(wif: String, account: Account) {
         val privateKey = cryptoCoreComponent.decodeFromWif(wif)
         val publicKey = cryptoCoreComponent.deriveEdDSAPublicKeyFromPrivate(privateKey)
         val address = cryptoCoreComponent.getEdDSAAddressFromPublicKey(publicKey)
 
-        val isKeySame = account.isEqualsByKey(address, AuthorityType.ACTIVE)
+        val isKeySame = account.isEqualsByKey(address)
         if (!isKeySame) {
             throw LocalException("Owner account checking exception")
         }

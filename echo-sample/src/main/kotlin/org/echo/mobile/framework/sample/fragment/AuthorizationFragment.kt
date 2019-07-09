@@ -52,7 +52,7 @@ class AuthorizationFragment : BaseFragment() {
 
         btnChangePassword.setOnClickListener {
             progressListener?.toggle(true)
-            lib?.changePassword(etName.text.toString(),
+            lib?.changeWif(etName.text.toString(),
                 etPassword.text.toString(),
                 etNewPassword.text.toString(),
                 object : Callback<Any> {

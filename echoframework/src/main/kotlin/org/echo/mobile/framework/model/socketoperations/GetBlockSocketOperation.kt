@@ -10,7 +10,6 @@ import org.echo.mobile.framework.model.AccountOptions
 import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.AssetOptions
 import org.echo.mobile.framework.model.Block
-import org.echo.mobile.framework.model.Memo
 import org.echo.mobile.framework.model.Transaction
 import org.echo.mobile.framework.model.eddsa.EdAuthority
 import org.echo.mobile.framework.model.network.Network
@@ -99,10 +98,6 @@ class GetBlockSocketOperation(
         registerTypeAdapter(
             AssetOptions::class.java,
             AssetOptions.AssetOptionsDeserializer()
-        )
-        registerTypeAdapter(
-            Memo::class.java,
-            Memo.MemoDeserializer(network)
         )
         registerTypeAdapter(
             IssueAssetOperation::class.java,

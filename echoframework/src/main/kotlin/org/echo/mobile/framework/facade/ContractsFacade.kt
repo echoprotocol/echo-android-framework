@@ -19,7 +19,7 @@ interface ContractsFacade {
      * Creates contract on blockchain
      *
      * @param registrarNameOrId     Name or id of account that creates the contract
-     * @param password              Password from account for transaction signature
+     * @param wif                   Account's private key in wif format
      * @param value                 Payable value for contract creation
      * @param assetId               Asset of contract
      * @param feeAsset              Asset for fee pay
@@ -33,100 +33,12 @@ interface ContractsFacade {
      */
     fun createContract(
         registrarNameOrId: String,
-        password: String,
-        value: String = BigInteger.ZERO.toString(),
-        assetId: String,
-        feeAsset: String?,
-        byteCode: String,
-        params: List<InputValue> = listOf(),
-        broadcastCallback: Callback<Boolean>,
-        resultCallback: Callback<String>? = null
-    )
-
-    /**
-     * Creates contract on blockchain
-     *
-     * @param registrarNameOrId     Name or id of account that creates the contract
-     * @param wif                   Account's private key in wif format
-     * @param value                 Payable value for contract creation
-     * @param assetId               Asset of contract
-     * @param feeAsset              Asset for fee pay
-     * @param byteCode              Bytecode of the created contract
-     * @param params                Params for contract constructor
-     * @param broadcastCallback     Callback for result of operation broadcast
-     * @param resultCallback        Callback for retrieving result of operation (not required).
-     *                              Retrieves result of transactions if exists -
-     *                              history id which contains call contract result,
-     *                              if not exists - empty string
-     */
-    fun createContractWithWif(
-        registrarNameOrId: String,
         wif: String,
         value: String = BigInteger.ZERO.toString(),
         assetId: String,
         feeAsset: String?,
         byteCode: String,
         params: List<InputValue> = listOf(),
-        broadcastCallback: Callback<Boolean>,
-        resultCallback: Callback<String>? = null
-    )
-
-    /**
-     * Calls to contract on blockchain using account password
-     *
-     * @param userNameOrId          Name or id of account that calls the contract
-     * @param password              Password from account for transaction signature
-     * @param assetId               Asset of contract
-     * @param feeAsset              Asset for fee pay
-     * @param contractId            Id of called contract
-     * @param methodName            Name of called method
-     * @param methodParams          Parameters of calling method
-     * @param value                 Amount for payable methods
-     * @param broadcastCallback     Callback for result of operation deploying
-     * @param resultCallback        Callback for retrieving result of operation (not required).
-     *                              Retrieves result of transactions if exists -
-     *                              history id which contains call contract result,
-     *                              if not exists - empty string
-     */
-    fun callContract(
-        userNameOrId: String,
-        password: String,
-        assetId: String,
-        feeAsset: String?,
-        contractId: String,
-        methodName: String,
-        methodParams: List<InputValue>,
-        value: String = BigInteger.ZERO.toString(),
-        broadcastCallback: Callback<Boolean>,
-        resultCallback: Callback<String>? = null
-    )
-
-    /**
-     * Calls to contract on blockchain using account password
-     *
-     * Required valid [code] for contract call
-     *
-     * @param userNameOrId          Name or id of account that calls the contract
-     * @param password              Password from account for transaction signature
-     * @param assetId               Asset of contract
-     * @param feeAsset              Asset for fee pay
-     * @param contractId            Id of called contract
-     * @param code                  Valid code for contract call
-     * @param value                 Amount for payable methods
-     * @param broadcastCallback     Callback for result of operation deploying
-     * @param resultCallback        Callback for retrieving result of operation (not required).
-     *                              Retrieves result of transactions if exists -
-     *                              history id which contains call contract result,
-     *                              if not exists - empty string
-     */
-    fun callContract(
-        userNameOrId: String,
-        password: String,
-        assetId: String,
-        feeAsset: String?,
-        contractId: String,
-        code: String,
-        value: String = BigInteger.ZERO.toString(),
         broadcastCallback: Callback<Boolean>,
         resultCallback: Callback<String>? = null
     )
@@ -148,7 +60,7 @@ interface ContractsFacade {
      *                              history id which contains call contract result,
      *                              if not exists - empty string
      */
-    fun callContractWithWif(
+    fun callContract(
         userNameOrId: String,
         wif: String,
         assetId: String,
@@ -179,7 +91,7 @@ interface ContractsFacade {
      *                              history id which contains call contract result,
      *                              if not exists - empty string
      */
-    fun callContractWithWif(
+    fun callContract(
         userNameOrId: String,
         wif: String,
         assetId: String,
