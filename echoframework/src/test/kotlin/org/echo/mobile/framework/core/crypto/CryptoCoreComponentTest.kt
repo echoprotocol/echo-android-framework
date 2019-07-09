@@ -8,7 +8,6 @@ import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.Address
 import org.echo.mobile.framework.model.Asset
 import org.echo.mobile.framework.model.AssetAmount
-import org.echo.mobile.framework.model.AuthorityType
 import org.echo.mobile.framework.model.BlockData
 import org.echo.mobile.framework.model.Transaction
 import org.echo.mobile.framework.model.network.Echodevnet
@@ -31,15 +30,7 @@ class CryptoCoreComponentTest {
 
     private lateinit var cryptoCoreComponent: CryptoCoreComponent
 
-    private val name = "testName"
-    private val password = "testPassword"
-
-    private val secondName = "secondTestName"
-    private val secondPassword = "secondTestPassword"
-
     private lateinit var network: Network
-
-    private val message = "testMessage"
 
     @Before
     fun setUp() {

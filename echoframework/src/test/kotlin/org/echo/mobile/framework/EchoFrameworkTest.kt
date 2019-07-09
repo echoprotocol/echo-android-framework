@@ -78,7 +78,6 @@ class EchoFrameworkTest {
     private val legalTokenId = "1.14.1"
     private val accountId = "1.2.13"
     private val login = "dima"
-    private val password = "dima"
     private val wif = "5J3UbadSyzzcQQ7HEfTr2brhJJpHhx3NsMzrvgzfysBesutNRCm"
     private val secondAccountId = "1.2.14"
     private val secondLogin = "daria"

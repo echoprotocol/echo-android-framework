@@ -8,7 +8,6 @@ import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.Asset
 import org.echo.mobile.framework.model.AssetAmount
-import org.echo.mobile.framework.model.AuthorityType
 import org.echo.mobile.framework.model.BlockData
 import org.echo.mobile.framework.model.Transaction
 import org.echo.mobile.framework.model.operations.TransferOperationBuilder

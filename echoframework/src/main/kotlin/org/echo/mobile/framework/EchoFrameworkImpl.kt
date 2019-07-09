@@ -688,14 +688,17 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             sidechainFacade.getEthereumAddress(accountNameOrId, callback)
         })
 
-    override fun getAccountDeposits(accountId: String, callback: Callback<List<EthDeposit>>) =
+    override fun getAccountDeposits(accountNameOrId: String, callback: Callback<List<EthDeposit>>) =
         dispatch(Runnable {
-            sidechainFacade.getAccountDeposits(accountId, callback)
+            sidechainFacade.getAccountDeposits(accountNameOrId, callback)
         })
 
-    override fun getAccountWithdrawals(accountId: String, callback: Callback<List<EthWithdraw>>) =
+    override fun getAccountWithdrawals(
+        accountNameOrId: String,
+        callback: Callback<List<EthWithdraw>>
+    ) =
         dispatch(Runnable {
-            sidechainFacade.getAccountWithdrawals(accountId, callback)
+            sidechainFacade.getAccountWithdrawals(accountNameOrId, callback)
         })
 
     override fun getContracts(

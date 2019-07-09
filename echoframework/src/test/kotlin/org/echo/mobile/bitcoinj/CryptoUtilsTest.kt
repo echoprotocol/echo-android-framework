@@ -23,7 +23,7 @@ import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.math.BigInteger
-import java.util.*
+import java.util.Arrays
 
 /**
  * Test cases for crypto utils
