@@ -225,6 +225,20 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         )
     })
 
+    override fun changeWif(
+        name: String,
+        oldWif: String,
+        newWif: String,
+        callback: Callback<Any>
+    ) = dispatch(Runnable {
+        authenticationFacade.changeWif(
+            name,
+            oldWif,
+            newWif,
+            callback.wrapOriginal()
+        )
+    })
+
     override fun register(userName: String, password: String, callback: Callback<Boolean>) =
         dispatch(Runnable {
             authenticationFacade.register(
