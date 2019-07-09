@@ -463,6 +463,36 @@ class EchoFrameworkTest {
         assertTrue(futureChangePassword.get() ?: false)
     }
 
+    @Test
+    fun changeWifTest() {
+        val framework = initFramework()
+
+        val futureChangePassword = FutureTask<Boolean>()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val oldWif = "5J3UbadSyzzcQQ7HEfTr2brhJJpHhx3NsMzrvgzfysBesutNRCm"
+        val newWif = "5J3UbadSyzzcQQ7HEfTr2brhJJpHhx3NsMzrvgzfysBesutNRCm"
+
+        framework.changeWif(
+            "dima",
+            oldWif,
+            newWif,
+            object : Callback<Any> {
+                override fun onSuccess(result: Any) {
+                    futureChangePassword.setComplete(true)
+                }
+
+                override fun onError(error: LocalException) {
+                    error.printStackTrace()
+                    futureChangePassword.setComplete(false)
+                }
+
+            })
+
+        assertTrue(futureChangePassword.get() ?: false)
+    }
+
 //    @Test
 //    fun generateEthereumTest() {
 //        val framework = initFramework()

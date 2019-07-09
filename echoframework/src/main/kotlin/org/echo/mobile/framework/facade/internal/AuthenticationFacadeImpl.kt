@@ -102,6 +102,39 @@ class AuthenticationFacadeImpl(
         networkBroadcastApiService.broadcastTransaction(transaction).dematerialize()
     }
 
+    override fun changeWif(
+        name: String,
+        oldWif: String,
+        newWif: String,
+        callback: Callback<Any>
+    ) = callback.processResult {
+        val accountId = getAccountIdByWif(name, oldWif)
+        val operation: AccountUpdateOperation =
+            buildAccountUpdateOperationWithWif(accountId, newWif)
+
+        val account =
+            databaseApiService.getFullAccounts(listOf(accountId), false).dematerialize()
+
+        operation.newOptionsOption.field?.votingAccount =
+            account[accountId]?.account!!.options.votingAccount
+
+        operation.newOptionsOption.field?.delegatingAccount =
+            account[accountId]?.account!!.options.delegatingAccount
+
+        val blockData = databaseApiService.getBlockData()
+        val chainId = getChainId()
+
+        val privateKey = cryptoCoreComponent.decodeFromWif(oldWif)
+        val fees = getFees(listOf(operation))
+
+        val transaction = Transaction(blockData, listOf(operation), chainId).apply {
+            setFees(fees)
+            addPrivateKey(privateKey)
+        }
+
+        networkBroadcastApiService.broadcastTransaction(transaction).dematerialize()
+    }
+
     override fun register(userName: String, password: String, callback: Callback<Boolean>) {
         try {
             val active =
@@ -158,17 +191,29 @@ class AuthenticationFacadeImpl(
     }
 
     private fun getAccountId(name: String, password: String): String {
-        val accountsResult = databaseApiService.getFullAccounts(listOf(name), false)
-
-        val ownerAddress =
+        val address =
             cryptoCoreComponent.getEdDSAAddress(name, password, AuthorityType.ACTIVE)
+
+        return getOwnedAccountId(name, address)
+    }
+
+    private fun getAccountIdByWif(name: String, wif: String): String {
+        val privateKeyRaw = cryptoCoreComponent.decodeFromWif(wif)
+        val publicKeyRaw = cryptoCoreComponent.deriveEdDSAPublicKeyFromPrivate(privateKeyRaw)
+        val address = cryptoCoreComponent.getEdDSAAddressFromPublicKey(publicKeyRaw)
+
+        return getOwnedAccountId(name, address)
+    }
+
+    private fun getOwnedAccountId(name: String, address: String): String {
+        val accountsResult = databaseApiService.getFullAccounts(listOf(name), false)
 
         val account = accountsResult
             .map { accountsMap -> accountsMap[name] }
             .map { fullAccount -> fullAccount?.account }
             .dematerialize()
 
-        val isKeySame = account?.isEqualsByKey(ownerAddress, AuthorityType.ACTIVE) ?: false
+        val isKeySame = account?.isEqualsByKey(address, AuthorityType.ACTIVE) ?: false
 
         return if (isKeySame) {
             account!!.getObjectId()
@@ -201,6 +246,32 @@ class AuthenticationFacadeImpl(
             .setAccount(account)
             .setActive(activeAuthority)
             .setEdKey(echorandKey)
+            .build()
+    }
+
+    private fun buildAccountUpdateOperationWithWif(
+        id: String,
+        newWif: String
+    ): AccountUpdateOperation {
+        val privateKeyRaw = cryptoCoreComponent.decodeFromWif(newWif)
+        val publicKeyRaw = cryptoCoreComponent.deriveEdDSAPublicKeyFromPrivate(privateKeyRaw)
+        val address = cryptoCoreComponent.getEdDSAAddressFromPublicKey(publicKeyRaw)
+
+        val activeAuthority =
+            EdAuthority(
+                1,
+                hashMapOf(EdAddress(address).pubKey to 1L),
+                hashMapOf()
+            )
+
+        val newOptions = AccountOptions()
+        val account = Account(id)
+
+        return AccountUpdateOperationBuilder()
+            .setOptions(newOptions)
+            .setAccount(account)
+            .setActive(activeAuthority)
+            .setEdKey(address)
             .build()
     }
 

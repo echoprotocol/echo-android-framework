@@ -35,6 +35,21 @@ interface AuthenticationFacade {
     )
 
     /**
+     * Describes wif changing logic contract
+     *
+     * @param name Account name
+     * @param oldWif Current account's wif
+     * @param newWif New wif that user wants to apply
+     * @param callback Listener of operation results
+     */
+    fun changeWif(
+        name: String,
+        oldWif: String,
+        newWif: String,
+        callback: Callback<Any>
+    )
+
+    /**
      * Registers user in echo blockchain using [userName] and [password]
      *
      * Returns true/false according to registration result
