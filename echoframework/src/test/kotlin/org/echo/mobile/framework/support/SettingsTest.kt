@@ -96,6 +96,8 @@ class SettingsTest {
     }
 
     private class TestCryptoComponent : CryptoCoreComponent {
+        override fun getEdDSAPrivateKey(): ByteArray = byteArrayOf(1)
+
         override fun derivePublicKeyFromPrivate(privateKey: ByteArray): ByteArray = byteArrayOf(1)
 
         override fun deriveEdDSAPublicKeyFromPrivate(privateKey: ByteArray): ByteArray = byteArrayOf(1)

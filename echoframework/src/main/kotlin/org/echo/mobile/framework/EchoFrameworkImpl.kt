@@ -234,6 +234,15 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             )
         })
 
+    override fun registerByWif(userName: String, wif: String, callback: Callback<Boolean>) =
+        dispatch(Runnable {
+            authenticationFacade.registerByWif(
+                userName,
+                wif,
+                callback.wrapOriginal()
+            )
+        })
+
     override fun getFeeForTransferOperation(
         fromNameOrId: String,
         password: String,

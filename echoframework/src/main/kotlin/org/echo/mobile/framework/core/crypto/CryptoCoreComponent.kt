@@ -33,6 +33,11 @@ interface CryptoCoreComponent {
     fun getEdDSAPrivateKey(userName: String, password: String, authorityType: AuthorityType): ByteArray
 
     /**
+     * Generate random EdDSA raw private key
+     */
+    fun getEdDSAPrivateKey(): ByteArray
+
+    /**
      * Derives public key from raw private key bytes
      */
     fun derivePublicKeyFromPrivate(privateKey: ByteArray): ByteArray

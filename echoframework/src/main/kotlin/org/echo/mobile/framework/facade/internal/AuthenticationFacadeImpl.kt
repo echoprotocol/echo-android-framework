@@ -121,6 +121,26 @@ class AuthenticationFacadeImpl(
         }
     }
 
+    override fun registerByWif(userName: String, wif: String, callback: Callback<Boolean>) {
+        try {
+            val privateKeyRaw = cryptoCoreComponent.decodeFromWif(wif)
+            val publicKeyRaw = cryptoCoreComponent.deriveEdDSAPublicKeyFromPrivate(privateKeyRaw)
+
+            val active =
+                cryptoCoreComponent.getEdDSAAddressFromPublicKey(publicKeyRaw)
+
+            val callId = registrationApiService.register(
+                userName,
+                active,
+                active
+            ).dematerialize().toString()
+
+            retrieveTransactionResult(callId, callback)
+        } catch (ex: Exception) {
+            callback.onError(LocalException("Can't register account", cause = ex))
+        }
+    }
+
     private fun retrieveTransactionResult(
         callId: String,
         callback: Callback<Boolean>

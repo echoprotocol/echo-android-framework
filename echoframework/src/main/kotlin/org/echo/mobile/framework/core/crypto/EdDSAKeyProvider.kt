@@ -26,7 +26,7 @@ interface EdDSAKeyProvider {
     /**
      * Generates private key in raw representation
      */
-    fun providePrivateKeyRaw(seed: ByteArray): ByteArray
+    fun providePrivateKeyRaw(seed: ByteArray? = null): ByteArray
 
     /**
      * Generates address from public key [ByteArray]
