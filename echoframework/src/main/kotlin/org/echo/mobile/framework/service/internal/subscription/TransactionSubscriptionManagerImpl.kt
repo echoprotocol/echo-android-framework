@@ -10,7 +10,6 @@ import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.AccountOptions
 import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.AssetOptions
-import org.echo.mobile.framework.model.Memo
 import org.echo.mobile.framework.model.TransactionOperationsResult
 import org.echo.mobile.framework.model.TransactionResult
 import org.echo.mobile.framework.model.eddsa.EdAuthority
@@ -114,10 +113,6 @@ class TransactionSubscriptionManagerImpl(network: Network) : TransactionSubscrip
             AssetOptions.AssetOptionsDeserializer()
         )
         registerTypeAdapter(
-            Memo::class.java,
-            Memo.MemoDeserializer(network)
-        )
-        registerTypeAdapter(
             IssueAssetOperation::class.java,
             IssueAssetOperation.IssueAssetDeserializer()
         )
@@ -140,6 +135,5 @@ class TransactionSubscriptionManagerImpl(network: Network) : TransactionSubscrip
         private val LOGGER =
             LoggerCoreComponent.create(TransactionSubscriptionManagerImpl::class.java.name)
     }
-
 
 }

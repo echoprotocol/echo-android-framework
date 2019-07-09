@@ -145,7 +145,6 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             networkBroadcastApiService,
             registrationService,
             settings.cryptoComponent,
-            settings.network,
             registrationNotificationsHelper
         )
 
@@ -202,28 +201,14 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
     override fun stop() =
         dispatch(Runnable { initializerFacade.disconnect() })
 
-    override fun isOwnedBy(name: String, password: String, callback: Callback<FullAccount>) =
+    override fun isOwnedBy(nameOrId: String, wif: String, callback: Callback<FullAccount>) =
         dispatch(Runnable {
             authenticationFacade.isOwnedBy(
-                name,
-                password,
+                nameOrId,
+                wif,
                 callback.wrapOriginal()
             )
         })
-
-    override fun changePassword(
-        name: String,
-        oldPassword: String,
-        newPassword: String,
-        callback: Callback<Any>
-    ) = dispatch(Runnable {
-        authenticationFacade.changePassword(
-            name,
-            oldPassword,
-            newPassword,
-            callback.wrapOriginal()
-        )
-    })
 
     override fun changeWif(
         name: String,
@@ -239,18 +224,9 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         )
     })
 
-    override fun register(userName: String, password: String, callback: Callback<Boolean>) =
+    override fun register(userName: String, wif: String, callback: Callback<Boolean>) =
         dispatch(Runnable {
             authenticationFacade.register(
-                userName,
-                password,
-                callback.wrapOriginal()
-            )
-        })
-
-    override fun registerByWif(userName: String, wif: String, callback: Callback<Boolean>) =
-        dispatch(Runnable {
-            authenticationFacade.registerByWif(
                 userName,
                 wif,
                 callback.wrapOriginal()
@@ -258,28 +234,6 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         })
 
     override fun getFeeForTransferOperation(
-        fromNameOrId: String,
-        password: String,
-        toNameOrId: String,
-        amount: String,
-        asset: String,
-        feeAsset: String?,
-        message: String?,
-        callback: Callback<String>
-    ) = dispatch(Runnable {
-        feeFacade.getFeeForTransferOperation(
-            fromNameOrId,
-            password,
-            toNameOrId,
-            amount,
-            asset,
-            feeAsset,
-            message,
-            callback.wrapOriginal()
-        )
-    })
-
-    override fun getFeeForTransferOperationWithWif(
         fromNameOrId: String,
         wif: String,
         toNameOrId: String,
@@ -289,7 +243,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         message: String?,
         callback: Callback<String>
     ) = dispatch(Runnable {
-        feeFacade.getFeeForTransferOperationWithWif(
+        feeFacade.getFeeForTransferOperation(
             fromNameOrId,
             wif,
             toNameOrId,
@@ -458,26 +412,12 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
 
     override fun createAsset(
         name: String,
-        password: String,
-        asset: Asset,
-        broadcastCallback: Callback<Boolean>,
-        resultCallback: Callback<String>?
-    ) = dispatch(Runnable {
-        assetsFacade.createAsset(
-            name, password,
-            asset,
-            broadcastCallback.wrapOriginal(), resultCallback?.wrapOriginal()
-        )
-    })
-
-    override fun createAssetWithWif(
-        name: String,
         wif: String,
         asset: Asset,
         broadcastCallback: Callback<Boolean>,
         resultCallback: Callback<String>?
     ) = dispatch(Runnable {
-        assetsFacade.createAssetWithWif(
+        assetsFacade.createAsset(
             name, wif,
             asset,
             broadcastCallback.wrapOriginal(), resultCallback?.wrapOriginal()
@@ -486,26 +426,6 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
 
     override fun issueAsset(
         issuerNameOrId: String,
-        password: String,
-        asset: String,
-        amount: String,
-        destinationIdOrName: String,
-        message: String?,
-        callback: Callback<Boolean>
-    ) = dispatch(Runnable {
-        assetsFacade.issueAsset(
-            issuerNameOrId,
-            password,
-            asset,
-            amount,
-            destinationIdOrName,
-            message,
-            callback
-        )
-    })
-
-    override fun issueAssetWithWif(
-        issuerNameOrId: String,
         wif: String,
         asset: String,
         amount: String,
@@ -513,7 +433,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         message: String?,
         callback: Callback<Boolean>
     ) = dispatch(Runnable {
-        assetsFacade.issueAssetWithWif(
+        assetsFacade.issueAsset(
             issuerNameOrId,
             wif,
             asset,
@@ -564,26 +484,6 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
 
     override fun sendTransferOperation(
         nameOrId: String,
-        password: String,
-        toNameOrId: String,
-        amount: String,
-        asset: String,
-        feeAsset: String?,
-        callback: Callback<Boolean>
-    ) = dispatch(Runnable {
-        transactionsFacade.sendTransferOperation(
-            nameOrId,
-            password,
-            toNameOrId,
-            amount,
-            asset,
-            feeAsset,
-            callback.wrapOriginal()
-        )
-    })
-
-    override fun sendTransferOperationWithWif(
-        nameOrId: String,
         wif: String,
         toNameOrId: String,
         amount: String,
@@ -591,7 +491,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         feeAsset: String?,
         callback: Callback<Boolean>
     ) {
-        transactionsFacade.sendTransferOperationWithWif(
+        transactionsFacade.sendTransferOperation(
             nameOrId,
             wif,
             toNameOrId,
@@ -620,7 +520,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
 
     override fun createContract(
         registrarNameOrId: String,
-        password: String,
+        wif: String,
         value: String,
         assetId: String,
         feeAsset: String?,
@@ -631,30 +531,6 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
     ) = dispatch(Runnable {
         contractsFacade.createContract(
             registrarNameOrId,
-            password,
-            value,
-            assetId,
-            feeAsset,
-            byteCode,
-            params,
-            broadcastCallback.wrapOriginal(),
-            resultCallback?.wrapOriginal()
-        )
-    })
-
-    override fun createContractWithWif(
-        registrarNameOrId: String,
-        wif: String,
-        value: String,
-        assetId: String,
-        feeAsset: String?,
-        byteCode: String,
-        params: List<InputValue>,
-        broadcastCallback: Callback<Boolean>,
-        resultCallback: Callback<String>?
-    ) = dispatch(Runnable {
-        contractsFacade.createContractWithWif(
-            registrarNameOrId,
             wif,
             value,
             assetId,
@@ -668,56 +544,6 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
 
     override fun callContract(
         userNameOrId: String,
-        password: String,
-        assetId: String,
-        feeAsset: String?,
-        contractId: String,
-        methodName: String,
-        methodParams: List<InputValue>,
-        value: String,
-        broadcastCallback: Callback<Boolean>,
-        resultCallback: Callback<String>?
-    ) = dispatch(Runnable {
-        contractsFacade.callContract(
-            userNameOrId,
-            password,
-            assetId,
-            feeAsset,
-            contractId,
-            methodName,
-            methodParams,
-            value,
-            broadcastCallback.wrapOriginal(),
-            resultCallback?.wrapOriginal()
-        )
-    })
-
-    override fun callContract(
-        userNameOrId: String,
-        password: String,
-        assetId: String,
-        feeAsset: String?,
-        contractId: String,
-        code: String,
-        value: String,
-        broadcastCallback: Callback<Boolean>,
-        resultCallback: Callback<String>?
-    ) = dispatch(Runnable {
-        contractsFacade.callContract(
-            userNameOrId,
-            password,
-            assetId,
-            feeAsset,
-            contractId,
-            code,
-            value,
-            broadcastCallback.wrapOriginal(),
-            resultCallback?.wrapOriginal()
-        )
-    })
-
-    override fun callContractWithWif(
-        userNameOrId: String,
         wif: String,
         assetId: String,
         feeAsset: String?,
@@ -728,7 +554,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         broadcastCallback: Callback<Boolean>,
         resultCallback: Callback<String>?
     ) = dispatch(Runnable {
-        contractsFacade.callContractWithWif(
+        contractsFacade.callContract(
             userNameOrId,
             wif,
             assetId,
@@ -742,7 +568,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         )
     })
 
-    override fun callContractWithWif(
+    override fun callContract(
         userNameOrId: String,
         wif: String,
         assetId: String,
@@ -753,7 +579,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         broadcastCallback: Callback<Boolean>,
         resultCallback: Callback<String>?
     ) = dispatch(Runnable {
-        contractsFacade.callContractWithWif(
+        contractsFacade.callContract(
             userNameOrId,
             wif,
             assetId,
@@ -823,31 +649,19 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
 
     override fun generateEthereumAddress(
         accountNameOrId: String,
-        password: String,
-        broadcastCallback: Callback<Boolean>,
-        resultCallback: Callback<TransactionResult>?
-    ) =
-        dispatch(Runnable {
-            sidechainFacade.generateEthereumAddress(
-                accountNameOrId, password, broadcastCallback, resultCallback
-            )
-        })
-
-    override fun generateEthereumAddressWithWif(
-        accountNameOrId: String,
         wif: String,
         broadcastCallback: Callback<Boolean>,
         resultCallback: Callback<TransactionResult>?
     ) =
         dispatch(Runnable {
-            sidechainFacade.generateEthereumAddressWithWif(
+            sidechainFacade.generateEthereumAddress(
                 accountNameOrId, wif, broadcastCallback, resultCallback
             )
         })
 
     override fun ethWithdraw(
         accountNameOrId: String,
-        password: String,
+        wif: String,
         ethAddress: String,
         value: String,
         feeAsset: String,
@@ -856,27 +670,6 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
     ) =
         dispatch(Runnable {
             sidechainFacade.ethWithdraw(
-                accountNameOrId,
-                password,
-                ethAddress,
-                value,
-                feeAsset,
-                broadcastCallback,
-                resultCallback
-            )
-        })
-
-    override fun ethWithdrawWithWif(
-        accountNameOrId: String,
-        wif: String,
-        ethAddress: String,
-        value: String,
-        feeAsset: String,
-        broadcastCallback: Callback<Boolean>,
-        resultCallback: Callback<TransactionResult>?
-    ) =
-        dispatch(Runnable {
-            sidechainFacade.ethWithdrawWithWif(
                 accountNameOrId,
                 wif,
                 ethAddress,

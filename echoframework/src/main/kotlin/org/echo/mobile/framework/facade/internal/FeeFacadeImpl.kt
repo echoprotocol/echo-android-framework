@@ -40,38 +40,6 @@ class FeeFacadeImpl(
 
     override fun getFeeForTransferOperation(
         fromNameOrId: String,
-        password: String,
-        toNameOrId: String,
-        amount: String,
-        asset: String,
-        feeAsset: String?,
-        message: String?,
-        callback: Callback<String>
-    ) = callback.processResult(Result {
-        val (fromAccount, toAccount) = getParticipantsPair(fromNameOrId, toNameOrId)
-
-        val transfer = buildTransaction(fromAccount, toAccount, amount, asset)
-
-        getFees(listOf(transfer), feeAsset ?: asset)
-    }.map { fees ->
-        if (fees.isEmpty()) {
-            LOGGER.log(
-                """Empty fee list for required operation.
-                            |Source = $fromNameOrId
-                            |Target = $toNameOrId
-                            |Amount = $amount
-                            |Asset = $asset
-                            |Fee asset = $feeAsset
-                        """
-            )
-            throw LocalException("Unable to get fee for specified operation")
-        }
-
-        fees.first().amount.toString()
-    })
-
-    override fun getFeeForTransferOperationWithWif(
-        fromNameOrId: String,
         wif: String,
         toNameOrId: String,
         amount: String,
