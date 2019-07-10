@@ -64,7 +64,7 @@ class AuthenticationFacadeImpl(
             }
     }
 
-    override fun changeWif(
+    override fun changeKeys(
         name: String,
         oldWif: String,
         newWif: String,

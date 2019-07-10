@@ -210,13 +210,13 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             )
         })
 
-    override fun changeWif(
+    override fun changeKeys(
         name: String,
         oldWif: String,
         newWif: String,
         callback: Callback<Any>
     ) = dispatch(Runnable {
-        authenticationFacade.changeWif(
+        authenticationFacade.changeKeys(
             name,
             oldWif,
             newWif,

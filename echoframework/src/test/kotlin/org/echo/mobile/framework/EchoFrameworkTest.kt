@@ -78,10 +78,8 @@ class EchoFrameworkTest {
     private val legalTokenId = "1.14.1"
     private val accountId = "1.2.13"
     private val login = "dima"
-    private val wif = "5J3UbadSyzzcQQ7HEfTr2brhJJpHhx3NsMzrvgzfysBesutNRCm"
     private val secondAccountId = "1.2.14"
     private val secondLogin = "daria"
-    private val secondPassword = "daria"
     private val legalAssetId = "1.3.0"
 
     private val legalContractParamsBytecode =
@@ -444,7 +442,7 @@ class EchoFrameworkTest {
         val oldWif = "5J3UbadSyzzcQQ7HEfTr2brhJJpHhx3NsMzrvgzfysBesutNRCm"
         val newWif = "5J3UbadSyzzcQQ7HEfTr2brhJJpHhx3NsMzrvgzfysBesutNRCm"
 
-        framework.changeWif(
+        framework.changeKeys(
             "dima",
             oldWif,
             newWif,
@@ -929,7 +927,6 @@ class EchoFrameworkTest {
             amount = "10000",
             asset = "1.3.0",
             feeAsset = "1.3.0",
-            message = "Memasiki",
             callback = futureFee.completeCallback()
         )
 
@@ -951,7 +948,6 @@ class EchoFrameworkTest {
             "10000",
             "1.3.1234",
             "1.3.1234",
-            "Ololoshka",
             futureFee.completeCallback()
         )
 
@@ -1115,7 +1111,6 @@ class EchoFrameworkTest {
             asset = "1.3.3",
             amount = "1",
             destinationIdOrName = "daria",
-            message = "Do it",
             callback = futureIssue.completeCallback()
         )
 

@@ -28,7 +28,7 @@ interface AuthenticationFacade {
      * @param newWif New wif that user wants to apply
      * @param callback Listener of operation results
      */
-    fun changeWif(
+    fun changeKeys(
         name: String,
         oldWif: String,
         newWif: String,
