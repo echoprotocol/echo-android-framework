@@ -1,3 +1,43 @@
+# CHANGELOG 3.3.0
+
+## Operations
+Replaced password with wif in the following methods:
+
+# Authentication:
+* isOwnedBy
+* register
+* changeKeys
+
+# Assets:
+* createAsset
+* issueAsset
+
+# Contracts
+* createContract
+* callContract
+
+# Fee
+* getFeeForTransferOperation
+
+# Sidechain
+* generateEthereumAddress
+* ethWithdraw
+
+# Transfer
+* sendTransferOperation
+
+# Added
+Added account registration by wif
+Added method for account's active and echorand keys changing by wif
+Added random account's private key generation
+
+## Tests
+Removed tests with password and added required tests with wif
+
+## Removed
+Removed ECKey and all connected features
+
+
 # CHANGELOG 3.2.1
 
 ### Fixed

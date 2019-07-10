@@ -24,36 +24,6 @@ interface SidechainFacade {
      */
     fun generateEthereumAddress(
         accountNameOrId: String,
-        password: String,
-        broadcastCallback: Callback<Boolean>,
-        resultCallback: Callback<TransactionResult>?
-    )
-
-    /**
-     * Transfers eth [value] from account [accountNameOrId]
-     * to eth address [ethAddress] using [feeAsset] asfee currency
-     */
-    fun ethWithdraw(
-        accountNameOrId: String,
-        password: String,
-        ethAddress: String,
-        value: String,
-        feeAsset: String,
-        broadcastCallback: Callback<Boolean>,
-        resultCallback: Callback<TransactionResult>?
-    )
-
-    /**
-     * Generates ethereum address for required account [accountNameOrId]
-     *
-     * @param broadcastCallback     Callback for result of operation broadcast
-     * @param resultCallback        Callback for retrieving result of operation (not required).
-     *                              Retrieves result of transactions if exists -
-     *                              history id which contains call contract result,
-     *                              if not exists - empty string
-     */
-    fun generateEthereumAddressWithWif(
-        accountNameOrId: String,
         wif: String,
         broadcastCallback: Callback<Boolean>,
         resultCallback: Callback<TransactionResult>?
@@ -63,7 +33,7 @@ interface SidechainFacade {
      * Transfers eth [value] from account [accountNameOrId]
      * to eth address [ethAddress] using [feeAsset] asfee currency
      */
-    fun ethWithdrawWithWif(
+    fun ethWithdraw(
         accountNameOrId: String,
         wif: String,
         ethAddress: String,

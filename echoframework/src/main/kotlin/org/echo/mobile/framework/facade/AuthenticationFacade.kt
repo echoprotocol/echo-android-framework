@@ -11,34 +11,35 @@ import org.echo.mobile.framework.model.FullAccount
 interface AuthenticationFacade {
 
     /**
-     * Authenticate user with defined [name] and [password] parameters. Returns account if exists
+     * Authenticate user with defined [nameOrId] and [wif] parameters.
+     * Returns account if exists and belongs to required user
      *
-     * @param name Account name
-     * @param password Required account's password
+     * @param nameOrId Account name or id
+     * @param wif Required account's wif
      * @param callback Listener of login operation results
      */
-    fun isOwnedBy(name: String, password: String, callback: Callback<FullAccount>)
+    fun isOwnedBy(nameOrId: String, wif: String, callback: Callback<FullAccount>)
 
     /**
-     * Describes password changing logic contract
+     * Describes wif changing logic contract
      *
      * @param name Account name
-     * @param oldPassword Current account's password
-     * @param newPassword New password that user wants to apply
+     * @param oldWif Current account's wif
+     * @param newWif New wif that user wants to apply
      * @param callback Listener of operation results
      */
-    fun changePassword(
+    fun changeKeys(
         name: String,
-        oldPassword: String,
-        newPassword: String,
+        oldWif: String,
+        newWif: String,
         callback: Callback<Any>
     )
 
     /**
-     * Registers user in echo blockchain using [userName] and [password]
+     * Registers user in echo blockchain using [userName] and already generated [wif]
      *
      * Returns true/false according to registration result
      */
-    fun register(userName: String, password: String, callback: Callback<Boolean>)
+    fun register(userName: String, wif: String, callback: Callback<Boolean>)
 
 }

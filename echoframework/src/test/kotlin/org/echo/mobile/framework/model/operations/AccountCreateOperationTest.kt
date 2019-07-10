@@ -1,12 +1,10 @@
 package org.echo.mobile.framework.model.operations
 
 import com.google.common.primitives.UnsignedLong
-import org.echo.mobile.bitcoinj.ECKey
 import org.echo.mobile.framework.model.AccountOptions
 import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.BaseOperation
 import org.echo.mobile.framework.model.eddsa.EdAuthority
-import org.echo.mobile.framework.model.PublicKey
 import org.junit.Assert
 import org.junit.Assert.assertNotNull
 import org.junit.Test

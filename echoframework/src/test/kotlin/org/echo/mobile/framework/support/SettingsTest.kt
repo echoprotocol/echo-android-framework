@@ -1,6 +1,5 @@
 package org.echo.mobile.framework.support
 
-import org.echo.mobile.bitcoinj.ECKey
 import org.echo.mobile.framework.ECHO_URL
 import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
 import org.echo.mobile.framework.core.crypto.internal.CryptoCoreComponentImpl
@@ -8,7 +7,6 @@ import org.echo.mobile.framework.core.socket.SocketMessenger
 import org.echo.mobile.framework.core.socket.SocketMessengerListener
 import org.echo.mobile.framework.core.socket.internal.SocketMessengerImpl
 import org.echo.mobile.framework.exception.LocalException
-import org.echo.mobile.framework.model.AuthorityType
 import org.echo.mobile.framework.model.Transaction
 import org.echo.mobile.framework.model.network.Echodevnet
 import org.echo.mobile.framework.model.network.Mainnet
@@ -16,7 +14,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.math.BigInteger
 import java.util.ArrayList
 
 /**
@@ -96,64 +93,16 @@ class SettingsTest {
     }
 
     private class TestCryptoComponent : CryptoCoreComponent {
-        override fun derivePublicKeyFromPrivate(privateKey: ByteArray): ByteArray = byteArrayOf(1)
+        override fun getEdDSAPrivateKey(): ByteArray = byteArrayOf(1)
 
-        override fun deriveEdDSAPublicKeyFromPrivate(privateKey: ByteArray): ByteArray = byteArrayOf(1)
-
-        override fun getAddressFromPublicKey(publicKey: ByteArray): String = ""
+        override fun deriveEdDSAPublicKeyFromPrivate(privateKey: ByteArray): ByteArray =
+            byteArrayOf(1)
 
         override fun getEdDSAAddressFromPublicKey(publicKey: ByteArray): String = ""
 
         override fun encodeToWif(source: ByteArray): String = ""
 
         override fun decodeFromWif(source: String): ByteArray = byteArrayOf(1)
-
-        override fun getRawEchorandKey(userName: String, password: String): ByteArray =
-            byteArrayOf(0)
-
-        override fun getEchorandKey(userName: String, password: String): String = ""
-
-        override fun encryptMessage(
-            privateKey: ByteArray,
-            publicKey: ByteArray,
-            nonce: BigInteger,
-            message: String
-        ): ByteArray? = ByteArray(0)
-
-        override fun decryptMessage(
-            privateKey: ByteArray,
-            publicKey: ByteArray,
-            nonce: BigInteger,
-            message: ByteArray
-        ): String = ""
-
-        override fun getAddress(
-            userName: String,
-            password: String,
-            authorityType: AuthorityType
-        ): String = "test"
-
-        override fun getEdDSAAddress(
-            userName: String,
-            password: String,
-            authorityType: AuthorityType
-        ): String = "test"
-
-        override fun getPrivateKey(
-            userName: String,
-            password: String,
-            authorityType: AuthorityType
-        ): ByteArray = ECKey.fromPrivate(
-            BigInteger("0")
-        ).getPrivKeyBytes()
-
-        override fun getEdDSAPrivateKey(
-            userName: String,
-            password: String,
-            authorityType: AuthorityType
-        ): ByteArray = ECKey.fromPrivate(
-            BigInteger("0")
-        ).getPrivKeyBytes()
 
         override fun signTransaction(transaction: Transaction): ArrayList<ByteArray> =
             arrayListOf(ByteArray(1))

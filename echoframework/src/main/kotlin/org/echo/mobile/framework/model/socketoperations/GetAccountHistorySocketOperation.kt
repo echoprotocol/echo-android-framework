@@ -11,7 +11,6 @@ import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.AssetOptions
 import org.echo.mobile.framework.model.HistoricalTransfer
 import org.echo.mobile.framework.model.HistoryResponse
-import org.echo.mobile.framework.model.Memo
 import org.echo.mobile.framework.model.eddsa.EdAuthority
 import org.echo.mobile.framework.model.network.Network
 import org.echo.mobile.framework.model.operations.AccountCreateOperation
@@ -114,10 +113,6 @@ class GetAccountHistorySocketOperation(
         registerTypeAdapter(
             AssetOptions::class.java,
             AssetOptions.AssetOptionsDeserializer()
-        )
-        registerTypeAdapter(
-            Memo::class.java,
-            Memo.MemoDeserializer(network)
         )
         registerTypeAdapter(
             IssueAssetOperation::class.java,

@@ -3,7 +3,6 @@ package org.echo.mobile.framework.model.operations
 import org.echo.mobile.framework.exception.MalformedOperationException
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.AssetAmount
-import org.echo.mobile.framework.model.Memo
 import org.echo.mobile.framework.support.Builder
 
 /**

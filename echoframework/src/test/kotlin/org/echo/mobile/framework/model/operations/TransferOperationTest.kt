@@ -2,7 +2,11 @@ package org.echo.mobile.framework.model.operations
 
 import com.google.common.primitives.UnsignedLong
 import com.google.gson.GsonBuilder
-import org.echo.mobile.framework.model.*
+import org.echo.mobile.framework.model.Account
+import org.echo.mobile.framework.model.AccountOptions
+import org.echo.mobile.framework.model.Asset
+import org.echo.mobile.framework.model.AssetAmount
+import org.echo.mobile.framework.model.BaseOperation
 import org.echo.mobile.framework.model.eddsa.EdAuthority
 import org.echo.mobile.framework.model.network.Testnet
 import org.junit.Assert

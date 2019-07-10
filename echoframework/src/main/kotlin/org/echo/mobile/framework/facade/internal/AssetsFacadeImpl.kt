@@ -11,7 +11,6 @@ import org.echo.mobile.framework.facade.AssetsFacade
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.Asset
 import org.echo.mobile.framework.model.AssetAmount
-import org.echo.mobile.framework.model.AuthorityType
 import org.echo.mobile.framework.model.Transaction
 import org.echo.mobile.framework.model.TransactionResult
 import org.echo.mobile.framework.model.operations.CreateAssetOperation
@@ -36,35 +35,6 @@ class AssetsFacadeImpl(
 ) : BaseTransactionsFacade(databaseApiService, cryptoCoreComponent), AssetsFacade {
 
     override fun createAsset(
-        name: String,
-        password: String,
-        asset: Asset,
-        broadcastCallback: Callback<Boolean>,
-        resultCallback: Callback<String>?
-    ) {
-        val callId: String
-        try {
-            val privateKey = cryptoCoreComponent.getEdDSAPrivateKey(
-                name, password, AuthorityType.ACTIVE
-            )
-
-            val account = findAccount(name)
-
-            checkOwnerAccount(account.name, password, account)
-            callId = createAsset(privateKey, asset)
-
-            broadcastCallback.onSuccess(true)
-        } catch (ex: Exception) {
-            broadcastCallback.onError(ex as? LocalException ?: LocalException(ex))
-            return
-        }
-
-        resultCallback?.let {
-            retrieveTransactionResult(callId, it)
-        }
-    }
-
-    override fun createAssetWithWif(
         name: String,
         wif: String,
         asset: Asset,
@@ -129,41 +99,10 @@ class AssetsFacadeImpl(
 
     override fun issueAsset(
         issuerNameOrId: String,
-        password: String,
-        asset: String,
-        amount: String,
-        destinationIdOrName: String,
-        message: String?,
-        callback: Callback<Boolean>
-    ) = callback.processResult {
-        val (issuer, target) = getParticipantsPair(issuerNameOrId, destinationIdOrName)
-
-        checkOwnerAccount(issuer.name, password, issuer)
-
-        val operation = IssueAssetOperationBuilder()
-            .setIssuer(issuer)
-            .setAmount(AssetAmount(UnsignedLong.valueOf(amount.toLong()), Asset(asset)))
-            .setDestination(target)
-            .build()
-
-        val privateKey = cryptoCoreComponent.getEdDSAPrivateKey(
-            issuerNameOrId,
-            password,
-            AuthorityType.ACTIVE
-        )
-
-        val transaction = configureTransaction(operation, privateKey, asset, ECHO_ASSET_ID)
-
-        networkBroadcastApiService.broadcastTransaction(transaction).dematerialize()
-    }
-
-    override fun issueAssetWithWif(
-        issuerNameOrId: String,
         wif: String,
         asset: String,
         amount: String,
         destinationIdOrName: String,
-        message: String?,
         callback: Callback<Boolean>
     ) = callback.processResult {
         val (issuer, target) = getParticipantsPair(issuerNameOrId, destinationIdOrName)

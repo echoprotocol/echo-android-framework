@@ -9,14 +9,12 @@ import org.echo.mobile.framework.exception.NotFoundException
 import org.echo.mobile.framework.facade.AuthenticationFacade
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.AccountOptions
-import org.echo.mobile.framework.model.AuthorityType
 import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.RegistrationResult
 import org.echo.mobile.framework.model.Transaction
 import org.echo.mobile.framework.model.eddsa.EdAddress
 import org.echo.mobile.framework.model.eddsa.EdAuthority
 import org.echo.mobile.framework.model.isEqualsByKey
-import org.echo.mobile.framework.model.network.Network
 import org.echo.mobile.framework.model.operations.AccountUpdateOperation
 import org.echo.mobile.framework.model.operations.AccountUpdateOperationBuilder
 import org.echo.mobile.framework.processResult
@@ -42,41 +40,39 @@ class AuthenticationFacadeImpl(
     private val networkBroadcastApiService: NetworkBroadcastApiService,
     private val registrationApiService: RegistrationApiService,
     private val cryptoCoreComponent: CryptoCoreComponent,
-    private val network: Network,
     private val notificationsHelper: NotificationsHelper<RegistrationResult>
 ) : BaseTransactionsFacade(databaseApiService, cryptoCoreComponent), AuthenticationFacade {
 
-    override fun isOwnedBy(name: String, password: String, callback: Callback<FullAccount>) {
+    override fun isOwnedBy(name: String, wif: String, callback: Callback<FullAccount>) {
         databaseApiService.getFullAccounts(listOf(name), false)
             .map { accountsMap -> accountsMap[name] }
             .value { account ->
-                val address =
-                    cryptoCoreComponent.getEdDSAAddress(name, password, AuthorityType.ACTIVE)
+                try {
+                    val isOwner = checkOwner(account, wif)
 
-                val isKeySame =
-                    account?.account?.isEqualsByKey(address, AuthorityType.ACTIVE) ?: false
-                if (isKeySame) {
-                    callback.onSuccess(account!!)
-                    return
+                    if (isOwner) callback.onSuccess(account!!)
+
+                    LOGGER.log("No account found owned by $name with specified password")
+                    callback.onError(AccountNotFoundException("No account found owned by $name with specified password"))
+                } catch (exception: Exception) {
+                    LOGGER.log("Error during account'sowner checking")
+                    callback.onError(AccountNotFoundException("Error during account'sowner checking"))
                 }
-
-                LOGGER.log("No account found owned by $name with specified password")
-                callback.onError(AccountNotFoundException("No account found owned by $name with specified password"))
             }
             .error { error ->
                 callback.onError(LocalException(error.message, error))
             }
     }
 
-    override fun changePassword(
+    override fun changeKeys(
         name: String,
-        oldPassword: String,
-        newPassword: String,
+        oldWif: String,
+        newWif: String,
         callback: Callback<Any>
     ) = callback.processResult {
-        val accountId = getAccountId(name, oldPassword)
+        val accountId = getAccountIdByWif(name, oldWif)
         val operation: AccountUpdateOperation =
-            buildAccountUpdateOperation(accountId, name, newPassword)
+            buildAccountUpdateOperationWithWif(accountId, newWif)
 
         val account =
             databaseApiService.getFullAccounts(listOf(accountId), false).dematerialize()
@@ -90,8 +86,7 @@ class AuthenticationFacadeImpl(
         val blockData = databaseApiService.getBlockData()
         val chainId = getChainId()
 
-        val privateKey =
-            cryptoCoreComponent.getEdDSAPrivateKey(name, oldPassword, AuthorityType.ACTIVE)
+        val privateKey = cryptoCoreComponent.decodeFromWif(oldWif)
         val fees = getFees(listOf(operation))
 
         val transaction = Transaction(blockData, listOf(operation), chainId).apply {
@@ -102,23 +97,34 @@ class AuthenticationFacadeImpl(
         networkBroadcastApiService.broadcastTransaction(transaction).dematerialize()
     }
 
-    override fun register(userName: String, password: String, callback: Callback<Boolean>) {
+    override fun register(userName: String, wif: String, callback: Callback<Boolean>) {
         try {
-            val active =
-                cryptoCoreComponent.getEdDSAAddress(userName, password, AuthorityType.ACTIVE)
+            val privateKeyRaw = cryptoCoreComponent.decodeFromWif(wif)
+            val publicKeyRaw = cryptoCoreComponent.deriveEdDSAPublicKeyFromPrivate(privateKeyRaw)
 
-            val echorandKey = cryptoCoreComponent.getEchorandKey(userName, password)
+            val active =
+                cryptoCoreComponent.getEdDSAAddressFromPublicKey(publicKeyRaw)
 
             val callId = registrationApiService.register(
                 userName,
                 active,
-                echorandKey
+                active
             ).dematerialize().toString()
 
             retrieveTransactionResult(callId, callback)
         } catch (ex: Exception) {
             callback.onError(LocalException("Can't register account", cause = ex))
         }
+    }
+
+    private fun checkOwner(account: FullAccount?, wif: String): Boolean {
+        val privateKey = cryptoCoreComponent.decodeFromWif(wif)
+        val publicKey = cryptoCoreComponent.deriveEdDSAPublicKeyFromPrivate(privateKey)
+
+        val address =
+            cryptoCoreComponent.getEdDSAAddressFromPublicKey(publicKey)
+
+        return account?.account?.isEqualsByKey(address) ?: false
     }
 
     private fun retrieveTransactionResult(
@@ -137,18 +143,23 @@ class AuthenticationFacadeImpl(
         callback.onSuccess(true)
     }
 
-    private fun getAccountId(name: String, password: String): String {
-        val accountsResult = databaseApiService.getFullAccounts(listOf(name), false)
+    private fun getAccountIdByWif(name: String, wif: String): String {
+        val privateKeyRaw = cryptoCoreComponent.decodeFromWif(wif)
+        val publicKeyRaw = cryptoCoreComponent.deriveEdDSAPublicKeyFromPrivate(privateKeyRaw)
+        val address = cryptoCoreComponent.getEdDSAAddressFromPublicKey(publicKeyRaw)
 
-        val ownerAddress =
-            cryptoCoreComponent.getEdDSAAddress(name, password, AuthorityType.ACTIVE)
+        return getOwnedAccountId(name, address)
+    }
+
+    private fun getOwnedAccountId(name: String, address: String): String {
+        val accountsResult = databaseApiService.getFullAccounts(listOf(name), false)
 
         val account = accountsResult
             .map { accountsMap -> accountsMap[name] }
             .map { fullAccount -> fullAccount?.account }
             .dematerialize()
 
-        val isKeySame = account?.isEqualsByKey(ownerAddress, AuthorityType.ACTIVE) ?: false
+        val isKeySame = account?.isEqualsByKey(address) ?: false
 
         return if (isKeySame) {
             account!!.getObjectId()
@@ -157,19 +168,18 @@ class AuthenticationFacadeImpl(
         }
     }
 
-    private fun buildAccountUpdateOperation(
+    private fun buildAccountUpdateOperationWithWif(
         id: String,
-        name: String,
-        newPassword: String
+        newWif: String
     ): AccountUpdateOperation {
-        val active = cryptoCoreComponent.getEdDSAAddress(name, newPassword, AuthorityType.ACTIVE)
-
-        val echorandKey = cryptoCoreComponent.getEchorandKey(name, newPassword)
+        val privateKeyRaw = cryptoCoreComponent.decodeFromWif(newWif)
+        val publicKeyRaw = cryptoCoreComponent.deriveEdDSAPublicKeyFromPrivate(privateKeyRaw)
+        val address = cryptoCoreComponent.getEdDSAAddressFromPublicKey(publicKeyRaw)
 
         val activeAuthority =
             EdAuthority(
                 1,
-                hashMapOf(EdAddress(active).pubKey to 1L),
+                hashMapOf(EdAddress(address).pubKey to 1L),
                 hashMapOf()
             )
 
@@ -180,7 +190,7 @@ class AuthenticationFacadeImpl(
             .setOptions(newOptions)
             .setAccount(account)
             .setActive(activeAuthority)
-            .setEdKey(echorandKey)
+            .setEdKey(address)
             .build()
     }
 

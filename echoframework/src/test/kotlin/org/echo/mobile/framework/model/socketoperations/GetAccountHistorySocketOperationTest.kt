@@ -5,7 +5,9 @@ import org.echo.mobile.framework.model.operations.ContractCreateOperation
 import org.echo.mobile.framework.model.operations.OperationType
 import org.echo.mobile.framework.model.operations.TransferOperation
 import org.echo.mobile.framework.support.EmptyCallback
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 

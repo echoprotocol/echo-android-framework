@@ -3,7 +3,11 @@ package org.echo.mobile.framework.service
 import com.google.common.primitives.UnsignedLong
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.exception.LocalException
-import org.echo.mobile.framework.model.*
+import org.echo.mobile.framework.model.Account
+import org.echo.mobile.framework.model.Asset
+import org.echo.mobile.framework.model.AssetAmount
+import org.echo.mobile.framework.model.HistoricalTransfer
+import org.echo.mobile.framework.model.HistoryResponse
 import org.echo.mobile.framework.model.network.Echodevnet
 import org.echo.mobile.framework.model.operations.TransferOperation
 import org.echo.mobile.framework.service.internal.AccountHistoryApiServiceImpl
@@ -12,7 +16,7 @@ import org.echo.mobile.framework.support.value
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import java.util.*
+import java.util.Date
 
 /**
  * Test cases for [AccountHistoryApiService]

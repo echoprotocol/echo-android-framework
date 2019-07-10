@@ -7,10 +7,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.exception.LocalException
-import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.sample.R
-import kotlinx.android.synthetic.main.fragment_authorization.*
 
 /**
  * @author Daria Pechkovskaya
@@ -52,7 +50,7 @@ class AuthorizationFragment : BaseFragment() {
 
         btnChangePassword.setOnClickListener {
             progressListener?.toggle(true)
-            lib?.changePassword(etName.text.toString(),
+            lib?.changeKeys(etName.text.toString(),
                 etPassword.text.toString(),
                 etNewPassword.text.toString(),
                 object : Callback<Any> {

@@ -10,7 +10,6 @@ import org.echo.mobile.framework.facade.ContractsFacade
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.Asset
 import org.echo.mobile.framework.model.AssetAmount
-import org.echo.mobile.framework.model.AuthorityType
 import org.echo.mobile.framework.model.BaseOperation
 import org.echo.mobile.framework.model.Log
 import org.echo.mobile.framework.model.Transaction
@@ -50,50 +49,6 @@ class ContractsFacadeImpl(
 ), ContractsFacade {
 
     override fun createContract(
-        registrarNameOrId: String,
-        password: String,
-        value: String,
-        assetId: String,
-        feeAsset: String?,
-        byteCode: String,
-        params: List<InputValue>,
-        broadcastCallback: Callback<Boolean>,
-        resultCallback: Callback<String>?
-    ) {
-        val callId: String
-        try {
-            val registrar = findRegistrar(registrarNameOrId)
-
-            checkOwnerAccount(registrar.name, password, registrar)
-
-            val privateKey = cryptoCoreComponent.getPrivateKey(
-                registrar.name,
-                password,
-                AuthorityType.ACTIVE
-            )
-
-            callId = createContract(
-                registrar,
-                privateKey,
-                value,
-                assetId,
-                feeAsset,
-                byteCode,
-                params
-            )
-
-            broadcastCallback.onSuccess(true)
-        } catch (ex: Exception) {
-            broadcastCallback.onError(ex as? LocalException ?: LocalException(ex))
-            return
-        }
-
-        resultCallback?.let {
-            retrieveTransactionResult(callId, it)
-        }
-    }
-
-    override fun createContractWithWif(
         registrarNameOrId: String,
         wif: String,
         value: String,
@@ -135,7 +90,7 @@ class ContractsFacadeImpl(
 
     override fun callContract(
         userNameOrId: String,
-        password: String,
+        wif: String,
         assetId: String,
         feeAsset: String?,
         contractId: String,
@@ -154,82 +109,6 @@ class ContractsFacadeImpl(
 
         callContract(
             userNameOrId,
-            password,
-            assetId,
-            feeAsset,
-            contractId,
-            contractCode,
-            value,
-            broadcastCallback,
-            resultCallback
-        )
-    }
-
-    override fun callContract(
-        userNameOrId: String,
-        password: String,
-        assetId: String,
-        feeAsset: String?,
-        contractId: String,
-        code: String,
-        value: String,
-        broadcastCallback: Callback<Boolean>,
-        resultCallback: Callback<String>?
-    ) {
-        val callId: String
-        try {
-            val registrar = findRegistrar(userNameOrId)
-
-            checkOwnerAccount(registrar.name, password, registrar)
-
-            val privateKey = cryptoCoreComponent.getPrivateKey(
-                registrar.name,
-                password,
-                AuthorityType.ACTIVE
-            )
-
-            callId = callContract(
-                registrar,
-                privateKey,
-                assetId,
-                feeAsset,
-                contractId,
-                code,
-                value
-            )
-
-            broadcastCallback.onSuccess(true)
-        } catch (ex: Exception) {
-            broadcastCallback.onError(ex as? LocalException ?: LocalException(ex))
-            return
-        }
-
-        resultCallback?.let {
-            retrieveTransactionResult(callId, it, default = "")
-        }
-    }
-
-    override fun callContractWithWif(
-        userNameOrId: String,
-        wif: String,
-        assetId: String,
-        feeAsset: String?,
-        contractId: String,
-        methodName: String,
-        methodParams: List<InputValue>,
-        value: String,
-        broadcastCallback: Callback<Boolean>,
-        resultCallback: Callback<String>?
-    ) {
-        val contractCode = try {
-            ContractInputEncoder().encode(methodName, methodParams)
-        } catch (exception: Exception) {
-            broadcastCallback.onError(exception as? LocalException ?: LocalException(exception))
-            return
-        }
-
-        callContractWithWif(
-            userNameOrId,
             wif,
             assetId,
             feeAsset,
@@ -241,7 +120,7 @@ class ContractsFacadeImpl(
         )
     }
 
-    override fun callContractWithWif(
+    override fun callContract(
         userNameOrId: String,
         wif: String,
         assetId: String,
