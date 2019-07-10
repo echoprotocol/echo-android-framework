@@ -58,7 +58,7 @@ There are simple examples of usage framework
 
 ```kotlin
 fun login() {
-    echo.isOwnedBy("name", "password", object : Callback<FullAccount> {
+    echo.isOwnedBy("name", "wif", object : Callback<FullAccount> {
                     override fun onSuccess(result: FullAccount) {}
                          
                     override fun onError(error: LocalException) {}
@@ -84,7 +84,7 @@ fun getInfo() {
                         override fun onError(error: LocalException) {}
             })
     
-    echo.isOwnedBy(name, "password", object : Callback<FullAccount> {
+    echo.isOwnedBy(name, "wif", object : Callback<FullAccount> {
                         override fun onSuccess(result: FullAccount) {}
                         
                         override fun onError(error: LocalException) {}
@@ -127,11 +127,11 @@ fun subscribeOnAccount() {
 #### Change password
 
 ```kotlin
-fun changePassword() {
+fun changeWif() {
     echo.changePassword(
                "account name or id",
-               "old password",
-               "new password",
+               "old wif",
+               "new wif",
                object : Callback<Boolean> {
                    override fun onSuccess(result: Boolean) {}
                
@@ -147,12 +147,11 @@ fun changePassword() {
 fun feeForTransfer() {
     framework.getFeeForTransferOperation(
                "from name or id",
-               "from account password",
+               "from account wif",
                "to name or id",
                amount = "10000",
                asset = "1.3.0",
                feeAsset = "1.3.0", //optional
-               message = "message",          //optional
                object : Callback<String> {
                    override fun onSuccess(result: String) {}
                
@@ -167,12 +166,11 @@ fun feeForTransfer() {
 ```kotlin
 fun send() {
     echo.sendTransferOperation(fromNameOrId = "some name",
-                               password = "some pass",
+                               password = "some wif",
                                toNameOrId = "some name",
                                amount = "300",
                                asset = "1.3.0",
                                feeAsset = "1.3.0",
-                               message = null, // optional
                                object : Callback<Boolean> {
                                     override fun onSuccess(result: Boolean) {}
                                 
@@ -191,7 +189,7 @@ fun createAsset() {
     val asset = Asset("").apply {
         symbol = "ASSET SYMBOL"
         precision = 4
-        issuer = Account("account id")
+        issuer = Account("issuer id")
         setBtsOptions(
             BitassetOptions(
                 feedLifetimeSec = 86400,
@@ -224,7 +222,8 @@ fun createAsset() {
      asset.assetOptions = options
      
      echo.createAsset(
-                "issuer name or id", "password",
+                "issuer name or id", 
+                "wif",
                 asset,
                 broadcastCallback = object : Callback<Boolean> {
                     override fun onSuccess(result: Boolean) {}
@@ -246,11 +245,10 @@ fun createAsset() {
 fun issueAsset() {
     framework.issueAsset(
                 "issuer account name or id",
-                "password",
+                "wif",
                 "1.3.79",
                 "1",
                 "target account name or id", 
-                "message", // optional
                 object : Callback<Boolean> {
                      override fun onSuccess(result: Boolean) {}
                  
@@ -270,7 +268,7 @@ fun createContract() {
     
     framework.createContract(
         "registrarNameOrId",
-        "password",
+        "wif",
         assetId = "1.3.0",
         feeAsset = "1.3.0",     // optional
         byteCode,
@@ -295,7 +293,7 @@ fun createContract() {
 fun callContract() {
     echo.callContract(
                 "account name or id",
-                "password",
+                "wif",
                 assetId = "1.3.0",
                 feeAsset = "1.3.0",     //optional
                 contractId = "contractId",

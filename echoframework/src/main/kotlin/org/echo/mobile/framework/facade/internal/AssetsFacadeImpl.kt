@@ -103,7 +103,6 @@ class AssetsFacadeImpl(
         asset: String,
         amount: String,
         destinationIdOrName: String,
-        message: String?,
         callback: Callback<Boolean>
     ) = callback.processResult {
         val (issuer, target) = getParticipantsPair(issuerNameOrId, destinationIdOrName)

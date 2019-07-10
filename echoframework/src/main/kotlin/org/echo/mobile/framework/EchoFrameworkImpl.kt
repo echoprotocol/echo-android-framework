@@ -240,7 +240,6 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         amount: String,
         asset: String,
         feeAsset: String?,
-        message: String?,
         callback: Callback<String>
     ) = dispatch(Runnable {
         feeFacade.getFeeForTransferOperation(
@@ -250,7 +249,6 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             amount,
             asset,
             feeAsset,
-            message,
             callback.wrapOriginal()
         )
     })
@@ -430,7 +428,6 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         asset: String,
         amount: String,
         destinationIdOrName: String,
-        message: String?,
         callback: Callback<Boolean>
     ) = dispatch(Runnable {
         assetsFacade.issueAsset(
@@ -439,7 +436,6 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             asset,
             amount,
             destinationIdOrName,
-            message,
             callback
         )
     })

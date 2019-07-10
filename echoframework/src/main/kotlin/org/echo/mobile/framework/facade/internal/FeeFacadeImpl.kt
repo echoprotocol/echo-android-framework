@@ -45,13 +45,9 @@ class FeeFacadeImpl(
         amount: String,
         asset: String,
         feeAsset: String?,
-        message: String?,
         callback: Callback<String>
     ) = callback.processResult(Result {
         val (fromAccount, toAccount) = getParticipantsPair(fromNameOrId, toNameOrId)
-
-        val memoPrivateKey = cryptoCoreComponent.decodeFromWif(wif)
-//        val memo = generateMemo(memoPrivateKey, fromAccount, toAccount, message)
 
         val transfer = buildTransaction(fromAccount, toAccount, amount, asset)
 

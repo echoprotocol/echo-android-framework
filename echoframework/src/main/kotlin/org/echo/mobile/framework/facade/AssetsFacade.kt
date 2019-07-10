@@ -34,7 +34,6 @@ interface AssetsFacade {
         asset: String,
         amount: String,
         destinationIdOrName: String,
-        message: String?,
         callback: Callback<Boolean>
     )
 

@@ -29,7 +29,6 @@ interface FeeFacade {
         amount: String,
         asset: String,
         feeAsset: String?,
-        message: String?,
         callback: Callback<String>
     )
 
