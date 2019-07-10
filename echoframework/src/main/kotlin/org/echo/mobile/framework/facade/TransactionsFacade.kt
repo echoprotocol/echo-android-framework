@@ -13,28 +13,6 @@ interface TransactionsFacade {
      * Submits transaction to blockchain
      *
      * @param nameOrId   Source account name or id
-     * @param password   Source account password for retrieving access to funds
-     * @param toNameOrId Transfer target account name or id
-     * @param amount     Value amount of transfer operation
-     * @param asset      Specific asset type id
-     * @param feeAsset   Specific asset type id for calculating fee. If null - [asset] will be used
-     * @param callback   Listener of operation results.
-     *                   Retrieves true if transfer succeed,  otherwise - false
-     */
-    fun sendTransferOperation(
-        nameOrId: String,
-        password: String,
-        toNameOrId: String,
-        amount: String,
-        asset: String,
-        feeAsset: String?,
-        callback: Callback<Boolean>
-    )
-
-    /**
-     * Submits transaction to blockchain
-     *
-     * @param nameOrId   Source account name or id
      * @param wif        Account's private key in wif format
      * @param toNameOrId Transfer target account name or id
      * @param amount     Value amount of transfer operation
@@ -43,7 +21,7 @@ interface TransactionsFacade {
      * @param callback   Listener of operation results.
      *                   Retrieves true if transfer succeed,  otherwise - false
      */
-    fun sendTransferOperationWithWif(
+    fun sendTransferOperation(
         nameOrId: String,
         wif: String,
         toNameOrId: String,

@@ -136,7 +136,6 @@ class Settings private constructor(
             val network = network ?: Echodevnet()
             val cryptoComponent =
                 this.cryptoComponent ?: CryptoCoreComponentImpl(
-                    network,
                     IrohaKeyPairCryptoAdapter()
                 )
             val apis = apis ?: Api.values().toSet()

@@ -1,15 +1,18 @@
 package org.echo.mobile.framework.model.socketoperations
 
 import com.google.common.primitives.UnsignedLong
-import org.echo.mobile.bitcoinj.ECKey
-import org.echo.mobile.framework.model.*
+import org.echo.mobile.framework.model.Account
+import org.echo.mobile.framework.model.AccountOptions
+import org.echo.mobile.framework.model.Asset
+import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.eddsa.EdAuthority
-import org.echo.mobile.framework.model.PublicKey
 import org.echo.mobile.framework.model.operations.AccountUpdateOperation
 import org.echo.mobile.framework.model.operations.AccountUpdateOperationBuilder
 import org.echo.mobile.framework.support.EmptyCallback
 import org.echo.mobile.framework.support.toUnsignedLong
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 

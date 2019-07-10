@@ -5,7 +5,10 @@ import org.echo.mobile.framework.support.concurrent.future.FutureCallback
 import org.echo.mobile.framework.support.concurrent.future.FutureTask
 import org.echo.mobile.framework.support.concurrent.future.wrapResult
 import org.echo.mobile.framework.support.fold
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
+import org.junit.Assert.assertTrue
+import org.junit.Assert.fail
 import org.junit.Test
 import java.util.concurrent.Semaphore
 import java.util.concurrent.TimeUnit

@@ -22,7 +22,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.math.BigInteger
-import java.util.*
+import java.util.Arrays
 
 /**
  * Test cases for [Base58]

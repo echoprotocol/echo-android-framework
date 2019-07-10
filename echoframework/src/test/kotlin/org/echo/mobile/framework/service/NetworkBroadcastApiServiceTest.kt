@@ -8,10 +8,8 @@ import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.Asset
 import org.echo.mobile.framework.model.AssetAmount
-import org.echo.mobile.framework.model.AuthorityType
 import org.echo.mobile.framework.model.BlockData
 import org.echo.mobile.framework.model.Transaction
-import org.echo.mobile.framework.model.network.Echodevnet
 import org.echo.mobile.framework.model.operations.TransferOperationBuilder
 import org.echo.mobile.framework.service.internal.NetworkBroadcastApiServiceImpl
 import org.echo.mobile.framework.support.error
@@ -33,7 +31,7 @@ import java.security.Security
 class NetworkBroadcastApiServiceTest {
 
     private val cryptoCoreComponent =
-        CryptoCoreComponentImpl(Echodevnet(), NaCLKeyPairCryptoAdapter())
+        CryptoCoreComponentImpl(NaCLKeyPairCryptoAdapter())
 
     private lateinit var transaction: Transaction
 
@@ -49,11 +47,7 @@ class NetworkBroadcastApiServiceTest {
         val chainId = Hex.toHexString("chainId".toByteArray())
 
         val privateKey =
-            cryptoCoreComponent.getPrivateKey(
-                "name",
-                "password",
-                AuthorityType.ACTIVE
-            )
+            cryptoCoreComponent.getEdDSAPrivateKey()
 
         transaction = Transaction(
             blockData,

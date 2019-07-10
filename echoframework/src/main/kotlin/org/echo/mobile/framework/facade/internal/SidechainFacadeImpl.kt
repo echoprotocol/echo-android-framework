@@ -8,7 +8,6 @@ import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.exception.NotFoundException
 import org.echo.mobile.framework.facade.SidechainFacade
 import org.echo.mobile.framework.model.Account
-import org.echo.mobile.framework.model.AuthorityType
 import org.echo.mobile.framework.model.EthAddress
 import org.echo.mobile.framework.model.EthDeposit
 import org.echo.mobile.framework.model.EthWithdraw
@@ -40,32 +39,6 @@ class SidechainFacadeImpl(
 
     override fun generateEthereumAddress(
         accountNameOrId: String,
-        password: String,
-        broadcastCallback: Callback<Boolean>,
-        resultCallback: Callback<TransactionResult>?
-    ) {
-        val callId: String
-        try {
-            val account = findAccount(accountNameOrId)
-            checkOwnerAccount(account.name, password, account)
-            val privateKey =
-                cryptoCoreComponent.getEdDSAPrivateKey(account.name, password, AuthorityType.ACTIVE)
-
-            callId = generateAddress(account, privateKey)
-
-            broadcastCallback.onSuccess(true)
-        } catch (exception: Exception) {
-            broadcastCallback.onError(exception as? LocalException ?: LocalException(exception))
-            return
-        }
-
-        resultCallback?.let {
-            retrieveTransactionResult(callId, it)
-        }
-    }
-
-    override fun generateEthereumAddressWithWif(
-        accountNameOrId: String,
         wif: String,
         broadcastCallback: Callback<Boolean>,
         resultCallback: Callback<TransactionResult>?
@@ -90,35 +63,6 @@ class SidechainFacadeImpl(
     }
 
     override fun ethWithdraw(
-        accountNameOrId: String,
-        password: String,
-        ethAddress: String,
-        value: String,
-        feeAsset: String,
-        broadcastCallback: Callback<Boolean>,
-        resultCallback: Callback<TransactionResult>?
-    ) {
-        val callId: String
-        try {
-            val account = findAccount(accountNameOrId)
-            checkOwnerAccount(account.name, password, account)
-            val privateKey =
-                cryptoCoreComponent.getEdDSAPrivateKey(account.name, password, AuthorityType.ACTIVE)
-
-            callId = withdraw(ethAddress, account, privateKey, value, feeAsset)
-
-            broadcastCallback.onSuccess(true)
-        } catch (exception: Exception) {
-            broadcastCallback.onError(exception as? LocalException ?: LocalException(exception))
-            return
-        }
-
-        resultCallback?.let {
-            retrieveTransactionResult(callId, it)
-        }
-    }
-
-    override fun ethWithdrawWithWif(
         accountNameOrId: String,
         wif: String,
         ethAddress: String,
@@ -227,7 +171,10 @@ class SidechainFacadeImpl(
         databaseApiService.getAccountDeposits(account.getObjectId(), callback)
     }
 
-    override fun getAccountWithdrawals(accountNameOrId: String, callback: Callback<List<EthWithdraw>>) {
+    override fun getAccountWithdrawals(
+        accountNameOrId: String,
+        callback: Callback<List<EthWithdraw>>
+    ) {
         val account = findAccount(accountNameOrId)
 
         databaseApiService.getAccountWithdrawals(account.getObjectId(), callback)

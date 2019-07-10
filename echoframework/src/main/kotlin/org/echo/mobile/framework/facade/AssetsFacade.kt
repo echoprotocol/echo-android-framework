@@ -11,58 +11,29 @@ import org.echo.mobile.framework.model.Asset
 interface AssetsFacade {
 
     /**
-     * Creates [asset] with required parameters.
+     * Creates [asset] with required parameters using [name] account's [wif] for transaction signing
      *
      * @param broadcastCallback Callback for result of operation broadcast
      * @param resultCallback Callback for retrieving result of operation  (not required)
      */
     fun createAsset(
         name: String,
-        password: String,
-        asset: Asset,
-        broadcastCallback: Callback<Boolean>,
-        resultCallback: Callback<String>? = null
-    )
-
-    /**
-     * Creates [asset] with required parameters using [name] account's [wif] for transaction signing
-     *
-     * @param broadcastCallback Callback for result of operation broadcast
-     * @param resultCallback Callback for retrieving result of operation  (not required)
-     */
-    fun createAssetWithWif(
-        name: String,
         wif: String,
         asset: Asset,
         broadcastCallback: Callback<Boolean>,
         resultCallback: Callback<String>? = null
-    )
-
-    /**
-     * Issues [asset] from [issuerNameOrId] account to [destinationIdOrName] account using source
-     * account [password] for signature
-     */
-    fun issueAsset(
-        issuerNameOrId: String,
-        password: String,
-        asset: String,
-        amount: String,
-        destinationIdOrName: String,
-        message: String?,
-        callback: Callback<Boolean>
     )
 
     /**
      * Issues [asset] from [issuerNameOrId] account to [destinationIdOrName] account using source
      * account [wif] for signature
      */
-    fun issueAssetWithWif(
+    fun issueAsset(
         issuerNameOrId: String,
         wif: String,
         asset: String,
         amount: String,
         destinationIdOrName: String,
-        message: String?,
         callback: Callback<Boolean>
     )
 

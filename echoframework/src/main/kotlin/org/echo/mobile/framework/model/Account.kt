@@ -163,10 +163,7 @@ class Account : GrapheneObject, GrapheneSerializable {
  * @param key Public key from role
  * @param authorityType Role for equals operation
  */
-fun Account.isEqualsByKey(key: String, authorityType: AuthorityType): Boolean =
-    when (authorityType) {
-        AuthorityType.ACTIVE -> isKeyExist(key, active)
-    }
+fun Account.isEqualsByKey(key: String): Boolean = isKeyExist(key, active)
 
 private fun isKeyExist(address: String, authority: EdAuthority): Boolean {
     val foundKey = authority.keyAuthorities.keys.find { pubKey ->
