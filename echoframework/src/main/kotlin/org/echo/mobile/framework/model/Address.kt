@@ -2,9 +2,7 @@ package org.echo.mobile.framework.model
 
 import com.google.common.primitives.Bytes
 import org.echo.mobile.bitcoinj.Base58
-import org.echo.mobile.framework.exception.MalformedAddressException
 import org.echo.mobile.framework.model.network.Network
-import org.echo.mobile.framework.support.crypto.Checksum.CHECKSUM_SIZE
 import org.echo.mobile.framework.support.crypto.Checksum.calculateChecksum
 
 /**
@@ -26,20 +24,11 @@ class Address {
 
     constructor(address: String, network: Network) {
         val prefixSize = network.addressPrefix.length
-        this.prefix = address.substring(0..prefixSize)
+        this.prefix = address.substring(0 until prefixSize)
 
         val decoded = Base58.decode(address.substring(prefixSize))
-        val pubKey = decoded.copyOfRange(0, decoded.size - CHECKSUM_SIZE)
+        val pubKey = decoded.copyOfRange(0, decoded.size)
         this.pubKey = PublicKey(pubKey, network)
-
-        val calculatedChecksum = calculateChecksum(pubKey)
-        val checksum = decoded.copyOfRange(decoded.size - CHECKSUM_SIZE, decoded.size)
-
-        for ((i, data) in calculatedChecksum.withIndex()) {
-            if (checksum[i] != data) {
-                throw MalformedAddressException("Address checksum error")
-            }
-        }
     }
 
     override fun toString(): String {
