@@ -1,3 +1,9 @@
+# CHANGELOG 3.3.1
+
+## Fixed
+Fixed EdDSA random private key generation
+
+
 # CHANGELOG 3.3.0
 
 ## Operations
