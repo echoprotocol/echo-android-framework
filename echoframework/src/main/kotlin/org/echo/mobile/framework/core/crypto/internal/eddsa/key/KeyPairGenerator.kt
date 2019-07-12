@@ -63,7 +63,9 @@ class KeyPairGenerator : KeyPairGeneratorSpi() {
         }
 
         val seed: ByteArray = if (this.seed == null) {
-            ByteArray(this.edParams!!.curve.field.getb() / 8)
+            ByteArray(this.edParams!!.curve.field.getb() / 8).apply {
+                random?.nextBytes(this)
+            }
         } else {
             this.seed!!
         }
