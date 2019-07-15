@@ -381,7 +381,7 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
-        framework.getBalance("init1", legalAssetId, futureBalanceExistent.completeCallback())
+        framework.getBalance("init1", "1.3.0", futureBalanceExistent.completeCallback())
 
         assertTrue(futureBalanceExistent.get() != null)
     }
@@ -1263,8 +1263,8 @@ class EchoFrameworkTest {
         framework.callContract(
             "daria",
             "5J9YnfSUx6GnweorDEswRNAFcBzsZrQoJLkfqKLzXwBdRvjmoz1",
-            legalAssetId,
-            legalAssetId,
+            "1.3.0",
+            "1.3.0",
             legalContractId,
             "testReturn",
             listOf(),
