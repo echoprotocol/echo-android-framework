@@ -3,7 +3,7 @@ package org.echo.mobile.framework.core.crypto
 import com.google.common.primitives.UnsignedLong
 import org.echo.mobile.framework.core.crypto.internal.CryptoCoreComponentImpl
 import org.echo.mobile.framework.core.crypto.internal.eddsa.EdDSASecurityProvider
-import org.echo.mobile.framework.core.crypto.internal.eddsa.key.NaCLKeyPairCryptoAdapter
+import org.echo.mobile.framework.core.crypto.internal.eddsa.key.IrohaKeyPairCryptoAdapter
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.Address
 import org.echo.mobile.framework.model.Asset
@@ -35,7 +35,7 @@ class CryptoCoreComponentTest {
     @Before
     fun setUp() {
         network = Echodevnet()
-        cryptoCoreComponent = CryptoCoreComponentImpl(NaCLKeyPairCryptoAdapter())
+        cryptoCoreComponent = CryptoCoreComponentImpl(IrohaKeyPairCryptoAdapter())
 
         Security.addProvider(EdDSASecurityProvider())
     }

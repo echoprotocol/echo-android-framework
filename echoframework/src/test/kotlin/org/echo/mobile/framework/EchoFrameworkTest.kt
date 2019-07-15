@@ -60,7 +60,7 @@ class EchoFrameworkTest {
     private fun initFramework(ratio: BigDecimal = BigDecimal.ONE): EchoFramework {
         return EchoFramework.create(
             Settings.Configurator()
-                .setUrl("wss://devnet.echo-dev.io/ws")
+                .setUrl("wss://testnet.echo-dev.io")
                 .setNetworkType(Echodevnet())
                 .setReturnOnMainThread(false)
                 .setApis(
@@ -74,13 +74,13 @@ class EchoFrameworkTest {
         )
     }
 
-    private val legalContractId = "1.14.0"
-    private val legalTokenId = "1.14.1"
-    private val accountId = "1.2.13"
+    private val legalContractId = "1.14.52"
+    private val legalTokenId = "1.14.51"
+    private val accountId = "1.2.18"
     private val login = "dima"
-    private val secondAccountId = "1.2.14"
+    private val secondAccountId = "1.2.22"
     private val secondLogin = "daria"
-    private val legalAssetId = "1.3.0"
+    private val legalAssetId = "1.3.3"
 
     private val legalContractParamsBytecode =
         "60806040526000805534801561001457600080fd5b506104e180610024600" +
@@ -381,7 +381,7 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
-        framework.getBalance("init1", legalAssetId, futureBalanceExistent.completeCallback())
+        framework.getBalance("init1", "1.3.0", futureBalanceExistent.completeCallback())
 
         assertTrue(futureBalanceExistent.get() != null)
     }
@@ -1108,7 +1108,7 @@ class EchoFrameworkTest {
         framework.issueAsset(
             "daria",
             "5J9YnfSUx6GnweorDEswRNAFcBzsZrQoJLkfqKLzXwBdRvjmoz1",
-            asset = "1.3.3",
+            asset = legalAssetId,
             amount = "1",
             destinationIdOrName = "daria",
             callback = futureIssue.completeCallback()
@@ -1263,8 +1263,8 @@ class EchoFrameworkTest {
         framework.callContract(
             "daria",
             "5J9YnfSUx6GnweorDEswRNAFcBzsZrQoJLkfqKLzXwBdRvjmoz1",
-            legalAssetId,
-            legalAssetId,
+            "1.3.0",
+            "1.3.0",
             legalContractId,
             "testReturn",
             listOf(),
