@@ -1,6 +1,9 @@
 plugins {
     id "io.gitlab.arturbosch.detekt" version "1.0.0.RC8"
 }
+plugins {
+    id "org.sonarqube" version "2.7"
+}
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
