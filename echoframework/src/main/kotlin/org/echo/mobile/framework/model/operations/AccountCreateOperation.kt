@@ -37,8 +37,6 @@ class AccountCreateOperation
 @JvmOverloads constructor(
     val name: String,
     var registrar: Account,
-    var referrer: Account,
-    val referrerPercent: Int = 0,
     active: EdAuthority,
     private val edKey: String,
     options: AccountOptions,
@@ -77,8 +75,6 @@ class AccountCreateOperation
             add(KEY_FEE, fee.toJsonObject())
             addProperty(KEY_NAME, name)
             addProperty(KEY_REGISTRAR, registrar.toJsonString())
-            addProperty(KEY_REFERRER, referrer.toJsonString())
-            addProperty(KEY_REFERRER_PERCENT, referrerPercent)
 
             if (active.isSet) add(KEY_ACTIVE, active.toJsonObject())
 
@@ -97,8 +93,6 @@ class AccountCreateOperation
         val feeBytes = fee.toBytes()
         val nameBytes = name.toByteArray()
         val registrar = registrar.toBytes()
-        val referrer = referrer.toBytes()
-        val referrerPercent = byteArrayOf(referrerPercent.toByte())
         val activeBytes = active.toBytes()
         val edKeyBytes = edKey.toByteArray()
         val newOptionsBytes = options.toBytes()
@@ -106,8 +100,6 @@ class AccountCreateOperation
         return Bytes.concat(
             feeBytes,
             registrar,
-            referrer,
-            referrerPercent,
             nameBytes,
             activeBytes,
             edKeyBytes,
@@ -130,7 +122,6 @@ class AccountCreateOperation
             val jsonObject = json.asJsonObject
 
             val name = jsonObject.get(KEY_NAME).asString
-            val referrer = Account(jsonObject.get(KEY_REFERRER).asString)
             val registrar = Account(jsonObject.get(KEY_REGISTRAR).asString)
 
             // Deserializing EdAuthority objects
@@ -154,8 +145,6 @@ class AccountCreateOperation
             return AccountCreateOperation(
                 name,
                 registrar,
-                referrer,
-                0,
                 active,
                 edKey,
                 options,
@@ -168,8 +157,6 @@ class AccountCreateOperation
     companion object {
         const val KEY_NAME = "name"
         const val KEY_REGISTRAR = "registrar"
-        const val KEY_REFERRER = "referrer"
-        const val KEY_REFERRER_PERCENT = "referrer_percent"
         const val KEY_ACTIVE = "active"
         const val KEY_ED_KEY = "echorand_key"
         const val KEY_OPTIONS = "options"

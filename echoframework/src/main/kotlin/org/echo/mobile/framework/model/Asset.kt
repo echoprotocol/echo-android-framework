@@ -29,8 +29,6 @@ class Asset(id: String) : GrapheneObject(id), ByteSerializable {
 
     val bitassetOptions = Optional<BitassetOptions>(null, true)
 
-    var predictionMarket = false
-
     @SerializedName(BITASSET_DATA_ID_KEY)
     var bitAssetId: String? = null
 
@@ -64,10 +62,8 @@ class Asset(id: String) : GrapheneObject(id), ByteSerializable {
         val precisionBytes = byteArrayOf(precision.toByte())
         val optionsBytes = assetOptions!!.toBytes()
         val btsOptionsBytes = bitassetOptions.toBytes()
-        val predictionMarketBytes = predictionMarket.serialize()
         return Bytes.concat(
-            issuerBytes, symbolBytes, precisionBytes, optionsBytes,
-            btsOptionsBytes, predictionMarketBytes
+            issuerBytes, symbolBytes, precisionBytes, optionsBytes, btsOptionsBytes
         )
     }
 
@@ -107,7 +103,6 @@ class Asset(id: String) : GrapheneObject(id), ByteSerializable {
                 jsonOptions.get(BITASSETS_OPTIONS_KEY),
                 BitassetOptions::class.java
             )
-            val parsedPredictionMarket = jsonOptions.get(PREDICTION_MARKET_KEY)?.asBoolean ?: false
             val parsedBitAssetId = jsonOptions.get(BITASSET_DATA_ID_KEY)?.asString
 
             return Asset(parsedId).apply {
@@ -117,7 +112,6 @@ class Asset(id: String) : GrapheneObject(id), ByteSerializable {
                 this.dynamicAssetDataId = parsedDynamicAssetDataId
                 this.assetOptions = parsedAssetOptions
                 this.setBtsOptions(parsedBitassetOptions)
-                this.predictionMarket = parsedPredictionMarket
                 this.bitAssetId = parsedBitAssetId
             }
         }
@@ -131,7 +125,6 @@ class Asset(id: String) : GrapheneObject(id), ByteSerializable {
         const val OPTIONS_KEY = "options"
         const val BITASSET_DATA_ID_KEY = "bitasset_data_id"
         const val BITASSETS_OPTIONS_KEY = "bitasset_opts"
-        const val PREDICTION_MARKET_KEY = "is_prediction_market"
     }
 
 }
