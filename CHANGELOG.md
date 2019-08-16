@@ -1,3 +1,67 @@
+# CHANGELOG 3.4.0
+
+## Removed
+
+# AssetOptions:
+* marketFeePercent
+* maxMarketFee
+* whitelistMarkets
+* blacklistMarkets
+
+# BitassetOptions
+* forceSettlementDelaySec
+* forceSettlementOffsetPercent
+* maximumForceSettlementVolume
+
+# CreateAssetOperation
+* isPredictionMarket
+
+# Account
+* membershipExpirationDate
+* referrer
+* lifetimeReferrer
+* lifetimeReferrerFeePercentage
+
+# FullAccount
+* referrerName
+
+# AccountCreateOperation
+* referrer
+* referrerPercent
+
+# GlobalProperties
+* lifetimeReferrer_percent_of_fee
+* cashbackVestingThreshold
+* countNonMemberVotes
+* allowNonMemberWhitelists
+* feeLiquidationThreshold
+
+# DynamicGlobalProperties
+* recentSlotsFilled
+
+## Added
+
+# Block
+* delegate
+* prevSignatures
+* vmRoot
+
+# SidechainConfig
+* erc20WithdrawTopic
+* gasPrice
+
+## Updated
+
+# OperationType
+Changed operations ordinals 
+
+# Objects ids
+* HistoricalTransfer - 1.6.
+* ContractInfo - 1.9.
+* ContractResult - 1.10.
+* Account statistic - 2.5.
+
+
 # CHANGELOG 3.3.1
 
 ## Fixed

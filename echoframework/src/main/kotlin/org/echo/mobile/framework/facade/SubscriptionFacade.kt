@@ -54,6 +54,8 @@ interface SubscriptionFacade {
      */
     fun subscribeOnContractLogs(
         contractId: String,
+        fromBlock: String,
+        limit: String,
         listener: UpdateListener<List<Log>>,
         callback: Callback<Boolean>
     )

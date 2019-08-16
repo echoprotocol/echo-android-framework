@@ -304,12 +304,12 @@ interface SubscriptionService {
      *
      * @param contractId   Contract id for fetching logs
      * @param fromBlock    Number of the earliest block to retrieve
-     * @param toBlock      Number of the most recent block to retrieve
+     * @param limit        Limit of the logs count
      */
     fun subscribeContractLogs(
         contractId: String,
         fromBlock: String,
-        toBlock: String
+        limit: String
     ): Result<LocalException, List<Log>>
 
     /**

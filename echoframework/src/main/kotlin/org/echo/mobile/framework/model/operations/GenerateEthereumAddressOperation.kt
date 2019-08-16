@@ -23,7 +23,7 @@ import java.lang.reflect.Type
 class GenerateEthereumAddressOperation constructor(
     var account: Account,
     override var fee: AssetAmount = AssetAmount(UnsignedLong.ZERO)
-) : BaseOperation(OperationType.GENERATE_ETH_ADDRESS_OPERATION) {
+) : BaseOperation(OperationType.SIDECHAIN_ETH_CREATE_ADDRESS_OPERATION) {
 
     override fun toBytes(): ByteArray {
         val feeBytes = fee.toBytes()

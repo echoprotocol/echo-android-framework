@@ -252,23 +252,23 @@ class InformationFacadeImpl(
                         accountsRegistry,
                         assetsRegistry
                     )
-                OperationType.GENERATE_ETH_ADDRESS_OPERATION ->
+                OperationType.SIDECHAIN_ETH_CREATE_ADDRESS_OPERATION ->
                     processGenerateEthAddressOperation(
                         operation as GenerateEthereumAddressOperation,
                         accountsRegistry
                     )
-                OperationType.WITHDRAW_ETH_OPERATION ->
+                OperationType.SIDECHAIN_ETH_WITHDRAW_OPERATION ->
                     processWithdrawEthOperation(
                         operation as WithdrawEthereumOperation,
                         accountsRegistry
                     )
-                OperationType.SIDECHAIN_ISSUE_OPERATION ->
+                OperationType.SIDECHAIN_ETH_ISSUE_OPERATION ->
                     processSidechainIssueOperation(
                         operation as SidechainIssueSocketOperation,
                         accountsRegistry,
                         assetsRegistry
                     )
-                OperationType.SIDECHAIN_BURN_OPERATION ->
+                OperationType.SIDECHAIN_ETH_BURN_OPERATION ->
                     processSidechainBurnOperation(
                         operation as SidechainBurnSocketOperation,
                         accountsRegistry,
@@ -373,15 +373,11 @@ class InformationFacadeImpl(
         accountRegistry: MutableMap<String, Account>
     ) {
         val registrar = operation.registrar.getObjectId()
-        val referrer = operation.referrer.getObjectId()
 
-        fillAccounts(listOf(registrar, referrer), accountRegistry)
+        fillAccounts(listOf(registrar), accountRegistry)
 
         accountRegistry[registrar]?.let { notNullAccount ->
             operation.registrar = notNullAccount
-        }
-        accountRegistry[referrer]?.let { notNullAccount ->
-            operation.referrer = notNullAccount
         }
     }
 

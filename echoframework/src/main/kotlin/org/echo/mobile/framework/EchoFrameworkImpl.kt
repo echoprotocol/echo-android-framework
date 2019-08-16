@@ -362,10 +362,12 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
 
     override fun subscribeOnContractLogs(
         contractId: String,
+        fromBlock: String,
+        limit: String,
         listener: UpdateListener<List<Log>>,
         callback: Callback<Boolean>
     ) = dispatch(Runnable {
-        subscriptionFacade.subscribeOnContractLogs(contractId, listener, callback)
+        subscriptionFacade.subscribeOnContractLogs(contractId, fromBlock, limit, listener, callback)
     })
 
     override fun subscribeOnContracts(

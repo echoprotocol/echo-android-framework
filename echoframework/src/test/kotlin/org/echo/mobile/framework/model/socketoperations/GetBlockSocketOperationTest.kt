@@ -74,16 +74,12 @@ class GetBlockSocketOperationTest {
                         "timestamp": "2019-04-24T08:25:12",
                         "account": "1.2.12",
                         "transaction_merkle_root": "34e64b73ac1fd5e146e4033aed1ea3011d99152f",
-                        "vm_root": "e3054d080d1dce5eb5905b7641806399ad9dfa4627a7f3f811fa48459b3035cc.5f15d8519e6ea1d967b645eeb0b73269f93b0f8b9bca71ac94f320e629db09d3 0.9a71ff66a2f503e4e96c4e9a2521d6a710f2d373b422332029da170d78fa1a68",
+                        "vm_root": ["e3054d080d1dce5eb5905b7641806399ad9dfa4627a7f3f811fa48459b3035cc.5f15d8519e6ea1d967b645eeb0b73269f93b0f8b9bca71ac94f320e629db09d3 0.9a71ff66a2f503e4e96c4e9a2521d6a710f2d373b422332029da170d78fa1a68"],
                         "round": 166659,
                         "extensions": [],
                         "ed_signature": "18f5c5b77248d71f33f521f06f32e077b1c203a601cef0241724dc6c9277c0ddd6510ca0229179c0bc934fd8541fc16b57b9a8abf51e0773776f3bb13e0d880e",
                         "rand": "9ac4c73efeead66584877038963918c27477b831f4f5f302dc322fa63ea13337",
-                        "cert": {
-                          "_rand": "9ac4c73efeead66584877038963918c27477b831f4f5f302dc322fa63ea13337",
-                          "_block_hash": "00028b030c68ba19b5a8a32860c14e1ce04dd7a0",
-                          "_producer": 12,
-                          "_signatures": [
+                        "prev_signatures":  [
                             {
                               "_step": 4,
                               "_value": 0,
@@ -114,8 +110,7 @@ class GetBlockSocketOperationTest {
                               "_signer": 15,
                               "_bba_sign": "431a882c9a4e74e3b11972c2d5c3888bba3017452473c1d925fc21d68b4aba82b0b29f981c660ea70685452f623f4222bbddd0e21081a5aa8c6aa588d6287808"
                             }
-                          ]
-                        },
+                          ],
                         "transactions": [
                           {
                             "ref_block_num": 35585,
