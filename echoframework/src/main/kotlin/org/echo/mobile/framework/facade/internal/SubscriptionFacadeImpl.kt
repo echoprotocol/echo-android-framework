@@ -173,6 +173,8 @@ class SubscriptionFacadeImpl(
 
     override fun subscribeOnContractLogs(
         contractId: String,
+        fromBlock: String,
+        limit: String,
         listener: UpdateListener<List<Log>>,
         callback: Callback<Boolean>
     ) {
@@ -180,7 +182,7 @@ class SubscriptionFacadeImpl(
             subscribeGlobal(callback)
 
             if (!contractLogSubscriptionManager.registered(contractId)) {
-                databaseApiService.subscribeContractLogs(contractId, "0", "0")
+                databaseApiService.subscribeContractLogs(contractId, fromBlock, limit)
                     .value {
                         contractLogSubscriptionManager.registerListener(contractId, listener)
                         callback.onSuccess(subscribed)

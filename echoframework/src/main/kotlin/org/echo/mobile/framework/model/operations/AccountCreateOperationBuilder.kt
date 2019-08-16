@@ -17,8 +17,6 @@ class AccountCreateOperationBuilder : Builder<AccountCreateOperation> {
 
     private var name: String? = null
     private var registrar: String? = null
-    private var referrer: String? = null
-    private var referrerPercent: Int = 0
     private var fee: AssetAmount? = null
     private var active: EdAuthority? = null
     private var edKey: String? = null
@@ -41,27 +39,6 @@ class AccountCreateOperationBuilder : Builder<AccountCreateOperation> {
      */
     fun setRegistrar(registrar: String): AccountCreateOperationBuilder {
         this.registrar = registrar
-        return this
-    }
-
-    /**
-     * Sets referrer account id
-     *
-     * @param referrer Account for updating
-     */
-    fun setReferrer(referrer: String): AccountCreateOperationBuilder {
-        this.referrer = referrer
-        return this
-    }
-
-    /**
-     * Defines fee split between registrar and referrer,
-     * this percentage goes to the referrer. The rest goes to the registrar.
-     *
-     * @param referrerPercent Account for updating
-     */
-    fun setReferrerPercent(referrerPercent: Int): AccountCreateOperationBuilder {
-        this.referrerPercent = referrerPercent
         return this
     }
 
@@ -105,16 +82,13 @@ class AccountCreateOperationBuilder : Builder<AccountCreateOperation> {
 
     override fun build(): AccountCreateOperation {
         checkName(name)
-        checkConnectedAccounts(registrar, referrer)
+        checkConnectedAccounts(registrar)
         checkAuthoritiesAccountOptions(active, options)
-        checkReferrerPercent()
 
         return fee?.let { nullSafeFee ->
             AccountCreateOperation(
                 name!!,
                 Account(registrar!!),
-                Account(referrer!!),
-                referrerPercent,
                 active!!,
                 edKey!!,
                 options!!,
@@ -123,8 +97,6 @@ class AccountCreateOperationBuilder : Builder<AccountCreateOperation> {
         } ?: AccountCreateOperation(
             name!!,
             Account(registrar!!),
-            Account(referrer!!),
-            referrerPercent,
             active!!,
             edKey!!,
             options!!
@@ -136,16 +108,9 @@ class AccountCreateOperationBuilder : Builder<AccountCreateOperation> {
             throw MalformedOperationException("Account create operation requires not null account name defined")
     }
 
-    private fun checkConnectedAccounts(registrar: String?, referrer: String?) {
-        if (registrar == null || referrer == null)
-            throw MalformedOperationException("Account create operation requires not null registrar and referrer accounts id")
-    }
-
-    private fun checkReferrerPercent() {
-        if (referrerPercent < 0)
-            throw MalformedOperationException(
-                "Account create operation requires not negative referrer percent value"
-            )
+    private fun checkConnectedAccounts(registrar: String?) {
+        if (registrar == null)
+            throw MalformedOperationException("Account create operation requires not null registrar accounts id")
     }
 
     private fun checkAuthoritiesAccountOptions(

@@ -317,7 +317,9 @@ class ContractsFacadeImpl(
                 future.completeCallback()
             )
 
-            val result = future.get()?.trx?.operationsWithResults?.values?.firstOrNull()
+            val transactionResult = future.get()
+
+            val result = transactionResult?.trx?.operationsWithResults?.values?.firstOrNull()
                 ?: default
                 ?: throw NotFoundException("Result of operation not found.")
 

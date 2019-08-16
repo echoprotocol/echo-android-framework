@@ -58,17 +58,20 @@ class DatabaseApiServiceTest {
             headBlockId = "000033affe5ec1c922b4666f3e754233b31af00e",
             date = Date(),
             nextMaintenanceDate = Date(),
-            recentSlotsFilled = "340282366920938463463374607431768211455",
             lastBudgetTime = "budgetTime"
         )
         blockResponse = Block(
             "000000ea71c0589dc4f1db03fa38d38675b538f3",
+            "0000000000000000000000000000000000000000",
             "2018-08-02T14:42:30",
             Account("1.2.0"),
-            "0000000000000000000000000000000000000000",
+            Account("1.2.0"),
+            "5",
             "5",
             "0000000000000000000000000000000000000000000000000000000" +
                     "000000000000000000000000000000000000000000000000000000000000000000000000000",
+            listOf(),
+            listOf(),
             listOf()
         )
     }

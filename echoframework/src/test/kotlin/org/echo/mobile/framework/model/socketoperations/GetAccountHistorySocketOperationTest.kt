@@ -103,9 +103,9 @@ class GetAccountHistorySocketOperationTest {
                                 "jsonrpc": "2.0",
                                 "result": [
                                             {
-                                            "id": "1.11.506",
+                                            "id": "1.6.506",
                                             "op": [
-                                                40,
+                                                24,
                                                 {
                                                   "fee": {
                                                     "amount": 20,
@@ -134,7 +134,7 @@ class GetAccountHistorySocketOperationTest {
                                             "virtual_op": 1437
                                             },
                                             {
-                                              "id": "1.11.316",
+                                              "id": "1.6.316",
                                               "op": [
                                                 0,
                                                 {

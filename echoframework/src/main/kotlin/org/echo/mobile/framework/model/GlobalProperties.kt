@@ -62,12 +62,8 @@ class Parameters {
     val accountFeeScaleBitshifts: String? = null
     @SerializedName("sidechain_config")
     val sidechainConfig: SidechainConfig? = null
-    @SerializedName("count_non_member_votes")
-    val countNonMemberVotes: String? = null
     @SerializedName("gas_price")
     val gasPrice: GasPrice? = null
-    @SerializedName("fee_liquidation_threshold")
-    val feeLiquidationThreshold: String? = null
     @SerializedName("maximum_transaction_size")
     val maximumTransactionSize: String? = null
     @SerializedName("maximum_block_size")
@@ -80,23 +76,14 @@ class Parameters {
     val maximumCommitteeCount: String? = null
     @SerializedName("accounts_per_fee_scale")
     val accountsPerFeeScale: String? = null
-    @SerializedName("allow_non_member_whitelists")
-    val allowNonMemberWhitelists: String? = null
     @SerializedName("extensions")
     val extensions: Array<String>? = null
-    @SerializedName("cashback_vesting_threshold")
-    val cashbackVestingThreshold: String? = null
     @SerializedName("current_fees")
     val currentFees: CurrentFees? = null
-    @SerializedName("cashback_vesting_period_seconds")
-    val cashbackVestingPeriodSeconds: String? = null
     @SerializedName("maintenance_interval")
     val maintenanceInterval: String? = null
     @SerializedName("network_percent_of_fee")
     val networkPercentOfFee: String? = null
-    @SerializedName("lifetime_referrer_percent_of_fee")
-    val lifetimeReferrerPercentOfFee: String? = null
-
 }
 
 /**
@@ -231,7 +218,10 @@ class SidechainConfig {
     var ethWithdrawTopic: String? = null
     @SerializedName("eth_committee_updated_topic")
     var ethCommitteeUpdateTopic: String? = null
-
+    @SerializedName("erc20_withdraw_topic")
+    var erc20WithdrawTopic: String? = null
+    @SerializedName("gas_price")
+    var gasPrice: String? = null
 }
 
 /**

@@ -5,12 +5,8 @@ import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.annotations.Expose
-import org.echo.mobile.framework.TIME_DATE_FORMAT
 import org.echo.mobile.framework.model.eddsa.EdAuthority
 import java.lang.reflect.Type
-import java.text.ParseException
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 /**
  * Represents account model in blockchain
@@ -35,25 +31,10 @@ class Account : GrapheneObject, GrapheneSerializable {
     lateinit var statistics: String
 
     @Expose
-    var membershipExpirationDate: Long = 0
-
-    @Expose
     lateinit var registrar: String
 
     @Expose
-    lateinit var referrer: String
-
-    @Expose
-    lateinit var lifetimeReferrer: String
-
-    @Expose
     var networkFeePercentage: Long = 0
-
-    @Expose
-    var lifetimeReferrerFeePercentage: Long = 0
-
-    @Expose
-    var referrerRewardsPercentage: Long = 0
 
     /**
      * Requires a user account in the string representation, that is in the 1.2.x format.
@@ -90,14 +71,7 @@ class Account : GrapheneObject, GrapheneSerializable {
 
             return createAccountFromJson(jsonAccount).apply {
                 registrar = jsonAccount.get(KEY_REGISTRAR).asString
-                membershipExpirationDate = getDate(jsonAccount)
-                referrer = jsonAccount.get(KEY_REFERRER).asString
-                lifetimeReferrer = jsonAccount.get(KEY_LIFETIME_REFERRER).asString
                 networkFeePercentage = jsonAccount.get(KEY_NETWORK_FEE_PERCENTAGE).asLong
-                lifetimeReferrerFeePercentage =
-                    jsonAccount.get(KEY_LIFETIME_REFERRER_FEE_PERCENTAGE).asLong
-                referrerRewardsPercentage =
-                    jsonAccount.get(KEY_REFERRER_REWARD_PERCENTAGE).asLong
                 active = getAuthority(context!!, jsonAccount, KEY_ACTIVE)
                 edKey = jsonAccount.get(KEY_ECHORAND_KEY).asString
                 options = getOptions(context, jsonAccount)
@@ -127,27 +101,13 @@ class Account : GrapheneObject, GrapheneSerializable {
         ): EdAuthority =
             context.deserialize<EdAuthority>(jsonAccount.get(key), EdAuthority::class.java)
 
-        private fun getDate(jsonAccount: JsonObject): Long {
-            val dateFormat = SimpleDateFormat(TIME_DATE_FORMAT, Locale.getDefault())
-            return try {
-                dateFormat.parse(jsonAccount.get(KEY_MEMBERSHIP_EXPIRATION_DATE).asString).time
-            } catch (e: ParseException) {
-                0
-            }
-        }
-
     }
 
     companion object {
         const val PROXY_TO_SELF = "1.2.5"
 
-        const val KEY_MEMBERSHIP_EXPIRATION_DATE = "membership_expiration_date"
         const val KEY_REGISTRAR = "registrar"
-        const val KEY_REFERRER = "referrer"
-        const val KEY_LIFETIME_REFERRER = "lifetime_referrer"
         const val KEY_NETWORK_FEE_PERCENTAGE = "network_fee_percentage"
-        const val KEY_LIFETIME_REFERRER_FEE_PERCENTAGE = "lifetime_referrer_fee_percentage"
-        const val KEY_REFERRER_REWARD_PERCENTAGE = "referrer_rewards_percentage"
         const val KEY_NAME = "name"
         const val KEY_ACTIVE = "active"
         const val KEY_ECHORAND_KEY = "echorand_key"

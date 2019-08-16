@@ -24,7 +24,7 @@ class SubscribeContractLogsSocketOperation(
     override val apiId: Int,
     private val contractId: String,
     private val fromBlock: String,
-    private val toBlock: String,
+    private val limit: String,
     callId: Int,
     callback: Callback<List<Log>>
 ) : SocketOperation<List<Log>>(SocketMethodType.CALL, callId, listOf<Log>().javaClass, callback) {
@@ -37,7 +37,7 @@ class SubscribeContractLogsSocketOperation(
                 add(callId)
                 add(contractId)
                 add(fromBlock)
-                add(toBlock)
+                add(limit)
             })
         }
 

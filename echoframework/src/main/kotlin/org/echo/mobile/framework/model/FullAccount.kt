@@ -17,7 +17,6 @@ import java.lang.reflect.Type
 class FullAccount(
     @Expose var account: Account? = null,
     @SerializedName("registrar_name") @Expose var registrarName: String? = null,
-    @SerializedName("referrer_name") @Expose var referrerName: String? = null,
     @Expose var balances: List<Balance>? = null,
     @Expose var assets: List<Asset>? = null
 ) {
@@ -39,14 +38,12 @@ class FullAccount(
 
             val account = parseAccount(fullAccountObject, context)
             val registrar = fullAccountObject.get(REGISTRAR_KEY).asString
-            val referrer = fullAccountObject.get(REFERRER_KEY).asString
             val balances = parseBalances(fullAccountObject, context)
             val assets = parseAssets(fullAccountObject)
 
             return FullAccount(
                 account,
                 registrar,
-                referrer,
                 balances,
                 assets
             )
@@ -80,7 +77,6 @@ class FullAccount(
     companion object {
         const val ACCOUNT_KEY = "account"
         const val REGISTRAR_KEY = "registrar_name"
-        const val REFERRER_KEY = "referrer_name"
         const val BALANCES_KEY = "balances"
         const val ASSETS_KEY = "assets"
         const val KEY_EXTENSIONS = "extensions"

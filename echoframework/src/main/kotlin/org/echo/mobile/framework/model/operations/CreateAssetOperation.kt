@@ -53,7 +53,6 @@ class CreateAssetOperation @JvmOverloads constructor(
             add(OPTIONS_KEY, asset.assetOptions?.toJsonObject())
             if (asset.getBtsOptions() != null)
                 add(Asset.BITASSETS_OPTIONS_KEY, asset.getBtsOptions()!!.toJsonObject())
-            addProperty(Asset.PREDICTION_MARKET_KEY, asset.predictionMarket)
             add(EXTENSIONS_KEY, extensions.toJsonObject())
         }
         add(jsonObject)
@@ -110,7 +109,6 @@ class CreateAssetOperation @JvmOverloads constructor(
                 jsonObject.get(Asset.BITASSETS_OPTIONS_KEY),
                 BitassetOptions::class.java
             )
-            val parsedPredictionMarket = jsonObject.get(Asset.PREDICTION_MARKET_KEY).asBoolean
 
             val asset = Asset(DEFAULT_ASSET_ID).apply {
                 issuer = issuerAccount
@@ -118,7 +116,6 @@ class CreateAssetOperation @JvmOverloads constructor(
                 precision = parsedPrecision
                 assetOptions = parsedOptions
                 setBtsOptions(parsedBitassetOpts)
-                predictionMarket = parsedPredictionMarket
             }
 
             return CreateAssetOperation(asset, fee)

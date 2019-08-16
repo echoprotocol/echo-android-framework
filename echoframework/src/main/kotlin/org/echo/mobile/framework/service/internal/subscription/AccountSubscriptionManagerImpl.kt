@@ -153,7 +153,7 @@ class AccountSubscriptionManagerImpl(private val network: Network) :
     companion object {
         private const val PARAMS_KEY = "params"
         private const val OBJECT_ID_KEY = "id"
-        private const val ACCOUNT_STATISTIC_OBJECT_ID = "2.6"
+        private const val ACCOUNT_STATISTIC_OBJECT_ID = "2.5"
         private const val ACCOUNT_OWNER_KEY = "owner"
     }
 

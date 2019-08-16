@@ -35,8 +35,6 @@ class AccountCreateOperationTest {
 
         assertNotNull(transferObject.get(BaseOperation.KEY_FEE))
         assertNotNull(transferObject.get(AccountCreateOperation.KEY_REGISTRAR))
-        assertNotNull(transferObject.get(AccountCreateOperation.KEY_REFERRER))
-        assertNotNull(transferObject.get(AccountCreateOperation.KEY_REFERRER_PERCENT))
         assertNotNull(transferObject.get(AccountCreateOperation.KEY_ACTIVE))
         assertNotNull(transferObject.get(AccountCreateOperation.KEY_OPTIONS))
         assertNotNull(transferObject.get(AccountCreateOperation.KEY_EXTENSIONS))
@@ -55,8 +53,6 @@ class AccountCreateOperationTest {
         return AccountCreateOperationBuilder()
             .setAccountName("testName")
             .setRegistrar("registrar")
-            .setReferrer("referrer")
-            .setReferrerPercent(5)
             .setActive(active)
             .setEdKey("")
             .setOptions(options)

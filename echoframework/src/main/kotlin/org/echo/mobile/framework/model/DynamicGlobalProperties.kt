@@ -30,7 +30,6 @@ class DynamicGlobalProperties(
     @SerializedName(KEY_ACCOUNTS_REGISTERED_THIS_INTERVAL) @Expose val accountsRegisteredThisInterval: Long = 0,
     @SerializedName(KEY_RECENTLY_MISSED_COUNT) @Expose val recentlyMissedCount: Long = 0,
     @SerializedName(KEY_CURRENT_ASLOT) @Expose val currentAslot: Long = 0,
-    @SerializedName(KEY_RECENT_SLOTS_FILLED) @Expose val recentSlotsFilled: String,
     @SerializedName(KEY_DYNAMIC_FLAGS) @Expose val dynamicFlags: Int = 0,
     @SerializedName(KEY_LAST_IRREVERSIBLE_BLOCK_NUM) @Expose val lastIrreversibleBlockNum: Long = 0
 
@@ -46,7 +45,6 @@ class DynamicGlobalProperties(
         const val KEY_ACCOUNTS_REGISTERED_THIS_INTERVAL = "accounts_registered_this_interval"
         const val KEY_RECENTLY_MISSED_COUNT = "recently_missed_count"
         const val KEY_CURRENT_ASLOT = "current_aslot"
-        const val KEY_RECENT_SLOTS_FILLED = "recent_slots_filled"
         const val KEY_DYNAMIC_FLAGS = "dynamic_flags"
         const val KEY_LAST_IRREVERSIBLE_BLOCK_NUM = "last_irreversible_block_num"
     }

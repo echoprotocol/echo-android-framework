@@ -1,4 +1,4 @@
-[ ![Download](https://api.bintray.com/packages/echo/mobile/android-framework-stable/images/download.svg?version=3.3.1) ](https://bintray.com/echo/mobile/android-framework-stable/3.3.1/link)
+[ ![Download](https://api.bintray.com/packages/echo/mobile/android-framework-stable/images/download.svg?version=3.4.0) ](https://bintray.com/echo/mobile/android-framework-stable/3.4.0/link)
 
 # echo-android-framework (echo-android-framework)
 
@@ -9,7 +9,7 @@ Pure Kotlin Echo framework for Android mobile development. Can be used to work w
 This framework can be obtained through gradle dependency:
 
 ```
-implementation 'org.echo.mobile:echoframework:3.3.1'
+implementation 'org.echo.mobile:echoframework:3.4.0'
 ```
 
 Or maven dependency:
@@ -18,7 +18,7 @@ Or maven dependency:
 <dependency>
   <groupId>org.echo.mobile</groupId>
   <artifactId>echoframework</artifactId>
-  <version>3.3.1</version>
+  <version>3.4.0</version>
   <type>pom</type>
 </dependency>
 ```
@@ -193,14 +193,9 @@ fun createAsset() {
         setBtsOptions(
             BitassetOptions(
                 feedLifetimeSec = 86400,
-                minimumFeeds = 7, 
-                forceSettlementDelaySec = 86400,
-                forceSettlementOffsetPercent = 100, 
-                maximumForceSettlementVolume = 2000
+                minimumFeeds = 7
             )
         )
-    
-        predictionMarket = false
     }
     
      
@@ -211,10 +206,8 @@ fun createAsset() {
      
      val options = AssetOptions(
                      UnsignedLong.valueOf(100000),
-                     0.toLong(),
-                     UnsignedLong.ZERO,
-                     AssetOptions.ALLOW_COMITEE_PROVIDE_FEEDS,
-                     AssetOptions.ALLOW_COMITEE_PROVIDE_FEEDS,
+                     AssetOptions.CHARGE_MARKET_FEE,
+                     AssetOptions.CHARGE_MARKET_FEE,
                      price,
                      "description"
              )
