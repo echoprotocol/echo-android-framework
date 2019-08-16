@@ -509,14 +509,14 @@ class DatabaseApiServiceImpl(
     override fun subscribeContractLogs(
         contractId: String,
         fromBlock: String,
-        toBlock: String
+        limit: String
     ): Result<LocalException, List<Log>> {
         val future = FutureTask<List<Log>>()
         val operation = SubscribeContractLogsSocketOperation(
             id,
             contractId,
             fromBlock,
-            toBlock,
+            limit,
             callId = socketCoreComponent.currentId,
             callback = future.completeCallback()
         )

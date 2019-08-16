@@ -20,7 +20,6 @@ import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.HistoryResponse
 import org.echo.mobile.framework.model.Log
 import org.echo.mobile.framework.model.Price
-import org.echo.mobile.framework.model.TransactionResult
 import org.echo.mobile.framework.model.contract.ContractBalance
 import org.echo.mobile.framework.model.contract.ContractFee
 import org.echo.mobile.framework.model.contract.ContractInfo
@@ -810,6 +809,8 @@ class EchoFrameworkTest {
 
         framework.subscribeOnContractLogs(
             legalContractId,
+            "0",
+            "100",
             listener = object : UpdateListener<List<Log>> {
                 override fun onUpdate(data: List<Log>) {
                     futureSubscription.setComplete(data)
@@ -847,6 +848,8 @@ class EchoFrameworkTest {
 
         framework.subscribeOnContractLogs(
             legalContractId,
+            "0",
+            "100",
             listener = object : UpdateListener<List<Log>> {
                 override fun onUpdate(data: List<Log>) {
                     futureSubscription.setComplete(data)
