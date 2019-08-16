@@ -180,7 +180,7 @@ class SubscriptionFacadeImpl(
             subscribeGlobal(callback)
 
             if (!contractLogSubscriptionManager.registered(contractId)) {
-                databaseApiService.subscribeContractLogs(contractId, "0", "0")
+                databaseApiService.subscribeContractLogs(contractId, "0", "100")
                     .value {
                         contractLogSubscriptionManager.registerListener(contractId, listener)
                         callback.onSuccess(subscribed)

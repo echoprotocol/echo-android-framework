@@ -1,9 +1,11 @@
 package org.echo.mobile.framework.model
 
+import com.google.common.reflect.TypeToken
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import com.google.gson.JsonParseException
+import com.google.gson.annotations.SerializedName
 import java.lang.reflect.Type
 
 /**
@@ -14,12 +16,16 @@ import java.lang.reflect.Type
  */
 class Block(
     var previous: String,
+    var round: String,
     var timestamp: String,
     var account: Account,
-    var round: String,
-    var rand: String,
+    var delagate: Account,
     var transactionMerkleRoot: String,
-    var transactions: List<Transaction>
+    var rand: String,
+    var edSignature: String,
+    var transactions: List<Transaction>,
+    var vmRoot: List<String>,
+    var prevSignatures: List<PrevSignature>
 ) {
 
     /**
@@ -41,7 +47,9 @@ class Block(
             val round = jsonObject.get(KEY_ROUND).asString
             val rand = jsonObject.get(KEY_RAND).asString
             val transactionMerkleRoot = jsonObject.get(KEY_TRANSACTION_MERKLE_ROOT).asString
+            val edSignature = jsonObject.get(KEY_ED_SIGNATURE).asString
             val account = Account(jsonObject.get(KEY_ACCOUNT).asString)
+            val delegate = Account(jsonObject.get(KEY_DELEGATE).asString)
 
             // Parsing operation list
             val transactions = mutableListOf<Transaction>()
@@ -59,14 +67,27 @@ class Block(
                 )
             }
 
+            val vmRoot = context.deserialize<List<String>>(
+                jsonObject.get(KEY_VM_ROOT),
+                object : TypeToken<List<String>>() {}.type
+            )
+            val prevSignatures = context.deserialize<List<PrevSignature>>(
+                jsonObject.get(KEY_PREV_SIGNATURES),
+                object : TypeToken<List<PrevSignature>>() {}.type
+            )
+
             return Block(
                 previous,
+                round,
                 timestamp,
                 account,
-                round,
-                rand,
+                delegate,
                 transactionMerkleRoot,
-                transactions
+                rand,
+                edSignature,
+                transactions,
+                vmRoot,
+                prevSignatures
             )
         }
     }
@@ -75,10 +96,26 @@ class Block(
         private const val KEY_PREVIOUS = "previous"
         private const val KEY_TIMESTAMP = "timestamp"
         private const val KEY_ACCOUNT = "account"
+        private const val KEY_DELEGATE = "account"
         private const val KEY_TRANSACTION_MERKLE_ROOT = "transaction_merkle_root"
         private const val KEY_TRANSACTIONS = "transactions"
+        private const val KEY_VM_ROOT = "vm_root"
+        private const val KEY_PREV_SIGNATURES = "prev_signatures"
         private const val KEY_ROUND = "round"
         private const val KEY_RAND = "rand"
+        private const val KEY_ED_SIGNATURE = "ed_signature"
     }
 
 }
+
+/**
+ * Describes previous signature model
+ */
+class PrevSignature(
+    @SerializedName("_step") val step: Long,
+    @SerializedName("_leader") val leader: Long,
+    @SerializedName("_signer") val signer: Long,
+    @SerializedName("_delegate") val delegate: Long,
+    @SerializedName("_fallback") val fallback: Long,
+    @SerializedName("_bba_sign") val sign: String
+)

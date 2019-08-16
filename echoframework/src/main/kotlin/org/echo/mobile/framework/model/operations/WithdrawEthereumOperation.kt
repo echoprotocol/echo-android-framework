@@ -29,7 +29,7 @@ class WithdrawEthereumOperation constructor(
     val ethAddress: String,
     val value: UnsignedLong,
     override var fee: AssetAmount = AssetAmount(UnsignedLong.ZERO)
-) : BaseOperation(OperationType.WITHDRAW_ETH_OPERATION) {
+) : BaseOperation(OperationType.SIDECHAIN_ETH_WITHDRAW_OPERATION) {
 
     override fun toBytes(): ByteArray {
         val feeBytes = fee.toBytes()
