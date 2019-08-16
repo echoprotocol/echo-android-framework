@@ -80,8 +80,6 @@ class Parameters {
     val extensions: Array<String>? = null
     @SerializedName("current_fees")
     val currentFees: CurrentFees? = null
-    @SerializedName("cashback_vesting_period_seconds")
-    val cashbackVestingPeriodSeconds: String? = null
     @SerializedName("maintenance_interval")
     val maintenanceInterval: String? = null
     @SerializedName("network_percent_of_fee")
