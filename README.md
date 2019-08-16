@@ -18,7 +18,8 @@ Or maven dependency:
 <dependency>
   <groupId>org.echo.mobile</groupId>
   <artifactId>echoframework</artifactId>
-  <version>3.4.0pe>
+  <version>3.4.0</version>
+  <type>pom</type>
 </dependency>
 ```
 
@@ -192,14 +193,9 @@ fun createAsset() {
         setBtsOptions(
             BitassetOptions(
                 feedLifetimeSec = 86400,
-                minimumFeeds = 7, 
-                forceSettlementDelaySec = 86400,
-                forceSettlementOffsetPercent = 100, 
-                maximumForceSettlementVolume = 2000
+                minimumFeeds = 7
             )
         )
-    
-        predictionMarket = false
     }
     
      
@@ -210,10 +206,8 @@ fun createAsset() {
      
      val options = AssetOptions(
                      UnsignedLong.valueOf(100000),
-                     0.toLong(),
-                     UnsignedLong.ZERO,
-                     AssetOptions.ALLOW_COMITEE_PROVIDE_FEEDS,
-                     AssetOptions.ALLOW_COMITEE_PROVIDE_FEEDS,
+                     AssetOptions.CHARGE_MARKET_FEE,
+                     AssetOptions.CHARGE_MARKET_FEE,
                      price,
                      "description"
              )

@@ -121,6 +121,7 @@ android.view
 android.view.accessibility
 android.view.animation
 android.view.autofill
+android.view.contentcapture
 android.view.inputmethod
 android.view.inspector
 android.view.textclassifier
