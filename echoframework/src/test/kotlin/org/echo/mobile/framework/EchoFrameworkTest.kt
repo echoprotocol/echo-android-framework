@@ -1409,11 +1409,12 @@ class EchoFrameworkTest {
         val future = FutureTask<ContractResult>()
 
         framework.getContractResult(
-            historyId = "1.11.5",
+            historyId = "1.11.210",
             callback = future.completeCallback()
         )
 
         val contractResult = future.get()
+        var converted = contractResult?.toRegular()
         assertNotNull(contractResult)
 
         assertNotNull(contractResult?.toRegular())
