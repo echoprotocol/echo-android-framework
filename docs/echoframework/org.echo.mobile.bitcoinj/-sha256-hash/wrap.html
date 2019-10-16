@@ -1,0 +1,35 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>Sha256Hash.wrap - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.bitcoinj</a>&nbsp;/&nbsp;<a href="index.html">Sha256Hash</a>&nbsp;/&nbsp;<a href="./wrap.html">wrap</a><br/>
+<br/>
+<h1>wrap</h1>
+<a name="org.echo.mobile.bitcoinj.Sha256Hash.Companion$wrap(kotlin.ByteArray)"></a>
+<code><span class="identifier">@JvmStatic</span> <span class="keyword">fun </span><span class="identifier">wrap</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.bitcoinj.Sha256Hash.Companion$wrap(kotlin.ByteArray)/rawHashBytes">rawHashBytes</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="index.html"><span class="identifier">Sha256Hash</span></a></code>
+<p>Creates a new instance that wraps the given hash value.</p>
+<h3>Parameters</h3>
+<p><a name="rawHashBytes"></a>
+<code>rawHashBytes</code> - the raw hash bytes to wrap</p>
+<h3>Exceptions</h3>
+<p><a name="IllegalArgumentException"></a>
+<code>IllegalArgumentException</code> - if the given array length is not exactly 32</p>
+<p><strong>Return</strong><br/>
+a new instance</p>
+<a name="org.echo.mobile.bitcoinj.Sha256Hash.Companion$wrap(kotlin.String)"></a>
+<code><span class="identifier">@JvmStatic</span> <span class="keyword">fun </span><span class="identifier">wrap</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.bitcoinj.Sha256Hash.Companion$wrap(kotlin.String)/hexString">hexString</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="index.html"><span class="identifier">Sha256Hash</span></a></code>
+<p>Creates a new instance that wraps the given hash value (represented as a hex string).</p>
+<h3>Parameters</h3>
+<p><a name="hexString"></a>
+<code>hexString</code> - a hash value represented as a hex string</p>
+<h3>Exceptions</h3>
+<p><a name="IllegalArgumentException"></a>
+<code>IllegalArgumentException</code> - if the given string is not a valid
+hex string, or if it does not represent exactly 32 bytes</p>
+<p><strong>Return</strong><br/>
+a new instance</p>
+</BODY>
+</HTML>

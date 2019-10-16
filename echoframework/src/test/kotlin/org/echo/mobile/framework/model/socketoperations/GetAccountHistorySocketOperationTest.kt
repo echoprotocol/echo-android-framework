@@ -105,14 +105,14 @@ class GetAccountHistorySocketOperationTest {
                                             {
                                             "id": "1.6.506",
                                             "op": [
-                                                24,
+                                                25,
                                                 {
                                                   "fee": {
                                                     "amount": 20,
                                                     "asset_id": "1.3.0"
                                                   },
                                                   "registrar": "1.2.22",
-                                                  "receiver": "1.16.1",
+                                                  "callee": "1.10.1",
                                                   "asset_id": "1.3.0",
                                                   "eth_accuracy": false,
                                                   "value": {

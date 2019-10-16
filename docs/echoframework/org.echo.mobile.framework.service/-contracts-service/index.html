@@ -1,0 +1,72 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>ContractsService - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.service</a>&nbsp;/&nbsp;<a href="./index.html">ContractsService</a><br/>
+<br/>
+<h1>ContractsService</h1>
+<code><span class="keyword">interface </span><span class="identifier">ContractsService</span></code>
+<p>Encapsulates logic, associated with information about contracts from Database API</p>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="call-contract-no-changing-state.html">callContractNoChangingState</a></h4>
+</td>
+<td>
+<p>Calls contract without blockchain changing state</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">callContractNoChangingState</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.ContractsService$callContractNoChangingState(kotlin.String, kotlin.String, kotlin.String, kotlin.String)/contractId">contractId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.service.ContractsService$callContractNoChangingState(kotlin.String, kotlin.String, kotlin.String, kotlin.String)/registrarNameOrId">registrarNameOrId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.service.ContractsService$callContractNoChangingState(kotlin.String, kotlin.String, kotlin.String, kotlin.String)/assetId">assetId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.service.ContractsService$callContractNoChangingState(kotlin.String, kotlin.String, kotlin.String, kotlin.String)/byteCode">byteCode</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.support/-result/index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.exception/-local-exception/index.html"><span class="identifier">LocalException</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="get-contract.html">getContract</a></h4>
+</td>
+<td>
+<p>Returns contract code by <a href="get-contract.html#org.echo.mobile.framework.service.ContractsService$getContract(kotlin.String)/contractId">contractId</a></p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">getContract</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.ContractsService$getContract(kotlin.String)/contractId">contractId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.support/-result/index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.exception/-local-exception/index.html"><span class="identifier">LocalException</span></a><span class="symbol">,</span>&nbsp;<a href="../../org.echo.mobile.framework.model.contract/-contract-struct/index.html"><span class="identifier">ContractStruct</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="get-contract-logs.html">getContractLogs</a></h4>
+</td>
+<td>
+<p>Return list of contract logs</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">getContractLogs</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.ContractsService$getContractLogs(kotlin.String, kotlin.String, kotlin.String)/contractId">contractId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.service.ContractsService$getContractLogs(kotlin.String, kotlin.String, kotlin.String)/fromBlock">fromBlock</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.service.ContractsService$getContractLogs(kotlin.String, kotlin.String, kotlin.String)/limit">limit</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.support/-result/index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.exception/-local-exception/index.html"><span class="identifier">LocalException</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model.contract/-contract-log/index.html"><span class="identifier">ContractLog</span></a><span class="symbol">&gt;</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="get-contract-result.html">getContractResult</a></h4>
+</td>
+<td>
+<p>Return result of contract operation call</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">getContractResult</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.ContractsService$getContractResult(kotlin.String)/historyId">historyId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.support/-result/index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.exception/-local-exception/index.html"><span class="identifier">LocalException</span></a><span class="symbol">,</span>&nbsp;<a href="../../org.echo.mobile.framework.model.contract/-contract-result/index.html"><span class="identifier">ContractResult</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="get-contracts.html">getContracts</a></h4>
+</td>
+<td>
+<p>Returns contracts by ids</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">getContracts</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.ContractsService$getContracts(kotlin.collections.List((kotlin.String)))/contractIds">contractIds</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.support/-result/index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.exception/-local-exception/index.html"><span class="identifier">LocalException</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model.contract/-contract-info/index.html"><span class="identifier">ContractInfo</span></a><span class="symbol">&gt;</span><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Inheritors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="../-database-api-service.html">DatabaseApiService</a></h4>
+</td>
+<td>
+<p>Encapsulates logic, associated with blockchain database API</p>
+<code><span class="keyword">interface </span><span class="identifier">DatabaseApiService</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-api-service/index.html"><span class="identifier">ApiService</span></a><span class="symbol">, </span><a href="../-accounts-service/index.html"><span class="identifier">AccountsService</span></a><span class="symbol">, </span><a href="../-globals-service/index.html"><span class="identifier">GlobalsService</span></a><span class="symbol">, </span><a href="../-authority-and-validation-service/index.html"><span class="identifier">AuthorityAndValidationService</span></a><span class="symbol">, </span><a href="../-blocks-and-transactions-service/index.html"><span class="identifier">BlocksAndTransactionsService</span></a><span class="symbol">, </span><a href="./index.html"><span class="identifier">ContractsService</span></a><span class="symbol">, </span><a href="../-assets-service/index.html"><span class="identifier">AssetsService</span></a><span class="symbol">, </span><a href="../-subscription-service/index.html"><span class="identifier">SubscriptionService</span></a><span class="symbol">, </span><a href="../-objects-service/index.html"><span class="identifier">ObjectsService</span></a><span class="symbol">, </span><a href="../-custom-operation-service/index.html"><span class="identifier">CustomOperationService</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

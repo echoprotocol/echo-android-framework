@@ -1,0 +1,51 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>BlocksAndTransactionsService - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.service</a>&nbsp;/&nbsp;<a href="./index.html">BlocksAndTransactionsService</a><br/>
+<br/>
+<h1>BlocksAndTransactionsService</h1>
+<code><span class="keyword">interface </span><span class="identifier">BlocksAndTransactionsService</span></code>
+<p>Encapsulates logic, associated with blocks and transactions information from Database API</p>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="get-block.html">getBlock</a></h4>
+</td>
+<td>
+<p>Retrieves full signed block</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">getBlock</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.BlocksAndTransactionsService$getBlock(kotlin.String, org.echo.mobile.framework.Callback((org.echo.mobile.framework.model.Block)))/blockNumber">blockNumber</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.service.BlocksAndTransactionsService$getBlock(kotlin.String, org.echo.mobile.framework.Callback((org.echo.mobile.framework.model.Block)))/callback">callback</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-block/index.html"><span class="identifier">Block</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Retrieves full signed block synchronously</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">getBlock</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.BlocksAndTransactionsService$getBlock(kotlin.String)/blockNumber">blockNumber</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.support/-result/index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.exception/-local-exception/index.html"><span class="identifier">LocalException</span></a><span class="symbol">,</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-block/index.html"><span class="identifier">Block</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="get-block-data.html">getBlockData</a></h4>
+</td>
+<td>
+<p>Retrieves base block information</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">getBlockData</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.model/-block-data/index.html"><span class="identifier">BlockData</span></a></code><br/>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">getBlockData</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.BlocksAndTransactionsService$getBlockData(org.echo.mobile.framework.Callback((org.echo.mobile.framework.model.BlockData)))/callback">callback</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-block-data/index.html"><span class="identifier">BlockData</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Inheritors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="../-database-api-service.html">DatabaseApiService</a></h4>
+</td>
+<td>
+<p>Encapsulates logic, associated with blockchain database API</p>
+<code><span class="keyword">interface </span><span class="identifier">DatabaseApiService</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-api-service/index.html"><span class="identifier">ApiService</span></a><span class="symbol">, </span><a href="../-accounts-service/index.html"><span class="identifier">AccountsService</span></a><span class="symbol">, </span><a href="../-globals-service/index.html"><span class="identifier">GlobalsService</span></a><span class="symbol">, </span><a href="../-authority-and-validation-service/index.html"><span class="identifier">AuthorityAndValidationService</span></a><span class="symbol">, </span><a href="./index.html"><span class="identifier">BlocksAndTransactionsService</span></a><span class="symbol">, </span><a href="../-contracts-service/index.html"><span class="identifier">ContractsService</span></a><span class="symbol">, </span><a href="../-assets-service/index.html"><span class="identifier">AssetsService</span></a><span class="symbol">, </span><a href="../-subscription-service/index.html"><span class="identifier">SubscriptionService</span></a><span class="symbol">, </span><a href="../-objects-service/index.html"><span class="identifier">ObjectsService</span></a><span class="symbol">, </span><a href="../-custom-operation-service/index.html"><span class="identifier">CustomOperationService</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

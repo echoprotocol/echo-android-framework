@@ -1,0 +1,88 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>GetObjectsSocketOperation - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.model.socketoperations</a>&nbsp;/&nbsp;<a href="./index.html">GetObjectsSocketOperation</a><br/>
+<br/>
+<h1>GetObjectsSocketOperation</h1>
+<code><span class="keyword">class </span><span class="identifier">GetObjectsSocketOperation</span><span class="symbol">&lt;</span><span class="identifier">T</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-graphene-object/index.html"><span class="identifier">GrapheneObject</span></a><span class="symbol">&gt;</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-socket-operation/index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span><span class="symbol">&gt;</span></code>
+<p>Get the objects corresponding to the provided IDs.
+If any of the provided IDs does not map to an object, a null variant is returned in its position.</p>
+<h3>Parameters</h3>
+<p><a name="ids"></a>
+<code>ids</code> - of the objects to retrieve</p>
+<p><a name="mapper"></a>
+<code>mapper</code> - Mapper for received object</p>
+<p><strong>Return</strong><br/>
+The objects retrieved, in the order they are mentioned in ids</p>
+<p><strong>Author</strong><br/>
+Daria Pechkovskaya</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<p>Get the objects corresponding to the provided IDs.
+If any of the provided IDs does not map to an object, a null variant is returned in its position.</p>
+<code><span class="identifier">GetObjectsSocketOperation</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.socketoperations.GetObjectsSocketOperation$<init>(kotlin.Int, kotlin.Array((kotlin.String)), org.echo.mobile.framework.core.mapper.ObjectMapper((org.echo.mobile.framework.model.socketoperations.GetObjectsSocketOperation.T)), kotlin.Int, org.echo.mobile.framework.Callback((kotlin.collections.List((org.echo.mobile.framework.model.socketoperations.GetObjectsSocketOperation.T)))))/apiId">apiId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.socketoperations.GetObjectsSocketOperation$<init>(kotlin.Int, kotlin.Array((kotlin.String)), org.echo.mobile.framework.core.mapper.ObjectMapper((org.echo.mobile.framework.model.socketoperations.GetObjectsSocketOperation.T)), kotlin.Int, org.echo.mobile.framework.Callback((kotlin.collections.List((org.echo.mobile.framework.model.socketoperations.GetObjectsSocketOperation.T)))))/ids">ids</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html"><span class="identifier">Array</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">&gt;</span><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.socketoperations.GetObjectsSocketOperation$<init>(kotlin.Int, kotlin.Array((kotlin.String)), org.echo.mobile.framework.core.mapper.ObjectMapper((org.echo.mobile.framework.model.socketoperations.GetObjectsSocketOperation.T)), kotlin.Int, org.echo.mobile.framework.Callback((kotlin.collections.List((org.echo.mobile.framework.model.socketoperations.GetObjectsSocketOperation.T)))))/mapper">mapper</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.core.mapper/-object-mapper.html"><span class="identifier">ObjectMapper</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.socketoperations.GetObjectsSocketOperation$<init>(kotlin.Int, kotlin.Array((kotlin.String)), org.echo.mobile.framework.core.mapper.ObjectMapper((org.echo.mobile.framework.model.socketoperations.GetObjectsSocketOperation.T)), kotlin.Int, org.echo.mobile.framework.Callback((kotlin.collections.List((org.echo.mobile.framework.model.socketoperations.GetObjectsSocketOperation.T)))))/callId">callId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.socketoperations.GetObjectsSocketOperation$<init>(kotlin.Int, kotlin.Array((kotlin.String)), org.echo.mobile.framework.core.mapper.ObjectMapper((org.echo.mobile.framework.model.socketoperations.GetObjectsSocketOperation.T)), kotlin.Int, org.echo.mobile.framework.Callback((kotlin.collections.List((org.echo.mobile.framework.model.socketoperations.GetObjectsSocketOperation.T)))))/callback">callback</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span><span class="symbol">&gt;</span><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="api-id.html">apiId</a></h4>
+</td>
+<td>
+<p>Blockchain api id, which contains operation</p>
+<code><span class="keyword">val </span><span class="identifier">apiId</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="ids.html">ids</a></h4>
+</td>
+<td>
+<p>of the objects to retrieve</p>
+<code><span class="keyword">val </span><span class="identifier">ids</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html"><span class="identifier">Array</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="mapper.html">mapper</a></h4>
+</td>
+<td>
+<p>Mapper for received object</p>
+<code><span class="keyword">val </span><span class="identifier">mapper</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.core.mapper/-object-mapper.html"><span class="identifier">ObjectMapper</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="create-parameters.html">createParameters</a></h4>
+</td>
+<td>
+<p>Creates json of call parameters</p>
+<code><span class="keyword">fun </span><span class="identifier">createParameters</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">JsonElement</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="from-json.html">fromJson</a></h4>
+</td>
+<td>
+<p>Converts json string to entity</p>
+<code><span class="keyword">fun </span><span class="identifier">fromJson</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.socketoperations.GetObjectsSocketOperation$fromJson(kotlin.String)/json">json</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

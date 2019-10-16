@@ -1,0 +1,67 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>AuthenticationFacade - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.facade</a>&nbsp;/&nbsp;<a href="./index.html">AuthenticationFacade</a><br/>
+<br/>
+<h1>AuthenticationFacade</h1>
+<code><span class="keyword">interface </span><span class="identifier">AuthenticationFacade</span></code>
+<p>Encapsulates logic, associated with user authentication and account configuration processes</p>
+<p><strong>Author</strong><br/>
+Dmitriy Bushuev</p>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="change-keys.html">changeKeys</a></h4>
+</td>
+<td>
+<p>Describes wif changing logic contract</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">changeKeys</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.facade.AuthenticationFacade$changeKeys(kotlin.String, kotlin.String, kotlin.String, org.echo.mobile.framework.Callback((kotlin.Any)))/name">name</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.AuthenticationFacade$changeKeys(kotlin.String, kotlin.String, kotlin.String, org.echo.mobile.framework.Callback((kotlin.Any)))/oldWif">oldWif</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.AuthenticationFacade$changeKeys(kotlin.String, kotlin.String, kotlin.String, org.echo.mobile.framework.Callback((kotlin.Any)))/newWif">newWif</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.AuthenticationFacade$changeKeys(kotlin.String, kotlin.String, kotlin.String, org.echo.mobile.framework.Callback((kotlin.Any)))/callback">callback</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="is-owned-by.html">isOwnedBy</a></h4>
+</td>
+<td>
+<p>Authenticate user with defined <a href="is-owned-by.html#org.echo.mobile.framework.facade.AuthenticationFacade$isOwnedBy(kotlin.String, kotlin.String, org.echo.mobile.framework.Callback((org.echo.mobile.framework.model.FullAccount)))/nameOrId">nameOrId</a> and <a href="is-owned-by.html#org.echo.mobile.framework.facade.AuthenticationFacade$isOwnedBy(kotlin.String, kotlin.String, org.echo.mobile.framework.Callback((org.echo.mobile.framework.model.FullAccount)))/wif">wif</a> parameters.
+Returns account if exists and belongs to required user</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">isOwnedBy</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.facade.AuthenticationFacade$isOwnedBy(kotlin.String, kotlin.String, org.echo.mobile.framework.Callback((org.echo.mobile.framework.model.FullAccount)))/nameOrId">nameOrId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.AuthenticationFacade$isOwnedBy(kotlin.String, kotlin.String, org.echo.mobile.framework.Callback((org.echo.mobile.framework.model.FullAccount)))/wif">wif</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.AuthenticationFacade$isOwnedBy(kotlin.String, kotlin.String, org.echo.mobile.framework.Callback((org.echo.mobile.framework.model.FullAccount)))/callback">callback</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-full-account/index.html"><span class="identifier">FullAccount</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="register.html">register</a></h4>
+</td>
+<td>
+<p>Registers user in echo blockchain using <a href="register.html#org.echo.mobile.framework.facade.AuthenticationFacade$register(kotlin.String, kotlin.String, org.echo.mobile.framework.Callback((kotlin.Boolean)))/userName">userName</a> and already generated <a href="register.html#org.echo.mobile.framework.facade.AuthenticationFacade$register(kotlin.String, kotlin.String, org.echo.mobile.framework.Callback((kotlin.Boolean)))/wif">wif</a></p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">register</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.facade.AuthenticationFacade$register(kotlin.String, kotlin.String, org.echo.mobile.framework.Callback((kotlin.Boolean)))/userName">userName</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.AuthenticationFacade$register(kotlin.String, kotlin.String, org.echo.mobile.framework.Callback((kotlin.Boolean)))/wif">wif</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.AuthenticationFacade$register(kotlin.String, kotlin.String, org.echo.mobile.framework.Callback((kotlin.Boolean)))/callback">callback</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Inheritors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="../../org.echo.mobile.framework.facade.internal/-authentication-facade-impl/index.html">AuthenticationFacadeImpl</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="./index.html">AuthenticationFacade</a></p>
+<code><span class="keyword">class </span><span class="identifier">AuthenticationFacadeImpl</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.facade.internal/-base-transactions-facade/index.html"><span class="identifier">BaseTransactionsFacade</span></a><span class="symbol">, </span><a href="./index.html"><span class="identifier">AuthenticationFacade</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../../org.echo.mobile.framework/-echo-framework/index.html">EchoFramework</a></h4>
+</td>
+<td>
+<p>Describes base library functionality</p>
+<code><span class="keyword">interface </span><span class="identifier">EchoFramework</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">AuthenticationFacade</span></a><span class="symbol">, </span><a href="../-fee-facade/index.html"><span class="identifier">FeeFacade</span></a><span class="symbol">, </span><a href="../-information-facade/index.html"><span class="identifier">InformationFacade</span></a><span class="symbol">, </span><a href="../-subscription-facade/index.html"><span class="identifier">SubscriptionFacade</span></a><span class="symbol">, </span><a href="../-transactions-facade/index.html"><span class="identifier">TransactionsFacade</span></a><span class="symbol">, </span><a href="../-assets-facade/index.html"><span class="identifier">AssetsFacade</span></a><span class="symbol">, </span><a href="../-contracts-facade/index.html"><span class="identifier">ContractsFacade</span></a><span class="symbol">, </span><a href="../-sidechain-facade/index.html"><span class="identifier">SidechainFacade</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

@@ -1,0 +1,188 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>BaseOperation - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.model</a>&nbsp;/&nbsp;<a href="./index.html">BaseOperation</a><br/>
+<br/>
+<h1>BaseOperation</h1>
+<code><span class="keyword">abstract</span> <span class="keyword">class </span><span class="identifier">BaseOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-byte-serializable/index.html"><span class="identifier">ByteSerializable</span></a><span class="symbol">, </span><a href="../-json-serializable/index.html"><span class="identifier">JsonSerializable</span></a></code>
+<p>Represents base operation model in Graphene blockchain</p>
+<p><strong>Author</strong><br/>
+Daria Pechkovskaya</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<p>Represents base operation model in Graphene blockchain</p>
+<code><span class="identifier">BaseOperation</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.BaseOperation$<init>(org.echo.mobile.framework.model.operations.OperationType)/type">type</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model.operations/-operation-type/index.html"><span class="identifier">OperationType</span></a><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="extensions.html">extensions</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">extensions</span><span class="symbol">: </span><a href="../-extensions/index.html"><span class="identifier">Extensions</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="fee.html">fee</a></h4>
+</td>
+<td>
+<p>Required amount of fee <a href="../-asset-amount/index.html">AssetAmount</a> to operation</p>
+<code><span class="keyword">abstract</span> <span class="keyword">var </span><span class="identifier">fee</span><span class="symbol">: </span><a href="../-asset-amount/index.html"><span class="identifier">AssetAmount</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="id.html">id</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">id</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte/index.html"><span class="identifier">Byte</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="type.html">type</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">type</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.model.operations/-operation-type/index.html"><span class="identifier">OperationType</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="to-json-object.html">toJsonObject</a></h4>
+</td>
+<td>
+<p>Converts entity to json object representation</p>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">toJsonObject</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">JsonElement</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="to-string.html">toString</a></h4>
+</td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">toString</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Companion Object Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-k-e-y_-f-e-e.html">KEY_FEE</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_FEE</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Inheritors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="../../org.echo.mobile.framework.model.operations/-account-create-operation/index.html">AccountCreateOperation</a></h4>
+</td>
+<td>
+<p>Class used to encapsulate operations related to the <a href="../../org.echo.mobile.framework.model.operations/-operation-type/-a-c-c-o-u-n-t_-c-r-e-a-t-e_-o-p-e-r-a-t-i-o-n.html">OperationType.ACCOUNT_CREATE_OPERATION</a></p>
+<code><span class="keyword">class </span><span class="identifier">AccountCreateOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">BaseOperation</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../../org.echo.mobile.framework.model.operations/-account-update-operation/index.html">AccountUpdateOperation</a></h4>
+</td>
+<td>
+<p>Represents blockchain operation for updating an existing account.</p>
+<code><span class="keyword">class </span><span class="identifier">AccountUpdateOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">BaseOperation</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../../org.echo.mobile.framework.model.operations/-contract-operation/index.html">ContractOperation</a></h4>
+</td>
+<td>
+<p>Base implementation of contract operation</p>
+<code><span class="keyword">abstract</span> <span class="keyword">class </span><span class="identifier">ContractOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">BaseOperation</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../../org.echo.mobile.framework.model.operations/-contract-transfer-operation/index.html">ContractTransferOperation</a></h4>
+</td>
+<td>
+<p>Represents blockchain operation for transferring amount from contract.</p>
+<code><span class="keyword">class </span><span class="identifier">ContractTransferOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">BaseOperation</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../../org.echo.mobile.framework.model.operations/-create-asset-operation/index.html">CreateAssetOperation</a></h4>
+</td>
+<td>
+<p>Encapsulates asset creation information</p>
+<code><span class="keyword">class </span><span class="identifier">CreateAssetOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">BaseOperation</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../../org.echo.mobile.framework.model.operations/-generate-ethereum-address-operation/index.html">GenerateEthereumAddressOperation</a></h4>
+</td>
+<td>
+<p>Generates address for ethereum network transfers for required target account <a href="../../org.echo.mobile.framework.model.operations/-generate-ethereum-address-operation/account.html">account</a></p>
+<code><span class="keyword">class </span><span class="identifier">GenerateEthereumAddressOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">BaseOperation</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../../org.echo.mobile.framework.model.operations/-issue-asset-operation/index.html">IssueAssetOperation</a></h4>
+</td>
+<td>
+<p>Encapsulates asset issue operation information</p>
+<code><span class="keyword">class </span><span class="identifier">IssueAssetOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">BaseOperation</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../../org.echo.mobile.framework.model.operations/-sidechain-burn-socket-operation/index.html">SidechainBurnSocketOperation</a></h4>
+</td>
+<td>
+<p>Encapsulates ethereum asset withdraw information</p>
+<code><span class="keyword">class </span><span class="identifier">SidechainBurnSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">BaseOperation</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../../org.echo.mobile.framework.model.operations/-sidechain-issue-socket-operation/index.html">SidechainIssueSocketOperation</a></h4>
+</td>
+<td>
+<p>Encapsulates ethereum asset issue information</p>
+<code><span class="keyword">class </span><span class="identifier">SidechainIssueSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">BaseOperation</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../../org.echo.mobile.framework.model.operations/-transfer-operation/index.html">TransferOperation</a></h4>
+</td>
+<td>
+<p>Encapsulates transfer information</p>
+<code><span class="keyword">class </span><span class="identifier">TransferOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">BaseOperation</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../../org.echo.mobile.framework.model.operations/-withdraw-ethereum-operation/index.html">WithdrawEthereumOperation</a></h4>
+</td>
+<td>
+<p>Transfers ethereum asset from echo blockchain to ethereum address</p>
+<code><span class="keyword">class </span><span class="identifier">WithdrawEthereumOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">BaseOperation</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

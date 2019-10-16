@@ -26,7 +26,7 @@ class SidechainBurnSocketOperation @JvmOverloads constructor(
     var value: AssetAmount,
     var withdraw: EthWithdraw,
     override var fee: AssetAmount = AssetAmount(UnsignedLong.ZERO)
-) : BaseOperation(OperationType.SIDECHAIN_ETH_BURN_OPERATION) {
+) : BaseOperation(OperationType.SIDECHAIN_BURN_OPERATION) {
 
     override fun toBytes(): ByteArray = byteArrayOf()
 

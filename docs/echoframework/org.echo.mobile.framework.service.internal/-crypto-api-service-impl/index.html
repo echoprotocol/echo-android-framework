@@ -1,0 +1,57 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>CryptoApiServiceImpl - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.service.internal</a>&nbsp;/&nbsp;<a href="./index.html">CryptoApiServiceImpl</a><br/>
+<br/>
+<h1>CryptoApiServiceImpl</h1>
+<code><span class="keyword">class </span><span class="identifier">CryptoApiServiceImpl</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.service/-crypto-api-service.html"><span class="identifier">CryptoApiService</span></a></code>
+<p>Implementation of <a href="../../org.echo.mobile.framework.service/-crypto-api-service.html">CryptoApiService</a></p>
+<p><strong>Author</strong><br/>
+Dmitriy Bushuev</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="../../org.echo.mobile.framework.service/-crypto-api-service.html">CryptoApiService</a></p>
+<code><span class="identifier">CryptoApiServiceImpl</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.internal.CryptoApiServiceImpl$<init>(org.echo.mobile.framework.core.socket.SocketCoreComponent)/socketCoreComponent">socketCoreComponent</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.core.socket/-socket-core-component/index.html"><span class="identifier">SocketCoreComponent</span></a><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="id.html">id</a></h4>
+</td>
+<td>
+<p>Actual api id</p>
+<code><span class="keyword">var </span><span class="identifier">id</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="call-custom-operation.html">callCustomOperation</a></h4>
+</td>
+<td>
+<p>Calls custom <a href="../../org.echo.mobile.framework.service/-custom-operation-service/call-custom-operation.html#org.echo.mobile.framework.service.CustomOperationService$callCustomOperation(org.echo.mobile.framework.model.socketoperations.CustomOperation((org.echo.mobile.framework.service.CustomOperationService.callCustomOperation.T)), org.echo.mobile.framework.Callback((org.echo.mobile.framework.service.CustomOperationService.callCustomOperation.T)))/operation">operation</a> to blockchain API, returns result to <a href="../../org.echo.mobile.framework.service/-custom-operation-service/call-custom-operation.html#org.echo.mobile.framework.service.CustomOperationService$callCustomOperation(org.echo.mobile.framework.model.socketoperations.CustomOperation((org.echo.mobile.framework.service.CustomOperationService.callCustomOperation.T)), org.echo.mobile.framework.Callback((org.echo.mobile.framework.service.CustomOperationService.callCustomOperation.T)))/callback">callback</a></p>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span> <span class="identifier">callCustomOperation</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.internal.CryptoApiServiceImpl$callCustomOperation(org.echo.mobile.framework.model.socketoperations.CustomOperation((org.echo.mobile.framework.service.internal.CryptoApiServiceImpl.callCustomOperation.T)), org.echo.mobile.framework.Callback((org.echo.mobile.framework.service.internal.CryptoApiServiceImpl.callCustomOperation.T)))/operation">operation</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model.socketoperations/-custom-operation/index.html"><span class="identifier">CustomOperation</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.service.internal.CryptoApiServiceImpl$callCustomOperation(org.echo.mobile.framework.model.socketoperations.CustomOperation((org.echo.mobile.framework.service.internal.CryptoApiServiceImpl.callCustomOperation.T)), org.echo.mobile.framework.Callback((org.echo.mobile.framework.service.internal.CryptoApiServiceImpl.callCustomOperation.T)))/callback">callback</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Calls custom <a href="../../org.echo.mobile.framework.service/-custom-operation-service/call-custom-operation.html#org.echo.mobile.framework.service.CustomOperationService$callCustomOperation(org.echo.mobile.framework.model.socketoperations.CustomOperation((org.echo.mobile.framework.service.CustomOperationService.callCustomOperation.T)))/operation">operation</a> to blockchain API, returns <a href="../../org.echo.mobile.framework.support/-result/index.html">Result</a> of call</p>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span> <span class="identifier">callCustomOperation</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.internal.CryptoApiServiceImpl$callCustomOperation(org.echo.mobile.framework.model.socketoperations.CustomOperation((org.echo.mobile.framework.service.internal.CryptoApiServiceImpl.callCustomOperation.T)))/operation">operation</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model.socketoperations/-custom-operation/index.html"><span class="identifier">CustomOperation</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.support/-result/index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.exception/-local-exception/index.html"><span class="identifier">LocalException</span></a><span class="symbol">,</span>&nbsp;<span class="identifier">T</span><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

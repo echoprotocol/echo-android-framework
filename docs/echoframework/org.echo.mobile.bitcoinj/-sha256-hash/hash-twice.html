@@ -1,0 +1,29 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>Sha256Hash.hashTwice - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.bitcoinj</a>&nbsp;/&nbsp;<a href="index.html">Sha256Hash</a>&nbsp;/&nbsp;<a href="./hash-twice.html">hashTwice</a><br/>
+<br/>
+<h1>hashTwice</h1>
+<a name="org.echo.mobile.bitcoinj.Sha256Hash.Companion$hashTwice(kotlin.ByteArray, kotlin.Int, kotlin.Int)"></a>
+<code><span class="identifier">@JvmStatic</span> <span class="identifier">@JvmOverloads</span> <span class="keyword">fun </span><span class="identifier">hashTwice</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.bitcoinj.Sha256Hash.Companion$hashTwice(kotlin.ByteArray, kotlin.Int, kotlin.Int)/input">input</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.bitcoinj.Sha256Hash.Companion$hashTwice(kotlin.ByteArray, kotlin.Int, kotlin.Int)/offset">offset</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a>&nbsp;<span class="symbol">=</span>&nbsp;0<span class="symbol">, </span><span class="identifier" id="org.echo.mobile.bitcoinj.Sha256Hash.Companion$hashTwice(kotlin.ByteArray, kotlin.Int, kotlin.Int)/length">length</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a>&nbsp;<span class="symbol">=</span>&nbsp;input.size<span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a></code>
+<p>Calculates the SHA-256 hash of the given byte range,
+and then hashes the resulting hash again.</p>
+<h3>Parameters</h3>
+<p><a name="input"></a>
+<code>input</code> - the array containing the bytes to hash</p>
+<p><a name="offset"></a>
+<code>offset</code> - the offset within the array of the bytes to hash</p>
+<p><a name="length"></a>
+<code>length</code> - the number of bytes to hash</p>
+<p><strong>Return</strong><br/>
+the double-hash (in big-endian order)</p>
+<a name="org.echo.mobile.bitcoinj.Sha256Hash.Companion$hashTwice(kotlin.ByteArray, kotlin.Int, kotlin.Int, kotlin.ByteArray, kotlin.Int, kotlin.Int)"></a>
+<code><span class="identifier">@JvmStatic</span> <span class="keyword">fun </span><span class="identifier">hashTwice</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.bitcoinj.Sha256Hash.Companion$hashTwice(kotlin.ByteArray, kotlin.Int, kotlin.Int, kotlin.ByteArray, kotlin.Int, kotlin.Int)/input1">input1</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.bitcoinj.Sha256Hash.Companion$hashTwice(kotlin.ByteArray, kotlin.Int, kotlin.Int, kotlin.ByteArray, kotlin.Int, kotlin.Int)/offset1">offset1</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.bitcoinj.Sha256Hash.Companion$hashTwice(kotlin.ByteArray, kotlin.Int, kotlin.Int, kotlin.ByteArray, kotlin.Int, kotlin.Int)/length1">length1</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.bitcoinj.Sha256Hash.Companion$hashTwice(kotlin.ByteArray, kotlin.Int, kotlin.Int, kotlin.ByteArray, kotlin.Int, kotlin.Int)/input2">input2</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.bitcoinj.Sha256Hash.Companion$hashTwice(kotlin.ByteArray, kotlin.Int, kotlin.Int, kotlin.ByteArray, kotlin.Int, kotlin.Int)/offset2">offset2</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.bitcoinj.Sha256Hash.Companion$hashTwice(kotlin.ByteArray, kotlin.Int, kotlin.Int, kotlin.ByteArray, kotlin.Int, kotlin.Int)/length2">length2</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a></code>
+<p>Calculates the hash of hash on the given byte ranges. This is equivalent to
+concatenating the two ranges and then passing the result to <a href="#">.hashTwice</a>.</p>
+</BODY>
+</HTML>

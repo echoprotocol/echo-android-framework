@@ -1,0 +1,161 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>AccountOptions - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.model</a>&nbsp;/&nbsp;<a href="./index.html">AccountOptions</a><br/>
+<br/>
+<h1>AccountOptions</h1>
+<code><span class="keyword">class </span><span class="identifier">AccountOptions</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-graphene-serializable.html"><span class="identifier">GrapheneSerializable</span></a></code>
+<p>Contains user account additional information</p>
+<p>These are the fields which can be updated by the active authority</p>
+<p><a href="https://dev-doc.myecho.app/structgraphene_1_1chain_1_1account__options.html">Account options details</a></p>
+<p><strong>Author</strong><br/>
+Dmitriy Bushuev</p>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-deserializer/index.html">Deserializer</a></h4>
+</td>
+<td>
+<p>Deserializer used to build a <a href="./index.html">AccountOptions</a> instance from the full JSON-formatted response
+obtained by the API call.</p>
+<code><span class="keyword">class </span><span class="identifier">Deserializer</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">JsonDeserializer</span><span class="symbol">&lt;</span><a href="./index.html"><span class="identifier">AccountOptions</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<p>Contains user account additional information</p>
+<code><span class="identifier">AccountOptions</span><span class="symbol">(</span><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="committee-count.html">committeeCount</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">committeeCount</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="delegate-share.html">delegateShare</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">delegateShare</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="delegating-account.html">delegatingAccount</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">delegatingAccount</span><span class="symbol">: </span><a href="../-account/index.html"><span class="identifier">Account</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="votes.html">votes</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">votes</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html"><span class="identifier">Array</span></a><span class="symbol">&lt;</span><a href="../-vote/index.html"><span class="identifier">Vote</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="voting-account.html">votingAccount</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">votingAccount</span><span class="symbol">: </span><a href="../-account/index.html"><span class="identifier">Account</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="to-bytes.html">toBytes</a></h4>
+</td>
+<td>
+<p>Converts entity to byte-array representation</p>
+<code><span class="keyword">fun </span><span class="identifier">toBytes</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="to-json-object.html">toJsonObject</a></h4>
+</td>
+<td>
+<p>Converts entity to json object representation</p>
+<code><span class="keyword">fun </span><span class="identifier">toJsonObject</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">JsonElement</span><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="to-json-string.html">toJsonString</a></h4>
+</td>
+<td>
+<p>Converts entity to json string representation</p>
+<code><span class="keyword">fun </span><span class="identifier">toJsonString</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Companion Object Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-k-e-y_-d-e-l-e-g-a-t-e_-s-h-a-r-e.html">KEY_DELEGATE_SHARE</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_DELEGATE_SHARE</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-k-e-y_-d-e-l-e-g-a-t-i-n-g_-a-c-c-o-u-n-t.html">KEY_DELEGATING_ACCOUNT</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_DELEGATING_ACCOUNT</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-k-e-y_-e-x-t-e-n-s-i-o-n-s.html">KEY_EXTENSIONS</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_EXTENSIONS</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-k-e-y_-n-u-m_-c-o-m-m-i-t-t-e-e.html">KEY_NUM_COMMITTEE</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_NUM_COMMITTEE</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-k-e-y_-v-o-t-e-s.html">KEY_VOTES</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_VOTES</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-k-e-y_-v-o-t-i-n-g_-a-c-c-o-u-n-t.html">KEY_VOTING_ACCOUNT</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_VOTING_ACCOUNT</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

@@ -1,0 +1,52 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>JsonDeserializable - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.model</a>&nbsp;/&nbsp;<a href="./index.html">JsonDeserializable</a><br/>
+<br/>
+<h1>JsonDeserializable</h1>
+<code><span class="keyword">interface </span><span class="identifier">JsonDeserializable</span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/io/Serializable.html"><span class="identifier">Serializable</span></a></code>
+<p>Describes functionality of entities for which it is required
+to have specific representation from json string</p>
+<p><strong>Author</strong><br/>
+Daria Pechkovskaya</p>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="from-json.html">fromJson</a></h4>
+</td>
+<td>
+<p>Converts json string to entity</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">fromJson</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.JsonDeserializable$fromJson(kotlin.String)/json">json</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">T</span><span class="symbol">?</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Inheritors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="../../org.echo.mobile.framework.model.socketoperations/-custom-operation/index.html">CustomOperation</a></h4>
+</td>
+<td>
+<p>Represents operation data for custom call to blockchain API</p>
+<code><span class="keyword">abstract</span> <span class="keyword">class </span><span class="identifier">CustomOperation</span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">JsonDeserializable</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../../org.echo.mobile.framework.model.socketoperations/-socket-operation/index.html">SocketOperation</a></h4>
+</td>
+<td>
+<p>Represents blockchain call
+Source</p>
+<code><span class="keyword">abstract</span> <span class="keyword">class </span><span class="identifier">SocketOperation</span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-json-serializable/index.html"><span class="identifier">JsonSerializable</span></a><span class="symbol">, </span><a href="./index.html"><span class="identifier">JsonDeserializable</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

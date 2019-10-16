@@ -44,8 +44,6 @@ class Parameters {
     val maximumProposalLifetime: String? = null
     @SerializedName("witness_pay_per_block")
     val witnessPayPerBlock: String? = null
-    @SerializedName("block_interval")
-    val blockInterval: String? = null
     @SerializedName("maximum_time_until_expiration")
     val maximumTimeUntilExpiration: String? = null
     @SerializedName("max_predicate_opcode")
@@ -210,6 +208,8 @@ class SidechainConfig {
     var ethUpdateAddressMethod: Method? = null
     @SerializedName("ETH_asset_id")
     var ethAssetId: String? = null
+    @SerializedName("waiting_eth_blocks")
+    var waitingETHBlocks: String? = null
     @SerializedName("eth_deposit_topic")
     var ethDepositTopic: String? = null
     @SerializedName("eth_gen_address_topic")

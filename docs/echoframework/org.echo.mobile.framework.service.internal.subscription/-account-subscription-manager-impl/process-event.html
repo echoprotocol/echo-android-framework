@@ -1,0 +1,24 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>AccountSubscriptionManagerImpl.processEvent - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.service.internal.subscription</a>&nbsp;/&nbsp;<a href="index.html">AccountSubscriptionManagerImpl</a>&nbsp;/&nbsp;<a href="./process-event.html">processEvent</a><br/>
+<br/>
+<h1>processEvent</h1>
+<a name="org.echo.mobile.framework.service.internal.subscription.AccountSubscriptionManagerImpl$processEvent(kotlin.String)"></a>
+<code><span class="keyword">fun </span><span class="identifier">processEvent</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.internal.subscription.AccountSubscriptionManagerImpl$processEvent(kotlin.String)/event">event</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">&gt;</span></code>
+<p>Searches for account object id that has active subscriptions</p>
+<p>Steps:
+    1) Find not empty array with depth = 3 in params array.
+       To receive result all events should be in example's form
+    2) Go through all elements of array and find account statistic object with id starting from 2.6
+       (@see http://docs.bitshares.org/development/blockchain/objects.html)
+    3) Parse from statistic object account id with key "owner"
+    4) Check, whether there are listeners for this account id.
+       If true - return found account id, else - null
+    5) Return null if any of steps fails</p>
+</BODY>
+</HTML>

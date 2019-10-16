@@ -1,0 +1,175 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>GrapheneObject - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.model</a>&nbsp;/&nbsp;<a href="./index.html">GrapheneObject</a><br/>
+<br/>
+<h1>GrapheneObject</h1>
+<code><span class="keyword">open</span> <span class="keyword">class </span><span class="identifier">GrapheneObject</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-byte-serializable/index.html"><span class="identifier">ByteSerializable</span></a></code>
+<p>Represents base graphene object model</p>
+<p>Encapsulates logic of parsing object id</p>
+<p><strong>Author</strong><br/>
+Dmitriy Bushuev</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<p>Represents base graphene object model</p>
+<code><span class="identifier">GrapheneObject</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.GrapheneObject$<init>(kotlin.String)/id">id</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="id.html">id</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">id</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="instance.html">instance</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">instance</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html"><span class="identifier">Long</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="space.html">space</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">space</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="type.html">type</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">type</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="get-object-id.html">getObjectId</a></h4>
+</td>
+<td>
+<p>Returns a String containing the full object apiId in the form {space}.{type}.{instance}</p>
+<code><span class="keyword">fun </span><span class="identifier">getObjectId</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="get-object-type.html">getObjectType</a></h4>
+</td>
+<td>
+<p>Returns the type of this object.</p>
+<code><span class="keyword">fun </span><span class="identifier">getObjectType</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="../-object-type/index.html"><span class="identifier">ObjectType</span></a><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="to-bytes.html">toBytes</a></h4>
+</td>
+<td>
+<p>Converts entity to byte-array representation</p>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">toBytes</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Companion Object Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-k-e-y_-i-d.html">KEY_ID</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_ID</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Inheritors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="../-account/index.html">Account</a></h4>
+</td>
+<td>
+<p>Represents account model in blockchain</p>
+<code><span class="keyword">class </span><span class="identifier">Account</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">GrapheneObject</span></a><span class="symbol">, </span><a href="../-graphene-serializable.html"><span class="identifier">GrapheneSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-asset/index.html">Asset</a></h4>
+</td>
+<td>
+<p>Class used to represent a specific asset on the Graphene platform</p>
+<code><span class="keyword">class </span><span class="identifier">Asset</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">GrapheneObject</span></a><span class="symbol">, </span><a href="../-byte-serializable/index.html"><span class="identifier">ByteSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../../org.echo.mobile.framework.model.contract/-contract/index.html">Contract</a></h4>
+</td>
+<td>
+<p>Represents contract_object from blockchain</p>
+<code><span class="keyword">class </span><span class="identifier">Contract</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">GrapheneObject</span></a><span class="symbol">, </span><a href="../-graphene-serializable.html"><span class="identifier">GrapheneSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../../org.echo.mobile.framework.model.contract/-contract-balance/index.html">ContractBalance</a></h4>
+</td>
+<td>
+<p>Represents contract balance model from blockchain</p>
+<code><span class="keyword">class </span><span class="identifier">ContractBalance</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">GrapheneObject</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../../org.echo.mobile.framework.model.contract/-contract-info/index.html">ContractInfo</a></h4>
+</td>
+<td>
+<p>Represents info object about contract from blockchain</p>
+<code><span class="keyword">class </span><span class="identifier">ContractInfo</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">GrapheneObject</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-dynamic-global-properties/index.html">DynamicGlobalProperties</a></h4>
+</td>
+<td>
+<p>Represents account model in Graphene blockchain
+<a href="#">Dynamic global properties details</a>
+(https://dev-doc.myecho.app/classgraphene_1_1chain_1_1dynamic__global__property__object.html)</p>
+<code><span class="keyword">class </span><span class="identifier">DynamicGlobalProperties</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">GrapheneObject</span></a><span class="symbol">, </span><a href="https://docs.oracle.com/javase/6/docs/api/java/io/Serializable.html"><span class="identifier">Serializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-eth-deposit/index.html">EthDeposit</a></h4>
+</td>
+<td>
+<p>Describes single ethereum deposit model</p>
+<code><span class="keyword">class </span><span class="identifier">EthDeposit</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">GrapheneObject</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-eth-withdraw/index.html">EthWithdraw</a></h4>
+</td>
+<td>
+<p>Describes single ethereum withdraw model</p>
+<code><span class="keyword">class </span><span class="identifier">EthWithdraw</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">GrapheneObject</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

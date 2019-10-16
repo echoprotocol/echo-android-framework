@@ -11,12 +11,9 @@ import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.Asset
 import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.BaseOperation
-import org.echo.mobile.framework.model.Log
 import org.echo.mobile.framework.model.Transaction
 import org.echo.mobile.framework.model.TransactionResult
-import org.echo.mobile.framework.model.contract.ContractInfo
-import org.echo.mobile.framework.model.contract.ContractResult
-import org.echo.mobile.framework.model.contract.ContractStruct
+import org.echo.mobile.framework.model.contract.*
 import org.echo.mobile.framework.model.contract.input.ContractInputEncoder
 import org.echo.mobile.framework.model.contract.input.InputValue
 import org.echo.mobile.framework.model.operations.ContractCallOperationBuilder
@@ -201,9 +198,9 @@ class ContractsFacadeImpl(
         callback.processResult(databaseApiService.getContractResult(historyId))
 
     override fun getContractLogs(
-        contractId: String, fromBlock: String, toBlock: String, callback: Callback<List<Log>>
+        contractId: String, fromBlock: String, limit: String, callback: Callback<List<ContractLog>>
     ) = callback.processResult(
-        databaseApiService.getContractLogs(contractId, fromBlock, toBlock)
+        databaseApiService.getContractLogs(contractId, fromBlock, limit)
     )
 
     override fun getContracts(

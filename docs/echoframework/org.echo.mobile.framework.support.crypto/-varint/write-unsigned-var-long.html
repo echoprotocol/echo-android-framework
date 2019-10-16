@@ -1,0 +1,30 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>Varint.writeUnsignedVarLong - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.support.crypto</a>&nbsp;/&nbsp;<a href="index.html">Varint</a>&nbsp;/&nbsp;<a href="./write-unsigned-var-long.html">writeUnsignedVarLong</a><br/>
+<br/>
+<h1>writeUnsignedVarLong</h1>
+<a name="org.echo.mobile.framework.support.crypto.Varint$writeUnsignedVarLong(kotlin.Long, java.io.DataOutput)"></a>
+<code><span class="keyword">fun </span><span class="identifier">writeUnsignedVarLong</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support.crypto.Varint$writeUnsignedVarLong(kotlin.Long, java.io.DataOutput)/value">value</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html"><span class="identifier">Long</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.support.crypto.Varint$writeUnsignedVarLong(kotlin.Long, java.io.DataOutput)/out">out</span><span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/io/DataOutput.html"><span class="identifier">DataOutput</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Encodes a value using the variable-length encoding from
+<a href="http://code.google.com/apis/protocolbuffers/docs/encoding.html}">http://code.google.com/apis/protocolbuffers/docs/encoding.html}</a>
+Google Protocol Buffers.
+Zig-zag is not used, so input must not be negative.
+If values can be negative, use</p>
+<h3>Parameters</h3>
+<p><a name="value"></a>
+<code>value</code> - value to encode</p>
+<p><a name="out"></a>
+<code>out</code> - to write bytes to</p>
+<h3>Exceptions</h3>
+<p><a name="IOException"></a>
+<code>IOException</code> - if <a href="https://docs.oracle.com/javase/6/docs/api/java/io/DataOutput.html">DataOutput</a> throws <a href="https://docs.oracle.com/javase/6/docs/api/java/io/IOException.html">IOException</a></p>
+<p><strong>See Also</strong><br/>
+<p><a href="write-signed-var-long.html">writeSignedVarLong</a></p>
+</p>
+</BODY>
+</HTML>

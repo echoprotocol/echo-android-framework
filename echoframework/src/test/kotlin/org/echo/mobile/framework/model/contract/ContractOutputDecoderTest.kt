@@ -120,7 +120,7 @@ class ContractOutputDecoderTest {
 
         val value = result.first().value
         assertNotNull(value)
-        assertEquals(value.toString(), "1.9.0")
+        assertEquals(value.toString(), "1.10.0")
     }
 
     @Test
@@ -133,7 +133,7 @@ class ContractOutputDecoderTest {
 
         val value = result.first().value
         assertNotNull(value)
-        assertEquals(value.toString(), "1.9.45")
+        assertEquals(value.toString(), "1.10.45")
     }
 
     @Test

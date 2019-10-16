@@ -83,6 +83,9 @@ class AuthenticationFacadeImpl(
         operation.newOptionsOption.field?.delegatingAccount =
             account[accountId]?.account!!.options.delegatingAccount
 
+        operation.newOptionsOption.field?.delegateShare =
+            account[accountId]?.account!!.options.delegateShare
+
         val blockData = databaseApiService.getBlockData()
         val chainId = getChainId()
 

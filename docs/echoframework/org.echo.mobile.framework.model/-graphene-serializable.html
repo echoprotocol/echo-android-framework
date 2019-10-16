@@ -1,0 +1,88 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>GrapheneSerializable - echoframework</title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">echoframework</a>&nbsp;/&nbsp;<a href="index.html">org.echo.mobile.framework.model</a>&nbsp;/&nbsp;<a href="./-graphene-serializable.html">GrapheneSerializable</a><br/>
+<br/>
+<h1>GrapheneSerializable</h1>
+<code><span class="keyword">interface </span><span class="identifier">GrapheneSerializable</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-byte-serializable/index.html"><span class="identifier">ByteSerializable</span></a><span class="symbol">, </span><a href="-json-serializable/index.html"><span class="identifier">JsonSerializable</span></a></code>
+<p>Represents functionality of entities that fot which
+it is required to have both json and byte-array representation</p>
+<p><strong>Author</strong><br/>
+Dmitriy Bushuev</p>
+<h3>Inheritors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-account/index.html">Account</a></h4>
+</td>
+<td>
+<p>Represents account model in blockchain</p>
+<code><span class="keyword">class </span><span class="identifier">Account</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-graphene-object/index.html"><span class="identifier">GrapheneObject</span></a><span class="symbol">, </span><a href="./-graphene-serializable.html"><span class="identifier">GrapheneSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-account-options/index.html">AccountOptions</a></h4>
+</td>
+<td>
+<p>Contains user account additional information</p>
+<code><span class="keyword">class </span><span class="identifier">AccountOptions</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./-graphene-serializable.html"><span class="identifier">GrapheneSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-asset-amount/index.html">AssetAmount</a></h4>
+</td>
+<td>
+<p>Class used to represent a specific amount of a certain asset</p>
+<code><span class="keyword">class </span><span class="identifier">AssetAmount</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./-graphene-serializable.html"><span class="identifier">GrapheneSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-bitasset-options/index.html">BitassetOptions</a></h4>
+</td>
+<td>
+<p>Options only available for BitAssets
+<a href="https://dev-doc.myecho.app/asset__ops_8hpp_source.html">https://dev-doc.myecho.app/asset__ops_8hpp_source.html</a></p>
+<code><span class="keyword">class </span><span class="identifier">BitassetOptions</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./-graphene-serializable.html"><span class="identifier">GrapheneSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../org.echo.mobile.framework.model.contract/-contract/index.html">Contract</a></h4>
+</td>
+<td>
+<p>Represents contract_object from blockchain</p>
+<code><span class="keyword">class </span><span class="identifier">Contract</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-graphene-object/index.html"><span class="identifier">GrapheneObject</span></a><span class="symbol">, </span><a href="./-graphene-serializable.html"><span class="identifier">GrapheneSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../org.echo.mobile.framework.model.eddsa/-ed-authority/index.html">EdAuthority</a></h4>
+</td>
+<td>
+<p>Class used to represent the weighted set of keys and accounts that must approve operations.
+Uses EdDSA algorithm.</p>
+<code><span class="keyword">class </span><span class="identifier">EdAuthority</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./-graphene-serializable.html"><span class="identifier">GrapheneSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-extensions/index.html">Extensions</a></h4>
+</td>
+<td>
+<p>Represents additional payload of models</p>
+<code><span class="keyword">class </span><span class="identifier">Extensions</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./-graphene-serializable.html"><span class="identifier">GrapheneSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-optional/index.html">Optional</a></h4>
+</td>
+<td>
+<p>Container template class used whenever we have an optional field.</p>
+<code><span class="keyword">class </span><span class="identifier">Optional</span><span class="symbol">&lt;</span><span class="identifier">T</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./-graphene-serializable.html"><span class="identifier">GrapheneSerializable</span></a><span class="symbol">&gt;</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./-graphene-serializable.html"><span class="identifier">GrapheneSerializable</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

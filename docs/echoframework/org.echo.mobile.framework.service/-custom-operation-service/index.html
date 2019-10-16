@@ -1,0 +1,76 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>CustomOperationService - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.service</a>&nbsp;/&nbsp;<a href="./index.html">CustomOperationService</a><br/>
+<br/>
+<h1>CustomOperationService</h1>
+<code><span class="keyword">interface </span><span class="identifier">CustomOperationService</span></code>
+<p>Encapsulates logic, associated with emitting custom calls to blockchain API</p>
+<p><strong>Author</strong><br/>
+Daria Pechkovskaya</p>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="call-custom-operation.html">callCustomOperation</a></h4>
+</td>
+<td>
+<p>Calls custom <a href="call-custom-operation.html#org.echo.mobile.framework.service.CustomOperationService$callCustomOperation(org.echo.mobile.framework.model.socketoperations.CustomOperation((org.echo.mobile.framework.service.CustomOperationService.callCustomOperation.T)), org.echo.mobile.framework.Callback((org.echo.mobile.framework.service.CustomOperationService.callCustomOperation.T)))/operation">operation</a> to blockchain API, returns result to <a href="call-custom-operation.html#org.echo.mobile.framework.service.CustomOperationService$callCustomOperation(org.echo.mobile.framework.model.socketoperations.CustomOperation((org.echo.mobile.framework.service.CustomOperationService.callCustomOperation.T)), org.echo.mobile.framework.Callback((org.echo.mobile.framework.service.CustomOperationService.callCustomOperation.T)))/callback">callback</a></p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span> <span class="identifier">callCustomOperation</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.CustomOperationService$callCustomOperation(org.echo.mobile.framework.model.socketoperations.CustomOperation((org.echo.mobile.framework.service.CustomOperationService.callCustomOperation.T)), org.echo.mobile.framework.Callback((org.echo.mobile.framework.service.CustomOperationService.callCustomOperation.T)))/operation">operation</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model.socketoperations/-custom-operation/index.html"><span class="identifier">CustomOperation</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.service.CustomOperationService$callCustomOperation(org.echo.mobile.framework.model.socketoperations.CustomOperation((org.echo.mobile.framework.service.CustomOperationService.callCustomOperation.T)), org.echo.mobile.framework.Callback((org.echo.mobile.framework.service.CustomOperationService.callCustomOperation.T)))/callback">callback</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Calls custom <a href="call-custom-operation.html#org.echo.mobile.framework.service.CustomOperationService$callCustomOperation(org.echo.mobile.framework.model.socketoperations.CustomOperation((org.echo.mobile.framework.service.CustomOperationService.callCustomOperation.T)))/operation">operation</a> to blockchain API, returns <a href="../../org.echo.mobile.framework.support/-result/index.html">Result</a> of call</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span> <span class="identifier">callCustomOperation</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.CustomOperationService$callCustomOperation(org.echo.mobile.framework.model.socketoperations.CustomOperation((org.echo.mobile.framework.service.CustomOperationService.callCustomOperation.T)))/operation">operation</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model.socketoperations/-custom-operation/index.html"><span class="identifier">CustomOperation</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.support/-result/index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.exception/-local-exception/index.html"><span class="identifier">LocalException</span></a><span class="symbol">,</span>&nbsp;<span class="identifier">T</span><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Inheritors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="../-account-history-api-service/index.html">AccountHistoryApiService</a></h4>
+</td>
+<td>
+<p>Encapsulates logic, associated with blockchain account history API</p>
+<code><span class="keyword">interface </span><span class="identifier">AccountHistoryApiService</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-api-service/index.html"><span class="identifier">ApiService</span></a><span class="symbol">, </span><a href="./index.html"><span class="identifier">CustomOperationService</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-crypto-api-service.html">CryptoApiService</a></h4>
+</td>
+<td>
+<p>Encapsulates logic, associated with blockchain crypto API</p>
+<code><span class="keyword">interface </span><span class="identifier">CryptoApiService</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-api-service/index.html"><span class="identifier">ApiService</span></a><span class="symbol">, </span><a href="./index.html"><span class="identifier">CustomOperationService</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-database-api-service.html">DatabaseApiService</a></h4>
+</td>
+<td>
+<p>Encapsulates logic, associated with blockchain database API</p>
+<code><span class="keyword">interface </span><span class="identifier">DatabaseApiService</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-api-service/index.html"><span class="identifier">ApiService</span></a><span class="symbol">, </span><a href="../-accounts-service/index.html"><span class="identifier">AccountsService</span></a><span class="symbol">, </span><a href="../-globals-service/index.html"><span class="identifier">GlobalsService</span></a><span class="symbol">, </span><a href="../-authority-and-validation-service/index.html"><span class="identifier">AuthorityAndValidationService</span></a><span class="symbol">, </span><a href="../-blocks-and-transactions-service/index.html"><span class="identifier">BlocksAndTransactionsService</span></a><span class="symbol">, </span><a href="../-contracts-service/index.html"><span class="identifier">ContractsService</span></a><span class="symbol">, </span><a href="../-assets-service/index.html"><span class="identifier">AssetsService</span></a><span class="symbol">, </span><a href="../-subscription-service/index.html"><span class="identifier">SubscriptionService</span></a><span class="symbol">, </span><a href="../-objects-service/index.html"><span class="identifier">ObjectsService</span></a><span class="symbol">, </span><a href="./index.html"><span class="identifier">CustomOperationService</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-login-api-service/index.html">LoginApiService</a></h4>
+</td>
+<td>
+<p>Encapsulates logic, associated with blockchain login API</p>
+<code><span class="keyword">interface </span><span class="identifier">LoginApiService</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-api-service/index.html"><span class="identifier">ApiService</span></a><span class="symbol">, </span><a href="./index.html"><span class="identifier">CustomOperationService</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-network-broadcast-api-service.html">NetworkBroadcastApiService</a></h4>
+</td>
+<td>
+<p>Encapsulates logic, associated with blockchain network broadcast API</p>
+<code><span class="keyword">interface </span><span class="identifier">NetworkBroadcastApiService</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-api-service/index.html"><span class="identifier">ApiService</span></a><span class="symbol">, </span><a href="../-transactions-service/index.html"><span class="identifier">TransactionsService</span></a><span class="symbol">, </span><a href="./index.html"><span class="identifier">CustomOperationService</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

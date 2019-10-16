@@ -1,0 +1,126 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>ByteSerializable - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.model</a>&nbsp;/&nbsp;<a href="./index.html">ByteSerializable</a><br/>
+<br/>
+<h1>ByteSerializable</h1>
+<code><span class="keyword">interface </span><span class="identifier">ByteSerializable</span></code>
+<p>Describes functionality of entities for which it is required
+to have specific byte-array representation</p>
+<p><strong>Author</strong><br/>
+Dmitriy Bushuev</p>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="to-bytes.html">toBytes</a></h4>
+</td>
+<td>
+<p>Converts entity to byte-array representation</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">toBytes</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Inheritors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="../-asset/index.html">Asset</a></h4>
+</td>
+<td>
+<p>Class used to represent a specific asset on the Graphene platform</p>
+<code><span class="keyword">class </span><span class="identifier">Asset</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-graphene-object/index.html"><span class="identifier">GrapheneObject</span></a><span class="symbol">, </span><a href="./index.html"><span class="identifier">ByteSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-asset-options/index.html">AssetOptions</a></h4>
+</td>
+<td>
+<p>Contains options available on all assets in the network
+<a href="https://dev-doc.myecho.app/structgraphene_1_1chain_1_1asset__options.html">AssetOptions details</a></p>
+<code><span class="keyword">class </span><span class="identifier">AssetOptions</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-json-serializable/index.html"><span class="identifier">JsonSerializable</span></a><span class="symbol">, </span><a href="./index.html"><span class="identifier">ByteSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-base-operation/index.html">BaseOperation</a></h4>
+</td>
+<td>
+<p>Represents base operation model in Graphene blockchain</p>
+<code><span class="keyword">abstract</span> <span class="keyword">class </span><span class="identifier">BaseOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">ByteSerializable</span></a><span class="symbol">, </span><a href="../-json-serializable/index.html"><span class="identifier">JsonSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-block-data/index.html">BlockData</a></h4>
+</td>
+<td>
+<p>This class encapsulates all block-related information needed in order to build a valid transaction.</p>
+<code><span class="keyword">class </span><span class="identifier">BlockData</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">ByteSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../../org.echo.mobile.framework.model.eddsa/-ed-public-key/index.html">EdPublicKey</a></h4>
+</td>
+<td>
+<p>Encapsulates logic of working with account key/address by EdDSA algorithm</p>
+<code><span class="keyword">class </span><span class="identifier">EdPublicKey</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/io/Serializable.html"><span class="identifier">Serializable</span></a><span class="symbol">, </span><a href="./index.html"><span class="identifier">ByteSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-graphene-object/index.html">GrapheneObject</a></h4>
+</td>
+<td>
+<p>Represents base graphene object model</p>
+<code><span class="keyword">open</span> <span class="keyword">class </span><span class="identifier">GrapheneObject</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">ByteSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-graphene-serializable.html">GrapheneSerializable</a></h4>
+</td>
+<td>
+<p>Represents functionality of entities that fot which
+it is required to have both json and byte-array representation</p>
+<code><span class="keyword">interface </span><span class="identifier">GrapheneSerializable</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">ByteSerializable</span></a><span class="symbol">, </span><a href="../-json-serializable/index.html"><span class="identifier">JsonSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-price/index.html">Price</a></h4>
+</td>
+<td>
+<p>The price struct stores asset prices in the Graphene system.</p>
+<code><span class="keyword">class </span><span class="identifier">Price</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-json-serializable/index.html"><span class="identifier">JsonSerializable</span></a><span class="symbol">, </span><a href="./index.html"><span class="identifier">ByteSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-public-key/index.html">PublicKey</a></h4>
+</td>
+<td>
+<p>Encapsulates logic of working with account key/address by EcDSA algorithm</p>
+<code><span class="keyword">class </span><span class="identifier">PublicKey</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/io/Serializable.html"><span class="identifier">Serializable</span></a><span class="symbol">, </span><a href="./index.html"><span class="identifier">ByteSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-transaction/index.html">Transaction</a></h4>
+</td>
+<td>
+<p>Class used to represent a generic Graphene transaction.
+<a href="https://dev-doc.myecho.app/structgraphene_1_1chain_1_1transaction.html">Transaction details</a></p>
+<code><span class="keyword">class </span><span class="identifier">Transaction</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">ByteSerializable</span></a><span class="symbol">, </span><a href="../-json-serializable/index.html"><span class="identifier">JsonSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-vote/index.html">Vote</a></h4>
+</td>
+<td>
+<p>Represents vote model in graphene blockchain</p>
+<code><span class="keyword">class </span><span class="identifier">Vote</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">ByteSerializable</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

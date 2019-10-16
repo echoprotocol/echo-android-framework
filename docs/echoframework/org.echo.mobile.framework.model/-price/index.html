@@ -1,0 +1,98 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>Price - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.model</a>&nbsp;/&nbsp;<a href="./index.html">Price</a><br/>
+<br/>
+<h1>Price</h1>
+<code><span class="keyword">class </span><span class="identifier">Price</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-json-serializable/index.html"><span class="identifier">JsonSerializable</span></a><span class="symbol">, </span><a href="../-byte-serializable/index.html"><span class="identifier">ByteSerializable</span></a></code>
+<p>The price struct stores asset prices in the Graphene system.</p>
+<p>A price is defined as a ratio between two assets, and represents a possible exchange rate
+between those two assets. prices are generally not stored in any simplified form, i.e. a price
+of (1000 CORE)/(20 USD) is perfectly normal.</p>
+<p>The assets within a price are labeled base and quote. Throughout the Graphene code base,
+the convention used is that the base asset is the asset being sold, and the quote asset is
+the asset being purchased, where the price is represented as base/quote, so in the example
+price above the seller is looking to sell CORE asset and get USD in return.</p>
+<p>Note: Taken from the Graphene doxygen.</p>
+<p><strong>Author</strong><br/>
+Dmitriy Bushuev</p>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-price-deserializer/index.html">PriceDeserializer</a></h4>
+</td>
+<td>
+<p>Json deserializer for <a href="./index.html">Price</a> model</p>
+<code><span class="keyword">class </span><span class="identifier">PriceDeserializer</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">JsonDeserializer</span><span class="symbol">&lt;</span><a href="./index.html"><span class="identifier">Price</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<p>The price struct stores asset prices in the Graphene system.</p>
+<code><span class="identifier">Price</span><span class="symbol">(</span><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="base.html">base</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">base</span><span class="symbol">: </span><a href="../-asset-amount/index.html"><span class="identifier">AssetAmount</span></a><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="quote.html">quote</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">quote</span><span class="symbol">: </span><a href="../-asset-amount/index.html"><span class="identifier">AssetAmount</span></a><span class="symbol">?</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="to-bytes.html">toBytes</a></h4>
+</td>
+<td>
+<p>Converts entity to byte-array representation</p>
+<code><span class="keyword">fun </span><span class="identifier">toBytes</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="to-json-object.html">toJsonObject</a></h4>
+</td>
+<td>
+<p>Converts entity to json object representation</p>
+<code><span class="keyword">fun </span><span class="identifier">toJsonObject</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">JsonElement</span><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="to-json-string.html">toJsonString</a></h4>
+</td>
+<td>
+<p>Converts entity to json string representation</p>
+<code><span class="keyword">fun </span><span class="identifier">toJsonString</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

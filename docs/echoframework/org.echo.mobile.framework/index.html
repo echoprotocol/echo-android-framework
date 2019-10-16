@@ -1,0 +1,117 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>org.echo.mobile.framework - echoframework</title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">echoframework</a>&nbsp;/&nbsp;<a href="./index.html">org.echo.mobile.framework</a><br/>
+<br/>
+<h2>Package org.echo.mobile.framework</h2>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-account-listener/index.html">AccountListener</a></h4>
+</td>
+<td>
+<p>Account subscription results listener</p>
+<code><span class="keyword">interface </span><span class="identifier">AccountListener</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-callback/index.html">Callback</a></h4>
+</td>
+<td>
+<p>Generic callback handler</p>
+<code><span class="keyword">interface </span><span class="identifier">Callback</span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-echo-framework/index.html">EchoFramework</a></h4>
+</td>
+<td>
+<p>Describes base library functionality</p>
+<code><span class="keyword">interface </span><span class="identifier">EchoFramework</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.facade/-authentication-facade/index.html"><span class="identifier">AuthenticationFacade</span></a><span class="symbol">, </span><a href="../org.echo.mobile.framework.facade/-fee-facade/index.html"><span class="identifier">FeeFacade</span></a><span class="symbol">, </span><a href="../org.echo.mobile.framework.facade/-information-facade/index.html"><span class="identifier">InformationFacade</span></a><span class="symbol">, </span><a href="../org.echo.mobile.framework.facade/-subscription-facade/index.html"><span class="identifier">SubscriptionFacade</span></a><span class="symbol">, </span><a href="../org.echo.mobile.framework.facade/-transactions-facade/index.html"><span class="identifier">TransactionsFacade</span></a><span class="symbol">, </span><a href="../org.echo.mobile.framework.facade/-assets-facade/index.html"><span class="identifier">AssetsFacade</span></a><span class="symbol">, </span><a href="../org.echo.mobile.framework.facade/-contracts-facade/index.html"><span class="identifier">ContractsFacade</span></a><span class="symbol">, </span><a href="../org.echo.mobile.framework.facade/-sidechain-facade/index.html"><span class="identifier">SidechainFacade</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-echo-framework-impl/index.html">EchoFrameworkImpl</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="-echo-framework/index.html">EchoFramework</a> base library API</p>
+<code><span class="keyword">class </span><span class="identifier">EchoFrameworkImpl</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-echo-framework/index.html"><span class="identifier">EchoFramework</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-d-e-f-a-u-l-t_-g-a-s_-l-i-m-i-t.html">DEFAULT_GAS_LIMIT</a></h4>
+</td>
+<td>
+<p>Default amount of gas limit for contract call</p>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">DEFAULT_GAS_LIMIT</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html"><span class="identifier">Long</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-d-e-f-a-u-l-t_-g-a-s_-p-r-i-c-e.html">DEFAULT_GAS_PRICE</a></h4>
+</td>
+<td>
+<p>Default price of gas unit for contract call</p>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">DEFAULT_GAS_PRICE</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html"><span class="identifier">Long</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-e-c-h-o_-a-s-s-e-t_-i-d.html">ECHO_ASSET_ID</a></h4>
+</td>
+<td>
+<p>Id of ECHO asset</p>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">ECHO_ASSET_ID</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-e-c-h-o_-u-r-l.html">ECHO_URL</a></h4>
+</td>
+<td>
+<p>Socket url for echo blockchain</p>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">ECHO_URL</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-i-l-l-e-g-a-l_-i-d.html">ILLEGAL_ID</a></h4>
+</td>
+<td>
+<p>Illegal id for all blockchain apis, call id</p>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">ILLEGAL_ID</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-t-i-m-e_-d-a-t-e_-f-o-r-m-a-t.html">TIME_DATE_FORMAT</a></h4>
+</td>
+<td>
+<p>Time format used across the platform</p>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">TIME_DATE_FORMAT</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="process-result.html">processResult</a></h4>
+</td>
+<td>
+<p>Wrap input code block in <a href="../org.echo.mobile.framework.support/-result/index.html">Result</a> and and calls corresponding callback methods after finish</p>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span> <a href="-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span><span class="symbol">.</span><span class="identifier">processResult</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework$processResult(org.echo.mobile.framework.Callback((org.echo.mobile.framework.processResult.T)), kotlin.Function0((org.echo.mobile.framework.processResult.T)))/block">block</span><span class="symbol">:</span>&nbsp;<span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<span class="identifier">T</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Calls corresponding callback methods on <a href="process-result.html#org.echo.mobile.framework$processResult(org.echo.mobile.framework.Callback((org.echo.mobile.framework.processResult.T)), org.echo.mobile.framework.support.Result((org.echo.mobile.framework.processResult.E, org.echo.mobile.framework.processResult.T)))/targetResult">targetResult</a> processing results</p>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">, </span><span class="identifier">T</span><span class="symbol">&gt;</span> <a href="-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span><span class="symbol">.</span><span class="identifier">processResult</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework$processResult(org.echo.mobile.framework.Callback((org.echo.mobile.framework.processResult.T)), org.echo.mobile.framework.support.Result((org.echo.mobile.framework.processResult.E, org.echo.mobile.framework.processResult.T)))/targetResult">targetResult</span><span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.support/-result/index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">,</span>&nbsp;<span class="identifier">T</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

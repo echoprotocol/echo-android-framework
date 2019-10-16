@@ -1,0 +1,42 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>Dispatcher - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.support.concurrent</a>&nbsp;/&nbsp;<a href="./index.html">Dispatcher</a><br/>
+<br/>
+<h1>Dispatcher</h1>
+<code><span class="keyword">interface </span><span class="identifier">Dispatcher</span></code>
+<p>Encapsulates logic of dispatching asynchronous requests</p>
+<p><strong>Author</strong><br/>
+Dmitriy Bushuev</p>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="dispatch.html">dispatch</a></h4>
+</td>
+<td>
+<p>Dispatches required job</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">dispatch</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support.concurrent.Dispatcher$dispatch(java.lang.Runnable)/job">job</span><span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/lang/Runnable.html"><span class="identifier">Runnable</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Inheritors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="../-executor-service-dispatcher/index.html">ExecutorServiceDispatcher</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="./index.html">Dispatcher</a> based on <a href="https://docs.oracle.com/javase/6/docs/api/java/util/concurrent/ExecutorService.html">ExecutorService</a></p>
+<code><span class="keyword">class </span><span class="identifier">ExecutorServiceDispatcher</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">Dispatcher</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

@@ -3,7 +3,6 @@ package org.echo.mobile.framework.model.contract
 import com.google.gson.Gson
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import org.echo.mobile.framework.model.Log
 
 /**
  * Contains classes, describing result of contract operation
@@ -11,6 +10,20 @@ import org.echo.mobile.framework.model.Log
  * @author Daria Pechkovskaya
  */
 class ContractResult(val contractType: Int, val rawString: String = "")
+
+/**
+ * Describes log of contract operation result
+ *
+ * @author Dmitriy Bushuev
+ */
+class ContractResultLog(
+    @Expose
+    val address: String,
+    @SerializedName("log")
+    val calledMethodsHashes: List<String>,
+    @Expose
+    val data: String
+)
 
 /**
  * Converts [ContractResult] to [RegularContractResult] if possible,else returns null
@@ -78,9 +91,6 @@ class ExecRes(
     @SerializedName("code_deposit")
     val codeDeposit: String = "",
 
-    @SerializedName("gas_refunded")
-    val gasRefunded: String = "",
-
     @SerializedName("deposit_size")
     val depositSize: Long = 0,
 
@@ -103,5 +113,5 @@ class TrReceipt(
     val bloom: String = "",
 
     @Expose
-    val log: List<Log> = listOf()
+    val log: List<ContractResultLog> = listOf()
 )

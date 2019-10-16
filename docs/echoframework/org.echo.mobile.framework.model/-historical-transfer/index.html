@@ -1,0 +1,108 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>HistoricalTransfer - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.model</a>&nbsp;/&nbsp;<a href="./index.html">HistoricalTransfer</a><br/>
+<br/>
+<h1>HistoricalTransfer</h1>
+<code><span class="keyword">data</span> <span class="keyword">class </span><span class="identifier">HistoricalTransfer</span></code>
+<p>Represents account history
+<a href="https://dev-doc.myecho.app/classgraphene_1_1chain_1_1operation__history__object.html">History object details</a></p>
+<p>Contains required information about user operations</p>
+<p><strong>Author</strong><br/>
+Daria Pechkovskaya</p>
+<p><strong>Author</strong><br/>
+Dmitriy Bushuev</p>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-history-deserializer/index.html">HistoryDeserializer</a></h4>
+</td>
+<td>
+<p>Json deserializer for <a href="./index.html">HistoricalTransfer</a> class</p>
+<code><span class="keyword">class </span><span class="identifier">HistoryDeserializer</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">JsonDeserializer</span><span class="symbol">&lt;</span><a href="./index.html"><span class="identifier">HistoricalTransfer</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<p>Represents account history
+<a href="https://dev-doc.myecho.app/classgraphene_1_1chain_1_1operation__history__object.html">History object details</a></p>
+<code><span class="identifier">HistoricalTransfer</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.HistoricalTransfer$<init>(kotlin.String, org.echo.mobile.framework.model.BaseOperation, java.util.Date)/id">id</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.HistoricalTransfer$<init>(kotlin.String, org.echo.mobile.framework.model.BaseOperation, java.util.Date)/operation">operation</span><span class="symbol">:</span>&nbsp;<a href="../-base-operation/index.html"><span class="identifier">BaseOperation</span></a><span class="symbol">?</span><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.HistoricalTransfer$<init>(kotlin.String, org.echo.mobile.framework.model.BaseOperation, java.util.Date)/timestamp">timestamp</span><span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/util/Date.html"><span class="identifier">Date</span></a><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="block-num.html">blockNum</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">blockNum</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html"><span class="identifier">Long</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="id.html">id</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">id</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="operation.html">operation</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">operation</span><span class="symbol">: </span><a href="../-base-operation/index.html"><span class="identifier">BaseOperation</span></a><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="op-in-trx.html">opInTrx</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">opInTrx</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html"><span class="identifier">Long</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="result.html">result</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">result</span><span class="symbol">: </span><a href="../-history-result/index.html"><span class="identifier">HistoryResult</span></a><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="timestamp.html">timestamp</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">timestamp</span><span class="symbol">: </span><a href="https://docs.oracle.com/javase/6/docs/api/java/util/Date.html"><span class="identifier">Date</span></a><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="trx-in-block.html">trxInBlock</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">trxInBlock</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html"><span class="identifier">Long</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="virtual-op.html">virtualOp</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">virtualOp</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html"><span class="identifier">Long</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

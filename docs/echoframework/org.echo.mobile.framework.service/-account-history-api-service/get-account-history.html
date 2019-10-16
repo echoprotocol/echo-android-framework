@@ -1,0 +1,40 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>AccountHistoryApiService.getAccountHistory - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.service</a>&nbsp;/&nbsp;<a href="index.html">AccountHistoryApiService</a>&nbsp;/&nbsp;<a href="./get-account-history.html">getAccountHistory</a><br/>
+<br/>
+<h1>getAccountHistory</h1>
+<a name="org.echo.mobile.framework.service.AccountHistoryApiService$getAccountHistory(kotlin.String, kotlin.String, kotlin.String, kotlin.Int, org.echo.mobile.framework.Callback((org.echo.mobile.framework.model.HistoryResponse)))"></a>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">getAccountHistory</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.AccountHistoryApiService$getAccountHistory(kotlin.String, kotlin.String, kotlin.String, kotlin.Int, org.echo.mobile.framework.Callback((org.echo.mobile.framework.model.HistoryResponse)))/accountId">accountId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.service.AccountHistoryApiService$getAccountHistory(kotlin.String, kotlin.String, kotlin.String, kotlin.Int, org.echo.mobile.framework.Callback((org.echo.mobile.framework.model.HistoryResponse)))/start">start</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.service.AccountHistoryApiService$getAccountHistory(kotlin.String, kotlin.String, kotlin.String, kotlin.Int, org.echo.mobile.framework.Callback((org.echo.mobile.framework.model.HistoryResponse)))/stop">stop</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.service.AccountHistoryApiService$getAccountHistory(kotlin.String, kotlin.String, kotlin.String, kotlin.Int, org.echo.mobile.framework.Callback((org.echo.mobile.framework.model.HistoryResponse)))/limit">limit</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.service.AccountHistoryApiService$getAccountHistory(kotlin.String, kotlin.String, kotlin.String, kotlin.Int, org.echo.mobile.framework.Callback((org.echo.mobile.framework.model.HistoryResponse)))/callback">callback</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-history-response/index.html"><span class="identifier">HistoryResponse</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Get operations relevant to the specified account</p>
+<h3>Parameters</h3>
+<p><a name="accountId"></a>
+<code>accountId</code> - : The account whose history should be queried</p>
+<p><a name="start"></a>
+<code>start</code> - : ID of the most recent operation to retrieve</p>
+<p><a name="stop"></a>
+<code>stop</code> - : ID of the earliest operation to retrieve</p>
+<p><a name="limit"></a>
+<code>limit</code> - : Maximum number of operations to retrieve (must not exceed 100)</p>
+<p><strong>Return</strong><br/>
+A list of operations performed by account, ordered from most recent to oldest</p>
+<a name="org.echo.mobile.framework.service.AccountHistoryApiService$getAccountHistory(kotlin.String, kotlin.String, kotlin.String, kotlin.Int)"></a>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">getAccountHistory</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.AccountHistoryApiService$getAccountHistory(kotlin.String, kotlin.String, kotlin.String, kotlin.Int)/accountId">accountId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.service.AccountHistoryApiService$getAccountHistory(kotlin.String, kotlin.String, kotlin.String, kotlin.Int)/start">start</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.service.AccountHistoryApiService$getAccountHistory(kotlin.String, kotlin.String, kotlin.String, kotlin.Int)/stop">stop</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.service.AccountHistoryApiService$getAccountHistory(kotlin.String, kotlin.String, kotlin.String, kotlin.Int)/limit">limit</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.support/-result/index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-exception/index.html"><span class="identifier">Exception</span></a><span class="symbol">,</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-history-response/index.html"><span class="identifier">HistoryResponse</span></a><span class="symbol">&gt;</span></code>
+<p>Get operations relevant to the specified account in synchronous way</p>
+<h3>Parameters</h3>
+<p><a name="accountId"></a>
+<code>accountId</code> - : The account whose history should be queried</p>
+<p><a name="start"></a>
+<code>start</code> - : ID of the most recent operation to retrieve</p>
+<p><a name="stop"></a>
+<code>stop</code> - : ID of the earliest operation to retrieve</p>
+<p><a name="limit"></a>
+<code>limit</code> - : Maximum number of operations to retrieve (must not exceed 100)</p>
+<p><strong>Return</strong><br/>
+A list of operations performed by account, ordered from most recent to oldest</p>
+</BODY>
+</HTML>
