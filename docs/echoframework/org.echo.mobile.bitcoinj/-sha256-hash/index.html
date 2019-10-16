@@ -1,0 +1,160 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>Sha256Hash - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.bitcoinj</a>&nbsp;/&nbsp;<a href="./index.html">Sha256Hash</a><br/>
+<br/>
+<h1>Sha256Hash</h1>
+<code><span class="keyword">class </span><span class="identifier">Sha256Hash</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/io/Serializable.html"><span class="identifier">Serializable</span></a><span class="symbol">, </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-comparable/index.html"><span class="identifier">Comparable</span></a><span class="symbol">&lt;</span><a href="./index.html"><span class="identifier">Sha256Hash</span></a><span class="symbol">&gt;</span></code>
+<p>A Sha256Hash just wraps a byte[] so that equals and hashcode work correctly, allowing it to be used as keys in a
+map. It also checks that the length is correct and provides a bit more type safety.</p>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="bytes.html">bytes</a></h4>
+</td>
+<td>
+<p>Returns the internal byte array, without defensively copying. Therefore do NOT modify the returned array.</p>
+<code><span class="keyword">val </span><span class="identifier">bytes</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="reversed-bytes.html">reversedBytes</a></h4>
+</td>
+<td>
+<p>Returns a reversed copy of the internal byte array.</p>
+<code><span class="keyword">val </span><span class="identifier">reversedBytes</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="compare-to.html">compareTo</a></h4>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">compareTo</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.bitcoinj.Sha256Hash$compareTo(org.echo.mobile.bitcoinj.Sha256Hash)/other">other</span><span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">Sha256Hash</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="equals.html">equals</a></h4>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">equals</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.bitcoinj.Sha256Hash$equals(kotlin.Any)/other">other</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">?</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="hash-code.html">hashCode</a></h4>
+</td>
+<td>
+<p>Returns the last four bytes of the wrapped hash. This should be unique enough to be a suitable hash code even for
+blocks, where the goal is to try and get the first bytes to be zeros (i.e. the value as a big integer lower
+than the target value).</p>
+<code><span class="keyword">fun </span><span class="identifier">hashCode</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="to-big-integer.html">toBigInteger</a></h4>
+</td>
+<td>
+<p>Returns the bytes interpreted as a positive integer.</p>
+<code><span class="keyword">fun </span><span class="identifier">toBigInteger</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://docs.oracle.com/javase/6/docs/api/java/math/BigInteger.html"><span class="identifier">BigInteger</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="to-string.html">toString</a></h4>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">toString</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Companion Object Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-l-e-n-g-t-h.html">LENGTH</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">LENGTH</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-z-e-r-o_-h-a-s-h.html">ZERO_HASH</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">ZERO_HASH</span><span class="symbol">: </span><a href="./index.html"><span class="identifier">Sha256Hash</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Companion Object Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="hash.html">hash</a></h4>
+</td>
+<td>
+<p>Calculates the SHA-256 hash of the given byte range.</p>
+<code><span class="keyword">fun </span><span class="identifier">hash</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.bitcoinj.Sha256Hash.Companion$hash(kotlin.ByteArray, kotlin.Int, kotlin.Int)/input">input</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.bitcoinj.Sha256Hash.Companion$hash(kotlin.ByteArray, kotlin.Int, kotlin.Int)/offset">offset</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a>&nbsp;<span class="symbol">=</span>&nbsp;0<span class="symbol">, </span><span class="identifier" id="org.echo.mobile.bitcoinj.Sha256Hash.Companion$hash(kotlin.ByteArray, kotlin.Int, kotlin.Int)/length">length</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a>&nbsp;<span class="symbol">=</span>&nbsp;input.size<span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="hash-twice.html">hashTwice</a></h4>
+</td>
+<td>
+<p>Calculates the SHA-256 hash of the given byte range,
+and then hashes the resulting hash again.</p>
+<code><span class="keyword">fun </span><span class="identifier">hashTwice</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.bitcoinj.Sha256Hash.Companion$hashTwice(kotlin.ByteArray, kotlin.Int, kotlin.Int)/input">input</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.bitcoinj.Sha256Hash.Companion$hashTwice(kotlin.ByteArray, kotlin.Int, kotlin.Int)/offset">offset</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a>&nbsp;<span class="symbol">=</span>&nbsp;0<span class="symbol">, </span><span class="identifier" id="org.echo.mobile.bitcoinj.Sha256Hash.Companion$hashTwice(kotlin.ByteArray, kotlin.Int, kotlin.Int)/length">length</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a>&nbsp;<span class="symbol">=</span>&nbsp;input.size<span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a></code>
+<p>Calculates the hash of hash on the given byte ranges. This is equivalent to
+concatenating the two ranges and then passing the result to <a href="#">.hashTwice</a>.</p>
+<code><span class="keyword">fun </span><span class="identifier">hashTwice</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.bitcoinj.Sha256Hash.Companion$hashTwice(kotlin.ByteArray, kotlin.Int, kotlin.Int, kotlin.ByteArray, kotlin.Int, kotlin.Int)/input1">input1</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.bitcoinj.Sha256Hash.Companion$hashTwice(kotlin.ByteArray, kotlin.Int, kotlin.Int, kotlin.ByteArray, kotlin.Int, kotlin.Int)/offset1">offset1</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.bitcoinj.Sha256Hash.Companion$hashTwice(kotlin.ByteArray, kotlin.Int, kotlin.Int, kotlin.ByteArray, kotlin.Int, kotlin.Int)/length1">length1</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.bitcoinj.Sha256Hash.Companion$hashTwice(kotlin.ByteArray, kotlin.Int, kotlin.Int, kotlin.ByteArray, kotlin.Int, kotlin.Int)/input2">input2</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.bitcoinj.Sha256Hash.Companion$hashTwice(kotlin.ByteArray, kotlin.Int, kotlin.Int, kotlin.ByteArray, kotlin.Int, kotlin.Int)/offset2">offset2</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.bitcoinj.Sha256Hash.Companion$hashTwice(kotlin.ByteArray, kotlin.Int, kotlin.Int, kotlin.ByteArray, kotlin.Int, kotlin.Int)/length2">length2</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="new-digest.html">newDigest</a></h4>
+</td>
+<td>
+<p>Returns a new SHA-256 MessageDigest instance.</p>
+<code><span class="keyword">fun </span><span class="identifier">newDigest</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://docs.oracle.com/javase/6/docs/api/java/security/MessageDigest.html"><span class="identifier">MessageDigest</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="of.html">of</a></h4>
+</td>
+<td>
+<p>Creates a new instance containing the calculated (one-time) hash of the given bytes.</p>
+<code><span class="keyword">fun </span><span class="identifier">of</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.bitcoinj.Sha256Hash.Companion$of(kotlin.ByteArray)/contents">contents</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="./index.html"><span class="identifier">Sha256Hash</span></a></code>
+<p>Creates a new instance containing the calculated (one-time) hash of the given file's contents.</p>
+<code><span class="keyword">fun </span><span class="identifier">of</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.bitcoinj.Sha256Hash.Companion$of(java.io.File)/file">file</span><span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/io/File.html"><span class="identifier">File</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="./index.html"><span class="identifier">Sha256Hash</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="twice-of.html">twiceOf</a></h4>
+</td>
+<td>
+<p>Creates a new instance containing the hash of the calculated hash of the given bytes.</p>
+<code><span class="keyword">fun </span><span class="identifier">twiceOf</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.bitcoinj.Sha256Hash.Companion$twiceOf(kotlin.ByteArray)/contents">contents</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="./index.html"><span class="identifier">Sha256Hash</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="wrap.html">wrap</a></h4>
+</td>
+<td>
+<p>Creates a new instance that wraps the given hash value.</p>
+<code><span class="keyword">fun </span><span class="identifier">wrap</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.bitcoinj.Sha256Hash.Companion$wrap(kotlin.ByteArray)/rawHashBytes">rawHashBytes</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="./index.html"><span class="identifier">Sha256Hash</span></a></code>
+<p>Creates a new instance that wraps the given hash value (represented as a hex string).</p>
+<code><span class="keyword">fun </span><span class="identifier">wrap</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.bitcoinj.Sha256Hash.Companion$wrap(kotlin.String)/hexString">hexString</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="./index.html"><span class="identifier">Sha256Hash</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

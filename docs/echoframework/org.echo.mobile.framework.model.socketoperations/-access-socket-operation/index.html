@@ -1,0 +1,77 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>AccessSocketOperation - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.model.socketoperations</a>&nbsp;/&nbsp;<a href="./index.html">AccessSocketOperation</a><br/>
+<br/>
+<h1>AccessSocketOperation</h1>
+<code><span class="keyword">class </span><span class="identifier">AccessSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-socket-operation/index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">&gt;</span></code>
+<p>Represents blockchain call for access to blockchain apis</p>
+<p><strong>Author</strong><br/>
+Daria Pechkovskaya</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<p>Represents blockchain call for access to blockchain apis</p>
+<code><span class="identifier">AccessSocketOperation</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.socketoperations.AccessSocketOperation$<init>(org.echo.mobile.framework.model.socketoperations.AccessSocketOperationType, kotlin.Int, kotlin.Int, org.echo.mobile.framework.Callback((kotlin.Int)))/accessSocketType">accessSocketType</span><span class="symbol">:</span>&nbsp;<a href="../-access-socket-operation-type/index.html"><span class="identifier">AccessSocketOperationType</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.socketoperations.AccessSocketOperation$<init>(org.echo.mobile.framework.model.socketoperations.AccessSocketOperationType, kotlin.Int, kotlin.Int, org.echo.mobile.framework.Callback((kotlin.Int)))/api">api</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.socketoperations.AccessSocketOperation$<init>(org.echo.mobile.framework.model.socketoperations.AccessSocketOperationType, kotlin.Int, kotlin.Int, org.echo.mobile.framework.Callback((kotlin.Int)))/callId">callId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.socketoperations.AccessSocketOperation$<init>(org.echo.mobile.framework.model.socketoperations.AccessSocketOperationType, kotlin.Int, kotlin.Int, org.echo.mobile.framework.Callback((kotlin.Int)))/callback">callback</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">&gt;</span><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="access-socket-type.html">accessSocketType</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">accessSocketType</span><span class="symbol">: </span><a href="../-access-socket-operation-type/index.html"><span class="identifier">AccessSocketOperationType</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="api.html">api</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">api</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="api-id.html">apiId</a></h4>
+</td>
+<td>
+<p>Blockchain api id, which contains operation</p>
+<code><span class="keyword">val </span><span class="identifier">apiId</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="create-parameters.html">createParameters</a></h4>
+</td>
+<td>
+<p>Creates json of call parameters</p>
+<code><span class="keyword">fun </span><span class="identifier">createParameters</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">JsonElement</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="from-json.html">fromJson</a></h4>
+</td>
+<td>
+<p>Converts json string to entity</p>
+<code><span class="keyword">fun </span><span class="identifier">fromJson</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.socketoperations.AccessSocketOperation$fromJson(kotlin.String)/json">json</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">?</span></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

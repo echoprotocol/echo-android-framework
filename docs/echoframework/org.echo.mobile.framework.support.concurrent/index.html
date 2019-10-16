@@ -1,0 +1,65 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>org.echo.mobile.framework.support.concurrent - echoframework</title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">echoframework</a>&nbsp;/&nbsp;<a href="./index.html">org.echo.mobile.framework.support.concurrent</a><br/>
+<br/>
+<h2>Package org.echo.mobile.framework.support.concurrent</h2>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-dispatcher/index.html">Dispatcher</a></h4>
+</td>
+<td>
+<p>Encapsulates logic of dispatching asynchronous requests</p>
+<code><span class="keyword">interface </span><span class="identifier">Dispatcher</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-executor-service-dispatcher/index.html">ExecutorServiceDispatcher</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="-dispatcher/index.html">Dispatcher</a> based on <a href="https://docs.oracle.com/javase/6/docs/api/java/util/concurrent/ExecutorService.html">ExecutorService</a></p>
+<code><span class="keyword">class </span><span class="identifier">ExecutorServiceDispatcher</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-dispatcher/index.html"><span class="identifier">Dispatcher</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-main-thread-account-listener/index.html">MainThreadAccountListener</a></h4>
+</td>
+<td>
+<p>Executes account listener events on main (UI) thread</p>
+<code><span class="keyword">class </span><span class="identifier">MainThreadAccountListener</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework/-account-listener/index.html"><span class="identifier">AccountListener</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-main-thread-callback/index.html">MainThreadCallback</a></h4>
+</td>
+<td>
+<p>Executes callback events on main (UI) thread</p>
+<code><span class="keyword">class </span><span class="identifier">MainThreadCallback</span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-main-thread-executor/index.html">MainThreadExecutor</a></h4>
+</td>
+<td>
+<p>Executes runnable jobs on main application (UI) thread</p>
+<code><span class="keyword">class </span><span class="identifier">MainThreadExecutor</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/util/concurrent/Executor.html"><span class="identifier">Executor</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-main-thread-update-listener/index.html">MainThreadUpdateListener</a></h4>
+</td>
+<td>
+<p>Executes typed update listener events on main (UI) thread</p>
+<code><span class="keyword">class </span><span class="identifier">MainThreadUpdateListener</span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.service/-update-listener/index.html"><span class="identifier">UpdateListener</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

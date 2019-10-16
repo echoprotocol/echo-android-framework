@@ -1,0 +1,66 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>Cancellable - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.support.concurrent.future</a>&nbsp;/&nbsp;<a href="./index.html">Cancellable</a><br/>
+<br/>
+<h1>Cancellable</h1>
+<code><span class="keyword">interface </span><span class="identifier">Cancellable</span></code>
+<p>Describe base functionality of simple cancellable process wrapper</p>
+<p><strong>Author</strong><br/>
+Dmitriy Bushuev</p>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="cancel.html">cancel</a></h4>
+</td>
+<td>
+<p>Attempt to cancel this asynchronous operation.</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">cancel</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="is-cancelled.html">isCancelled</a></h4>
+</td>
+<td>
+<p>Check whether this asynchronous operation has been cancelled.</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">isCancelled</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="is-done.html">isDone</a></h4>
+</td>
+<td>
+<p>Check whether this asynchronous operation completed successfully.</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">isDone</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Inheritors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="../-cancellable-future/index.html">CancellableFuture</a></h4>
+</td>
+<td>
+<p>Representation of the result of asynchronous computation</p>
+<code><span class="keyword">interface </span><span class="identifier">CancellableFuture</span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">Cancellable</span></a><span class="symbol">, </span><a href="https://docs.oracle.com/javase/6/docs/api/java/util/concurrent/Future.html"><span class="identifier">Future</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-cancellable-task/index.html">CancellableTask</a></h4>
+</td>
+<td>
+<p>Base realization of <a href="./index.html">Cancellable</a></p>
+<code><span class="keyword">open</span> <span class="keyword">class </span><span class="identifier">CancellableTask</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">Cancellable</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

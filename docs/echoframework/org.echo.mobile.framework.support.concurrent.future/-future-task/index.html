@@ -1,0 +1,145 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>FutureTask - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.support.concurrent.future</a>&nbsp;/&nbsp;<a href="./index.html">FutureTask</a><br/>
+<br/>
+<h1>FutureTask</h1>
+<code><span class="keyword">class </span><span class="identifier">FutureTask</span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-cancellable-task/index.html"><span class="identifier">CancellableTask</span></a><span class="symbol">, </span><a href="../-cancellable-future/index.html"><span class="identifier">CancellableFuture</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span></code>
+<p>Realization of cancellable future</p>
+<p>Adds functionality to set completed value or error in future</p>
+<p>Example:
+    val future = FutureTask()
+    lib.start(object : Callback {</p>
+<pre><code>    override fun onSuccess(result: String) {
+       future.setComplete(result)
+    }
+
+    override fun onError(error: LocalException) {
+       future.setComplete(error)
+    }
+
+    })
+
+    // blocking current thread until result or error won't be obtained
+    val result = future.get()</code></pre>
+<p><strong>Author</strong><br/>
+Dmitriy Bushuev</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<code><span class="identifier">FutureTask</span><span class="symbol">(</span><span class="symbol">)</span></code><br/>
+<code><span class="identifier">FutureTask</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support.concurrent.future.FutureTask$<init>(org.echo.mobile.framework.support.concurrent.future.FutureTask.T)/value">value</span><span class="symbol">:</span>&nbsp;<span class="identifier">T</span><span class="symbol">)</span></code><br/>
+<code><span class="identifier">FutureTask</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support.concurrent.future.FutureTask$<init>(java.lang.Exception)/e">e</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-exception/index.html"><span class="identifier">Exception</span></a><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="cancel.html">cancel</a></h4>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">cancel</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support.concurrent.future.FutureTask$cancel(kotlin.Boolean)/mayInterruptIfRunning">mayInterruptIfRunning</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code>
+<p>Attempt to cancel this asynchronous operation.</p>
+<code><span class="keyword">fun </span><span class="identifier">cancel</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="get.html">get</a></h4>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">get</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">T</span><span class="symbol">?</span></code><br/>
+<code><span class="keyword">fun </span><span class="identifier">get</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support.concurrent.future.FutureTask$get(kotlin.Long, java.util.concurrent.TimeUnit)/timeout">timeout</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html"><span class="identifier">Long</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.support.concurrent.future.FutureTask$get(kotlin.Long, java.util.concurrent.TimeUnit)/unit">unit</span><span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/util/concurrent/TimeUnit.html"><span class="identifier">TimeUnit</span></a><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">T</span><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="reset.html">reset</a></h4>
+</td>
+<td>
+<p>Reset the future for reuse.</p>
+<code><span class="keyword">fun </span><span class="identifier">reset</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="./index.html"><span class="identifier">FutureTask</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="set-callback.html">setCallback</a></h4>
+</td>
+<td>
+<p>Set a callback to be invoked when this CancellableFuture completes.</p>
+<code><span class="keyword">fun </span><span class="identifier">setCallback</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support.concurrent.future.FutureTask$setCallback(org.echo.mobile.framework.support.concurrent.future.FutureCallback((org.echo.mobile.framework.support.concurrent.future.FutureTask.T)))/callback">callback</span><span class="symbol">:</span>&nbsp;<a href="../-future-callback/index.html"><span class="identifier">FutureCallback</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="../-cancellable-future/index.html"><span class="identifier">CancellableFuture</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="set-complete.html">setComplete</a></h4>
+</td>
+<td>
+<p>Completes current cancellable instance</p>
+<code><span class="keyword">fun </span><span class="identifier">setComplete</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code>
+<p>Defines complete value <a href="set-complete.html#org.echo.mobile.framework.support.concurrent.future.FutureTask$setComplete(org.echo.mobile.framework.support.concurrent.future.FutureTask.T)/value">value</a> and null error. Completes execution</p>
+<code><span class="keyword">fun </span><span class="identifier">setComplete</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support.concurrent.future.FutureTask$setComplete(org.echo.mobile.framework.support.concurrent.future.FutureTask.T)/value">value</span><span class="symbol">:</span>&nbsp;<span class="identifier">T</span><span class="symbol">?</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code>
+<p>Defines complete value <a href="set-complete.html#org.echo.mobile.framework.support.concurrent.future.FutureTask$setComplete(java.lang.Exception, org.echo.mobile.framework.support.concurrent.future.FutureTask.T)/value">value</a> and error <a href="set-complete.html#org.echo.mobile.framework.support.concurrent.future.FutureTask$setComplete(java.lang.Exception, org.echo.mobile.framework.support.concurrent.future.FutureTask.T)/error">error</a>. Completes execution</p>
+<code><span class="keyword">fun </span><span class="identifier">setComplete</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support.concurrent.future.FutureTask$setComplete(java.lang.Exception, org.echo.mobile.framework.support.concurrent.future.FutureTask.T)/error">error</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-exception/index.html"><span class="identifier">Exception</span></a><span class="symbol">?</span><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.support.concurrent.future.FutureTask$setComplete(java.lang.Exception, org.echo.mobile.framework.support.concurrent.future.FutureTask.T)/value">value</span><span class="symbol">:</span>&nbsp;<span class="identifier">T</span><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="then.html">then</a></h4>
+</td>
+<td>
+<p>Set a callback to be invoked when this CancellableFuture completes.</p>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">C</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-future-callback/index.html"><span class="identifier">FutureCallback</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span><span class="symbol">&gt;</span> <span class="identifier">then</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support.concurrent.future.FutureTask$then(org.echo.mobile.framework.support.concurrent.future.FutureTask.then.C)/callback">callback</span><span class="symbol">:</span>&nbsp;<span class="identifier">C</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">C</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="try-get.html">tryGet</a></h4>
+</td>
+<td>
+<p>Get the result, if any. Returns null if still in progress.</p>
+<code><span class="keyword">fun </span><span class="identifier">tryGet</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">T</span><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="try-get-exception.html">tryGetException</a></h4>
+</td>
+<td>
+<p>Get the exception, if any. Returns null if still in progress.</p>
+<code><span class="keyword">fun </span><span class="identifier">tryGetException</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-exception/index.html"><span class="identifier">Exception</span></a><span class="symbol">?</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Extension Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="../complete-callback.html">completeCallback</a></h4>
+</td>
+<td>
+<p>Creates <a href="../../org.echo.mobile.framework/-callback/index.html">Callback</a> that completes future in it's methods with optional block call</p>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span> <a href="./index.html"><span class="identifier">FutureTask</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span><span class="symbol">.</span><span class="identifier">completeCallback</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support.concurrent.future$completeCallback(org.echo.mobile.framework.support.concurrent.future.FutureTask((org.echo.mobile.framework.support.concurrent.future.completeCallback.T)), kotlin.Function1((org.echo.mobile.framework.support.concurrent.future.completeCallback.T, kotlin.Unit)), kotlin.Function1((org.echo.mobile.framework.exception.LocalException, kotlin.Unit)))/successBlock">successBlock</span><span class="symbol">:</span>&nbsp;<span class="symbol">(</span><span class="identifier">T</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a>&nbsp;<span class="symbol">=</span>&nbsp;{}<span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.support.concurrent.future$completeCallback(org.echo.mobile.framework.support.concurrent.future.FutureTask((org.echo.mobile.framework.support.concurrent.future.completeCallback.T)), kotlin.Function1((org.echo.mobile.framework.support.concurrent.future.completeCallback.T, kotlin.Unit)), kotlin.Function1((org.echo.mobile.framework.exception.LocalException, kotlin.Unit)))/errorBlock">errorBlock</span><span class="symbol">:</span>&nbsp;<span class="symbol">(</span><a href="../../org.echo.mobile.framework.exception/-local-exception/index.html"><span class="identifier">LocalException</span></a><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a>&nbsp;<span class="symbol">=</span>&nbsp;{}<span class="symbol">)</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../wrap-result.html">wrapResult</a></h4>
+</td>
+<td>
+<p>Wraps future task result in <a href="../../org.echo.mobile.framework.support/-result/index.html">Result</a></p>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">, </span><span class="identifier">T</span><span class="symbol">&gt;</span> <a href="./index.html"><span class="identifier">FutureTask</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span><span class="symbol">.</span><span class="identifier">wrapResult</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.support/-result/index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">,</span>&nbsp;<span class="identifier">T</span><span class="symbol">&gt;</span></code>
+<p>Wraps future task result in <a href="../../org.echo.mobile.framework.support/-result/index.html">Result</a> with <a href="../wrap-result.html#org.echo.mobile.framework.support.concurrent.future$wrapResult(org.echo.mobile.framework.support.concurrent.future.FutureTask((org.echo.mobile.framework.support.concurrent.future.wrapResult.T)), kotlin.Long, java.util.concurrent.TimeUnit)/timeout">timeout</a></p>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">, </span><span class="identifier">T</span><span class="symbol">&gt;</span> <a href="./index.html"><span class="identifier">FutureTask</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span><span class="symbol">.</span><span class="identifier">wrapResult</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support.concurrent.future$wrapResult(org.echo.mobile.framework.support.concurrent.future.FutureTask((org.echo.mobile.framework.support.concurrent.future.wrapResult.T)), kotlin.Long, java.util.concurrent.TimeUnit)/timeout">timeout</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html"><span class="identifier">Long</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.support.concurrent.future$wrapResult(org.echo.mobile.framework.support.concurrent.future.FutureTask((org.echo.mobile.framework.support.concurrent.future.wrapResult.T)), kotlin.Long, java.util.concurrent.TimeUnit)/unit">unit</span><span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/util/concurrent/TimeUnit.html"><span class="identifier">TimeUnit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.support/-result/index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">,</span>&nbsp;<span class="identifier">T</span><span class="symbol">&gt;</span></code>
+<p>Wraps future task result in <a href="../../org.echo.mobile.framework.support/-result/index.html">Result</a> with default value if operation succeeds with null</p>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">, </span><span class="identifier">T</span><span class="symbol">&gt;</span> <a href="./index.html"><span class="identifier">FutureTask</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span><span class="symbol">.</span><span class="identifier">wrapResult</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support.concurrent.future$wrapResult(org.echo.mobile.framework.support.concurrent.future.FutureTask((org.echo.mobile.framework.support.concurrent.future.wrapResult.T)), org.echo.mobile.framework.support.concurrent.future.wrapResult.T)/default">default</span><span class="symbol">:</span>&nbsp;<span class="identifier">T</span><span class="symbol">)</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.support/-result/index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">,</span>&nbsp;<span class="identifier">T</span><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

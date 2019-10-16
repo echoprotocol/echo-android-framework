@@ -1,0 +1,50 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>Converter - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.support</a>&nbsp;/&nbsp;<a href="./index.html">Converter</a><br/>
+<br/>
+<h1>Converter</h1>
+<code><span class="keyword">interface </span><span class="identifier">Converter</span><span class="symbol">&lt;</span><span class="identifier">I</span><span class="symbol">, </span><span class="identifier">O</span><span class="symbol">&gt;</span></code>
+<p>Simple value converter interface</p>
+<p><strong>Author</strong><br/>
+Dmitriy Bushuev.</p>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="convert.html">convert</a></h4>
+</td>
+<td>
+<p>Converts input value of type <a href="index.html#I">I</a> to value with type <a href="index.html#O">O</a></p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">convert</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support.Converter$convert(org.echo.mobile.framework.support.Converter.I)/source">source</span><span class="symbol">:</span>&nbsp;<span class="identifier">I</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">O</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Inheritors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="../../org.echo.mobile.framework.model.contract/-contract-code-converter/index.html">ContractCodeConverter</a></h4>
+</td>
+<td>
+<p>Converts <a href="../../org.echo.mobile.framework.model.contract/-contract-method-parameter/index.html">ContractMethodParameter</a> to hash string by type</p>
+<code><span class="keyword">class </span><span class="identifier">ContractCodeConverter</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">Converter</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model.contract/-contract-method-parameter/index.html"><span class="identifier">ContractMethodParameter</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../../org.echo.mobile.framework.model.operations/-operation-type-to-class-converter/index.html">OperationTypeToClassConverter</a></h4>
+</td>
+<td>
+<p>Maps operation id to required result class type</p>
+<code><span class="keyword">class </span><span class="identifier">OperationTypeToClassConverter</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">Converter</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">,</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/lang/Class.html"><span class="identifier">Class</span></a><span class="symbol">&lt;</span><span class="identifier">*</span><span class="symbol">&gt;</span><span class="symbol">?</span><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

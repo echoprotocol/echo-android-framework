@@ -1,0 +1,143 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>SubscriptionFacadeImpl - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.facade.internal</a>&nbsp;/&nbsp;<a href="./index.html">SubscriptionFacadeImpl</a><br/>
+<br/>
+<h1>SubscriptionFacadeImpl</h1>
+<code><span class="keyword">class </span><span class="identifier">SubscriptionFacadeImpl</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.facade/-subscription-facade/index.html"><span class="identifier">SubscriptionFacade</span></a></code>
+<p>Implementation of <a href="../../org.echo.mobile.framework.facade/-subscription-facade/index.html">SubscriptionFacade</a></p>
+<p><strong>Author</strong><br/>
+Dmitriy Bushuev</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="../../org.echo.mobile.framework.facade/-subscription-facade/index.html">SubscriptionFacade</a></p>
+<code><span class="identifier">SubscriptionFacadeImpl</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.facade.internal.SubscriptionFacadeImpl$<init>(org.echo.mobile.framework.core.socket.SocketCoreComponent, org.echo.mobile.framework.service.DatabaseApiService, org.echo.mobile.framework.model.network.Network)/socketCoreComponent">socketCoreComponent</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.core.socket/-socket-core-component/index.html"><span class="identifier">SocketCoreComponent</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.internal.SubscriptionFacadeImpl$<init>(org.echo.mobile.framework.core.socket.SocketCoreComponent, org.echo.mobile.framework.service.DatabaseApiService, org.echo.mobile.framework.model.network.Network)/databaseApiService">databaseApiService</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.service/-database-api-service.html"><span class="identifier">DatabaseApiService</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.internal.SubscriptionFacadeImpl$<init>(org.echo.mobile.framework.core.socket.SocketCoreComponent, org.echo.mobile.framework.service.DatabaseApiService, org.echo.mobile.framework.model.network.Network)/network">network</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model.network/-network/index.html"><span class="identifier">Network</span></a><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="subscribe-on-account.html">subscribeOnAccount</a></h4>
+</td>
+<td>
+<p>Subscribe <a href="../../org.echo.mobile.framework.facade/-subscription-facade/subscribe-on-account.html#org.echo.mobile.framework.facade.SubscriptionFacade$subscribeOnAccount(kotlin.String, org.echo.mobile.framework.AccountListener, org.echo.mobile.framework.Callback((kotlin.Boolean)))/listener">listener</a> on account changing events</p>
+<code><span class="keyword">fun </span><span class="identifier">subscribeOnAccount</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.facade.internal.SubscriptionFacadeImpl$subscribeOnAccount(kotlin.String, org.echo.mobile.framework.AccountListener, org.echo.mobile.framework.Callback((kotlin.Boolean)))/nameOrId">nameOrId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.internal.SubscriptionFacadeImpl$subscribeOnAccount(kotlin.String, org.echo.mobile.framework.AccountListener, org.echo.mobile.framework.Callback((kotlin.Boolean)))/listener">listener</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-account-listener/index.html"><span class="identifier">AccountListener</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.internal.SubscriptionFacadeImpl$subscribeOnAccount(kotlin.String, org.echo.mobile.framework.AccountListener, org.echo.mobile.framework.Callback((kotlin.Boolean)))/callback">callback</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="subscribe-on-block.html">subscribeOnBlock</a></h4>
+</td>
+<td>
+<p>Subscribe <a href="../../org.echo.mobile.framework.facade/-subscription-facade/subscribe-on-block.html#org.echo.mobile.framework.facade.SubscriptionFacade$subscribeOnBlock(org.echo.mobile.framework.service.UpdateListener((org.echo.mobile.framework.model.Block)), org.echo.mobile.framework.Callback((kotlin.Boolean)))/listener">listener</a> on block adding events</p>
+<code><span class="keyword">fun </span><span class="identifier">subscribeOnBlock</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.facade.internal.SubscriptionFacadeImpl$subscribeOnBlock(org.echo.mobile.framework.service.UpdateListener((org.echo.mobile.framework.model.Block)), org.echo.mobile.framework.Callback((kotlin.Boolean)))/listener">listener</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.service/-update-listener/index.html"><span class="identifier">UpdateListener</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-block/index.html"><span class="identifier">Block</span></a><span class="symbol">&gt;</span><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.internal.SubscriptionFacadeImpl$subscribeOnBlock(org.echo.mobile.framework.service.UpdateListener((org.echo.mobile.framework.model.Block)), org.echo.mobile.framework.Callback((kotlin.Boolean)))/callback">callback</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="subscribe-on-blockchain-data.html">subscribeOnBlockchainData</a></h4>
+</td>
+<td>
+<p>Subscribe <a href="../../org.echo.mobile.framework.facade/-subscription-facade/subscribe-on-blockchain-data.html#org.echo.mobile.framework.facade.SubscriptionFacade$subscribeOnBlockchainData(org.echo.mobile.framework.service.UpdateListener((org.echo.mobile.framework.model.DynamicGlobalProperties)), org.echo.mobile.framework.Callback((kotlin.Boolean)))/listener">listener</a> on dynamic global properties changes events</p>
+<code><span class="keyword">fun </span><span class="identifier">subscribeOnBlockchainData</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.facade.internal.SubscriptionFacadeImpl$subscribeOnBlockchainData(org.echo.mobile.framework.service.UpdateListener((org.echo.mobile.framework.model.DynamicGlobalProperties)), org.echo.mobile.framework.Callback((kotlin.Boolean)))/listener">listener</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.service/-update-listener/index.html"><span class="identifier">UpdateListener</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-dynamic-global-properties/index.html"><span class="identifier">DynamicGlobalProperties</span></a><span class="symbol">&gt;</span><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.internal.SubscriptionFacadeImpl$subscribeOnBlockchainData(org.echo.mobile.framework.service.UpdateListener((org.echo.mobile.framework.model.DynamicGlobalProperties)), org.echo.mobile.framework.Callback((kotlin.Boolean)))/callback">callback</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="subscribe-on-contract-logs.html">subscribeOnContractLogs</a></h4>
+</td>
+<td>
+<p>Subscribe <a href="../../org.echo.mobile.framework.facade/-subscription-facade/subscribe-on-contract-logs.html#org.echo.mobile.framework.facade.SubscriptionFacade$subscribeOnContractLogs(kotlin.String, org.echo.mobile.framework.service.UpdateListener((kotlin.collections.List((org.echo.mobile.framework.model.contract.ContractLog)))), org.echo.mobile.framework.Callback((kotlin.Boolean)))/listener">listener</a> on contract logs
+<a href="../../org.echo.mobile.framework.facade/-subscription-facade/subscribe-on-contract-logs.html#org.echo.mobile.framework.facade.SubscriptionFacade$subscribeOnContractLogs(kotlin.String, org.echo.mobile.framework.service.UpdateListener((kotlin.collections.List((org.echo.mobile.framework.model.contract.ContractLog)))), org.echo.mobile.framework.Callback((kotlin.Boolean)))/callback">callback</a> is needed for subscription process result events notifying</p>
+<code><span class="keyword">fun </span><span class="identifier">subscribeOnContractLogs</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.facade.internal.SubscriptionFacadeImpl$subscribeOnContractLogs(kotlin.String, org.echo.mobile.framework.service.UpdateListener((kotlin.collections.List((org.echo.mobile.framework.model.contract.ContractLog)))), org.echo.mobile.framework.Callback((kotlin.Boolean)))/contractId">contractId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.internal.SubscriptionFacadeImpl$subscribeOnContractLogs(kotlin.String, org.echo.mobile.framework.service.UpdateListener((kotlin.collections.List((org.echo.mobile.framework.model.contract.ContractLog)))), org.echo.mobile.framework.Callback((kotlin.Boolean)))/listener">listener</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.service/-update-listener/index.html"><span class="identifier">UpdateListener</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model.contract/-contract-log/index.html"><span class="identifier">ContractLog</span></a><span class="symbol">&gt;</span><span class="symbol">&gt;</span><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.internal.SubscriptionFacadeImpl$subscribeOnContractLogs(kotlin.String, org.echo.mobile.framework.service.UpdateListener((kotlin.collections.List((org.echo.mobile.framework.model.contract.ContractLog)))), org.echo.mobile.framework.Callback((kotlin.Boolean)))/callback">callback</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="subscribe-on-contracts.html">subscribeOnContracts</a></h4>
+</td>
+<td>
+<p>Subscribe <a href="../../org.echo.mobile.framework.facade/-subscription-facade/subscribe-on-contracts.html#org.echo.mobile.framework.facade.SubscriptionFacade$subscribeOnContracts(kotlin.collections.List((kotlin.String)), org.echo.mobile.framework.service.UpdateListener((kotlin.collections.Map((kotlin.String, kotlin.collections.List((org.echo.mobile.framework.model.contract.ContractBalance)))))), org.echo.mobile.framework.Callback((kotlin.Boolean)))/listener">listener</a> on contracts changes
+<a href="../../org.echo.mobile.framework.facade/-subscription-facade/subscribe-on-contracts.html#org.echo.mobile.framework.facade.SubscriptionFacade$subscribeOnContracts(kotlin.collections.List((kotlin.String)), org.echo.mobile.framework.service.UpdateListener((kotlin.collections.Map((kotlin.String, kotlin.collections.List((org.echo.mobile.framework.model.contract.ContractBalance)))))), org.echo.mobile.framework.Callback((kotlin.Boolean)))/callback">callback</a> is needed for subscription process result events notifying</p>
+<code><span class="keyword">fun </span><span class="identifier">subscribeOnContracts</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.facade.internal.SubscriptionFacadeImpl$subscribeOnContracts(kotlin.collections.List((kotlin.String)), org.echo.mobile.framework.service.UpdateListener((kotlin.collections.Map((kotlin.String, kotlin.collections.List((org.echo.mobile.framework.model.contract.ContractBalance)))))), org.echo.mobile.framework.Callback((kotlin.Boolean)))/contractIds">contractIds</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">&gt;</span><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.internal.SubscriptionFacadeImpl$subscribeOnContracts(kotlin.collections.List((kotlin.String)), org.echo.mobile.framework.service.UpdateListener((kotlin.collections.Map((kotlin.String, kotlin.collections.List((org.echo.mobile.framework.model.contract.ContractBalance)))))), org.echo.mobile.framework.Callback((kotlin.Boolean)))/listener">listener</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.service/-update-listener/index.html"><span class="identifier">UpdateListener</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html"><span class="identifier">Map</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model.contract/-contract-balance/index.html"><span class="identifier">ContractBalance</span></a><span class="symbol">&gt;</span><span class="symbol">&gt;</span><span class="symbol">&gt;</span><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.internal.SubscriptionFacadeImpl$subscribeOnContracts(kotlin.collections.List((kotlin.String)), org.echo.mobile.framework.service.UpdateListener((kotlin.collections.Map((kotlin.String, kotlin.collections.List((org.echo.mobile.framework.model.contract.ContractBalance)))))), org.echo.mobile.framework.Callback((kotlin.Boolean)))/callback">callback</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="unsubscribe-all.html">unsubscribeAll</a></h4>
+</td>
+<td>
+<p>Unsubscribe all listeners from observing all account changing events</p>
+<code><span class="keyword">fun </span><span class="identifier">unsubscribeAll</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.facade.internal.SubscriptionFacadeImpl$unsubscribeAll(org.echo.mobile.framework.Callback((kotlin.Boolean)))/callback">callback</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="unsubscribe-from-account.html">unsubscribeFromAccount</a></h4>
+</td>
+<td>
+<p>Unsubscribe listeners from observing account event changes with id = <a href="../../org.echo.mobile.framework.facade/-subscription-facade/unsubscribe-from-account.html#org.echo.mobile.framework.facade.SubscriptionFacade$unsubscribeFromAccount(kotlin.String, org.echo.mobile.framework.Callback((kotlin.Boolean)))/nameOrId">nameOrId</a></p>
+<code><span class="keyword">fun </span><span class="identifier">unsubscribeFromAccount</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.facade.internal.SubscriptionFacadeImpl$unsubscribeFromAccount(kotlin.String, org.echo.mobile.framework.Callback((kotlin.Boolean)))/nameOrId">nameOrId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.internal.SubscriptionFacadeImpl$unsubscribeFromAccount(kotlin.String, org.echo.mobile.framework.Callback((kotlin.Boolean)))/callback">callback</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="unsubscribe-from-block.html">unsubscribeFromBlock</a></h4>
+</td>
+<td>
+<p>Unsubscribe listeners from observing block adding event</p>
+<code><span class="keyword">fun </span><span class="identifier">unsubscribeFromBlock</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.facade.internal.SubscriptionFacadeImpl$unsubscribeFromBlock(org.echo.mobile.framework.Callback((kotlin.Boolean)))/callback">callback</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="unsubscribe-from-blockchain-data.html">unsubscribeFromBlockchainData</a></h4>
+</td>
+<td>
+<p>Unsubscribe listeners from observing dynamic global properties chnages event</p>
+<code><span class="keyword">fun </span><span class="identifier">unsubscribeFromBlockchainData</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.facade.internal.SubscriptionFacadeImpl$unsubscribeFromBlockchainData(org.echo.mobile.framework.Callback((kotlin.Boolean)))/callback">callback</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="unsubscribe-from-contract-logs.html">unsubscribeFromContractLogs</a></h4>
+</td>
+<td>
+<p>Unsubscribe listeners from observing contract <a href="../../org.echo.mobile.framework.facade/-subscription-facade/unsubscribe-from-contract-logs.html#org.echo.mobile.framework.facade.SubscriptionFacade$unsubscribeFromContractLogs(kotlin.String, org.echo.mobile.framework.Callback((kotlin.Boolean)))/contractId">contractId</a> logs changes</p>
+<code><span class="keyword">fun </span><span class="identifier">unsubscribeFromContractLogs</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.facade.internal.SubscriptionFacadeImpl$unsubscribeFromContractLogs(kotlin.String, org.echo.mobile.framework.Callback((kotlin.Boolean)))/contractId">contractId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.internal.SubscriptionFacadeImpl$unsubscribeFromContractLogs(kotlin.String, org.echo.mobile.framework.Callback((kotlin.Boolean)))/callback">callback</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="unsubscribe-from-contracts.html">unsubscribeFromContracts</a></h4>
+</td>
+<td>
+<p>Unsubscribe <a href="../../org.echo.mobile.framework.facade/-subscription-facade/unsubscribe-from-contracts.html#org.echo.mobile.framework.facade.SubscriptionFacade$unsubscribeFromContracts(org.echo.mobile.framework.service.UpdateListener((kotlin.collections.Map((kotlin.String, kotlin.collections.List((org.echo.mobile.framework.model.contract.ContractBalance)))))), org.echo.mobile.framework.Callback((kotlin.Boolean)))/listener">listener</a> from contracts observing</p>
+<code><span class="keyword">fun </span><span class="identifier">unsubscribeFromContracts</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.facade.internal.SubscriptionFacadeImpl$unsubscribeFromContracts(org.echo.mobile.framework.service.UpdateListener((kotlin.collections.Map((kotlin.String, kotlin.collections.List((org.echo.mobile.framework.model.contract.ContractBalance)))))), org.echo.mobile.framework.Callback((kotlin.Boolean)))/listener">listener</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.service/-update-listener/index.html"><span class="identifier">UpdateListener</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html"><span class="identifier">Map</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model.contract/-contract-balance/index.html"><span class="identifier">ContractBalance</span></a><span class="symbol">&gt;</span><span class="symbol">&gt;</span><span class="symbol">&gt;</span><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.internal.SubscriptionFacadeImpl$unsubscribeFromContracts(org.echo.mobile.framework.service.UpdateListener((kotlin.collections.Map((kotlin.String, kotlin.collections.List((org.echo.mobile.framework.model.contract.ContractBalance)))))), org.echo.mobile.framework.Callback((kotlin.Boolean)))/callback">callback</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Companion Object Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="block-object-id.html">blockObjectId</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">blockObjectId</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-m-e-t-h-o-d_-k-e-y.html">METHOD_KEY</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">METHOD_KEY</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

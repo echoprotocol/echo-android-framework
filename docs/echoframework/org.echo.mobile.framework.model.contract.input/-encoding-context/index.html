@@ -1,0 +1,48 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>EncodingContext - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.model.contract.input</a>&nbsp;/&nbsp;<a href="./index.html">EncodingContext</a><br/>
+<br/>
+<h1>EncodingContext</h1>
+<code><span class="keyword">interface </span><span class="identifier">EncodingContext</span></code>
+<p>Describes context of current encoding process</p>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="dynamic-parameters-offset.html">dynamicParametersOffset</a></h4>
+</td>
+<td>
+<p>Current offset of dynamic contract parameters</p>
+<code><span class="keyword">abstract</span> <span class="keyword">var </span><span class="identifier">dynamicParametersOffset</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html"><span class="identifier">Long</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="params-count.html">paramsCount</a></h4>
+</td>
+<td>
+<p>Params count of contract method</p>
+<code><span class="keyword">abstract</span> <span class="keyword">val </span><span class="identifier">paramsCount</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="append-dynamic-data-part.html">appendDynamicDataPart</a></h4>
+</td>
+<td>
+<p>Appends dynamic parameter data part to the encoding context</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">appendDynamicDataPart</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.contract.input.EncodingContext$appendDynamicDataPart(kotlin.String)/value">value</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

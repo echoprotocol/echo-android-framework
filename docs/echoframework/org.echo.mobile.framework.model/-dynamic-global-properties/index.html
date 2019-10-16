@@ -1,0 +1,197 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>DynamicGlobalProperties - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.model</a>&nbsp;/&nbsp;<a href="./index.html">DynamicGlobalProperties</a><br/>
+<br/>
+<h1>DynamicGlobalProperties</h1>
+<code><span class="keyword">class </span><span class="identifier">DynamicGlobalProperties</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-graphene-object/index.html"><span class="identifier">GrapheneObject</span></a><span class="symbol">, </span><a href="https://docs.oracle.com/javase/6/docs/api/java/io/Serializable.html"><span class="identifier">Serializable</span></a></code>
+<p>Represents account model in Graphene blockchain
+<a href="#">Dynamic global properties details</a>
+(https://dev-doc.myecho.app/classgraphene_1_1chain_1_1dynamic__global__property__object.html)</p>
+<p><strong>Author</strong><br/>
+Daria Pechkovskaya</p>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-deserializer/index.html">Deserializer</a></h4>
+</td>
+<td>
+<p>Class that will parse the JSON element containing the dynamic global properties object and
+return an instance of the <a href="./index.html">DynamicGlobalProperties</a> class.</p>
+<code><span class="keyword">class </span><span class="identifier">Deserializer</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">JsonDeserializer</span><span class="symbol">&lt;</span><a href="./index.html"><span class="identifier">DynamicGlobalProperties</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<p>Represents account model in Graphene blockchain
+<a href="#">Dynamic global properties details</a>
+(https://dev-doc.myecho.app/classgraphene_1_1chain_1_1dynamic__global__property__object.html)</p>
+<code><span class="identifier">DynamicGlobalProperties</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.DynamicGlobalProperties$<init>(kotlin.String, kotlin.Long, kotlin.String, java.util.Date, java.util.Date, kotlin.String, kotlin.Long, kotlin.Long, kotlin.Int, kotlin.Long, kotlin.String)/id">id</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.DynamicGlobalProperties$<init>(kotlin.String, kotlin.Long, kotlin.String, java.util.Date, java.util.Date, kotlin.String, kotlin.Long, kotlin.Long, kotlin.Int, kotlin.Long, kotlin.String)/headBlockNumber">headBlockNumber</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html"><span class="identifier">Long</span></a>&nbsp;<span class="symbol">=</span>&nbsp;0<span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.DynamicGlobalProperties$<init>(kotlin.String, kotlin.Long, kotlin.String, java.util.Date, java.util.Date, kotlin.String, kotlin.Long, kotlin.Long, kotlin.Int, kotlin.Long, kotlin.String)/headBlockId">headBlockId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.DynamicGlobalProperties$<init>(kotlin.String, kotlin.Long, kotlin.String, java.util.Date, java.util.Date, kotlin.String, kotlin.Long, kotlin.Long, kotlin.Int, kotlin.Long, kotlin.String)/date">date</span><span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/util/Date.html"><span class="identifier">Date</span></a><span class="symbol">?</span><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.DynamicGlobalProperties$<init>(kotlin.String, kotlin.Long, kotlin.String, java.util.Date, java.util.Date, kotlin.String, kotlin.Long, kotlin.Long, kotlin.Int, kotlin.Long, kotlin.String)/nextMaintenanceDate">nextMaintenanceDate</span><span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/util/Date.html"><span class="identifier">Date</span></a><span class="symbol">?</span><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.DynamicGlobalProperties$<init>(kotlin.String, kotlin.Long, kotlin.String, java.util.Date, java.util.Date, kotlin.String, kotlin.Long, kotlin.Long, kotlin.Int, kotlin.Long, kotlin.String)/lastBudgetTime">lastBudgetTime</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.DynamicGlobalProperties$<init>(kotlin.String, kotlin.Long, kotlin.String, java.util.Date, java.util.Date, kotlin.String, kotlin.Long, kotlin.Long, kotlin.Int, kotlin.Long, kotlin.String)/committeeBudget">committeeBudget</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html"><span class="identifier">Long</span></a>&nbsp;<span class="symbol">=</span>&nbsp;0<span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.DynamicGlobalProperties$<init>(kotlin.String, kotlin.Long, kotlin.String, java.util.Date, java.util.Date, kotlin.String, kotlin.Long, kotlin.Long, kotlin.Int, kotlin.Long, kotlin.String)/accountsRegisteredThisInterval">accountsRegisteredThisInterval</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html"><span class="identifier">Long</span></a>&nbsp;<span class="symbol">=</span>&nbsp;0<span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.DynamicGlobalProperties$<init>(kotlin.String, kotlin.Long, kotlin.String, java.util.Date, java.util.Date, kotlin.String, kotlin.Long, kotlin.Long, kotlin.Int, kotlin.Long, kotlin.String)/dynamicFlags">dynamicFlags</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a>&nbsp;<span class="symbol">=</span>&nbsp;0<span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.DynamicGlobalProperties$<init>(kotlin.String, kotlin.Long, kotlin.String, java.util.Date, java.util.Date, kotlin.String, kotlin.Long, kotlin.Long, kotlin.Int, kotlin.Long, kotlin.String)/lastIrreversibleBlockNum">lastIrreversibleBlockNum</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html"><span class="identifier">Long</span></a>&nbsp;<span class="symbol">=</span>&nbsp;0<span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.DynamicGlobalProperties$<init>(kotlin.String, kotlin.Long, kotlin.String, java.util.Date, java.util.Date, kotlin.String, kotlin.Long, kotlin.Long, kotlin.Int, kotlin.Long, kotlin.String)/lastRandQuantity">lastRandQuantity</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a>&nbsp;<span class="symbol">=</span>&nbsp;""<span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="accounts-registered-this-interval.html">accountsRegisteredThisInterval</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">accountsRegisteredThisInterval</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html"><span class="identifier">Long</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="committee-budget.html">committeeBudget</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">committeeBudget</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html"><span class="identifier">Long</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="date.html">date</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">date</span><span class="symbol">: </span><a href="https://docs.oracle.com/javase/6/docs/api/java/util/Date.html"><span class="identifier">Date</span></a><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="dynamic-flags.html">dynamicFlags</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">dynamicFlags</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="head-block-id.html">headBlockId</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">headBlockId</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="head-block-number.html">headBlockNumber</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">headBlockNumber</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html"><span class="identifier">Long</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="last-budget-time.html">lastBudgetTime</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">lastBudgetTime</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="last-irreversible-block-num.html">lastIrreversibleBlockNum</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">lastIrreversibleBlockNum</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html"><span class="identifier">Long</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="last-rand-quantity.html">lastRandQuantity</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">lastRandQuantity</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="next-maintenance-date.html">nextMaintenanceDate</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">nextMaintenanceDate</span><span class="symbol">: </span><a href="https://docs.oracle.com/javase/6/docs/api/java/util/Date.html"><span class="identifier">Date</span></a><span class="symbol">?</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Companion Object Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-k-e-y_-a-c-c-o-u-n-t-s_-r-e-g-i-s-t-e-r-e-d_-t-h-i-s_-i-n-t-e-r-v-a-l.html">KEY_ACCOUNTS_REGISTERED_THIS_INTERVAL</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_ACCOUNTS_REGISTERED_THIS_INTERVAL</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-k-e-y_-c-o-m-m-i-t-t-e-e_-b-u-d-g-e-t.html">KEY_COMMITTEE_BUDGET</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_COMMITTEE_BUDGET</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-k-e-y_-d-y-n-a-m-i-c_-f-l-a-g-s.html">KEY_DYNAMIC_FLAGS</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_DYNAMIC_FLAGS</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-k-e-y_-h-e-a-d_-b-l-o-c-k_-i-d.html">KEY_HEAD_BLOCK_ID</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_HEAD_BLOCK_ID</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-k-e-y_-h-e-a-d_-b-l-o-c-k_-n-u-m-b-e-r.html">KEY_HEAD_BLOCK_NUMBER</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_HEAD_BLOCK_NUMBER</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-k-e-y_-l-a-s-t_-b-u-d-g-e-t_-t-i-m-e.html">KEY_LAST_BUDGET_TIME</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_LAST_BUDGET_TIME</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-k-e-y_-l-a-s-t_-i-r-r-e-v-e-r-s-i-b-l-e_-b-l-o-c-k_-n-u-m.html">KEY_LAST_IRREVERSIBLE_BLOCK_NUM</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_LAST_IRREVERSIBLE_BLOCK_NUM</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-k-e-y_-l-a-s-t_-r-a-n-d_-q-u-a-n-t-i-t-y.html">KEY_LAST_RAND_QUANTITY</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_LAST_RAND_QUANTITY</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-k-e-y_-n-e-x-t_-m-a-i-n-t-e-n-a-n-c-e_-t-i-m-e.html">KEY_NEXT_MAINTENANCE_TIME</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_NEXT_MAINTENANCE_TIME</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-k-e-y_-t-i-m-e.html">KEY_TIME</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_TIME</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

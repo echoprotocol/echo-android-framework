@@ -18,12 +18,8 @@ import org.echo.mobile.framework.model.EthWithdraw
 import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.GrapheneObject
-import org.echo.mobile.framework.model.Log
 import org.echo.mobile.framework.model.Transaction
-import org.echo.mobile.framework.model.contract.ContractFee
-import org.echo.mobile.framework.model.contract.ContractInfo
-import org.echo.mobile.framework.model.contract.ContractResult
-import org.echo.mobile.framework.model.contract.ContractStruct
+import org.echo.mobile.framework.model.contract.*
 import org.echo.mobile.framework.model.network.Network
 import org.echo.mobile.framework.model.socketoperations.BlockDataSocketOperation
 import org.echo.mobile.framework.model.socketoperations.CancelAllSubscriptionsSocketOperation
@@ -466,12 +462,12 @@ class DatabaseApiServiceImpl(
     override fun getContractLogs(
         contractId: String,
         fromBlock: String,
-        toBlock: String
-    ): Result<LocalException, List<Log>> {
-        val futureTask = FutureTask<List<Log>>()
+        limit: String
+    ): Result<LocalException, List<ContractLog>> {
+        val futureTask = FutureTask<List<ContractLog>>()
         val operation = GetContractLogsSocketOperation(
             id,
-            contractId, fromBlock, toBlock,
+            contractId, fromBlock, limit,
             callId = socketCoreComponent.currentId,
             callback = futureTask.completeCallback()
         )
@@ -507,16 +503,12 @@ class DatabaseApiServiceImpl(
     }
 
     override fun subscribeContractLogs(
-        contractId: String,
-        fromBlock: String,
-        limit: String
-    ): Result<LocalException, List<Log>> {
-        val future = FutureTask<List<Log>>()
+        contractId: String
+    ): Result<LocalException, Boolean> {
+        val future = FutureTask<Boolean>()
         val operation = SubscribeContractLogsSocketOperation(
             id,
             contractId,
-            fromBlock,
-            limit,
             callId = socketCoreComponent.currentId,
             callback = future.completeCallback()
         )

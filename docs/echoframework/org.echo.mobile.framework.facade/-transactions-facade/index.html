@@ -1,0 +1,50 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>TransactionsFacade - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.facade</a>&nbsp;/&nbsp;<a href="./index.html">TransactionsFacade</a><br/>
+<br/>
+<h1>TransactionsFacade</h1>
+<code><span class="keyword">interface </span><span class="identifier">TransactionsFacade</span></code>
+<p>Encapsulates logic, associated with various blockchain transactions processes</p>
+<p><strong>Author</strong><br/>
+Dmitriy Bushuev</p>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="send-transfer-operation.html">sendTransferOperation</a></h4>
+</td>
+<td>
+<p>Submits transaction to blockchain</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">sendTransferOperation</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.facade.TransactionsFacade$sendTransferOperation(kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, org.echo.mobile.framework.Callback((kotlin.Boolean)))/nameOrId">nameOrId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.TransactionsFacade$sendTransferOperation(kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, org.echo.mobile.framework.Callback((kotlin.Boolean)))/wif">wif</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.TransactionsFacade$sendTransferOperation(kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, org.echo.mobile.framework.Callback((kotlin.Boolean)))/toNameOrId">toNameOrId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.TransactionsFacade$sendTransferOperation(kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, org.echo.mobile.framework.Callback((kotlin.Boolean)))/amount">amount</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.TransactionsFacade$sendTransferOperation(kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, org.echo.mobile.framework.Callback((kotlin.Boolean)))/asset">asset</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.TransactionsFacade$sendTransferOperation(kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, org.echo.mobile.framework.Callback((kotlin.Boolean)))/feeAsset">feeAsset</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.TransactionsFacade$sendTransferOperation(kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, org.echo.mobile.framework.Callback((kotlin.Boolean)))/callback">callback</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Inheritors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="../../org.echo.mobile.framework/-echo-framework/index.html">EchoFramework</a></h4>
+</td>
+<td>
+<p>Describes base library functionality</p>
+<code><span class="keyword">interface </span><span class="identifier">EchoFramework</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-authentication-facade/index.html"><span class="identifier">AuthenticationFacade</span></a><span class="symbol">, </span><a href="../-fee-facade/index.html"><span class="identifier">FeeFacade</span></a><span class="symbol">, </span><a href="../-information-facade/index.html"><span class="identifier">InformationFacade</span></a><span class="symbol">, </span><a href="../-subscription-facade/index.html"><span class="identifier">SubscriptionFacade</span></a><span class="symbol">, </span><a href="./index.html"><span class="identifier">TransactionsFacade</span></a><span class="symbol">, </span><a href="../-assets-facade/index.html"><span class="identifier">AssetsFacade</span></a><span class="symbol">, </span><a href="../-contracts-facade/index.html"><span class="identifier">ContractsFacade</span></a><span class="symbol">, </span><a href="../-sidechain-facade/index.html"><span class="identifier">SidechainFacade</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../../org.echo.mobile.framework.facade.internal/-transactions-facade-impl/index.html">TransactionsFacadeImpl</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="./index.html">TransactionsFacade</a></p>
+<code><span class="keyword">class </span><span class="identifier">TransactionsFacadeImpl</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.facade.internal/-base-transactions-facade/index.html"><span class="identifier">BaseTransactionsFacade</span></a><span class="symbol">, </span><a href="./index.html"><span class="identifier">TransactionsFacade</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

@@ -1,0 +1,66 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>org.echo.mobile.framework.core.socket - echoframework</title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">echoframework</a>&nbsp;/&nbsp;<a href="./index.html">org.echo.mobile.framework.core.socket</a><br/>
+<br/>
+<h2>Package org.echo.mobile.framework.core.socket</h2>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-socket-connection/index.html">SocketConnection</a></h4>
+</td>
+<td>
+<p>Encapsulates socket connection establishment logic</p>
+<code><span class="keyword">interface </span><span class="identifier">SocketConnection</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-socket-core-component/index.html">SocketCoreComponent</a></h4>
+</td>
+<td>
+<p>Encapsulates logic, associated with socket API calls to Graphene blockchain</p>
+<code><span class="keyword">interface </span><span class="identifier">SocketCoreComponent</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-socket-messenger.html">SocketMessenger</a></h4>
+</td>
+<td>
+<p>Represents base socket managing functionality
+(@see SocketConnection, @see SocketProxy)</p>
+<code><span class="keyword">interface </span><span class="identifier">SocketMessenger</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-socket-connection/index.html"><span class="identifier">SocketConnection</span></a><span class="symbol">, </span><a href="-socket-proxy/index.html"><span class="identifier">SocketProxy</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-socket-messenger-listener/index.html">SocketMessengerListener</a></h4>
+</td>
+<td>
+<p>Listener for <a href="-socket-messenger.html">SocketMessenger</a> events</p>
+<code><span class="keyword">interface </span><span class="identifier">SocketMessengerListener</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-socket-proxy/index.html">SocketProxy</a></h4>
+</td>
+<td>
+<p>Encapsulates messages proxying logic and listeners managing</p>
+<code><span class="keyword">interface </span><span class="identifier">SocketProxy</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-socket-state/index.html">SocketState</a></h4>
+</td>
+<td>
+<p>State of socket connection</p>
+<code><span class="keyword">enum</span> <span class="keyword">class </span><span class="identifier">SocketState</span></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

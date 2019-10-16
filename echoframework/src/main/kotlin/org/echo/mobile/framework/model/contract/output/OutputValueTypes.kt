@@ -122,7 +122,7 @@ class AccountAddressOutputValueType : AddressOutputValueType() {
 class ContractAddressOutputValueType : AddressOutputValueType() {
 
     companion object {
-        const val PREFIX = "1.9."
+        const val PREFIX = "1.10."
         const val CONTRACT_ADDRESS_SIZE = 40
         const val CONTRACT_ADDRESS_PREFIX = "01"
     }

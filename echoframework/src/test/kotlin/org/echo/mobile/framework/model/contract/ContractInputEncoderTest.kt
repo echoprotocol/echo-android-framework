@@ -124,7 +124,7 @@ class ContractInputEncoderTest {
         val encoded =
             contractInputEncoder.encode(
                 function,
-                listOf(InputValue(ContractAddressInputValueType(), "1.14.45"))
+                listOf(InputValue(ContractAddressInputValueType(), "1.10.45"))
             )
 
         Assert.assertEquals(result, encoded)

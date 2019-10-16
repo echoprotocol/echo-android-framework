@@ -1,0 +1,77 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>Log - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.model.contract</a>&nbsp;/&nbsp;<a href="./index.html">Log</a><br/>
+<br/>
+<h1>Log</h1>
+<code><span class="keyword">class </span><span class="identifier">Log</span></code>
+<p>Represent log model in Graphene Blockchain</p>
+<p><strong>Author</strong><br/>
+Dmitriy Bushuev</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<p>Represent log model in Graphene Blockchain</p>
+<code><span class="identifier">Log</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.contract.Log$<init>(kotlin.Int, kotlin.String)/contractType">contractType</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.contract.Log$<init>(kotlin.Int, kotlin.String)/rawString">rawString</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a>&nbsp;<span class="symbol">=</span>&nbsp;""<span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="contract-type.html">contractType</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">contractType</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="raw-string.html">rawString</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">rawString</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Extension Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="../process-type.html">processType</a></h4>
+</td>
+<td>
+<p>Parses log according to contract type</p>
+<code><span class="keyword">fun </span><a href="./index.html"><span class="identifier">Log</span></a><span class="symbol">.</span><span class="identifier">processType</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="../-contract-log/index.html"><span class="identifier">ContractLog</span></a><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../to-regular.html">toRegular</a></h4>
+</td>
+<td>
+<p>Converts <a href="./index.html">Log</a> to <a href="../-contract-log/-regular-contract-log/index.html">ContractLog.RegularContractLog</a> if possible,else returns null</p>
+<code><span class="keyword">fun </span><a href="./index.html"><span class="identifier">Log</span></a><span class="symbol">.</span><span class="identifier">toRegular</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">RegularContractLog</span><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../to-x86.html">toX86</a></h4>
+</td>
+<td>
+<p>Converts <a href="./index.html">Log</a> to <a href="../-contract-log/-contract-logx86/index.html">ContractLog.ContractLogx86</a> if possible,else returns null</p>
+<code><span class="keyword">fun </span><a href="./index.html"><span class="identifier">Log</span></a><span class="symbol">.</span><span class="identifier">toX86</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">ContractLogx86</span><span class="symbol">?</span></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

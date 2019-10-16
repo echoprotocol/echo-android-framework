@@ -1,0 +1,64 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>LoginApiService - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.service</a>&nbsp;/&nbsp;<a href="./index.html">LoginApiService</a><br/>
+<br/>
+<h1>LoginApiService</h1>
+<code><span class="keyword">interface </span><span class="identifier">LoginApiService</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-api-service/index.html"><span class="identifier">ApiService</span></a><span class="symbol">, </span><a href="../-custom-operation-service/index.html"><span class="identifier">CustomOperationService</span></a></code>
+<p>Encapsulates logic, associated with blockchain login API</p>
+<p><a href="https://dev-doc.myecho.app/classgraphene_1_1app_1_1login__api.html">Login API details</a></p>
+<p><strong>Author</strong><br/>
+Daria Pechkovskaya</p>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="connect-api.html">connectApi</a></h4>
+</td>
+<td>
+<p>Retrieve the API id from blockchain.</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">connectApi</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.LoginApiService$connectApi(org.echo.mobile.framework.support.Api, org.echo.mobile.framework.Callback((kotlin.Int)))/api">api</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.support/-api/index.html"><span class="identifier">Api</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.service.LoginApiService$connectApi(org.echo.mobile.framework.support.Api, org.echo.mobile.framework.Callback((kotlin.Int)))/callback">callback</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="login.html">login</a></h4>
+</td>
+<td>
+<p>Authenticate to the RPC server.</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">login</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.LoginApiService$login(org.echo.mobile.framework.Callback((kotlin.Boolean)))/callback">callback</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Companion Object Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-i-n-i-t-i-a-l-i-z-e-r_-a-p-i_-i-d.html">INITIALIZER_API_ID</a></h4>
+</td>
+<td>
+<p>Blockchain api id for initializing another apis</p>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">INITIALIZER_API_ID</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Inheritors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="../../org.echo.mobile.framework.service.internal/-login-api-service-impl/index.html">LoginApiServiceImpl</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="./index.html">LoginApiService</a></p>
+<code><span class="keyword">class </span><span class="identifier">LoginApiServiceImpl</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">LoginApiService</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

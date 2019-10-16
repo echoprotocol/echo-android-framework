@@ -1,0 +1,29 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>BlockData.<init> - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.model</a>&nbsp;/&nbsp;<a href="index.html">BlockData</a>&nbsp;/&nbsp;<a href="./-init-.html">&lt;init&gt;</a><br/>
+<br/>
+<h1>&lt;init&gt;</h1>
+<a name="org.echo.mobile.framework.model.BlockData$&lt;init&gt;(kotlin.Int, kotlin.Long, kotlin.Long)"></a>
+<code><span class="identifier">BlockData</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.BlockData$<init>(kotlin.Int, kotlin.Long, kotlin.Long)/refBlockNum">refBlockNum</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.BlockData$<init>(kotlin.Int, kotlin.Long, kotlin.Long)/refBlockPrefix">refBlockPrefix</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html"><span class="identifier">Long</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.BlockData$<init>(kotlin.Int, kotlin.Long, kotlin.Long)/relativeExpiration">relativeExpiration</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html"><span class="identifier">Long</span></a><span class="symbol">)</span></code>
+<p>Block data constructor</p>
+<h3>Parameters</h3>
+<p><a name="refBlockNum"></a>
+<code>refBlockNum</code> - :        Least significant 16 bits from the reference block number.
+    If "relative_expiration" is zero, this field must be zero as well.</p>
+<p><a name="refBlockPrefix"></a>
+<code>refBlockPrefix</code> - :     The first non-block-number 32-bits of the reference block ID.
+    Recall that block IDs have 32 bits of block number followed by the
+    actual block hash, so this field should be set using the second 32 bits
+    in the block_id_type</p>
+<p><a name="relativeExpiration"></a>
+<code>relativeExpiration</code> - : Expiration time specified as a POSIX or
+    <a href="https://en.wikipedia.org/wiki/Unix_time">Unix time</a></p>
+<a name="org.echo.mobile.framework.model.BlockData$&lt;init&gt;(kotlin.Long, kotlin.String, kotlin.Long)"></a>
+<code><span class="identifier">BlockData</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.BlockData$<init>(kotlin.Long, kotlin.String, kotlin.Long)/headBlockNumber">headBlockNumber</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html"><span class="identifier">Long</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.BlockData$<init>(kotlin.Long, kotlin.String, kotlin.Long)/headBlockId">headBlockId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.BlockData$<init>(kotlin.Long, kotlin.String, kotlin.Long)/relativeExpiration">relativeExpiration</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html"><span class="identifier">Long</span></a><span class="symbol">)</span></code>
+</BODY>
+</HTML>

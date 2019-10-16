@@ -1,0 +1,85 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>TransactionSocketOperation - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.model.socketoperations</a>&nbsp;/&nbsp;<a href="./index.html">TransactionSocketOperation</a><br/>
+<br/>
+<h1>TransactionSocketOperation</h1>
+<code><span class="keyword">class </span><span class="identifier">TransactionSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-socket-operation/index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">&gt;</span></code>
+<p>Broadcast a transaction to the network.
+The <a href="transaction.html">transaction</a> will be checked for validity in the local database prior to broadcasting. If it
+fails to apply locally, an error will be thrown and the transaction will not be broadcast.</p>
+<h3>Parameters</h3>
+<p><a name="transaction"></a>
+<code>transaction</code> - Transaction for broadcast</p>
+<p><strong>Author</strong><br/>
+Daria Pechkovskaya</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<p>Broadcast a transaction to the network.
+The <a href="transaction.html">transaction</a> will be checked for validity in the local database prior to broadcasting. If it
+fails to apply locally, an error will be thrown and the transaction will not be broadcast.</p>
+<code><span class="identifier">TransactionSocketOperation</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.socketoperations.TransactionSocketOperation$<init>(kotlin.Int, org.echo.mobile.framework.model.Transaction, java.util.ArrayList((kotlin.ByteArray)), kotlin.Int, org.echo.mobile.framework.Callback((kotlin.Boolean)))/apiId">apiId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.socketoperations.TransactionSocketOperation$<init>(kotlin.Int, org.echo.mobile.framework.model.Transaction, java.util.ArrayList((kotlin.ByteArray)), kotlin.Int, org.echo.mobile.framework.Callback((kotlin.Boolean)))/transaction">transaction</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-transaction/index.html"><span class="identifier">Transaction</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.socketoperations.TransactionSocketOperation$<init>(kotlin.Int, org.echo.mobile.framework.model.Transaction, java.util.ArrayList((kotlin.ByteArray)), kotlin.Int, org.echo.mobile.framework.Callback((kotlin.Boolean)))/signatures">signatures</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-array-list/index.html"><span class="identifier">ArrayList</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a><span class="symbol">&gt;</span><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.socketoperations.TransactionSocketOperation$<init>(kotlin.Int, org.echo.mobile.framework.model.Transaction, java.util.ArrayList((kotlin.ByteArray)), kotlin.Int, org.echo.mobile.framework.Callback((kotlin.Boolean)))/callId">callId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.socketoperations.TransactionSocketOperation$<init>(kotlin.Int, org.echo.mobile.framework.model.Transaction, java.util.ArrayList((kotlin.ByteArray)), kotlin.Int, org.echo.mobile.framework.Callback((kotlin.Boolean)))/callback">callback</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">&gt;</span><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="api-id.html">apiId</a></h4>
+</td>
+<td>
+<p>Blockchain api id, which contains operation</p>
+<code><span class="keyword">val </span><span class="identifier">apiId</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="signatures.html">signatures</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">signatures</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-array-list/index.html"><span class="identifier">ArrayList</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="transaction.html">transaction</a></h4>
+</td>
+<td>
+<p>Transaction for broadcast</p>
+<code><span class="keyword">val </span><span class="identifier">transaction</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.model/-transaction/index.html"><span class="identifier">Transaction</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="create-parameters.html">createParameters</a></h4>
+</td>
+<td>
+<p>Creates json of call parameters</p>
+<code><span class="keyword">fun </span><span class="identifier">createParameters</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">JsonElement</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="from-json.html">fromJson</a></h4>
+</td>
+<td>
+<p>Converts json string to entity</p>
+<code><span class="keyword">fun </span><span class="identifier">fromJson</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.socketoperations.TransactionSocketOperation$fromJson(kotlin.String)/json">json</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">?</span></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

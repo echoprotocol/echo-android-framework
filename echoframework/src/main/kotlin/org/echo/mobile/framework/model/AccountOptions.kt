@@ -1,11 +1,7 @@
 package org.echo.mobile.framework.model
 
 import com.google.common.primitives.Bytes
-import com.google.gson.JsonArray
-import com.google.gson.JsonDeserializationContext
-import com.google.gson.JsonDeserializer
-import com.google.gson.JsonElement
-import com.google.gson.JsonObject
+import com.google.gson.*
 import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent
 import org.echo.mobile.framework.exception.MalformedAddressException
 import org.echo.mobile.framework.model.network.Network
@@ -28,6 +24,8 @@ class AccountOptions : GrapheneSerializable {
 
     var delegatingAccount: Account = Account(Account.PROXY_TO_SELF)
 
+    var delegateShare: Int = 0
+
     var committeeCount: Int = 0
 
     var votes: Array<Vote> = arrayOf()
@@ -36,29 +34,33 @@ class AccountOptions : GrapheneSerializable {
 
     override fun toBytes(): ByteArray {
 
-            // Adding voting account
-            val votingAccountBytes = votingAccount.toBytes()
+        // Adding voting account
+        val votingAccountBytes = votingAccount.toBytes()
 
-            // Adding delegating account
-            val delegatingAccountBytes = delegatingAccount.toBytes()
+        // Adding delegating account
+        val delegatingAccountBytes = delegatingAccount.toBytes()
 
-            // Adding num_committee
-            val committeeCountBytes = Uint16.serialize(committeeCount)
+        // Adding delegating account
+        val delegateShare = Uint16.serialize(delegateShare)
 
-            // Vote's array length
-            val votesBytes = votes.serialize { vote -> vote.toBytes() }
+        // Adding num_committee
+        val committeeCountBytes = Uint16.serialize(committeeCount)
 
-            // Account options's extensions
-            val extensionsBytes = extensions.toBytes()
+        // Vote's array length
+        val votesBytes = votes.serialize { vote -> vote.toBytes() }
 
-            return Bytes.concat(
-                votingAccountBytes,
-                delegatingAccountBytes,
-                committeeCountBytes,
-                votesBytes,
-                extensionsBytes
-            )
-        }
+        // Account options's extensions
+        val extensionsBytes = extensions.toBytes()
+
+        return Bytes.concat(
+            votingAccountBytes,
+            delegatingAccountBytes,
+            delegateShare,
+            committeeCountBytes,
+            votesBytes,
+            extensionsBytes
+        )
+    }
 
     override fun toJsonString(): String? = null
 
@@ -67,6 +69,7 @@ class AccountOptions : GrapheneSerializable {
             addProperty(KEY_NUM_COMMITTEE, committeeCount)
             addProperty(KEY_VOTING_ACCOUNT, votingAccount.getObjectId())
             addProperty(KEY_DELEGATING_ACCOUNT, delegatingAccount.getObjectId())
+            addProperty(KEY_DELEGATE_SHARE, delegateShare)
 
             val votesArray = JsonArray().apply {
                 votes.forEach { vote -> add(vote.toString()) }
@@ -113,6 +116,7 @@ class AccountOptions : GrapheneSerializable {
         const val KEY_VOTES = "votes"
         const val KEY_VOTING_ACCOUNT = "voting_account"
         const val KEY_DELEGATING_ACCOUNT = "delegating_account"
+        const val KEY_DELEGATE_SHARE = "delegate_share"
         const val KEY_EXTENSIONS = Extensions.KEY_EXTENSIONS
     }
 

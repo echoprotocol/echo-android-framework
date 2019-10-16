@@ -11,8 +11,9 @@ import org.echo.mobile.framework.facade.SubscriptionFacade
 import org.echo.mobile.framework.model.Block
 import org.echo.mobile.framework.model.DynamicGlobalProperties
 import org.echo.mobile.framework.model.FullAccount
-import org.echo.mobile.framework.model.Log
+import org.echo.mobile.framework.model.contract.Log
 import org.echo.mobile.framework.model.contract.ContractBalance
+import org.echo.mobile.framework.model.contract.ContractLog
 import org.echo.mobile.framework.model.network.Network
 import org.echo.mobile.framework.service.AccountSubscriptionManager
 import org.echo.mobile.framework.service.BlockSubscriptionManager
@@ -173,16 +174,14 @@ class SubscriptionFacadeImpl(
 
     override fun subscribeOnContractLogs(
         contractId: String,
-        fromBlock: String,
-        limit: String,
-        listener: UpdateListener<List<Log>>,
+        listener: UpdateListener<List<ContractLog>>,
         callback: Callback<Boolean>
     ) {
         synchronized(this) {
             subscribeGlobal(callback)
 
             if (!contractLogSubscriptionManager.registered(contractId)) {
-                databaseApiService.subscribeContractLogs(contractId, fromBlock, limit)
+                databaseApiService.subscribeContractLogs(contractId)
                     .value {
                         contractLogSubscriptionManager.registerListener(contractId, listener)
                         callback.onSuccess(subscribed)

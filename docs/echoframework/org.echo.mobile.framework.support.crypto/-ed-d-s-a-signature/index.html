@@ -1,0 +1,44 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>EdDSASignature - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.support.crypto</a>&nbsp;/&nbsp;<a href="./index.html">EdDSASignature</a><br/>
+<br/>
+<h1>EdDSASignature</h1>
+<code><span class="keyword">object </span><span class="identifier">EdDSASignature</span></code>
+<p>Object used to transaction EdDSA signing</p>
+<p><strong>Author</strong><br/>
+Daria Pechkovskaya</p>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-s-i-g-n_-d-a-t-a_-b-y-t-e-s.html">SIGN_DATA_BYTES</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">SIGN_DATA_BYTES</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="sign-transaction.html">signTransaction</a></h4>
+</td>
+<td>
+<p>Obtains a signature of transaction. Please note that due to the fact that it uses
+deterministic EdDSA signatures, we are slightly modifying the expiration time of
+the transaction while we look for a signature that will be accepted by
+the graphene network.</p>
+<code><span class="keyword">fun </span><span class="identifier">signTransaction</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support.crypto.EdDSASignature$signTransaction(org.echo.mobile.framework.model.Transaction)/transaction">transaction</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-transaction/index.html"><span class="identifier">Transaction</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://docs.oracle.com/javase/6/docs/api/java/util/ArrayList.html"><span class="identifier">ArrayList</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

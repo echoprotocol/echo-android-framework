@@ -1,0 +1,82 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>BlockSubscriptionManagerImpl - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.service.internal.subscription</a>&nbsp;/&nbsp;<a href="./index.html">BlockSubscriptionManagerImpl</a><br/>
+<br/>
+<h1>BlockSubscriptionManagerImpl</h1>
+<code><span class="keyword">class </span><span class="identifier">BlockSubscriptionManagerImpl</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.service/-block-subscription-manager/index.html"><span class="identifier">BlockSubscriptionManager</span></a></code>
+<p>Implementation of <a href="../../org.echo.mobile.framework.service/-block-subscription-manager/index.html">BlockSubscriptionManager</a></p>
+<p><strong>Author</strong><br/>
+Daria Pechkovskaya</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="../../org.echo.mobile.framework.service/-block-subscription-manager/index.html">BlockSubscriptionManager</a></p>
+<code><span class="identifier">BlockSubscriptionManagerImpl</span><span class="symbol">(</span><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="add-listener.html">addListener</a></h4>
+</td>
+<td>
+<p>Registers required listener</p>
+<code><span class="keyword">fun </span><span class="identifier">addListener</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.internal.subscription.BlockSubscriptionManagerImpl$addListener(org.echo.mobile.framework.service.UpdateListener((org.echo.mobile.framework.model.Block)))/listener">listener</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.service/-update-listener/index.html"><span class="identifier">UpdateListener</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-block/index.html"><span class="identifier">Block</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="clear.html">clear</a></h4>
+</td>
+<td>
+<p>Removes all listeners</p>
+<code><span class="keyword">fun </span><span class="identifier">clear</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="contain-listeners.html">containListeners</a></h4>
+</td>
+<td>
+<p>Checks if manager contains any listeners</p>
+<code><span class="keyword">fun </span><span class="identifier">containListeners</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="contains-listener.html">containsListener</a></h4>
+</td>
+<td>
+<p>Checks if manager contains <a href="../../org.echo.mobile.framework.service/-block-subscription-manager/contains-listener.html#org.echo.mobile.framework.service.BlockSubscriptionManager$containsListener(org.echo.mobile.framework.service.UpdateListener((org.echo.mobile.framework.model.Block)))/listener">listener</a></p>
+<code><span class="keyword">fun </span><span class="identifier">containsListener</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.internal.subscription.BlockSubscriptionManagerImpl$containsListener(org.echo.mobile.framework.service.UpdateListener((org.echo.mobile.framework.model.Block)))/listener">listener</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.service/-update-listener/index.html"><span class="identifier">UpdateListener</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-block/index.html"><span class="identifier">Block</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="notify.html">notify</a></h4>
+</td>
+<td>
+<p>Notifies listeners, connected with input data item</p>
+<code><span class="keyword">fun </span><span class="identifier">notify</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.internal.subscription.BlockSubscriptionManagerImpl$notify(org.echo.mobile.framework.model.Block)/block">block</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-block/index.html"><span class="identifier">Block</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="remove-listener.html">removeListener</a></h4>
+</td>
+<td>
+<p>Removes listener</p>
+<code><span class="keyword">fun </span><span class="identifier">removeListener</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.internal.subscription.BlockSubscriptionManagerImpl$removeListener(org.echo.mobile.framework.service.UpdateListener((org.echo.mobile.framework.model.Block)))/listener">listener</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.service/-update-listener/index.html"><span class="identifier">UpdateListener</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-block/index.html"><span class="identifier">Block</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

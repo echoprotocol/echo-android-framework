@@ -1,0 +1,45 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>EdAuthority.Deserializer - echoframework</title>
+<link rel="stylesheet" href="../../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../../index.html">org.echo.mobile.framework.model.eddsa</a>&nbsp;/&nbsp;<a href="../index.html">EdAuthority</a>&nbsp;/&nbsp;<a href="./index.html">Deserializer</a><br/>
+<br/>
+<h1>Deserializer</h1>
+<code><span class="keyword">class </span><span class="identifier">Deserializer</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">JsonDeserializer</span><span class="symbol">&lt;</span><a href="../index.html"><span class="identifier">EdAuthority</span></a><span class="symbol">&gt;</span></code>
+<p>Custom deserializer used while parsing the 'get_account' API call response.</p>
+<p>This will deserialize an account authority in the form:</p>
+<p>{
+"weight_threshold": 1,
+"account_auths": [],
+"key_auths": [<a href="#">DETHV1WK9KNWskGnuFSkgbL63cfh82xWhExF5gdNxPM9FTe,1</a>]
+}</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<p>Custom deserializer used while parsing the 'get_account' API call response.</p>
+<code><span class="identifier">Deserializer</span><span class="symbol">(</span><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="deserialize.html">deserialize</a></h4>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">deserialize</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.eddsa.EdAuthority.Deserializer$deserialize(com.google.gson.JsonElement, java.lang.reflect.Type, com.google.gson.JsonDeserializationContext)/json">json</span><span class="symbol">:</span>&nbsp;<span class="identifier">JsonElement</span><span class="symbol">?</span><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.eddsa.EdAuthority.Deserializer$deserialize(com.google.gson.JsonElement, java.lang.reflect.Type, com.google.gson.JsonDeserializationContext)/typeOfT">typeOfT</span><span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/lang/reflect/Type.html"><span class="identifier">Type</span></a><span class="symbol">?</span><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.eddsa.EdAuthority.Deserializer$deserialize(com.google.gson.JsonElement, java.lang.reflect.Type, com.google.gson.JsonDeserializationContext)/context">context</span><span class="symbol">:</span>&nbsp;<span class="identifier">JsonDeserializationContext</span><span class="symbol">?</span><span class="symbol">)</span><span class="symbol">: </span><a href="../index.html"><span class="identifier">EdAuthority</span></a><span class="symbol">?</span></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

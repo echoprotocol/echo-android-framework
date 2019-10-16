@@ -60,7 +60,7 @@ class ContractCallOperationBuilder : Builder<ContractCallOperation> {
     }
 
     /**
-     * Sets code for contract if [receiver] is not set
+     * Sets code for contract if [callee] is not set
      * @param code Code for contract operation
      */
     fun setContractCode(code: String): ContractCallOperationBuilder {

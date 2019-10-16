@@ -1,0 +1,76 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>DefaultWifProcessor - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.core.crypto.internal</a>&nbsp;/&nbsp;<a href="./index.html">DefaultWifProcessor</a><br/>
+<br/>
+<h1>DefaultWifProcessor</h1>
+<code><span class="keyword">class </span><span class="identifier">DefaultWifProcessor</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.core.crypto/-wif-processor/index.html"><span class="identifier">WifProcessor</span></a></code>
+<p>Default <a href="../../org.echo.mobile.framework.core.crypto/-wif-processor/index.html">WifProcessor</a> implementation based on standard WIF format</p>
+<p><strong>Author</strong><br/>
+Dmitriy Bushuev</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<p>Default <a href="../../org.echo.mobile.framework.core.crypto/-wif-processor/index.html">WifProcessor</a> implementation based on standard WIF format</p>
+<code><span class="identifier">DefaultWifProcessor</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.core.crypto.internal.DefaultWifProcessor$<init>(kotlin.Boolean)/isMainNet">isMainNet</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="decode-from-wif.html">decodeFromWif</a></h4>
+</td>
+<td>
+<p>Decodes private key in wif format <a href="../../org.echo.mobile.framework.core.crypto/-wif-processor/decode-from-wif.html#org.echo.mobile.framework.core.crypto.WifProcessor$decodeFromWif(kotlin.String)/source">source</a> to the raw bytes representation</p>
+<code><span class="keyword">fun </span><span class="identifier">decodeFromWif</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.core.crypto.internal.DefaultWifProcessor$decodeFromWif(kotlin.String)/source">source</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="encode-to-wif.html">encodeToWif</a></h4>
+</td>
+<td>
+<p>Encodes private key in raw string representation to wif format</p>
+<code><span class="keyword">fun </span><span class="identifier">encodeToWif</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.core.crypto.internal.DefaultWifProcessor$encodeToWif(kotlin.ByteArray)/source">source</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Companion Object Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-c-h-e-c-k-s-u-m_-s-i-z-e.html">CHECKSUM_SIZE</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">CHECKSUM_SIZE</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-m-a-i-n_-n-e-t_-f-r-o-n-t_-b-y-t-e-s.html">MAIN_NET_FRONT_BYTES</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">MAIN_NET_FRONT_BYTES</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-t-e-s-t_-n-e-t_-f-r-o-n-t_-b-y-t-e-s.html">TEST_NET_FRONT_BYTES</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">TEST_NET_FRONT_BYTES</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

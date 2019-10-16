@@ -1,0 +1,95 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>JsonSerializable - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.model</a>&nbsp;/&nbsp;<a href="./index.html">JsonSerializable</a><br/>
+<br/>
+<h1>JsonSerializable</h1>
+<code><span class="keyword">interface </span><span class="identifier">JsonSerializable</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/io/Serializable.html"><span class="identifier">Serializable</span></a></code>
+<p>Describes functionality of entities for which it is required
+to have specific json string representation</p>
+<p><strong>Author</strong><br/>
+Dmitriy Bushuev</p>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="to-json-object.html">toJsonObject</a></h4>
+</td>
+<td>
+<p>Converts entity to json object representation</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">toJsonObject</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">JsonElement</span><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="to-json-string.html">toJsonString</a></h4>
+</td>
+<td>
+<p>Converts entity to json string representation</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">toJsonString</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Inheritors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="../-asset-options/index.html">AssetOptions</a></h4>
+</td>
+<td>
+<p>Contains options available on all assets in the network
+<a href="https://dev-doc.myecho.app/structgraphene_1_1chain_1_1asset__options.html">AssetOptions details</a></p>
+<code><span class="keyword">class </span><span class="identifier">AssetOptions</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">JsonSerializable</span></a><span class="symbol">, </span><a href="../-byte-serializable/index.html"><span class="identifier">ByteSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-base-operation/index.html">BaseOperation</a></h4>
+</td>
+<td>
+<p>Represents base operation model in Graphene blockchain</p>
+<code><span class="keyword">abstract</span> <span class="keyword">class </span><span class="identifier">BaseOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-byte-serializable/index.html"><span class="identifier">ByteSerializable</span></a><span class="symbol">, </span><a href="./index.html"><span class="identifier">JsonSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-graphene-serializable.html">GrapheneSerializable</a></h4>
+</td>
+<td>
+<p>Represents functionality of entities that fot which
+it is required to have both json and byte-array representation</p>
+<code><span class="keyword">interface </span><span class="identifier">GrapheneSerializable</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-byte-serializable/index.html"><span class="identifier">ByteSerializable</span></a><span class="symbol">, </span><a href="./index.html"><span class="identifier">JsonSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-price/index.html">Price</a></h4>
+</td>
+<td>
+<p>The price struct stores asset prices in the Graphene system.</p>
+<code><span class="keyword">class </span><span class="identifier">Price</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">JsonSerializable</span></a><span class="symbol">, </span><a href="../-byte-serializable/index.html"><span class="identifier">ByteSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../../org.echo.mobile.framework.model.socketoperations/-socket-operation/index.html">SocketOperation</a></h4>
+</td>
+<td>
+<p>Represents blockchain call
+Source</p>
+<code><span class="keyword">abstract</span> <span class="keyword">class </span><span class="identifier">SocketOperation</span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">JsonSerializable</span></a><span class="symbol">, </span><a href="../-json-deserializable/index.html"><span class="identifier">JsonDeserializable</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-transaction/index.html">Transaction</a></h4>
+</td>
+<td>
+<p>Class used to represent a generic Graphene transaction.
+<a href="https://dev-doc.myecho.app/structgraphene_1_1chain_1_1transaction.html">Transaction details</a></p>
+<code><span class="keyword">class </span><span class="identifier">Transaction</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-byte-serializable/index.html"><span class="identifier">ByteSerializable</span></a><span class="symbol">, </span><a href="./index.html"><span class="identifier">JsonSerializable</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

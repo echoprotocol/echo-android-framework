@@ -1,0 +1,161 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>AccountCreateOperation - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.model.operations</a>&nbsp;/&nbsp;<a href="./index.html">AccountCreateOperation</a><br/>
+<br/>
+<h1>AccountCreateOperation</h1>
+<code><span class="keyword">class </span><span class="identifier">AccountCreateOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-base-operation/index.html"><span class="identifier">BaseOperation</span></a></code>
+<p>Class used to encapsulate operations related to the <a href="../-operation-type/-a-c-c-o-u-n-t_-c-r-e-a-t-e_-o-p-e-r-a-t-i-o-n.html">OperationType.ACCOUNT_CREATE_OPERATION</a></p>
+<p><strong>Author</strong><br/>
+Dmitriy Bushuev</p>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-deserializer/index.html">Deserializer</a></h4>
+</td>
+<td>
+<p>Deserializer used to build a <a href="./index.html">AccountCreateOperation</a> instance from JSON</p>
+<code><span class="keyword">class </span><span class="identifier">Deserializer</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">JsonDeserializer</span><span class="symbol">&lt;</span><a href="./index.html"><span class="identifier">AccountCreateOperation</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<p>Class used to encapsulate operations related to the <a href="../-operation-type/-a-c-c-o-u-n-t_-c-r-e-a-t-e_-o-p-e-r-a-t-i-o-n.html">OperationType.ACCOUNT_CREATE_OPERATION</a></p>
+<code><span class="identifier">AccountCreateOperation</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.operations.AccountCreateOperation$<init>(kotlin.String, org.echo.mobile.framework.model.Account, org.echo.mobile.framework.model.eddsa.EdAuthority, kotlin.String, org.echo.mobile.framework.model.AccountOptions, org.echo.mobile.framework.model.AssetAmount)/name">name</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.operations.AccountCreateOperation$<init>(kotlin.String, org.echo.mobile.framework.model.Account, org.echo.mobile.framework.model.eddsa.EdAuthority, kotlin.String, org.echo.mobile.framework.model.AccountOptions, org.echo.mobile.framework.model.AssetAmount)/registrar">registrar</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-account/index.html"><span class="identifier">Account</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.operations.AccountCreateOperation$<init>(kotlin.String, org.echo.mobile.framework.model.Account, org.echo.mobile.framework.model.eddsa.EdAuthority, kotlin.String, org.echo.mobile.framework.model.AccountOptions, org.echo.mobile.framework.model.AssetAmount)/active">active</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model.eddsa/-ed-authority/index.html"><span class="identifier">EdAuthority</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.operations.AccountCreateOperation$<init>(kotlin.String, org.echo.mobile.framework.model.Account, org.echo.mobile.framework.model.eddsa.EdAuthority, kotlin.String, org.echo.mobile.framework.model.AccountOptions, org.echo.mobile.framework.model.AssetAmount)/edKey">edKey</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.operations.AccountCreateOperation$<init>(kotlin.String, org.echo.mobile.framework.model.Account, org.echo.mobile.framework.model.eddsa.EdAuthority, kotlin.String, org.echo.mobile.framework.model.AccountOptions, org.echo.mobile.framework.model.AssetAmount)/options">options</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-account-options/index.html"><span class="identifier">AccountOptions</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.operations.AccountCreateOperation$<init>(kotlin.String, org.echo.mobile.framework.model.Account, org.echo.mobile.framework.model.eddsa.EdAuthority, kotlin.String, org.echo.mobile.framework.model.AccountOptions, org.echo.mobile.framework.model.AssetAmount)/fee">fee</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-asset-amount/index.html"><span class="identifier">AssetAmount</span></a>&nbsp;<span class="symbol">=</span>&nbsp;AssetAmount(UnsignedLong.ZERO)<span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="fee.html">fee</a></h4>
+</td>
+<td>
+<p>Required amount of fee <a href="../../org.echo.mobile.framework.model/-asset-amount/index.html">AssetAmount</a> to operation</p>
+<code><span class="keyword">var </span><span class="identifier">fee</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.model/-asset-amount/index.html"><span class="identifier">AssetAmount</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="name.html">name</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">name</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="registrar.html">registrar</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">registrar</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.model/-account/index.html"><span class="identifier">Account</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="set-account-options.html">setAccountOptions</a></h4>
+</td>
+<td>
+<p>Updates options value</p>
+<code><span class="keyword">fun </span><span class="identifier">setAccountOptions</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.operations.AccountCreateOperation$setAccountOptions(org.echo.mobile.framework.model.AccountOptions)/options">options</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-account-options/index.html"><span class="identifier">AccountOptions</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="set-active.html">setActive</a></h4>
+</td>
+<td>
+<p>Updates active value</p>
+<code><span class="keyword">fun </span><span class="identifier">setActive</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.operations.AccountCreateOperation$setActive(org.echo.mobile.framework.model.eddsa.EdAuthority)/active">active</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model.eddsa/-ed-authority/index.html"><span class="identifier">EdAuthority</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="to-bytes.html">toBytes</a></h4>
+</td>
+<td>
+<p>Converts entity to byte-array representation</p>
+<code><span class="keyword">fun </span><span class="identifier">toBytes</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="to-json-object.html">toJsonObject</a></h4>
+</td>
+<td>
+<p>Converts entity to json object representation</p>
+<code><span class="keyword">fun </span><span class="identifier">toJsonObject</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">JsonElement</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="to-json-string.html">toJsonString</a></h4>
+</td>
+<td>
+<p>Converts entity to json string representation</p>
+<code><span class="keyword">fun </span><span class="identifier">toJsonString</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Companion Object Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-k-e-y_-a-c-t-i-v-e.html">KEY_ACTIVE</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_ACTIVE</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-k-e-y_-e-d_-k-e-y.html">KEY_ED_KEY</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_ED_KEY</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-k-e-y_-e-x-t-e-n-s-i-o-n-s.html">KEY_EXTENSIONS</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_EXTENSIONS</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-k-e-y_-n-a-m-e.html">KEY_NAME</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_NAME</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-k-e-y_-o-p-t-i-o-n-s.html">KEY_OPTIONS</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_OPTIONS</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-k-e-y_-r-e-g-i-s-t-r-a-r.html">KEY_REGISTRAR</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_REGISTRAR</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>
