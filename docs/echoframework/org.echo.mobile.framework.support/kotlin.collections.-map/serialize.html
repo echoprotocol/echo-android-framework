@@ -1,0 +1,21 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>serialize - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.support</a>&nbsp;/&nbsp;<a href="index.html">kotlin.collections.Map</a>&nbsp;/&nbsp;<a href="./serialize.html">serialize</a><br/>
+<br/>
+<h1>serialize</h1>
+<a name="org.echo.mobile.framework.support$serialize(kotlin.collections.Map((org.echo.mobile.framework.support.serialize.K, org.echo.mobile.framework.support.serialize.V)), kotlin.Function1((org.echo.mobile.framework.support.serialize.K, kotlin.ByteArray)), kotlin.Function1((org.echo.mobile.framework.support.serialize.V, kotlin.ByteArray)))"></a>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">K</span><span class="symbol">, </span><span class="identifier">V</span><span class="symbol">&gt;</span> <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html"><span class="identifier">Map</span></a><span class="symbol">&lt;</span><span class="identifier">K</span><span class="symbol">,</span>&nbsp;<span class="identifier">V</span><span class="symbol">&gt;</span><span class="symbol">.</span><span class="identifier">serialize</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support$serialize(kotlin.collections.Map((org.echo.mobile.framework.support.serialize.K, org.echo.mobile.framework.support.serialize.V)), kotlin.Function1((org.echo.mobile.framework.support.serialize.K, kotlin.ByteArray)), kotlin.Function1((org.echo.mobile.framework.support.serialize.V, kotlin.ByteArray)))/keyToBytes">keyToBytes</span><span class="symbol">:</span>&nbsp;<span class="symbol">(</span><span class="identifier">K</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.support$serialize(kotlin.collections.Map((org.echo.mobile.framework.support.serialize.K, org.echo.mobile.framework.support.serialize.V)), kotlin.Function1((org.echo.mobile.framework.support.serialize.K, kotlin.ByteArray)), kotlin.Function1((org.echo.mobile.framework.support.serialize.V, kotlin.ByteArray)))/valueToBytes">valueToBytes</span><span class="symbol">:</span>&nbsp;<span class="symbol">(</span><span class="identifier">V</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a></code>
+<p>Serializes typed <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a> to byte array by serialization functions. Concatenates size of map and
+byte arrays from serializing functions.</p>
+<h3>Parameters</h3>
+<p><a name="keyToBytes"></a>
+<code>keyToBytes</code> - Function to serialize key item of map</p>
+<p><a name="valueToBytes"></a>
+<code>valueToBytes</code> - Function to serialize value item of map</p>
+</BODY>
+</HTML>

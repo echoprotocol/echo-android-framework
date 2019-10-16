@@ -26,7 +26,7 @@ class SidechainIssueSocketOperation @JvmOverloads constructor(
     var value: AssetAmount,
     var deposit: EthDeposit,
     override var fee: AssetAmount = AssetAmount(UnsignedLong.ZERO)
-) : BaseOperation(OperationType.SIDECHAIN_ETH_ISSUE_OPERATION) {
+) : BaseOperation(OperationType.SIDECHAIN_ISSUE_OPERATION) {
 
     override fun toBytes(): ByteArray = byteArrayOf()
 

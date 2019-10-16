@@ -15,11 +15,7 @@ import org.echo.mobile.framework.model.EthWithdraw
 import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.GrapheneObject
-import org.echo.mobile.framework.model.Log
-import org.echo.mobile.framework.model.contract.ContractFee
-import org.echo.mobile.framework.model.contract.ContractInfo
-import org.echo.mobile.framework.model.contract.ContractResult
-import org.echo.mobile.framework.model.contract.ContractStruct
+import org.echo.mobile.framework.model.contract.*
 import org.echo.mobile.framework.support.Result
 
 /**
@@ -259,13 +255,13 @@ interface ContractsService {
      *
      * @param contractId   Contract id for fetching logs
      * @param fromBlock    Number of the earliest block to retrieve
-     * @param toBlock      Number of the most recent block to retrieve
+     * @param limit        Blocks limit
      */
     fun getContractLogs(
         contractId: String,
         fromBlock: String,
-        toBlock: String
-    ): Result<LocalException, List<Log>>
+        limit: String
+    ): Result<LocalException, List<ContractLog>>
 
     /**
      * Returns contracts by ids
@@ -303,14 +299,10 @@ interface SubscriptionService {
      * Subscribes to listening contract logs
      *
      * @param contractId   Contract id for fetching logs
-     * @param fromBlock    Number of the earliest block to retrieve
-     * @param limit        Limit of the logs count
      */
     fun subscribeContractLogs(
-        contractId: String,
-        fromBlock: String,
-        limit: String
-    ): Result<LocalException, List<Log>>
+        contractId: String
+    ): Result<LocalException, Boolean>
 
     /**
      * Subscribes to listening contracts changes

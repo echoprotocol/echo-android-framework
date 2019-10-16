@@ -1,0 +1,160 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>EdAuthority - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.model.eddsa</a>&nbsp;/&nbsp;<a href="./index.html">EdAuthority</a><br/>
+<br/>
+<h1>EdAuthority</h1>
+<code><span class="keyword">class </span><span class="identifier">EdAuthority</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-graphene-serializable.html"><span class="identifier">GrapheneSerializable</span></a></code>
+<p>Class used to represent the weighted set of keys and accounts that must approve operations.
+Uses EdDSA algorithm.</p>
+<p><strong>Author</strong><br/>
+Dmitriy Bushuev</p>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-deserializer/index.html">Deserializer</a></h4>
+</td>
+<td>
+<p>Custom deserializer used while parsing the 'get_account' API call response.</p>
+<code><span class="keyword">class </span><span class="identifier">Deserializer</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">JsonDeserializer</span><span class="symbol">&lt;</span><a href="./index.html"><span class="identifier">EdAuthority</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<p>Class used to represent the weighted set of keys and accounts that must approve operations.
+Uses EdDSA algorithm.</p>
+<code><span class="identifier">EdAuthority</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.eddsa.EdAuthority$<init>(kotlin.Int, kotlin.collections.Map((org.echo.mobile.framework.model.eddsa.EdPublicKey, kotlin.Long)), kotlin.collections.Map((org.echo.mobile.framework.model.Account, kotlin.Long)))/weightThreshold">weightThreshold</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a>&nbsp;<span class="symbol">=</span>&nbsp;1<span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.eddsa.EdAuthority$<init>(kotlin.Int, kotlin.collections.Map((org.echo.mobile.framework.model.eddsa.EdPublicKey, kotlin.Long)), kotlin.collections.Map((org.echo.mobile.framework.model.Account, kotlin.Long)))/keyAuthorities">keyAuthorities</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html"><span class="identifier">Map</span></a><span class="symbol">&lt;</span><a href="../-ed-public-key/index.html"><span class="identifier">EdPublicKey</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html"><span class="identifier">Long</span></a><span class="symbol">&gt;</span>&nbsp;<span class="symbol">=</span>&nbsp;mapOf()<span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.eddsa.EdAuthority$<init>(kotlin.Int, kotlin.collections.Map((org.echo.mobile.framework.model.eddsa.EdPublicKey, kotlin.Long)), kotlin.collections.Map((org.echo.mobile.framework.model.Account, kotlin.Long)))/accountAuthorities">accountAuthorities</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html"><span class="identifier">Map</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-account/index.html"><span class="identifier">Account</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html"><span class="identifier">Long</span></a><span class="symbol">&gt;</span>&nbsp;<span class="symbol">=</span>&nbsp;mapOf()<span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="account-auth-list.html">accountAuthList</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">accountAuthList</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-account/index.html"><span class="identifier">Account</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="account-authorities.html">accountAuthorities</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">accountAuthorities</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html"><span class="identifier">Map</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-account/index.html"><span class="identifier">Account</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html"><span class="identifier">Long</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="key-auth-list.html">keyAuthList</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">keyAuthList</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../-ed-public-key/index.html"><span class="identifier">EdPublicKey</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="key-authorities.html">keyAuthorities</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">keyAuthorities</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html"><span class="identifier">Map</span></a><span class="symbol">&lt;</span><a href="../-ed-public-key/index.html"><span class="identifier">EdPublicKey</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html"><span class="identifier">Long</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="weight-threshold.html">weightThreshold</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">weightThreshold</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="equals.html">equals</a></h4>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">equals</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.eddsa.EdAuthority$equals(kotlin.Any)/other">other</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">?</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="hash-code.html">hashCode</a></h4>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">hashCode</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="to-bytes.html">toBytes</a></h4>
+</td>
+<td>
+<p>Converts entity to byte-array representation</p>
+<code><span class="keyword">fun </span><span class="identifier">toBytes</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="to-json-object.html">toJsonObject</a></h4>
+</td>
+<td>
+<p>Converts entity to json object representation</p>
+<code><span class="keyword">fun </span><span class="identifier">toJsonObject</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">JsonElement</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="to-json-string.html">toJsonString</a></h4>
+</td>
+<td>
+<p>Converts entity to json string representation</p>
+<code><span class="keyword">fun </span><span class="identifier">toJsonString</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Companion Object Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-k-e-y_-a-c-c-o-u-n-t_-a-u-t-h-s.html">KEY_ACCOUNT_AUTHS</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_ACCOUNT_AUTHS</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-k-e-y_-e-x-t-e-n-s-i-o-n-s.html">KEY_EXTENSIONS</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_EXTENSIONS</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-k-e-y_-k-e-y_-a-u-t-h-s.html">KEY_KEY_AUTHS</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_KEY_AUTHS</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-k-e-y_-w-e-i-g-h-t_-t-h-r-e-s-h-o-l-d.html">KEY_WEIGHT_THRESHOLD</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_WEIGHT_THRESHOLD</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

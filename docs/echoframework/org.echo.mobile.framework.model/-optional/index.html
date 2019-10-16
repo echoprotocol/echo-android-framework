@@ -1,0 +1,89 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>Optional - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.model</a>&nbsp;/&nbsp;<a href="./index.html">Optional</a><br/>
+<br/>
+<h1>Optional</h1>
+<code><span class="keyword">class </span><span class="identifier">Optional</span><span class="symbol">&lt;</span><span class="identifier">T</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-graphene-serializable.html"><span class="identifier">GrapheneSerializable</span></a><span class="symbol">&gt;</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-graphene-serializable.html"><span class="identifier">GrapheneSerializable</span></a></code>
+<p>Container template class used whenever we have an optional field.</p>
+<p>The idea here is that the binary serialization of this field should be performed
+in a specific way determined by the field implementing the {@link ByteSerializable}
+interface, more specifically using the {@link ByteSerializable#toBytes()} method.</p>
+<p>However, if the field is missing, the Optional class should be able to know how
+to serialize it, as this is always done by placing an zero byte.</p>
+<p><strong>Author</strong><br/>
+Daria Pechkovskaya</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<p>Container template class used whenever we have an optional field.</p>
+<code><span class="identifier">Optional</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.Optional$<init>(org.echo.mobile.framework.model.Optional.T, kotlin.Boolean)/field">field</span><span class="symbol">:</span>&nbsp;<span class="identifier">T</span><span class="symbol">?</span><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.Optional$<init>(org.echo.mobile.framework.model.Optional.T, kotlin.Boolean)/addByteToStart">addByteToStart</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a>&nbsp;<span class="symbol">=</span>&nbsp;false<span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="add-byte-to-start.html">addByteToStart</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">addByteToStart</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="field.html">field</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">field</span><span class="symbol">: </span><span class="identifier">T</span><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="is-set.html">isSet</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">isSet</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="to-bytes.html">toBytes</a></h4>
+</td>
+<td>
+<p>Converts entity to byte-array representation</p>
+<code><span class="keyword">fun </span><span class="identifier">toBytes</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="to-json-object.html">toJsonObject</a></h4>
+</td>
+<td>
+<p>Converts entity to json object representation</p>
+<code><span class="keyword">fun </span><span class="identifier">toJsonObject</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">JsonElement</span><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="to-json-string.html">toJsonString</a></h4>
+</td>
+<td>
+<p>Converts entity to json string representation</p>
+<code><span class="keyword">fun </span><span class="identifier">toJsonString</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

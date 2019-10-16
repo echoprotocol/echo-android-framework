@@ -1,0 +1,82 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>org.echo.mobile.framework.support.crypto - echoframework</title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">echoframework</a>&nbsp;/&nbsp;<a href="./index.html">org.echo.mobile.framework.support.crypto</a><br/>
+<br/>
+<h2>Package org.echo.mobile.framework.support.crypto</h2>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-checksum/index.html">Checksum</a></h4>
+</td>
+<td>
+<p>Contains logic of checksum calculation</p>
+<code><span class="keyword">object </span><span class="identifier">Checksum</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-ed-d-s-a-signature/index.html">EdDSASignature</a></h4>
+</td>
+<td>
+<p>Object used to transaction EdDSA signing</p>
+<code><span class="keyword">object </span><span class="identifier">EdDSASignature</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-keccak/index.html">Keccak</a></h4>
+</td>
+<td>
+<p>Keccak encryption implementation.</p>
+<code><span class="keyword">class </span><span class="identifier">Keccak</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-parameter/index.html">Parameter</a></h4>
+</td>
+<td>
+<p>The parameters defining the standard FIPS 202.</p>
+<code><span class="keyword">enum</span> <span class="keyword">class </span><span class="identifier">Parameter</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-varint/index.html">Varint</a></h4>
+</td>
+<td>
+<p>Encodes signed and unsigned values using a common variable-length
+scheme, found for example in
+<a href="http://code.google.com/apis/protocolbuffers/docs/encoding.html">http://code.google.com/apis/protocolbuffers/docs/encoding.html</a>
+Google's Protocol Buffers. It uses fewer bytes to encode smaller values,
+but will use slightly more bytes to encode large values.</p>
+<code><span class="keyword">object </span><span class="identifier">Varint</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="decrypt-a-e-s.html">decryptAES</a></h4>
+</td>
+<td>
+<p>Function to decrypt <a href="decrypt-a-e-s.html#org.echo.mobile.framework.support.crypto$decryptAES(kotlin.ByteArray, kotlin.ByteArray)/input">input</a> with padded AES algorithm</p>
+<code><span class="keyword">fun </span><span class="identifier">decryptAES</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support.crypto$decryptAES(kotlin.ByteArray, kotlin.ByteArray)/input">input</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.support.crypto$decryptAES(kotlin.ByteArray, kotlin.ByteArray)/key">key</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="encrypt-a-e-s.html">encryptAES</a></h4>
+</td>
+<td>
+<p>Function to encrypt <a href="encrypt-a-e-s.html#org.echo.mobile.framework.support.crypto$encryptAES(kotlin.ByteArray, kotlin.ByteArray)/input">input</a> with padded AES algorithm</p>
+<code><span class="keyword">fun </span><span class="identifier">encryptAES</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support.crypto$encryptAES(kotlin.ByteArray, kotlin.ByteArray)/input">input</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.support.crypto$encryptAES(kotlin.ByteArray, kotlin.ByteArray)/key">key</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a><span class="symbol">?</span></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

@@ -1,0 +1,162 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>org.echo.mobile.framework.model.contract.input - echoframework</title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">echoframework</a>&nbsp;/&nbsp;<a href="./index.html">org.echo.mobile.framework.model.contract.input</a><br/>
+<br/>
+<h2>Package org.echo.mobile.framework.model.contract.input</h2>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-account-address-input-value-type/index.html">AccountAddressInputValueType</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="-input-value-type/index.html">InputValueType</a> for account address types.
+Can encode addresses with account prefix "1.2." and without it.</p>
+<code><span class="keyword">class </span><span class="identifier">AccountAddressInputValueType</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-input-value-type/index.html"><span class="identifier">InputValueType</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-address-input-value-type/index.html">AddressInputValueType</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="-input-value-type/index.html">InputValueType</a> for any address types.
+Can encode only prefixed addresses.  For example, account address: 1.2.1.
+If address is not clear, throws exception.</p>
+<code><span class="keyword">class </span><span class="identifier">AddressInputValueType</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-input-value-type/index.html"><span class="identifier">InputValueType</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-boolean-input-value-type/index.html">BooleanInputValueType</a></h4>
+</td>
+<td>
+<p>Extension of <a href="-input-value-type/index.html">InputValueType</a> for boolean type</p>
+<code><span class="keyword">class </span><span class="identifier">BooleanInputValueType</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-input-value-type/index.html"><span class="identifier">InputValueType</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-bytes-input-value-type/index.html">BytesInputValueType</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="-input-value-type/index.html">InputValueType</a> for bytes types</p>
+<code><span class="keyword">class </span><span class="identifier">BytesInputValueType</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-input-value-type/index.html"><span class="identifier">InputValueType</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-contract-address-input-value-type/index.html">ContractAddressInputValueType</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="-input-value-type/index.html">InputValueType</a> for contract address types.
+Can decode addresses with contract prefix "1.14." and without it.</p>
+<code><span class="keyword">class </span><span class="identifier">ContractAddressInputValueType</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-input-value-type/index.html"><span class="identifier">InputValueType</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-contract-input-encoder/index.html">ContractInputEncoder</a></h4>
+</td>
+<td>
+<p>Encodes input contract data according to required input types types</p>
+<code><span class="keyword">class </span><span class="identifier">ContractInputEncoder</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-dynamic-array-input-value-type/index.html">DynamicArrayInputValueType</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="-input-value-type/index.html">InputValueType</a> for dynamic arrays</p>
+<code><span class="keyword">class </span><span class="identifier">DynamicArrayInputValueType</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-input-value-type/index.html"><span class="identifier">InputValueType</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-dynamic-string-array-value-type/index.html">DynamicStringArrayValueType</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="-input-value-type/index.html">InputValueType</a> for dynamic string array</p>
+<code><span class="keyword">class </span><span class="identifier">DynamicStringArrayValueType</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-input-value-type/index.html"><span class="identifier">InputValueType</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-encoding-context/index.html">EncodingContext</a></h4>
+</td>
+<td>
+<p>Describes context of current encoding process</p>
+<code><span class="keyword">interface </span><span class="identifier">EncodingContext</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-eth-contract-address-input-value-type/index.html">EthContractAddressInputValueType</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="-input-value-type/index.html">InputValueType</a> for ethereum contract address types.</p>
+<code><span class="keyword">class </span><span class="identifier">EthContractAddressInputValueType</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-input-value-type/index.html"><span class="identifier">InputValueType</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-fixed-array-input-value-type/index.html">FixedArrayInputValueType</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="-input-value-type/index.html">InputValueType</a> for fixed arrays</p>
+<code><span class="keyword">class </span><span class="identifier">FixedArrayInputValueType</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-input-value-type/index.html"><span class="identifier">InputValueType</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-fixed-bytes-input-value-type/index.html">FixedBytesInputValueType</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="-input-value-type/index.html">InputValueType</a> for fixed bytes types</p>
+<code><span class="keyword">class </span><span class="identifier">FixedBytesInputValueType</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-input-value-type/index.html"><span class="identifier">InputValueType</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-input-value/index.html">InputValue</a></h4>
+</td>
+<td>
+<p>Describes value <a href="-input-value/value.html">value</a> and it's type <a href="-input-value/type.html">type</a> of contract method parameter</p>
+<code><span class="keyword">data</span> <span class="keyword">class </span><span class="identifier">InputValue</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-input-value-type/index.html">InputValueType</a></h4>
+</td>
+<td>
+<p>Describes base functionality of contract input parameter model type</p>
+<code><span class="keyword">interface </span><span class="identifier">InputValueType</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-number-input-value-type/index.html">NumberInputValueType</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="-input-value-type/index.html">InputValueType</a> for number types</p>
+<code><span class="keyword">class </span><span class="identifier">NumberInputValueType</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-input-value-type/index.html"><span class="identifier">InputValueType</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-string-input-value-type/index.html">StringInputValueType</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="-input-value-type/index.html">InputValueType</a> for string types</p>
+<code><span class="keyword">class </span><span class="identifier">StringInputValueType</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-input-value-type/index.html"><span class="identifier">InputValueType</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-i-n-p-u-t_-s-l-i-c-e_-s-i-z-e.html">INPUT_SLICE_SIZE</a></h4>
+</td>
+<td>
+<p>Encoding parameter default slice size</p>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">INPUT_SLICE_SIZE</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

@@ -3,7 +3,6 @@ package org.echo.mobile.framework.model.contract
 import com.google.gson.Gson
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import org.echo.mobile.framework.model.Log
 
 /**
  * Contains classes, describing result of contract operation
@@ -77,9 +76,6 @@ class ExecRes(
 
     @SerializedName("code_deposit")
     val codeDeposit: String = "",
-
-    @SerializedName("gas_refunded")
-    val gasRefunded: String = "",
 
     @SerializedName("deposit_size")
     val depositSize: Long = 0,

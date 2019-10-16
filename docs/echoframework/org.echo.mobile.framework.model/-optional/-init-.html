@@ -1,0 +1,22 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>Optional.<init> - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.model</a>&nbsp;/&nbsp;<a href="index.html">Optional</a>&nbsp;/&nbsp;<a href="./-init-.html">&lt;init&gt;</a><br/>
+<br/>
+<h1>&lt;init&gt;</h1>
+<a name="org.echo.mobile.framework.model.Optional$&lt;init&gt;(org.echo.mobile.framework.model.Optional.T, kotlin.Boolean)"></a>
+<code><span class="identifier">Optional</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.Optional$<init>(org.echo.mobile.framework.model.Optional.T, kotlin.Boolean)/field">field</span><span class="symbol">:</span>&nbsp;<span class="identifier">T</span><span class="symbol">?</span><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.Optional$<init>(org.echo.mobile.framework.model.Optional.T, kotlin.Boolean)/addByteToStart">addByteToStart</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a>&nbsp;<span class="symbol">=</span>&nbsp;false<span class="symbol">)</span></code>
+<p>Container template class used whenever we have an optional field.</p>
+<p>The idea here is that the binary serialization of this field should be performed
+in a specific way determined by the field implementing the {@link ByteSerializable}
+interface, more specifically using the {@link ByteSerializable#toBytes()} method.</p>
+<p>However, if the field is missing, the Optional class should be able to know how
+to serialize it, as this is always done by placing an zero byte.</p>
+<p><strong>Author</strong><br/>
+Daria Pechkovskaya</p>
+</BODY>
+</HTML>

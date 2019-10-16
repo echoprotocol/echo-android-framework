@@ -262,13 +262,13 @@ class InformationFacadeImpl(
                         operation as WithdrawEthereumOperation,
                         accountsRegistry
                     )
-                OperationType.SIDECHAIN_ETH_ISSUE_OPERATION ->
+                OperationType.SIDECHAIN_ISSUE_OPERATION ->
                     processSidechainIssueOperation(
                         operation as SidechainIssueSocketOperation,
                         accountsRegistry,
                         assetsRegistry
                     )
-                OperationType.SIDECHAIN_ETH_BURN_OPERATION ->
+                OperationType.SIDECHAIN_BURN_OPERATION ->
                     processSidechainBurnOperation(
                         operation as SidechainBurnSocketOperation,
                         accountsRegistry,

@@ -1,0 +1,99 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>CreateAssetOperation - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.model.operations</a>&nbsp;/&nbsp;<a href="./index.html">CreateAssetOperation</a><br/>
+<br/>
+<h1>CreateAssetOperation</h1>
+<code><span class="keyword">class </span><span class="identifier">CreateAssetOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-base-operation/index.html"><span class="identifier">BaseOperation</span></a></code>
+<p>Encapsulates asset creation information</p>
+<p><strong>Author</strong><br/>
+Dmitriy Bushuev</p>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-create-asset-deserializer/index.html">CreateAssetDeserializer</a></h4>
+</td>
+<td>
+<p>It will convert this data into a nice TransferOperation object.</p>
+<code><span class="keyword">class </span><span class="identifier">CreateAssetDeserializer</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">JsonDeserializer</span><span class="symbol">&lt;</span><a href="./index.html"><span class="identifier">CreateAssetOperation</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-create-asset-serializer/index.html">CreateAssetSerializer</a></h4>
+</td>
+<td>
+<p>Encapsulates logic of transfer json serialization</p>
+<code><span class="keyword">class </span><span class="identifier">CreateAssetSerializer</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">JsonSerializer</span><span class="symbol">&lt;</span><a href="./index.html"><span class="identifier">CreateAssetOperation</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<p>Encapsulates asset creation information</p>
+<code><span class="identifier">CreateAssetOperation</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.operations.CreateAssetOperation$<init>(org.echo.mobile.framework.model.Asset, org.echo.mobile.framework.model.AssetAmount)/asset">asset</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-asset/index.html"><span class="identifier">Asset</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.operations.CreateAssetOperation$<init>(org.echo.mobile.framework.model.Asset, org.echo.mobile.framework.model.AssetAmount)/fee">fee</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-asset-amount/index.html"><span class="identifier">AssetAmount</span></a>&nbsp;<span class="symbol">=</span>&nbsp;AssetAmount(UnsignedLong.ZERO)<span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="asset.html">asset</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">asset</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.model/-asset/index.html"><span class="identifier">Asset</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="fee.html">fee</a></h4>
+</td>
+<td>
+<p>Required amount of fee <a href="../../org.echo.mobile.framework.model/-asset-amount/index.html">AssetAmount</a> to operation</p>
+<code><span class="keyword">var </span><span class="identifier">fee</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.model/-asset-amount/index.html"><span class="identifier">AssetAmount</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="to-bytes.html">toBytes</a></h4>
+</td>
+<td>
+<p>Converts entity to byte-array representation</p>
+<code><span class="keyword">fun </span><span class="identifier">toBytes</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="to-json-object.html">toJsonObject</a></h4>
+</td>
+<td>
+<p>Converts entity to json object representation</p>
+<code><span class="keyword">fun </span><span class="identifier">toJsonObject</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">JsonElement</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="to-json-string.html">toJsonString</a></h4>
+</td>
+<td>
+<p>Converts entity to json string representation</p>
+<code><span class="keyword">fun </span><span class="identifier">toJsonString</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

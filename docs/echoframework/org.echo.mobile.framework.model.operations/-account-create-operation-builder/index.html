@@ -1,0 +1,92 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>AccountCreateOperationBuilder - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.model.operations</a>&nbsp;/&nbsp;<a href="./index.html">AccountCreateOperationBuilder</a><br/>
+<br/>
+<h1>AccountCreateOperationBuilder</h1>
+<code><span class="keyword">class </span><span class="identifier">AccountCreateOperationBuilder</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">Builder</span><span class="symbol">&lt;</span><a href="../-account-create-operation/index.html"><span class="identifier">AccountCreateOperation</span></a><span class="symbol">&gt;</span></code>
+<p>Represents builder for <a href="../-account-create-operation/index.html">AccountCreateOperation</a>.
+Checks required data.</p>
+<p><strong>Author</strong><br/>
+Dmitriy Bushuev</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<p>Represents builder for <a href="../-account-create-operation/index.html">AccountCreateOperation</a>.
+Checks required data.</p>
+<code><span class="identifier">AccountCreateOperationBuilder</span><span class="symbol">(</span><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="build.html">build</a></h4>
+</td>
+<td>
+<p>Must be implemented and return the factory is supposed to build.</p>
+<code><span class="keyword">fun </span><span class="identifier">build</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="../-account-create-operation/index.html"><span class="identifier">AccountCreateOperation</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="set-account-name.html">setAccountName</a></h4>
+</td>
+<td>
+<p>Sets creating account name</p>
+<code><span class="keyword">fun </span><span class="identifier">setAccountName</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.operations.AccountCreateOperationBuilder$setAccountName(kotlin.String)/name">name</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="./index.html"><span class="identifier">AccountCreateOperationBuilder</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="set-active.html">setActive</a></h4>
+</td>
+<td>
+<p>Sets new active <a href="../../org.echo.mobile.framework.model.eddsa/-ed-authority/index.html">EdAuthority</a> for account</p>
+<code><span class="keyword">fun </span><span class="identifier">setActive</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.operations.AccountCreateOperationBuilder$setActive(org.echo.mobile.framework.model.eddsa.EdAuthority)/active">active</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model.eddsa/-ed-authority/index.html"><span class="identifier">EdAuthority</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="./index.html"><span class="identifier">AccountCreateOperationBuilder</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="set-ed-key.html">setEdKey</a></h4>
+</td>
+<td>
+<p>Sets new echorand ed key <a href="set-ed-key.html#org.echo.mobile.framework.model.operations.AccountCreateOperationBuilder$setEdKey(kotlin.String)/edKey">edKey</a> for account</p>
+<code><span class="keyword">fun </span><span class="identifier">setEdKey</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.operations.AccountCreateOperationBuilder$setEdKey(kotlin.String)/edKey">edKey</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="./index.html"><span class="identifier">AccountCreateOperationBuilder</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="set-fee.html">setFee</a></h4>
+</td>
+<td>
+<p>Sets actual fee <a href="../../org.echo.mobile.framework.model/-asset-amount/index.html">AssetAmount</a> for operation</p>
+<code><span class="keyword">fun </span><span class="identifier">setFee</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.operations.AccountCreateOperationBuilder$setFee(org.echo.mobile.framework.model.AssetAmount)/fee">fee</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-asset-amount/index.html"><span class="identifier">AssetAmount</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="./index.html"><span class="identifier">AccountCreateOperationBuilder</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="set-options.html">setOptions</a></h4>
+</td>
+<td>
+<p>Sets options for account</p>
+<code><span class="keyword">fun </span><span class="identifier">setOptions</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.operations.AccountCreateOperationBuilder$setOptions(org.echo.mobile.framework.model.AccountOptions)/options">options</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-account-options/index.html"><span class="identifier">AccountOptions</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="./index.html"><span class="identifier">AccountCreateOperationBuilder</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="set-registrar.html">setRegistrar</a></h4>
+</td>
+<td>
+<p>Sets registrar account id</p>
+<code><span class="keyword">fun </span><span class="identifier">setRegistrar</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.operations.AccountCreateOperationBuilder$setRegistrar(kotlin.String)/registrar">registrar</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="./index.html"><span class="identifier">AccountCreateOperationBuilder</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

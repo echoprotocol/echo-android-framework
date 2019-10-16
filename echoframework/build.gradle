@@ -4,6 +4,7 @@ plugins {
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'org.jetbrains.dokka'
 
 android {
     def globalConfiguration = rootProject.extensions.getByName("ext")
@@ -52,20 +53,17 @@ configurations {
     detekt
 }
 
-task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaAndroidTask) {
-    outputFormat = 'javadoc'
-    outputDirectory = "$buildDir/javadoc"
-    // Use to include or exclude non public members.
-    includeNonPublic = false
-    noStdlibLink = true
+dokka {
+    outputFormat = 'html'
+    outputDirectory = "$buildDir/dokka"
+    disableAutoconfiguration = false
 
-    // Do not output deprecated members. Applies globally, can be overridden by packageOptions
-    skipDeprecated = true
-
-    // Emit warnings about not documented members. Applies globally, also can be overridden by packageOptions
-    reportUndocumented = false
-
-    cacheRoot = "$rootDir/config/dokka"
+    configuration {
+        includeNonPublic = false
+        skipDeprecated = true
+        reportUndocumented = false
+        skipEmptyPackages = true
+    }
 }
 
 //detekt task
@@ -85,6 +83,6 @@ check.dependsOn(analyzeCode)
 apply from: "$rootDir/config/publish.gradle"
 
 task copyJavaDocs(type: Copy) {
-    from "${buildDir}/javadoc"
+    from "${buildDir}/dokka"
     into "${rootDir}/docs"
 }

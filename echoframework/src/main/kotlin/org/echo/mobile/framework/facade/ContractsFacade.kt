@@ -1,10 +1,7 @@
 package org.echo.mobile.framework.facade
 
 import org.echo.mobile.framework.Callback
-import org.echo.mobile.framework.model.Log
-import org.echo.mobile.framework.model.contract.ContractInfo
-import org.echo.mobile.framework.model.contract.ContractResult
-import org.echo.mobile.framework.model.contract.ContractStruct
+import org.echo.mobile.framework.model.contract.*
 import org.echo.mobile.framework.model.contract.input.InputValue
 import java.math.BigInteger
 
@@ -151,14 +148,14 @@ interface ContractsFacade {
      *
      * @param contractId   Contract id for fetching logs
      * @param fromBlock    Number of the earliest block to retrieve
-     * @param toBlock      Number of the most recent block to retrieve
+     * @param limit        Blocks limit
      * @param callback     Listener of operation results.
      */
     fun getContractLogs(
         contractId: String,
         fromBlock: String,
-        toBlock: String,
-        callback: Callback<List<Log>>
+        limit: String,
+        callback: Callback<List<ContractLog>>
     )
 
     /**

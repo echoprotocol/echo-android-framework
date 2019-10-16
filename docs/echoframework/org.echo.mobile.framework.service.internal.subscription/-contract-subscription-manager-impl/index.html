@@ -1,0 +1,90 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>ContractSubscriptionManagerImpl - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.service.internal.subscription</a>&nbsp;/&nbsp;<a href="./index.html">ContractSubscriptionManagerImpl</a><br/>
+<br/>
+<h1>ContractSubscriptionManagerImpl</h1>
+<code><span class="keyword">class </span><span class="identifier">ContractSubscriptionManagerImpl</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.service/-contract-subscription-manager/index.html"><span class="identifier">ContractSubscriptionManager</span></a></code>
+<p>Implementation of <a href="../../org.echo.mobile.framework.service/-contract-subscription-manager/index.html">ContractSubscriptionManager</a></p>
+<p><strong>Author</strong><br/>
+Dmitriy Bushuev</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="../../org.echo.mobile.framework.service/-contract-subscription-manager/index.html">ContractSubscriptionManager</a></p>
+<code><span class="identifier">ContractSubscriptionManagerImpl</span><span class="symbol">(</span><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="clear.html">clear</a></h4>
+</td>
+<td>
+<p>Removes all listeners</p>
+<code><span class="keyword">fun </span><span class="identifier">clear</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="contains-listeners.html">containsListeners</a></h4>
+</td>
+<td>
+<p>Checks if manager contains any listeners</p>
+<code><span class="keyword">fun </span><span class="identifier">containsListeners</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="notify.html">notify</a></h4>
+</td>
+<td>
+<p>Notifies contract <a href="../../org.echo.mobile.framework.service/-contract-subscription-manager/notify.html#org.echo.mobile.framework.service.ContractSubscriptionManager$notify(kotlin.String, kotlin.collections.List((org.echo.mobile.framework.model.contract.ContractLog)))/logs">logs</a> for listeners, connected with input <a href="../../org.echo.mobile.framework.service/-contract-subscription-manager/notify.html#org.echo.mobile.framework.service.ContractSubscriptionManager$notify(kotlin.String, kotlin.collections.List((org.echo.mobile.framework.model.contract.ContractLog)))/contractId">contractId</a></p>
+<code><span class="keyword">fun </span><span class="identifier">notify</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.internal.subscription.ContractSubscriptionManagerImpl$notify(kotlin.String, kotlin.collections.List((org.echo.mobile.framework.model.contract.ContractLog)))/contractId">contractId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.service.internal.subscription.ContractSubscriptionManagerImpl$notify(kotlin.String, kotlin.collections.List((org.echo.mobile.framework.model.contract.ContractLog)))/logs">logs</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model.contract/-contract-log/index.html"><span class="identifier">ContractLog</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="process-event.html">processEvent</a></h4>
+</td>
+<td>
+<p>Processes notifying event.</p>
+<code><span class="keyword">fun </span><span class="identifier">processEvent</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.internal.subscription.ContractSubscriptionManagerImpl$processEvent(kotlin.String)/event">event</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html"><span class="identifier">Map</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model.contract/-contract-log/index.html"><span class="identifier">ContractLog</span></a><span class="symbol">&gt;</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="registered.html">registered</a></h4>
+</td>
+<td>
+<p>Checks, whether listeners already registered by this <a href="../../org.echo.mobile.framework.service/-contract-subscription-manager/registered.html#org.echo.mobile.framework.service.ContractSubscriptionManager$registered(kotlin.String)/id">id</a></p>
+<code><span class="keyword">fun </span><span class="identifier">registered</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.internal.subscription.ContractSubscriptionManagerImpl$registered(kotlin.String)/id">id</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="register-listener.html">registerListener</a></h4>
+</td>
+<td>
+<p>Registers required listener by contract <a href="../../org.echo.mobile.framework.service/-contract-subscription-manager/register-listener.html#org.echo.mobile.framework.service.ContractSubscriptionManager$registerListener(kotlin.String, org.echo.mobile.framework.service.UpdateListener((kotlin.collections.List((org.echo.mobile.framework.model.contract.ContractLog)))))/id">id</a></p>
+<code><span class="keyword">fun </span><span class="identifier">registerListener</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.internal.subscription.ContractSubscriptionManagerImpl$registerListener(kotlin.String, org.echo.mobile.framework.service.UpdateListener((kotlin.collections.List((org.echo.mobile.framework.model.contract.ContractLog)))))/id">id</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.service.internal.subscription.ContractSubscriptionManagerImpl$registerListener(kotlin.String, org.echo.mobile.framework.service.UpdateListener((kotlin.collections.List((org.echo.mobile.framework.model.contract.ContractLog)))))/listener">listener</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.service/-update-listener/index.html"><span class="identifier">UpdateListener</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model.contract/-contract-log/index.html"><span class="identifier">ContractLog</span></a><span class="symbol">&gt;</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="remove-listeners.html">removeListeners</a></h4>
+</td>
+<td>
+<p>Removes listener by <a href="../../org.echo.mobile.framework.service/-contract-subscription-manager/remove-listeners.html#org.echo.mobile.framework.service.ContractSubscriptionManager$removeListeners(kotlin.String)/id">id</a></p>
+<code><span class="keyword">fun </span><span class="identifier">removeListeners</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.internal.subscription.ContractSubscriptionManagerImpl$removeListeners(kotlin.String)/id">id</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html"><span class="identifier">MutableList</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.service/-update-listener/index.html"><span class="identifier">UpdateListener</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model.contract/-contract-log/index.html"><span class="identifier">ContractLog</span></a><span class="symbol">&gt;</span><span class="symbol">&gt;</span><span class="symbol">&gt;</span><span class="symbol">?</span></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

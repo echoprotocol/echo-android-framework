@@ -1,0 +1,31 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>EchoFrameworkImpl.sendTransferOperation - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework</a>&nbsp;/&nbsp;<a href="index.html">EchoFrameworkImpl</a>&nbsp;/&nbsp;<a href="./send-transfer-operation.html">sendTransferOperation</a><br/>
+<br/>
+<h1>sendTransferOperation</h1>
+<a name="org.echo.mobile.framework.EchoFrameworkImpl$sendTransferOperation(kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, org.echo.mobile.framework.Callback((kotlin.Boolean)))"></a>
+<code><span class="keyword">fun </span><span class="identifier">sendTransferOperation</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.EchoFrameworkImpl$sendTransferOperation(kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, org.echo.mobile.framework.Callback((kotlin.Boolean)))/nameOrId">nameOrId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.EchoFrameworkImpl$sendTransferOperation(kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, org.echo.mobile.framework.Callback((kotlin.Boolean)))/wif">wif</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.EchoFrameworkImpl$sendTransferOperation(kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, org.echo.mobile.framework.Callback((kotlin.Boolean)))/toNameOrId">toNameOrId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.EchoFrameworkImpl$sendTransferOperation(kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, org.echo.mobile.framework.Callback((kotlin.Boolean)))/amount">amount</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.EchoFrameworkImpl$sendTransferOperation(kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, org.echo.mobile.framework.Callback((kotlin.Boolean)))/asset">asset</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.EchoFrameworkImpl$sendTransferOperation(kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, org.echo.mobile.framework.Callback((kotlin.Boolean)))/feeAsset">feeAsset</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.EchoFrameworkImpl$sendTransferOperation(kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, org.echo.mobile.framework.Callback((kotlin.Boolean)))/callback">callback</span><span class="symbol">:</span>&nbsp;<a href="../-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Submits transaction to blockchain</p>
+<h3>Parameters</h3>
+<p><a name="nameOrId"></a>
+<code>nameOrId</code> - Source account name or id</p>
+<p><a name="wif"></a>
+<code>wif</code> - Account's private key in wif format</p>
+<p><a name="toNameOrId"></a>
+<code>toNameOrId</code> - Transfer target account name or id</p>
+<p><a name="amount"></a>
+<code>amount</code> - Value amount of transfer operation</p>
+<p><a name="asset"></a>
+<code>asset</code> - Specific asset type id</p>
+<p><a name="feeAsset"></a>
+<code>feeAsset</code> - Specific asset type id for calculating fee. If null - <a href="../../org.echo.mobile.framework.facade/-transactions-facade/send-transfer-operation.html#org.echo.mobile.framework.facade.TransactionsFacade$sendTransferOperation(kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, org.echo.mobile.framework.Callback((kotlin.Boolean)))/asset">asset</a> will be used</p>
+<p><a name="callback"></a>
+<code>callback</code> - Listener of operation results.
+    Retrieves true if transfer succeed,  otherwise - false</p>
+</BODY>
+</HTML>

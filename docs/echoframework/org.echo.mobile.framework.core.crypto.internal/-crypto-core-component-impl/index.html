@@ -1,0 +1,86 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>CryptoCoreComponentImpl - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.core.crypto.internal</a>&nbsp;/&nbsp;<a href="./index.html">CryptoCoreComponentImpl</a><br/>
+<br/>
+<h1>CryptoCoreComponentImpl</h1>
+<code><span class="keyword">class </span><span class="identifier">CryptoCoreComponentImpl</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.core.crypto/-crypto-core-component/index.html"><span class="identifier">CryptoCoreComponent</span></a></code>
+<p>Implementation of <a href="../../org.echo.mobile.framework.core.crypto/-crypto-core-component/index.html">CryptoCoreComponent</a></p>
+<p>Provides default implementation of cryptography core component
+based on bitcoinj ECKey realization</p>
+<p><strong>Author</strong><br/>
+Daria Pechkovskaya</p>
+<p><strong>Author</strong><br/>
+Dmitriy Bushuev</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="../../org.echo.mobile.framework.core.crypto/-crypto-core-component/index.html">CryptoCoreComponent</a></p>
+<code><span class="identifier">CryptoCoreComponentImpl</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.core.crypto.internal.CryptoCoreComponentImpl$<init>(org.echo.mobile.framework.core.crypto.internal.eddsa.key.KeyPairCryptoAdapter, org.echo.mobile.framework.core.crypto.WifProcessor)/keyPairCryptoAdapter">keyPairCryptoAdapter</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.core.crypto.internal.eddsa.key/-key-pair-crypto-adapter/index.html"><span class="identifier">KeyPairCryptoAdapter</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.core.crypto.internal.CryptoCoreComponentImpl$<init>(org.echo.mobile.framework.core.crypto.internal.eddsa.key.KeyPairCryptoAdapter, org.echo.mobile.framework.core.crypto.WifProcessor)/wifProcessor">wifProcessor</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.core.crypto/-wif-processor/index.html"><span class="identifier">WifProcessor</span></a>&nbsp;<span class="symbol">=</span>&nbsp;DefaultWifProcessor(true)<span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="decode-from-wif.html">decodeFromWif</a></h4>
+</td>
+<td>
+<p>Decodes private key in wif format <a href="../../org.echo.mobile.framework.core.crypto/-crypto-core-component/decode-from-wif.html#org.echo.mobile.framework.core.crypto.CryptoCoreComponent$decodeFromWif(kotlin.String)/source">source</a> to the raw bytes representation</p>
+<code><span class="keyword">fun </span><span class="identifier">decodeFromWif</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.core.crypto.internal.CryptoCoreComponentImpl$decodeFromWif(kotlin.String)/source">source</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="derive-ed-d-s-a-public-key-from-private.html">deriveEdDSAPublicKeyFromPrivate</a></h4>
+</td>
+<td>
+<p>Derives public key from raw private key bytes  by EdDSA algorithm</p>
+<code><span class="keyword">fun </span><span class="identifier">deriveEdDSAPublicKeyFromPrivate</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.core.crypto.internal.CryptoCoreComponentImpl$deriveEdDSAPublicKeyFromPrivate(kotlin.ByteArray)/privateKey">privateKey</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="encode-to-wif.html">encodeToWif</a></h4>
+</td>
+<td>
+<p>Encodes private key in raw string representation to wif format</p>
+<code><span class="keyword">fun </span><span class="identifier">encodeToWif</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.core.crypto.internal.CryptoCoreComponentImpl$encodeToWif(kotlin.ByteArray)/source">source</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="get-ed-d-s-a-address-from-public-key.html">getEdDSAAddressFromPublicKey</a></h4>
+</td>
+<td>
+<p>Transforms public key raw bytes to account address format by EdDSA algorithm</p>
+<code><span class="keyword">fun </span><span class="identifier">getEdDSAAddressFromPublicKey</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.core.crypto.internal.CryptoCoreComponentImpl$getEdDSAAddressFromPublicKey(kotlin.ByteArray)/publicKey">publicKey</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="get-ed-d-s-a-private-key.html">getEdDSAPrivateKey</a></h4>
+</td>
+<td>
+<p>Generate random EdDSA raw private key</p>
+<code><span class="keyword">fun </span><span class="identifier">getEdDSAPrivateKey</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="sign-transaction.html">signTransaction</a></h4>
+</td>
+<td>
+<p>Generates transaction signatures</p>
+<code><span class="keyword">fun </span><span class="identifier">signTransaction</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.core.crypto.internal.CryptoCoreComponentImpl$signTransaction(org.echo.mobile.framework.model.Transaction)/transaction">transaction</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-transaction/index.html"><span class="identifier">Transaction</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://docs.oracle.com/javase/6/docs/api/java/util/ArrayList.html"><span class="identifier">ArrayList</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

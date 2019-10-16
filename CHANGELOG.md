@@ -1,3 +1,79 @@
+# Changelog 3.5.0 - 2019-10-15
+
+## Removed
+
+### DynamicGlobalProperties
+* currentAslot
+* recentlyMissedCount
+
+### GlobalProperties
+* blockInterval
+
+### ObjectType
+* budgetRecord
+
+### Statistics
+* pendingFees
+
+### ContractResultEVM
+* gasRefunded
+
+### OperationType
+* accountTransferOperation
+* sidechainChangeConfigOperation
+
+## Added
+
+### AccountOptions
+* delegateShare
+
+### DynamicGlobalProperties
+* lastRandQuantity
+
+### ObjectType
+* frozenBalance
+* btcAddress
+* btcIntermediateDeposit
+* btcDeposit
+* btcWithdraw
+* btcAggregating
+
+### SidechainConfig
+* waitingETHBlocks
+
+## ContractLogEnum
+* Added enum which represent evm or x86 contract log
+* ContractLogx86
+
+### OperationType
+* balanceFreezeOperation
+* balanceUnfreezeOperation
+* sidechainERC20IssueOperation
+* sidechainERC20BurnOperation
+* sidechainBTCCreateAddressOperatio
+* sidechainBTCIntermediateDepositOperatio
+* sidechainBTCDepositOperatio
+* sidechainBTCWithdrawOperatio
+* sidechainBTCApproveWithdrawOperatio
+* sidechainBTCAggregateOperatio
+* blockRewardOperation
+
+## Updated
+
+### Signatures
+* signer changed to producer
+
+### ContractLogsSocketOperation
+* Fixed returns parameter to ContractLog
+
+### SubscribeContractLogsSocketOperation
+* Fixed returns parameter to Boolean
+* Removed fromBlock and toBlock fields
+
+### Tests
+* Updated all tests and constants
+
+
 # CHANGELOG 3.4.0
 
 ## Removed

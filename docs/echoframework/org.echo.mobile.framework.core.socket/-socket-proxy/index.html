@@ -1,0 +1,67 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>SocketProxy - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.core.socket</a>&nbsp;/&nbsp;<a href="./index.html">SocketProxy</a><br/>
+<br/>
+<h1>SocketProxy</h1>
+<code><span class="keyword">interface </span><span class="identifier">SocketProxy</span></code>
+<p>Encapsulates messages proxying logic and listeners managing</p>
+<p><strong>Author</strong><br/>
+Dmitriy Bushuev</p>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="emit.html">emit</a></h4>
+</td>
+<td>
+<p>Emits <a href="emit.html#org.echo.mobile.framework.core.socket.SocketProxy$emit(kotlin.String)/message">message</a> through socket connection</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">emit</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.core.socket.SocketProxy$emit(kotlin.String)/message">message</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="off.html">off</a></h4>
+</td>
+<td>
+<p>Unsubscribes <a href="off.html#org.echo.mobile.framework.core.socket.SocketProxy$off(org.echo.mobile.framework.core.socket.SocketMessengerListener)/listener">listener</a> from socket events</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">off</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.core.socket.SocketProxy$off(org.echo.mobile.framework.core.socket.SocketMessengerListener)/listener">listener</span><span class="symbol">:</span>&nbsp;<a href="../-socket-messenger-listener/index.html"><span class="identifier">SocketMessengerListener</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="off-all.html">offAll</a></h4>
+</td>
+<td>
+<p>Unsubscribes all listeners from socket events</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">offAll</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="on.html">on</a></h4>
+</td>
+<td>
+<p>Subscribes <a href="on.html#org.echo.mobile.framework.core.socket.SocketProxy$on(org.echo.mobile.framework.core.socket.SocketMessengerListener)/listener">listener</a> on socket events</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">on</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.core.socket.SocketProxy$on(org.echo.mobile.framework.core.socket.SocketMessengerListener)/listener">listener</span><span class="symbol">:</span>&nbsp;<a href="../-socket-messenger-listener/index.html"><span class="identifier">SocketMessengerListener</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Inheritors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="../-socket-messenger.html">SocketMessenger</a></h4>
+</td>
+<td>
+<p>Represents base socket managing functionality
+(@see SocketConnection, @see SocketProxy)</p>
+<code><span class="keyword">interface </span><span class="identifier">SocketMessenger</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-socket-connection/index.html"><span class="identifier">SocketConnection</span></a><span class="symbol">, </span><a href="./index.html"><span class="identifier">SocketProxy</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

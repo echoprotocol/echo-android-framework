@@ -1,0 +1,82 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>ApiService - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.service</a>&nbsp;/&nbsp;<a href="./index.html">ApiService</a><br/>
+<br/>
+<h1>ApiService</h1>
+<code><span class="keyword">interface </span><span class="identifier">ApiService</span></code>
+<p>Encapsulates logic for services of blockchain API</p>
+<p><strong>Author</strong><br/>
+Daria Pechkovskaya</p>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="id.html">id</a></h4>
+</td>
+<td>
+<p>Actual api id</p>
+<code><span class="keyword">abstract</span> <span class="keyword">var </span><span class="identifier">id</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Inheritors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="../-account-history-api-service/index.html">AccountHistoryApiService</a></h4>
+</td>
+<td>
+<p>Encapsulates logic, associated with blockchain account history API</p>
+<code><span class="keyword">interface </span><span class="identifier">AccountHistoryApiService</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">ApiService</span></a><span class="symbol">, </span><a href="../-custom-operation-service/index.html"><span class="identifier">CustomOperationService</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-crypto-api-service.html">CryptoApiService</a></h4>
+</td>
+<td>
+<p>Encapsulates logic, associated with blockchain crypto API</p>
+<code><span class="keyword">interface </span><span class="identifier">CryptoApiService</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">ApiService</span></a><span class="symbol">, </span><a href="../-custom-operation-service/index.html"><span class="identifier">CustomOperationService</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-database-api-service.html">DatabaseApiService</a></h4>
+</td>
+<td>
+<p>Encapsulates logic, associated with blockchain database API</p>
+<code><span class="keyword">interface </span><span class="identifier">DatabaseApiService</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">ApiService</span></a><span class="symbol">, </span><a href="../-accounts-service/index.html"><span class="identifier">AccountsService</span></a><span class="symbol">, </span><a href="../-globals-service/index.html"><span class="identifier">GlobalsService</span></a><span class="symbol">, </span><a href="../-authority-and-validation-service/index.html"><span class="identifier">AuthorityAndValidationService</span></a><span class="symbol">, </span><a href="../-blocks-and-transactions-service/index.html"><span class="identifier">BlocksAndTransactionsService</span></a><span class="symbol">, </span><a href="../-contracts-service/index.html"><span class="identifier">ContractsService</span></a><span class="symbol">, </span><a href="../-assets-service/index.html"><span class="identifier">AssetsService</span></a><span class="symbol">, </span><a href="../-subscription-service/index.html"><span class="identifier">SubscriptionService</span></a><span class="symbol">, </span><a href="../-objects-service/index.html"><span class="identifier">ObjectsService</span></a><span class="symbol">, </span><a href="../-custom-operation-service/index.html"><span class="identifier">CustomOperationService</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-login-api-service/index.html">LoginApiService</a></h4>
+</td>
+<td>
+<p>Encapsulates logic, associated with blockchain login API</p>
+<code><span class="keyword">interface </span><span class="identifier">LoginApiService</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">ApiService</span></a><span class="symbol">, </span><a href="../-custom-operation-service/index.html"><span class="identifier">CustomOperationService</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-network-broadcast-api-service.html">NetworkBroadcastApiService</a></h4>
+</td>
+<td>
+<p>Encapsulates logic, associated with blockchain network broadcast API</p>
+<code><span class="keyword">interface </span><span class="identifier">NetworkBroadcastApiService</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">ApiService</span></a><span class="symbol">, </span><a href="../-transactions-service/index.html"><span class="identifier">TransactionsService</span></a><span class="symbol">, </span><a href="../-custom-operation-service/index.html"><span class="identifier">CustomOperationService</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-registration-api-service/index.html">RegistrationApiService</a></h4>
+</td>
+<td>
+<p>Encapsulates logic, associated with blockchain registration API</p>
+<code><span class="keyword">interface </span><span class="identifier">RegistrationApiService</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">ApiService</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

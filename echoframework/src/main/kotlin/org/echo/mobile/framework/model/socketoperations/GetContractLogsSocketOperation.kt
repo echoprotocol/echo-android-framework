@@ -1,12 +1,14 @@
 package org.echo.mobile.framework.model.socketoperations
 
-import com.google.common.reflect.TypeToken
-import com.google.gson.GsonBuilder
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
-import com.google.gson.JsonParser
 import org.echo.mobile.framework.Callback
-import org.echo.mobile.framework.model.Log
+import org.echo.mobile.framework.model.contract.ContractLog
+import org.echo.mobile.framework.model.contract.Log
+import org.echo.mobile.framework.model.contract.output.ContractAddressOutputValueType
+import org.echo.mobile.framework.model.contract.output.ContractOutputDecoder
+import org.echo.mobile.framework.model.contract.processType
+import org.echo.mobile.framework.support.toJsonObject
 
 /**
  * Retrieves emitted logs of contract
@@ -21,16 +23,18 @@ class GetContractLogsSocketOperation(
     override val apiId: Int,
     private val contractId: String,
     private val fromBlock: String,
-    private val toBlock: String,
+    private val limit: String,
     callId: Int,
-    callback: Callback<List<Log>>
+    callback: Callback<List<ContractLog>>
 
-) : SocketOperation<List<Log>>(
+) : SocketOperation<List<ContractLog>>(
     SocketMethodType.CALL,
     callId,
-    listOf<Log>().javaClass,
+    listOf<ContractLog>().javaClass,
     callback
 ) {
+
+    private val contractDecoder = ContractOutputDecoder()
 
     override fun createParameters(): JsonElement =
         JsonArray().apply {
@@ -39,22 +43,50 @@ class GetContractLogsSocketOperation(
             add(JsonArray().apply {
                 add(contractId)
                 add(fromBlock)
-                add(toBlock)
+                add(limit)
             })
         }
 
-    override fun fromJson(json: String): List<Log> {
-        val parser = JsonParser()
-        val jsonTree = parser.parse(json)
+    override fun fromJson(json: String): List<ContractLog> {
+        val dataParam = getDataParam(json)?.asJsonArray
 
-        if (!jsonTree.isJsonObject || jsonTree.asJsonObject.get(RESULT_KEY) == null) {
-            return emptyList()
+        val logs = mutableListOf<ContractLog>()
+        dataParam?.forEach { logArray ->
+            val contractArray = logArray.asJsonArray
+            val type = contractArray[0]
+            val contractJson = logArray.asJsonArray[1]
+
+            val log = Log(type.asInt, contractJson.toString())
+
+            val contractLog = log.processType()
+
+            val decodedValues = contractDecoder.decode(
+                contractLog?.address!!.toByteArray(),
+                listOf(ContractAddressOutputValueType())
+            )
+
+            val address = decodedValues.first().value.toString()
+
+            contractLog.address = address
+
+            logs.add(contractLog)
         }
 
-        val result = jsonTree.asJsonObject.get(RESULT_KEY)?.asJsonArray
-        return GsonBuilder().create().fromJson<List<Log>>(
-            result,
-            object : TypeToken<List<Log>>() {}.type
-        )
+        return logs
     }
+
+    private fun getDataParam(event: String): JsonElement? {
+        val params = event.toJsonObject()?.getAsJsonArray(PARAMS_KEY) ?: return null
+
+        if (params.size() == 0) {
+            return null
+        }
+
+        return params
+    }
+
+    companion object {
+        private const val PARAMS_KEY = "result"
+    }
+
 }

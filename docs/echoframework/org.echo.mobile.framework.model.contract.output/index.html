@@ -1,0 +1,125 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>org.echo.mobile.framework.model.contract.output - echoframework</title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">echoframework</a>&nbsp;/&nbsp;<a href="./index.html">org.echo.mobile.framework.model.contract.output</a><br/>
+<br/>
+<h2>Package org.echo.mobile.framework.model.contract.output</h2>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-account-address-output-value-type/index.html">AccountAddressOutputValueType</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="-output-value-type/index.html">OutputValueType</a> for account address types.
+Can decode addresses with account prefix "1.2." and without it.</p>
+<code><span class="keyword">class </span><span class="identifier">AccountAddressOutputValueType</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-address-output-value-type/index.html"><span class="identifier">AddressOutputValueType</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-address-output-value-type/index.html">AddressOutputValueType</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="-output-value-type/index.html">OutputValueType</a> for all address types.
+Decodes prefixed address values. For example, account address: 1.2.1.
+If address is not clear, throws exception.</p>
+<code><span class="keyword">open</span> <span class="keyword">class </span><span class="identifier">AddressOutputValueType</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-output-value-type/index.html"><span class="identifier">OutputValueType</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-boolean-output-value-type/index.html">BooleanOutputValueType</a></h4>
+</td>
+<td>
+<p>Extension of <a href="-number-output-value-type/index.html">NumberOutputValueType</a> for boolean type</p>
+<code><span class="keyword">class </span><span class="identifier">BooleanOutputValueType</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-number-output-value-type/index.html"><span class="identifier">NumberOutputValueType</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-contract-address-output-value-type/index.html">ContractAddressOutputValueType</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="-output-value-type/index.html">OutputValueType</a> for contract address types
+Can decode addresses with contract prefix "1.16." and without it.</p>
+<code><span class="keyword">class </span><span class="identifier">ContractAddressOutputValueType</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-address-output-value-type/index.html"><span class="identifier">AddressOutputValueType</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-contract-output-decoder/index.html">ContractOutputDecoder</a></h4>
+</td>
+<td>
+<p>Decodes output contract data according to required output types</p>
+<code><span class="keyword">class </span><span class="identifier">ContractOutputDecoder</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-eth-contract-address-output-value-type/index.html">EthContractAddressOutputValueType</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="-output-value-type/index.html">OutputValueType</a> for ethereum contract address types</p>
+<code><span class="keyword">class </span><span class="identifier">EthContractAddressOutputValueType</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-output-value-type/index.html"><span class="identifier">OutputValueType</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-fixed-array-output-value-type/index.html">FixedArrayOutputValueType</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="-output-value-type/index.html">OutputValueType</a> for fixed arrays</p>
+<code><span class="keyword">class </span><span class="identifier">FixedArrayOutputValueType</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-output-value-type/index.html"><span class="identifier">OutputValueType</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-fixed-bytes-output-value-type/index.html">FixedBytesOutputValueType</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="-output-value-type/index.html">OutputValueType</a> for fixed bytes types types</p>
+<code><span class="keyword">class </span><span class="identifier">FixedBytesOutputValueType</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-output-value-type/index.html"><span class="identifier">OutputValueType</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-list-value-type/index.html">ListValueType</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="-output-value-type/index.html">OutputValueType</a> for list of one type</p>
+<code><span class="keyword">class </span><span class="identifier">ListValueType</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-output-value-type/index.html"><span class="identifier">OutputValueType</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-number-output-value-type/index.html">NumberOutputValueType</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="-output-value-type/index.html">OutputValueType</a> for number types</p>
+<code><span class="keyword">open</span> <span class="keyword">class </span><span class="identifier">NumberOutputValueType</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-output-value-type/index.html"><span class="identifier">OutputValueType</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-output-value/index.html">OutputValue</a></h4>
+</td>
+<td>
+<p>Defines model for contract decoder outputs</p>
+<code><span class="keyword">data</span> <span class="keyword">class </span><span class="identifier">OutputValue</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-output-value-type/index.html">OutputValueType</a></h4>
+</td>
+<td>
+<p>Describes functionality for contract result decoder</p>
+<code><span class="keyword">interface </span><span class="identifier">OutputValueType</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-string-output-value-type/index.html">StringOutputValueType</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="-output-value-type/index.html">OutputValueType</a> for string types</p>
+<code><span class="keyword">class </span><span class="identifier">StringOutputValueType</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-output-value-type/index.html"><span class="identifier">OutputValueType</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

@@ -1,0 +1,147 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>TransferOperation - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.model.operations</a>&nbsp;/&nbsp;<a href="./index.html">TransferOperation</a><br/>
+<br/>
+<h1>TransferOperation</h1>
+<code><span class="keyword">class </span><span class="identifier">TransferOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-base-operation/index.html"><span class="identifier">BaseOperation</span></a></code>
+<p>Encapsulates transfer information</p>
+<p><strong>Author</strong><br/>
+Dmitriy Bushuev</p>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-transfer-deserializer/index.html">TransferDeserializer</a></h4>
+</td>
+<td>
+<p>This deserializer will work on any transfer operation serialized in the 'array form' used a lot in
+the Graphene Blockchain API.</p>
+<code><span class="keyword">class </span><span class="identifier">TransferDeserializer</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">JsonDeserializer</span><span class="symbol">&lt;</span><a href="./index.html"><span class="identifier">TransferOperation</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-transfer-serializer/index.html">TransferSerializer</a></h4>
+</td>
+<td>
+<p>Encapsulates logic of transfer json serialization</p>
+<code><span class="keyword">class </span><span class="identifier">TransferSerializer</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">JsonSerializer</span><span class="symbol">&lt;</span><a href="./index.html"><span class="identifier">TransferOperation</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<p>Encapsulates transfer information</p>
+<code><span class="identifier">TransferOperation</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.operations.TransferOperation$<init>(org.echo.mobile.framework.model.Account, org.echo.mobile.framework.model.Account, org.echo.mobile.framework.model.AssetAmount, org.echo.mobile.framework.model.AssetAmount)/from">from</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-account/index.html"><span class="identifier">Account</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.operations.TransferOperation$<init>(org.echo.mobile.framework.model.Account, org.echo.mobile.framework.model.Account, org.echo.mobile.framework.model.AssetAmount, org.echo.mobile.framework.model.AssetAmount)/to">to</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-account/index.html"><span class="identifier">Account</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.operations.TransferOperation$<init>(org.echo.mobile.framework.model.Account, org.echo.mobile.framework.model.Account, org.echo.mobile.framework.model.AssetAmount, org.echo.mobile.framework.model.AssetAmount)/transferAmount">transferAmount</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-asset-amount/index.html"><span class="identifier">AssetAmount</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.operations.TransferOperation$<init>(org.echo.mobile.framework.model.Account, org.echo.mobile.framework.model.Account, org.echo.mobile.framework.model.AssetAmount, org.echo.mobile.framework.model.AssetAmount)/fee">fee</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-asset-amount/index.html"><span class="identifier">AssetAmount</span></a>&nbsp;<span class="symbol">=</span>&nbsp;AssetAmount(UnsignedLong.ZERO)<span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="fee.html">fee</a></h4>
+</td>
+<td>
+<p>Required amount of fee <a href="../../org.echo.mobile.framework.model/-asset-amount/index.html">AssetAmount</a> to operation</p>
+<code><span class="keyword">var </span><span class="identifier">fee</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.model/-asset-amount/index.html"><span class="identifier">AssetAmount</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="from.html">from</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">from</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.model/-account/index.html"><span class="identifier">Account</span></a><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="to.html">to</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">to</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.model/-account/index.html"><span class="identifier">Account</span></a><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="transfer-amount.html">transferAmount</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">transferAmount</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.model/-asset-amount/index.html"><span class="identifier">AssetAmount</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="to-bytes.html">toBytes</a></h4>
+</td>
+<td>
+<p>Converts entity to byte-array representation</p>
+<code><span class="keyword">fun </span><span class="identifier">toBytes</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="to-json-object.html">toJsonObject</a></h4>
+</td>
+<td>
+<p>Converts entity to json object representation</p>
+<code><span class="keyword">fun </span><span class="identifier">toJsonObject</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">JsonElement</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="to-json-string.html">toJsonString</a></h4>
+</td>
+<td>
+<p>Converts entity to json string representation</p>
+<code><span class="keyword">fun </span><span class="identifier">toJsonString</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Companion Object Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-k-e-y_-a-m-o-u-n-t.html">KEY_AMOUNT</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_AMOUNT</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-k-e-y_-e-x-t-e-n-s-i-o-n-s.html">KEY_EXTENSIONS</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_EXTENSIONS</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-k-e-y_-f-r-o-m.html">KEY_FROM</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_FROM</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-k-e-y_-t-o.html">KEY_TO</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_TO</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

@@ -1,0 +1,122 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>FullAccount - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.model</a>&nbsp;/&nbsp;<a href="./index.html">FullAccount</a><br/>
+<br/>
+<h1>FullAccount</h1>
+<code><span class="keyword">class </span><span class="identifier">FullAccount</span></code>
+<p>Represents full information about user account</p>
+<p><strong>Author</strong><br/>
+Daria Pechkovskaya</p>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-full-account-deserializer/index.html">FullAccountDeserializer</a></h4>
+</td>
+<td>
+<p>Deserializer used to build a <a href="./index.html">FullAccount</a> instance from JSON</p>
+<code><span class="keyword">class </span><span class="identifier">FullAccountDeserializer</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">JsonDeserializer</span><span class="symbol">&lt;</span><a href="./index.html"><span class="identifier">FullAccount</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<p>Represents full information about user account</p>
+<code><span class="identifier">FullAccount</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.FullAccount$<init>(org.echo.mobile.framework.model.Account, kotlin.String, kotlin.collections.List((org.echo.mobile.framework.model.Balance)), kotlin.collections.List((org.echo.mobile.framework.model.Asset)))/account">account</span><span class="symbol">:</span>&nbsp;<a href="../-account/index.html"><span class="identifier">Account</span></a><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.FullAccount$<init>(org.echo.mobile.framework.model.Account, kotlin.String, kotlin.collections.List((org.echo.mobile.framework.model.Balance)), kotlin.collections.List((org.echo.mobile.framework.model.Asset)))/registrarName">registrarName</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.FullAccount$<init>(org.echo.mobile.framework.model.Account, kotlin.String, kotlin.collections.List((org.echo.mobile.framework.model.Balance)), kotlin.collections.List((org.echo.mobile.framework.model.Asset)))/balances">balances</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../-balance/index.html"><span class="identifier">Balance</span></a><span class="symbol">&gt;</span><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.FullAccount$<init>(org.echo.mobile.framework.model.Account, kotlin.String, kotlin.collections.List((org.echo.mobile.framework.model.Balance)), kotlin.collections.List((org.echo.mobile.framework.model.Asset)))/assets">assets</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../-asset/index.html"><span class="identifier">Asset</span></a><span class="symbol">&gt;</span><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="account.html">account</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">account</span><span class="symbol">: </span><a href="../-account/index.html"><span class="identifier">Account</span></a><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="assets.html">assets</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">assets</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../-asset/index.html"><span class="identifier">Asset</span></a><span class="symbol">&gt;</span><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="balances.html">balances</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">balances</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../-balance/index.html"><span class="identifier">Balance</span></a><span class="symbol">&gt;</span><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="registrar-name.html">registrarName</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">registrarName</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Companion Object Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-a-c-c-o-u-n-t_-k-e-y.html">ACCOUNT_KEY</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">ACCOUNT_KEY</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-a-s-s-e-t-s_-k-e-y.html">ASSETS_KEY</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">ASSETS_KEY</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-b-a-l-a-n-c-e-s_-k-e-y.html">BALANCES_KEY</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">BALANCES_KEY</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-d-e-f-a-u-l-t_-a-s-s-e-t_-i-d.html">DEFAULT_ASSET_ID</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">DEFAULT_ASSET_ID</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-k-e-y_-e-x-t-e-n-s-i-o-n-s.html">KEY_EXTENSIONS</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_EXTENSIONS</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-r-e-g-i-s-t-r-a-r_-k-e-y.html">REGISTRAR_KEY</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">REGISTRAR_KEY</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>
