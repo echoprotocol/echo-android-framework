@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import kotlinx.android.synthetic.main.fragment_authorization.*
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.model.FullAccount

@@ -42,7 +42,7 @@ Daria Pechkovskaya</p>
 </td>
 <td>
 <p>Represents blockchain operation for transferring amount from contract.</p>
-<code><span class="identifier">ContractTransferOperation</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.operations.ContractTransferOperation$<init>(org.echo.mobile.framework.model.AssetAmount, org.echo.mobile.framework.model.contract.Contract, org.echo.mobile.framework.model.Account, org.echo.mobile.framework.model.AssetAmount)/fee">fee</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-asset-amount/index.html"><span class="identifier">AssetAmount</span></a>&nbsp;<span class="symbol">=</span>&nbsp;AssetAmount(UnsignedLong.ZERO)<span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.operations.ContractTransferOperation$<init>(org.echo.mobile.framework.model.AssetAmount, org.echo.mobile.framework.model.contract.Contract, org.echo.mobile.framework.model.Account, org.echo.mobile.framework.model.AssetAmount)/from">from</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model.contract/-contract/index.html"><span class="identifier">Contract</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.operations.ContractTransferOperation$<init>(org.echo.mobile.framework.model.AssetAmount, org.echo.mobile.framework.model.contract.Contract, org.echo.mobile.framework.model.Account, org.echo.mobile.framework.model.AssetAmount)/to">to</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-account/index.html"><span class="identifier">Account</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.operations.ContractTransferOperation$<init>(org.echo.mobile.framework.model.AssetAmount, org.echo.mobile.framework.model.contract.Contract, org.echo.mobile.framework.model.Account, org.echo.mobile.framework.model.AssetAmount)/amount">amount</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-asset-amount/index.html"><span class="identifier">AssetAmount</span></a><span class="symbol">)</span></code></td>
+<code><span class="identifier">ContractTransferOperation</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.operations.ContractTransferOperation$<init>(org.echo.mobile.framework.model.AssetAmount, org.echo.mobile.framework.model.contract.Contract, org.echo.mobile.framework.model.GrapheneObject, kotlin.String, org.echo.mobile.framework.model.AssetAmount)/fee">fee</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-asset-amount/index.html"><span class="identifier">AssetAmount</span></a>&nbsp;<span class="symbol">=</span>&nbsp;AssetAmount(UnsignedLong.ZERO)<span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.operations.ContractTransferOperation$<init>(org.echo.mobile.framework.model.AssetAmount, org.echo.mobile.framework.model.contract.Contract, org.echo.mobile.framework.model.GrapheneObject, kotlin.String, org.echo.mobile.framework.model.AssetAmount)/caller">caller</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model.contract/-contract/index.html"><span class="identifier">Contract</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.operations.ContractTransferOperation$<init>(org.echo.mobile.framework.model.AssetAmount, org.echo.mobile.framework.model.contract.Contract, org.echo.mobile.framework.model.GrapheneObject, kotlin.String, org.echo.mobile.framework.model.AssetAmount)/callee">callee</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-graphene-object/index.html"><span class="identifier">GrapheneObject</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.operations.ContractTransferOperation$<init>(org.echo.mobile.framework.model.AssetAmount, org.echo.mobile.framework.model.contract.Contract, org.echo.mobile.framework.model.GrapheneObject, kotlin.String, org.echo.mobile.framework.model.AssetAmount)/method">method</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.operations.ContractTransferOperation$<init>(org.echo.mobile.framework.model.AssetAmount, org.echo.mobile.framework.model.contract.Contract, org.echo.mobile.framework.model.GrapheneObject, kotlin.String, org.echo.mobile.framework.model.AssetAmount)/value">value</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-asset-amount/index.html"><span class="identifier">AssetAmount</span></a><span class="symbol">)</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -51,10 +51,17 @@ Daria Pechkovskaya</p>
 <tbody>
 <tr>
 <td>
-<h4><a href="amount.html">amount</a></h4>
+<h4><a href="callee.html">callee</a></h4>
 </td>
 <td>
-<code><span class="keyword">val </span><span class="identifier">amount</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.model/-asset-amount/index.html"><span class="identifier">AssetAmount</span></a></code></td>
+<code><span class="keyword">var </span><span class="identifier">callee</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.model/-graphene-object/index.html"><span class="identifier">GrapheneObject</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="caller.html">caller</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">caller</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.model.contract/-contract/index.html"><span class="identifier">Contract</span></a></code></td>
 </tr>
 <tr>
 <td>
@@ -66,17 +73,17 @@ Daria Pechkovskaya</p>
 </tr>
 <tr>
 <td>
-<h4><a href="from.html">from</a></h4>
+<h4><a href="method.html">method</a></h4>
 </td>
 <td>
-<code><span class="keyword">val </span><span class="identifier">from</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.model.contract/-contract/index.html"><span class="identifier">Contract</span></a></code></td>
+<code><span class="keyword">val </span><span class="identifier">method</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
 </tr>
 <tr>
 <td>
-<h4><a href="to.html">to</a></h4>
+<h4><a href="value.html">value</a></h4>
 </td>
 <td>
-<code><span class="keyword">var </span><span class="identifier">to</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.model/-account/index.html"><span class="identifier">Account</span></a></code></td>
+<code><span class="keyword">val </span><span class="identifier">value</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.model/-asset-amount/index.html"><span class="identifier">AssetAmount</span></a></code></td>
 </tr>
 </tbody>
 </table>

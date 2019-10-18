@@ -1,20 +1,23 @@
 package org.echo.mobile.framework.model.socketoperations
 
+import com.google.common.primitives.UnsignedLong
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.support.toJsonObject
 
 /**
- * Register account on blockchain node with credentials
+ * Tries to submit registration task to blockchain with predefined [randNum] and solved [nonce]
  *
- * @author Daria Pechkovskaya
+ * @author Dmitriy Bushuev
  */
-class RegisterSocketOperation(
+class SubmitRegistrationSolutionSocketOperation(
     override val apiId: Int,
     private val accountName: String,
     private val keyActive: String,
     private val echorandKey: String,
+    private val nonce: UnsignedLong,
+    private val randNum: UnsignedLong,
     callId: Int,
     callback: Callback<Int>
 ) : SocketOperation<Int>(SocketMethodType.CALL, callId, Int::class.java, callback) {
@@ -22,18 +25,21 @@ class RegisterSocketOperation(
     override fun createParameters(): JsonElement =
         JsonArray().apply {
             add(apiId)
-            add(SocketOperationKeys.REGISTER_ACCOUNT.key)
+            add(SocketOperationKeys.SUBMIT_REGISTRATION_SOLUTION.key)
 
             add(JsonArray().apply {
                 add(callId)
                 add(accountName)
                 add(keyActive)
                 add(echorandKey)
+                add(nonce)
+                add(randNum)
             })
         }
 
     override fun fromJson(json: String): Int? {
-        return json.toJsonObject()?.has(RESULT_KEY)?.let { callId } ?: -1
+        val result = json.toJsonObject()?.get(RESULT_KEY)?.asBoolean
+        return if (result == true) callId else -1
     }
 
 }

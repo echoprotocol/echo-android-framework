@@ -42,6 +42,7 @@ class GetContractLogsSocketOperation(
             add(SocketOperationKeys.GET_CONTRACT_LOGS.key)
             add(JsonArray().apply {
                 add(contractId)
+                add(JsonArray())
                 add(fromBlock)
                 add(limit)
             })

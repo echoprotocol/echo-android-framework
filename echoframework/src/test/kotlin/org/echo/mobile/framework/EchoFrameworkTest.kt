@@ -4,12 +4,33 @@ import com.google.common.primitives.UnsignedLong
 import org.echo.mobile.framework.core.crypto.internal.CryptoCoreComponentImpl
 import org.echo.mobile.framework.core.crypto.internal.eddsa.key.IrohaKeyPairCryptoAdapter
 import org.echo.mobile.framework.exception.LocalException
-import org.echo.mobile.framework.model.*
-import org.echo.mobile.framework.model.contract.*
+import org.echo.mobile.framework.model.Account
+import org.echo.mobile.framework.model.Asset
+import org.echo.mobile.framework.model.AssetAmount
+import org.echo.mobile.framework.model.AssetOptions
+import org.echo.mobile.framework.model.Balance
+import org.echo.mobile.framework.model.Block
+import org.echo.mobile.framework.model.BlockData
+import org.echo.mobile.framework.model.DynamicGlobalProperties
+import org.echo.mobile.framework.model.EthAddress
+import org.echo.mobile.framework.model.EthDeposit
+import org.echo.mobile.framework.model.EthWithdraw
+import org.echo.mobile.framework.model.FullAccount
+import org.echo.mobile.framework.model.GlobalProperties
+import org.echo.mobile.framework.model.HistoryResponse
+import org.echo.mobile.framework.model.Price
+import org.echo.mobile.framework.model.TransactionResult
+import org.echo.mobile.framework.model.contract.ContractBalance
+import org.echo.mobile.framework.model.contract.ContractFee
+import org.echo.mobile.framework.model.contract.ContractInfo
+import org.echo.mobile.framework.model.contract.ContractLog
+import org.echo.mobile.framework.model.contract.ContractResult
+import org.echo.mobile.framework.model.contract.ContractStruct
 import org.echo.mobile.framework.model.contract.input.AccountAddressInputValueType
 import org.echo.mobile.framework.model.contract.input.ContractInputEncoder
 import org.echo.mobile.framework.model.contract.input.InputValue
 import org.echo.mobile.framework.model.contract.input.StringInputValueType
+import org.echo.mobile.framework.model.contract.toRegular
 import org.echo.mobile.framework.model.network.Echodevnet
 import org.echo.mobile.framework.service.UpdateListener
 import org.echo.mobile.framework.support.Api
@@ -20,7 +41,12 @@ import org.echo.mobile.framework.support.concurrent.future.completeCallback
 import org.echo.mobile.framework.support.concurrent.future.wrapResult
 import org.echo.mobile.framework.support.fold
 import org.junit.Assert
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
+import org.junit.Assert.fail
 import org.junit.Test
 import java.math.BigDecimal
 import java.util.concurrent.TimeUnit
@@ -35,7 +61,7 @@ class EchoFrameworkTest {
     private fun initFramework(ratio: BigDecimal = BigDecimal.ONE): EchoFramework {
         return EchoFramework.create(
             Settings.Configurator()
-                .setUrl("wss://testnet.echo-dev.io/ws")
+                .setUrl("wss://devnet.echo-dev.io/ws")
                 .setNetworkType(Echodevnet())
                 .setReturnOnMainThread(false)
                 .setApis(
@@ -49,11 +75,11 @@ class EchoFrameworkTest {
         )
     }
 
-    private val legalContractId = "1.10.5"
-    private val legalTokenId = "1.10.1"
-    private val accountId = "1.2.16"
+    private val legalContractId = "1.11.0"
+    private val legalTokenId = "1.11.2"
+    private val accountId = "1.2.26"
     private val login = "dima"
-    private val secondAccountId = "1.2.17"
+    private val secondAccountId = "1.2.27"
     private val secondLogin = "daria"
     private val legalAssetId = "1.3.0"
 
@@ -200,11 +226,11 @@ class EchoFrameworkTest {
             "000000000000000000000000000353544e0000000000000000000000000000000000000000000000000" +
             "000000000"
 
-    private val illegalContractId = "1.10.-1"
-    private val illegalHistoryItemId = "1.11.-1"
+    private val illegalContractId = "1.11.-1"
+    private val illegalHistoryItemId = "1.12.-1"
 
-    private val validContractPrefix = "1.9."
-    private val validContractResultPrefix = "1.11."
+    private val validContractPrefix = "1.11."
+    private val validContractResultPrefix = "1.12."
 
     private val cryptoCoreComponent by lazy {
         CryptoCoreComponentImpl(IrohaKeyPairCryptoAdapter())
@@ -479,7 +505,7 @@ class EchoFrameworkTest {
 //    }
 
     @Test
-    fun getEthereumTest() {
+    fun getEthereumAddressTest() {
         val framework = initFramework()
 
         val futureEthereum = FutureTask<EthAddress>()
@@ -503,38 +529,38 @@ class EchoFrameworkTest {
         assertNotNull(futureEthereum.get() ?: false)
     }
 
-    @Test
-    fun withdrawEthereumWithWifTest() {
-        val framework = initFramework()
-
-        val futureChangePassword = FutureTask<Boolean>()
-        val futureResult = FutureTask<TransactionResult>()
-
-        if (connect(framework) == false) Assert.fail("Connection error")
-
-        framework.ethWithdraw(
-            "vsharaev",
-            "5KjC8BiryoxUNz3dEY2ZWQK5ssmD84JgRGemVWwxfNgiPoxcaVa",
-            "0x46Ba2677a1c982B329A81f60Cf90fBA2E8CA9fA8",
-            "1",
-            "1.3.0",
-            object : Callback<Boolean> {
-                override fun onSuccess(result: Boolean) {
-                    futureChangePassword.setComplete(result)
-                }
-
-                override fun onError(error: LocalException) {
-                    error.printStackTrace()
-                    futureChangePassword.setComplete(error)
-                }
-
-            },
-            futureResult.completeCallback()
-        )
-
-        val result = futureResult.get()
-        assertNotNull(result ?: false)
-    }
+//    @Test
+//    fun withdrawEthereumWithWifTest() {
+//        val framework = initFramework()
+//
+//        val futureChangePassword = FutureTask<Boolean>()
+//        val futureResult = FutureTask<TransactionResult>()
+//
+//        if (connect(framework) == false) fail("Connection error")
+//
+//        framework.ethWithdraw(
+//            "dima",
+//            "5J3UbadSyzzcQQ7HEfTr2brhJJpHhx3NsMzrvgzfysBesutNRCm",
+//            "0x46Ba2677a1c982B329A81f60Cf90fBA2E8CA9fA8",
+//            "1",
+//            "1.3.0",
+//            object : Callback<Boolean> {
+//                override fun onSuccess(result: Boolean) {
+//                    futureChangePassword.setComplete(result)
+//                }
+//
+//                override fun onError(error: LocalException) {
+//                    error.printStackTrace()
+//                    futureChangePassword.setComplete(error)
+//                }
+//
+//            },
+//            futureResult.completeCallback()
+//        )
+//
+//        val result = futureResult.get()
+//        assertNotNull(result ?: false)
+//    }
 
 //    @Test
 //    fun registrationByWifTest() {
@@ -548,7 +574,7 @@ class EchoFrameworkTest {
 //        val wif = cryptoCoreComponent.encodeToWif(randomPrivateKey)
 //
 //        framework.register(
-//            "dimasbywif", wif,
+//            "dima", wif,
 //            object : Callback<Boolean> {
 //                override fun onSuccess(result: Boolean) {
 //                    futureRegistration.setComplete(true)
@@ -1084,7 +1110,7 @@ class EchoFrameworkTest {
         framework.issueAsset(
             "daria",
             "5J9YnfSUx6GnweorDEswRNAFcBzsZrQoJLkfqKLzXwBdRvjmoz1",
-            asset = "1.3.4",
+            asset = "1.3.3",
             amount = "1",
             destinationIdOrName = "daria",
             callback = futureIssue.completeCallback()
@@ -1349,7 +1375,7 @@ class EchoFrameworkTest {
             methodParams = listOf(
                 InputValue(
                     AccountAddressInputValueType(),
-                    "1.2.16"
+                    secondAccountId
                 )
             ),
             callback = future.completeCallback()
@@ -1409,7 +1435,7 @@ class EchoFrameworkTest {
         val future = FutureTask<ContractResult>()
 
         framework.getContractResult(
-            historyId = "1.11.210",
+            historyId = "1.12.5",
             callback = future.completeCallback()
         )
 
@@ -1449,15 +1475,15 @@ class EchoFrameworkTest {
         val future = FutureTask<List<ContractLog>>()
 
         framework.getContractLogs(
-            contractId = "1.10.2",
-            fromBlock = "510",
-            limit = "10",
+            contractId = legalContractId,
+            fromBlock = "147314",
+            limit = "100",
             callback = future.completeCallback()
         )
 
         val contractResult = future.get()
         assertNotNull(contractResult)
-//        assert(contractResult!!.isNotEmpty())
+        assert(contractResult!!.isNotEmpty())
     }
 
     @Test(expected = LocalException::class)

@@ -24,13 +24,39 @@ sealed class ContractLog(@Expose var address: String) {
         @SerializedName("log")
         val calledMethodsHashes: List<String>,
         @Expose
-        val data: String
+        val data: String,
+        @Expose
+        @SerializedName("block_num")
+        val blockNum: String,
+        @Expose
+        @SerializedName("trx_num")
+        val trxNum: String,
+        @Expose
+        @SerializedName("op_num")
+        val opNum: String
     ) : ContractLog(address)
 
     /**
      * Result type for x86 contract
      */
-    class ContractLogx86(address: String) : ContractLog(address)
+    class ContractLogx86(
+        address: String,
+        @Expose
+        val log: String,
+        @Expose
+        val hash: String,
+        @Expose
+        val id: String,
+        @Expose
+        @SerializedName("block_num")
+        val blockNum: String,
+        @Expose
+        @SerializedName("trx_num")
+        val trxNum: String,
+        @Expose
+        @SerializedName("op_num")
+        val opNum: String
+    ) : ContractLog(address)
 }
 
 /**
@@ -44,7 +70,10 @@ fun Log.processType(): ContractLog? {
         )
     }
     if (this.contractType == ContractType.X86.ordinal) {
-        return ContractLog.ContractLogx86("")
+        return Gson().fromJson<ContractLog.ContractLogx86>(
+            rawString,
+            ContractLog.ContractLogx86::class.java
+        )
     }
 
     return null
@@ -69,7 +98,10 @@ fun Log.toRegular(): ContractLog.RegularContractLog? {
  */
 fun Log.toX86(): ContractLog.ContractLogx86? {
     if (this.contractType == ContractType.X86.ordinal) {
-        return ContractLog.ContractLogx86("")
+        return Gson().fromJson<ContractLog.ContractLogx86>(
+            rawString,
+            ContractLog.ContractLogx86::class.java
+        )
     }
 
     return null
