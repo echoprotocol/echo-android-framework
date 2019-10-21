@@ -1,3 +1,8 @@
+# Changelog 3.5.1 - 2019-10-21
+
+## Fixed
+Fixed framework login flow
+
 # Changelog 3.5.0 - 2019-10-15
 
 ## Removed
