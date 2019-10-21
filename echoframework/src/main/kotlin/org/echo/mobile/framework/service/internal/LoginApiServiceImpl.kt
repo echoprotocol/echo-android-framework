@@ -26,17 +26,17 @@ class LoginApiServiceImpl(val socketCoreComponent: SocketCoreComponent) : LoginA
     override var id: Int = LoginApiService.INITIALIZER_API_ID
 
     override fun login(callback: Callback<Boolean>) {
-        val loginOperation = LoginSocketOperation(socketCoreComponent.currentId, id, callback)
+        val loginOperation = LoginSocketOperation(id, socketCoreComponent.currentId, callback)
         socketCoreComponent.emit(loginOperation)
     }
 
     override fun connectApi(api: Api, callback: Callback<Int>) {
         val apiTypeConverter = ApiToOperationTypeConverter()
         val operation = AccessSocketOperation(
-            accessSocketType = apiTypeConverter.convert(api),
-            api = id,
-            callId = socketCoreComponent.currentId,
-            callback = callback
+                accessSocketType = apiTypeConverter.convert(api),
+                api = id,
+                callId = socketCoreComponent.currentId,
+                callback = callback
         )
         socketCoreComponent.emit(operation)
     }
@@ -44,23 +44,24 @@ class LoginApiServiceImpl(val socketCoreComponent: SocketCoreComponent) : LoginA
     private class ApiToOperationTypeConverter : Converter<Api, AccessSocketOperationType> {
 
         private val apiToType = hashMapOf(
-            Api.DATABASE to AccessSocketOperationType.DATABASE,
-            Api.NETWORK_BROADCAST to AccessSocketOperationType.NETWORK_BROADCAST,
-            Api.ACCOUNT_HISTORY to AccessSocketOperationType.HISTORY,
-            Api.CRYPTO to AccessSocketOperationType.CRYPTO,
-            Api.REGISTRATION to AccessSocketOperationType.REGISTRATION
+                Api.DATABASE to AccessSocketOperationType.DATABASE,
+                Api.NETWORK_BROADCAST to AccessSocketOperationType.NETWORK_BROADCAST,
+                Api.ACCOUNT_HISTORY to AccessSocketOperationType.HISTORY,
+                Api.CRYPTO to AccessSocketOperationType.CRYPTO,
+                Api.REGISTRATION to AccessSocketOperationType.REGISTRATION
         )
 
         override fun convert(source: Api): AccessSocketOperationType =
-            apiToType[source] ?: throw IllegalArgumentException("Unrecognized api type: $source")
+                apiToType[source]
+                        ?: throw IllegalArgumentException("Unrecognized api type: $source")
     }
 
     override fun <T> callCustomOperation(operation: CustomOperation<T>, callback: Callback<T>) {
         val customSocketOperation = CustomSocketOperation(
-            id,
-            socketCoreComponent.currentId,
-            operation,
-            callback
+                id,
+                socketCoreComponent.currentId,
+                operation,
+                callback
         )
         socketCoreComponent.emit(customSocketOperation)
     }
@@ -68,10 +69,10 @@ class LoginApiServiceImpl(val socketCoreComponent: SocketCoreComponent) : LoginA
     override fun <T> callCustomOperation(operation: CustomOperation<T>): Result<LocalException, T> {
         val futureTask = FutureTask<T>()
         val customSocketOperation = CustomSocketOperation(
-            id,
-            socketCoreComponent.currentId,
-            operation,
-            futureTask.completeCallback()
+                id,
+                socketCoreComponent.currentId,
+                operation,
+                futureTask.completeCallback()
         )
         socketCoreComponent.emit(customSocketOperation)
 
