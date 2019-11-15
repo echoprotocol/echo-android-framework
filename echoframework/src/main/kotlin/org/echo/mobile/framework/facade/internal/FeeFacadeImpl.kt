@@ -15,6 +15,8 @@ import org.echo.mobile.framework.model.contract.input.ContractInputEncoder
 import org.echo.mobile.framework.model.contract.input.InputValue
 import org.echo.mobile.framework.model.operations.ContractCallOperation
 import org.echo.mobile.framework.model.operations.ContractCallOperationBuilder
+import org.echo.mobile.framework.model.operations.ContractCreateOperation
+import org.echo.mobile.framework.model.operations.ContractCreateOperationBuilder
 import org.echo.mobile.framework.model.operations.TransferOperationBuilder
 import org.echo.mobile.framework.processResult
 import org.echo.mobile.framework.service.DatabaseApiService
@@ -132,6 +134,37 @@ class FeeFacadeImpl(
         multiplyContractFee(fees.first(), feeRatioProvider.provide())
     })
 
+    override fun getFeeForContractCreateOperation(
+        userNameOrId: String,
+        amount: String,
+        byteCode: String,
+        assetId: String,
+        feeAsset: String?,
+        callback: Callback<AssetAmount>
+    ) = callback.processResult(Result {
+        val contractOperation =
+            configureContractCreateTransaction(userNameOrId, amount, byteCode, assetId)
+
+        getFees(listOf(contractOperation), feeAsset ?: assetId)
+    }.map { fees ->
+        if (fees.isEmpty()) {
+            LOGGER.log(
+                """Empty fee list for required create contract operation.
+                            |Caller = $userNameOrId
+                            |Code = $byteCode
+                            |Fee asset = ${feeAsset ?: assetId}
+                        """
+            )
+            throw LocalException("Unable to get fee for specified operation")
+        }
+
+        multiplyFee(fees.first(), feeRatioProvider.provide())
+    })
+
+    private fun multiplyFee(rawFee: AssetAmount, feeRatio: Double): AssetAmount {
+        return rawFee.multiplyBy(feeRatio, RoundingMode.FLOOR)
+    }
+
     private fun multiplyContractFee(rawFee: ContractFee, feeRatio: Double): ContractFee {
         val fee = rawFee.fee.multiplyBy(feeRatio, RoundingMode.FLOOR)
         val userFee = rawFee.feeToPay.multiplyBy(feeRatio, RoundingMode.FLOOR)
@@ -179,6 +212,39 @@ class FeeFacadeImpl(
             .setFee(AssetAmount(UnsignedLong.ZERO, Asset(assetId)))
             .setRegistrar(account!!)
             .setReceiver(contractId)
+            .setContractCode(code)
+            .setValue(AssetAmount(UnsignedLong.valueOf(amount), Asset(assetId)))
+            .build()
+    }
+
+    private fun configureContractCreateTransaction(
+        userNameOrId: String,
+        amount: String,
+        code: String,
+        assetId: String
+    ): ContractCreateOperation {
+        var account: Account? = null
+
+        databaseApiService.getFullAccounts(listOf(userNameOrId), false)
+            .value { accountsMap ->
+                account = accountsMap[userNameOrId]?.account
+            }
+            .error { accountsError ->
+                throw LocalException("Error occurred during accounts request", accountsError)
+            }
+
+        if (account == null) {
+            LOGGER.log(
+                """Unable to find accounts for contract call.
+                    |Caller = $account
+                """.trimMargin()
+            )
+            throw AccountNotFoundException("Unable to find required accounts: caller = $account")
+        }
+
+        return ContractCreateOperationBuilder()
+            .setFee(AssetAmount(UnsignedLong.ZERO, Asset(assetId)))
+            .setRegistrar(account!!)
             .setContractCode(code)
             .setValue(AssetAmount(UnsignedLong.valueOf(amount), Asset(assetId)))
             .build()

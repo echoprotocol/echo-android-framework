@@ -3,10 +3,11 @@ package org.echo.mobile.framework.model.socketoperations
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
+import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import com.google.gson.reflect.TypeToken
 import org.echo.mobile.framework.Callback
-import org.echo.mobile.framework.model.EthWithdraw
+import org.echo.mobile.framework.model.SidechainType
+import org.echo.mobile.framework.model.Withdraw
 
 /**
  * Retrieves ethereum withdrawals by [accountId]
@@ -16,25 +17,27 @@ import org.echo.mobile.framework.model.EthWithdraw
 class GetAccountWithdrawalsSocketOperation(
     override val apiId: Int,
     val accountId: String,
+    private val sidechainType: SidechainType?,
     callId: Int,
-    callback: Callback<List<EthWithdraw>>
-) : SocketOperation<List<EthWithdraw>>(
+    callback: Callback<List<Withdraw?>>
+) : SocketOperation<List<Withdraw?>>(
     SocketMethodType.CALL,
     callId,
-    listOf<EthWithdraw>().javaClass,
+    listOf<Withdraw?>().javaClass,
     callback
 ) {
 
     override fun createParameters(): JsonElement =
         JsonArray().apply {
             add(apiId)
-            add(SocketOperationKeys.GET_ACCOUNT_DEPOSITS.key)
+            add(SocketOperationKeys.GET_ACCOUNT_WITHDRAWALS.key)
             add(JsonArray().apply {
                 add(accountId)
+                add(sidechainType?.name?.toLowerCase() ?: "")
             })
         }
 
-    override fun fromJson(json: String): List<EthWithdraw> {
+    override fun fromJson(json: String): List<Withdraw?> {
         val parser = JsonParser()
         val jsonTree = parser.parse(json)
 
@@ -42,11 +45,22 @@ class GetAccountWithdrawalsSocketOperation(
             return listOf()
         }
 
-        val type = object : TypeToken<List<EthWithdraw>>() {}.type
+        val depositListJson = jsonTree.asJsonObject.get(RESULT_KEY).asJsonArray
 
-        val result = jsonTree.asJsonObject.get(RESULT_KEY)
-
-        return Gson().fromJson(result, type)
+        return depositListJson.map { it.asJsonObject }.map { candidate ->
+            candidate.tryMapWithdrawals()
+        }
     }
+
+    private fun JsonObject.tryMapWithdrawals() =
+        this.tryMap(Withdraw.EthWithdraw::class.java)
+            ?: this.tryMap(Withdraw.BtcWithdraw::class.java)
+
+    private fun <T> JsonObject.tryMap(resultType: Class<T>): T? =
+        try {
+            Gson().fromJson(this, resultType)
+        } catch (exception: Exception) {
+            null
+        }
 
 }
