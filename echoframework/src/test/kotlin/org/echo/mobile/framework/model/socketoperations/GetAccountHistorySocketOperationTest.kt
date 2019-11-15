@@ -105,7 +105,7 @@ class GetAccountHistorySocketOperationTest {
                                             {
                                             "id": "1.6.506",
                                             "op": [
-                                                25,
+                                                31,
                                                 {
                                                   "fee": {
                                                     "amount": 20,

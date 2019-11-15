@@ -24,7 +24,7 @@ class GlobalProperties {
     var parameters: Parameters? = null
 
     @SerializedName("active_committee_members")
-    val activeCommitteeMembers: List<String>? = null
+    val activeCommitteeMembers: List<List<String>>? = null
 
     @SerializedName("active_witnesses")
     val activeWitnesses: List<String>? = null

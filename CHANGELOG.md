@@ -1,3 +1,57 @@
+# Changelog 3.6.0 - 2019-10-18
+
+## Removed
+
+### DynamicGlobalProperties
+* lastRandQuantity
+
+### OperationType
+* contractTransferOperation
+
+### AccountOptions
+* votingAccount
+* numCommittee
+* votes
+
+## Added
+
+### SubmitRegistrationSolutionSocketOperation
+
+### OperationType
+* committee_member_activate_operation
+* committee_member_deactivate_operation
+* committee_frozen_balance_deposit_operation
+* committee_frozen_balance_withdraw_operation
+* contract_internal_create_operation
+* contract_internal_call_operation
+* contract_selfdestruct_operation
+* sidechain_btc_create_intermediate_deposit_operation
+
+### Log
+* blockNum
+* trxNum
+* opNum
+
+### Account
+* accumulatedReward
+
+### ObjectType
+* committee_frozen_balance_object
+
+## Updated
+
+### SubscribeContractLogsSocketOperation
+* Updated input parameters
+
+### GetContractLogsSocketOperation
+* Updated input parameters
+
+### GlobalProperties
+* Updated activeCommitteeMembers field type
+
+### Registration
+* Now registration goes through task solving
+
 # Changelog 3.5.1 - 2019-10-21
 
 ## Fixed

@@ -238,11 +238,11 @@ If any of the provided IDs does not map to an object, a null variant is returned
 </tr>
 <tr>
 <td>
-<h4><a href="-register-socket-operation/index.html">RegisterSocketOperation</a></h4>
+<h4><a href="-request-registration-task-socket-operation/index.html">RequestRegistrationTaskSocketOperation</a></h4>
 </td>
 <td>
-<p>Register account on blockchain node with credentials</p>
-<code><span class="keyword">class </span><span class="identifier">RegisterSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-socket-operation/index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">&gt;</span></code></td>
+<p>Retrieves registration task</p>
+<code><span class="keyword">class </span><span class="identifier">RequestRegistrationTaskSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-socket-operation/index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="../org.echo.mobile.framework.model/-registration-task/index.html"><span class="identifier">RegistrationTask</span></a><span class="symbol">&gt;</span></code></td>
 </tr>
 <tr>
 <td>
@@ -294,6 +294,14 @@ Source</p>
 <td>
 <p>Represents blockchain operations by keys</p>
 <code><span class="keyword">enum</span> <span class="keyword">class </span><span class="identifier">SocketOperationKeys</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-submit-registration-solution-socket-operation/index.html">SubmitRegistrationSolutionSocketOperation</a></h4>
+</td>
+<td>
+<p>Tries to submit registration task to blockchain with predefined <a href="#">randNum</a> and solved <a href="#">nonce</a></p>
+<code><span class="keyword">class </span><span class="identifier">SubmitRegistrationSolutionSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-socket-operation/index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">&gt;</span></code></td>
 </tr>
 <tr>
 <td>

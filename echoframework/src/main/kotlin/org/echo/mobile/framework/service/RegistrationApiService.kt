@@ -1,5 +1,7 @@
 package org.echo.mobile.framework.service
 
+import com.google.common.primitives.UnsignedLong
+import org.echo.mobile.framework.model.RegistrationTask
 import org.echo.mobile.framework.support.Result
 
 /**
@@ -10,13 +12,20 @@ import org.echo.mobile.framework.support.Result
 interface RegistrationApiService : ApiService {
 
     /**
-     * Registration on blockchain node.
+     * Registration task submitting
      *
-     * @return Call [Result]. Return true if call succeed, otherwise false
+     * @return Call [Result]. Returns call id for notice receiving
      */
-    fun register(
+    fun submitRegistrationSolution(
         accountName: String,
         keyActive: String,
-        echorandKey: String
+        echorandKey: String,
+        nonce: UnsignedLong,
+        randNum: UnsignedLong
     ): Result<Exception, Int>
+
+    /**
+     * Requests task for solving registration issue
+     */
+    fun requestRegistrationTask(): Result<Exception, RegistrationTask>
 }
