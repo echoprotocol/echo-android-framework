@@ -1,4 +1,4 @@
-## Changelog 3.7.0 - 2019-11-15
+# Changelog 3.7.0 - 2019-11-15
 
 ## Removed
 * networkFeePercentage from Account object
