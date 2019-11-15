@@ -5,6 +5,7 @@ import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 import org.echo.mobile.framework.model.eddsa.EdAuthority
 import java.lang.reflect.Type
 
@@ -35,6 +36,10 @@ class Account : GrapheneObject, GrapheneSerializable {
 
     @Expose
     var networkFeePercentage: Long = 0
+
+    @Expose
+    @SerializedName("accumulated_reward")
+    var accumulatedReward: Long = 0
 
     /**
      * Requires a user account in the string representation, that is in the 1.2.x format.

@@ -35,6 +35,7 @@ enum class SocketOperationKeys(val key: String) {
     SIDECHAIN_TRANSFERS("get_sidechain_transfers"),
     LOOKUP_ASSETS_SYMBOLS("lookup_asset_symbols"),
     REGISTER_ACCOUNT("register_account"),
+    SUBMIT_REGISTRATION_SOLUTION("submit_registration_solution"),
     BLOCK("get_block"),
     CHAIN_ID("get_chain_id"),
     CONTRACT_RESULT("get_contract_result"),
@@ -57,7 +58,8 @@ enum class SocketOperationKeys(val key: String) {
     GET_GLOBAL_PROPERTIES("get_global_properties"),
     GET_ACCOUNT_ADDRESSES("get_eth_address"),
     GET_ACCOUNT_DEPOSITS("get_account_deposits"),
-    GET_ACCOUNT_WITHDRAWALS("get_account_withdrawals");
+    GET_ACCOUNT_WITHDRAWALS("get_account_withdrawals"),
+    REQUEST_REGISTRATION_TASK("request_registration_task");
 
     override fun toString(): String = this.key
 }

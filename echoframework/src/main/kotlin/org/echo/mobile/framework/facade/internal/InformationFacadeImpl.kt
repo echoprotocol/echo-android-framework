@@ -246,10 +246,9 @@ class InformationFacadeImpl(
                         accountsRegistry,
                         assetsRegistry
                     )
-                OperationType.CONTRACT_TRANSFER_OPERATION ->
+                OperationType.CONTRACT_INTERNAL_CALL_OPERATION ->
                     processContractTransferOperation(
                         operation as ContractTransferOperation,
-                        accountsRegistry,
                         assetsRegistry
                     )
                 OperationType.SIDECHAIN_ETH_CREATE_ADDRESS_OPERATION ->
@@ -411,21 +410,12 @@ class InformationFacadeImpl(
 
     private fun processContractTransferOperation(
         operation: ContractTransferOperation,
-        accountRegistry: MutableMap<String, Account>,
         assetsRegistry: MutableList<Asset>
     ) {
-        val assetId = operation.amount.asset.getObjectId()
+        val assetId = operation.value.asset.getObjectId()
 
         getAsset(assetId, assetsRegistry)?.let { notNullAsset ->
-            operation.amount.asset = notNullAsset
-        }
-
-        val toAccount = operation.to.getObjectId()
-
-        fillAccounts(listOf(toAccount), accountRegistry)
-
-        accountRegistry[toAccount]?.let { notNullAccount ->
-            operation.to = notNullAccount
+            operation.value.asset = notNullAsset
         }
     }
 

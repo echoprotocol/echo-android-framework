@@ -28,7 +28,12 @@ class SubscribeContractLogsSocketOperation(
             add(SocketOperationKeys.SUBSCRIBE_CONTRACT_LOGS.key)
             add(JsonArray().apply {
                 add(callId)
-                add(contractId)
+                add(JsonArray().apply {
+                    add(JsonArray().apply {
+                        add(contractId)
+                        add(JsonArray())
+                    })
+                })
             })
         }
 

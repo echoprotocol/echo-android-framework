@@ -349,6 +349,10 @@ Checks required data.</p>
 <p>Contains classes, describing result of contract operation</p>
 </tr>
 <tr>
+<h5><a href="../org.echo.mobile.framework.model.contract/-contract-result-log/index.html">org.echo.mobile.framework.model.contract.ContractResultLog</a></h5>
+<p>Describes log of contract operation result</p>
+</tr>
+<tr>
 <h5><a href="../org.echo.mobile.framework.model.contract/-contract-resultx86/index.html">org.echo.mobile.framework.model.contract.ContractResultx86</a></h5>
 <p>Model of contract operation result for x86 VM</p>
 </tr>
@@ -1017,10 +1021,6 @@ to have specific json string representation</p>
 <p>Calls contract operation without chaining blockchain state. Retrieves constant information.</p>
 </tr>
 <tr>
-<h5><a href="../org.echo.mobile.framework.model.socketoperations/-register-socket-operation/index.html">org.echo.mobile.framework.model.socketoperations.RegisterSocketOperation</a></h5>
-<p>Register account on blockchain node with credentials</p>
-</tr>
-<tr>
 <h5><a href="../org.echo.mobile.framework.service/-registration-api-service/index.html">org.echo.mobile.framework.service.RegistrationApiService</a></h5>
 <p>Encapsulates logic, associated with blockchain registration API</p>
 </tr>
@@ -1046,8 +1046,16 @@ Example: <a href="#">{block_num:114642,tx_id:30b2716a2f563b2cfe29442f410681bdae8
 <p>Implementation of <a href="../org.echo.mobile.framework.service/-registration-subscription-manager.html">RegistrationSubscriptionManager</a></p>
 </tr>
 <tr>
+<h5><a href="../org.echo.mobile.framework.model/-registration-task/index.html">org.echo.mobile.framework.model.RegistrationTask</a></h5>
+<p>Describes task required to solv for account registration</p>
+</tr>
+<tr>
 <h5><a href="../org.echo.mobile.framework.model.contract/-regular-contract-result/index.html">org.echo.mobile.framework.model.contract.RegularContractResult</a></h5>
 <p>Model of contract operation result</p>
+</tr>
+<tr>
+<h5><a href="../org.echo.mobile.framework.model.socketoperations/-request-registration-task-socket-operation/index.html">org.echo.mobile.framework.model.socketoperations.RequestRegistrationTaskSocketOperation</a></h5>
+<p>Retrieves registration task</p>
 </tr>
 <tr>
 <h5><a href="../org.echo.mobile.framework.model.socketoperations/-required-contract-fees-socket-operation/index.html">org.echo.mobile.framework.model.socketoperations.RequiredContractFeesSocketOperation</a></h5>
@@ -1185,6 +1193,10 @@ Source</p>
 <tr>
 <h5><a href="../org.echo.mobile.framework.model.contract.output/-string-output-value-type/index.html">org.echo.mobile.framework.model.contract.output.StringOutputValueType</a></h5>
 <p>Implementation of <a href="../org.echo.mobile.framework.model.contract.output/-output-value-type/index.html">OutputValueType</a> for string types</p>
+</tr>
+<tr>
+<h5><a href="../org.echo.mobile.framework.model.socketoperations/-submit-registration-solution-socket-operation/index.html">org.echo.mobile.framework.model.socketoperations.SubmitRegistrationSolutionSocketOperation</a></h5>
+<p>Tries to submit registration task to blockchain with predefined <a href="#">randNum</a> and solved <a href="#">nonce</a></p>
 </tr>
 <tr>
 <h5><a href="../org.echo.mobile.framework.model.socketoperations/-subscribe-contract-logs-socket-operation/index.html">org.echo.mobile.framework.model.socketoperations.SubscribeContractLogsSocketOperation</a></h5>
