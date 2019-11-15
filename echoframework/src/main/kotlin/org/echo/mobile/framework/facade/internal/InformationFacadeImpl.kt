@@ -11,13 +11,14 @@ import org.echo.mobile.framework.model.Asset
 import org.echo.mobile.framework.model.Balance
 import org.echo.mobile.framework.model.BaseOperation
 import org.echo.mobile.framework.model.Block
-import org.echo.mobile.framework.model.EthDepositMapper
+import org.echo.mobile.framework.model.DepositMapper
 import org.echo.mobile.framework.model.EthWithdrawMapper
 import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.HistoricalTransfer
 import org.echo.mobile.framework.model.HistoryResponse
 import org.echo.mobile.framework.model.HistoryResult
+import org.echo.mobile.framework.model.WithdrawMapper
 import org.echo.mobile.framework.model.operations.AccountCreateOperation
 import org.echo.mobile.framework.model.operations.AccountUpdateOperation
 import org.echo.mobile.framework.model.operations.ContractCallOperation
@@ -465,7 +466,7 @@ class InformationFacadeImpl(
         }
 
         val withdrawId = operation.deposit.getObjectId()
-        databaseApiService.getObjects(listOf(withdrawId), EthDepositMapper())
+        databaseApiService.getObjects(listOf(withdrawId), DepositMapper())
             .value { deposits ->
                 deposits.find { it.getObjectId() == withdrawId }?.let {
                     operation.deposit = it
@@ -493,7 +494,7 @@ class InformationFacadeImpl(
         }
 
         val withdrawId = operation.withdraw.getObjectId()
-        databaseApiService.getObjects(listOf(withdrawId), EthWithdrawMapper())
+        databaseApiService.getObjects(listOf(withdrawId), WithdrawMapper())
             .value { withdraws ->
                 withdraws.find { it.getObjectId() == withdrawId }?.let {
                     operation.withdraw = it

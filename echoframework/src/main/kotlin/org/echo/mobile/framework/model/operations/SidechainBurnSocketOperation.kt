@@ -13,7 +13,7 @@ import com.google.gson.JsonSerializer
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.BaseOperation
-import org.echo.mobile.framework.model.EthWithdraw
+import org.echo.mobile.framework.model.Withdraw
 import java.lang.reflect.Type
 
 /**
@@ -24,7 +24,7 @@ import java.lang.reflect.Type
 class SidechainBurnSocketOperation @JvmOverloads constructor(
     var account: Account,
     var value: AssetAmount,
-    var withdraw: EthWithdraw,
+    var withdraw: Withdraw,
     override var fee: AssetAmount = AssetAmount(UnsignedLong.ZERO)
 ) : BaseOperation(OperationType.SIDECHAIN_BURN_OPERATION) {
 
@@ -34,7 +34,7 @@ class SidechainBurnSocketOperation @JvmOverloads constructor(
         val gsonBuilder = GsonBuilder()
         gsonBuilder.registerTypeAdapter(
             SidechainBurnSocketOperation::class.java,
-            SidechainBurnSocketOperation.SidechainBurnSerializer()
+            SidechainBurnSerializer()
         )
         return gsonBuilder.create().toJson(this)
     }
@@ -97,7 +97,7 @@ class SidechainBurnSocketOperation @JvmOverloads constructor(
             return SidechainBurnSocketOperation(
                 account,
                 amount,
-                EthWithdraw(withdrawId),
+                Withdraw.Undefined(withdrawId),
                 fee
             )
         }

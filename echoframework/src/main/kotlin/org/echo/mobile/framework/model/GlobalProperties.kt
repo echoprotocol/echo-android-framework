@@ -46,18 +46,12 @@ class Parameters {
     val witnessPayPerBlock: String? = null
     @SerializedName("maximum_time_until_expiration")
     val maximumTimeUntilExpiration: String? = null
-    @SerializedName("max_predicate_opcode")
-    val maxPredicateOpcode: String? = null
     @SerializedName("echorand_config")
     val echorandConfig: EchorandConfig? = null
-    @SerializedName("reserve_percent_of_fee")
-    val reservePercentOfFee: String? = null
     @SerializedName("max_authority_depth")
     val maxAuthorityDepth: String? = null
     @SerializedName("committee_proposal_review_period")
     val committeeProposalReviewPeriod: String? = null
-    @SerializedName("account_fee_scale_bitshifts")
-    val accountFeeScaleBitshifts: String? = null
     @SerializedName("sidechain_config")
     val sidechainConfig: SidechainConfig? = null
     @SerializedName("gas_price")
@@ -70,18 +64,12 @@ class Parameters {
     val workerBudgetPerDay: String? = null
     @SerializedName("maximum_authority_membership")
     val maximumAuthorityMembership: String? = null
-    @SerializedName("maximum_committee_count")
-    val maximumCommitteeCount: String? = null
-    @SerializedName("accounts_per_fee_scale")
-    val accountsPerFeeScale: String? = null
     @SerializedName("extensions")
     val extensions: Array<String>? = null
     @SerializedName("current_fees")
     val currentFees: CurrentFees? = null
     @SerializedName("maintenance_interval")
     val maintenanceInterval: String? = null
-    @SerializedName("network_percent_of_fee")
-    val networkPercentOfFee: String? = null
 }
 
 /**

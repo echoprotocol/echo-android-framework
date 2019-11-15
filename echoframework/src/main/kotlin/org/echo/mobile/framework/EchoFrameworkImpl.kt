@@ -4,18 +4,67 @@ import org.echo.mobile.framework.core.crypto.internal.eddsa.EdDSASecurityProvide
 import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent
 import org.echo.mobile.framework.core.mapper.internal.MapperCoreComponentImpl
 import org.echo.mobile.framework.core.socket.internal.SocketCoreComponentImpl
-import org.echo.mobile.framework.facade.*
-import org.echo.mobile.framework.facade.internal.*
-import org.echo.mobile.framework.model.*
-import org.echo.mobile.framework.model.contract.*
+import org.echo.mobile.framework.facade.AssetsFacade
+import org.echo.mobile.framework.facade.AuthenticationFacade
+import org.echo.mobile.framework.facade.ContractsFacade
+import org.echo.mobile.framework.facade.FeeFacade
+import org.echo.mobile.framework.facade.InformationFacade
+import org.echo.mobile.framework.facade.InitializerFacade
+import org.echo.mobile.framework.facade.SidechainFacade
+import org.echo.mobile.framework.facade.SubscriptionFacade
+import org.echo.mobile.framework.facade.TransactionsFacade
+import org.echo.mobile.framework.facade.internal.AssetsFacadeImpl
+import org.echo.mobile.framework.facade.internal.AuthenticationFacadeImpl
+import org.echo.mobile.framework.facade.internal.ContractsFacadeImpl
+import org.echo.mobile.framework.facade.internal.FeeFacadeImpl
+import org.echo.mobile.framework.facade.internal.InformationFacadeImpl
+import org.echo.mobile.framework.facade.internal.InitializerFacadeImpl
+import org.echo.mobile.framework.facade.internal.NotificationsHelper
+import org.echo.mobile.framework.facade.internal.SidechainFacadeImpl
+import org.echo.mobile.framework.facade.internal.SubscriptionFacadeImpl
+import org.echo.mobile.framework.facade.internal.TransactionsFacadeImpl
+import org.echo.mobile.framework.model.Asset
+import org.echo.mobile.framework.model.AssetAmount
+import org.echo.mobile.framework.model.Balance
+import org.echo.mobile.framework.model.Block
+import org.echo.mobile.framework.model.Deposit
+import org.echo.mobile.framework.model.DynamicGlobalProperties
+import org.echo.mobile.framework.model.EthAddress
+import org.echo.mobile.framework.model.FullAccount
+import org.echo.mobile.framework.model.GlobalProperties
+import org.echo.mobile.framework.model.HistoryResponse
+import org.echo.mobile.framework.model.SidechainType
+import org.echo.mobile.framework.model.TransactionResult
+import org.echo.mobile.framework.model.Withdraw
+import org.echo.mobile.framework.model.contract.ContractBalance
+import org.echo.mobile.framework.model.contract.ContractFee
+import org.echo.mobile.framework.model.contract.ContractInfo
+import org.echo.mobile.framework.model.contract.ContractLog
+import org.echo.mobile.framework.model.contract.ContractResult
+import org.echo.mobile.framework.model.contract.ContractStruct
 import org.echo.mobile.framework.model.contract.input.InputValue
-import org.echo.mobile.framework.service.*
-import org.echo.mobile.framework.service.internal.*
+import org.echo.mobile.framework.service.AccountHistoryApiService
+import org.echo.mobile.framework.service.CryptoApiService
+import org.echo.mobile.framework.service.DatabaseApiService
+import org.echo.mobile.framework.service.LoginApiService
+import org.echo.mobile.framework.service.NetworkBroadcastApiService
+import org.echo.mobile.framework.service.RegistrationApiService
+import org.echo.mobile.framework.service.UpdateListener
+import org.echo.mobile.framework.service.internal.AccountHistoryApiServiceImpl
+import org.echo.mobile.framework.service.internal.CryptoApiServiceImpl
+import org.echo.mobile.framework.service.internal.DatabaseApiServiceImpl
+import org.echo.mobile.framework.service.internal.LoginApiServiceImpl
+import org.echo.mobile.framework.service.internal.NetworkBroadcastApiServiceImpl
+import org.echo.mobile.framework.service.internal.RegistrationApiServiceImpl
 import org.echo.mobile.framework.service.internal.subscription.RegistrationSubscriptionManagerImpl
 import org.echo.mobile.framework.service.internal.subscription.TransactionSubscriptionManagerImpl
 import org.echo.mobile.framework.support.FeeRatioProvider
 import org.echo.mobile.framework.support.Settings
-import org.echo.mobile.framework.support.concurrent.*
+import org.echo.mobile.framework.support.concurrent.Dispatcher
+import org.echo.mobile.framework.support.concurrent.ExecutorServiceDispatcher
+import org.echo.mobile.framework.support.concurrent.MainThreadAccountListener
+import org.echo.mobile.framework.support.concurrent.MainThreadCallback
+import org.echo.mobile.framework.support.concurrent.MainThreadUpdateListener
 import java.security.Security
 
 /**
@@ -222,6 +271,24 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             amount,
             methodName,
             methodParams,
+            assetId,
+            feeAsset,
+            callback.wrapOriginal()
+        )
+    })
+
+    override fun getFeeForContractCreateOperation(
+        userNameOrId: String,
+        amount: String,
+        byteCode: String,
+        assetId: String,
+        feeAsset: String?,
+        callback: Callback<AssetAmount>
+    ) = dispatch(Runnable {
+        feeFacade.getFeeForContractCreateOperation(
+            userNameOrId,
+            amount,
+            byteCode,
             assetId,
             feeAsset,
             callback.wrapOriginal()
@@ -544,6 +611,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
     override fun queryContract(
         userNameOrId: String,
         assetId: String,
+        amount: String,
         contractId: String,
         methodName: String,
         methodParams: List<InputValue>,
@@ -552,6 +620,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         contractsFacade.queryContract(
             userNameOrId,
             assetId,
+            amount,
             contractId,
             methodName,
             methodParams,
@@ -562,6 +631,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
     override fun queryContract(
         userNameOrId: String,
         assetId: String,
+        amount: String,
         contractId: String,
         code: String,
         callback: Callback<String>
@@ -569,6 +639,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         contractsFacade.queryContract(
             userNameOrId,
             assetId,
+            amount,
             contractId,
             code,
             callback
@@ -637,17 +708,22 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             sidechainFacade.getEthereumAddress(accountNameOrId, callback)
         })
 
-    override fun getAccountDeposits(accountNameOrId: String, callback: Callback<List<EthDeposit>>) =
+    override fun getAccountDeposits(
+        accountNameOrId: String,
+        sidechainType: SidechainType?,
+        callback: Callback<List<Deposit?>>
+    ) =
         dispatch(Runnable {
-            sidechainFacade.getAccountDeposits(accountNameOrId, callback)
+            sidechainFacade.getAccountDeposits(accountNameOrId, sidechainType, callback)
         })
 
     override fun getAccountWithdrawals(
         accountNameOrId: String,
-        callback: Callback<List<EthWithdraw>>
+        sidechainType: SidechainType?,
+        callback: Callback<List<Withdraw?>>
     ) =
         dispatch(Runnable {
-            sidechainFacade.getAccountWithdrawals(accountNameOrId, callback)
+            sidechainFacade.getAccountWithdrawals(accountNameOrId, sidechainType, callback)
         })
 
     override fun getContracts(

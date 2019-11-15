@@ -1,6 +1,7 @@
 package org.echo.mobile.framework.facade
 
 import org.echo.mobile.framework.Callback
+import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.contract.ContractFee
 import org.echo.mobile.framework.model.contract.input.InputValue
 
@@ -74,6 +75,25 @@ interface FeeFacade {
         assetId: String,
         feeAsset: String?,
         callback: Callback<ContractFee>
+    )
+
+    /**
+     * Counts required fee for defined contract creation operation settings
+     *
+     * @param userNameOrId  Source account name or id
+     * @param amount        Amount for payable contract
+     * @param byteCode      Valid contract bytecode
+     * @param assetId       Specific asset type id
+     * @param feeAsset      Asset for fee calculating
+     * @param callback      Listener of operation results
+     */
+    fun getFeeForContractCreateOperation(
+        userNameOrId: String,
+        amount: String,
+        byteCode: String,
+        assetId: String,
+        feeAsset: String?,
+        callback: Callback<AssetAmount>
     )
 
 }

@@ -27,7 +27,6 @@ class DynamicGlobalProperties(
     var nextMaintenanceDate: Date?,
     @SerializedName(KEY_LAST_BUDGET_TIME) @Expose val lastBudgetTime: String,
     @SerializedName(KEY_COMMITTEE_BUDGET) @Expose val committeeBudget: Long = 0,
-    @SerializedName(KEY_ACCOUNTS_REGISTERED_THIS_INTERVAL) @Expose val accountsRegisteredThisInterval: Long = 0,
     @SerializedName(KEY_DYNAMIC_FLAGS) @Expose val dynamicFlags: Int = 0,
     @SerializedName(KEY_LAST_IRREVERSIBLE_BLOCK_NUM) @Expose val lastIrreversibleBlockNum: Long = 0
 ) : GrapheneObject(id), Serializable {
@@ -39,7 +38,6 @@ class DynamicGlobalProperties(
         const val KEY_NEXT_MAINTENANCE_TIME = "next_maintenance_time"
         const val KEY_LAST_BUDGET_TIME = "last_budget_time"
         const val KEY_COMMITTEE_BUDGET = "committee_budget"
-        const val KEY_ACCOUNTS_REGISTERED_THIS_INTERVAL = "accounts_registered_this_interval"
         const val KEY_DYNAMIC_FLAGS = "dynamic_flags"
         const val KEY_LAST_IRREVERSIBLE_BLOCK_NUM = "last_irreversible_block_num"
     }
