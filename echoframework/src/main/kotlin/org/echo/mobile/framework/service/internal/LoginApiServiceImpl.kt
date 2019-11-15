@@ -26,7 +26,7 @@ class LoginApiServiceImpl(val socketCoreComponent: SocketCoreComponent) : LoginA
     override var id: Int = LoginApiService.INITIALIZER_API_ID
 
     override fun login(callback: Callback<Boolean>) {
-        val loginOperation = LoginSocketOperation(socketCoreComponent.currentId, id, callback)
+        val loginOperation = LoginSocketOperation(id, socketCoreComponent.currentId, callback)
         socketCoreComponent.emit(loginOperation)
     }
 
