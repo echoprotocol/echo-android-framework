@@ -25,10 +25,11 @@ class ListAssetsSocketOperation(
     override val apiId: Int,
     val lowerBound: String,
     val limit: Int,
+    callId: Int,
     method: SocketMethodType = SocketMethodType.CALL,
     callback: Callback<List<Asset>>
 
-) : SocketOperation<List<Asset>>(method, ILLEGAL_ID, listOf<Asset>().javaClass, callback) {
+) : SocketOperation<List<Asset>>(method, callId, listOf<Asset>().javaClass, callback) {
 
     @Suppress("UNUSED_EXPRESSION")
     override fun createParameters(): JsonElement =

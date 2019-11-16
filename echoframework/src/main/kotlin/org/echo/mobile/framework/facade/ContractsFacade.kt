@@ -1,7 +1,10 @@
 package org.echo.mobile.framework.facade
 
 import org.echo.mobile.framework.Callback
-import org.echo.mobile.framework.model.contract.*
+import org.echo.mobile.framework.model.contract.ContractInfo
+import org.echo.mobile.framework.model.contract.ContractLog
+import org.echo.mobile.framework.model.contract.ContractResult
+import org.echo.mobile.framework.model.contract.ContractStruct
 import org.echo.mobile.framework.model.contract.input.InputValue
 import java.math.BigInteger
 
@@ -106,6 +109,7 @@ interface ContractsFacade {
      * @param userNameOrId Name or id of account that calls the contract
      * @param contractId   Id of called contract
      * @param assetId      Asset of contract
+     * @param amount       Value in [assetId]
      * @param methodName   Name of calling method
      * @param methodParams Parameters of called method
      * @param callback     Listener of operation results.
@@ -113,6 +117,7 @@ interface ContractsFacade {
     fun queryContract(
         userNameOrId: String,
         assetId: String,
+        amount: String,
         contractId: String,
         methodName: String,
         methodParams: List<InputValue>,
@@ -125,12 +130,14 @@ interface ContractsFacade {
      * @param userNameOrId Name or id of account that calls the contract
      * @param contractId   Id of called contract
      * @param assetId      Asset of contract
+     * @param amount       Value in [assetId]
      * @param code         Valid code for contract query
      * @param callback     Listener of operation results.
      */
     fun queryContract(
         userNameOrId: String,
         assetId: String,
+        amount: String,
         contractId: String,
         code: String,
         callback: Callback<String>
@@ -148,13 +155,13 @@ interface ContractsFacade {
      *
      * @param contractId   Contract id for fetching logs
      * @param fromBlock    Number of the earliest block to retrieve
-     * @param limit        Blocks limit
+     * @param toBlock      Last request block
      * @param callback     Listener of operation results.
      */
     fun getContractLogs(
         contractId: String,
         fromBlock: String,
-        limit: String,
+        toBlock: String,
         callback: Callback<List<ContractLog>>
     )
 

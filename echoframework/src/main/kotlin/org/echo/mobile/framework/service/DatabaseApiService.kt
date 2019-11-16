@@ -8,14 +8,19 @@ import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.BaseOperation
 import org.echo.mobile.framework.model.Block
 import org.echo.mobile.framework.model.BlockData
+import org.echo.mobile.framework.model.Deposit
 import org.echo.mobile.framework.model.DynamicGlobalProperties
 import org.echo.mobile.framework.model.EthAddress
-import org.echo.mobile.framework.model.EthDeposit
-import org.echo.mobile.framework.model.EthWithdraw
 import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.GrapheneObject
-import org.echo.mobile.framework.model.contract.*
+import org.echo.mobile.framework.model.SidechainType
+import org.echo.mobile.framework.model.Withdraw
+import org.echo.mobile.framework.model.contract.ContractFee
+import org.echo.mobile.framework.model.contract.ContractInfo
+import org.echo.mobile.framework.model.contract.ContractLog
+import org.echo.mobile.framework.model.contract.ContractResult
+import org.echo.mobile.framework.model.contract.ContractStruct
 import org.echo.mobile.framework.support.Result
 
 /**
@@ -81,14 +86,22 @@ interface AccountsService {
     fun getEthereumAddress(accountId: String, callback: Callback<EthAddress>)
 
     /**
-     * Retrieves list of account's [accountId] deposits [EthDeposit]
+     * Retrieves list of account's [accountId] deposits [Deposit]
      */
-    fun getAccountDeposits(accountId: String, callback: Callback<List<EthDeposit>>)
+    fun getAccountDeposits(
+        accountId: String,
+        sidechainType: SidechainType?,
+        callback: Callback<List<Deposit?>>
+    )
 
     /**
-     * Retrieves list of account's [accountId] withdrawals [EthWithdraw]
+     * Retrieves list of account's [accountId] withdrawals [Withdraw]
      */
-    fun getAccountWithdrawals(accountId: String, callback: Callback<List<EthWithdraw>>)
+    fun getAccountWithdrawals(
+        accountId: String,
+        sidechainType: SidechainType?,
+        callback: Callback<List<Withdraw?>>
+    )
 }
 
 /**
@@ -240,6 +253,7 @@ interface ContractsService {
         contractId: String,
         registrarNameOrId: String,
         assetId: String,
+        amount: String,
         byteCode: String
     ): Result<LocalException, String>
 
@@ -255,12 +269,12 @@ interface ContractsService {
      *
      * @param contractId   Contract id for fetching logs
      * @param fromBlock    Number of the earliest block to retrieve
-     * @param limit        Blocks limit
+     * @param toBlock      End request block
      */
     fun getContractLogs(
         contractId: String,
         fromBlock: String,
-        limit: String
+        toBlock: String
     ): Result<LocalException, List<ContractLog>>
 
     /**

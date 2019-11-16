@@ -13,7 +13,10 @@ import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.BaseOperation
 import org.echo.mobile.framework.model.Transaction
 import org.echo.mobile.framework.model.TransactionResult
-import org.echo.mobile.framework.model.contract.*
+import org.echo.mobile.framework.model.contract.ContractInfo
+import org.echo.mobile.framework.model.contract.ContractLog
+import org.echo.mobile.framework.model.contract.ContractResult
+import org.echo.mobile.framework.model.contract.ContractStruct
 import org.echo.mobile.framework.model.contract.input.ContractInputEncoder
 import org.echo.mobile.framework.model.contract.input.InputValue
 import org.echo.mobile.framework.model.operations.ContractCallOperationBuilder
@@ -160,6 +163,7 @@ class ContractsFacadeImpl(
     override fun queryContract(
         userNameOrId: String,
         assetId: String,
+        amount: String,
         contractId: String,
         methodName: String,
         methodParams: List<InputValue>,
@@ -173,6 +177,7 @@ class ContractsFacadeImpl(
             contractId,
             registrar.getObjectId(),
             assetId,
+            amount,
             contractCode
         ).dematerialize()
     }
@@ -180,6 +185,7 @@ class ContractsFacadeImpl(
     override fun queryContract(
         userNameOrId: String,
         assetId: String,
+        amount: String,
         contractId: String,
         code: String,
         callback: Callback<String>
@@ -190,6 +196,7 @@ class ContractsFacadeImpl(
             contractId,
             registrar.getObjectId(),
             assetId,
+            amount,
             code
         ).dematerialize()
     }
@@ -198,9 +205,12 @@ class ContractsFacadeImpl(
         callback.processResult(databaseApiService.getContractResult(historyId))
 
     override fun getContractLogs(
-        contractId: String, fromBlock: String, limit: String, callback: Callback<List<ContractLog>>
+        contractId: String,
+        fromBlock: String,
+        toBlock: String,
+        callback: Callback<List<ContractLog>>
     ) = callback.processResult(
-        databaseApiService.getContractLogs(contractId, fromBlock, limit)
+        databaseApiService.getContractLogs(contractId, fromBlock, toBlock)
     )
 
     override fun getContracts(
@@ -231,8 +241,7 @@ class ContractsFacadeImpl(
         val constructorParams = ContractInputEncoder().encode("", params)
 
         val contractOperation = ContractCreateOperationBuilder()
-            .setAsset(assetId)
-            .setValue(UnsignedLong.valueOf(value))
+            .setValue(AssetAmount(UnsignedLong.valueOf(value), Asset(assetId)))
             .setRegistrar(registrar)
             .setContractCode(byteCode + constructorParams)
             .build()

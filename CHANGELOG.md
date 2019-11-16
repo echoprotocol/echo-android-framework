@@ -1,3 +1,45 @@
+# Changelog 3.7.0 - 2019-11-15
+
+## Removed
+* networkFeePercentage from Account object
+* accountsRegisteredThisInterval from DynamicGlobalProperties object
+* nextAvailableVoteId from GlobalProperties object
+* maximumCommitteeCount, reservePercentOfFee, networkPercentOfFee, maxPredicateOpcode, accountsPerFeeScale, accountFeeScaleBitshifts from GlobalPropertiesParameters
+* blockResult from ObjectTypes
+
+## Changed
+
+### GetContractLogsSocketOperation
+* Limit changed to toBlock
+* Fixed operation JSON
+
+### GetAccountDepositsSocketOperation
+* Added type(SidechainType)
+* Operation returns array of Deposit
+
+### GetAccountWithdrawalsSocketOperation
+* Added type(SidechainType)
+* Operation returns array of Withdraw
+
+## Added
+
+### QueryContractSocketOperation
+* Added amount field. Fixed operation JSON
+
+### SidechainType
+* It contains .eth and .btc value
+
+### BtcDeposit object
+
+### BtcWithdrawal object
+
+### Deposit.
+* It contains EthDeposit or BtcDeposit
+
+### Withdraw.
+* It contains EthWithdrawal or BtcWithdrawal
+
+
 # Changelog 3.6.0 - 2019-10-18
 
 ## Removed

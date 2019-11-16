@@ -1,10 +1,11 @@
 package org.echo.mobile.framework.facade
 
 import org.echo.mobile.framework.Callback
+import org.echo.mobile.framework.model.Deposit
 import org.echo.mobile.framework.model.EthAddress
-import org.echo.mobile.framework.model.EthDeposit
-import org.echo.mobile.framework.model.EthWithdraw
+import org.echo.mobile.framework.model.SidechainType
 import org.echo.mobile.framework.model.TransactionResult
+import org.echo.mobile.framework.model.Withdraw
 
 /**
  * Encapsulates logic, associated with sidechain functionality
@@ -52,13 +53,21 @@ interface SidechainFacade {
     )
 
     /**
-     * Retrieves list of account's [accountNameOrId] deposits [EthDeposit]
+     * Retrieves list of account's [accountNameOrId] deposits [Deposit]
      */
-    fun getAccountDeposits(accountNameOrId: String, callback: Callback<List<EthDeposit>>)
+    fun getAccountDeposits(
+        accountNameOrId: String,
+        sidechainType: SidechainType?,
+        callback: Callback<List<Deposit?>>
+    )
 
     /**
      * Retrieves list of account's [accountNameOrId] withdrawals [EthWithdraw]
      */
-    fun getAccountWithdrawals(accountNameOrId: String, callback: Callback<List<EthWithdraw>>)
+    fun getAccountWithdrawals(
+        accountNameOrId: String,
+        sidechainType: SidechainType?,
+        callback: Callback<List<Withdraw?>>
+    )
 
 }

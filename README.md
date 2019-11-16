@@ -1,4 +1,4 @@
-[ ![Download](https://api.bintray.com/packages/echo/mobile/android-framework-stable/images/download.svg?version=3.6.0) ](https://bintray.com/echo/mobile/android-framework-stable/3.6.0/link)
+[ ![Download](https://api.bintray.com/packages/echo/mobile/android-framework-stable/images/download.svg?version=3.7.0) ](https://bintray.com/echo/mobile/android-framework-stable/3.7.0/link)
 
 # echo-android-framework (echo-android-framework)
 
@@ -9,7 +9,7 @@ Pure Kotlin Echo framework for Android mobile development. Can be used to work w
 This framework can be obtained through gradle dependency:
 
 ```
-implementation 'org.echo.mobile:echoframework:3.6.0'
+implementation 'org.echo.mobile:echoframework:3.7.0'
 ```
 
 Or maven dependency:
@@ -18,7 +18,7 @@ Or maven dependency:
 <dependency>
   <groupId>org.echo.mobile</groupId>
   <artifactId>echoframework</artifactId>
-  <version>3.6.0</version>
+  <version>3.7.0</version>
   <type>pom</type>
 </dependency>
 ```
@@ -316,6 +316,7 @@ fun queryContract() {
                 assetId = "1.3.0",
                 contractId = "contractId",
                 "getCount",
+                 amount = "0",
                 methodParams = listOf(),
                 object : Callback<String> {
                     override fun onSuccess(result: String) {}

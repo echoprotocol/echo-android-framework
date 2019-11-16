@@ -20,8 +20,7 @@ class ContractCreateOperationBuilder : Builder<ContractCreateOperation> {
     private var fee: AssetAmount? = null
     private var registrar: Account? = null
     private var receiver: Contract? = null
-    private var asset: Asset? = null
-    private var value: UnsignedLong? = null
+    private var value: AssetAmount? = null
     private var code: String? = null
 
     /**
@@ -52,19 +51,10 @@ class ContractCreateOperationBuilder : Builder<ContractCreateOperation> {
     }
 
     /**
-     * Sets asset for operation
-     * @param assetId Id of asset for operation
-     */
-    fun setAsset(assetId: String): ContractCreateOperationBuilder {
-        this.asset = Asset(assetId)
-        return this
-    }
-
-    /**
      * Sets pay value for contract operation
      * @param value Pay value for operation
      */
-    fun setValue(value: UnsignedLong): ContractCreateOperationBuilder {
+    fun setValue(value: AssetAmount): ContractCreateOperationBuilder {
         this.value = value
         return this
     }
@@ -82,20 +72,18 @@ class ContractCreateOperationBuilder : Builder<ContractCreateOperation> {
         checkRegistrar(registrar)
         checkContractCode(code)
 
-        val finalAsset = asset ?: Asset(ECHO_ASSET_ID)
-        val value = this.value ?: UnsignedLong.ZERO
-        val payedValue = AssetAmount(value, finalAsset)
+        val value = this.value ?: AssetAmount(UnsignedLong.ZERO, Asset(ECHO_ASSET_ID))
         val registrar = this.registrar!!
         val code = this.code!!
 
         return fee?.let { nullSafeFee ->
             ContractCreateOperation(
                 registrar,
-                payedValue,
+                value,
                 code,
                 fee = nullSafeFee
             )
-        } ?: ContractCreateOperation(registrar, payedValue, code)
+        } ?: ContractCreateOperation(registrar, value, code)
     }
 
     private fun checkRegistrar(account: Account?) {

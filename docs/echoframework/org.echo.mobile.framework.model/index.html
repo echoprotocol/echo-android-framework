@@ -120,6 +120,22 @@ to have specific byte-array representation</p>
 </tr>
 <tr>
 <td>
+<h4><a href="-deposit/index.html">Deposit</a></h4>
+</td>
+<td>
+<p>Echo sidechain base deposit model</p>
+<code><span class="keyword">sealed</span> <span class="keyword">class </span><span class="identifier">Deposit</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-graphene-object/index.html"><span class="identifier">GrapheneObject</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-deposit-mapper/index.html">DepositMapper</a></h4>
+</td>
+<td>
+<p>Json mapper for <a href="-deposit/index.html">Deposit</a> model</p>
+<code><span class="keyword">class </span><span class="identifier">DepositMapper</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.core.mapper/-object-mapper.html"><span class="identifier">ObjectMapper</span></a><span class="symbol">&lt;</span><a href="-deposit/index.html"><span class="identifier">Deposit</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
 <h4><a href="-dynamic-global-properties/index.html">DynamicGlobalProperties</a></h4>
 </td>
 <td>
@@ -162,35 +178,11 @@ to have specific byte-array representation</p>
 </tr>
 <tr>
 <td>
-<h4><a href="-eth-deposit/index.html">EthDeposit</a></h4>
-</td>
-<td>
-<p>Describes single ethereum deposit model</p>
-<code><span class="keyword">class </span><span class="identifier">EthDeposit</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-graphene-object/index.html"><span class="identifier">GrapheneObject</span></a></code></td>
-</tr>
-<tr>
-<td>
-<h4><a href="-eth-deposit-mapper/index.html">EthDepositMapper</a></h4>
-</td>
-<td>
-<p>Json mapper for <a href="-eth-deposit/index.html">EthDeposit</a> model</p>
-<code><span class="keyword">class </span><span class="identifier">EthDepositMapper</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.core.mapper/-object-mapper.html"><span class="identifier">ObjectMapper</span></a><span class="symbol">&lt;</span><a href="-eth-deposit/index.html"><span class="identifier">EthDeposit</span></a><span class="symbol">&gt;</span></code></td>
-</tr>
-<tr>
-<td>
-<h4><a href="-eth-withdraw/index.html">EthWithdraw</a></h4>
-</td>
-<td>
-<p>Describes single ethereum withdraw model</p>
-<code><span class="keyword">class </span><span class="identifier">EthWithdraw</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-graphene-object/index.html"><span class="identifier">GrapheneObject</span></a></code></td>
-</tr>
-<tr>
-<td>
 <h4><a href="-eth-withdraw-mapper/index.html">EthWithdrawMapper</a></h4>
 </td>
 <td>
-<p>Json mapper for <a href="-eth-withdraw/index.html">EthWithdraw</a> model</p>
-<code><span class="keyword">class </span><span class="identifier">EthWithdrawMapper</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.core.mapper/-object-mapper.html"><span class="identifier">ObjectMapper</span></a><span class="symbol">&lt;</span><a href="-eth-withdraw/index.html"><span class="identifier">EthWithdraw</span></a><span class="symbol">&gt;</span></code></td>
+<p>Json mapper for <a href="#">EthWithdraw</a> model</p>
+<code><span class="keyword">class </span><span class="identifier">EthWithdrawMapper</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.core.mapper/-object-mapper.html"><span class="identifier">ObjectMapper</span></a><span class="symbol">&lt;</span><span class="identifier">EthWithdraw</span><span class="symbol">&gt;</span></code></td>
 </tr>
 <tr>
 <td>
@@ -383,6 +375,14 @@ Example: <a href="#">{block_num:114642,tx_id:30b2716a2f563b2cfe29442f410681bdae8
 </tr>
 <tr>
 <td>
+<h4><a href="-sidechain-type/index.html">SidechainType</a></h4>
+</td>
+<td>
+<p>Contains possible sidechain types</p>
+<code><span class="keyword">enum</span> <span class="keyword">class </span><span class="identifier">SidechainType</span></code></td>
+</tr>
+<tr>
+<td>
 <h4><a href="-socket-response/index.html">SocketResponse</a></h4>
 </td>
 <td>
@@ -429,6 +429,22 @@ Example: <a href="#">{block_num:114642,tx_id:30b2716a2f563b2cfe29442f410681bdae8
 <td>
 <p>Represents vote model in graphene blockchain</p>
 <code><span class="keyword">class </span><span class="identifier">Vote</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-byte-serializable/index.html"><span class="identifier">ByteSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-withdraw/index.html">Withdraw</a></h4>
+</td>
+<td>
+<p>Echo sidechain base withdraw model</p>
+<code><span class="keyword">sealed</span> <span class="keyword">class </span><span class="identifier">Withdraw</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-graphene-object/index.html"><span class="identifier">GrapheneObject</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-withdraw-mapper/index.html">WithdrawMapper</a></h4>
+</td>
+<td>
+<p>Json mapper for <a href="-withdraw/index.html">Withdraw</a> model</p>
+<code><span class="keyword">class </span><span class="identifier">WithdrawMapper</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.core.mapper/-object-mapper.html"><span class="identifier">ObjectMapper</span></a><span class="symbol">&lt;</span><a href="-withdraw/index.html"><span class="identifier">Withdraw</span></a><span class="symbol">&gt;</span></code></td>
 </tr>
 </tbody>
 </table>

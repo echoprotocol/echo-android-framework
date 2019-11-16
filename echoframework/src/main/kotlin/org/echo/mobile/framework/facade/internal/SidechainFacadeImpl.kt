@@ -8,11 +8,12 @@ import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.exception.NotFoundException
 import org.echo.mobile.framework.facade.SidechainFacade
 import org.echo.mobile.framework.model.Account
+import org.echo.mobile.framework.model.Deposit
 import org.echo.mobile.framework.model.EthAddress
-import org.echo.mobile.framework.model.EthDeposit
-import org.echo.mobile.framework.model.EthWithdraw
+import org.echo.mobile.framework.model.SidechainType
 import org.echo.mobile.framework.model.Transaction
 import org.echo.mobile.framework.model.TransactionResult
+import org.echo.mobile.framework.model.Withdraw
 import org.echo.mobile.framework.model.operations.GenerateEthereumAddressOperation
 import org.echo.mobile.framework.model.operations.WithdrawEthereumOperation
 import org.echo.mobile.framework.service.DatabaseApiService
@@ -165,19 +166,24 @@ class SidechainFacadeImpl(
         databaseApiService.getEthereumAddress(id, callback)
     }
 
-    override fun getAccountDeposits(accountNameOrId: String, callback: Callback<List<EthDeposit>>) {
+    override fun getAccountDeposits(
+        accountNameOrId: String,
+        sidechainType: SidechainType?,
+        callback: Callback<List<Deposit?>>
+    ) {
         val account = findAccount(accountNameOrId)
 
-        databaseApiService.getAccountDeposits(account.getObjectId(), callback)
+        databaseApiService.getAccountDeposits(account.getObjectId(), sidechainType, callback)
     }
 
     override fun getAccountWithdrawals(
         accountNameOrId: String,
-        callback: Callback<List<EthWithdraw>>
+        sidechainType: SidechainType?,
+        callback: Callback<List<Withdraw?>>
     ) {
         val account = findAccount(accountNameOrId)
 
-        databaseApiService.getAccountWithdrawals(account.getObjectId(), callback)
+        databaseApiService.getAccountWithdrawals(account.getObjectId(), sidechainType, callback)
     }
 
     private fun findAccount(nameOrId: String): Account {
