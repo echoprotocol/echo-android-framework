@@ -9,12 +9,14 @@ import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.AccountOptions
 import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.AssetOptions
+import org.echo.mobile.framework.model.GenerateBitcoinAddressOperation
 import org.echo.mobile.framework.model.HistoricalTransfer
 import org.echo.mobile.framework.model.HistoryResponse
 import org.echo.mobile.framework.model.eddsa.EdAuthority
 import org.echo.mobile.framework.model.network.Network
 import org.echo.mobile.framework.model.operations.AccountCreateOperation
 import org.echo.mobile.framework.model.operations.AccountUpdateOperation
+import org.echo.mobile.framework.model.operations.BlockRewardOperation
 import org.echo.mobile.framework.model.operations.ContractCallOperation
 import org.echo.mobile.framework.model.operations.ContractCreateOperation
 import org.echo.mobile.framework.model.operations.ContractTransferOperation
@@ -24,6 +26,7 @@ import org.echo.mobile.framework.model.operations.IssueAssetOperation
 import org.echo.mobile.framework.model.operations.SidechainBurnSocketOperation
 import org.echo.mobile.framework.model.operations.SidechainIssueSocketOperation
 import org.echo.mobile.framework.model.operations.TransferOperation
+import org.echo.mobile.framework.model.operations.WithdrawBitcoinOperation
 import org.echo.mobile.framework.model.operations.WithdrawEthereumOperation
 
 /**
@@ -123,8 +126,20 @@ class GetAccountHistorySocketOperation(
             GenerateEthereumAddressOperation.GenerateEthereumAddressDeserializer()
         )
         registerTypeAdapter(
+            GenerateBitcoinAddressOperation::class.java,
+            GenerateBitcoinAddressOperation.GenerateBitcoinAddressDeserializer()
+        )
+        registerTypeAdapter(
             WithdrawEthereumOperation::class.java,
             WithdrawEthereumOperation.WithdrawEthereumOperationDeserializer()
+        )
+        registerTypeAdapter(
+            BlockRewardOperation::class.java,
+            BlockRewardOperation.BlockRewardDeserializer()
+        )
+        registerTypeAdapter(
+            WithdrawBitcoinOperation::class.java,
+            WithdrawBitcoinOperation.WithdrawBitcoinOperationDeserializer()
         )
         registerTypeAdapter(
             SidechainIssueSocketOperation::class.java,

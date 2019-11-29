@@ -113,6 +113,7 @@ class ContractsFragment : BaseFragment() {
             lib?.queryContract(
                 etNameQuery.text.toString(),
                 ECHO_ASSET_ID,
+                "0",
                 etContractQueryId.text.toString(),
                 etMethodNameQuery.text.toString(),
                 parseContractParams(etMethodParamsQuery.text.toString()),

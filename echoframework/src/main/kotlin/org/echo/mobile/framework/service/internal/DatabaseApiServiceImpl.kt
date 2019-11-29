@@ -12,6 +12,7 @@ import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.BaseOperation
 import org.echo.mobile.framework.model.Block
 import org.echo.mobile.framework.model.BlockData
+import org.echo.mobile.framework.model.BtcAddress
 import org.echo.mobile.framework.model.Deposit
 import org.echo.mobile.framework.model.DynamicGlobalProperties
 import org.echo.mobile.framework.model.EthAddress
@@ -35,6 +36,7 @@ import org.echo.mobile.framework.model.socketoperations.FullAccountsSocketOperat
 import org.echo.mobile.framework.model.socketoperations.GetAccountDepositsSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetAccountWithdrawalsSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetAssetsSocketOperation
+import org.echo.mobile.framework.model.socketoperations.GetBitcoinAddressSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetBlockSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetChainIdSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetContractLogsSocketOperation
@@ -177,6 +179,17 @@ class DatabaseApiServiceImpl(
         callback: Callback<EthAddress>
     ) {
         val operation = GetEthereumAddressSocketOperation(
+            id,
+            accountId,
+            socketCoreComponent.currentId,
+            callback
+        )
+
+        socketCoreComponent.emit(operation)
+    }
+
+    override fun getBitcoinAddress(accountId: String, callback: Callback<BtcAddress>) {
+        val operation = GetBitcoinAddressSocketOperation(
             id,
             accountId,
             socketCoreComponent.currentId,

@@ -1,5 +1,3 @@
-autoCorrect: true
-failFast: false
 
 comments:
   active: true
@@ -113,8 +111,6 @@ formatting:
   NoEmptyClassBody:
     active: true
     autoCorrect: true
-  NoItParamInMultilineLambda:
-    active: true
   NoLineBreakAfterElse:
     active: true
     autoCorrect: true

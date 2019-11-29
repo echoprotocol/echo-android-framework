@@ -1,5 +1,6 @@
 package org.echo.mobile.framework.model.operations
 
+import org.echo.mobile.framework.model.GenerateBitcoinAddressOperation
 import org.echo.mobile.framework.support.Converter
 
 /**
@@ -95,7 +96,9 @@ class OperationTypeToClassConverter : Converter<Int, Class<*>?> {
             OperationType.SIDECHAIN_ETH_CREATE_ADDRESS_OPERATION.ordinal to GenerateEthereumAddressOperation::class.java,
             OperationType.SIDECHAIN_ETH_WITHDRAW_OPERATION.ordinal to WithdrawEthereumOperation::class.java,
             OperationType.SIDECHAIN_ISSUE_OPERATION.ordinal to SidechainIssueSocketOperation::class.java,
-            OperationType.SIDECHAIN_BURN_OPERATION.ordinal to SidechainBurnSocketOperation::class.java
+            OperationType.SIDECHAIN_BURN_OPERATION.ordinal to SidechainBurnSocketOperation::class.java,
+            OperationType.SIDECHAIN_BTC_CREATE_ADDRESS_OPERATION.ordinal to GenerateBitcoinAddressOperation::class.java,
+            OperationType.BLOCK_REWARD_OPERATION.ordinal to BlockRewardOperation::class.java
         )
     }
 
