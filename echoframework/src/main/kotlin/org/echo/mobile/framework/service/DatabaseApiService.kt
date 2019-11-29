@@ -8,6 +8,7 @@ import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.BaseOperation
 import org.echo.mobile.framework.model.Block
 import org.echo.mobile.framework.model.BlockData
+import org.echo.mobile.framework.model.BtcAddress
 import org.echo.mobile.framework.model.Deposit
 import org.echo.mobile.framework.model.DynamicGlobalProperties
 import org.echo.mobile.framework.model.EthAddress
@@ -84,6 +85,11 @@ interface AccountsService {
      * Fetches addresses list [EthAddress] for required account [accountId]
      */
     fun getEthereumAddress(accountId: String, callback: Callback<EthAddress>)
+
+    /**
+     * Fetches addresses list [EthAddress] for required account [accountId]
+     */
+    fun getBitcoinAddress(accountId: String, callback: Callback<BtcAddress>)
 
     /**
      * Retrieves list of account's [accountId] deposits [Deposit]

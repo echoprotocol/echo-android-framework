@@ -5,37 +5,38 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonParser
 import org.echo.mobile.framework.Callback
+import org.echo.mobile.framework.model.BtcAddress
 import org.echo.mobile.framework.model.EthAddress
 
 /**
- * Retrieves ethereum address for required account
+ * Retrieves bitcoin address for required account
  *
  * @param accountId Required account id
  *
  * @author Dmitriy Bushuev
  */
-class GetEthereumAddressSocketOperation(
+class GetBitcoinAddressSocketOperation(
     override val apiId: Int,
     val accountId: String,
     callId: Int,
-    callback: Callback<EthAddress>
-) : SocketOperation<EthAddress>(
+    callback: Callback<BtcAddress>
+) : SocketOperation<BtcAddress>(
     SocketMethodType.CALL,
     callId,
-    EthAddress::class.java,
+    BtcAddress::class.java,
     callback
 ) {
 
     override fun createParameters(): JsonElement =
         JsonArray().apply {
             add(apiId)
-            add(SocketOperationKeys.GET_ETH_ADDRESS.key)
+            add(SocketOperationKeys.GET_BTC_ADDRESS.key)
             add(JsonArray().apply {
                 add(accountId)
             })
         }
 
-    override fun fromJson(json: String): EthAddress? {
+    override fun fromJson(json: String): BtcAddress? {
         val parser = JsonParser()
         val jsonTree = parser.parse(json)
 
@@ -45,7 +46,7 @@ class GetEthereumAddressSocketOperation(
 
         val result = jsonTree.asJsonObject.get(RESULT_KEY)
 
-        return Gson().fromJson(result, EthAddress::class.java)
+        return Gson().fromJson(result, BtcAddress::class.java)
     }
 
 }

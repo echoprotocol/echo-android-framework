@@ -6,41 +6,39 @@ import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
 import org.echo.mobile.framework.exception.AccountNotFoundException
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.exception.NotFoundException
-import org.echo.mobile.framework.facade.SidechainFacade
+import org.echo.mobile.framework.facade.BitcoinSidechainFacade
+import org.echo.mobile.framework.facade.EthereumSidechainFacade
 import org.echo.mobile.framework.model.Account
-import org.echo.mobile.framework.model.Deposit
-import org.echo.mobile.framework.model.EthAddress
-import org.echo.mobile.framework.model.SidechainType
+import org.echo.mobile.framework.model.BtcAddress
+import org.echo.mobile.framework.model.GenerateBitcoinAddressOperation
 import org.echo.mobile.framework.model.Transaction
 import org.echo.mobile.framework.model.TransactionResult
-import org.echo.mobile.framework.model.Withdraw
-import org.echo.mobile.framework.model.operations.GenerateEthereumAddressOperation
-import org.echo.mobile.framework.model.operations.WithdrawEthereumOperation
+import org.echo.mobile.framework.model.operations.WithdrawBitcoinOperation
 import org.echo.mobile.framework.service.DatabaseApiService
 import org.echo.mobile.framework.service.NetworkBroadcastApiService
-import org.echo.mobile.framework.support.EthAddressValidator
 import org.echo.mobile.framework.support.concurrent.future.FutureTask
 import org.echo.mobile.framework.support.concurrent.future.completeCallback
 import org.echo.mobile.framework.support.dematerialize
 
 /**
- * Implementation of [SidechainFacade]
+ * Implementation of [EthereumSidechainFacade]
  *
  * Wraps logic for sidechain processing
  *
  * @author Dmitriy Bushuev
  */
-class SidechainFacadeImpl(
+class BitcoinSidechainFacadeImpl(
     private val databaseApiService: DatabaseApiService,
     private val networkBroadcastApiService: NetworkBroadcastApiService,
     private val cryptoCoreComponent: CryptoCoreComponent,
     private val notifiedTransactionsHelper: NotificationsHelper<TransactionResult>
 ) :
-    BaseTransactionsFacade(databaseApiService, cryptoCoreComponent), SidechainFacade {
+    BaseTransactionsFacade(databaseApiService, cryptoCoreComponent), BitcoinSidechainFacade {
 
-    override fun generateEthereumAddress(
+    override fun generateBitcoinAddress(
         accountNameOrId: String,
         wif: String,
+        backupAddress: String,
         broadcastCallback: Callback<Boolean>,
         resultCallback: Callback<TransactionResult>?
     ) {
@@ -50,7 +48,7 @@ class SidechainFacadeImpl(
             checkOwnerAccount(wif, account)
             val privateKey = cryptoCoreComponent.decodeFromWif(wif)
 
-            callId = generateAddress(account, privateKey)
+            callId = generateAddress(account, backupAddress, privateKey)
 
             broadcastCallback.onSuccess(true)
         } catch (exception: Exception) {
@@ -61,81 +59,6 @@ class SidechainFacadeImpl(
         resultCallback?.let {
             retrieveTransactionResult(callId, it)
         }
-    }
-
-    override fun ethWithdraw(
-        accountNameOrId: String,
-        wif: String,
-        ethAddress: String,
-        value: String,
-        feeAsset: String,
-        broadcastCallback: Callback<Boolean>,
-        resultCallback: Callback<TransactionResult>?
-    ) {
-        val callId: String
-        try {
-            val account = findAccount(accountNameOrId)
-            checkOwnerAccount(wif, account)
-            val privateKey = cryptoCoreComponent.decodeFromWif(wif)
-
-            callId = withdraw(ethAddress, account, privateKey, value, feeAsset)
-
-            broadcastCallback.onSuccess(true)
-        } catch (exception: Exception) {
-            broadcastCallback.onError(exception as? LocalException ?: LocalException(exception))
-            return
-        }
-
-        resultCallback?.let {
-            retrieveTransactionResult(callId, it)
-        }
-    }
-
-    private fun generateAddress(account: Account, privateKey: ByteArray): String {
-        val blockData = databaseApiService.getBlockData()
-        val chainId = getChainId()
-
-        val operation = GenerateEthereumAddressOperation(Account(account.getObjectId()))
-
-        val fees = getFees(listOf(operation))
-
-        val transaction = Transaction(blockData, listOf(operation), chainId).apply {
-            setFees(fees)
-            addPrivateKey(privateKey)
-        }
-
-        return networkBroadcastApiService.broadcastTransactionWithCallback(transaction)
-            .dematerialize().toString()
-    }
-
-    private fun withdraw(
-        ethAddress: String,
-        account: Account,
-        privateKey: ByteArray,
-        value: String,
-        feeAsset: String
-    ): String {
-        val processedAddress =
-            ethAddress.replace(EthAddressValidator.ADDRESS_PREFIX, "").toLowerCase()
-
-        val blockData = databaseApiService.getBlockData()
-        val chainId = getChainId()
-
-        val operation =
-            WithdrawEthereumOperation(
-                Account(account.getObjectId()),
-                processedAddress,
-                UnsignedLong.valueOf(value)
-            )
-        val fees = getFees(listOf(operation), feeAsset)
-
-        val transaction = Transaction(blockData, listOf(operation), chainId).apply {
-            setFees(fees)
-            addPrivateKey(privateKey)
-        }
-
-        return networkBroadcastApiService.broadcastTransactionWithCallback(transaction)
-            .dematerialize().toString()
     }
 
     private fun retrieveTransactionResult(
@@ -158,32 +81,89 @@ class SidechainFacadeImpl(
         }
     }
 
-    override fun getEthereumAddress(
+    override fun getBitcoinAddress(
         accountNameOrId: String,
-        callback: Callback<EthAddress>
+        callback: Callback<BtcAddress>
     ) {
         val id = findAccount(accountNameOrId).getObjectId()
-        databaseApiService.getEthereumAddress(id, callback)
+        databaseApiService.getBitcoinAddress(id, callback)
     }
 
-    override fun getAccountDeposits(
+    override fun btcWithdraw(
         accountNameOrId: String,
-        sidechainType: SidechainType?,
-        callback: Callback<List<Deposit?>>
+        wif: String,
+        btcAddress: String,
+        value: String,
+        feeAsset: String,
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<TransactionResult>?
     ) {
-        val account = findAccount(accountNameOrId)
+        val callId: String
+        try {
+            val account = findAccount(accountNameOrId)
+            checkOwnerAccount(wif, account)
+            val privateKey = cryptoCoreComponent.decodeFromWif(wif)
 
-        databaseApiService.getAccountDeposits(account.getObjectId(), sidechainType, callback)
+            callId = withdraw(btcAddress, account, privateKey, value, feeAsset)
+
+            broadcastCallback.onSuccess(true)
+        } catch (exception: Exception) {
+            broadcastCallback.onError(exception as? LocalException ?: LocalException(exception))
+            return
+        }
+
+        resultCallback?.let {
+            retrieveTransactionResult(callId, it)
+        }
     }
 
-    override fun getAccountWithdrawals(
-        accountNameOrId: String,
-        sidechainType: SidechainType?,
-        callback: Callback<List<Withdraw?>>
-    ) {
-        val account = findAccount(accountNameOrId)
+    private fun withdraw(
+        btcAddress: String,
+        account: Account,
+        privateKey: ByteArray,
+        value: String,
+        feeAsset: String
+    ): String {
+        val blockData = databaseApiService.getBlockData()
+        val chainId = getChainId()
 
-        databaseApiService.getAccountWithdrawals(account.getObjectId(), sidechainType, callback)
+        val operation =
+            WithdrawBitcoinOperation(
+                Account(account.getObjectId()),
+                btcAddress,
+                UnsignedLong.valueOf(value)
+            )
+        val fees = getFees(listOf(operation), feeAsset)
+
+        val transaction = Transaction(blockData, listOf(operation), chainId).apply {
+            setFees(fees)
+            addPrivateKey(privateKey)
+        }
+
+        return networkBroadcastApiService.broadcastTransactionWithCallback(transaction)
+            .dematerialize().toString()
+    }
+
+    private fun generateAddress(
+        account: Account,
+        backupAddress: String,
+        privateKey: ByteArray
+    ): String {
+        val blockData = databaseApiService.getBlockData()
+        val chainId = getChainId()
+
+        val operation =
+            GenerateBitcoinAddressOperation(Account(account.getObjectId()), backupAddress)
+
+        val fees = getFees(listOf(operation))
+
+        val transaction = Transaction(blockData, listOf(operation), chainId).apply {
+            setFees(fees)
+            addPrivateKey(privateKey)
+        }
+
+        return networkBroadcastApiService.broadcastTransactionWithCallback(transaction)
+            .dematerialize().toString()
     }
 
     private fun findAccount(nameOrId: String): Account {

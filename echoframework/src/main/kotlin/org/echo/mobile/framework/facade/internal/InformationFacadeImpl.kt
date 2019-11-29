@@ -12,8 +12,8 @@ import org.echo.mobile.framework.model.Balance
 import org.echo.mobile.framework.model.BaseOperation
 import org.echo.mobile.framework.model.Block
 import org.echo.mobile.framework.model.DepositMapper
-import org.echo.mobile.framework.model.EthWithdrawMapper
 import org.echo.mobile.framework.model.FullAccount
+import org.echo.mobile.framework.model.GenerateBitcoinAddressOperation
 import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.HistoricalTransfer
 import org.echo.mobile.framework.model.HistoryResponse
@@ -32,6 +32,7 @@ import org.echo.mobile.framework.model.operations.OperationType
 import org.echo.mobile.framework.model.operations.SidechainBurnSocketOperation
 import org.echo.mobile.framework.model.operations.SidechainIssueSocketOperation
 import org.echo.mobile.framework.model.operations.TransferOperation
+import org.echo.mobile.framework.model.operations.WithdrawBitcoinOperation
 import org.echo.mobile.framework.model.operations.WithdrawEthereumOperation
 import org.echo.mobile.framework.processResult
 import org.echo.mobile.framework.service.AccountHistoryApiService
@@ -257,9 +258,19 @@ class InformationFacadeImpl(
                         operation as GenerateEthereumAddressOperation,
                         accountsRegistry
                     )
+                OperationType.SIDECHAIN_BTC_CREATE_ADDRESS_OPERATION ->
+                    processGenerateBtcAddressOperation(
+                        operation as GenerateBitcoinAddressOperation,
+                        accountsRegistry
+                    )
                 OperationType.SIDECHAIN_ETH_WITHDRAW_OPERATION ->
                     processWithdrawEthOperation(
                         operation as WithdrawEthereumOperation,
+                        accountsRegistry
+                    )
+                OperationType.SIDECHAIN_BTC_WITHDRAW_OPERATION ->
+                    processWithdrawBtcOperation(
+                        operation as WithdrawBitcoinOperation,
                         accountsRegistry
                     )
                 OperationType.SIDECHAIN_ISSUE_OPERATION ->
@@ -433,8 +444,34 @@ class InformationFacadeImpl(
         }
     }
 
+    private fun processGenerateBtcAddressOperation(
+        operation: GenerateBitcoinAddressOperation,
+        accountRegistry: MutableMap<String, Account>
+    ) {
+        val account = operation.account.getObjectId()
+
+        fillAccounts(listOf(account), accountRegistry)
+
+        accountRegistry[account]?.let { notNullAccount ->
+            operation.account = notNullAccount
+        }
+    }
+
     private fun processWithdrawEthOperation(
         operation: WithdrawEthereumOperation,
+        accountRegistry: MutableMap<String, Account>
+    ) {
+        val account = operation.account.getObjectId()
+
+        fillAccounts(listOf(account), accountRegistry)
+
+        accountRegistry[account]?.let { notNullAccount ->
+            operation.account = notNullAccount
+        }
+    }
+
+    private fun processWithdrawBtcOperation(
+        operation: WithdrawBitcoinOperation,
         accountRegistry: MutableMap<String, Account>
     ) {
         val account = operation.account.getObjectId()

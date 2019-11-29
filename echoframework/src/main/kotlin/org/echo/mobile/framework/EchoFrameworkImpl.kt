@@ -6,27 +6,32 @@ import org.echo.mobile.framework.core.mapper.internal.MapperCoreComponentImpl
 import org.echo.mobile.framework.core.socket.internal.SocketCoreComponentImpl
 import org.echo.mobile.framework.facade.AssetsFacade
 import org.echo.mobile.framework.facade.AuthenticationFacade
+import org.echo.mobile.framework.facade.BitcoinSidechainFacade
+import org.echo.mobile.framework.facade.CommonSidechainFacade
 import org.echo.mobile.framework.facade.ContractsFacade
+import org.echo.mobile.framework.facade.EthereumSidechainFacade
 import org.echo.mobile.framework.facade.FeeFacade
 import org.echo.mobile.framework.facade.InformationFacade
 import org.echo.mobile.framework.facade.InitializerFacade
-import org.echo.mobile.framework.facade.SidechainFacade
 import org.echo.mobile.framework.facade.SubscriptionFacade
 import org.echo.mobile.framework.facade.TransactionsFacade
 import org.echo.mobile.framework.facade.internal.AssetsFacadeImpl
 import org.echo.mobile.framework.facade.internal.AuthenticationFacadeImpl
+import org.echo.mobile.framework.facade.internal.BitcoinSidechainFacadeImpl
+import org.echo.mobile.framework.facade.internal.CommonSidechainFacadeImpl
 import org.echo.mobile.framework.facade.internal.ContractsFacadeImpl
+import org.echo.mobile.framework.facade.internal.EthereumSidechainFacadeImpl
 import org.echo.mobile.framework.facade.internal.FeeFacadeImpl
 import org.echo.mobile.framework.facade.internal.InformationFacadeImpl
 import org.echo.mobile.framework.facade.internal.InitializerFacadeImpl
 import org.echo.mobile.framework.facade.internal.NotificationsHelper
-import org.echo.mobile.framework.facade.internal.SidechainFacadeImpl
 import org.echo.mobile.framework.facade.internal.SubscriptionFacadeImpl
 import org.echo.mobile.framework.facade.internal.TransactionsFacadeImpl
 import org.echo.mobile.framework.model.Asset
 import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.Balance
 import org.echo.mobile.framework.model.Block
+import org.echo.mobile.framework.model.BtcAddress
 import org.echo.mobile.framework.model.Deposit
 import org.echo.mobile.framework.model.DynamicGlobalProperties
 import org.echo.mobile.framework.model.EthAddress
@@ -94,7 +99,9 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
     private val transactionsFacade: TransactionsFacade
     private val assetsFacade: AssetsFacade
     private val contractsFacade: ContractsFacade
-    private val sidechainFacade: SidechainFacade
+    private val ethereumSidechainFacade: EthereumSidechainFacade
+    private val bitcoinSidechainFacade: BitcoinSidechainFacade
+    private val commonSidechainFacade: CommonSidechainFacade
 
     private val dispatcher: Dispatcher by lazy { ExecutorServiceDispatcher() }
     private var returnOnMainThread = false
@@ -189,12 +196,19 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
 
         val notifiedEthAddressHelper =
             NotificationsHelper(socketCoreComponent, transactionSubscriptionManager)
-        sidechainFacade = SidechainFacadeImpl(
+        ethereumSidechainFacade = EthereumSidechainFacadeImpl(
             databaseApiService,
             networkBroadcastApiService,
             settings.cryptoComponent,
             notifiedEthAddressHelper
         )
+        bitcoinSidechainFacade = BitcoinSidechainFacadeImpl(
+            databaseApiService,
+            networkBroadcastApiService,
+            settings.cryptoComponent,
+            notifiedEthAddressHelper
+        )
+        commonSidechainFacade = CommonSidechainFacadeImpl(databaseApiService)
     }
 
     override fun start(callback: Callback<Any>) =
@@ -674,7 +688,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         resultCallback: Callback<TransactionResult>?
     ) =
         dispatch(Runnable {
-            sidechainFacade.generateEthereumAddress(
+            ethereumSidechainFacade.generateEthereumAddress(
                 accountNameOrId, wif, broadcastCallback, resultCallback
             )
         })
@@ -689,10 +703,31 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         resultCallback: Callback<TransactionResult>?
     ) =
         dispatch(Runnable {
-            sidechainFacade.ethWithdraw(
+            ethereumSidechainFacade.ethWithdraw(
                 accountNameOrId,
                 wif,
                 ethAddress,
+                value,
+                feeAsset,
+                broadcastCallback,
+                resultCallback
+            )
+        })
+
+    override fun btcWithdraw(
+        accountNameOrId: String,
+        wif: String,
+        btcAddress: String,
+        value: String,
+        feeAsset: String,
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<TransactionResult>?
+    ) =
+        dispatch(Runnable {
+            bitcoinSidechainFacade.btcWithdraw(
+                accountNameOrId,
+                wif,
+                btcAddress,
                 value,
                 feeAsset,
                 broadcastCallback,
@@ -705,7 +740,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         callback: Callback<EthAddress>
     ) =
         dispatch(Runnable {
-            sidechainFacade.getEthereumAddress(accountNameOrId, callback)
+            ethereumSidechainFacade.getEthereumAddress(accountNameOrId, callback)
         })
 
     override fun getAccountDeposits(
@@ -714,7 +749,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         callback: Callback<List<Deposit?>>
     ) =
         dispatch(Runnable {
-            sidechainFacade.getAccountDeposits(accountNameOrId, sidechainType, callback)
+            commonSidechainFacade.getAccountDeposits(accountNameOrId, sidechainType, callback)
         })
 
     override fun getAccountWithdrawals(
@@ -723,7 +758,25 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         callback: Callback<List<Withdraw?>>
     ) =
         dispatch(Runnable {
-            sidechainFacade.getAccountWithdrawals(accountNameOrId, sidechainType, callback)
+            commonSidechainFacade.getAccountWithdrawals(accountNameOrId, sidechainType, callback)
+        })
+
+    override fun generateBitcoinAddress(
+        accountNameOrId: String,
+        wif: String,
+        backupAddress: String,
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<TransactionResult>?
+    ) =
+        dispatch(Runnable {
+            bitcoinSidechainFacade.generateBitcoinAddress(
+                accountNameOrId, wif, backupAddress, broadcastCallback, resultCallback
+            )
+        })
+
+    override fun getBitcoinAddress(accountNameOrId: String, callback: Callback<BtcAddress>) =
+        dispatch(Runnable {
+            bitcoinSidechainFacade.getBitcoinAddress(accountNameOrId, callback)
         })
 
     override fun getContracts(
