@@ -98,7 +98,14 @@ class OperationTypeToClassConverter : Converter<Int, Class<*>?> {
             OperationType.SIDECHAIN_ISSUE_OPERATION.ordinal to SidechainIssueSocketOperation::class.java,
             OperationType.SIDECHAIN_BURN_OPERATION.ordinal to SidechainBurnSocketOperation::class.java,
             OperationType.SIDECHAIN_BTC_CREATE_ADDRESS_OPERATION.ordinal to GenerateBitcoinAddressOperation::class.java,
-            OperationType.BLOCK_REWARD_OPERATION.ordinal to BlockRewardOperation::class.java
+            OperationType.BLOCK_REWARD_OPERATION.ordinal to BlockRewardOperation::class.java,
+            OperationType.SIDECHAIN_BTC_WITHDRAW_OPERATION.ordinal to WithdrawBitcoinOperation::class.java,
+            OperationType.BLOCK_REWARD_OPERATION.ordinal to BlockRewardOperation::class.java,
+            OperationType.SIDECHAIN_ERC20_REGISTER_TOKEN_OPERATION.ordinal to SidechainERC20RegisterTokenOperation::class.java,
+            OperationType.SIDECHAIN_ERC20_WITHDRAW_TOKEN_OPERATION.ordinal to WithdrawERC20Operation::class.java,
+            OperationType.SIDECHAIN_ERC20_ISSUE_OPERATION.ordinal to SidechainERC20IssueSocketOperation::class.java,
+            OperationType.SIDECHAIN_ERC20_BURN_OPERATION.ordinal to SidechainERC20BurnSocketOperation::class.java,
+            OperationType.SIDECHAIN_ERC20_DEPOSIT_TOKEN_OPERATION.ordinal to SidechainERC20DepositSocketOperation::class.java
         )
     }
 

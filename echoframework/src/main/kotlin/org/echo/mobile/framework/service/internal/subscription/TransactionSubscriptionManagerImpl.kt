@@ -24,8 +24,15 @@ import org.echo.mobile.framework.model.operations.ContractTransferOperation
 import org.echo.mobile.framework.model.operations.CreateAssetOperation
 import org.echo.mobile.framework.model.operations.GenerateEthereumAddressOperation
 import org.echo.mobile.framework.model.operations.IssueAssetOperation
+import org.echo.mobile.framework.model.operations.SidechainBurnSocketOperation
+import org.echo.mobile.framework.model.operations.SidechainERC20BurnSocketOperation
+import org.echo.mobile.framework.model.operations.SidechainERC20DepositSocketOperation
+import org.echo.mobile.framework.model.operations.SidechainERC20IssueSocketOperation
+import org.echo.mobile.framework.model.operations.SidechainERC20RegisterTokenOperation
+import org.echo.mobile.framework.model.operations.SidechainIssueSocketOperation
 import org.echo.mobile.framework.model.operations.TransferOperation
 import org.echo.mobile.framework.model.operations.WithdrawBitcoinOperation
+import org.echo.mobile.framework.model.operations.WithdrawERC20Operation
 import org.echo.mobile.framework.model.operations.WithdrawEthereumOperation
 import org.echo.mobile.framework.service.TransactionSubscriptionManager
 import org.echo.mobile.framework.support.toJsonObject
@@ -124,12 +131,44 @@ class TransactionSubscriptionManagerImpl(network: Network) : TransactionSubscrip
             GenerateEthereumAddressOperation.GenerateEthereumAddressDeserializer()
         )
         registerTypeAdapter(
+            SidechainERC20RegisterTokenOperation::class.java,
+            SidechainERC20RegisterTokenOperation.SidechainERC20RegisterTokenOperationDeserializer()
+        )
+        registerTypeAdapter(
+            WithdrawERC20Operation::class.java,
+            WithdrawERC20Operation.WithdrawErc20OperationDeserializer()
+        )
+        registerTypeAdapter(
+            SidechainIssueSocketOperation::class.java,
+            SidechainIssueSocketOperation.SidechainIssueDeserializer()
+        )
+        registerTypeAdapter(
+            SidechainBurnSocketOperation::class.java,
+            SidechainBurnSocketOperation.SidechainBurnDeserializer()
+        )
+        registerTypeAdapter(
+            SidechainERC20IssueSocketOperation::class.java,
+            SidechainERC20IssueSocketOperation.SidechainERC20IssueDeserializer()
+        )
+        registerTypeAdapter(
             GenerateBitcoinAddressOperation::class.java,
             GenerateBitcoinAddressOperation.GenerateBitcoinAddressDeserializer()
         )
         registerTypeAdapter(
             WithdrawBitcoinOperation::class.java,
             WithdrawBitcoinOperation.WithdrawBitcoinOperationDeserializer()
+        )
+        registerTypeAdapter(
+            SidechainERC20BurnSocketOperation::class.java,
+            SidechainERC20BurnSocketOperation.SidechainERC20BurnDeserializer()
+        )
+        registerTypeAdapter(
+            WithdrawERC20Operation::class.java,
+            WithdrawERC20Operation.WithdrawErc20OperationDeserializer()
+        )
+        registerTypeAdapter(
+            SidechainERC20DepositSocketOperation::class.java,
+            SidechainERC20DepositSocketOperation.SidechainERC20DepositDeserializer()
         )
         registerTypeAdapter(
             BlockRewardOperation::class.java,

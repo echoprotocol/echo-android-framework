@@ -60,6 +60,10 @@ enum class SocketOperationKeys(val key: String) {
     GET_BTC_ADDRESS("get_btc_address"),
     GET_ACCOUNT_DEPOSITS("get_account_deposits"),
     GET_ACCOUNT_WITHDRAWALS("get_account_withdrawals"),
+    GET_ERC20_TOKEN("get_erc20_token"),
+    CHECK_ERC20_TOKEN("check_erc20_token"),
+    GET_ERC20_TOKEN_DEPOSITS("get_erc20_account_deposits"),
+    GET_ERC20_TOKEN_WITHDRAWALS("get_erc20_account_withdrawals"),
     REQUEST_REGISTRATION_TASK("request_registration_task");
 
     override fun toString(): String = this.key

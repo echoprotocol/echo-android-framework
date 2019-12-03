@@ -9,6 +9,7 @@ import org.echo.mobile.framework.facade.AuthenticationFacade
 import org.echo.mobile.framework.facade.BitcoinSidechainFacade
 import org.echo.mobile.framework.facade.CommonSidechainFacade
 import org.echo.mobile.framework.facade.ContractsFacade
+import org.echo.mobile.framework.facade.ERC20SidechainFacade
 import org.echo.mobile.framework.facade.EthereumSidechainFacade
 import org.echo.mobile.framework.facade.FeeFacade
 import org.echo.mobile.framework.facade.InformationFacade
@@ -20,6 +21,7 @@ import org.echo.mobile.framework.facade.internal.AuthenticationFacadeImpl
 import org.echo.mobile.framework.facade.internal.BitcoinSidechainFacadeImpl
 import org.echo.mobile.framework.facade.internal.CommonSidechainFacadeImpl
 import org.echo.mobile.framework.facade.internal.ContractsFacadeImpl
+import org.echo.mobile.framework.facade.internal.ERC20SidechainFacadeImpl
 import org.echo.mobile.framework.facade.internal.EthereumSidechainFacadeImpl
 import org.echo.mobile.framework.facade.internal.FeeFacadeImpl
 import org.echo.mobile.framework.facade.internal.InformationFacadeImpl
@@ -34,6 +36,9 @@ import org.echo.mobile.framework.model.Block
 import org.echo.mobile.framework.model.BtcAddress
 import org.echo.mobile.framework.model.Deposit
 import org.echo.mobile.framework.model.DynamicGlobalProperties
+import org.echo.mobile.framework.model.ERC20Deposit
+import org.echo.mobile.framework.model.ERC20Token
+import org.echo.mobile.framework.model.ERC20Withdrawal
 import org.echo.mobile.framework.model.EthAddress
 import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.GlobalProperties
@@ -102,6 +107,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
     private val ethereumSidechainFacade: EthereumSidechainFacade
     private val bitcoinSidechainFacade: BitcoinSidechainFacade
     private val commonSidechainFacade: CommonSidechainFacade
+    private val erc20SidechainFacade: ERC20SidechainFacade
 
     private val dispatcher: Dispatcher by lazy { ExecutorServiceDispatcher() }
     private var returnOnMainThread = false
@@ -209,6 +215,12 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             notifiedEthAddressHelper
         )
         commonSidechainFacade = CommonSidechainFacadeImpl(databaseApiService)
+        erc20SidechainFacade = ERC20SidechainFacadeImpl(
+            databaseApiService,
+            networkBroadcastApiService,
+            settings.cryptoComponent,
+            notifiedEthAddressHelper
+        )
     }
 
     override fun start(callback: Callback<Any>) =
@@ -777,6 +789,88 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
     override fun getBitcoinAddress(accountNameOrId: String, callback: Callback<BtcAddress>) =
         dispatch(Runnable {
             bitcoinSidechainFacade.getBitcoinAddress(accountNameOrId, callback)
+        })
+
+    override fun registerERC20Token(
+        accountNameOrId: String,
+        wif: String,
+        ethAddress: String,
+        name: String,
+        symbol: String,
+        decimals: String,
+        feeAsset: String,
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<TransactionResult>?
+    ) =
+        dispatch(Runnable {
+            erc20SidechainFacade.registerERC20Token(
+                accountNameOrId,
+                wif,
+                ethAddress,
+                name,
+                symbol,
+                decimals,
+                feeAsset,
+                broadcastCallback,
+                resultCallback
+            )
+        })
+
+    override fun getERC20Token(address: String, callback: Callback<ERC20Token>) =
+        dispatch(Runnable {
+            erc20SidechainFacade.getERC20Token(
+                address, callback
+            )
+        })
+
+    override fun checkERC20Token(contractId: String, callback: Callback<Boolean>) =
+        dispatch(Runnable {
+            erc20SidechainFacade.checkERC20Token(
+                contractId, callback
+            )
+        })
+
+    override fun getERC20AccountDeposits(
+        accountNameOrId: String,
+        callback: Callback<List<ERC20Deposit>>
+    ) =
+        dispatch(Runnable {
+            erc20SidechainFacade.getERC20AccountDeposits(
+                accountNameOrId, callback
+            )
+        })
+
+    override fun getERC20AccountWithdrawals(
+        accountNameOrId: String,
+        callback: Callback<List<ERC20Withdrawal>>
+    ) =
+        dispatch(Runnable {
+            erc20SidechainFacade.getERC20AccountWithdrawals(
+                accountNameOrId, callback
+            )
+        })
+
+    override fun erc20Withdraw(
+        accountNameOrId: String,
+        wif: String,
+        ethAddress: String,
+        ethTokenId: String,
+        value: String,
+        feeAsset: String,
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<TransactionResult>?
+    ) =
+        dispatch(Runnable {
+            erc20SidechainFacade.erc20Withdraw(
+                accountNameOrId,
+                wif,
+                ethAddress,
+                ethTokenId,
+                value,
+                feeAsset,
+                broadcastCallback,
+                resultCallback
+            )
         })
 
     override fun getContracts(

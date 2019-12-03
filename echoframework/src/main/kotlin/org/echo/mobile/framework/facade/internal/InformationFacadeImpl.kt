@@ -12,6 +12,9 @@ import org.echo.mobile.framework.model.Balance
 import org.echo.mobile.framework.model.BaseOperation
 import org.echo.mobile.framework.model.Block
 import org.echo.mobile.framework.model.DepositMapper
+import org.echo.mobile.framework.model.Erc20DepositMapper
+import org.echo.mobile.framework.model.Erc20TokenMapper
+import org.echo.mobile.framework.model.Erc20WithdrawalMapper
 import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.GenerateBitcoinAddressOperation
 import org.echo.mobile.framework.model.GlobalProperties
@@ -30,6 +33,10 @@ import org.echo.mobile.framework.model.operations.GenerateEthereumAddressOperati
 import org.echo.mobile.framework.model.operations.IssueAssetOperation
 import org.echo.mobile.framework.model.operations.OperationType
 import org.echo.mobile.framework.model.operations.SidechainBurnSocketOperation
+import org.echo.mobile.framework.model.operations.SidechainERC20BurnSocketOperation
+import org.echo.mobile.framework.model.operations.SidechainERC20DepositSocketOperation
+import org.echo.mobile.framework.model.operations.SidechainERC20IssueSocketOperation
+import org.echo.mobile.framework.model.operations.SidechainERC20RegisterTokenOperation
 import org.echo.mobile.framework.model.operations.SidechainIssueSocketOperation
 import org.echo.mobile.framework.model.operations.TransferOperation
 import org.echo.mobile.framework.model.operations.WithdrawBitcoinOperation
@@ -285,6 +292,26 @@ class InformationFacadeImpl(
                         accountsRegistry,
                         assetsRegistry
                     )
+                OperationType.SIDECHAIN_ERC20_REGISTER_TOKEN_OPERATION ->
+                    processSidechainERC20RegisterTokenOperation(
+                        operation as SidechainERC20RegisterTokenOperation,
+                        accountsRegistry
+                    )
+                OperationType.SIDECHAIN_ERC20_ISSUE_OPERATION ->
+                    processSidechainERC20IssueTokenOperation(
+                        operation as SidechainERC20IssueSocketOperation,
+                        accountsRegistry
+                    )
+                OperationType.SIDECHAIN_ERC20_BURN_OPERATION ->
+                    processSidechainERC20BurnTokenOperation(
+                        operation as SidechainERC20BurnSocketOperation,
+                        accountsRegistry
+                    )
+                OperationType.SIDECHAIN_ERC20_DEPOSIT_TOKEN_OPERATION ->
+                    processSidechainERC20DepositTokenOperation(
+                        operation as SidechainERC20DepositSocketOperation,
+                        accountsRegistry
+                    )
 
                 else -> {
                 }
@@ -535,6 +562,94 @@ class InformationFacadeImpl(
             .value { withdraws ->
                 withdraws.find { it.getObjectId() == withdrawId }?.let {
                     operation.withdraw = it
+                }
+            }
+    }
+
+    private fun processSidechainERC20RegisterTokenOperation(
+        operation: SidechainERC20RegisterTokenOperation,
+        accountRegistry: MutableMap<String, Account>
+    ) {
+        val account = operation.account.getObjectId()
+
+        fillAccounts(listOf(account), accountRegistry)
+
+        accountRegistry[account]?.let { notNullAccount ->
+            operation.account = notNullAccount
+        }
+    }
+
+    private fun processSidechainERC20IssueTokenOperation(
+        operation: SidechainERC20IssueSocketOperation,
+        accountRegistry: MutableMap<String, Account>
+    ) {
+        val account = operation.account.getObjectId()
+
+        fillAccounts(listOf(account), accountRegistry)
+
+        accountRegistry[account]?.let { notNullAccount ->
+            operation.account = notNullAccount
+        }
+
+        val depositId = operation.erc20Deposit.getObjectId()
+        databaseApiService.getObjects(listOf(depositId), Erc20DepositMapper())
+            .value { deposits ->
+                deposits.find { it.getObjectId() == depositId }?.let {
+                    operation.erc20Deposit = it
+                }
+            }
+
+        val tokenId = operation.erc20Token.getObjectId()
+        databaseApiService.getObjects(listOf(tokenId), Erc20TokenMapper())
+            .value { deposits ->
+                deposits.find { it.getObjectId() == tokenId }?.let {
+                    operation.erc20Token = it
+                }
+            }
+    }
+
+    private fun processSidechainERC20DepositTokenOperation(
+        operation: SidechainERC20DepositSocketOperation,
+        accountRegistry: MutableMap<String, Account>
+    ) {
+        val account = operation.account.getObjectId()
+        val commetteeMember = operation.committeeMember.getObjectId()
+
+        fillAccounts(listOf(account, commetteeMember), accountRegistry)
+
+        accountRegistry[account]?.let { notNullAccount ->
+            operation.account = notNullAccount
+        }
+        accountRegistry[commetteeMember]?.let { notNullAccount ->
+            operation.committeeMember = notNullAccount
+        }
+    }
+
+    private fun processSidechainERC20BurnTokenOperation(
+        operation: SidechainERC20BurnSocketOperation,
+        accountRegistry: MutableMap<String, Account>
+    ) {
+        val account = operation.account.getObjectId()
+
+        fillAccounts(listOf(account), accountRegistry)
+
+        accountRegistry[account]?.let { notNullAccount ->
+            operation.account = notNullAccount
+        }
+
+        val depositId = operation.erc20Withdrawal.getObjectId()
+        databaseApiService.getObjects(listOf(depositId), Erc20WithdrawalMapper())
+            .value { deposits ->
+                deposits.find { it.getObjectId() == depositId }?.let {
+                    operation.erc20Withdrawal = it
+                }
+            }
+
+        val tokenId = operation.erc20Token.getObjectId()
+        databaseApiService.getObjects(listOf(tokenId), Erc20TokenMapper())
+            .value { deposits ->
+                deposits.find { it.getObjectId() == tokenId }?.let {
+                    operation.erc20Token = it
                 }
             }
     }

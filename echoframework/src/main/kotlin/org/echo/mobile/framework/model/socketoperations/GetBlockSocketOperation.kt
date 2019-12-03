@@ -10,8 +10,12 @@ import org.echo.mobile.framework.model.AccountOptions
 import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.AssetOptions
 import org.echo.mobile.framework.model.Block
+import org.echo.mobile.framework.model.Deposit
+import org.echo.mobile.framework.model.DepositDeserializer
 import org.echo.mobile.framework.model.GenerateBitcoinAddressOperation
 import org.echo.mobile.framework.model.Transaction
+import org.echo.mobile.framework.model.Withdraw
+import org.echo.mobile.framework.model.WithdrawDeserializer
 import org.echo.mobile.framework.model.eddsa.EdAuthority
 import org.echo.mobile.framework.model.network.Network
 import org.echo.mobile.framework.model.operations.AccountCreateOperation
@@ -22,8 +26,15 @@ import org.echo.mobile.framework.model.operations.ContractCreateOperation
 import org.echo.mobile.framework.model.operations.CreateAssetOperation
 import org.echo.mobile.framework.model.operations.GenerateEthereumAddressOperation
 import org.echo.mobile.framework.model.operations.IssueAssetOperation
+import org.echo.mobile.framework.model.operations.SidechainBurnSocketOperation
+import org.echo.mobile.framework.model.operations.SidechainERC20BurnSocketOperation
+import org.echo.mobile.framework.model.operations.SidechainERC20DepositSocketOperation
+import org.echo.mobile.framework.model.operations.SidechainERC20IssueSocketOperation
+import org.echo.mobile.framework.model.operations.SidechainERC20RegisterTokenOperation
+import org.echo.mobile.framework.model.operations.SidechainIssueSocketOperation
 import org.echo.mobile.framework.model.operations.TransferOperation
 import org.echo.mobile.framework.model.operations.WithdrawBitcoinOperation
+import org.echo.mobile.framework.model.operations.WithdrawERC20Operation
 import org.echo.mobile.framework.model.operations.WithdrawEthereumOperation
 
 /**
@@ -97,7 +108,6 @@ class GetBlockSocketOperation(
             ContractCallOperation::class.java,
             ContractCallOperation.Deserializer()
         )
-
         registerTypeAdapter(
             CreateAssetOperation::class.java,
             CreateAssetOperation.CreateAssetDeserializer()
@@ -119,6 +129,38 @@ class GetBlockSocketOperation(
             WithdrawBitcoinOperation.WithdrawBitcoinOperationDeserializer()
         )
         registerTypeAdapter(
+            WithdrawERC20Operation::class.java,
+            WithdrawERC20Operation.WithdrawErc20OperationDeserializer()
+        )
+        registerTypeAdapter(
+            SidechainERC20RegisterTokenOperation::class.java,
+            SidechainERC20RegisterTokenOperation.SidechainERC20RegisterTokenOperationDeserializer()
+        )
+        registerTypeAdapter(
+            SidechainIssueSocketOperation::class.java,
+            SidechainIssueSocketOperation.SidechainIssueDeserializer()
+        )
+        registerTypeAdapter(
+            SidechainERC20BurnSocketOperation::class.java,
+            SidechainERC20BurnSocketOperation.SidechainERC20BurnDeserializer()
+        )
+        registerTypeAdapter(
+            SidechainBurnSocketOperation::class.java,
+            SidechainBurnSocketOperation.SidechainBurnDeserializer()
+        )
+        registerTypeAdapter(
+            SidechainERC20IssueSocketOperation::class.java,
+            SidechainERC20IssueSocketOperation.SidechainERC20IssueDeserializer()
+        )
+        registerTypeAdapter(
+            SidechainERC20DepositSocketOperation::class.java,
+            SidechainERC20DepositSocketOperation.SidechainERC20DepositDeserializer()
+        )
+        registerTypeAdapter(
+            SidechainERC20DepositSocketOperation::class.java,
+            SidechainERC20DepositSocketOperation.SidechainERC20DepositDeserializer()
+        )
+        registerTypeAdapter(
             GenerateBitcoinAddressOperation::class.java,
             GenerateBitcoinAddressOperation.GenerateBitcoinAddressDeserializer()
         )
@@ -130,6 +172,8 @@ class GetBlockSocketOperation(
         registerTypeAdapter(EdAuthority::class.java, EdAuthority.Deserializer())
         registerTypeAdapter(Account::class.java, Account.Deserializer())
         registerTypeAdapter(AccountOptions::class.java, AccountOptions.Deserializer(network))
+        registerTypeAdapter(Withdraw::class.java, WithdrawDeserializer())
+        registerTypeAdapter(Deposit::class.java, DepositDeserializer())
     }.create()
 
 

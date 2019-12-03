@@ -1,42 +1,40 @@
 package org.echo.mobile.framework.model.socketoperations
 
+import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonParser
+import com.google.gson.reflect.TypeToken
 import org.echo.mobile.framework.Callback
-import org.echo.mobile.framework.model.Deposit
-import org.echo.mobile.framework.model.DepositMapper
-import org.echo.mobile.framework.model.SidechainType
+import org.echo.mobile.framework.model.ERC20Deposit
 
 /**
- * Retrieves ethereum deposits by [accountId]
+ * Retrieves erc20 deposits for [accountId]
  *
  * @author Dmitriy Bushuev
  */
-class GetAccountDepositsSocketOperation(
+class GetERC20DepositsSocketOperation(
     override val apiId: Int,
     val accountId: String,
-    val sidechainType: SidechainType?,
     callId: Int,
-    callback: Callback<List<Deposit?>>
-) : SocketOperation<List<Deposit?>>(
+    callback: Callback<List<ERC20Deposit>>
+) : SocketOperation<List<ERC20Deposit>>(
     SocketMethodType.CALL,
     callId,
-    listOf<Deposit>().javaClass,
+    listOf<ERC20Deposit>().javaClass,
     callback
 ) {
 
     override fun createParameters(): JsonElement =
         JsonArray().apply {
             add(apiId)
-            add(SocketOperationKeys.GET_ACCOUNT_DEPOSITS.key)
+            add(SocketOperationKeys.GET_ERC20_TOKEN_DEPOSITS.key)
             add(JsonArray().apply {
                 add(accountId)
-                add(sidechainType?.name?.toLowerCase() ?: "")
             })
         }
 
-    override fun fromJson(json: String): List<Deposit?> {
+    override fun fromJson(json: String): List<ERC20Deposit> {
         val parser = JsonParser()
         val jsonTree = parser.parse(json)
 
@@ -46,10 +44,7 @@ class GetAccountDepositsSocketOperation(
 
         val depositListJson = jsonTree.asJsonObject.get(RESULT_KEY).asJsonArray
 
-        val mapper = DepositMapper()
-        return depositListJson.map { it.toString() }.map { candidate ->
-            mapper.map(candidate)
-        }
+        return Gson().fromJson(depositListJson, object : TypeToken<List<ERC20Deposit>>() {}.type)
     }
 
 }
