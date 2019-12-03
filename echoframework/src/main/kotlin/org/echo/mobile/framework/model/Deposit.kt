@@ -1,8 +1,12 @@
 package org.echo.mobile.framework.model
 
-import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonElement
 import com.google.gson.annotations.SerializedName
 import org.echo.mobile.framework.core.mapper.ObjectMapper
+import java.lang.reflect.Type
 
 /**
  * Echo sidechain base deposit model
@@ -13,7 +17,6 @@ sealed class Deposit(
     id: String
 ) : GrapheneObject(id) {
     val account: String = ""
-    val value: String = ""
     @SerializedName("is_approved")
     val isApproved: Boolean = false
     val approves: List<String> = listOf()
@@ -28,7 +31,8 @@ sealed class Deposit(
      */
     class EthDeposit(
         id: String,
-        @SerializedName("deposit_id") val depositId: String
+        @SerializedName("deposit_id") val depositId: String,
+        val value: String = ""
     ) : Deposit(id)
 
     /**
@@ -37,7 +41,6 @@ sealed class Deposit(
     class BtcDeposit(
         id: String,
         @SerializedName("intermediate_deposit_id") val depositId: String,
-        @SerializedName("block_number") val blockNumber: String,
         @SerializedName("tx_info") val transactionInfo: TransactionInfo
     ) : Deposit(id)
 
@@ -61,19 +64,45 @@ sealed class Deposit(
 }
 
 /**
- * Json mapper for [Deposit] model
+ * Deserializer for [Deposit] model
+ */
+class DepositDeserializer : JsonDeserializer<Deposit> {
+
+    override fun deserialize(
+        json: JsonElement?,
+        typeOfT: Type?,
+        context: JsonDeserializationContext?
+    ): Deposit? {
+        if (json == null || !json.isJsonObject) return null
+
+        val ethWithdrawal =
+            context!!.deserialize<Deposit.EthDeposit>(json, Deposit.EthDeposit::class.java)
+
+        return ethWithdrawal?.depositId?.let { ethWithdrawal }
+            ?: context.deserialize<Deposit.BtcDeposit>(json, Deposit.BtcDeposit::class.java)
+    }
+
+}
+
+/**
+ * Json mapper for [Withdraw] model
  */
 class DepositMapper : ObjectMapper<Deposit> {
 
     override fun map(data: String): Deposit? =
-        data.tryMapDeposit()
+        data.tryMapWithdraw()
 
-    private fun String.tryMapDeposit() =
-        this.tryMap(Deposit.EthDeposit::class.java) ?: this.tryMap(Deposit.BtcDeposit::class.java)
+    private fun String.tryMapWithdraw() =
+        this.tryMap(Deposit::class.java)
 
     private fun <T> String.tryMap(resultType: Class<T>): T? =
         try {
-            Gson().fromJson(this, resultType)
+            GsonBuilder().registerTypeAdapter(
+                Deposit::class.java,
+                DepositDeserializer()
+            )
+                .create()
+                .fromJson(this, resultType)
         } catch (exception: Exception) {
             null
         }

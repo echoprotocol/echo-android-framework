@@ -1,13 +1,12 @@
 package org.echo.mobile.framework.model.socketoperations
 
-import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
-import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.model.SidechainType
 import org.echo.mobile.framework.model.Withdraw
+import org.echo.mobile.framework.model.WithdrawMapper
 
 /**
  * Retrieves ethereum withdrawals by [accountId]
@@ -47,20 +46,10 @@ class GetAccountWithdrawalsSocketOperation(
 
         val depositListJson = jsonTree.asJsonObject.get(RESULT_KEY).asJsonArray
 
-        return depositListJson.map { it.asJsonObject }.map { candidate ->
-            candidate.tryMapWithdrawals()
+        val mapper = WithdrawMapper()
+        return depositListJson.map { it.toString() }.map { candidate ->
+            mapper.map(candidate)
         }
     }
-
-    private fun JsonObject.tryMapWithdrawals() =
-        this.tryMap(Withdraw.EthWithdraw::class.java)
-            ?: this.tryMap(Withdraw.BtcWithdraw::class.java)
-
-    private fun <T> JsonObject.tryMap(resultType: Class<T>): T? =
-        try {
-            Gson().fromJson(this, resultType)
-        } catch (exception: Exception) {
-            null
-        }
 
 }

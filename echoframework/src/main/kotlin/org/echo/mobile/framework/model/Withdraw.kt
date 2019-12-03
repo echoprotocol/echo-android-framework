@@ -1,8 +1,12 @@
 package org.echo.mobile.framework.model
 
-import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonElement
 import com.google.gson.annotations.SerializedName
 import org.echo.mobile.framework.core.mapper.ObjectMapper
+import java.lang.reflect.Type
 
 /**
  * Echo sidechain base withdraw model
@@ -17,7 +21,6 @@ sealed class Withdraw(
     val value: String = ""
     @SerializedName("is_approved")
     val isApproved: Boolean = false
-    val approves: List<String> = listOf()
 
     /**
      * Currently undefined withdraw type
@@ -31,7 +34,8 @@ sealed class Withdraw(
      */
     class EthWithdraw(
         id: String,
-        @SerializedName("eth_addr") val address: String = ""
+        @SerializedName("eth_addr") val address: String = "",
+        val approves: List<String> = listOf()
     ) : Withdraw(id)
 
     /**
@@ -47,6 +51,27 @@ sealed class Withdraw(
 }
 
 /**
+ * Deserializer for [Deposit] model
+ */
+class WithdrawDeserializer : JsonDeserializer<Withdraw> {
+
+    override fun deserialize(
+        json: JsonElement?,
+        typeOfT: Type?,
+        context: JsonDeserializationContext?
+    ): Withdraw? {
+        if (json == null || !json.isJsonObject) return null
+
+        val ethWithdrawal =
+            context!!.deserialize<Withdraw.EthWithdraw>(json, Withdraw.EthWithdraw::class.java)
+
+        return ethWithdrawal?.address?.let { ethWithdrawal }
+            ?: context.deserialize<Withdraw.BtcWithdraw>(json, Withdraw.BtcWithdraw::class.java)
+    }
+
+}
+
+/**
  * Json mapper for [Withdraw] model
  */
 class WithdrawMapper : ObjectMapper<Withdraw> {
@@ -55,25 +80,18 @@ class WithdrawMapper : ObjectMapper<Withdraw> {
         data.tryMapWithdraw()
 
     private fun String.tryMapWithdraw() =
-        this.tryMap(Withdraw.EthWithdraw::class.java)
-            ?: this.tryMap(Withdraw.BtcWithdraw::class.java)
+        this.tryMap(Withdraw::class.java)
 
     private fun <T> String.tryMap(resultType: Class<T>): T? =
         try {
-            Gson().fromJson(this, resultType)
+            GsonBuilder().registerTypeAdapter(
+                Withdraw::class.java,
+                WithdrawDeserializer()
+            )
+                .create()
+                .fromJson(this, resultType)
         } catch (exception: Exception) {
             null
         }
-
-}
-
-/**
- * Json mapper for [EthWithdraw] model
- */
-class EthWithdrawMapper : ObjectMapper<Withdraw.EthWithdraw> {
-    private val gson = Gson()
-
-    override fun map(data: String): Withdraw.EthWithdraw? =
-        gson.fromJson<Withdraw.EthWithdraw>(data, Withdraw.EthWithdraw::class.java)
 
 }

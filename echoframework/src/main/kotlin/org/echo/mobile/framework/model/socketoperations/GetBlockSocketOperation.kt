@@ -10,8 +10,12 @@ import org.echo.mobile.framework.model.AccountOptions
 import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.AssetOptions
 import org.echo.mobile.framework.model.Block
+import org.echo.mobile.framework.model.Deposit
+import org.echo.mobile.framework.model.DepositDeserializer
 import org.echo.mobile.framework.model.GenerateBitcoinAddressOperation
 import org.echo.mobile.framework.model.Transaction
+import org.echo.mobile.framework.model.Withdraw
+import org.echo.mobile.framework.model.WithdrawDeserializer
 import org.echo.mobile.framework.model.eddsa.EdAuthority
 import org.echo.mobile.framework.model.network.Network
 import org.echo.mobile.framework.model.operations.AccountCreateOperation
@@ -104,7 +108,6 @@ class GetBlockSocketOperation(
             ContractCallOperation::class.java,
             ContractCallOperation.Deserializer()
         )
-
         registerTypeAdapter(
             CreateAssetOperation::class.java,
             CreateAssetOperation.CreateAssetDeserializer()
@@ -154,6 +157,10 @@ class GetBlockSocketOperation(
             SidechainERC20DepositSocketOperation.SidechainERC20DepositDeserializer()
         )
         registerTypeAdapter(
+            SidechainERC20DepositSocketOperation::class.java,
+            SidechainERC20DepositSocketOperation.SidechainERC20DepositDeserializer()
+        )
+        registerTypeAdapter(
             GenerateBitcoinAddressOperation::class.java,
             GenerateBitcoinAddressOperation.GenerateBitcoinAddressDeserializer()
         )
@@ -165,6 +172,8 @@ class GetBlockSocketOperation(
         registerTypeAdapter(EdAuthority::class.java, EdAuthority.Deserializer())
         registerTypeAdapter(Account::class.java, Account.Deserializer())
         registerTypeAdapter(AccountOptions::class.java, AccountOptions.Deserializer(network))
+        registerTypeAdapter(Withdraw::class.java, WithdrawDeserializer())
+        registerTypeAdapter(Deposit::class.java, DepositDeserializer())
     }.create()
 
 
