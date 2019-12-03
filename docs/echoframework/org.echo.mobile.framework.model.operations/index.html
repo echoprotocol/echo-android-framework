@@ -47,6 +47,14 @@ Checks required data.</p>
 </tr>
 <tr>
 <td>
+<h4><a href="-block-reward-operation/index.html">BlockRewardOperation</a></h4>
+</td>
+<td>
+<p>Virtual operation that indicates payout of block reward</p>
+<code><span class="keyword">class </span><span class="identifier">BlockRewardOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.model/-base-operation/index.html"><span class="identifier">BaseOperation</span></a></code></td>
+</tr>
+<tr>
+<td>
 <h4><a href="-contract-call-operation/index.html">ContractCallOperation</a></h4>
 </td>
 <td>
@@ -105,6 +113,14 @@ Checks required data.</p>
 </tr>
 <tr>
 <td>
+<h4><a href="-generate-bitcoin-address-operation/index.html">GenerateBitcoinAddressOperation</a></h4>
+</td>
+<td>
+<p>Generates address for botcoin network transfers for required target account <a href="-generate-bitcoin-address-operation/account.html">account</a></p>
+<code><span class="keyword">class </span><span class="identifier">GenerateBitcoinAddressOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.model/-base-operation/index.html"><span class="identifier">BaseOperation</span></a></code></td>
+</tr>
+<tr>
+<td>
 <h4><a href="-generate-ethereum-address-operation/index.html">GenerateEthereumAddressOperation</a></h4>
 </td>
 <td>
@@ -153,6 +169,38 @@ Checks required data.</p>
 </tr>
 <tr>
 <td>
+<h4><a href="-sidechain-e-r-c20-burn-socket-operation/index.html">SidechainERC20BurnSocketOperation</a></h4>
+</td>
+<td>
+<p>Encapsulates erc20 token <a href="-sidechain-e-r-c20-burn-socket-operation/erc20-token.html">erc20Token</a> burning information in ECHO network</p>
+<code><span class="keyword">class </span><span class="identifier">SidechainERC20BurnSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.model/-base-operation/index.html"><span class="identifier">BaseOperation</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-sidechain-e-r-c20-deposit-socket-operation/index.html">SidechainERC20DepositSocketOperation</a></h4>
+</td>
+<td>
+<p>Encapsulates erc20 token <a href="-sidechain-e-r-c20-deposit-socket-operation/erc20-token-address.html">erc20TokenAddress</a> deposit information</p>
+<code><span class="keyword">class </span><span class="identifier">SidechainERC20DepositSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.model/-base-operation/index.html"><span class="identifier">BaseOperation</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-sidechain-e-r-c20-issue-socket-operation/index.html">SidechainERC20IssueSocketOperation</a></h4>
+</td>
+<td>
+<p>Encapsulates erc20 token <a href="-sidechain-e-r-c20-issue-socket-operation/erc20-token.html">erc20Token</a> issue information in ECHO network</p>
+<code><span class="keyword">class </span><span class="identifier">SidechainERC20IssueSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.model/-base-operation/index.html"><span class="identifier">BaseOperation</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-sidechain-e-r-c20-register-token-operation/index.html">SidechainERC20RegisterTokenOperation</a></h4>
+</td>
+<td>
+<p>Registers ethereum ERC20 token by <a href="-sidechain-e-r-c20-register-token-operation/eth-address.html">ethAddress</a> in ECHO network</p>
+<code><span class="keyword">class </span><span class="identifier">SidechainERC20RegisterTokenOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.model/-base-operation/index.html"><span class="identifier">BaseOperation</span></a></code></td>
+</tr>
+<tr>
+<td>
 <h4><a href="-sidechain-issue-socket-operation/index.html">SidechainIssueSocketOperation</a></h4>
 </td>
 <td>
@@ -174,6 +222,22 @@ Checks required data.</p>
 <td>
 <p>Builder class for transfer operation <a href="-transfer-operation/index.html">TransferOperation</a></p>
 <code><span class="keyword">class </span><span class="identifier">TransferOperationBuilder</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">Builder</span><span class="symbol">&lt;</span><a href="-transfer-operation/index.html"><span class="identifier">TransferOperation</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-withdraw-bitcoin-operation/index.html">WithdrawBitcoinOperation</a></h4>
+</td>
+<td>
+<p>Transfers bitcoin asset from echo blockchain to bitcoin address</p>
+<code><span class="keyword">class </span><span class="identifier">WithdrawBitcoinOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.model/-base-operation/index.html"><span class="identifier">BaseOperation</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-withdraw-e-r-c20-operation/index.html">WithdrawERC20Operation</a></h4>
+</td>
+<td>
+<p>Transfers <a href="-withdraw-e-r-c20-operation/value.html">value</a> amount ethereum token <a href="-withdraw-e-r-c20-operation/erc20-token.html">erc20Token</a> to ethereum address <a href="-withdraw-e-r-c20-operation/eth-address.html">ethAddress</a></p>
+<code><span class="keyword">class </span><span class="identifier">WithdrawERC20Operation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.model/-base-operation/index.html"><span class="identifier">BaseOperation</span></a></code></td>
 </tr>
 <tr>
 <td>

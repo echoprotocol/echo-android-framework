@@ -182,6 +182,14 @@ If address is not clear, throws exception.</p>
 <a href="https://dev-doc.myecho.app/asset__ops_8hpp_source.html">https://dev-doc.myecho.app/asset__ops_8hpp_source.html</a></p>
 </tr>
 <tr>
+<h5><a href="../org.echo.mobile.framework.facade/-bitcoin-sidechain-facade/index.html">org.echo.mobile.framework.facade.BitcoinSidechainFacade</a></h5>
+<p>Encapsulates logic, associated with bitcoin sidechain functionality</p>
+</tr>
+<tr>
+<h5><a href="../org.echo.mobile.framework.facade.internal/-bitcoin-sidechain-facade-impl/index.html">org.echo.mobile.framework.facade.internal.BitcoinSidechainFacadeImpl</a></h5>
+<p>Implementation of <a href="../org.echo.mobile.framework.facade/-ethereum-sidechain-facade/index.html">EthereumSidechainFacade</a></p>
+</tr>
+<tr>
 <h5><a href="../org.echo.mobile.framework.model/-block/index.html">org.echo.mobile.framework.model.Block</a></h5>
 <p>Represents block model in blockchain</p>
 </tr>
@@ -193,6 +201,10 @@ If address is not clear, throws exception.</p>
 <h5><a href="../org.echo.mobile.framework.model.socketoperations/-block-data-socket-operation/index.html">org.echo.mobile.framework.model.socketoperations.BlockDataSocketOperation</a></h5>
 <p>Returns the block chain’s rapidly-changing properties. The returned object contains information
 that changes every block interval such as the head block number, the next witness, etc.</p>
+</tr>
+<tr>
+<h5><a href="../org.echo.mobile.framework.model.operations/-block-reward-operation/index.html">org.echo.mobile.framework.model.operations.BlockRewardOperation</a></h5>
+<p>Virtual operation that indicates payout of block reward</p>
 </tr>
 <tr>
 <h5><a href="../org.echo.mobile.framework.service/-blocks-and-transactions-service/index.html">org.echo.mobile.framework.service.BlocksAndTransactionsService</a></h5>
@@ -217,6 +229,10 @@ that changes every block interval such as the head block number, the next witnes
 <tr>
 <h5><a href="../org.echo.mobile.framework.model.contract.output/-boolean-output-value-type/index.html">org.echo.mobile.framework.model.contract.output.BooleanOutputValueType</a></h5>
 <p>Extension of <a href="../org.echo.mobile.framework.model.contract.output/-number-output-value-type/index.html">NumberOutputValueType</a> for boolean type</p>
+</tr>
+<tr>
+<h5><a href="../org.echo.mobile.framework.model/-btc-address/index.html">org.echo.mobile.framework.model.BtcAddress</a></h5>
+<p>Describes account's botcoin address model</p>
 </tr>
 <tr>
  (extensions in package org.echo.mobile.bitcoinj)
@@ -257,8 +273,20 @@ This unsubscribes from all subscribed markets and objects.</p>
 <p>Base realization of <a href="../org.echo.mobile.framework.support.concurrent.future/-cancellable/index.html">Cancellable</a></p>
 </tr>
 <tr>
+<h5><a href="../org.echo.mobile.framework.model.socketoperations/-check-e-r-c20-token-socket-operation/index.html">org.echo.mobile.framework.model.socketoperations.CheckERC20TokenSocketOperation</a></h5>
+<p>Checks whether <a href="#">contractId</a> is ERC20 token</p>
+</tr>
+<tr>
 <h5><a href="../org.echo.mobile.framework.support.crypto/-checksum/index.html">org.echo.mobile.framework.support.crypto.Checksum</a></h5>
 <p>Contains logic of checksum calculation</p>
+</tr>
+<tr>
+<h5><a href="../org.echo.mobile.framework.facade/-common-sidechain-facade/index.html">org.echo.mobile.framework.facade.CommonSidechainFacade</a></h5>
+<p>Encapsulates logic, associated with common sidechain functionality</p>
+</tr>
+<tr>
+<h5><a href="../org.echo.mobile.framework.facade.internal/-common-sidechain-facade-impl/index.html">org.echo.mobile.framework.facade.internal.CommonSidechainFacadeImpl</a></h5>
+<p>Implementation of <a href="../org.echo.mobile.framework.facade/-common-sidechain-facade/index.html">CommonSidechainFacade</a></p>
 </tr>
 <tr>
 <h5><a href="../org.echo.mobile.framework.model.contract/-contract/index.html">org.echo.mobile.framework.model.contract.Contract</a></h5>
@@ -458,8 +486,16 @@ and listeners notifying</p>
 <p>Echo sidechain base deposit model</p>
 </tr>
 <tr>
+<h5><a href="../org.echo.mobile.framework.model/-deposit-address/index.html">org.echo.mobile.framework.model.DepositAddress</a></h5>
+<p>Describes deposit bitcoin address</p>
+</tr>
+<tr>
+<h5><a href="../org.echo.mobile.framework.model/-deposit-deserializer/index.html">org.echo.mobile.framework.model.DepositDeserializer</a></h5>
+<p>Deserializer for <a href="../org.echo.mobile.framework.model/-deposit/index.html">Deposit</a> model</p>
+</tr>
+<tr>
 <h5><a href="../org.echo.mobile.framework.model/-deposit-mapper/index.html">org.echo.mobile.framework.model.DepositMapper</a></h5>
-<p>Json mapper for <a href="../org.echo.mobile.framework.model/-deposit/index.html">Deposit</a> model</p>
+<p>Json mapper for <a href="../org.echo.mobile.framework.model/-withdraw/index.html">Withdraw</a> model</p>
 </tr>
 <tr>
 <h5><a href="../org.echo.mobile.framework.support.concurrent/-dispatcher/index.html">org.echo.mobile.framework.support.concurrent.Dispatcher</a></h5>
@@ -537,6 +573,42 @@ Uses EdDSA algorithm.</p>
 <p>Describes context of current encoding process</p>
 </tr>
 <tr>
+<h5><a href="../org.echo.mobile.framework.model/-e-r-c20-deposit/index.html">org.echo.mobile.framework.model.ERC20Deposit</a></h5>
+<p>Echo erc20 sidechain deposit model</p>
+</tr>
+<tr>
+<h5><a href="../org.echo.mobile.framework.model/-erc20-deposit-mapper/index.html">org.echo.mobile.framework.model.Erc20DepositMapper</a></h5>
+<p>Json mapper for <a href="../org.echo.mobile.framework.model/-deposit/index.html">Deposit</a> model</p>
+</tr>
+<tr>
+<h5><a href="../org.echo.mobile.framework.facade/-e-r-c20-sidechain-facade/index.html">org.echo.mobile.framework.facade.ERC20SidechainFacade</a></h5>
+<p>Encapsulates logic, associated with erc20 sidechain functionality</p>
+</tr>
+<tr>
+<h5><a href="../org.echo.mobile.framework.facade.internal/-e-r-c20-sidechain-facade-impl/index.html">org.echo.mobile.framework.facade.internal.ERC20SidechainFacadeImpl</a></h5>
+<p>Implementation of <a href="../org.echo.mobile.framework.facade/-e-r-c20-sidechain-facade/index.html">ERC20SidechainFacade</a></p>
+</tr>
+<tr>
+<h5><a href="../org.echo.mobile.framework.model/-e-r-c20-token/index.html">org.echo.mobile.framework.model.ERC20Token</a></h5>
+<p>Descibes model of ERC20 token in ECHO network</p>
+</tr>
+<tr>
+<h5><a href="../org.echo.mobile.framework.model/-erc20-token-deserializer/index.html">org.echo.mobile.framework.model.Erc20TokenDeserializer</a></h5>
+<p>Json deserializer for <a href="../org.echo.mobile.framework.model/-e-r-c20-token/index.html">ERC20Token</a></p>
+</tr>
+<tr>
+<h5><a href="../org.echo.mobile.framework.model/-erc20-token-mapper/index.html">org.echo.mobile.framework.model.Erc20TokenMapper</a></h5>
+<p>Json mapper for <a href="../org.echo.mobile.framework.model/-e-r-c20-token/index.html">ERC20Token</a> model</p>
+</tr>
+<tr>
+<h5><a href="../org.echo.mobile.framework.model/-e-r-c20-withdrawal/index.html">org.echo.mobile.framework.model.ERC20Withdrawal</a></h5>
+<p>Echo sidechain withdrawal model</p>
+</tr>
+<tr>
+<h5><a href="../org.echo.mobile.framework.model/-erc20-withdrawal-mapper/index.html">org.echo.mobile.framework.model.Erc20WithdrawalMapper</a></h5>
+<p>Json mapper for <a href="../org.echo.mobile.framework.model/-e-r-c20-withdrawal/index.html">ERC20Withdrawal</a> model</p>
+</tr>
+<tr>
 <h5><a href="../org.echo.mobile.framework.model/-error/index.html">org.echo.mobile.framework.model.Error</a></h5>
 <p>Represents error from blockchain response</p>
 </tr>
@@ -561,8 +633,12 @@ Uses EdDSA algorithm.</p>
 <p>Implementation of <a href="../org.echo.mobile.framework.model.contract.output/-output-value-type/index.html">OutputValueType</a> for ethereum contract address types</p>
 </tr>
 <tr>
-<h5><a href="../org.echo.mobile.framework.model/-eth-withdraw-mapper/index.html">org.echo.mobile.framework.model.EthWithdrawMapper</a></h5>
-<p>Json mapper for <a href="#">EthWithdraw</a> model</p>
+<h5><a href="../org.echo.mobile.framework.facade/-ethereum-sidechain-facade/index.html">org.echo.mobile.framework.facade.EthereumSidechainFacade</a></h5>
+<p>Encapsulates logic, associated with ethereum sidechain functionality</p>
+</tr>
+<tr>
+<h5><a href="../org.echo.mobile.framework.facade.internal/-ethereum-sidechain-facade-impl/index.html">org.echo.mobile.framework.facade.internal.EthereumSidechainFacadeImpl</a></h5>
+<p>Implementation of <a href="../org.echo.mobile.framework.facade/-ethereum-sidechain-facade/index.html">EthereumSidechainFacade</a></p>
 </tr>
 <tr>
 <h5><a href="../org.echo.mobile.framework.model.contract/-exec-res/index.html">org.echo.mobile.framework.model.contract.ExecRes</a></h5>
@@ -636,6 +712,10 @@ subscribed.</p>
 <p>Describes blockchain gas price</p>
 </tr>
 <tr>
+<h5><a href="../org.echo.mobile.framework.model.operations/-generate-bitcoin-address-operation/index.html">org.echo.mobile.framework.model.operations.GenerateBitcoinAddressOperation</a></h5>
+<p>Generates address for botcoin network transfers for required target account <a href="../org.echo.mobile.framework.model.operations/-generate-bitcoin-address-operation/account.html">account</a></p>
+</tr>
+<tr>
 <h5><a href="../org.echo.mobile.framework.model.operations/-generate-ethereum-address-operation/index.html">org.echo.mobile.framework.model.operations.GenerateEthereumAddressOperation</a></h5>
 <p>Generates address for ethereum network transfers for required target account <a href="../org.echo.mobile.framework.model.operations/-generate-ethereum-address-operation/account.html">account</a></p>
 </tr>
@@ -654,6 +734,10 @@ subscribed.</p>
 <tr>
 <h5><a href="../org.echo.mobile.framework.model.socketoperations/-get-assets-socket-operation/index.html">org.echo.mobile.framework.model.socketoperations.GetAssetsSocketOperation</a></h5>
 <p>Get a list of assets by id.</p>
+</tr>
+<tr>
+<h5><a href="../org.echo.mobile.framework.model.socketoperations/-get-bitcoin-address-socket-operation/index.html">org.echo.mobile.framework.model.socketoperations.GetBitcoinAddressSocketOperation</a></h5>
+<p>Retrieves bitcoin address for required account</p>
 </tr>
 <tr>
 <h5><a href="../org.echo.mobile.framework.model.socketoperations/-get-block-socket-operation/index.html">org.echo.mobile.framework.model.socketoperations.GetBlockSocketOperation</a></h5>
@@ -678,6 +762,18 @@ subscribed.</p>
 <tr>
 <h5><a href="../org.echo.mobile.framework.model.socketoperations/-get-contracts-socket-operation/index.html">org.echo.mobile.framework.model.socketoperations.GetContractsSocketOperation</a></h5>
 <p>Retrieves information about selected contracts.</p>
+</tr>
+<tr>
+<h5><a href="../org.echo.mobile.framework.model.socketoperations/-get-e-r-c20-deposits-socket-operation/index.html">org.echo.mobile.framework.model.socketoperations.GetERC20DepositsSocketOperation</a></h5>
+<p>Retrieves erc20 deposits for <a href="../org.echo.mobile.framework.model.socketoperations/-get-e-r-c20-deposits-socket-operation/account-id.html">accountId</a></p>
+</tr>
+<tr>
+<h5><a href="../org.echo.mobile.framework.model.socketoperations/-get-e-r-c20-token-socket-operation/index.html">org.echo.mobile.framework.model.socketoperations.GetERC20TokenSocketOperation</a></h5>
+<p>Retrieves information about erc20 token by <a href="#">contactAddress</a></p>
+</tr>
+<tr>
+<h5><a href="../org.echo.mobile.framework.model.socketoperations/-get-e-r-c20-withdrawals-socket-operation/index.html">org.echo.mobile.framework.model.socketoperations.GetERC20WithdrawalsSocketOperation</a></h5>
+<p>Retrieves erc20 withdrawals by <a href="../org.echo.mobile.framework.model.socketoperations/-get-e-r-c20-withdrawals-socket-operation/account-id.html">accountId</a></p>
 </tr>
 <tr>
 <h5><a href="../org.echo.mobile.framework.model.socketoperations/-get-ethereum-address-socket-operation/index.html">org.echo.mobile.framework.model.socketoperations.GetEthereumAddressSocketOperation</a></h5>
@@ -1101,16 +1197,28 @@ map. It also checks that the length is correct and provides a bit more type safe
 <p>Describes all sidechain's configs</p>
 </tr>
 <tr>
-<h5><a href="../org.echo.mobile.framework.facade/-sidechain-facade/index.html">org.echo.mobile.framework.facade.SidechainFacade</a></h5>
-<p>Encapsulates logic, associated with sidechain functionality</p>
+<h5><a href="../org.echo.mobile.framework.model.operations/-sidechain-e-r-c20-burn-socket-operation/index.html">org.echo.mobile.framework.model.operations.SidechainERC20BurnSocketOperation</a></h5>
+<p>Encapsulates erc20 token <a href="../org.echo.mobile.framework.model.operations/-sidechain-e-r-c20-burn-socket-operation/erc20-token.html">erc20Token</a> burning information in ECHO network</p>
 </tr>
 <tr>
-<h5><a href="../org.echo.mobile.framework.facade.internal/-sidechain-facade-impl/index.html">org.echo.mobile.framework.facade.internal.SidechainFacadeImpl</a></h5>
-<p>Implementation of <a href="../org.echo.mobile.framework.facade/-sidechain-facade/index.html">SidechainFacade</a></p>
+<h5><a href="../org.echo.mobile.framework.model.operations/-sidechain-e-r-c20-deposit-socket-operation/index.html">org.echo.mobile.framework.model.operations.SidechainERC20DepositSocketOperation</a></h5>
+<p>Encapsulates erc20 token <a href="../org.echo.mobile.framework.model.operations/-sidechain-e-r-c20-deposit-socket-operation/erc20-token-address.html">erc20TokenAddress</a> deposit information</p>
+</tr>
+<tr>
+<h5><a href="../org.echo.mobile.framework.model.operations/-sidechain-e-r-c20-issue-socket-operation/index.html">org.echo.mobile.framework.model.operations.SidechainERC20IssueSocketOperation</a></h5>
+<p>Encapsulates erc20 token <a href="../org.echo.mobile.framework.model.operations/-sidechain-e-r-c20-issue-socket-operation/erc20-token.html">erc20Token</a> issue information in ECHO network</p>
+</tr>
+<tr>
+<h5><a href="../org.echo.mobile.framework.model.operations/-sidechain-e-r-c20-register-token-operation/index.html">org.echo.mobile.framework.model.operations.SidechainERC20RegisterTokenOperation</a></h5>
+<p>Registers ethereum ERC20 token by <a href="../org.echo.mobile.framework.model.operations/-sidechain-e-r-c20-register-token-operation/eth-address.html">ethAddress</a> in ECHO network</p>
 </tr>
 <tr>
 <h5><a href="../org.echo.mobile.framework.model.operations/-sidechain-issue-socket-operation/index.html">org.echo.mobile.framework.model.operations.SidechainIssueSocketOperation</a></h5>
 <p>Encapsulates ethereum asset issue information</p>
+</tr>
+<tr>
+<h5><a href="../org.echo.mobile.framework.service/-sidechain-service/index.html">org.echo.mobile.framework.service.SidechainService</a></h5>
+<p>Encapsulates logic, associated with echo sidechain information</p>
 </tr>
 <tr>
 <h5><a href="../org.echo.mobile.framework.model/-sidechain-type/index.html">org.echo.mobile.framework.model.SidechainType</a></h5>
@@ -1318,6 +1426,18 @@ but will use slightly more bytes to encode large values.</p>
 <tr>
 <h5><a href="../org.echo.mobile.framework.model/-withdraw/index.html">org.echo.mobile.framework.model.Withdraw</a></h5>
 <p>Echo sidechain base withdraw model</p>
+</tr>
+<tr>
+<h5><a href="../org.echo.mobile.framework.model.operations/-withdraw-bitcoin-operation/index.html">org.echo.mobile.framework.model.operations.WithdrawBitcoinOperation</a></h5>
+<p>Transfers bitcoin asset from echo blockchain to bitcoin address</p>
+</tr>
+<tr>
+<h5><a href="../org.echo.mobile.framework.model/-withdraw-deserializer/index.html">org.echo.mobile.framework.model.WithdrawDeserializer</a></h5>
+<p>Deserializer for <a href="../org.echo.mobile.framework.model/-deposit/index.html">Deposit</a> model</p>
+</tr>
+<tr>
+<h5><a href="../org.echo.mobile.framework.model.operations/-withdraw-e-r-c20-operation/index.html">org.echo.mobile.framework.model.operations.WithdrawERC20Operation</a></h5>
+<p>Transfers <a href="../org.echo.mobile.framework.model.operations/-withdraw-e-r-c20-operation/value.html">value</a> amount ethereum token <a href="../org.echo.mobile.framework.model.operations/-withdraw-e-r-c20-operation/erc20-token.html">erc20Token</a> to ethereum address <a href="../org.echo.mobile.framework.model.operations/-withdraw-e-r-c20-operation/eth-address.html">ethAddress</a></p>
 </tr>
 <tr>
 <h5><a href="../org.echo.mobile.framework.model.operations/-withdraw-ethereum-operation/index.html">org.echo.mobile.framework.model.operations.WithdrawEthereumOperation</a></h5>

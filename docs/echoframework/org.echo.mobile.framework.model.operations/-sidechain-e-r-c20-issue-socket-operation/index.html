@@ -1,0 +1,160 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>SidechainERC20IssueSocketOperation - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.model.operations</a>&nbsp;/&nbsp;<a href="./index.html">SidechainERC20IssueSocketOperation</a><br/>
+<br/>
+<h1>SidechainERC20IssueSocketOperation</h1>
+<code><span class="keyword">class </span><span class="identifier">SidechainERC20IssueSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-base-operation/index.html"><span class="identifier">BaseOperation</span></a></code>
+<p>Encapsulates erc20 token <a href="erc20-token.html">erc20Token</a> issue information in ECHO network</p>
+<p><strong>Author</strong><br/>
+Dmitriy Bushuev</p>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-sidechain-e-r-c20-issue-deserializer/index.html">SidechainERC20IssueDeserializer</a></h4>
+</td>
+<td>
+<p>Deserializer for <a href="./index.html">SidechainERC20IssueSocketOperation</a></p>
+<code><span class="keyword">class </span><span class="identifier">SidechainERC20IssueDeserializer</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">JsonDeserializer</span><span class="symbol">&lt;</span><a href="./index.html"><span class="identifier">SidechainERC20IssueSocketOperation</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-sidechain-e-r-c20-issue-serializer/index.html">SidechainERC20IssueSerializer</a></h4>
+</td>
+<td>
+<p>Encapsulates logic of <a href="./index.html">SidechainERC20IssueSocketOperation</a> json serialization</p>
+<code><span class="keyword">class </span><span class="identifier">SidechainERC20IssueSerializer</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">JsonSerializer</span><span class="symbol">&lt;</span><a href="./index.html"><span class="identifier">SidechainERC20IssueSocketOperation</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<p>Encapsulates erc20 token <a href="erc20-token.html">erc20Token</a> issue information in ECHO network</p>
+<code><span class="identifier">SidechainERC20IssueSocketOperation</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.operations.SidechainERC20IssueSocketOperation$<init>(org.echo.mobile.framework.model.Account, kotlin.String, org.echo.mobile.framework.model.ERC20Deposit, org.echo.mobile.framework.model.ERC20Token, org.echo.mobile.framework.model.AssetAmount)/account">account</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-account/index.html"><span class="identifier">Account</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.operations.SidechainERC20IssueSocketOperation$<init>(org.echo.mobile.framework.model.Account, kotlin.String, org.echo.mobile.framework.model.ERC20Deposit, org.echo.mobile.framework.model.ERC20Token, org.echo.mobile.framework.model.AssetAmount)/amount">amount</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.operations.SidechainERC20IssueSocketOperation$<init>(org.echo.mobile.framework.model.Account, kotlin.String, org.echo.mobile.framework.model.ERC20Deposit, org.echo.mobile.framework.model.ERC20Token, org.echo.mobile.framework.model.AssetAmount)/erc20Deposit">erc20Deposit</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-e-r-c20-deposit/index.html"><span class="identifier">ERC20Deposit</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.operations.SidechainERC20IssueSocketOperation$<init>(org.echo.mobile.framework.model.Account, kotlin.String, org.echo.mobile.framework.model.ERC20Deposit, org.echo.mobile.framework.model.ERC20Token, org.echo.mobile.framework.model.AssetAmount)/erc20Token">erc20Token</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-e-r-c20-token/index.html"><span class="identifier">ERC20Token</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.operations.SidechainERC20IssueSocketOperation$<init>(org.echo.mobile.framework.model.Account, kotlin.String, org.echo.mobile.framework.model.ERC20Deposit, org.echo.mobile.framework.model.ERC20Token, org.echo.mobile.framework.model.AssetAmount)/fee">fee</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-asset-amount/index.html"><span class="identifier">AssetAmount</span></a>&nbsp;<span class="symbol">=</span>&nbsp;AssetAmount(UnsignedLong.ZERO)<span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="account.html">account</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">account</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.model/-account/index.html"><span class="identifier">Account</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="amount.html">amount</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">amount</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="erc20-deposit.html">erc20Deposit</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">erc20Deposit</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.model/-e-r-c20-deposit/index.html"><span class="identifier">ERC20Deposit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="erc20-token.html">erc20Token</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">erc20Token</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.model/-e-r-c20-token/index.html"><span class="identifier">ERC20Token</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="fee.html">fee</a></h4>
+</td>
+<td>
+<p>Required amount of fee <a href="../../org.echo.mobile.framework.model/-asset-amount/index.html">AssetAmount</a> to operation</p>
+<code><span class="keyword">var </span><span class="identifier">fee</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.model/-asset-amount/index.html"><span class="identifier">AssetAmount</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="to-bytes.html">toBytes</a></h4>
+</td>
+<td>
+<p>Converts entity to byte-array representation</p>
+<code><span class="keyword">fun </span><span class="identifier">toBytes</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="to-json-object.html">toJsonObject</a></h4>
+</td>
+<td>
+<p>Converts entity to json object representation</p>
+<code><span class="keyword">fun </span><span class="identifier">toJsonObject</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">JsonElement</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="to-json-string.html">toJsonString</a></h4>
+</td>
+<td>
+<p>Converts entity to json string representation</p>
+<code><span class="keyword">fun </span><span class="identifier">toJsonString</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Companion Object Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-a-c-c-o-u-n-t_-k-e-y.html">ACCOUNT_KEY</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">ACCOUNT_KEY</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-a-m-o-u-n-t_-k-e-y.html">AMOUNT_KEY</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">AMOUNT_KEY</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-d-e-p-o-s-i-t_-i-d_-k-e-y.html">DEPOSIT_ID_KEY</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">DEPOSIT_ID_KEY</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-k-e-y_-e-x-t-e-n-s-i-o-n-s.html">KEY_EXTENSIONS</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_EXTENSIONS</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-t-o-k-e-n_-k-e-y.html">TOKEN_KEY</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">TOKEN_KEY</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>
