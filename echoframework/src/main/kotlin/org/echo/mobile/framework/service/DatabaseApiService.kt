@@ -11,6 +11,9 @@ import org.echo.mobile.framework.model.BlockData
 import org.echo.mobile.framework.model.BtcAddress
 import org.echo.mobile.framework.model.Deposit
 import org.echo.mobile.framework.model.DynamicGlobalProperties
+import org.echo.mobile.framework.model.ERC20Deposit
+import org.echo.mobile.framework.model.ERC20Token
+import org.echo.mobile.framework.model.ERC20Withdrawal
 import org.echo.mobile.framework.model.EthAddress
 import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.GlobalProperties
@@ -33,7 +36,7 @@ import org.echo.mobile.framework.support.Result
  */
 interface DatabaseApiService : ApiService, AccountsService, GlobalsService,
     AuthorityAndValidationService, BlocksAndTransactionsService, ContractsService, AssetsService,
-    SubscriptionService, ObjectsService, CustomOperationService
+    SubscriptionService, ObjectsService, CustomOperationService, SidechainService
 
 /**
  * Encapsulates logic, associated with data from account from blockchain database API
@@ -330,6 +333,66 @@ interface SubscriptionService {
      * @param contractIds Ids of contracts for listening
      */
     fun subscribeContracts(contractIds: List<String>): Result<LocalException, Boolean>
+}
+
+/**
+ * Encapsulates logic, associated with echo sidechain information
+ */
+interface SidechainService {
+
+    /**
+     * Fetches addresses list [EthAddress] for required account [accountId]
+     */
+    fun getEthereumAddress(accountId: String, callback: Callback<EthAddress>)
+
+    /**
+     * Fetches addresses list [EthAddress] for required account [accountId]
+     */
+    fun getBitcoinAddress(accountId: String, callback: Callback<BtcAddress>)
+
+    /**
+     * Retrieves list of account's [accountId] deposits [Deposit]
+     */
+    fun getAccountDeposits(
+        accountId: String,
+        sidechainType: SidechainType?,
+        callback: Callback<List<Deposit?>>
+    )
+
+    /**
+     * Retrieves list of account's [accountId] withdrawals [Withdraw]
+     */
+    fun getAccountWithdrawals(
+        accountId: String,
+        sidechainType: SidechainType?,
+        callback: Callback<List<Withdraw?>>
+    )
+
+    /**
+     * Fetches addresses list [EthAddress] for required account [accountId]
+     */
+    fun getERC20Token(address: String, callback: Callback<ERC20Token>)
+
+    /**
+     * Retrieves [ERC20Token] by [address]
+     */
+    fun getERC20Token(address: String): Result<LocalException, ERC20Token>
+
+    /**
+     * Checks whether [contractId] iw ERC20 token
+     */
+    fun checkERC20Token(contractId: String, callback: Callback<Boolean>)
+
+    /**
+     * Retrieves erc20 token deposits for [accountNameOrId]
+     */
+    fun getERC20AccountDeposits(accountNameOrId: String, callback: Callback<List<ERC20Deposit>>)
+
+    /**
+     * Retrieves erc20 token withdrawals for [accountNameOrId]
+     */
+    fun getERC20AccountWithdrawals(accountNameOrId: String, callback: Callback<List<ERC20Withdrawal>>)
+
 }
 
 /**

@@ -5,6 +5,7 @@ import org.echo.mobile.framework.facade.AuthenticationFacade
 import org.echo.mobile.framework.facade.BitcoinSidechainFacade
 import org.echo.mobile.framework.facade.CommonSidechainFacade
 import org.echo.mobile.framework.facade.ContractsFacade
+import org.echo.mobile.framework.facade.ERC20SidechainFacade
 import org.echo.mobile.framework.facade.FeeFacade
 import org.echo.mobile.framework.facade.InformationFacade
 import org.echo.mobile.framework.facade.EthereumSidechainFacade
@@ -28,7 +29,7 @@ import org.echo.mobile.framework.support.Settings
  */
 interface EchoFramework : AuthenticationFacade, FeeFacade, InformationFacade, SubscriptionFacade,
     TransactionsFacade, AssetsFacade, ContractsFacade, EthereumSidechainFacade, BitcoinSidechainFacade,
-    CommonSidechainFacade {
+    CommonSidechainFacade, ERC20SidechainFacade {
 
     /**
      * Current library instance of [AccountHistoryApiService]

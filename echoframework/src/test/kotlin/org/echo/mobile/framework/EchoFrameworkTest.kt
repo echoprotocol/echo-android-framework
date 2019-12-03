@@ -14,6 +14,9 @@ import org.echo.mobile.framework.model.BlockData
 import org.echo.mobile.framework.model.BtcAddress
 import org.echo.mobile.framework.model.Deposit
 import org.echo.mobile.framework.model.DynamicGlobalProperties
+import org.echo.mobile.framework.model.ERC20Deposit
+import org.echo.mobile.framework.model.ERC20Token
+import org.echo.mobile.framework.model.ERC20Withdrawal
 import org.echo.mobile.framework.model.EthAddress
 import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.GlobalProperties
@@ -394,7 +397,7 @@ class EchoFrameworkTest {
     fun accountHistoryByIdTest() = getAccountHistory("1.2.8")
 
     @Test
-    fun accountHistoryByNameTest() = getAccountHistory("dima1")
+    fun accountHistoryByNameTest() = getAccountHistory("vsharaev1")
 
     private fun getAccountHistory(nameOrId: String) {
         val framework = initFramework()
@@ -531,6 +534,48 @@ class EchoFrameworkTest {
         assertNotNull(result ?: false)
     }
 
+//    @Test
+//    fun generateBitcoinAddressWithWifTest() {
+//        val framework = initFramework()
+//
+//        val futureChangePassword = FutureTask<Boolean>()
+//        val resultChangePassword = FutureTask<TransactionResult>()
+//
+//        if (connect(framework) == false) Assert.fail("Connection error")
+//
+//        framework.generateBitcoinAddress(
+//            "dima4",
+//            "5JuCju2v4Ht8w6x2NKe5SYpXBCWFjKLgmLTygDBsq1FK3C7qXrD",
+//            "n4cLNDfyVPGoNFUpUEyBP8TzDPRNaVBm6E",
+//            object : Callback<Boolean> {
+//                override fun onSuccess(result: Boolean) {
+//                    futureChangePassword.setComplete(result)
+//                }
+//
+//                override fun onError(error: LocalException) {
+//                    error.printStackTrace()
+//                    futureChangePassword.setComplete(error)
+//                }
+//
+//            },
+//            object : Callback<TransactionResult> {
+//                override fun onSuccess(result: TransactionResult) {
+//                    resultChangePassword.setComplete(result)
+//                }
+//
+//                override fun onError(error: LocalException) {
+//                    resultChangePassword.setComplete(error)
+//                }
+//
+//            }
+//        )
+//
+//        assertNotNull(futureChangePassword.get() ?: false)
+//
+//        val result = resultChangePassword.get()
+//        assertNotNull(result ?: false)
+//    }
+
     @Test
     fun getEthereumAddressTest() {
         val framework = initFramework()
@@ -582,38 +627,38 @@ class EchoFrameworkTest {
         assertNotNull(address ?: false)
     }
 
-    @Test
-    fun withdrawEthereumWithWifTest() {
-        val framework = initFramework()
-
-        val futureChangePassword = FutureTask<Boolean>()
-        val futureResult = FutureTask<TransactionResult>()
-
-        if (connect(framework) == false) Assert.fail("Connection error")
-
-        framework.ethWithdraw(
-            "vsharaev",
-            "5KjC8BiryoxUNz3dEY2ZWQK5ssmD84JgRGemVWwxfNgiPoxcaVa",
-            "0x46Ba2677a1c982B329A81f60Cf90fBA2E8CA9fA8",
-            "1",
-            "1.3.0",
-            object : Callback<Boolean> {
-                override fun onSuccess(result: Boolean) {
-                    futureChangePassword.setComplete(result)
-                }
-
-                override fun onError(error: LocalException) {
-                    error.printStackTrace()
-                    futureChangePassword.setComplete(error)
-                }
-
-            },
-            futureResult.completeCallback()
-        )
-
-        val result = futureResult.get()
-        assertNotNull(result ?: false)
-    }
+//    @Test
+//    fun withdrawEthereumWithWifTest() {
+//        val framework = initFramework()
+//
+//        val futureChangePassword = FutureTask<Boolean>()
+//        val futureResult = FutureTask<TransactionResult>()
+//
+//        if (connect(framework) == false) Assert.fail("Connection error")
+//
+//        framework.ethWithdraw(
+//            "vsharaev",
+//            "5KjC8BiryoxUNz3dEY2ZWQK5ssmD84JgRGemVWwxfNgiPoxcaVa",
+//            "0x46Ba2677a1c982B329A81f60Cf90fBA2E8CA9fA8",
+//            "1",
+//            "1.3.0",
+//            object : Callback<Boolean> {
+//                override fun onSuccess(result: Boolean) {
+//                    futureChangePassword.setComplete(result)
+//                }
+//
+//                override fun onError(error: LocalException) {
+//                    error.printStackTrace()
+//                    futureChangePassword.setComplete(error)
+//                }
+//
+//            },
+//            futureResult.completeCallback()
+//        )
+//
+//        val result = futureResult.get()
+//        assertNotNull(result ?: false)
+//    }
 
     @Test
     fun withdrawBitcoinWithWifTest() {
@@ -647,6 +692,226 @@ class EchoFrameworkTest {
         val result = futureResult.get()
         assertNotNull(result ?: false)
     }
+
+//    @Test
+//    fun withdrawEthereumWithWifTest() {
+//        val framework = initFramework()
+//
+//        val futureChangePassword = FutureTask<Boolean>()
+//        val futureResult = FutureTask<TransactionResult>()
+//
+//        if (connect(framework) == false) Assert.fail("Connection error")
+//
+//        framework.ethWithdraw(
+//            "vsharaev",
+//            "5KjC8BiryoxUNz3dEY2ZWQK5ssmD84JgRGemVWwxfNgiPoxcaVa",
+//            "0x46Ba2677a1c982B329A81f60Cf90fBA2E8CA9fA8",
+//            "1",
+//            "1.3.0",
+//            object : Callback<Boolean> {
+//                override fun onSuccess(result: Boolean) {
+//                    futureChangePassword.setComplete(result)
+//                }
+//
+//                override fun onError(error: LocalException) {
+//                    error.printStackTrace()
+//                    futureChangePassword.setComplete(error)
+//                }
+//
+//            },
+//            futureResult.completeCallback()
+//        )
+//
+//        val result = futureResult.get()
+//        assertNotNull(result ?: false)
+//    }
+//
+//    @Test
+//    fun withdrawBitcoinWithWifTest() {
+//        val framework = initFramework()
+//
+//        val futureChangePassword = FutureTask<Boolean>()
+//        val futureResult = FutureTask<TransactionResult>()
+//
+//        if (connect(framework) == false) Assert.fail("Connection error")
+//
+//        framework.btcWithdraw(
+//            "dima1",
+//            "5J3UbadSyzzcQQ7HEfTr2brhJJpHhx3NsMzrvgzfysBesutNRCm",
+//            "n38ykjakJ92huEXDAi1gp65AD7FjrhpAza",
+//            "1",
+//            "1.3.0",
+//            object : Callback<Boolean> {
+//                override fun onSuccess(result: Boolean) {
+//                    futureChangePassword.setComplete(result)
+//                }
+//
+//                override fun onError(error: LocalException) {
+//                    error.printStackTrace()
+//                    futureChangePassword.setComplete(error)
+//                }
+//
+//            },
+//            futureResult.completeCallback()
+//        )
+//
+//        val result = futureResult.get()
+//        assertNotNull(result ?: false)
+//    }
+
+//    @Test
+//    fun registerERC20TokenTest() {
+//        val framework = initFramework()
+//
+//        val futureChangePassword = FutureTask<Boolean>()
+//        val futureResult = FutureTask<TransactionResult>()
+//
+//        if (connect(framework) == false) Assert.fail("Connection error")
+//
+//        framework.registerERC20Token(
+//            "dima1",
+//            "5J3UbadSyzzcQQ7HEfTr2brhJJpHhx3NsMzrvgzfysBesutNRCm",
+//            "0x724d1b69a7ba352f11d73fdbdeb7ff869cb22e19",
+//            "DIMASIKERC",
+//            "DMSSSERC",
+//            "18",
+//            "1.3.0",
+//            object : Callback<Boolean> {
+//                override fun onSuccess(result: Boolean) {
+//                    futureChangePassword.setComplete(result)
+//                }
+//
+//                override fun onError(error: LocalException) {
+//                    error.printStackTrace()
+//                    futureChangePassword.setComplete(error)
+//                }
+//
+//            },
+//            futureResult.completeCallback()
+//        )
+//
+//        val result = futureResult.get()
+//        assertNotNull(result ?: false)
+//    }
+
+    @Test
+    fun getERC20TokenTest() {
+        val framework = initFramework()
+
+        val future = FutureTask<ERC20Token>()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        framework.getERC20Token(
+            "0x724d1b69a7ba352f11d73fdbdeb7ff869cb22e19",
+            future.completeCallback()
+        )
+
+        val result = future.get()
+        assertNotNull(result ?: false)
+    }
+
+    @Test
+    fun checkERC20TokenTest() {
+        val framework = initFramework()
+
+        val future = FutureTask<Boolean>()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        framework.checkERC20Token(
+            "1.11.141",
+            future.completeCallback()
+        )
+
+        val result = future.get() ?: false
+        assertTrue(result)
+    }
+
+    @Test
+    fun checkERC20TokenFailureTest() {
+        val framework = initFramework()
+
+        val future = FutureTask<Boolean>()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        framework.checkERC20Token(
+            legalContractId,
+            future.completeCallback()
+        )
+
+        val result = future.get() ?: false
+        assertFalse(result)
+    }
+
+    @Test
+    fun getERC20TokenDepositsTest() {
+        val framework = initFramework()
+
+        val future = FutureTask<List<ERC20Deposit>>()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        framework.getERC20AccountDeposits(
+            "1.2.41",
+            future.completeCallback()
+        )
+
+        val result = future.get()
+        assertNotNull(result)
+    }
+
+    @Test
+    fun getERC20TokenWithdrawalsTest() {
+        val framework = initFramework()
+
+        val future = FutureTask<List<ERC20Withdrawal>>()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        framework.getERC20AccountWithdrawals(
+            "1.2.41",
+            future.completeCallback()
+        )
+
+        val result = future.get()
+        assertNotNull(result)
+    }
+
+//    @Test
+//    fun withdrawERC20TokenTest() {
+//        val framework = initFramework()
+//
+//        val future = FutureTask<TransactionResult>()
+//        val futureComplete = FutureTask<Boolean>()
+//
+//        if (connect(framework) == false) Assert.fail("Connection error")
+//
+//        framework.erc20Withdraw(
+//            "vsharaev1",
+//            "5KjC8BiryoxUNz3dEY2ZWQK5ssmD84JgRGemVWwxfNgiPoxcaVa",
+//            "0x87C188D9e00e76f4d3003606258695435809fC66",
+//            "1.16.0",
+//            "1",
+//            "1.3.0",
+//            object : Callback<Boolean> {
+//                override fun onSuccess(result: Boolean) {
+//                    futureComplete.setComplete(result)
+//                }
+//
+//                override fun onError(error: LocalException) {
+//                    error.printStackTrace()
+//                    futureComplete.setComplete(error)
+//                }
+//
+//            },
+//            future.completeCallback()
+//        )
+//
+//        val result = future.get()
+//        assertNotNull(result ?: false)
+//    }
 
 //    @Test
 //    fun withdrawEthereumWithWifTest() {
@@ -709,6 +974,35 @@ class EchoFrameworkTest {
 
         assertTrue(registered)
     }
+
+//    @Test
+//    fun registrationByWifTest() {
+//        val framework = initFramework()
+//
+//        val futureRegistration = FutureTask<Boolean>()
+//
+//        if (connect(framework) == false) Assert.fail("Connection error")
+//
+//        val randomPrivateKey = cryptoCoreComponent.getEdDSAPrivateKey()
+//        val wif = cryptoCoreComponent.encodeToWif(randomPrivateKey)
+//
+//        framework.register(
+//            "dima4", wif,
+//            object : Callback<Boolean> {
+//                override fun onSuccess(result: Boolean) {
+//                    futureRegistration.setComplete(true)
+//                }
+//
+//                override fun onError(error: LocalException) {
+//                    futureRegistration.setComplete(false)
+//                }
+//
+//            })
+//
+//        val registered = futureRegistration.get() ?: false
+//
+//        assertTrue(registered)
+//    }
 
     @Test
     fun registrationFailureTest() {
