@@ -16,7 +16,7 @@ import org.echo.mobile.framework.model.Erc20DepositMapper
 import org.echo.mobile.framework.model.Erc20TokenMapper
 import org.echo.mobile.framework.model.Erc20WithdrawalMapper
 import org.echo.mobile.framework.model.FullAccount
-import org.echo.mobile.framework.model.GenerateBitcoinAddressOperation
+import org.echo.mobile.framework.model.operations.GenerateBitcoinAddressOperation
 import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.HistoricalTransfer
 import org.echo.mobile.framework.model.HistoryResponse

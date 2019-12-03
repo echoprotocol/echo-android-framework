@@ -1,3 +1,23 @@
+# Changelog 4.0.0 - 2019-12-03
+
+## Added
+
+### ERC20 Sidechaijn
+* SidechainERC20BurnSocketOperation
+* SidechainERC20DepositSocketOperation
+* SidechainERC20IssueSocketOperation
+* SidechainERC20RegisterTokenOperation
+* GetERC20WithdrawalsSocketOperation
+* SidechainERC20RegisterTokenOperation
+* GetERC20TokenSocketOperation
+* GetERC20DepositsSocketOperation
+
+### BTC Sidechain
+* WithdrawBitcoinOperation
+* GenerateBitcoinAddressOperation
+* GetBitcoinAddressSocketOperation
+
+
 # Changelog 3.7.0 - 2019-11-15
 
 ## Removed

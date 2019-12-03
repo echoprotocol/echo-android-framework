@@ -12,7 +12,7 @@ import org.echo.mobile.framework.model.AssetOptions
 import org.echo.mobile.framework.model.Block
 import org.echo.mobile.framework.model.Deposit
 import org.echo.mobile.framework.model.DepositDeserializer
-import org.echo.mobile.framework.model.GenerateBitcoinAddressOperation
+import org.echo.mobile.framework.model.operations.GenerateBitcoinAddressOperation
 import org.echo.mobile.framework.model.Transaction
 import org.echo.mobile.framework.model.Withdraw
 import org.echo.mobile.framework.model.WithdrawDeserializer

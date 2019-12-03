@@ -1,4 +1,4 @@
-package org.echo.mobile.framework.model
+package org.echo.mobile.framework.model.operations
 
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.UnsignedLong
@@ -8,9 +8,9 @@ import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonParseException
+import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.AssetAmount
-import org.echo.mobile.framework.model.operations.AccountUpdateOperation
-import org.echo.mobile.framework.model.operations.OperationType
+import org.echo.mobile.framework.model.BaseOperation
 import org.echo.mobile.framework.support.Uint8
 import java.lang.reflect.Type
 
@@ -75,9 +75,15 @@ class GenerateBitcoinAddressOperation constructor(
 
             val backupAddress = jsonObject.get(BACKUP_ADDRESS).asString
 
-            val account = Account(jsonObject.get(ACCOUNT_ID_KEY).asString)
+            val account = Account(
+                jsonObject.get(ACCOUNT_ID_KEY).asString
+            )
 
-            return GenerateBitcoinAddressOperation(account, backupAddress, fee)
+            return GenerateBitcoinAddressOperation(
+                account,
+                backupAddress,
+                fee
+            )
         }
     }
 

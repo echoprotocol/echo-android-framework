@@ -1,6 +1,5 @@
 package org.echo.mobile.framework.model.operations
 
-import org.echo.mobile.framework.model.GenerateBitcoinAddressOperation
 import org.echo.mobile.framework.support.Converter
 
 /**

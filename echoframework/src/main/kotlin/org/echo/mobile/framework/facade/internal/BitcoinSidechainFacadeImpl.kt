@@ -10,7 +10,7 @@ import org.echo.mobile.framework.facade.BitcoinSidechainFacade
 import org.echo.mobile.framework.facade.EthereumSidechainFacade
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.BtcAddress
-import org.echo.mobile.framework.model.GenerateBitcoinAddressOperation
+import org.echo.mobile.framework.model.operations.GenerateBitcoinAddressOperation
 import org.echo.mobile.framework.model.Transaction
 import org.echo.mobile.framework.model.TransactionResult
 import org.echo.mobile.framework.model.operations.WithdrawBitcoinOperation
@@ -153,7 +153,10 @@ class BitcoinSidechainFacadeImpl(
         val chainId = getChainId()
 
         val operation =
-            GenerateBitcoinAddressOperation(Account(account.getObjectId()), backupAddress)
+            GenerateBitcoinAddressOperation(
+                Account(account.getObjectId()),
+                backupAddress
+            )
 
         val fees = getFees(listOf(operation))
 
