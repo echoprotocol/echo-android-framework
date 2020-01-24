@@ -1,12 +1,11 @@
 package org.echo.mobile.framework.model.socketoperations
 
-import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
-import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.model.Deposit
+import org.echo.mobile.framework.model.DepositMapper
 import org.echo.mobile.framework.model.SidechainType
 
 /**
@@ -47,19 +46,10 @@ class GetAccountDepositsSocketOperation(
 
         val depositListJson = jsonTree.asJsonObject.get(RESULT_KEY).asJsonArray
 
-        return depositListJson.map { it.asJsonObject }.map { candidate ->
-            candidate.tryMapDeposit()
+        val mapper = DepositMapper()
+        return depositListJson.map { it.toString() }.map { candidate ->
+            mapper.map(candidate)
         }
     }
-
-    private fun JsonObject.tryMapDeposit() =
-        this.tryMap(Deposit.EthDeposit::class.java) ?: this.tryMap(Deposit.BtcDeposit::class.java)
-
-    private fun <T> JsonObject.tryMap(resultType: Class<T>): T? =
-        try {
-            Gson().fromJson(this, resultType)
-        } catch (exception: Exception) {
-            null
-        }
 
 }

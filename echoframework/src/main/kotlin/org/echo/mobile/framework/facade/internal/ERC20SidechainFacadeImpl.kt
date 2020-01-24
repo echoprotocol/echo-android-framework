@@ -6,41 +6,44 @@ import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
 import org.echo.mobile.framework.exception.AccountNotFoundException
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.exception.NotFoundException
-import org.echo.mobile.framework.facade.SidechainFacade
+import org.echo.mobile.framework.facade.ERC20SidechainFacade
 import org.echo.mobile.framework.model.Account
-import org.echo.mobile.framework.model.Deposit
-import org.echo.mobile.framework.model.EthAddress
-import org.echo.mobile.framework.model.SidechainType
+import org.echo.mobile.framework.model.ERC20Deposit
+import org.echo.mobile.framework.model.ERC20Token
+import org.echo.mobile.framework.model.ERC20Withdrawal
 import org.echo.mobile.framework.model.Transaction
 import org.echo.mobile.framework.model.TransactionResult
-import org.echo.mobile.framework.model.Withdraw
-import org.echo.mobile.framework.model.operations.GenerateEthereumAddressOperation
-import org.echo.mobile.framework.model.operations.WithdrawEthereumOperation
+import org.echo.mobile.framework.model.operations.SidechainERC20RegisterTokenOperation
+import org.echo.mobile.framework.model.operations.WithdrawERC20Operation
 import org.echo.mobile.framework.service.DatabaseApiService
 import org.echo.mobile.framework.service.NetworkBroadcastApiService
 import org.echo.mobile.framework.support.EthAddressValidator
 import org.echo.mobile.framework.support.concurrent.future.FutureTask
 import org.echo.mobile.framework.support.concurrent.future.completeCallback
 import org.echo.mobile.framework.support.dematerialize
+import org.echo.mobile.framework.support.fold
 
 /**
- * Implementation of [SidechainFacade]
- *
- * Wraps logic for sidechain processing
+ * Implementation of [ERC20SidechainFacade]
  *
  * @author Dmitriy Bushuev
  */
-class SidechainFacadeImpl(
+class ERC20SidechainFacadeImpl(
     private val databaseApiService: DatabaseApiService,
     private val networkBroadcastApiService: NetworkBroadcastApiService,
     private val cryptoCoreComponent: CryptoCoreComponent,
     private val notifiedTransactionsHelper: NotificationsHelper<TransactionResult>
 ) :
-    BaseTransactionsFacade(databaseApiService, cryptoCoreComponent), SidechainFacade {
+    BaseTransactionsFacade(databaseApiService, cryptoCoreComponent), ERC20SidechainFacade {
 
-    override fun generateEthereumAddress(
+    override fun registerERC20Token(
         accountNameOrId: String,
         wif: String,
+        ethAddress: String,
+        name: String,
+        symbol: String,
+        decimals: String,
+        feeAsset: String,
         broadcastCallback: Callback<Boolean>,
         resultCallback: Callback<TransactionResult>?
     ) {
@@ -50,7 +53,7 @@ class SidechainFacadeImpl(
             checkOwnerAccount(wif, account)
             val privateKey = cryptoCoreComponent.decodeFromWif(wif)
 
-            callId = generateAddress(account, privateKey)
+            callId = register(ethAddress, account, privateKey, name, symbol, decimals, feeAsset)
 
             broadcastCallback.onSuccess(true)
         } catch (exception: Exception) {
@@ -63,10 +66,11 @@ class SidechainFacadeImpl(
         }
     }
 
-    override fun ethWithdraw(
+    override fun erc20Withdraw(
         accountNameOrId: String,
         wif: String,
         ethAddress: String,
+        ethTokenId: String,
         value: String,
         feeAsset: String,
         broadcastCallback: Callback<Boolean>,
@@ -78,7 +82,7 @@ class SidechainFacadeImpl(
             checkOwnerAccount(wif, account)
             val privateKey = cryptoCoreComponent.decodeFromWif(wif)
 
-            callId = withdraw(ethAddress, account, privateKey, value, feeAsset)
+            callId = withdraw(ethAddress, ethTokenId, account, privateKey, value, feeAsset)
 
             broadcastCallback.onSuccess(true)
         } catch (exception: Exception) {
@@ -91,13 +95,71 @@ class SidechainFacadeImpl(
         }
     }
 
-    private fun generateAddress(account: Account, privateKey: ByteArray): String {
+    override fun getERC20Token(address: String, callback: Callback<ERC20Token>) {
+        if (!EthAddressValidator.isAddressValid(address)) {
+            callback.onError(LocalException("Invalid ERC20 token address"))
+        } else {
+            val processedAddress =
+                address.replace(EthAddressValidator.ADDRESS_PREFIX, "")
+            databaseApiService.getERC20Token(processedAddress).fold({ token ->
+                val account = try {
+                    findAccount(token.owner?.getObjectId())
+                } catch (exception: LocalException) {
+                    callback.onError(exception)
+                    return@fold
+                }
+                token.owner = account
+                callback.onSuccess(token)
+            }, { error ->
+                callback.onError(error)
+            })
+        }
+    }
+
+    override fun checkERC20Token(contractId: String, callback: Callback<Boolean>) {
+        databaseApiService.checkERC20Token(contractId, callback)
+    }
+
+    override fun getERC20AccountDeposits(
+        accountNameOrId: String,
+        callback: Callback<List<ERC20Deposit>>
+    ) {
+        val account = findAccount(accountNameOrId)
+        databaseApiService.getERC20AccountDeposits(account.getObjectId(), callback)
+    }
+
+    override fun getERC20AccountWithdrawals(
+        accountNameOrId: String,
+        callback: Callback<List<ERC20Withdrawal>>
+    ) {
+        val account = findAccount(accountNameOrId)
+        databaseApiService.getERC20AccountWithdrawals(account.getObjectId(), callback)
+    }
+
+    private fun register(
+        ethAddress: String,
+        account: Account,
+        privateKey: ByteArray,
+        name: String,
+        symbol: String,
+        decimals: String,
+        feeAsset: String
+    ): String {
+        val processedAddress =
+            ethAddress.replace(EthAddressValidator.ADDRESS_PREFIX, "").toLowerCase()
+
         val blockData = databaseApiService.getBlockData()
         val chainId = getChainId()
 
-        val operation = GenerateEthereumAddressOperation(Account(account.getObjectId()))
-
-        val fees = getFees(listOf(operation))
+        val operation =
+            SidechainERC20RegisterTokenOperation(
+                Account(account.getObjectId()),
+                processedAddress,
+                name,
+                symbol,
+                UnsignedLong.valueOf(decimals)
+            )
+        val fees = getFees(listOf(operation), feeAsset)
 
         val transaction = Transaction(blockData, listOf(operation), chainId).apply {
             setFees(fees)
@@ -110,6 +172,7 @@ class SidechainFacadeImpl(
 
     private fun withdraw(
         ethAddress: String,
+        ethTokenId: String,
         account: Account,
         privateKey: ByteArray,
         value: String,
@@ -122,10 +185,11 @@ class SidechainFacadeImpl(
         val chainId = getChainId()
 
         val operation =
-            WithdrawEthereumOperation(
+            WithdrawERC20Operation(
                 Account(account.getObjectId()),
                 processedAddress,
-                UnsignedLong.valueOf(value)
+                ERC20Token(ethTokenId),
+                value
             )
         val fees = getFees(listOf(operation), feeAsset)
 
@@ -136,6 +200,14 @@ class SidechainFacadeImpl(
 
         return networkBroadcastApiService.broadcastTransactionWithCallback(transaction)
             .dematerialize().toString()
+    }
+
+    private fun findAccount(nameOrId: String?): Account {
+        nameOrId ?: throw LocalException("Empty account id is not acceptable")
+        val accountsMap =
+            databaseApiService.getFullAccounts(listOf(nameOrId), false).dematerialize()
+        return accountsMap[nameOrId]?.account
+            ?: throw AccountNotFoundException("Unable to find required account $nameOrId")
     }
 
     private fun retrieveTransactionResult(
@@ -156,41 +228,6 @@ class SidechainFacadeImpl(
         } catch (ex: Exception) {
             callback.onError(ex as? LocalException ?: LocalException(ex))
         }
-    }
-
-    override fun getEthereumAddress(
-        accountNameOrId: String,
-        callback: Callback<EthAddress>
-    ) {
-        val id = findAccount(accountNameOrId).getObjectId()
-        databaseApiService.getEthereumAddress(id, callback)
-    }
-
-    override fun getAccountDeposits(
-        accountNameOrId: String,
-        sidechainType: SidechainType?,
-        callback: Callback<List<Deposit?>>
-    ) {
-        val account = findAccount(accountNameOrId)
-
-        databaseApiService.getAccountDeposits(account.getObjectId(), sidechainType, callback)
-    }
-
-    override fun getAccountWithdrawals(
-        accountNameOrId: String,
-        sidechainType: SidechainType?,
-        callback: Callback<List<Withdraw?>>
-    ) {
-        val account = findAccount(accountNameOrId)
-
-        databaseApiService.getAccountWithdrawals(account.getObjectId(), sidechainType, callback)
-    }
-
-    private fun findAccount(nameOrId: String): Account {
-        val accountsMap =
-            databaseApiService.getFullAccounts(listOf(nameOrId), false).dematerialize()
-        return accountsMap[nameOrId]?.account
-            ?: throw AccountNotFoundException("Unable to find required account $nameOrId")
     }
 
 }

@@ -1,0 +1,121 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>WithdrawBitcoinOperation - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.model.operations</a>&nbsp;/&nbsp;<a href="./index.html">WithdrawBitcoinOperation</a><br/>
+<br/>
+<h1>WithdrawBitcoinOperation</h1>
+<code><span class="keyword">class </span><span class="identifier">WithdrawBitcoinOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-base-operation/index.html"><span class="identifier">BaseOperation</span></a></code>
+<p>Transfers bitcoin asset from echo blockchain to bitcoin address</p>
+<h3>Parameters</h3>
+<p><a name="account"></a>
+<code>account</code> - Required account for withdraw operation</p>
+<p><a name="ethAddress"></a>
+<code>ethAddress</code> - Target eth address</p>
+<p><a name="value"></a>
+<code>value</code> - Transfer amount</p>
+<p><strong>Author</strong><br/>
+Dmitriy Bushuev</p>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-withdraw-bitcoin-operation-deserializer/index.html">WithdrawBitcoinOperationDeserializer</a></h4>
+</td>
+<td>
+<p>JSON deserializer for <a href="./index.html">WithdrawBitcoinOperation</a></p>
+<code><span class="keyword">class </span><span class="identifier">WithdrawBitcoinOperationDeserializer</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">JsonDeserializer</span><span class="symbol">&lt;</span><a href="./index.html"><span class="identifier">WithdrawBitcoinOperation</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<p>Transfers bitcoin asset from echo blockchain to bitcoin address</p>
+<code><span class="identifier">WithdrawBitcoinOperation</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.operations.WithdrawBitcoinOperation$<init>(org.echo.mobile.framework.model.Account, kotlin.String, com.google.common.primitives.UnsignedLong, org.echo.mobile.framework.model.AssetAmount)/account">account</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-account/index.html"><span class="identifier">Account</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.operations.WithdrawBitcoinOperation$<init>(org.echo.mobile.framework.model.Account, kotlin.String, com.google.common.primitives.UnsignedLong, org.echo.mobile.framework.model.AssetAmount)/btcAddress">btcAddress</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.operations.WithdrawBitcoinOperation$<init>(org.echo.mobile.framework.model.Account, kotlin.String, com.google.common.primitives.UnsignedLong, org.echo.mobile.framework.model.AssetAmount)/value">value</span><span class="symbol">:</span>&nbsp;<span class="identifier">UnsignedLong</span><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.operations.WithdrawBitcoinOperation$<init>(org.echo.mobile.framework.model.Account, kotlin.String, com.google.common.primitives.UnsignedLong, org.echo.mobile.framework.model.AssetAmount)/fee">fee</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-asset-amount/index.html"><span class="identifier">AssetAmount</span></a>&nbsp;<span class="symbol">=</span>&nbsp;AssetAmount(UnsignedLong.ZERO)<span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="account.html">account</a></h4>
+</td>
+<td>
+<p>Required account for withdraw operation</p>
+<code><span class="keyword">var </span><span class="identifier">account</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.model/-account/index.html"><span class="identifier">Account</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="btc-address.html">btcAddress</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">btcAddress</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="fee.html">fee</a></h4>
+</td>
+<td>
+<p>Required amount of fee <a href="../../org.echo.mobile.framework.model/-asset-amount/index.html">AssetAmount</a> to operation</p>
+<code><span class="keyword">var </span><span class="identifier">fee</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.model/-asset-amount/index.html"><span class="identifier">AssetAmount</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="value.html">value</a></h4>
+</td>
+<td>
+<p>Transfer amount</p>
+<code><span class="keyword">val </span><span class="identifier">value</span><span class="symbol">: </span><span class="identifier">UnsignedLong</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="to-bytes.html">toBytes</a></h4>
+</td>
+<td>
+<p>Converts entity to byte-array representation</p>
+<code><span class="keyword">fun </span><span class="identifier">toBytes</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="to-json-object.html">toJsonObject</a></h4>
+</td>
+<td>
+<p>Converts entity to json object representation</p>
+<code><span class="keyword">fun </span><span class="identifier">toJsonObject</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">JsonElement</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="to-json-string.html">toJsonString</a></h4>
+</td>
+<td>
+<p>Converts entity to json string representation</p>
+<code><span class="keyword">fun </span><span class="identifier">toJsonString</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="to-string.html">toString</a></h4>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">toString</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

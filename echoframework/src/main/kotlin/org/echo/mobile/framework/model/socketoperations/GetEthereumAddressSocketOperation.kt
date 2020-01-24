@@ -29,7 +29,7 @@ class GetEthereumAddressSocketOperation(
     override fun createParameters(): JsonElement =
         JsonArray().apply {
             add(apiId)
-            add(SocketOperationKeys.GET_ACCOUNT_ADDRESSES.key)
+            add(SocketOperationKeys.GET_ETH_ADDRESS.key)
             add(JsonArray().apply {
                 add(accountId)
             })
