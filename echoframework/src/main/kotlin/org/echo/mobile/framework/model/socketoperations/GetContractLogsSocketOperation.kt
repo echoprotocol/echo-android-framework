@@ -4,11 +4,6 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import org.echo.mobile.framework.Callback
-import org.echo.mobile.framework.model.contract.ContractLog
-import org.echo.mobile.framework.model.contract.Log
-import org.echo.mobile.framework.model.contract.output.ContractAddressOutputValueType
-import org.echo.mobile.framework.model.contract.output.ContractOutputDecoder
-import org.echo.mobile.framework.model.contract.processType
 import org.echo.mobile.framework.support.toJsonObject
 
 /**
@@ -26,22 +21,21 @@ class GetContractLogsSocketOperation(
     private val fromBlock: String,
     private val toBlock: String,
     callId: Int,
-    callback: Callback<List<ContractLog>>
+    callback: Callback<Int>
 
-) : SocketOperation<List<ContractLog>>(
+) : SocketOperation<Int>(
     SocketMethodType.CALL,
     callId,
-    listOf<ContractLog>().javaClass,
+    Int::class.java,
     callback
 ) {
-
-    private val contractDecoder = ContractOutputDecoder()
 
     override fun createParameters(): JsonElement =
         JsonArray().apply {
             add(apiId)
             add(SocketOperationKeys.GET_CONTRACT_LOGS.key)
             add(JsonArray().apply {
+                add(callId)
                 add(configureOptions())
             })
         }
@@ -57,42 +51,8 @@ class GetContractLogsSocketOperation(
         return options
     }
 
-    override fun fromJson(json: String): List<ContractLog> {
-        val dataParam = getDataParam(json)?.asJsonArray
-
-        val logs = mutableListOf<ContractLog>()
-        dataParam?.forEach { logArray ->
-            val contractArray = logArray.asJsonArray
-            val type = contractArray[0]
-            val contractJson = logArray.asJsonArray[1]
-
-            val log = Log(type.asInt, contractJson.toString())
-
-            val contractLog = log.processType()
-
-            val decodedValues = contractDecoder.decode(
-                contractLog?.address!!.toByteArray(),
-                listOf(ContractAddressOutputValueType())
-            )
-
-            val address = decodedValues.first().value.toString()
-
-            contractLog.address = address
-
-            logs.add(contractLog)
-        }
-
-        return logs
-    }
-
-    private fun getDataParam(event: String): JsonElement? {
-        val params = event.toJsonObject()?.getAsJsonArray(PARAMS_KEY) ?: return null
-
-        if (params.size() == 0) {
-            return null
-        }
-
-        return params
+    override fun fromJson(json: String): Int {
+        return json.toJsonObject()?.has(PARAMS_KEY)?.let { callId } ?: -1
     }
 
     companion object {

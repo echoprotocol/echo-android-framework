@@ -84,7 +84,7 @@ class BlockRewardOperation @JvmOverloads constructor(
     }
 
     companion object {
-        const val KEY_RECEIVER = "reciever"
+        const val KEY_RECEIVER = "receiver"
         const val KEY_AMOUNT = "amount"
     }
 

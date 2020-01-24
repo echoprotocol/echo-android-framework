@@ -153,16 +153,20 @@ interface ContractsFacade {
     /**
      * Return list of contract logs
      *
-     * @param contractId   Contract id for fetching logs
-     * @param fromBlock    Number of the earliest block to retrieve
-     * @param toBlock      Last request block
-     * @param callback     Listener of operation results.
+     * @param contractId            Contract id for fetching logs
+     * @param fromBlock             Number of the earliest block to retrieve
+     * @param toBlock               Last request block
+     * @param broadcastCallback     Callback for result of operation deploying
+     * @param resultCallback        Callback for retrieving result of operation.
+     *                              Retrieves list contract logs if exists,
+     *                              if not exists - empty list
      */
     fun getContractLogs(
         contractId: String,
         fromBlock: String,
         toBlock: String,
-        callback: Callback<List<ContractLog>>
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<List<ContractLog>>? = null
     )
 
     /**

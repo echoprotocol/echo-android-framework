@@ -11,7 +11,6 @@ import org.echo.mobile.framework.facade.SubscriptionFacade
 import org.echo.mobile.framework.model.Block
 import org.echo.mobile.framework.model.DynamicGlobalProperties
 import org.echo.mobile.framework.model.FullAccount
-import org.echo.mobile.framework.model.contract.Log
 import org.echo.mobile.framework.model.contract.ContractBalance
 import org.echo.mobile.framework.model.contract.ContractLog
 import org.echo.mobile.framework.model.network.Network
@@ -57,16 +56,14 @@ class SubscriptionFacadeImpl(
     private var subscribed = false
 
     private val accountSubscriptionManager: AccountSubscriptionManager by lazy {
-        AccountSubscriptionManagerImpl(
-            network
-        )
+        AccountSubscriptionManagerImpl(network)
     }
 
     private val blockSubscriptionManager: BlockSubscriptionManager by lazy {
         BlockSubscriptionManagerImpl()
     }
 
-    private val blockcnainDataSubscriptionManager: CurrentBlockchainDataSubscriptionManager by lazy {
+    private val blockchainDataSubscriptionManager: CurrentBlockchainDataSubscriptionManager by lazy {
         CurrentBlockchainDataSubscriptionManagerImpl()
     }
 
@@ -134,10 +131,10 @@ class SubscriptionFacadeImpl(
         synchronized(this) {
             subscribeGlobal(callback)
 
-            if (!blockcnainDataSubscriptionManager.containListeners()) {
+            if (!blockchainDataSubscriptionManager.containListeners()) {
                 getCurrentBlockchainData()
                     .value {
-                        blockcnainDataSubscriptionManager.addListener(listener)
+                        blockchainDataSubscriptionManager.addListener(listener)
                         callback.onSuccess(subscribed)
                     }
                     .error { error ->
@@ -145,7 +142,7 @@ class SubscriptionFacadeImpl(
                         callback.onError(LocalException(error))
                     }
             } else {
-                blockcnainDataSubscriptionManager.addListener(listener)
+                blockchainDataSubscriptionManager.addListener(listener)
                 callback.onSuccess(subscribed)
             }
         }
@@ -231,7 +228,7 @@ class SubscriptionFacadeImpl(
     private fun getCurrentBlockchainData(): Result<LocalException, DynamicGlobalProperties> {
         return databaseApiService.getObjects(
             listOf(blockObjectId),
-            blockcnainDataSubscriptionManager.mapper
+            blockchainDataSubscriptionManager.mapper
         )
             .flatMap { objects ->
                 objects.firstOrNull()?.let {
@@ -283,12 +280,12 @@ class SubscriptionFacadeImpl(
     }
 
     override fun unsubscribeFromBlockchainData(callback: Callback<Boolean>) {
-        if (!blockcnainDataSubscriptionManager.containListeners()) {
+        if (!blockchainDataSubscriptionManager.containListeners()) {
             LOGGER.log("No listeners found for blockchain changes subscription")
             callback.onError(LocalException("No listeners found for blockchain changes subscription"))
 
         } else {
-            blockcnainDataSubscriptionManager.clear()
+            blockchainDataSubscriptionManager.clear()
             callback.onSuccess(true)
         }
     }
@@ -326,7 +323,7 @@ class SubscriptionFacadeImpl(
                         socketCoreComponent.off(socketMessengerListener)
                         accountSubscriptionManager.clear()
                         blockSubscriptionManager.clear()
-                        blockcnainDataSubscriptionManager.clear()
+                        blockchainDataSubscriptionManager.clear()
                         contractLogSubscriptionManager.clear()
                         contractsSubscriptionManager.clear()
                         callback.onSuccess(result)
@@ -360,7 +357,7 @@ class SubscriptionFacadeImpl(
     private fun resetState() {
         accountSubscriptionManager.clear()
         blockSubscriptionManager.clear()
-        blockcnainDataSubscriptionManager.clear()
+        blockchainDataSubscriptionManager.clear()
         contractLogSubscriptionManager.clear()
         contractsSubscriptionManager.clear()
         socketCoreComponent.off(socketMessengerListener)
@@ -395,9 +392,9 @@ class SubscriptionFacadeImpl(
 
         private fun processBlockchainData(event: String): DynamicGlobalProperties? {
             val blockchainData =
-                blockcnainDataSubscriptionManager.processEvent(event) ?: return null
+                blockchainDataSubscriptionManager.processEvent(event) ?: return null
 
-            blockcnainDataSubscriptionManager.notify(blockchainData)
+            blockchainDataSubscriptionManager.notify(blockchainData)
 
             return blockchainData
         }
@@ -423,7 +420,6 @@ class SubscriptionFacadeImpl(
             contractLogs.forEach { (contractId, logs) ->
                 contractLogSubscriptionManager.notify(contractId, logs)
             }
-
         }
 
         private fun processContractsChanges(event: String) {

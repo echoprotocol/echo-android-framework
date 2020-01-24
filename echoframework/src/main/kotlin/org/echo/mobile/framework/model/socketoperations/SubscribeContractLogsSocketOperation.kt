@@ -2,6 +2,7 @@ package org.echo.mobile.framework.model.socketoperations
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
+import com.google.gson.JsonObject
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.support.toJsonObject
 
@@ -28,11 +29,8 @@ class SubscribeContractLogsSocketOperation(
             add(SocketOperationKeys.SUBSCRIBE_CONTRACT_LOGS.key)
             add(JsonArray().apply {
                 add(callId)
-                add(JsonArray().apply {
-                    add(JsonArray().apply {
-                        add(contractId)
-                        add(JsonArray())
-                    })
+                add(JsonObject().apply {
+                    add(contractId, JsonArray())
                 })
             })
         }

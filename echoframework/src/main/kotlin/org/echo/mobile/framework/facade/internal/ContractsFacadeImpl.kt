@@ -42,6 +42,7 @@ class ContractsFacadeImpl(
     private val networkBroadcastApiService: NetworkBroadcastApiService,
     private val cryptoCoreComponent: CryptoCoreComponent,
     private val notifiedTransactionsHelper: NotificationsHelper<TransactionResult>,
+    private val notifiedContractLogsHelper: NotificationsHelper<List<ContractLog>>,
     private val feeRatioProvider: Provider<Double>
 ) : BaseTransactionsFacade(
     databaseApiService,
@@ -208,10 +209,24 @@ class ContractsFacadeImpl(
         contractId: String,
         fromBlock: String,
         toBlock: String,
-        callback: Callback<List<ContractLog>>
-    ) = callback.processResult(
-        databaseApiService.getContractLogs(contractId, fromBlock, toBlock)
-    )
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<List<ContractLog>>?
+    ) {
+        val callId: String
+
+        try {
+            callId = databaseApiService.getContractLogs(contractId, fromBlock, toBlock)
+                .dematerialize().toString()
+            broadcastCallback.onSuccess(true)
+        }catch (ex: Exception){
+            broadcastCallback.onError(ex as? LocalException ?: LocalException(ex))
+            return
+        }
+
+        resultCallback?.let {
+            retrieveContractLogsResult(callId, it)
+        }
+    }
 
     override fun getContracts(
         contractIds: List<String>,
@@ -327,6 +342,29 @@ class ContractsFacadeImpl(
 
             val result = transactionResult?.trx?.operationsWithResults?.values?.firstOrNull()
                 ?: default
+                ?: throw NotFoundException("Result of operation not found.")
+
+            callback.onSuccess(result)
+        } catch (ex: Exception) {
+            callback.onError(ex as? LocalException ?: LocalException(ex))
+        }
+    }
+
+    private fun retrieveContractLogsResult(
+        callId: String,
+        callback: Callback<List<ContractLog>>
+    ) {
+        try {
+            val future = FutureTask<List<ContractLog>>()
+            notifiedContractLogsHelper.subscribeOnResult(
+                callId,
+                future.completeCallback()
+            )
+
+            val logsResult = future.get()
+
+            val result = logsResult
+                ?: listOf()
                 ?: throw NotFoundException("Result of operation not found.")
 
             callback.onSuccess(result)
