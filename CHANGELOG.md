@@ -1,3 +1,27 @@
+# Changelog 4.1.0 - 2020-01-24
+
+## Added
+
+### New sidechain operations
+* SIDECHAIN_ETH_SEND_DEPOSIT_OPERATION
+* SIDECHAIN_ETH_SEND_WITHDRAW_OPERATION
+* SIDECHAIN_ETH_UPDATE_CONTRACT_ADDRESS_OPERATION
+* SIDECHAIN_ERC20_SEND_DEPOSIT_TOKEN_OPERATION
+* SIDECHAIN_ERC20_SEND_WITHDRAW_TOKEN_OPERATION
+* SIDECHAIN_BTC_APPROVE_AGGREGATE_OPERATION
+
+## Changed
+
+### GetContractLogsSocketOperation
+* Getting result through notice subscription
+
+### SubscribeContractLogsSocketOperation
+* New format
+
+### BlockRewardOperation
+* Field fixed
+
+
 # Changelog 4.0.0 - 2019-12-03
 
 ## Added
