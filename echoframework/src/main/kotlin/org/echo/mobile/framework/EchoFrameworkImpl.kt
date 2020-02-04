@@ -66,6 +66,7 @@ import org.echo.mobile.framework.service.internal.DatabaseApiServiceImpl
 import org.echo.mobile.framework.service.internal.LoginApiServiceImpl
 import org.echo.mobile.framework.service.internal.NetworkBroadcastApiServiceImpl
 import org.echo.mobile.framework.service.internal.RegistrationApiServiceImpl
+import org.echo.mobile.framework.service.internal.subscription.ContractLogsSubscriptionManagerImpl
 import org.echo.mobile.framework.service.internal.subscription.RegistrationSubscriptionManagerImpl
 import org.echo.mobile.framework.service.internal.subscription.TransactionSubscriptionManagerImpl
 import org.echo.mobile.framework.support.FeeRatioProvider
@@ -186,6 +187,11 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         val notifiedTransactionsHelper =
             NotificationsHelper(socketCoreComponent, transactionSubscriptionManager)
 
+        val contractLogsSubscriptionManager = ContractLogsSubscriptionManagerImpl()
+
+        val notifiedContractLogsHelper =
+            NotificationsHelper(socketCoreComponent, contractLogsSubscriptionManager)
+
         assetsFacade = AssetsFacadeImpl(
             databaseApiService,
             networkBroadcastApiService,
@@ -197,6 +203,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             networkBroadcastApiService,
             settings.cryptoComponent,
             notifiedTransactionsHelper,
+            notifiedContractLogsHelper,
             feeRatioProvider
         )
 
@@ -686,10 +693,11 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         contractId: String,
         fromBlock: String,
         toBlock: String,
-        callback: Callback<List<ContractLog>>
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<List<ContractLog>>?
     ) = dispatch(Runnable {
         contractsFacade.getContractLogs(
-            contractId, fromBlock, toBlock, callback
+            contractId, fromBlock, toBlock, broadcastCallback, resultCallback
         )
     })
 

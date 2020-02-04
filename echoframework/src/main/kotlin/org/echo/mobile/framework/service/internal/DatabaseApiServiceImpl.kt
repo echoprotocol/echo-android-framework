@@ -27,7 +27,6 @@ import org.echo.mobile.framework.model.Transaction
 import org.echo.mobile.framework.model.Withdraw
 import org.echo.mobile.framework.model.contract.ContractFee
 import org.echo.mobile.framework.model.contract.ContractInfo
-import org.echo.mobile.framework.model.contract.ContractLog
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
 import org.echo.mobile.framework.model.network.Network
@@ -552,8 +551,8 @@ class DatabaseApiServiceImpl(
         contractId: String,
         fromBlock: String,
         toBlock: String
-    ): Result<LocalException, List<ContractLog>> {
-        val futureTask = FutureTask<List<ContractLog>>()
+    ): Result<LocalException, Int> {
+        val futureTask = FutureTask<Int>()
         val operation = GetContractLogsSocketOperation(
             id,
             contractId, fromBlock, toBlock,

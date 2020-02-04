@@ -22,7 +22,6 @@ import org.echo.mobile.framework.model.SidechainType
 import org.echo.mobile.framework.model.Withdraw
 import org.echo.mobile.framework.model.contract.ContractFee
 import org.echo.mobile.framework.model.contract.ContractInfo
-import org.echo.mobile.framework.model.contract.ContractLog
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
 import org.echo.mobile.framework.support.Result
@@ -279,12 +278,14 @@ interface ContractsService {
      * @param contractId   Contract id for fetching logs
      * @param fromBlock    Number of the earliest block to retrieve
      * @param toBlock      End request block
+     *
+     * @return Id of call to network
      */
     fun getContractLogs(
         contractId: String,
         fromBlock: String,
         toBlock: String
-    ): Result<LocalException, List<ContractLog>>
+    ): Result<LocalException, Int>
 
     /**
      * Returns contracts by ids
@@ -391,7 +392,10 @@ interface SidechainService {
     /**
      * Retrieves erc20 token withdrawals for [accountNameOrId]
      */
-    fun getERC20AccountWithdrawals(accountNameOrId: String, callback: Callback<List<ERC20Withdrawal>>)
+    fun getERC20AccountWithdrawals(
+        accountNameOrId: String,
+        callback: Callback<List<ERC20Withdrawal>>
+    )
 
 }
 
