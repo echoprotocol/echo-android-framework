@@ -43,10 +43,12 @@ class ContractsFacadeImpl(
     private val cryptoCoreComponent: CryptoCoreComponent,
     private val notifiedTransactionsHelper: NotificationsHelper<TransactionResult>,
     private val notifiedContractLogsHelper: NotificationsHelper<List<ContractLog>>,
-    private val feeRatioProvider: Provider<Double>
+    private val feeRatioProvider: Provider<Double>,
+    private val transactionExpirationDelay: Long
 ) : BaseTransactionsFacade(
     databaseApiService,
-    cryptoCoreComponent
+    cryptoCoreComponent,
+    transactionExpirationDelay
 ), ContractsFacade {
 
     override fun createContract(
@@ -313,7 +315,7 @@ class ContractsFacadeImpl(
             multiplyFees(fees.toMutableList(), ratio)
         } ?: fees
 
-        return Transaction(blockData, listOf(operation), chainId).apply {
+        return Transaction(blockData, listOf(operation), chainId, transactionExpirationDelay).apply {
             setFees(ratioFees)
             addPrivateKey(privateKey)
         }

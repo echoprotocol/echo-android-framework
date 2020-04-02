@@ -24,7 +24,8 @@ class Settings private constructor(
     val returnOnMainThread: Boolean,
     val network: Network,
     val logLevel: LogLevel,
-    val feeRatio: BigDecimal
+    val feeRatio: BigDecimal,
+    val transactionExpirationDelaySeconds: Long
 ) {
 
     /**
@@ -40,6 +41,7 @@ class Settings private constructor(
         private var network: Network? = null
         private var logLevel: LogLevel = LogLevel.INFO
         private var feeRatio: BigDecimal = BigDecimal.ONE
+        private var transactionExpirationDelaySeconds: Long = 150
 
         /**
          * Defines url for socket connection.
@@ -123,6 +125,16 @@ class Settings private constructor(
         }
 
         /**
+         * Defines ratio for fee used in library
+         *
+         * @param ratio Ratio for fee
+         */
+        fun setTransactionExpirationDelaySeconds(delay: Long): Configurator {
+            this.transactionExpirationDelaySeconds = delay
+            return this
+        }
+
+        /**
          * Create settings with configurations
          *
          * @return settings for library initialization
@@ -148,7 +160,8 @@ class Settings private constructor(
                 returnOnMainThread,
                 network,
                 logLevel,
-                feeRatio.abs()
+                feeRatio.abs(),
+                transactionExpirationDelaySeconds
             )
         }
     }

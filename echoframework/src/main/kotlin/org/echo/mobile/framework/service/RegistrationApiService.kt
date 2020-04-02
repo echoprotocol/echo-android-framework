@@ -20,6 +20,7 @@ interface RegistrationApiService : ApiService {
         accountName: String,
         keyActive: String,
         echorandKey: String,
+        evmAddress: String? = null,
         nonce: UnsignedLong,
         randNum: UnsignedLong
     ): Result<Exception, Int>

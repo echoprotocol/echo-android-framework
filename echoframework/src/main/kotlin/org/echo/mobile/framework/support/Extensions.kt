@@ -28,7 +28,7 @@ import java.util.TimeZone
  *
  * @return formatted date text
  */
-fun Date.format(): String = this.format(TIME_DATE_FORMAT)
+fun Date.format(timezone: String = "GMT"): String = this.format(TIME_DATE_FORMAT, timezone)
 
 /**
  * Format date to time format
@@ -36,9 +36,9 @@ fun Date.format(): String = this.format(TIME_DATE_FORMAT)
  * @param dateFormat: new date format
  * @return formatted date text
  */
-fun Date.format(dateFormat: String): String {
+fun Date.format(dateFormat: String, timezone: String = "GMT"): String {
     val dateFormatter = SimpleDateFormat(dateFormat, Locale.getDefault())
-    dateFormatter.timeZone = TimeZone.getTimeZone("GMT")
+    dateFormatter.timeZone = TimeZone.getTimeZone(timezone)
     return dateFormatter.format(this)
 }
 

@@ -31,8 +31,9 @@ class GenerateBitcoinAddressOperation constructor(
         val feeBytes = fee.toBytes()
         val accountIdBytes = account.toBytes()
         val backupBytes = Uint8.serialize(backupAddress.length) + backupAddress.toByteArray()
+        val extensionBytes = extensions.toBytes()
 
-        return Bytes.concat(feeBytes, accountIdBytes, backupBytes)
+        return Bytes.concat(feeBytes, accountIdBytes, backupBytes, extensionBytes)
     }
 
     override fun toJsonString(): String? = toJsonObject().toString()

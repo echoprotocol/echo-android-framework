@@ -28,6 +28,7 @@ class RegistrationApiServiceImpl(private val socketCoreComponent: SocketCoreComp
         accountName: String,
         keyActive: String,
         echorandKey: String,
+        evmAddress: String?,
         nonce: UnsignedLong,
         randNum: UnsignedLong
     ): Result<Exception, Int> {
@@ -38,6 +39,7 @@ class RegistrationApiServiceImpl(private val socketCoreComponent: SocketCoreComp
             accountName,
             keyActive,
             echorandKey,
+            evmAddress,
             nonce,
             randNum,
             callId = socketCoreComponent.currentId,

@@ -13,9 +13,7 @@ import org.spongycastle.util.encoders.Hex
 import java.lang.reflect.Type
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-import java.util.TimeZone
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 /**
@@ -33,11 +31,21 @@ class Transaction
  *                    transaction in the blockchain.
  * @param operations: The list of operations included in this transaction.
  */
-    (var blockData: BlockData, var operations: List<BaseOperation>, var chainId: String) :
+    (
+    var blockData: BlockData,
+    var operations: List<BaseOperation>,
+    var chainId: String,
+    delay: Long? = null
+) :
     ByteSerializable, JsonSerializable {
 
     var privateKeys = mutableListOf<ByteArray>()
     private val extensions: Extensions = Extensions()
+
+    init {
+        blockData.relativeExpiration =
+            TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) + (delay ?: 0)
+    }
 
     /**
      * This method is used to query whether the instance has a private keys.

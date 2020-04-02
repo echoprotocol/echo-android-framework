@@ -3,6 +3,7 @@ package org.echo.mobile.framework.facade.internal
 import com.google.common.primitives.UnsignedLong
 import org.echo.mobile.bitcoinj.Sha256Hash
 import org.echo.mobile.framework.Callback
+import org.echo.mobile.framework.ECHO_ASSET_ID
 import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
 import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent
 import org.echo.mobile.framework.exception.AccountNotFoundException
@@ -44,8 +45,9 @@ class AuthenticationFacadeImpl(
     private val networkBroadcastApiService: NetworkBroadcastApiService,
     private val registrationApiService: RegistrationApiService,
     private val cryptoCoreComponent: CryptoCoreComponent,
-    private val notificationsHelper: NotificationsHelper<RegistrationResult>
-) : BaseTransactionsFacade(databaseApiService, cryptoCoreComponent), AuthenticationFacade {
+    private val notificationsHelper: NotificationsHelper<RegistrationResult>,
+    private val transactionExpirationDelay: Long
+) : BaseTransactionsFacade(databaseApiService, cryptoCoreComponent, transactionExpirationDelay), AuthenticationFacade {
 
     override fun isOwnedBy(nameOrId: String, wif: String, callback: Callback<FullAccount>) {
         databaseApiService.getFullAccounts(listOf(nameOrId), false)
@@ -87,21 +89,18 @@ class AuthenticationFacadeImpl(
         operation.newOptionsOption.field?.delegateShare =
             account[accountId]?.account!!.options.delegateShare
 
-        val blockData = databaseApiService.getBlockData()
-        val chainId = getChainId()
-
         val privateKey = cryptoCoreComponent.decodeFromWif(oldWif)
-        val fees = getFees(listOf(operation))
-
-        val transaction = Transaction(blockData, listOf(operation), chainId).apply {
-            setFees(fees)
-            addPrivateKey(privateKey)
-        }
+        val transaction = configureTransaction(operation, privateKey, ECHO_ASSET_ID)
 
         networkBroadcastApiService.broadcastTransaction(transaction).dematerialize()
     }
 
-    override fun register(userName: String, wif: String, callback: Callback<Boolean>) {
+    override fun register(
+        userName: String,
+        wif: String,
+        evmAddress: String?,
+        callback: Callback<Boolean>
+    ) {
         try {
             val registrationTask = registrationApiService.requestRegistrationTask().dematerialize()
             val nonce = solveTask(
@@ -120,6 +119,7 @@ class AuthenticationFacadeImpl(
                 userName,
                 active,
                 active,
+                evmAddress,
                 nonce,
                 registrationTask.randNum
             ).dematerialize()
@@ -144,7 +144,9 @@ class AuthenticationFacadeImpl(
 
         val (index, value) = getSolutionPair(difficulty)
         while (true) {
-            if (hash.take(index).all { it.toInt() == 0 } && hash[index] > 0 && hash[index] < value) break
+            if (hash.take(index)
+                    .all { it.toInt() == 0 } && hash[index] > 0 && hash[index] < value
+            ) break
 
             nonce = nonce.plus(UnsignedLong.ONE)
             hash = Sha256Hash.hash(

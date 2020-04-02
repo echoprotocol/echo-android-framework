@@ -3,6 +3,7 @@ package org.echo.mobile.framework.model.socketoperations
 import com.google.common.primitives.UnsignedLong
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
+import com.google.gson.JsonNull
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.support.toJsonObject
 
@@ -16,6 +17,7 @@ class SubmitRegistrationSolutionSocketOperation(
     private val accountName: String,
     private val keyActive: String,
     private val echorandKey: String,
+    private val evmAddress: String?,
     private val nonce: UnsignedLong,
     private val randNum: UnsignedLong,
     callId: Int,
@@ -32,6 +34,7 @@ class SubmitRegistrationSolutionSocketOperation(
                 add(accountName)
                 add(keyActive)
                 add(echorandKey)
+                evmAddress?.let { add(it) }  ?: add(JsonNull.INSTANCE)
                 add(nonce)
                 add(randNum)
             })
