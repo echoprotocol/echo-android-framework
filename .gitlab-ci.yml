@@ -56,7 +56,7 @@ pages:
   only:
     - release
   script:
-    - ./gradlew :echoframework:clean :echoframework:dokkaJavadoc --stacktrace
+    - ./gradlew :echoframework:clean :echoframework:dokka --stacktrace
     - mkdir public
     - mv echoframework/build/javadoc/* public
   artifacts:
