@@ -1,0 +1,253 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>org.echo.mobile.framework.model.operations - echoframework</title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">echoframework</a>&nbsp;/&nbsp;<a href="./index.html">org.echo.mobile.framework.model.operations</a><br/>
+<br/>
+<h2>Package org.echo.mobile.framework.model.operations</h2>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-account-create-operation/index.html">AccountCreateOperation</a></h4>
+</td>
+<td>
+<p>Class used to encapsulate operations related to the <a href="-operation-type/-a-c-c-o-u-n-t_-c-r-e-a-t-e_-o-p-e-r-a-t-i-o-n.html">OperationType.ACCOUNT_CREATE_OPERATION</a></p>
+<code><span class="keyword">class </span><span class="identifier">AccountCreateOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.model/-base-operation/index.html"><span class="identifier">BaseOperation</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-account-create-operation-builder/index.html">AccountCreateOperationBuilder</a></h4>
+</td>
+<td>
+<p>Represents builder for <a href="-account-create-operation/index.html">AccountCreateOperation</a>.
+Checks required data.</p>
+<code><span class="keyword">class </span><span class="identifier">AccountCreateOperationBuilder</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">Builder</span><span class="symbol">&lt;</span><a href="-account-create-operation/index.html"><span class="identifier">AccountCreateOperation</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-account-update-operation/index.html">AccountUpdateOperation</a></h4>
+</td>
+<td>
+<p>Represents blockchain operation for updating an existing account.</p>
+<code><span class="keyword">class </span><span class="identifier">AccountUpdateOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.model/-base-operation/index.html"><span class="identifier">BaseOperation</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-account-update-operation-builder/index.html">AccountUpdateOperationBuilder</a></h4>
+</td>
+<td>
+<p>Represents builder for <a href="-account-update-operation/index.html">AccountUpdateOperation</a>.
+Checks required data.</p>
+<code><span class="keyword">class </span><span class="identifier">AccountUpdateOperationBuilder</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">Builder</span><span class="symbol">&lt;</span><a href="-account-update-operation/index.html"><span class="identifier">AccountUpdateOperation</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-block-reward-operation/index.html">BlockRewardOperation</a></h4>
+</td>
+<td>
+<p>Virtual operation that indicates payout of block reward</p>
+<code><span class="keyword">class </span><span class="identifier">BlockRewardOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.model/-base-operation/index.html"><span class="identifier">BaseOperation</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-contract-call-operation/index.html">ContractCallOperation</a></h4>
+</td>
+<td>
+<p>Represents blockchain operation for calling contract w2ith changing state</p>
+<code><span class="keyword">class </span><span class="identifier">ContractCallOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-contract-operation/index.html"><span class="identifier">ContractOperation</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-contract-call-operation-builder/index.html">ContractCallOperationBuilder</a></h4>
+</td>
+<td>
+<p>Represents builder for <a href="-contract-create-operation/index.html">ContractCreateOperation</a>.
+Checks required data.</p>
+<code><span class="keyword">class </span><span class="identifier">ContractCallOperationBuilder</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">Builder</span><span class="symbol">&lt;</span><a href="-contract-call-operation/index.html"><span class="identifier">ContractCallOperation</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-contract-create-operation/index.html">ContractCreateOperation</a></h4>
+</td>
+<td>
+<p>Represents blockchain operation for creating new smart contract</p>
+<code><span class="keyword">class </span><span class="identifier">ContractCreateOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-contract-operation/index.html"><span class="identifier">ContractOperation</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-contract-create-operation-builder/index.html">ContractCreateOperationBuilder</a></h4>
+</td>
+<td>
+<p>Represents builder for <a href="-contract-create-operation/index.html">ContractCreateOperation</a>.
+Checks required data.</p>
+<code><span class="keyword">class </span><span class="identifier">ContractCreateOperationBuilder</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">Builder</span><span class="symbol">&lt;</span><a href="-contract-create-operation/index.html"><span class="identifier">ContractCreateOperation</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-contract-operation/index.html">ContractOperation</a></h4>
+</td>
+<td>
+<p>Base implementation of contract operation</p>
+<code><span class="keyword">abstract</span> <span class="keyword">class </span><span class="identifier">ContractOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.model/-base-operation/index.html"><span class="identifier">BaseOperation</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-contract-transfer-operation/index.html">ContractTransferOperation</a></h4>
+</td>
+<td>
+<p>Represents blockchain operation for transferring amount from contract.</p>
+<code><span class="keyword">class </span><span class="identifier">ContractTransferOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.model/-base-operation/index.html"><span class="identifier">BaseOperation</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-create-asset-operation/index.html">CreateAssetOperation</a></h4>
+</td>
+<td>
+<p>Encapsulates asset creation information</p>
+<code><span class="keyword">class </span><span class="identifier">CreateAssetOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.model/-base-operation/index.html"><span class="identifier">BaseOperation</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-generate-bitcoin-address-operation/index.html">GenerateBitcoinAddressOperation</a></h4>
+</td>
+<td>
+<p>Generates address for botcoin network transfers for required target account <a href="-generate-bitcoin-address-operation/account.html">account</a></p>
+<code><span class="keyword">class </span><span class="identifier">GenerateBitcoinAddressOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.model/-base-operation/index.html"><span class="identifier">BaseOperation</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-generate-ethereum-address-operation/index.html">GenerateEthereumAddressOperation</a></h4>
+</td>
+<td>
+<p>Generates address for ethereum network transfers for required target account <a href="-generate-ethereum-address-operation/account.html">account</a></p>
+<code><span class="keyword">class </span><span class="identifier">GenerateEthereumAddressOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.model/-base-operation/index.html"><span class="identifier">BaseOperation</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-issue-asset-operation/index.html">IssueAssetOperation</a></h4>
+</td>
+<td>
+<p>Encapsulates asset issue operation information</p>
+<code><span class="keyword">class </span><span class="identifier">IssueAssetOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.model/-base-operation/index.html"><span class="identifier">BaseOperation</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-issue-asset-operation-builder/index.html">IssueAssetOperationBuilder</a></h4>
+</td>
+<td>
+<p>Builder class for asset issue operation <a href="-issue-asset-operation/index.html">IssueAssetOperation</a></p>
+<code><span class="keyword">class </span><span class="identifier">IssueAssetOperationBuilder</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">Builder</span><span class="symbol">&lt;</span><a href="-issue-asset-operation/index.html"><span class="identifier">IssueAssetOperation</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-operation-type/index.html">OperationType</a></h4>
+</td>
+<td>
+<p>Represents all blockchain operation types</p>
+<code><span class="keyword">enum</span> <span class="keyword">class </span><span class="identifier">OperationType</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-operation-type-to-class-converter/index.html">OperationTypeToClassConverter</a></h4>
+</td>
+<td>
+<p>Maps operation id to required result class type</p>
+<code><span class="keyword">class </span><span class="identifier">OperationTypeToClassConverter</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.support/-converter/index.html"><span class="identifier">Converter</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">,</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/lang/Class.html"><span class="identifier">Class</span></a><span class="symbol">&lt;</span><span class="identifier">*</span><span class="symbol">&gt;</span><span class="symbol">?</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-sidechain-burn-socket-operation/index.html">SidechainBurnSocketOperation</a></h4>
+</td>
+<td>
+<p>Encapsulates ethereum asset withdraw information</p>
+<code><span class="keyword">class </span><span class="identifier">SidechainBurnSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.model/-base-operation/index.html"><span class="identifier">BaseOperation</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-sidechain-e-r-c20-burn-socket-operation/index.html">SidechainERC20BurnSocketOperation</a></h4>
+</td>
+<td>
+<p>Encapsulates erc20 token <a href="-sidechain-e-r-c20-burn-socket-operation/erc20-token.html">erc20Token</a> burning information in ECHO network</p>
+<code><span class="keyword">class </span><span class="identifier">SidechainERC20BurnSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.model/-base-operation/index.html"><span class="identifier">BaseOperation</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-sidechain-e-r-c20-deposit-socket-operation/index.html">SidechainERC20DepositSocketOperation</a></h4>
+</td>
+<td>
+<p>Encapsulates erc20 token <a href="-sidechain-e-r-c20-deposit-socket-operation/erc20-token-address.html">erc20TokenAddress</a> deposit information</p>
+<code><span class="keyword">class </span><span class="identifier">SidechainERC20DepositSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.model/-base-operation/index.html"><span class="identifier">BaseOperation</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-sidechain-e-r-c20-issue-socket-operation/index.html">SidechainERC20IssueSocketOperation</a></h4>
+</td>
+<td>
+<p>Encapsulates erc20 token <a href="-sidechain-e-r-c20-issue-socket-operation/erc20-token.html">erc20Token</a> issue information in ECHO network</p>
+<code><span class="keyword">class </span><span class="identifier">SidechainERC20IssueSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.model/-base-operation/index.html"><span class="identifier">BaseOperation</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-sidechain-e-r-c20-register-token-operation/index.html">SidechainERC20RegisterTokenOperation</a></h4>
+</td>
+<td>
+<p>Registers ethereum ERC20 token by <a href="-sidechain-e-r-c20-register-token-operation/eth-address.html">ethAddress</a> in ECHO network</p>
+<code><span class="keyword">class </span><span class="identifier">SidechainERC20RegisterTokenOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.model/-base-operation/index.html"><span class="identifier">BaseOperation</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-sidechain-issue-socket-operation/index.html">SidechainIssueSocketOperation</a></h4>
+</td>
+<td>
+<p>Encapsulates ethereum asset issue information</p>
+<code><span class="keyword">class </span><span class="identifier">SidechainIssueSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.model/-base-operation/index.html"><span class="identifier">BaseOperation</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-transfer-operation/index.html">TransferOperation</a></h4>
+</td>
+<td>
+<p>Encapsulates transfer information</p>
+<code><span class="keyword">class </span><span class="identifier">TransferOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.model/-base-operation/index.html"><span class="identifier">BaseOperation</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-transfer-operation-builder/index.html">TransferOperationBuilder</a></h4>
+</td>
+<td>
+<p>Builder class for transfer operation <a href="-transfer-operation/index.html">TransferOperation</a></p>
+<code><span class="keyword">class </span><span class="identifier">TransferOperationBuilder</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">Builder</span><span class="symbol">&lt;</span><a href="-transfer-operation/index.html"><span class="identifier">TransferOperation</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-withdraw-bitcoin-operation/index.html">WithdrawBitcoinOperation</a></h4>
+</td>
+<td>
+<p>Transfers bitcoin asset from echo blockchain to bitcoin address</p>
+<code><span class="keyword">class </span><span class="identifier">WithdrawBitcoinOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.model/-base-operation/index.html"><span class="identifier">BaseOperation</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-withdraw-e-r-c20-operation/index.html">WithdrawERC20Operation</a></h4>
+</td>
+<td>
+<p>Transfers <a href="-withdraw-e-r-c20-operation/value.html">value</a> amount ethereum token <a href="-withdraw-e-r-c20-operation/erc20-token.html">erc20Token</a> to ethereum address <a href="-withdraw-e-r-c20-operation/eth-address.html">ethAddress</a></p>
+<code><span class="keyword">class </span><span class="identifier">WithdrawERC20Operation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.model/-base-operation/index.html"><span class="identifier">BaseOperation</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-withdraw-ethereum-operation/index.html">WithdrawEthereumOperation</a></h4>
+</td>
+<td>
+<p>Transfers ethereum asset from echo blockchain to ethereum address</p>
+<code><span class="keyword">class </span><span class="identifier">WithdrawEthereumOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.model/-base-operation/index.html"><span class="identifier">BaseOperation</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

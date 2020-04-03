@@ -1,0 +1,112 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>Settings.Configurator - echoframework</title>
+<link rel="stylesheet" href="../../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../../index.html">org.echo.mobile.framework.support</a>&nbsp;/&nbsp;<a href="../index.html">Settings</a>&nbsp;/&nbsp;<a href="./index.html">Configurator</a><br/>
+<br/>
+<h1>Configurator</h1>
+<code><span class="keyword">class </span><span class="identifier">Configurator</span></code>
+<p>Configures settings for library initialization</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<p>Configures settings for library initialization</p>
+<code><span class="identifier">Configurator</span><span class="symbol">(</span><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="configure.html">configure</a></h4>
+</td>
+<td>
+<p>Create settings with configurations</p>
+<code><span class="keyword">fun </span><span class="identifier">configure</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="../index.html"><span class="identifier">Settings</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="set-apis.html">setApis</a></h4>
+</td>
+<td>
+<p>Defines apis, needed for connection to blockchain</p>
+<code><span class="keyword">fun </span><span class="identifier">setApis</span><span class="symbol">(</span><span class="keyword">vararg</span> <span class="identifier" id="org.echo.mobile.framework.support.Settings.Configurator$setApis(kotlin.Array((org.echo.mobile.framework.support.Api)))/apis">apis</span><span class="symbol">:</span>&nbsp;<a href="../../-api/index.html"><span class="identifier">Api</span></a><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Configurator</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="set-crypto-core-component.html">setCryptoCoreComponent</a></h4>
+</td>
+<td>
+<p>Define component for key generation and encryption/decryption processes</p>
+<code><span class="keyword">fun </span><span class="identifier">setCryptoCoreComponent</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support.Settings.Configurator$setCryptoCoreComponent(org.echo.mobile.framework.core.crypto.CryptoCoreComponent)/cryptoComponent">cryptoComponent</span><span class="symbol">:</span>&nbsp;<a href="../../../org.echo.mobile.framework.core.crypto/-crypto-core-component/index.html"><span class="identifier">CryptoCoreComponent</span></a><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Configurator</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="set-fee-ratio.html">setFeeRatio</a></h4>
+</td>
+<td>
+<p>Defines ratio for fee used in library</p>
+<code><span class="keyword">fun </span><span class="identifier">setFeeRatio</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support.Settings.Configurator$setFeeRatio(java.math.BigDecimal)/ratio">ratio</span><span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/math/BigDecimal.html"><span class="identifier">BigDecimal</span></a><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Configurator</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="set-log-level.html">setLogLevel</a></h4>
+</td>
+<td>
+<p>Defines library log level <a href="../../../org.echo.mobile.framework.core.logger.internal/-logger-core-component/-log-level/index.html">LogLevel</a></p>
+<code><span class="keyword">fun </span><span class="identifier">setLogLevel</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support.Settings.Configurator$setLogLevel(org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent.LogLevel)/logLevel">logLevel</span><span class="symbol">:</span>&nbsp;<span class="identifier">LogLevel</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Configurator</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="set-network-type.html">setNetworkType</a></h4>
+</td>
+<td>
+<p>Defines blockchain network for connection</p>
+<code><span class="keyword">fun </span><span class="identifier">setNetworkType</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support.Settings.Configurator$setNetworkType(org.echo.mobile.framework.model.network.Network)/network">network</span><span class="symbol">:</span>&nbsp;<a href="../../../org.echo.mobile.framework.model.network/-network/index.html"><span class="identifier">Network</span></a><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Configurator</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="set-return-on-main-thread.html">setReturnOnMainThread</a></h4>
+</td>
+<td>
+<p>Defines whether callback result should return on main thread</p>
+<code><span class="keyword">fun </span><span class="identifier">setReturnOnMainThread</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support.Settings.Configurator$setReturnOnMainThread(kotlin.Boolean)/returnOnMainThread">returnOnMainThread</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Configurator</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="set-socket-messenger.html">setSocketMessenger</a></h4>
+</td>
+<td>
+<p>Defines socket managing functionality</p>
+<code><span class="keyword">fun </span><span class="identifier">setSocketMessenger</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support.Settings.Configurator$setSocketMessenger(org.echo.mobile.framework.core.socket.SocketMessenger)/socketMessenger">socketMessenger</span><span class="symbol">:</span>&nbsp;<a href="../../../org.echo.mobile.framework.core.socket/-socket-messenger.html"><span class="identifier">SocketMessenger</span></a><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Configurator</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="set-transaction-expiration-delay-seconds.html">setTransactionExpirationDelaySeconds</a></h4>
+</td>
+<td>
+<p>Defines ratio for fee used in library</p>
+<code><span class="keyword">fun </span><span class="identifier">setTransactionExpirationDelaySeconds</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support.Settings.Configurator$setTransactionExpirationDelaySeconds(kotlin.Long)/delay">delay</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html"><span class="identifier">Long</span></a><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Configurator</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="set-url.html">setUrl</a></h4>
+</td>
+<td>
+<p>Defines url for socket connection.</p>
+<code><span class="keyword">fun </span><span class="identifier">setUrl</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support.Settings.Configurator$setUrl(kotlin.String)/url">url</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Configurator</span></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

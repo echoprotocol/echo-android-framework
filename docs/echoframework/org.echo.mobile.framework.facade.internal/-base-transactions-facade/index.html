@@ -1,0 +1,146 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>BaseTransactionsFacade - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.facade.internal</a>&nbsp;/&nbsp;<a href="./index.html">BaseTransactionsFacade</a><br/>
+<br/>
+<h1>BaseTransactionsFacade</h1>
+<code><span class="keyword">abstract</span> <span class="keyword">class </span><span class="identifier">BaseTransactionsFacade</span></code>
+<p>Includes base logic for transactions assembly</p>
+<p><strong>Author</strong><br/>
+Daria Pechkovskaya</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<p>Includes base logic for transactions assembly</p>
+<code><span class="identifier">BaseTransactionsFacade</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.facade.internal.BaseTransactionsFacade$<init>(org.echo.mobile.framework.service.DatabaseApiService, org.echo.mobile.framework.core.crypto.CryptoCoreComponent, kotlin.Long)/databaseApiService">databaseApiService</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.service/-database-api-service.html"><span class="identifier">DatabaseApiService</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.internal.BaseTransactionsFacade$<init>(org.echo.mobile.framework.service.DatabaseApiService, org.echo.mobile.framework.core.crypto.CryptoCoreComponent, kotlin.Long)/cryptoCoreComponent">cryptoCoreComponent</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.core.crypto/-crypto-core-component/index.html"><span class="identifier">CryptoCoreComponent</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.internal.BaseTransactionsFacade$<init>(org.echo.mobile.framework.service.DatabaseApiService, org.echo.mobile.framework.core.crypto.CryptoCoreComponent, kotlin.Long)/transactionExpirationDelay">transactionExpirationDelay</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html"><span class="identifier">Long</span></a><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="check-owner-account.html">checkOwnerAccount</a></h4>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">checkOwnerAccount</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.facade.internal.BaseTransactionsFacade$checkOwnerAccount(kotlin.String, org.echo.mobile.framework.model.Account)/wif">wif</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.internal.BaseTransactionsFacade$checkOwnerAccount(kotlin.String, org.echo.mobile.framework.model.Account)/account">account</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-account/index.html"><span class="identifier">Account</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="configure-transaction.html">configureTransaction</a></h4>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">configureTransaction</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.facade.internal.BaseTransactionsFacade$configureTransaction(org.echo.mobile.framework.model.BaseOperation, kotlin.ByteArray, kotlin.String, kotlin.String)/transfer">transfer</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-base-operation/index.html"><span class="identifier">BaseOperation</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.internal.BaseTransactionsFacade$configureTransaction(org.echo.mobile.framework.model.BaseOperation, kotlin.ByteArray, kotlin.String, kotlin.String)/privateKey">privateKey</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.internal.BaseTransactionsFacade$configureTransaction(org.echo.mobile.framework.model.BaseOperation, kotlin.ByteArray, kotlin.String, kotlin.String)/asset">asset</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.internal.BaseTransactionsFacade$configureTransaction(org.echo.mobile.framework.model.BaseOperation, kotlin.ByteArray, kotlin.String, kotlin.String)/feeAsset">feeAsset</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">)</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.model/-transaction/index.html"><span class="identifier">Transaction</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="get-chain-id.html">getChainId</a></h4>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getChainId</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="get-contract-fees.html">getContractFees</a></h4>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getContractFees</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.facade.internal.BaseTransactionsFacade$getContractFees(kotlin.collections.List((org.echo.mobile.framework.model.BaseOperation)), kotlin.String)/operations">operations</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-base-operation/index.html"><span class="identifier">BaseOperation</span></a><span class="symbol">&gt;</span><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.internal.BaseTransactionsFacade$getContractFees(kotlin.collections.List((org.echo.mobile.framework.model.BaseOperation)), kotlin.String)/assetId">assetId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model.contract/-contract-fee/index.html"><span class="identifier">ContractFee</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="get-fees.html">getFees</a></h4>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getFees</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.facade.internal.BaseTransactionsFacade$getFees(kotlin.collections.List((org.echo.mobile.framework.model.BaseOperation)), org.echo.mobile.framework.model.Asset)/operations">operations</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-base-operation/index.html"><span class="identifier">BaseOperation</span></a><span class="symbol">&gt;</span><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.internal.BaseTransactionsFacade$getFees(kotlin.collections.List((org.echo.mobile.framework.model.BaseOperation)), org.echo.mobile.framework.model.Asset)/asset">asset</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-asset/index.html"><span class="identifier">Asset</span></a>&nbsp;<span class="symbol">=</span>&nbsp;Asset(ECHO_ASSET_ID)<span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-asset-amount/index.html"><span class="identifier">AssetAmount</span></a><span class="symbol">&gt;</span></code><br/>
+<code><span class="keyword">fun </span><span class="identifier">getFees</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.facade.internal.BaseTransactionsFacade$getFees(kotlin.collections.List((org.echo.mobile.framework.model.BaseOperation)), kotlin.String)/operations">operations</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-base-operation/index.html"><span class="identifier">BaseOperation</span></a><span class="symbol">&gt;</span><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.internal.BaseTransactionsFacade$getFees(kotlin.collections.List((org.echo.mobile.framework.model.BaseOperation)), kotlin.String)/assetId">assetId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-asset-amount/index.html"><span class="identifier">AssetAmount</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="get-participants-pair.html">getParticipantsPair</a></h4>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getParticipantsPair</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.facade.internal.BaseTransactionsFacade$getParticipantsPair(kotlin.String, kotlin.String)/fromNameOrId">fromNameOrId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.internal.BaseTransactionsFacade$getParticipantsPair(kotlin.String, kotlin.String)/toNameOrId">toNameOrId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-pair/index.html"><span class="identifier">Pair</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-account/index.html"><span class="identifier">Account</span></a><span class="symbol">,</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-account/index.html"><span class="identifier">Account</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Inheritors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="../-assets-facade-impl/index.html">AssetsFacadeImpl</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="../../org.echo.mobile.framework.facade/-assets-facade/index.html">AssetsFacade</a></p>
+<code><span class="keyword">class </span><span class="identifier">AssetsFacadeImpl</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">BaseTransactionsFacade</span></a><span class="symbol">, </span><a href="../../org.echo.mobile.framework.facade/-assets-facade/index.html"><span class="identifier">AssetsFacade</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-authentication-facade-impl/index.html">AuthenticationFacadeImpl</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="../../org.echo.mobile.framework.facade/-authentication-facade/index.html">AuthenticationFacade</a></p>
+<code><span class="keyword">class </span><span class="identifier">AuthenticationFacadeImpl</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">BaseTransactionsFacade</span></a><span class="symbol">, </span><a href="../../org.echo.mobile.framework.facade/-authentication-facade/index.html"><span class="identifier">AuthenticationFacade</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-bitcoin-sidechain-facade-impl/index.html">BitcoinSidechainFacadeImpl</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="../../org.echo.mobile.framework.facade/-ethereum-sidechain-facade/index.html">EthereumSidechainFacade</a></p>
+<code><span class="keyword">class </span><span class="identifier">BitcoinSidechainFacadeImpl</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">BaseTransactionsFacade</span></a><span class="symbol">, </span><a href="../../org.echo.mobile.framework.facade/-bitcoin-sidechain-facade/index.html"><span class="identifier">BitcoinSidechainFacade</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-contracts-facade-impl/index.html">ContractsFacadeImpl</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="../../org.echo.mobile.framework.facade/-contracts-facade/index.html">ContractsFacade</a></p>
+<code><span class="keyword">class </span><span class="identifier">ContractsFacadeImpl</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">BaseTransactionsFacade</span></a><span class="symbol">, </span><a href="../../org.echo.mobile.framework.facade/-contracts-facade/index.html"><span class="identifier">ContractsFacade</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-e-r-c20-sidechain-facade-impl/index.html">ERC20SidechainFacadeImpl</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="../../org.echo.mobile.framework.facade/-e-r-c20-sidechain-facade/index.html">ERC20SidechainFacade</a></p>
+<code><span class="keyword">class </span><span class="identifier">ERC20SidechainFacadeImpl</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">BaseTransactionsFacade</span></a><span class="symbol">, </span><a href="../../org.echo.mobile.framework.facade/-e-r-c20-sidechain-facade/index.html"><span class="identifier">ERC20SidechainFacade</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-ethereum-sidechain-facade-impl/index.html">EthereumSidechainFacadeImpl</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="../../org.echo.mobile.framework.facade/-ethereum-sidechain-facade/index.html">EthereumSidechainFacade</a></p>
+<code><span class="keyword">class </span><span class="identifier">EthereumSidechainFacadeImpl</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">BaseTransactionsFacade</span></a><span class="symbol">, </span><a href="../../org.echo.mobile.framework.facade/-ethereum-sidechain-facade/index.html"><span class="identifier">EthereumSidechainFacade</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-fee-facade-impl/index.html">FeeFacadeImpl</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="../../org.echo.mobile.framework.facade/-fee-facade/index.html">FeeFacade</a></p>
+<code><span class="keyword">class </span><span class="identifier">FeeFacadeImpl</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">BaseTransactionsFacade</span></a><span class="symbol">, </span><a href="../../org.echo.mobile.framework.facade/-fee-facade/index.html"><span class="identifier">FeeFacade</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-transactions-facade-impl/index.html">TransactionsFacadeImpl</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="../../org.echo.mobile.framework.facade/-transactions-facade/index.html">TransactionsFacade</a></p>
+<code><span class="keyword">class </span><span class="identifier">TransactionsFacadeImpl</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">BaseTransactionsFacade</span></a><span class="symbol">, </span><a href="../../org.echo.mobile.framework.facade/-transactions-facade/index.html"><span class="identifier">TransactionsFacade</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

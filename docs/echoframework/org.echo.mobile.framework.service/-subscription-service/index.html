@@ -1,0 +1,65 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>SubscriptionService - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.service</a>&nbsp;/&nbsp;<a href="./index.html">SubscriptionService</a><br/>
+<br/>
+<h1>SubscriptionService</h1>
+<code><span class="keyword">interface </span><span class="identifier">SubscriptionService</span></code>
+<p>Encapsulates logic, associated with global subscription to blockchain objects</p>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="subscribe.html">subscribe</a></h4>
+</td>
+<td>
+<p>Subscribes to listening chain objects
+Clears all subscriptions when <a href="subscribe.html#org.echo.mobile.framework.service.SubscriptionService$subscribe(kotlin.Boolean, org.echo.mobile.framework.Callback((kotlin.Boolean)))/clearFilter">clearFilter</a> set to true</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">subscribe</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.SubscriptionService$subscribe(kotlin.Boolean, org.echo.mobile.framework.Callback((kotlin.Boolean)))/clearFilter">clearFilter</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.service.SubscriptionService$subscribe(kotlin.Boolean, org.echo.mobile.framework.Callback((kotlin.Boolean)))/callback">callback</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="subscribe-contract-logs.html">subscribeContractLogs</a></h4>
+</td>
+<td>
+<p>Subscribes to listening contract logs</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">subscribeContractLogs</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.SubscriptionService$subscribeContractLogs(kotlin.String)/contractId">contractId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.support/-result/index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.exception/-local-exception/index.html"><span class="identifier">LocalException</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="subscribe-contracts.html">subscribeContracts</a></h4>
+</td>
+<td>
+<p>Subscribes to listening contracts changes</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">subscribeContracts</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.SubscriptionService$subscribeContracts(kotlin.collections.List((kotlin.String)))/contractIds">contractIds</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.support/-result/index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.exception/-local-exception/index.html"><span class="identifier">LocalException</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="unsubscribe.html">unsubscribe</a></h4>
+</td>
+<td>
+<p>Subscribes from listening chain objects</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">unsubscribe</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.SubscriptionService$unsubscribe(org.echo.mobile.framework.Callback((kotlin.Boolean)))/callback">callback</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Inheritors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="../-database-api-service.html">DatabaseApiService</a></h4>
+</td>
+<td>
+<p>Encapsulates logic, associated with blockchain database API</p>
+<code><span class="keyword">interface </span><span class="identifier">DatabaseApiService</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-api-service/index.html"><span class="identifier">ApiService</span></a><span class="symbol">, </span><a href="../-accounts-service/index.html"><span class="identifier">AccountsService</span></a><span class="symbol">, </span><a href="../-globals-service/index.html"><span class="identifier">GlobalsService</span></a><span class="symbol">, </span><a href="../-authority-and-validation-service/index.html"><span class="identifier">AuthorityAndValidationService</span></a><span class="symbol">, </span><a href="../-blocks-and-transactions-service/index.html"><span class="identifier">BlocksAndTransactionsService</span></a><span class="symbol">, </span><a href="../-contracts-service/index.html"><span class="identifier">ContractsService</span></a><span class="symbol">, </span><a href="../-assets-service/index.html"><span class="identifier">AssetsService</span></a><span class="symbol">, </span><a href="./index.html"><span class="identifier">SubscriptionService</span></a><span class="symbol">, </span><a href="../-objects-service/index.html"><span class="identifier">ObjectsService</span></a><span class="symbol">, </span><a href="../-custom-operation-service/index.html"><span class="identifier">CustomOperationService</span></a><span class="symbol">, </span><a href="../-sidechain-service/index.html"><span class="identifier">SidechainService</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

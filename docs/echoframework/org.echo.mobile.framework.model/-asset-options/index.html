@@ -1,0 +1,188 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>AssetOptions - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.model</a>&nbsp;/&nbsp;<a href="./index.html">AssetOptions</a><br/>
+<br/>
+<h1>AssetOptions</h1>
+<code><span class="keyword">class </span><span class="identifier">AssetOptions</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-json-serializable/index.html"><span class="identifier">JsonSerializable</span></a><span class="symbol">, </span><a href="../-byte-serializable/index.html"><span class="identifier">ByteSerializable</span></a></code>
+<p>Contains options available on all assets in the network
+<a href="https://dev-doc.myecho.app/structgraphene_1_1chain_1_1asset__options.html">AssetOptions details</a></p>
+<p><strong>Author</strong><br/>
+Dmitriy Bushuev</p>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-asset-options-deserializer/index.html">AssetOptionsDeserializer</a></h4>
+</td>
+<td>
+<p>Json deserializer for <a href="./index.html">AssetOptions</a></p>
+<code><span class="keyword">class </span><span class="identifier">AssetOptionsDeserializer</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">JsonDeserializer</span><span class="symbol">&lt;</span><a href="./index.html"><span class="identifier">AssetOptions</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<p>Contains options available on all assets in the network
+<a href="https://dev-doc.myecho.app/structgraphene_1_1chain_1_1asset__options.html">AssetOptions details</a></p>
+<code><span class="identifier">AssetOptions</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.AssetOptions$<init>(com.google.common.primitives.UnsignedLong, kotlin.Int, kotlin.Int, org.echo.mobile.framework.model.Price, kotlin.String)/maxSupply">maxSupply</span><span class="symbol">:</span>&nbsp;<span class="identifier">UnsignedLong</span><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.AssetOptions$<init>(com.google.common.primitives.UnsignedLong, kotlin.Int, kotlin.Int, org.echo.mobile.framework.model.Price, kotlin.String)/issuerPermissions">issuerPermissions</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a>&nbsp;<span class="symbol">=</span>&nbsp;0<span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.AssetOptions$<init>(com.google.common.primitives.UnsignedLong, kotlin.Int, kotlin.Int, org.echo.mobile.framework.model.Price, kotlin.String)/flags">flags</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a>&nbsp;<span class="symbol">=</span>&nbsp;0<span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.AssetOptions$<init>(com.google.common.primitives.UnsignedLong, kotlin.Int, kotlin.Int, org.echo.mobile.framework.model.Price, kotlin.String)/coreExchangeRate">coreExchangeRate</span><span class="symbol">:</span>&nbsp;<a href="../-price/index.html"><span class="identifier">Price</span></a><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.AssetOptions$<init>(com.google.common.primitives.UnsignedLong, kotlin.Int, kotlin.Int, org.echo.mobile.framework.model.Price, kotlin.String)/description">description</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="blacklist-authorities.html">blacklistAuthorities</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">blacklistAuthorities</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-set/index.html"><span class="identifier">Set</span></a><span class="symbol">&lt;</span><a href="../-account/index.html"><span class="identifier">Account</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="core-exchange-rate.html">coreExchangeRate</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">coreExchangeRate</span><span class="symbol">: </span><a href="../-price/index.html"><span class="identifier">Price</span></a><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="description.html">description</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">description</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="extensions.html">extensions</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">extensions</span><span class="symbol">: </span><a href="../-extensions/index.html"><span class="identifier">Extensions</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="flags.html">flags</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">flags</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="issuer-permissions.html">issuerPermissions</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">issuerPermissions</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="max-supply.html">maxSupply</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">maxSupply</span><span class="symbol">: </span><span class="identifier">UnsignedLong</span><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="whitelist-authorities.html">whitelistAuthorities</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">whitelistAuthorities</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-set/index.html"><span class="identifier">Set</span></a><span class="symbol">&lt;</span><a href="../-account/index.html"><span class="identifier">Account</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="to-bytes.html">toBytes</a></h4>
+</td>
+<td>
+<p>Converts entity to byte-array representation</p>
+<code><span class="keyword">fun </span><span class="identifier">toBytes</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="to-json-object.html">toJsonObject</a></h4>
+</td>
+<td>
+<p>Converts entity to json object representation</p>
+<code><span class="keyword">fun </span><span class="identifier">toJsonObject</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">JsonElement</span><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="to-json-string.html">toJsonString</a></h4>
+</td>
+<td>
+<p>Converts entity to json string representation</p>
+<code><span class="keyword">fun </span><span class="identifier">toJsonString</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Companion Object Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-c-h-a-r-g-e_-m-a-r-k-e-t_-f-e-e.html">CHARGE_MARKET_FEE</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">CHARGE_MARKET_FEE</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-c-o-m-m-i-t-t-e-e_-f-e-d_-a-s-s-e-t.html">COMMITTEE_FED_ASSET</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">COMMITTEE_FED_ASSET</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-d-i-s-a-b-l-e_-f-o-r-c-e_-s-e-t-t-l-e.html">DISABLE_FORCE_SETTLE</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">DISABLE_FORCE_SETTLE</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-g-l-o-b-a-l_-s-e-t-t-l-e.html">GLOBAL_SETTLE</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">GLOBAL_SETTLE</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-o-v-e-r-r-i-d-e_-a-u-t-h-o-r-i-t-y.html">OVERRIDE_AUTHORITY</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">OVERRIDE_AUTHORITY</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-t-r-a-n-s-f-e-r_-r-e-s-t-r-i-c-t-e-d.html">TRANSFER_RESTRICTED</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">TRANSFER_RESTRICTED</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-w-h-i-t-e_-l-i-s-t.html">WHITE_LIST</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">WHITE_LIST</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

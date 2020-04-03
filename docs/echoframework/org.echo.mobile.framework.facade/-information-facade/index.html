@@ -1,0 +1,90 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>InformationFacade - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.facade</a>&nbsp;/&nbsp;<a href="./index.html">InformationFacade</a><br/>
+<br/>
+<h1>InformationFacade</h1>
+<code><span class="keyword">interface </span><span class="identifier">InformationFacade</span></code>
+<p>Encapsulates logic, associated with receiving blockchain information processes</p>
+<p><strong>Author</strong><br/>
+Dmitriy Bushuev</p>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="check-account-reserved.html">checkAccountReserved</a></h4>
+</td>
+<td>
+<p>Checks whether account with <a href="check-account-reserved.html#org.echo.mobile.framework.facade.InformationFacade$checkAccountReserved(kotlin.String, org.echo.mobile.framework.Callback((kotlin.Boolean)))/nameOrId">nameOrId</a> already exists</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">checkAccountReserved</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.facade.InformationFacade$checkAccountReserved(kotlin.String, org.echo.mobile.framework.Callback((kotlin.Boolean)))/nameOrId">nameOrId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.InformationFacade$checkAccountReserved(kotlin.String, org.echo.mobile.framework.Callback((kotlin.Boolean)))/callback">callback</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="get-account.html">getAccount</a></h4>
+</td>
+<td>
+<p>Find and returns account with required <a href="get-account.html#org.echo.mobile.framework.facade.InformationFacade$getAccount(kotlin.String, org.echo.mobile.framework.Callback((org.echo.mobile.framework.model.FullAccount)))/nameOrId">nameOrId</a> if exists</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">getAccount</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.facade.InformationFacade$getAccount(kotlin.String, org.echo.mobile.framework.Callback((org.echo.mobile.framework.model.FullAccount)))/nameOrId">nameOrId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.InformationFacade$getAccount(kotlin.String, org.echo.mobile.framework.Callback((org.echo.mobile.framework.model.FullAccount)))/callback">callback</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-full-account/index.html"><span class="identifier">FullAccount</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="get-account-history.html">getAccountHistory</a></h4>
+</td>
+<td>
+<p>Retrieves account history with defining setting parameters</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">getAccountHistory</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.facade.InformationFacade$getAccountHistory(kotlin.String, kotlin.String, kotlin.String, kotlin.Int, org.echo.mobile.framework.Callback((org.echo.mobile.framework.model.HistoryResponse)))/nameOrId">nameOrId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.InformationFacade$getAccountHistory(kotlin.String, kotlin.String, kotlin.String, kotlin.Int, org.echo.mobile.framework.Callback((org.echo.mobile.framework.model.HistoryResponse)))/transactionStartId">transactionStartId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.InformationFacade$getAccountHistory(kotlin.String, kotlin.String, kotlin.String, kotlin.Int, org.echo.mobile.framework.Callback((org.echo.mobile.framework.model.HistoryResponse)))/transactionStopId">transactionStopId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.InformationFacade$getAccountHistory(kotlin.String, kotlin.String, kotlin.String, kotlin.Int, org.echo.mobile.framework.Callback((org.echo.mobile.framework.model.HistoryResponse)))/limit">limit</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.InformationFacade$getAccountHistory(kotlin.String, kotlin.String, kotlin.String, kotlin.Int, org.echo.mobile.framework.Callback((org.echo.mobile.framework.model.HistoryResponse)))/callback">callback</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-history-response/index.html"><span class="identifier">HistoryResponse</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="get-accounts-by-wif.html">getAccountsByWif</a></h4>
+</td>
+<td>
+<p>Fetches accounts associated with private key in wif format <a href="get-accounts-by-wif.html#org.echo.mobile.framework.facade.InformationFacade$getAccountsByWif(kotlin.String, org.echo.mobile.framework.Callback((kotlin.collections.List((org.echo.mobile.framework.model.FullAccount)))))/wif">wif</a></p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">getAccountsByWif</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.facade.InformationFacade$getAccountsByWif(kotlin.String, org.echo.mobile.framework.Callback((kotlin.collections.List((org.echo.mobile.framework.model.FullAccount)))))/wif">wif</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.InformationFacade$getAccountsByWif(kotlin.String, org.echo.mobile.framework.Callback((kotlin.collections.List((org.echo.mobile.framework.model.FullAccount)))))/callback">callback</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-full-account/index.html"><span class="identifier">FullAccount</span></a><span class="symbol">&gt;</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="get-balance.html">getBalance</a></h4>
+</td>
+<td>
+<p>Gets balance for account with defined <a href="get-balance.html#org.echo.mobile.framework.facade.InformationFacade$getBalance(kotlin.String, kotlin.String, org.echo.mobile.framework.Callback((org.echo.mobile.framework.model.Balance)))/nameOrId">nameOrId</a> and specific asset type</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">getBalance</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.facade.InformationFacade$getBalance(kotlin.String, kotlin.String, org.echo.mobile.framework.Callback((org.echo.mobile.framework.model.Balance)))/nameOrId">nameOrId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.InformationFacade$getBalance(kotlin.String, kotlin.String, org.echo.mobile.framework.Callback((org.echo.mobile.framework.model.Balance)))/asset">asset</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.facade.InformationFacade$getBalance(kotlin.String, kotlin.String, org.echo.mobile.framework.Callback((org.echo.mobile.framework.model.Balance)))/callback">callback</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-balance/index.html"><span class="identifier">Balance</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="get-global-properties.html">getGlobalProperties</a></h4>
+</td>
+<td>
+<p>Retrieves blockchain current configuration parameters</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">getGlobalProperties</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.facade.InformationFacade$getGlobalProperties(org.echo.mobile.framework.Callback((org.echo.mobile.framework.model.GlobalProperties)))/callback">callback</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-global-properties/index.html"><span class="identifier">GlobalProperties</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Inheritors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="../../org.echo.mobile.framework/-echo-framework/index.html">EchoFramework</a></h4>
+</td>
+<td>
+<p>Describes base library functionality</p>
+<code><span class="keyword">interface </span><span class="identifier">EchoFramework</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-authentication-facade/index.html"><span class="identifier">AuthenticationFacade</span></a><span class="symbol">, </span><a href="../-fee-facade/index.html"><span class="identifier">FeeFacade</span></a><span class="symbol">, </span><a href="./index.html"><span class="identifier">InformationFacade</span></a><span class="symbol">, </span><a href="../-subscription-facade/index.html"><span class="identifier">SubscriptionFacade</span></a><span class="symbol">, </span><a href="../-transactions-facade/index.html"><span class="identifier">TransactionsFacade</span></a><span class="symbol">, </span><a href="../-assets-facade/index.html"><span class="identifier">AssetsFacade</span></a><span class="symbol">, </span><a href="../-contracts-facade/index.html"><span class="identifier">ContractsFacade</span></a><span class="symbol">, </span><a href="../-ethereum-sidechain-facade/index.html"><span class="identifier">EthereumSidechainFacade</span></a><span class="symbol">, </span><a href="../-bitcoin-sidechain-facade/index.html"><span class="identifier">BitcoinSidechainFacade</span></a><span class="symbol">, </span><a href="../-common-sidechain-facade/index.html"><span class="identifier">CommonSidechainFacade</span></a><span class="symbol">, </span><a href="../-e-r-c20-sidechain-facade/index.html"><span class="identifier">ERC20SidechainFacade</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../../org.echo.mobile.framework.facade.internal/-information-facade-impl/index.html">InformationFacadeImpl</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="./index.html">InformationFacade</a></p>
+<code><span class="keyword">class </span><span class="identifier">InformationFacadeImpl</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">InformationFacade</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

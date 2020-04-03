@@ -114,4 +114,3 @@ fun Short.revert(): ByteArray =
 fun Long.revert(): ByteArray =
     ByteBuffer.allocate(java.lang.Long.SIZE / 8)
         .putLong(java.lang.Long.reverseBytes(this)).array()
-

@@ -1,0 +1,195 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>Asset - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.model</a>&nbsp;/&nbsp;<a href="./index.html">Asset</a><br/>
+<br/>
+<h1>Asset</h1>
+<code><span class="keyword">class </span><span class="identifier">Asset</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-graphene-object/index.html"><span class="identifier">GrapheneObject</span></a><span class="symbol">, </span><a href="../-byte-serializable/index.html"><span class="identifier">ByteSerializable</span></a></code>
+<p>Class used to represent a specific asset on the Graphene platform</p>
+<p><strong>Author</strong><br/>
+Dmitriy Bushuev</p>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-asset-deserializer/index.html">AssetDeserializer</a></h4>
+</td>
+<td>
+<p>Json deserializer for <a href="./index.html">Asset</a></p>
+<code><span class="keyword">class </span><span class="identifier">AssetDeserializer</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">JsonDeserializer</span><span class="symbol">&lt;</span><a href="./index.html"><span class="identifier">Asset</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<p>Asset copy constructor</p>
+<code><span class="identifier">Asset</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.Asset$<init>(org.echo.mobile.framework.model.Asset)/asset">asset</span><span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">Asset</span></a><span class="symbol">)</span></code>
+<p>Class used to represent a specific asset on the Graphene platform</p>
+<code><span class="identifier">Asset</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.Asset$<init>(kotlin.String)/id">id</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="asset-options.html">assetOptions</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">assetOptions</span><span class="symbol">: </span><a href="../-asset-options/index.html"><span class="identifier">AssetOptions</span></a><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="bit-asset-id.html">bitAssetId</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">bitAssetId</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="bitasset-options.html">bitassetOptions</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">bitassetOptions</span><span class="symbol">: </span><a href="../-optional/index.html"><span class="identifier">Optional</span></a><span class="symbol">&lt;</span><a href="../-bitasset-options/index.html"><span class="identifier">BitassetOptions</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="dynamic-asset-data-id.html">dynamicAssetDataId</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">dynamicAssetDataId</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="issuer.html">issuer</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">issuer</span><span class="symbol">: </span><a href="../-account/index.html"><span class="identifier">Account</span></a><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="precision.html">precision</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">precision</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="symbol.html">symbol</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">symbol</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="equals.html">equals</a></h4>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">equals</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.Asset$equals(kotlin.Any)/other">other</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">?</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="get-bts-options.html">getBtsOptions</a></h4>
+</td>
+<td>
+<p>Get optional <a href="bitasset-options.html">bitassetOptions</a> field</p>
+<code><span class="keyword">fun </span><span class="identifier">getBtsOptions</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="../-bitasset-options/index.html"><span class="identifier">BitassetOptions</span></a><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="hash-code.html">hashCode</a></h4>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">hashCode</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="set-bts-options.html">setBtsOptions</a></h4>
+</td>
+<td>
+<p>Set optional <a href="bitasset-options.html">bitassetOptions</a> field</p>
+<code><span class="keyword">fun </span><span class="identifier">setBtsOptions</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.Asset$setBtsOptions(org.echo.mobile.framework.model.BitassetOptions)/btsOptions">btsOptions</span><span class="symbol">:</span>&nbsp;<a href="../-bitasset-options/index.html"><span class="identifier">BitassetOptions</span></a><span class="symbol">?</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="to-bytes.html">toBytes</a></h4>
+</td>
+<td>
+<p>Converts entity to byte-array representation</p>
+<code><span class="keyword">fun </span><span class="identifier">toBytes</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Companion Object Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-b-i-t-a-s-s-e-t_-d-a-t-a_-i-d_-k-e-y.html">BITASSET_DATA_ID_KEY</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">BITASSET_DATA_ID_KEY</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-b-i-t-a-s-s-e-t-s_-o-p-t-i-o-n-s_-k-e-y.html">BITASSETS_OPTIONS_KEY</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">BITASSETS_OPTIONS_KEY</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-d-y-n-a-m-i-c_-a-s-s-e-t_-d-a-t-a_-i-d_-k-e-y.html">DYNAMIC_ASSET_DATA_ID_KEY</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">DYNAMIC_ASSET_DATA_ID_KEY</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-i-s-s-u-e-r_-k-e-y.html">ISSUER_KEY</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">ISSUER_KEY</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-o-p-t-i-o-n-s_-k-e-y.html">OPTIONS_KEY</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">OPTIONS_KEY</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-p-r-e-c-i-s-i-o-n_-k-e-y.html">PRECISION_KEY</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">PRECISION_KEY</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-s-y-m-b-o-l_-k-e-y.html">SYMBOL_KEY</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">SYMBOL_KEY</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

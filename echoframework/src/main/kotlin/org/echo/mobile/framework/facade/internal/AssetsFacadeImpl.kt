@@ -31,8 +31,10 @@ class AssetsFacadeImpl(
     private val databaseApiService: DatabaseApiService,
     private val networkBroadcastApiService: NetworkBroadcastApiService,
     private val cryptoCoreComponent: CryptoCoreComponent,
-    private val notifiedTransactionsHelper: NotificationsHelper<TransactionResult>
-) : BaseTransactionsFacade(databaseApiService, cryptoCoreComponent), AssetsFacade {
+    private val notifiedTransactionsHelper: NotificationsHelper<TransactionResult>,
+    private val transactionExpirationDelay: Long
+) : BaseTransactionsFacade(databaseApiService, cryptoCoreComponent, transactionExpirationDelay),
+    AssetsFacade {
 
     override fun createAsset(
         name: String,
@@ -65,16 +67,9 @@ class AssetsFacadeImpl(
         privateKey: ByteArray,
         asset: Asset
     ): String {
-        val blockData = databaseApiService.getBlockData()
-        val chainId = getChainId()
-
         val operation = CreateAssetOperation(asset)
-        val fees = getFees(listOf(operation), ECHO_ASSET_ID)
 
-        val transaction = Transaction(blockData, listOf(operation), chainId).apply {
-            setFees(fees)
-            addPrivateKey(privateKey)
-        }
+        val transaction = configureTransaction(operation, privateKey, ECHO_ASSET_ID)
 
         return networkBroadcastApiService.broadcastTransactionWithCallback(transaction)
             .dematerialize().toString()

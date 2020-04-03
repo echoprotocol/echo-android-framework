@@ -11,13 +11,17 @@ import org.echo.mobile.framework.model.Asset
 import org.echo.mobile.framework.model.Balance
 import org.echo.mobile.framework.model.BaseOperation
 import org.echo.mobile.framework.model.Block
-import org.echo.mobile.framework.model.EthDepositMapper
-import org.echo.mobile.framework.model.EthWithdrawMapper
+import org.echo.mobile.framework.model.DepositMapper
+import org.echo.mobile.framework.model.Erc20DepositMapper
+import org.echo.mobile.framework.model.Erc20TokenMapper
+import org.echo.mobile.framework.model.Erc20WithdrawalMapper
 import org.echo.mobile.framework.model.FullAccount
+import org.echo.mobile.framework.model.operations.GenerateBitcoinAddressOperation
 import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.HistoricalTransfer
 import org.echo.mobile.framework.model.HistoryResponse
 import org.echo.mobile.framework.model.HistoryResult
+import org.echo.mobile.framework.model.WithdrawMapper
 import org.echo.mobile.framework.model.operations.AccountCreateOperation
 import org.echo.mobile.framework.model.operations.AccountUpdateOperation
 import org.echo.mobile.framework.model.operations.ContractCallOperation
@@ -29,8 +33,13 @@ import org.echo.mobile.framework.model.operations.GenerateEthereumAddressOperati
 import org.echo.mobile.framework.model.operations.IssueAssetOperation
 import org.echo.mobile.framework.model.operations.OperationType
 import org.echo.mobile.framework.model.operations.SidechainBurnSocketOperation
+import org.echo.mobile.framework.model.operations.SidechainERC20BurnSocketOperation
+import org.echo.mobile.framework.model.operations.SidechainERC20DepositSocketOperation
+import org.echo.mobile.framework.model.operations.SidechainERC20IssueSocketOperation
+import org.echo.mobile.framework.model.operations.SidechainERC20RegisterTokenOperation
 import org.echo.mobile.framework.model.operations.SidechainIssueSocketOperation
 import org.echo.mobile.framework.model.operations.TransferOperation
+import org.echo.mobile.framework.model.operations.WithdrawBitcoinOperation
 import org.echo.mobile.framework.model.operations.WithdrawEthereumOperation
 import org.echo.mobile.framework.processResult
 import org.echo.mobile.framework.service.AccountHistoryApiService
@@ -246,10 +255,9 @@ class InformationFacadeImpl(
                         accountsRegistry,
                         assetsRegistry
                     )
-                OperationType.CONTRACT_TRANSFER_OPERATION ->
+                OperationType.CONTRACT_INTERNAL_CALL_OPERATION ->
                     processContractTransferOperation(
                         operation as ContractTransferOperation,
-                        accountsRegistry,
                         assetsRegistry
                     )
                 OperationType.SIDECHAIN_ETH_CREATE_ADDRESS_OPERATION ->
@@ -257,22 +265,52 @@ class InformationFacadeImpl(
                         operation as GenerateEthereumAddressOperation,
                         accountsRegistry
                     )
+                OperationType.SIDECHAIN_BTC_CREATE_ADDRESS_OPERATION ->
+                    processGenerateBtcAddressOperation(
+                        operation as GenerateBitcoinAddressOperation,
+                        accountsRegistry
+                    )
                 OperationType.SIDECHAIN_ETH_WITHDRAW_OPERATION ->
                     processWithdrawEthOperation(
                         operation as WithdrawEthereumOperation,
                         accountsRegistry
                     )
-                OperationType.SIDECHAIN_ETH_ISSUE_OPERATION ->
+                OperationType.SIDECHAIN_BTC_WITHDRAW_OPERATION ->
+                    processWithdrawBtcOperation(
+                        operation as WithdrawBitcoinOperation,
+                        accountsRegistry
+                    )
+                OperationType.SIDECHAIN_ISSUE_OPERATION ->
                     processSidechainIssueOperation(
                         operation as SidechainIssueSocketOperation,
                         accountsRegistry,
                         assetsRegistry
                     )
-                OperationType.SIDECHAIN_ETH_BURN_OPERATION ->
+                OperationType.SIDECHAIN_BURN_OPERATION ->
                     processSidechainBurnOperation(
                         operation as SidechainBurnSocketOperation,
                         accountsRegistry,
                         assetsRegistry
+                    )
+                OperationType.SIDECHAIN_ERC20_REGISTER_TOKEN_OPERATION ->
+                    processSidechainERC20RegisterTokenOperation(
+                        operation as SidechainERC20RegisterTokenOperation,
+                        accountsRegistry
+                    )
+                OperationType.SIDECHAIN_ERC20_ISSUE_OPERATION ->
+                    processSidechainERC20IssueTokenOperation(
+                        operation as SidechainERC20IssueSocketOperation,
+                        accountsRegistry
+                    )
+                OperationType.SIDECHAIN_ERC20_BURN_OPERATION ->
+                    processSidechainERC20BurnTokenOperation(
+                        operation as SidechainERC20BurnSocketOperation,
+                        accountsRegistry
+                    )
+                OperationType.SIDECHAIN_ERC20_DEPOSIT_TOKEN_OPERATION ->
+                    processSidechainERC20DepositTokenOperation(
+                        operation as SidechainERC20DepositSocketOperation,
+                        accountsRegistry
                     )
 
                 else -> {
@@ -411,21 +449,12 @@ class InformationFacadeImpl(
 
     private fun processContractTransferOperation(
         operation: ContractTransferOperation,
-        accountRegistry: MutableMap<String, Account>,
         assetsRegistry: MutableList<Asset>
     ) {
-        val assetId = operation.amount.asset.getObjectId()
+        val assetId = operation.value.asset.getObjectId()
 
         getAsset(assetId, assetsRegistry)?.let { notNullAsset ->
-            operation.amount.asset = notNullAsset
-        }
-
-        val toAccount = operation.to.getObjectId()
-
-        fillAccounts(listOf(toAccount), accountRegistry)
-
-        accountRegistry[toAccount]?.let { notNullAccount ->
-            operation.to = notNullAccount
+            operation.value.asset = notNullAsset
         }
     }
 
@@ -442,8 +471,34 @@ class InformationFacadeImpl(
         }
     }
 
+    private fun processGenerateBtcAddressOperation(
+        operation: GenerateBitcoinAddressOperation,
+        accountRegistry: MutableMap<String, Account>
+    ) {
+        val account = operation.account.getObjectId()
+
+        fillAccounts(listOf(account), accountRegistry)
+
+        accountRegistry[account]?.let { notNullAccount ->
+            operation.account = notNullAccount
+        }
+    }
+
     private fun processWithdrawEthOperation(
         operation: WithdrawEthereumOperation,
+        accountRegistry: MutableMap<String, Account>
+    ) {
+        val account = operation.account.getObjectId()
+
+        fillAccounts(listOf(account), accountRegistry)
+
+        accountRegistry[account]?.let { notNullAccount ->
+            operation.account = notNullAccount
+        }
+    }
+
+    private fun processWithdrawBtcOperation(
+        operation: WithdrawBitcoinOperation,
         accountRegistry: MutableMap<String, Account>
     ) {
         val account = operation.account.getObjectId()
@@ -475,7 +530,7 @@ class InformationFacadeImpl(
         }
 
         val withdrawId = operation.deposit.getObjectId()
-        databaseApiService.getObjects(listOf(withdrawId), EthDepositMapper())
+        databaseApiService.getObjects(listOf(withdrawId), DepositMapper())
             .value { deposits ->
                 deposits.find { it.getObjectId() == withdrawId }?.let {
                     operation.deposit = it
@@ -503,10 +558,98 @@ class InformationFacadeImpl(
         }
 
         val withdrawId = operation.withdraw.getObjectId()
-        databaseApiService.getObjects(listOf(withdrawId), EthWithdrawMapper())
+        databaseApiService.getObjects(listOf(withdrawId), WithdrawMapper())
             .value { withdraws ->
                 withdraws.find { it.getObjectId() == withdrawId }?.let {
                     operation.withdraw = it
+                }
+            }
+    }
+
+    private fun processSidechainERC20RegisterTokenOperation(
+        operation: SidechainERC20RegisterTokenOperation,
+        accountRegistry: MutableMap<String, Account>
+    ) {
+        val account = operation.account.getObjectId()
+
+        fillAccounts(listOf(account), accountRegistry)
+
+        accountRegistry[account]?.let { notNullAccount ->
+            operation.account = notNullAccount
+        }
+    }
+
+    private fun processSidechainERC20IssueTokenOperation(
+        operation: SidechainERC20IssueSocketOperation,
+        accountRegistry: MutableMap<String, Account>
+    ) {
+        val account = operation.account.getObjectId()
+
+        fillAccounts(listOf(account), accountRegistry)
+
+        accountRegistry[account]?.let { notNullAccount ->
+            operation.account = notNullAccount
+        }
+
+        val depositId = operation.erc20Deposit.getObjectId()
+        databaseApiService.getObjects(listOf(depositId), Erc20DepositMapper())
+            .value { deposits ->
+                deposits.find { it.getObjectId() == depositId }?.let {
+                    operation.erc20Deposit = it
+                }
+            }
+
+        val tokenId = operation.erc20Token.getObjectId()
+        databaseApiService.getObjects(listOf(tokenId), Erc20TokenMapper())
+            .value { deposits ->
+                deposits.find { it.getObjectId() == tokenId }?.let {
+                    operation.erc20Token = it
+                }
+            }
+    }
+
+    private fun processSidechainERC20DepositTokenOperation(
+        operation: SidechainERC20DepositSocketOperation,
+        accountRegistry: MutableMap<String, Account>
+    ) {
+        val account = operation.account.getObjectId()
+        val commetteeMember = operation.committeeMember.getObjectId()
+
+        fillAccounts(listOf(account, commetteeMember), accountRegistry)
+
+        accountRegistry[account]?.let { notNullAccount ->
+            operation.account = notNullAccount
+        }
+        accountRegistry[commetteeMember]?.let { notNullAccount ->
+            operation.committeeMember = notNullAccount
+        }
+    }
+
+    private fun processSidechainERC20BurnTokenOperation(
+        operation: SidechainERC20BurnSocketOperation,
+        accountRegistry: MutableMap<String, Account>
+    ) {
+        val account = operation.account.getObjectId()
+
+        fillAccounts(listOf(account), accountRegistry)
+
+        accountRegistry[account]?.let { notNullAccount ->
+            operation.account = notNullAccount
+        }
+
+        val depositId = operation.erc20Withdrawal.getObjectId()
+        databaseApiService.getObjects(listOf(depositId), Erc20WithdrawalMapper())
+            .value { deposits ->
+                deposits.find { it.getObjectId() == depositId }?.let {
+                    operation.erc20Withdrawal = it
+                }
+            }
+
+        val tokenId = operation.erc20Token.getObjectId()
+        databaseApiService.getObjects(listOf(tokenId), Erc20TokenMapper())
+            .value { deposits ->
+                deposits.find { it.getObjectId() == tokenId }?.let {
+                    operation.erc20Token = it
                 }
             }
     }

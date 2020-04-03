@@ -91,6 +91,7 @@ class AccountCreateOperationBuilder : Builder<AccountCreateOperation> {
                 Account(registrar!!),
                 active!!,
                 edKey!!,
+                null,
                 options!!,
                 nullSafeFee
             )
@@ -99,6 +100,7 @@ class AccountCreateOperationBuilder : Builder<AccountCreateOperation> {
             Account(registrar!!),
             active!!,
             edKey!!,
+            null,
             options!!
         )
     }

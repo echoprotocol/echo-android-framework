@@ -1,0 +1,545 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>org.echo.mobile.framework.model - echoframework</title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">echoframework</a>&nbsp;/&nbsp;<a href="./index.html">org.echo.mobile.framework.model</a><br/>
+<br/>
+<h2>Package org.echo.mobile.framework.model</h2>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-account/index.html">Account</a></h4>
+</td>
+<td>
+<p>Represents account model in blockchain</p>
+<code><span class="keyword">class </span><span class="identifier">Account</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-graphene-object/index.html"><span class="identifier">GrapheneObject</span></a><span class="symbol">, </span><a href="-graphene-serializable.html"><span class="identifier">GrapheneSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-account-options/index.html">AccountOptions</a></h4>
+</td>
+<td>
+<p>Contains user account additional information</p>
+<code><span class="keyword">class </span><span class="identifier">AccountOptions</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-graphene-serializable.html"><span class="identifier">GrapheneSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-address/index.html">Address</a></h4>
+</td>
+<td>
+<p>Represents EcDSA address model in blockchain</p>
+<code><span class="keyword">class </span><span class="identifier">Address</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-asset/index.html">Asset</a></h4>
+</td>
+<td>
+<p>Class used to represent a specific asset on the Graphene platform</p>
+<code><span class="keyword">class </span><span class="identifier">Asset</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-graphene-object/index.html"><span class="identifier">GrapheneObject</span></a><span class="symbol">, </span><a href="-byte-serializable/index.html"><span class="identifier">ByteSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-asset-amount/index.html">AssetAmount</a></h4>
+</td>
+<td>
+<p>Class used to represent a specific amount of a certain asset</p>
+<code><span class="keyword">class </span><span class="identifier">AssetAmount</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-graphene-serializable.html"><span class="identifier">GrapheneSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-asset-options/index.html">AssetOptions</a></h4>
+</td>
+<td>
+<p>Contains options available on all assets in the network
+<a href="https://dev-doc.myecho.app/structgraphene_1_1chain_1_1asset__options.html">AssetOptions details</a></p>
+<code><span class="keyword">class </span><span class="identifier">AssetOptions</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-json-serializable/index.html"><span class="identifier">JsonSerializable</span></a><span class="symbol">, </span><a href="-byte-serializable/index.html"><span class="identifier">ByteSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-balance/index.html">Balance</a></h4>
+</td>
+<td>
+<p>Represents balance model in Graphene blockchain</p>
+<code><span class="keyword">data</span> <span class="keyword">class </span><span class="identifier">Balance</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-base-operation/index.html">BaseOperation</a></h4>
+</td>
+<td>
+<p>Represents base operation model in Graphene blockchain</p>
+<code><span class="keyword">abstract</span> <span class="keyword">class </span><span class="identifier">BaseOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-byte-serializable/index.html"><span class="identifier">ByteSerializable</span></a><span class="symbol">, </span><a href="-json-serializable/index.html"><span class="identifier">JsonSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-bitasset-options/index.html">BitassetOptions</a></h4>
+</td>
+<td>
+<p>Options only available for BitAssets
+<a href="https://dev-doc.myecho.app/asset__ops_8hpp_source.html">https://dev-doc.myecho.app/asset__ops_8hpp_source.html</a></p>
+<code><span class="keyword">class </span><span class="identifier">BitassetOptions</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-graphene-serializable.html"><span class="identifier">GrapheneSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-block/index.html">Block</a></h4>
+</td>
+<td>
+<p>Represents block model in blockchain</p>
+<code><span class="keyword">class </span><span class="identifier">Block</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-block-data/index.html">BlockData</a></h4>
+</td>
+<td>
+<p>This class encapsulates all block-related information needed in order to build a valid transaction.</p>
+<code><span class="keyword">class </span><span class="identifier">BlockData</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-byte-serializable/index.html"><span class="identifier">ByteSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-btc-address/index.html">BtcAddress</a></h4>
+</td>
+<td>
+<p>Describes account's botcoin address model</p>
+<code><span class="keyword">data</span> <span class="keyword">class </span><span class="identifier">BtcAddress</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-byte-serializable/index.html">ByteSerializable</a></h4>
+</td>
+<td>
+<p>Describes functionality of entities for which it is required
+to have specific byte-array representation</p>
+<code><span class="keyword">interface </span><span class="identifier">ByteSerializable</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-current-fees/index.html">CurrentFees</a></h4>
+</td>
+<td>
+<p>Describes fees that exist in current blockchain version</p>
+<code><span class="keyword">class </span><span class="identifier">CurrentFees</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-deposit/index.html">Deposit</a></h4>
+</td>
+<td>
+<p>Echo sidechain base deposit model</p>
+<code><span class="keyword">sealed</span> <span class="keyword">class </span><span class="identifier">Deposit</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-graphene-object/index.html"><span class="identifier">GrapheneObject</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-deposit-address/index.html">DepositAddress</a></h4>
+</td>
+<td>
+<p>Describes deposit bitcoin address</p>
+<code><span class="keyword">data</span> <span class="keyword">class </span><span class="identifier">DepositAddress</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-deposit-deserializer/index.html">DepositDeserializer</a></h4>
+</td>
+<td>
+<p>Deserializer for <a href="-deposit/index.html">Deposit</a> model</p>
+<code><span class="keyword">class </span><span class="identifier">DepositDeserializer</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">JsonDeserializer</span><span class="symbol">&lt;</span><a href="-deposit/index.html"><span class="identifier">Deposit</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-deposit-mapper/index.html">DepositMapper</a></h4>
+</td>
+<td>
+<p>Json mapper for <a href="-withdraw/index.html">Withdraw</a> model</p>
+<code><span class="keyword">class </span><span class="identifier">DepositMapper</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.core.mapper/-object-mapper.html"><span class="identifier">ObjectMapper</span></a><span class="symbol">&lt;</span><a href="-deposit/index.html"><span class="identifier">Deposit</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-dynamic-global-properties/index.html">DynamicGlobalProperties</a></h4>
+</td>
+<td>
+<p>Represents account model in Graphene blockchain
+<a href="#">Dynamic global properties details</a>
+(https://dev-doc.myecho.app/classgraphene_1_1chain_1_1dynamic__global__property__object.html)</p>
+<code><span class="keyword">class </span><span class="identifier">DynamicGlobalProperties</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-graphene-object/index.html"><span class="identifier">GrapheneObject</span></a><span class="symbol">, </span><a href="https://docs.oracle.com/javase/6/docs/api/java/io/Serializable.html"><span class="identifier">Serializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-echorand-config/index.html">EchorandConfig</a></h4>
+</td>
+<td>
+<p>Describes all echorand's configs</p>
+<code><span class="keyword">class </span><span class="identifier">EchorandConfig</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-e-r-c20-deposit/index.html">ERC20Deposit</a></h4>
+</td>
+<td>
+<p>Echo erc20 sidechain deposit model</p>
+<code><span class="keyword">class </span><span class="identifier">ERC20Deposit</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-graphene-object/index.html"><span class="identifier">GrapheneObject</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-erc20-deposit-mapper/index.html">Erc20DepositMapper</a></h4>
+</td>
+<td>
+<p>Json mapper for <a href="-deposit/index.html">Deposit</a> model</p>
+<code><span class="keyword">class </span><span class="identifier">Erc20DepositMapper</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.core.mapper/-object-mapper.html"><span class="identifier">ObjectMapper</span></a><span class="symbol">&lt;</span><a href="-e-r-c20-deposit/index.html"><span class="identifier">ERC20Deposit</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-e-r-c20-token/index.html">ERC20Token</a></h4>
+</td>
+<td>
+<p>Descibes model of ERC20 token in ECHO network</p>
+<code><span class="keyword">class </span><span class="identifier">ERC20Token</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-graphene-object/index.html"><span class="identifier">GrapheneObject</span></a><span class="symbol">, </span><a href="-graphene-serializable.html"><span class="identifier">GrapheneSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-erc20-token-deserializer/index.html">Erc20TokenDeserializer</a></h4>
+</td>
+<td>
+<p>Json deserializer for <a href="-e-r-c20-token/index.html">ERC20Token</a></p>
+<code><span class="keyword">class </span><span class="identifier">Erc20TokenDeserializer</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">JsonDeserializer</span><span class="symbol">&lt;</span><a href="-e-r-c20-token/index.html"><span class="identifier">ERC20Token</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-erc20-token-mapper/index.html">Erc20TokenMapper</a></h4>
+</td>
+<td>
+<p>Json mapper for <a href="-e-r-c20-token/index.html">ERC20Token</a> model</p>
+<code><span class="keyword">class </span><span class="identifier">Erc20TokenMapper</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.core.mapper/-object-mapper.html"><span class="identifier">ObjectMapper</span></a><span class="symbol">&lt;</span><a href="-e-r-c20-token/index.html"><span class="identifier">ERC20Token</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-e-r-c20-withdrawal/index.html">ERC20Withdrawal</a></h4>
+</td>
+<td>
+<p>Echo sidechain withdrawal model</p>
+<code><span class="keyword">class </span><span class="identifier">ERC20Withdrawal</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-graphene-object/index.html"><span class="identifier">GrapheneObject</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-erc20-withdrawal-mapper/index.html">Erc20WithdrawalMapper</a></h4>
+</td>
+<td>
+<p>Json mapper for <a href="-e-r-c20-withdrawal/index.html">ERC20Withdrawal</a> model</p>
+<code><span class="keyword">class </span><span class="identifier">Erc20WithdrawalMapper</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.core.mapper/-object-mapper.html"><span class="identifier">ObjectMapper</span></a><span class="symbol">&lt;</span><a href="-e-r-c20-withdrawal/index.html"><span class="identifier">ERC20Withdrawal</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-error/index.html">Error</a></h4>
+</td>
+<td>
+<p>Represents error from blockchain response</p>
+<code><span class="keyword">data</span> <span class="keyword">class </span><span class="identifier">Error</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-error-data/index.html">ErrorData</a></h4>
+</td>
+<td>
+<p>Represents error data from blockchain response</p>
+<code><span class="keyword">data</span> <span class="keyword">class </span><span class="identifier">ErrorData</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-eth-address/index.html">EthAddress</a></h4>
+</td>
+<td>
+<p>Describes account'sethereum address model</p>
+<code><span class="keyword">data</span> <span class="keyword">class </span><span class="identifier">EthAddress</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-extensions/index.html">Extensions</a></h4>
+</td>
+<td>
+<p>Represents additional payload of models</p>
+<code><span class="keyword">class </span><span class="identifier">Extensions</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-graphene-serializable.html"><span class="identifier">GrapheneSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-fee-parameter/index.html">FeeParameter</a></h4>
+</td>
+<td>
+<p>Blockchain single fee item</p>
+<code><span class="keyword">class </span><span class="identifier">FeeParameter</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-fee-parameters/index.html">FeeParameters</a></h4>
+</td>
+<td>
+<p>List fo all blockchain fees</p>
+<code><span class="keyword">class </span><span class="identifier">FeeParameters</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-full-account/index.html">FullAccount</a></h4>
+</td>
+<td>
+<p>Represents full information about user account</p>
+<code><span class="keyword">class </span><span class="identifier">FullAccount</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-gas-price/index.html">GasPrice</a></h4>
+</td>
+<td>
+<p>Describes blockchain gas price</p>
+<code><span class="keyword">class </span><span class="identifier">GasPrice</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-global-properties/index.html">GlobalProperties</a></h4>
+</td>
+<td>
+<p>Contains all global blockchain properties</p>
+<code><span class="keyword">class </span><span class="identifier">GlobalProperties</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-graphene-object/index.html">GrapheneObject</a></h4>
+</td>
+<td>
+<p>Represents base graphene object model</p>
+<code><span class="keyword">open</span> <span class="keyword">class </span><span class="identifier">GrapheneObject</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-byte-serializable/index.html"><span class="identifier">ByteSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-graphene-serializable.html">GrapheneSerializable</a></h4>
+</td>
+<td>
+<p>Represents functionality of entities that fot which
+it is required to have both json and byte-array representation</p>
+<code><span class="keyword">interface </span><span class="identifier">GrapheneSerializable</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-byte-serializable/index.html"><span class="identifier">ByteSerializable</span></a><span class="symbol">, </span><a href="-json-serializable/index.html"><span class="identifier">JsonSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-historical-transfer/index.html">HistoricalTransfer</a></h4>
+</td>
+<td>
+<p>Represents account history
+<a href="https://dev-doc.myecho.app/classgraphene_1_1chain_1_1operation__history__object.html">History object details</a></p>
+<code><span class="keyword">data</span> <span class="keyword">class </span><span class="identifier">HistoricalTransfer</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-history-response/index.html">HistoryResponse</a></h4>
+</td>
+<td>
+<p>This class encapsulates batch of history</p>
+<code><span class="keyword">data</span> <span class="keyword">class </span><span class="identifier">HistoryResponse</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-history-result/index.html">HistoryResult</a></h4>
+</td>
+<td>
+<p>Represents account model in Graphene blockchain</p>
+<code><span class="keyword">class </span><span class="identifier">HistoryResult</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-json-deserializable/index.html">JsonDeserializable</a></h4>
+</td>
+<td>
+<p>Describes functionality of entities for which it is required
+to have specific representation from json string</p>
+<code><span class="keyword">interface </span><span class="identifier">JsonDeserializable</span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/io/Serializable.html"><span class="identifier">Serializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-json-serializable/index.html">JsonSerializable</a></h4>
+</td>
+<td>
+<p>Describes functionality of entities for which it is required
+to have specific json string representation</p>
+<code><span class="keyword">interface </span><span class="identifier">JsonSerializable</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/io/Serializable.html"><span class="identifier">Serializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-method/index.html">Method</a></h4>
+</td>
+<td>
+<p>Describes sidechain method informationstructure</p>
+<code><span class="keyword">class </span><span class="identifier">Method</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-object-type/index.html">ObjectType</a></h4>
+</td>
+<td>
+<p>Enum type used to list all possible object types in Graphene blockchain</p>
+<code><span class="keyword">enum</span> <span class="keyword">class </span><span class="identifier">ObjectType</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-optional/index.html">Optional</a></h4>
+</td>
+<td>
+<p>Container template class used whenever we have an optional field.</p>
+<code><span class="keyword">class </span><span class="identifier">Optional</span><span class="symbol">&lt;</span><span class="identifier">T</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-graphene-serializable.html"><span class="identifier">GrapheneSerializable</span></a><span class="symbol">&gt;</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-graphene-serializable.html"><span class="identifier">GrapheneSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-parameters/index.html">Parameters</a></h4>
+</td>
+<td>
+<p>Blockchain global properties parameters list</p>
+<code><span class="keyword">class </span><span class="identifier">Parameters</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-prev-signature/index.html">PrevSignature</a></h4>
+</td>
+<td>
+<p>Describes previous signature model</p>
+<code><span class="keyword">class </span><span class="identifier">PrevSignature</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-price/index.html">Price</a></h4>
+</td>
+<td>
+<p>The price struct stores asset prices in the Graphene system.</p>
+<code><span class="keyword">class </span><span class="identifier">Price</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-json-serializable/index.html"><span class="identifier">JsonSerializable</span></a><span class="symbol">, </span><a href="-byte-serializable/index.html"><span class="identifier">ByteSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-public-key/index.html">PublicKey</a></h4>
+</td>
+<td>
+<p>Encapsulates logic of working with account key/address by EcDSA algorithm</p>
+<code><span class="keyword">class </span><span class="identifier">PublicKey</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/io/Serializable.html"><span class="identifier">Serializable</span></a><span class="symbol">, </span><a href="-byte-serializable/index.html"><span class="identifier">ByteSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-registration-result/index.html">RegistrationResult</a></h4>
+</td>
+<td>
+<p>Represents result of account registration.
+Example: <a href="#">{block_num:114642,tx_id:30b2716a2f563b2cfe29442f410681bdae8b6347}</a></p>
+<code><span class="keyword">class </span><span class="identifier">RegistrationResult</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-registration-task/index.html">RegistrationTask</a></h4>
+</td>
+<td>
+<p>Describes task required to solv for account registration</p>
+<code><span class="keyword">data</span> <span class="keyword">class </span><span class="identifier">RegistrationTask</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-sidechain-config/index.html">SidechainConfig</a></h4>
+</td>
+<td>
+<p>Describes all sidechain's configs</p>
+<code><span class="keyword">class </span><span class="identifier">SidechainConfig</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-sidechain-type/index.html">SidechainType</a></h4>
+</td>
+<td>
+<p>Contains possible sidechain types</p>
+<code><span class="keyword">enum</span> <span class="keyword">class </span><span class="identifier">SidechainType</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-socket-response/index.html">SocketResponse</a></h4>
+</td>
+<td>
+<p>Represents response from blockchain</p>
+<code><span class="keyword">open</span> <span class="keyword">class </span><span class="identifier">SocketResponse</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-socket-response-result/index.html">SocketResponseResult</a></h4>
+</td>
+<td>
+<p>Represents typed response with result from blockchain</p>
+<code><span class="keyword">class </span><span class="identifier">SocketResponseResult</span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-socket-response/index.html"><span class="identifier">SocketResponse</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-transaction/index.html">Transaction</a></h4>
+</td>
+<td>
+<p>Class used to represent a generic Graphene transaction.
+<a href="https://dev-doc.myecho.app/structgraphene_1_1chain_1_1transaction.html">Transaction details</a></p>
+<code><span class="keyword">class </span><span class="identifier">Transaction</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-byte-serializable/index.html"><span class="identifier">ByteSerializable</span></a><span class="symbol">, </span><a href="-json-serializable/index.html"><span class="identifier">JsonSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-transaction-operations-result/index.html">TransactionOperationsResult</a></h4>
+</td>
+<td>
+<p>Represents Graphene object with operation results of broadcasted transaction</p>
+<code><span class="keyword">data</span> <span class="keyword">class </span><span class="identifier">TransactionOperationsResult</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-transaction-result/index.html">TransactionResult</a></h4>
+</td>
+<td>
+<p>Represents Graphene notice object for broadcasted transaction</p>
+<code><span class="keyword">data</span> <span class="keyword">class </span><span class="identifier">TransactionResult</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-vote/index.html">Vote</a></h4>
+</td>
+<td>
+<p>Represents vote model in graphene blockchain</p>
+<code><span class="keyword">class </span><span class="identifier">Vote</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-byte-serializable/index.html"><span class="identifier">ByteSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-withdraw/index.html">Withdraw</a></h4>
+</td>
+<td>
+<p>Echo sidechain base withdraw model</p>
+<code><span class="keyword">sealed</span> <span class="keyword">class </span><span class="identifier">Withdraw</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-graphene-object/index.html"><span class="identifier">GrapheneObject</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-withdraw-deserializer/index.html">WithdrawDeserializer</a></h4>
+</td>
+<td>
+<p>Deserializer for <a href="-deposit/index.html">Deposit</a> model</p>
+<code><span class="keyword">class </span><span class="identifier">WithdrawDeserializer</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">JsonDeserializer</span><span class="symbol">&lt;</span><a href="-withdraw/index.html"><span class="identifier">Withdraw</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-withdraw-mapper/index.html">WithdrawMapper</a></h4>
+</td>
+<td>
+<p>Json mapper for <a href="-withdraw/index.html">Withdraw</a> model</p>
+<code><span class="keyword">class </span><span class="identifier">WithdrawMapper</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.core.mapper/-object-mapper.html"><span class="identifier">ObjectMapper</span></a><span class="symbol">&lt;</span><a href="-withdraw/index.html"><span class="identifier">Withdraw</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="is-equals-by-key.html">isEqualsByKey</a></h4>
+</td>
+<td>
+<p>Check account equals by <a href="is-equals-by-key.html#org.echo.mobile.framework.model$isEqualsByKey(org.echo.mobile.framework.model.Account, kotlin.String)/key">key</a> from role <a href="#">authorityType</a></p>
+<code><span class="keyword">fun </span><a href="-account/index.html"><span class="identifier">Account</span></a><span class="symbol">.</span><span class="identifier">isEqualsByKey</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model$isEqualsByKey(org.echo.mobile.framework.model.Account, kotlin.String)/key">key</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

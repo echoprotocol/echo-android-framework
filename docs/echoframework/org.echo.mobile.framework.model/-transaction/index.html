@@ -1,0 +1,185 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>Transaction - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.model</a>&nbsp;/&nbsp;<a href="./index.html">Transaction</a><br/>
+<br/>
+<h1>Transaction</h1>
+<code><span class="keyword">class </span><span class="identifier">Transaction</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-byte-serializable/index.html"><span class="identifier">ByteSerializable</span></a><span class="symbol">, </span><a href="../-json-serializable/index.html"><span class="identifier">JsonSerializable</span></a></code>
+<p>Class used to represent a generic Graphene transaction.
+<a href="https://dev-doc.myecho.app/structgraphene_1_1chain_1_1transaction.html">Transaction details</a></p>
+<p><strong>Author</strong><br/>
+Daria Pechkovskaya</p>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-transaction-deserializer/index.html">TransactionDeserializer</a></h4>
+</td>
+<td>
+<p>Json deserializer for <a href="./index.html">Transaction</a> class</p>
+<code><span class="keyword">class </span><span class="identifier">TransactionDeserializer</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">JsonDeserializer</span><span class="symbol">&lt;</span><a href="./index.html"><span class="identifier">Transaction</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<p>Class used to represent a generic Graphene transaction.
+<a href="https://dev-doc.myecho.app/structgraphene_1_1chain_1_1transaction.html">Transaction details</a></p>
+<code><span class="identifier">Transaction</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.Transaction$<init>(org.echo.mobile.framework.model.BlockData, kotlin.collections.List((org.echo.mobile.framework.model.BaseOperation)), kotlin.String, kotlin.Long)/blockData">blockData</span><span class="symbol">:</span>&nbsp;<a href="../-block-data/index.html"><span class="identifier">BlockData</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.Transaction$<init>(org.echo.mobile.framework.model.BlockData, kotlin.collections.List((org.echo.mobile.framework.model.BaseOperation)), kotlin.String, kotlin.Long)/operations">operations</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../-base-operation/index.html"><span class="identifier">BaseOperation</span></a><span class="symbol">&gt;</span><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.Transaction$<init>(org.echo.mobile.framework.model.BlockData, kotlin.collections.List((org.echo.mobile.framework.model.BaseOperation)), kotlin.String, kotlin.Long)/chainId">chainId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.Transaction$<init>(org.echo.mobile.framework.model.BlockData, kotlin.collections.List((org.echo.mobile.framework.model.BaseOperation)), kotlin.String, kotlin.Long)/delay">delay</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html"><span class="identifier">Long</span></a><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="block-data.html">blockData</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">blockData</span><span class="symbol">: </span><a href="../-block-data/index.html"><span class="identifier">BlockData</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="chain-id.html">chainId</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">chainId</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="has-private-keys.html">hasPrivateKeys</a></h4>
+</td>
+<td>
+<p>This method is used to query whether the instance has a private keys.</p>
+<code><span class="keyword">val </span><span class="identifier">hasPrivateKeys</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="operations.html">operations</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">operations</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../-base-operation/index.html"><span class="identifier">BaseOperation</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="private-keys.html">privateKeys</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">privateKeys</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html"><span class="identifier">MutableList</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="add-private-key.html">addPrivateKey</a></h4>
+</td>
+<td>
+<p>Adds required public key to list for signature purposes</p>
+<code><span class="keyword">fun </span><span class="identifier">addPrivateKey</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.Transaction$addPrivateKey(kotlin.ByteArray)/key">key</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="set-fees.html">setFees</a></h4>
+</td>
+<td>
+<p>Updates the fees for all operations in this transaction.</p>
+<code><span class="keyword">fun </span><span class="identifier">setFees</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.Transaction$setFees(kotlin.collections.List((org.echo.mobile.framework.model.AssetAmount)))/fees">fees</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../-asset-amount/index.html"><span class="identifier">AssetAmount</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="to-bytes.html">toBytes</a></h4>
+</td>
+<td>
+<p>Method that creates a serialized byte array with compact information about this transaction
+that is needed for the creation of a signature.</p>
+<code><span class="keyword">fun </span><span class="identifier">toBytes</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="to-json-object.html">toJsonObject</a></h4>
+</td>
+<td>
+<p>Converts entity to json object representation</p>
+<code><span class="keyword">fun </span><span class="identifier">toJsonObject</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">JsonElement</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="to-json-string.html">toJsonString</a></h4>
+</td>
+<td>
+<p>Converts entity to json string representation</p>
+<code><span class="keyword">fun </span><span class="identifier">toJsonString</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Companion Object Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-d-e-f-a-u-l-t_-e-x-p-i-r-a-t-i-o-n_-t-i-m-e.html">DEFAULT_EXPIRATION_TIME</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">DEFAULT_EXPIRATION_TIME</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-k-e-y_-e-x-p-i-r-a-t-i-o-n.html">KEY_EXPIRATION</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_EXPIRATION</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-k-e-y_-e-x-t-e-n-s-i-o-n-s.html">KEY_EXTENSIONS</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_EXTENSIONS</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-k-e-y_-o-p-e-r-a-t-i-o-n-s.html">KEY_OPERATIONS</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_OPERATIONS</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-k-e-y_-r-e-f_-b-l-o-c-k_-n-u-m.html">KEY_REF_BLOCK_NUM</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_REF_BLOCK_NUM</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-k-e-y_-r-e-f_-b-l-o-c-k_-p-r-e-f-i-x.html">KEY_REF_BLOCK_PREFIX</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_REF_BLOCK_PREFIX</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-k-e-y_-s-i-g-n-a-t-u-r-e-s.html">KEY_SIGNATURES</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_SIGNATURES</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

@@ -1,0 +1,50 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>WifProcessor - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.core.crypto</a>&nbsp;/&nbsp;<a href="./index.html">WifProcessor</a><br/>
+<br/>
+<h1>WifProcessor</h1>
+<code><span class="keyword">interface </span><span class="identifier">WifProcessor</span></code>
+<p>Provides methods for working with private key WIF format</p>
+<p><strong>Author</strong><br/>
+Dmitriy Bushuev</p>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="decode-from-wif.html">decodeFromWif</a></h4>
+</td>
+<td>
+<p>Decodes private key in wif format <a href="decode-from-wif.html#org.echo.mobile.framework.core.crypto.WifProcessor$decodeFromWif(kotlin.String)/source">source</a> to the raw bytes representation</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">decodeFromWif</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.core.crypto.WifProcessor$decodeFromWif(kotlin.String)/source">source</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="encode-to-wif.html">encodeToWif</a></h4>
+</td>
+<td>
+<p>Encodes private key in raw string representation to wif format</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">encodeToWif</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.core.crypto.WifProcessor$encodeToWif(kotlin.ByteArray)/source">source</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Inheritors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="../../org.echo.mobile.framework.core.crypto.internal/-default-wif-processor/index.html">DefaultWifProcessor</a></h4>
+</td>
+<td>
+<p>Default <a href="./index.html">WifProcessor</a> implementation based on standard WIF format</p>
+<code><span class="keyword">class </span><span class="identifier">DefaultWifProcessor</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">WifProcessor</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

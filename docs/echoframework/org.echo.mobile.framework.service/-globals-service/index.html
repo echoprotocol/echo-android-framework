@@ -1,0 +1,58 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>GlobalsService - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.service</a>&nbsp;/&nbsp;<a href="./index.html">GlobalsService</a><br/>
+<br/>
+<h1>GlobalsService</h1>
+<code><span class="keyword">interface </span><span class="identifier">GlobalsService</span></code>
+<p>Encapsulates logic, associated with global data from Database API</p>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="get-chain-id.html">getChainId</a></h4>
+</td>
+<td>
+<p>Retrieves blockchain chain id</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">getChainId</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.support/-result/index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-exception/index.html"><span class="identifier">Exception</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">&gt;</span></code><br/>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">getChainId</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.GlobalsService$getChainId(org.echo.mobile.framework.Callback((kotlin.String)))/callback">callback</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="get-dynamic-global-properties.html">getDynamicGlobalProperties</a></h4>
+</td>
+<td>
+<p>Retrieves current blockchain block data</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">getDynamicGlobalProperties</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.support/-result/index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-exception/index.html"><span class="identifier">Exception</span></a><span class="symbol">,</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-dynamic-global-properties/index.html"><span class="identifier">DynamicGlobalProperties</span></a><span class="symbol">&gt;</span></code><br/>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">getDynamicGlobalProperties</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.GlobalsService$getDynamicGlobalProperties(org.echo.mobile.framework.Callback((org.echo.mobile.framework.model.DynamicGlobalProperties)))/callback">callback</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-dynamic-global-properties/index.html"><span class="identifier">DynamicGlobalProperties</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="get-global-properties.html">getGlobalProperties</a></h4>
+</td>
+<td>
+<p>Retrieves blockchain current configuration parameters</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">getGlobalProperties</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.GlobalsService$getGlobalProperties(org.echo.mobile.framework.Callback((org.echo.mobile.framework.model.GlobalProperties)))/callback">callback</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-global-properties/index.html"><span class="identifier">GlobalProperties</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Inheritors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="../-database-api-service.html">DatabaseApiService</a></h4>
+</td>
+<td>
+<p>Encapsulates logic, associated with blockchain database API</p>
+<code><span class="keyword">interface </span><span class="identifier">DatabaseApiService</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-api-service/index.html"><span class="identifier">ApiService</span></a><span class="symbol">, </span><a href="../-accounts-service/index.html"><span class="identifier">AccountsService</span></a><span class="symbol">, </span><a href="./index.html"><span class="identifier">GlobalsService</span></a><span class="symbol">, </span><a href="../-authority-and-validation-service/index.html"><span class="identifier">AuthorityAndValidationService</span></a><span class="symbol">, </span><a href="../-blocks-and-transactions-service/index.html"><span class="identifier">BlocksAndTransactionsService</span></a><span class="symbol">, </span><a href="../-contracts-service/index.html"><span class="identifier">ContractsService</span></a><span class="symbol">, </span><a href="../-assets-service/index.html"><span class="identifier">AssetsService</span></a><span class="symbol">, </span><a href="../-subscription-service/index.html"><span class="identifier">SubscriptionService</span></a><span class="symbol">, </span><a href="../-objects-service/index.html"><span class="identifier">ObjectsService</span></a><span class="symbol">, </span><a href="../-custom-operation-service/index.html"><span class="identifier">CustomOperationService</span></a><span class="symbol">, </span><a href="../-sidechain-service/index.html"><span class="identifier">SidechainService</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

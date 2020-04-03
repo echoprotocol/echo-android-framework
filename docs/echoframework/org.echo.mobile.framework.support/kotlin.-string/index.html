@@ -1,0 +1,56 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>org.echo.mobile.framework.support.kotlin.String - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.support</a>&nbsp;/&nbsp;<a href="./index.html">kotlin.String</a><br/>
+<br/>
+<h3>Extensions for kotlin.String</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="hexlify.html">hexlify</a></h4>
+</td>
+<td>
+<p>Decodes an ascii string to a byte array.</p>
+<code><span class="keyword">fun </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">.</span><span class="identifier">hexlify</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="hex-to-bytes.html">hexToBytes</a></h4>
+</td>
+<td>
+<p>Converts an hexadecimal string to its corresponding byte[] value.</p>
+<code><span class="keyword">fun </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">.</span><span class="identifier">hexToBytes</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="parse.html">parse</a></h4>
+</td>
+<td>
+<p>Parse string to <a href="https://docs.oracle.com/javase/6/docs/api/java/util/Date.html">Date</a> according to required configuration</p>
+<code><span class="keyword">fun </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">.</span><span class="identifier">parse</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support$parse(kotlin.String, kotlin.String, java.util.TimeZone, java.util.Locale, java.util.Date, kotlin.Function1((java.lang.Exception, kotlin.Unit)))/format">format</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a>&nbsp;<span class="symbol">=</span>&nbsp;TIME_DATE_FORMAT<span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.support$parse(kotlin.String, kotlin.String, java.util.TimeZone, java.util.Locale, java.util.Date, kotlin.Function1((java.lang.Exception, kotlin.Unit)))/timeZone">timeZone</span><span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/util/TimeZone.html"><span class="identifier">TimeZone</span></a>&nbsp;<span class="symbol">=</span>&nbsp;TimeZone.getTimeZone("UTC")<span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.support$parse(kotlin.String, kotlin.String, java.util.TimeZone, java.util.Locale, java.util.Date, kotlin.Function1((java.lang.Exception, kotlin.Unit)))/locale">locale</span><span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/util/Locale.html"><span class="identifier">Locale</span></a>&nbsp;<span class="symbol">=</span>&nbsp;Locale.getDefault()<span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.support$parse(kotlin.String, kotlin.String, java.util.TimeZone, java.util.Locale, java.util.Date, kotlin.Function1((java.lang.Exception, kotlin.Unit)))/default">default</span><span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/util/Date.html"><span class="identifier">Date</span></a><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.support$parse(kotlin.String, kotlin.String, java.util.TimeZone, java.util.Locale, java.util.Date, kotlin.Function1((java.lang.Exception, kotlin.Unit)))/catch">catch</span><span class="symbol">:</span>&nbsp;<span class="symbol">(</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-exception/index.html"><span class="identifier">Exception</span></a><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a>&nbsp;<span class="symbol">=</span>&nbsp;{}<span class="symbol">)</span><span class="symbol">: </span><a href="https://docs.oracle.com/javase/6/docs/api/java/util/Date.html"><span class="identifier">Date</span></a><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="serialize.html">serialize</a></h4>
+</td>
+<td>
+<p>Serializes <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a> value to byte array. Concatenates length of string in bytes and string bytes.</p>
+<code><span class="keyword">fun </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">.</span><span class="identifier">serialize</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="to-json-object.html">toJsonObject</a></h4>
+</td>
+<td>
+<p>Converts receiver string to json object with google json parser</p>
+<code><span class="keyword">fun </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">.</span><span class="identifier">toJsonObject</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">JsonObject</span><span class="symbol">?</span></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

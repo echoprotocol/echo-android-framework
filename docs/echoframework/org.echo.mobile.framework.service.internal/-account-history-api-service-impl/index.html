@@ -1,0 +1,68 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>AccountHistoryApiServiceImpl - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.service.internal</a>&nbsp;/&nbsp;<a href="./index.html">AccountHistoryApiServiceImpl</a><br/>
+<br/>
+<h1>AccountHistoryApiServiceImpl</h1>
+<code><span class="keyword">class </span><span class="identifier">AccountHistoryApiServiceImpl</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.service/-account-history-api-service/index.html"><span class="identifier">AccountHistoryApiService</span></a></code>
+<p>Implementation of <a href="../../org.echo.mobile.framework.service/-account-history-api-service/index.html">AccountHistoryApiService</a></p>
+<p>Encapsulates logic of preparing API calls to <a href="../../org.echo.mobile.framework.core.socket/-socket-core-component/index.html">SocketCoreComponent</a></p>
+<p><strong>Author</strong><br/>
+Dmitriy Bushuev</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="../../org.echo.mobile.framework.service/-account-history-api-service/index.html">AccountHistoryApiService</a></p>
+<code><span class="identifier">AccountHistoryApiServiceImpl</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.internal.AccountHistoryApiServiceImpl$<init>(org.echo.mobile.framework.core.socket.SocketCoreComponent, org.echo.mobile.framework.model.network.Network)/socketCoreComponent">socketCoreComponent</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.core.socket/-socket-core-component/index.html"><span class="identifier">SocketCoreComponent</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.service.internal.AccountHistoryApiServiceImpl$<init>(org.echo.mobile.framework.core.socket.SocketCoreComponent, org.echo.mobile.framework.model.network.Network)/network">network</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model.network/-network/index.html"><span class="identifier">Network</span></a><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="id.html">id</a></h4>
+</td>
+<td>
+<p>Actual api id</p>
+<code><span class="keyword">var </span><span class="identifier">id</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="call-custom-operation.html">callCustomOperation</a></h4>
+</td>
+<td>
+<p>Calls custom <a href="../../org.echo.mobile.framework.service/-custom-operation-service/call-custom-operation.html#org.echo.mobile.framework.service.CustomOperationService$callCustomOperation(org.echo.mobile.framework.model.socketoperations.CustomOperation((org.echo.mobile.framework.service.CustomOperationService.callCustomOperation.T)), org.echo.mobile.framework.Callback((org.echo.mobile.framework.service.CustomOperationService.callCustomOperation.T)))/operation">operation</a> to blockchain API, returns result to <a href="../../org.echo.mobile.framework.service/-custom-operation-service/call-custom-operation.html#org.echo.mobile.framework.service.CustomOperationService$callCustomOperation(org.echo.mobile.framework.model.socketoperations.CustomOperation((org.echo.mobile.framework.service.CustomOperationService.callCustomOperation.T)), org.echo.mobile.framework.Callback((org.echo.mobile.framework.service.CustomOperationService.callCustomOperation.T)))/callback">callback</a></p>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span> <span class="identifier">callCustomOperation</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.internal.AccountHistoryApiServiceImpl$callCustomOperation(org.echo.mobile.framework.model.socketoperations.CustomOperation((org.echo.mobile.framework.service.internal.AccountHistoryApiServiceImpl.callCustomOperation.T)), org.echo.mobile.framework.Callback((org.echo.mobile.framework.service.internal.AccountHistoryApiServiceImpl.callCustomOperation.T)))/operation">operation</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model.socketoperations/-custom-operation/index.html"><span class="identifier">CustomOperation</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.service.internal.AccountHistoryApiServiceImpl$callCustomOperation(org.echo.mobile.framework.model.socketoperations.CustomOperation((org.echo.mobile.framework.service.internal.AccountHistoryApiServiceImpl.callCustomOperation.T)), org.echo.mobile.framework.Callback((org.echo.mobile.framework.service.internal.AccountHistoryApiServiceImpl.callCustomOperation.T)))/callback">callback</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Calls custom <a href="../../org.echo.mobile.framework.service/-custom-operation-service/call-custom-operation.html#org.echo.mobile.framework.service.CustomOperationService$callCustomOperation(org.echo.mobile.framework.model.socketoperations.CustomOperation((org.echo.mobile.framework.service.CustomOperationService.callCustomOperation.T)))/operation">operation</a> to blockchain API, returns <a href="../../org.echo.mobile.framework.support/-result/index.html">Result</a> of call</p>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span> <span class="identifier">callCustomOperation</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.internal.AccountHistoryApiServiceImpl$callCustomOperation(org.echo.mobile.framework.model.socketoperations.CustomOperation((org.echo.mobile.framework.service.internal.AccountHistoryApiServiceImpl.callCustomOperation.T)))/operation">operation</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model.socketoperations/-custom-operation/index.html"><span class="identifier">CustomOperation</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.support/-result/index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.exception/-local-exception/index.html"><span class="identifier">LocalException</span></a><span class="symbol">,</span>&nbsp;<span class="identifier">T</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="get-account-history.html">getAccountHistory</a></h4>
+</td>
+<td>
+<p>Get operations relevant to the specified account</p>
+<code><span class="keyword">fun </span><span class="identifier">getAccountHistory</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.internal.AccountHistoryApiServiceImpl$getAccountHistory(kotlin.String, kotlin.String, kotlin.String, kotlin.Int, org.echo.mobile.framework.Callback((org.echo.mobile.framework.model.HistoryResponse)))/accountId">accountId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.service.internal.AccountHistoryApiServiceImpl$getAccountHistory(kotlin.String, kotlin.String, kotlin.String, kotlin.Int, org.echo.mobile.framework.Callback((org.echo.mobile.framework.model.HistoryResponse)))/start">start</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.service.internal.AccountHistoryApiServiceImpl$getAccountHistory(kotlin.String, kotlin.String, kotlin.String, kotlin.Int, org.echo.mobile.framework.Callback((org.echo.mobile.framework.model.HistoryResponse)))/stop">stop</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.service.internal.AccountHistoryApiServiceImpl$getAccountHistory(kotlin.String, kotlin.String, kotlin.String, kotlin.Int, org.echo.mobile.framework.Callback((org.echo.mobile.framework.model.HistoryResponse)))/limit">limit</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.service.internal.AccountHistoryApiServiceImpl$getAccountHistory(kotlin.String, kotlin.String, kotlin.String, kotlin.Int, org.echo.mobile.framework.Callback((org.echo.mobile.framework.model.HistoryResponse)))/callback">callback</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-history-response/index.html"><span class="identifier">HistoryResponse</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Get operations relevant to the specified account in synchronous way</p>
+<code><span class="keyword">fun </span><span class="identifier">getAccountHistory</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.internal.AccountHistoryApiServiceImpl$getAccountHistory(kotlin.String, kotlin.String, kotlin.String, kotlin.Int)/accountId">accountId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.service.internal.AccountHistoryApiServiceImpl$getAccountHistory(kotlin.String, kotlin.String, kotlin.String, kotlin.Int)/start">start</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.service.internal.AccountHistoryApiServiceImpl$getAccountHistory(kotlin.String, kotlin.String, kotlin.String, kotlin.Int)/stop">stop</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.service.internal.AccountHistoryApiServiceImpl$getAccountHistory(kotlin.String, kotlin.String, kotlin.String, kotlin.Int)/limit">limit</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.support/-result/index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-exception/index.html"><span class="identifier">Exception</span></a><span class="symbol">,</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-history-response/index.html"><span class="identifier">HistoryResponse</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

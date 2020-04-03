@@ -11,10 +11,10 @@ import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.Asset
 import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.BaseOperation
-import org.echo.mobile.framework.model.Log
 import org.echo.mobile.framework.model.Transaction
 import org.echo.mobile.framework.model.TransactionResult
 import org.echo.mobile.framework.model.contract.ContractInfo
+import org.echo.mobile.framework.model.contract.ContractLog
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
 import org.echo.mobile.framework.model.contract.input.ContractInputEncoder
@@ -42,10 +42,13 @@ class ContractsFacadeImpl(
     private val networkBroadcastApiService: NetworkBroadcastApiService,
     private val cryptoCoreComponent: CryptoCoreComponent,
     private val notifiedTransactionsHelper: NotificationsHelper<TransactionResult>,
-    private val feeRatioProvider: Provider<Double>
+    private val notifiedContractLogsHelper: NotificationsHelper<List<ContractLog>>,
+    private val feeRatioProvider: Provider<Double>,
+    private val transactionExpirationDelay: Long
 ) : BaseTransactionsFacade(
     databaseApiService,
-    cryptoCoreComponent
+    cryptoCoreComponent,
+    transactionExpirationDelay
 ), ContractsFacade {
 
     override fun createContract(
@@ -163,6 +166,7 @@ class ContractsFacadeImpl(
     override fun queryContract(
         userNameOrId: String,
         assetId: String,
+        amount: String,
         contractId: String,
         methodName: String,
         methodParams: List<InputValue>,
@@ -176,6 +180,7 @@ class ContractsFacadeImpl(
             contractId,
             registrar.getObjectId(),
             assetId,
+            amount,
             contractCode
         ).dematerialize()
     }
@@ -183,6 +188,7 @@ class ContractsFacadeImpl(
     override fun queryContract(
         userNameOrId: String,
         assetId: String,
+        amount: String,
         contractId: String,
         code: String,
         callback: Callback<String>
@@ -193,6 +199,7 @@ class ContractsFacadeImpl(
             contractId,
             registrar.getObjectId(),
             assetId,
+            amount,
             code
         ).dematerialize()
     }
@@ -201,10 +208,27 @@ class ContractsFacadeImpl(
         callback.processResult(databaseApiService.getContractResult(historyId))
 
     override fun getContractLogs(
-        contractId: String, fromBlock: String, toBlock: String, callback: Callback<List<Log>>
-    ) = callback.processResult(
-        databaseApiService.getContractLogs(contractId, fromBlock, toBlock)
-    )
+        contractId: String,
+        fromBlock: String,
+        toBlock: String,
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<List<ContractLog>>?
+    ) {
+        val callId: String
+
+        try {
+            callId = databaseApiService.getContractLogs(contractId, fromBlock, toBlock)
+                .dematerialize().toString()
+            broadcastCallback.onSuccess(true)
+        }catch (ex: Exception){
+            broadcastCallback.onError(ex as? LocalException ?: LocalException(ex))
+            return
+        }
+
+        resultCallback?.let {
+            retrieveContractLogsResult(callId, it)
+        }
+    }
 
     override fun getContracts(
         contractIds: List<String>,
@@ -234,8 +258,7 @@ class ContractsFacadeImpl(
         val constructorParams = ContractInputEncoder().encode("", params)
 
         val contractOperation = ContractCreateOperationBuilder()
-            .setAsset(assetId)
-            .setValue(UnsignedLong.valueOf(value))
+            .setValue(AssetAmount(UnsignedLong.valueOf(value), Asset(assetId)))
             .setRegistrar(registrar)
             .setContractCode(byteCode + constructorParams)
             .build()
@@ -292,7 +315,7 @@ class ContractsFacadeImpl(
             multiplyFees(fees.toMutableList(), ratio)
         } ?: fees
 
-        return Transaction(blockData, listOf(operation), chainId).apply {
+        return Transaction(blockData, listOf(operation), chainId, transactionExpirationDelay).apply {
             setFees(ratioFees)
             addPrivateKey(privateKey)
         }
@@ -321,6 +344,29 @@ class ContractsFacadeImpl(
 
             val result = transactionResult?.trx?.operationsWithResults?.values?.firstOrNull()
                 ?: default
+                ?: throw NotFoundException("Result of operation not found.")
+
+            callback.onSuccess(result)
+        } catch (ex: Exception) {
+            callback.onError(ex as? LocalException ?: LocalException(ex))
+        }
+    }
+
+    private fun retrieveContractLogsResult(
+        callId: String,
+        callback: Callback<List<ContractLog>>
+    ) {
+        try {
+            val future = FutureTask<List<ContractLog>>()
+            notifiedContractLogsHelper.subscribeOnResult(
+                callId,
+                future.completeCallback()
+            )
+
+            val logsResult = future.get()
+
+            val result = logsResult
+                ?: listOf()
                 ?: throw NotFoundException("Result of operation not found.")
 
             callback.onSuccess(result)

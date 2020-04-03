@@ -1,0 +1,291 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>org.echo.mobile.framework.support - echoframework</title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">echoframework</a>&nbsp;/&nbsp;<a href="./index.html">org.echo.mobile.framework.support</a><br/>
+<br/>
+<h2>Package org.echo.mobile.framework.support</h2>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-api/index.html">Api</a></h4>
+</td>
+<td>
+<p>Apis, needed for connection to blockchain</p>
+<code><span class="keyword">enum</span> <span class="keyword">class </span><span class="identifier">Api</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-converter/index.html">Converter</a></h4>
+</td>
+<td>
+<p>Simple value converter interface</p>
+<code><span class="keyword">interface </span><span class="identifier">Converter</span><span class="symbol">&lt;</span><span class="identifier">I</span><span class="symbol">, </span><span class="identifier">O</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-empty-callback/index.html">EmptyCallback</a></h4>
+</td>
+<td>
+<p>Empty instance of operation callback</p>
+<code><span class="keyword">class </span><span class="identifier">EmptyCallback</span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-eth-address-validator/index.html">EthAddressValidator</a></h4>
+</td>
+<td>
+<p>Utility class for validating ethereum addresses</p>
+<code><span class="keyword">object </span><span class="identifier">EthAddressValidator</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-fee-ratio-provider/index.html">FeeRatioProvider</a></h4>
+</td>
+<td>
+<p>Provides fee <a href="#">ratio</a> value</p>
+<code><span class="keyword">class </span><span class="identifier">FeeRatioProvider</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-provider/index.html"><span class="identifier">Provider</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html"><span class="identifier">Double</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-int64/index.html">Int64</a></h4>
+</td>
+<td>
+<p>Serializes <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-number/index.html">Number</a> value to <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html">ByteArray</a> by int64 type</p>
+<code><span class="keyword">object </span><span class="identifier">Int64</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-int-type/index.html"><span class="identifier">IntType</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-int-type/index.html">IntType</a></h4>
+</td>
+<td>
+<p>Encapsulates logic, associated with serialization of <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-number/index.html">Number</a> value to <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html">ByteArray</a></p>
+<code><span class="keyword">interface </span><span class="identifier">IntType</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-provider/index.html">Provider</a></h4>
+</td>
+<td>
+<p>Encapsulate simple provide logic</p>
+<code><span class="keyword">interface </span><span class="identifier">Provider</span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-result/index.html">Result</a></h4>
+</td>
+<td>
+<p>Encapsulates operation results</p>
+<code><span class="keyword">sealed</span> <span class="keyword">class </span><span class="identifier">Result</span><span class="symbol">&lt;</span><span class="keyword">out</span>&nbsp;<span class="identifier">E</span><span class="symbol">, </span><span class="keyword">out</span>&nbsp;<span class="identifier">V</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-settings/index.html">Settings</a></h4>
+</td>
+<td>
+<p>Settings for library initialization</p>
+<code><span class="keyword">class </span><span class="identifier">Settings</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-uint16/index.html">Uint16</a></h4>
+</td>
+<td>
+<p>Serializes <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-number/index.html">Number</a> value to <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html">ByteArray</a> by uint16 type</p>
+<code><span class="keyword">object </span><span class="identifier">Uint16</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-int-type/index.html"><span class="identifier">IntType</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-uint32/index.html">Uint32</a></h4>
+</td>
+<td>
+<p>Serializes <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-number/index.html">Number</a> value to <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html">ByteArray</a> by uint32 type</p>
+<code><span class="keyword">object </span><span class="identifier">Uint32</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-int-type/index.html"><span class="identifier">IntType</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-uint8/index.html">Uint8</a></h4>
+</td>
+<td>
+<p>Serializes <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-number/index.html">Number</a> value to <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html">ByteArray</a> by uint8 type</p>
+<code><span class="keyword">object </span><span class="identifier">Uint8</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-int-type/index.html"><span class="identifier">IntType</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Extensions for External Classes</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="java.util.-date/index.html">java.util.Date</a></h4>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<h4><a href="kotlin.-array/index.html">kotlin.Array</a></h4>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<h4><a href="kotlin.-boolean/index.html">kotlin.Boolean</a></h4>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<h4><a href="kotlin.-byte-array/index.html">kotlin.ByteArray</a></h4>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<h4><a href="kotlin.collections.-map/index.html">kotlin.collections.Map</a></h4>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<h4><a href="kotlin.collections.-set/index.html">kotlin.collections.Set</a></h4>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<h4><a href="kotlin.-long/index.html">kotlin.Long</a></h4>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<h4><a href="kotlin.-string/index.html">kotlin.String</a></h4>
+</td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="apply.html">apply</a></h4>
+</td>
+<td>
+<p>Apply new <a href="-result/index.html">Result</a> type</p>
+<code><span class="keyword">infix</span> <span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">, </span><span class="identifier">V</span><span class="symbol">, </span><span class="identifier">V2</span><span class="symbol">&gt;</span> <a href="-result/index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">,</span>&nbsp;<span class="symbol">(</span><span class="identifier">V</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<span class="identifier">V2</span><span class="symbol">&gt;</span><span class="symbol">.</span><span class="identifier">apply</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support$apply(org.echo.mobile.framework.support.Result((org.echo.mobile.framework.support.apply.E, kotlin.Function1((org.echo.mobile.framework.support.apply.V, org.echo.mobile.framework.support.apply.V2)))), org.echo.mobile.framework.support.Result((org.echo.mobile.framework.support.apply.E, org.echo.mobile.framework.support.apply.V)))/f">f</span><span class="symbol">:</span>&nbsp;<a href="-result/index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">,</span>&nbsp;<span class="identifier">V</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="-result/index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">,</span>&nbsp;<span class="identifier">V2</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="check-false.html">checkFalse</a></h4>
+</td>
+<td>
+<p>Throws <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-illegal-argument-exception/index.html">IllegalArgumentException</a> if input value is not false</p>
+<code><span class="keyword">fun </span><span class="identifier">checkFalse</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support$checkFalse(kotlin.Boolean, kotlin.String)/target">target</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.support$checkFalse(kotlin.Boolean, kotlin.String)/errorMessage">errorMessage</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="check-not-null.html">checkNotNull</a></h4>
+</td>
+<td>
+<p>Throws <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-illegal-argument-exception/index.html">IllegalArgumentException</a> if input value is null</p>
+<code><span class="keyword">fun </span><span class="identifier">checkNotNull</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support$checkNotNull(kotlin.Any, kotlin.String)/target">target</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">?</span><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.support$checkNotNull(kotlin.Any, kotlin.String)/errorMessage">errorMessage</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="check-true.html">checkTrue</a></h4>
+</td>
+<td>
+<p>Throws <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-illegal-argument-exception/index.html">IllegalArgumentException</a> if input value is not true</p>
+<code><span class="keyword">fun </span><span class="identifier">checkTrue</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support$checkTrue(kotlin.Boolean, kotlin.String)/target">target</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.support$checkTrue(kotlin.Boolean, kotlin.String)/errorMessage">errorMessage</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="dematerialize.html">dematerialize</a></h4>
+</td>
+<td>
+<p>Unwraps success result value or throws and error</p>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">, </span><span class="identifier">V</span><span class="symbol">&gt;</span> <a href="-result/index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">,</span>&nbsp;<span class="identifier">V</span><span class="symbol">&gt;</span><span class="symbol">.</span><span class="identifier">dematerialize</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">V</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="error.html">error</a></h4>
+</td>
+<td>
+<p>Apply function over result error value</p>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">, </span><span class="identifier">V</span><span class="symbol">&gt;</span> <a href="-result/index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">,</span>&nbsp;<span class="identifier">V</span><span class="symbol">&gt;</span><span class="symbol">.</span><span class="identifier">error</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support$error(org.echo.mobile.framework.support.Result((org.echo.mobile.framework.support.error.E, org.echo.mobile.framework.support.error.V)), kotlin.Function1((org.echo.mobile.framework.support.error.E, kotlin.Unit)))/e">e</span><span class="symbol">:</span>&nbsp;<span class="symbol">(</span><span class="identifier">E</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="-result/index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">,</span>&nbsp;<span class="identifier">V</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="flat-map.html">flatMap</a></h4>
+</td>
+<td>
+<p>Maps <a href="-result/index.html">Result</a> to another type of <a href="-result/index.html">Result</a></p>
+<code><span class="keyword">infix</span> <span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">, </span><span class="identifier">V</span><span class="symbol">, </span><span class="identifier">V2</span><span class="symbol">&gt;</span> <a href="-result/index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">,</span>&nbsp;<span class="identifier">V</span><span class="symbol">&gt;</span><span class="symbol">.</span><span class="identifier">flatMap</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support$flatMap(org.echo.mobile.framework.support.Result((org.echo.mobile.framework.support.flatMap.E, org.echo.mobile.framework.support.flatMap.V)), kotlin.Function1((org.echo.mobile.framework.support.flatMap.V, org.echo.mobile.framework.support.Result((org.echo.mobile.framework.support.flatMap.E, org.echo.mobile.framework.support.flatMap.V2)))))/f">f</span><span class="symbol">:</span>&nbsp;<span class="symbol">(</span><span class="identifier">V</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="-result/index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">,</span>&nbsp;<span class="identifier">V2</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="-result/index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">,</span>&nbsp;<span class="identifier">V2</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="fold.html">fold</a></h4>
+</td>
+<td>
+<p>Breaks result on error\value and provides functional way to work with them</p>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">, </span><span class="identifier">V</span><span class="symbol">, </span><span class="identifier">A</span><span class="symbol">&gt;</span> <a href="-result/index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">,</span>&nbsp;<span class="identifier">V</span><span class="symbol">&gt;</span><span class="symbol">.</span><span class="identifier">fold</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support$fold(org.echo.mobile.framework.support.Result((org.echo.mobile.framework.support.fold.E, org.echo.mobile.framework.support.fold.V)), kotlin.Function1((org.echo.mobile.framework.support.fold.V, org.echo.mobile.framework.support.fold.A)), kotlin.Function1((org.echo.mobile.framework.support.fold.E, org.echo.mobile.framework.support.fold.A)))/v">v</span><span class="symbol">:</span>&nbsp;<span class="symbol">(</span><span class="identifier">V</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<span class="identifier">A</span><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.support$fold(org.echo.mobile.framework.support.Result((org.echo.mobile.framework.support.fold.E, org.echo.mobile.framework.support.fold.V)), kotlin.Function1((org.echo.mobile.framework.support.fold.V, org.echo.mobile.framework.support.fold.A)), kotlin.Function1((org.echo.mobile.framework.support.fold.E, org.echo.mobile.framework.support.fold.A)))/e">e</span><span class="symbol">:</span>&nbsp;<span class="symbol">(</span><span class="identifier">E</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<span class="identifier">A</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">A</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="map.html">map</a></h4>
+</td>
+<td>
+<p>Maps value to another type of value by function</p>
+<code><span class="keyword">infix</span> <span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">, </span><span class="identifier">V</span><span class="symbol">, </span><span class="identifier">V2</span><span class="symbol">&gt;</span> <a href="-result/index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">,</span>&nbsp;<span class="identifier">V</span><span class="symbol">&gt;</span><span class="symbol">.</span><span class="identifier">map</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support$map(org.echo.mobile.framework.support.Result((org.echo.mobile.framework.support.map.E, org.echo.mobile.framework.support.map.V)), kotlin.Function1((org.echo.mobile.framework.support.map.V, org.echo.mobile.framework.support.map.V2)))/f">f</span><span class="symbol">:</span>&nbsp;<span class="symbol">(</span><span class="identifier">V</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<span class="identifier">V2</span><span class="symbol">)</span><span class="symbol">: </span><a href="-result/index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">,</span>&nbsp;<span class="identifier">V2</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="map-error.html">mapError</a></h4>
+</td>
+<td>
+<p>Maps error to another type of error by function</p>
+<code><span class="keyword">infix</span> <span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">, </span><span class="identifier">E2</span><span class="symbol">, </span><span class="identifier">V</span><span class="symbol">&gt;</span> <a href="-result/index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">,</span>&nbsp;<span class="identifier">V</span><span class="symbol">&gt;</span><span class="symbol">.</span><span class="identifier">mapError</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support$mapError(org.echo.mobile.framework.support.Result((org.echo.mobile.framework.support.mapError.E, org.echo.mobile.framework.support.mapError.V)), kotlin.Function1((org.echo.mobile.framework.support.mapError.E, org.echo.mobile.framework.support.mapError.E2)))/f">f</span><span class="symbol">:</span>&nbsp;<span class="symbol">(</span><span class="identifier">E</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<span class="identifier">E2</span><span class="symbol">)</span><span class="symbol">: </span><a href="-result/index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><span class="identifier">E2</span><span class="symbol">,</span>&nbsp;<span class="identifier">V</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="to-error.html">toError</a></h4>
+</td>
+<td>
+<p>Converts <a href="-result/index.html">Result</a> to <a href="-result/-error/index.html">Result.Error</a></p>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">&gt;</span> <span class="identifier">E</span><span class="symbol">.</span><span class="identifier">toError</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="-result/index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-nothing/index.html"><span class="identifier">Nothing</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="to-value.html">toValue</a></h4>
+</td>
+<td>
+<p>Converts <a href="-result/index.html">Result</a> to <a href="-result/-value/index.html">Result.Value</a></p>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">V</span><span class="symbol">&gt;</span> <span class="identifier">V</span><span class="symbol">.</span><span class="identifier">toValue</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="-result/index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-nothing/index.html"><span class="identifier">Nothing</span></a><span class="symbol">,</span>&nbsp;<span class="identifier">V</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="value.html">value</a></h4>
+</td>
+<td>
+<p>Apply function over result success value</p>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">, </span><span class="identifier">V</span><span class="symbol">&gt;</span> <a href="-result/index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">,</span>&nbsp;<span class="identifier">V</span><span class="symbol">&gt;</span><span class="symbol">.</span><span class="identifier">value</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support$value(org.echo.mobile.framework.support.Result((org.echo.mobile.framework.support.value.E, org.echo.mobile.framework.support.value.V)), kotlin.Function1((org.echo.mobile.framework.support.value.V, kotlin.Unit)))/v">v</span><span class="symbol">:</span>&nbsp;<span class="symbol">(</span><span class="identifier">V</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="-result/index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">,</span>&nbsp;<span class="identifier">V</span><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

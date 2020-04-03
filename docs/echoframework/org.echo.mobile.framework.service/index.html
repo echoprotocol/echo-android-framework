@@ -1,0 +1,242 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>org.echo.mobile.framework.service - echoframework</title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">echoframework</a>&nbsp;/&nbsp;<a href="./index.html">org.echo.mobile.framework.service</a><br/>
+<br/>
+<h2>Package org.echo.mobile.framework.service</h2>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-account-history-api-service/index.html">AccountHistoryApiService</a></h4>
+</td>
+<td>
+<p>Encapsulates logic, associated with blockchain account history API</p>
+<code><span class="keyword">interface </span><span class="identifier">AccountHistoryApiService</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-api-service/index.html"><span class="identifier">ApiService</span></a><span class="symbol">, </span><a href="-custom-operation-service/index.html"><span class="identifier">CustomOperationService</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-accounts-service/index.html">AccountsService</a></h4>
+</td>
+<td>
+<p>Encapsulates logic, associated with data from account from blockchain database API</p>
+<code><span class="keyword">interface </span><span class="identifier">AccountsService</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-account-subscription-manager/index.html">AccountSubscriptionManager</a></h4>
+</td>
+<td>
+<p>Encapsulates logic connected with account subscription event parsing and listeners notifying</p>
+<code><span class="keyword">interface </span><span class="identifier">AccountSubscriptionManager</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-api-service/index.html">ApiService</a></h4>
+</td>
+<td>
+<p>Encapsulates logic for services of blockchain API</p>
+<code><span class="keyword">interface </span><span class="identifier">ApiService</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-assets-service/index.html">AssetsService</a></h4>
+</td>
+<td>
+<p>Encapsulates logic, associated with assets information from Database API</p>
+<code><span class="keyword">interface </span><span class="identifier">AssetsService</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-authority-and-validation-service/index.html">AuthorityAndValidationService</a></h4>
+</td>
+<td>
+<p>Encapsulates logic, associated with authority and validation data from Database API</p>
+<code><span class="keyword">interface </span><span class="identifier">AuthorityAndValidationService</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-blocks-and-transactions-service/index.html">BlocksAndTransactionsService</a></h4>
+</td>
+<td>
+<p>Encapsulates logic, associated with blocks and transactions information from Database API</p>
+<code><span class="keyword">interface </span><span class="identifier">BlocksAndTransactionsService</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-block-subscription-manager/index.html">BlockSubscriptionManager</a></h4>
+</td>
+<td>
+<p>Encapsulates logic connected with block subscription event parsing and listeners notifying</p>
+<code><span class="keyword">interface </span><span class="identifier">BlockSubscriptionManager</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-contract-balances-subscription-manager/index.html">ContractBalancesSubscriptionManager</a></h4>
+</td>
+<td>
+<p>Encapsulates logic connected with contract subscription listeners notifying</p>
+<code><span class="keyword">interface </span><span class="identifier">ContractBalancesSubscriptionManager</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-contract-logs-subscription-manager.html">ContractLogsSubscriptionManager</a></h4>
+</td>
+<td>
+<p>Encapsulates logic connected with getting contract logs with callback subscription</p>
+<code><span class="keyword">interface </span><span class="identifier">ContractLogsSubscriptionManager</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-notified-subscription-manager/index.html"><span class="identifier">NotifiedSubscriptionManager</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../org.echo.mobile.framework.model.contract/-contract-log/index.html"><span class="identifier">ContractLog</span></a><span class="symbol">&gt;</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-contracts-service/index.html">ContractsService</a></h4>
+</td>
+<td>
+<p>Encapsulates logic, associated with information about contracts from Database API</p>
+<code><span class="keyword">interface </span><span class="identifier">ContractsService</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-contract-subscription-manager/index.html">ContractSubscriptionManager</a></h4>
+</td>
+<td>
+<p>Encapsulates logic connected with contract subscription listeners notifying</p>
+<code><span class="keyword">interface </span><span class="identifier">ContractSubscriptionManager</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-crypto-api-service.html">CryptoApiService</a></h4>
+</td>
+<td>
+<p>Encapsulates logic, associated with blockchain crypto API</p>
+<code><span class="keyword">interface </span><span class="identifier">CryptoApiService</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-api-service/index.html"><span class="identifier">ApiService</span></a><span class="symbol">, </span><a href="-custom-operation-service/index.html"><span class="identifier">CustomOperationService</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-current-blockchain-data-subscription-manager/index.html">CurrentBlockchainDataSubscriptionManager</a></h4>
+</td>
+<td>
+<p>Encapsulates logic connected with current blockchain data subscription event parsing
+and listeners notifying</p>
+<code><span class="keyword">interface </span><span class="identifier">CurrentBlockchainDataSubscriptionManager</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-custom-operation-service/index.html">CustomOperationService</a></h4>
+</td>
+<td>
+<p>Encapsulates logic, associated with emitting custom calls to blockchain API</p>
+<code><span class="keyword">interface </span><span class="identifier">CustomOperationService</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-database-api-service.html">DatabaseApiService</a></h4>
+</td>
+<td>
+<p>Encapsulates logic, associated with blockchain database API</p>
+<code><span class="keyword">interface </span><span class="identifier">DatabaseApiService</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-api-service/index.html"><span class="identifier">ApiService</span></a><span class="symbol">, </span><a href="-accounts-service/index.html"><span class="identifier">AccountsService</span></a><span class="symbol">, </span><a href="-globals-service/index.html"><span class="identifier">GlobalsService</span></a><span class="symbol">, </span><a href="-authority-and-validation-service/index.html"><span class="identifier">AuthorityAndValidationService</span></a><span class="symbol">, </span><a href="-blocks-and-transactions-service/index.html"><span class="identifier">BlocksAndTransactionsService</span></a><span class="symbol">, </span><a href="-contracts-service/index.html"><span class="identifier">ContractsService</span></a><span class="symbol">, </span><a href="-assets-service/index.html"><span class="identifier">AssetsService</span></a><span class="symbol">, </span><a href="-subscription-service/index.html"><span class="identifier">SubscriptionService</span></a><span class="symbol">, </span><a href="-objects-service/index.html"><span class="identifier">ObjectsService</span></a><span class="symbol">, </span><a href="-custom-operation-service/index.html"><span class="identifier">CustomOperationService</span></a><span class="symbol">, </span><a href="-sidechain-service/index.html"><span class="identifier">SidechainService</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-globals-service/index.html">GlobalsService</a></h4>
+</td>
+<td>
+<p>Encapsulates logic, associated with global data from Database API</p>
+<code><span class="keyword">interface </span><span class="identifier">GlobalsService</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-login-api-service/index.html">LoginApiService</a></h4>
+</td>
+<td>
+<p>Encapsulates logic, associated with blockchain login API</p>
+<code><span class="keyword">interface </span><span class="identifier">LoginApiService</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-api-service/index.html"><span class="identifier">ApiService</span></a><span class="symbol">, </span><a href="-custom-operation-service/index.html"><span class="identifier">CustomOperationService</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-network-broadcast-api-service.html">NetworkBroadcastApiService</a></h4>
+</td>
+<td>
+<p>Encapsulates logic, associated with blockchain network broadcast API</p>
+<code><span class="keyword">interface </span><span class="identifier">NetworkBroadcastApiService</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-api-service/index.html"><span class="identifier">ApiService</span></a><span class="symbol">, </span><a href="-transactions-service/index.html"><span class="identifier">TransactionsService</span></a><span class="symbol">, </span><a href="-custom-operation-service/index.html"><span class="identifier">CustomOperationService</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-notified-subscription-manager/index.html">NotifiedSubscriptionManager</a></h4>
+</td>
+<td>
+<p>Encapsulates logic connected with blockchain notifications subscription</p>
+<code><span class="keyword">interface </span><span class="identifier">NotifiedSubscriptionManager</span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-objects-service/index.html">ObjectsService</a></h4>
+</td>
+<td>
+<p>Encapsulates logic, associated with retrieving blockchain objects</p>
+<code><span class="keyword">interface </span><span class="identifier">ObjectsService</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-registration-api-service/index.html">RegistrationApiService</a></h4>
+</td>
+<td>
+<p>Encapsulates logic, associated with blockchain registration API</p>
+<code><span class="keyword">interface </span><span class="identifier">RegistrationApiService</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-api-service/index.html"><span class="identifier">ApiService</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-registration-subscription-manager.html">RegistrationSubscriptionManager</a></h4>
+</td>
+<td>
+<p>Encapsulates logic connected with registration with callback subscription</p>
+<code><span class="keyword">interface </span><span class="identifier">RegistrationSubscriptionManager</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-notified-subscription-manager/index.html"><span class="identifier">NotifiedSubscriptionManager</span></a><span class="symbol">&lt;</span><a href="../org.echo.mobile.framework.model/-registration-result/index.html"><span class="identifier">RegistrationResult</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-sidechain-service/index.html">SidechainService</a></h4>
+</td>
+<td>
+<p>Encapsulates logic, associated with echo sidechain information</p>
+<code><span class="keyword">interface </span><span class="identifier">SidechainService</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-subscription-service/index.html">SubscriptionService</a></h4>
+</td>
+<td>
+<p>Encapsulates logic, associated with global subscription to blockchain objects</p>
+<code><span class="keyword">interface </span><span class="identifier">SubscriptionService</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-transactions-service/index.html">TransactionsService</a></h4>
+</td>
+<td>
+<p>Encapsulates logic, associated with transactions</p>
+<code><span class="keyword">interface </span><span class="identifier">TransactionsService</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-transaction-subscription-manager.html">TransactionSubscriptionManager</a></h4>
+</td>
+<td>
+<p>Encapsulates logic connected with broadcast transaction with callback subscription</p>
+<code><span class="keyword">interface </span><span class="identifier">TransactionSubscriptionManager</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-notified-subscription-manager/index.html"><span class="identifier">NotifiedSubscriptionManager</span></a><span class="symbol">&lt;</span><a href="../org.echo.mobile.framework.model/-transaction-result/index.html"><span class="identifier">TransactionResult</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-update-listener/index.html">UpdateListener</a></h4>
+</td>
+<td>
+<p>Encapsulates logic, associated with data updates</p>
+<code><span class="keyword">interface </span><span class="identifier">UpdateListener</span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

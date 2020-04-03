@@ -1,0 +1,122 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>Result - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.support</a>&nbsp;/&nbsp;<a href="./index.html">Result</a><br/>
+<br/>
+<h1>Result</h1>
+<code><span class="keyword">sealed</span> <span class="keyword">class </span><span class="identifier">Result</span><span class="symbol">&lt;</span><span class="keyword">out</span>&nbsp;<span class="identifier">E</span><span class="symbol">, </span><span class="keyword">out</span>&nbsp;<span class="identifier">V</span><span class="symbol">&gt;</span></code>
+<p>Encapsulates operation results</p>
+<p>Provides abstraction over success\failure operation results</p>
+<p><strong>Author</strong><br/>
+Dmitriy Bushuev</p>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-error/index.html">Error</a></h4>
+</td>
+<td>
+<p>Error operation result</p>
+<code><span class="keyword">data</span> <span class="keyword">class </span><span class="identifier">Error</span><span class="symbol">&lt;</span><span class="keyword">out</span>&nbsp;<span class="identifier">E</span><span class="symbol">&gt;</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-nothing/index.html"><span class="identifier">Nothing</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-value/index.html">Value</a></h4>
+</td>
+<td>
+<p>Value operation result</p>
+<code><span class="keyword">data</span> <span class="keyword">class </span><span class="identifier">Value</span><span class="symbol">&lt;</span><span class="keyword">out</span>&nbsp;<span class="identifier">V</span><span class="symbol">&gt;</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-nothing/index.html"><span class="identifier">Nothing</span></a><span class="symbol">,</span>&nbsp;<span class="identifier">V</span><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Companion Object Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="invoke.html">invoke</a></h4>
+</td>
+<td>
+<p>Creates <a href="./index.html">Result</a> instance according to <a href="invoke.html#org.echo.mobile.framework.support.Result.Companion$invoke(kotlin.Function0((org.echo.mobile.framework.support.Result.Companion.invoke.T)))/body">body</a> result.
+If execution succeeds (no exception thrown) - <a href="-value/index.html">Value</a> returns,
+otherwise - <a href="-error/index.html">Error</a> returns</p>
+<code><span class="keyword">operator</span> <span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span> <span class="identifier">invoke</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support.Result.Companion$invoke(kotlin.Function0((org.echo.mobile.framework.support.Result.Companion.invoke.T)))/body">body</span><span class="symbol">:</span>&nbsp;<span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<span class="identifier">T</span><span class="symbol">)</span><span class="symbol">: </span><a href="./index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-exception/index.html"><span class="identifier">Exception</span></a><span class="symbol">,</span>&nbsp;<span class="identifier">T</span><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Extension Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="../apply.html">apply</a></h4>
+</td>
+<td>
+<p>Apply new <a href="./index.html">Result</a> type</p>
+<code><span class="keyword">infix</span> <span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">, </span><span class="identifier">V</span><span class="symbol">, </span><span class="identifier">V2</span><span class="symbol">&gt;</span> <a href="./index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">,</span>&nbsp;<span class="symbol">(</span><span class="identifier">V</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<span class="identifier">V2</span><span class="symbol">&gt;</span><span class="symbol">.</span><span class="identifier">apply</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support$apply(org.echo.mobile.framework.support.Result((org.echo.mobile.framework.support.apply.E, kotlin.Function1((org.echo.mobile.framework.support.apply.V, org.echo.mobile.framework.support.apply.V2)))), org.echo.mobile.framework.support.Result((org.echo.mobile.framework.support.apply.E, org.echo.mobile.framework.support.apply.V)))/f">f</span><span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">,</span>&nbsp;<span class="identifier">V</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="./index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">,</span>&nbsp;<span class="identifier">V2</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../dematerialize.html">dematerialize</a></h4>
+</td>
+<td>
+<p>Unwraps success result value or throws and error</p>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">, </span><span class="identifier">V</span><span class="symbol">&gt;</span> <a href="./index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">,</span>&nbsp;<span class="identifier">V</span><span class="symbol">&gt;</span><span class="symbol">.</span><span class="identifier">dematerialize</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">V</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../error.html">error</a></h4>
+</td>
+<td>
+<p>Apply function over result error value</p>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">, </span><span class="identifier">V</span><span class="symbol">&gt;</span> <a href="./index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">,</span>&nbsp;<span class="identifier">V</span><span class="symbol">&gt;</span><span class="symbol">.</span><span class="identifier">error</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support$error(org.echo.mobile.framework.support.Result((org.echo.mobile.framework.support.error.E, org.echo.mobile.framework.support.error.V)), kotlin.Function1((org.echo.mobile.framework.support.error.E, kotlin.Unit)))/e">e</span><span class="symbol">:</span>&nbsp;<span class="symbol">(</span><span class="identifier">E</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="./index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">,</span>&nbsp;<span class="identifier">V</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../flat-map.html">flatMap</a></h4>
+</td>
+<td>
+<p>Maps <a href="./index.html">Result</a> to another type of <a href="./index.html">Result</a></p>
+<code><span class="keyword">infix</span> <span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">, </span><span class="identifier">V</span><span class="symbol">, </span><span class="identifier">V2</span><span class="symbol">&gt;</span> <a href="./index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">,</span>&nbsp;<span class="identifier">V</span><span class="symbol">&gt;</span><span class="symbol">.</span><span class="identifier">flatMap</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support$flatMap(org.echo.mobile.framework.support.Result((org.echo.mobile.framework.support.flatMap.E, org.echo.mobile.framework.support.flatMap.V)), kotlin.Function1((org.echo.mobile.framework.support.flatMap.V, org.echo.mobile.framework.support.Result((org.echo.mobile.framework.support.flatMap.E, org.echo.mobile.framework.support.flatMap.V2)))))/f">f</span><span class="symbol">:</span>&nbsp;<span class="symbol">(</span><span class="identifier">V</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="./index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">,</span>&nbsp;<span class="identifier">V2</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="./index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">,</span>&nbsp;<span class="identifier">V2</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../fold.html">fold</a></h4>
+</td>
+<td>
+<p>Breaks result on error\value and provides functional way to work with them</p>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">, </span><span class="identifier">V</span><span class="symbol">, </span><span class="identifier">A</span><span class="symbol">&gt;</span> <a href="./index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">,</span>&nbsp;<span class="identifier">V</span><span class="symbol">&gt;</span><span class="symbol">.</span><span class="identifier">fold</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support$fold(org.echo.mobile.framework.support.Result((org.echo.mobile.framework.support.fold.E, org.echo.mobile.framework.support.fold.V)), kotlin.Function1((org.echo.mobile.framework.support.fold.V, org.echo.mobile.framework.support.fold.A)), kotlin.Function1((org.echo.mobile.framework.support.fold.E, org.echo.mobile.framework.support.fold.A)))/v">v</span><span class="symbol">:</span>&nbsp;<span class="symbol">(</span><span class="identifier">V</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<span class="identifier">A</span><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.support$fold(org.echo.mobile.framework.support.Result((org.echo.mobile.framework.support.fold.E, org.echo.mobile.framework.support.fold.V)), kotlin.Function1((org.echo.mobile.framework.support.fold.V, org.echo.mobile.framework.support.fold.A)), kotlin.Function1((org.echo.mobile.framework.support.fold.E, org.echo.mobile.framework.support.fold.A)))/e">e</span><span class="symbol">:</span>&nbsp;<span class="symbol">(</span><span class="identifier">E</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<span class="identifier">A</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">A</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../map.html">map</a></h4>
+</td>
+<td>
+<p>Maps value to another type of value by function</p>
+<code><span class="keyword">infix</span> <span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">, </span><span class="identifier">V</span><span class="symbol">, </span><span class="identifier">V2</span><span class="symbol">&gt;</span> <a href="./index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">,</span>&nbsp;<span class="identifier">V</span><span class="symbol">&gt;</span><span class="symbol">.</span><span class="identifier">map</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support$map(org.echo.mobile.framework.support.Result((org.echo.mobile.framework.support.map.E, org.echo.mobile.framework.support.map.V)), kotlin.Function1((org.echo.mobile.framework.support.map.V, org.echo.mobile.framework.support.map.V2)))/f">f</span><span class="symbol">:</span>&nbsp;<span class="symbol">(</span><span class="identifier">V</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<span class="identifier">V2</span><span class="symbol">)</span><span class="symbol">: </span><a href="./index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">,</span>&nbsp;<span class="identifier">V2</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../map-error.html">mapError</a></h4>
+</td>
+<td>
+<p>Maps error to another type of error by function</p>
+<code><span class="keyword">infix</span> <span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">, </span><span class="identifier">E2</span><span class="symbol">, </span><span class="identifier">V</span><span class="symbol">&gt;</span> <a href="./index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">,</span>&nbsp;<span class="identifier">V</span><span class="symbol">&gt;</span><span class="symbol">.</span><span class="identifier">mapError</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support$mapError(org.echo.mobile.framework.support.Result((org.echo.mobile.framework.support.mapError.E, org.echo.mobile.framework.support.mapError.V)), kotlin.Function1((org.echo.mobile.framework.support.mapError.E, org.echo.mobile.framework.support.mapError.E2)))/f">f</span><span class="symbol">:</span>&nbsp;<span class="symbol">(</span><span class="identifier">E</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<span class="identifier">E2</span><span class="symbol">)</span><span class="symbol">: </span><a href="./index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><span class="identifier">E2</span><span class="symbol">,</span>&nbsp;<span class="identifier">V</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../value.html">value</a></h4>
+</td>
+<td>
+<p>Apply function over result success value</p>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">, </span><span class="identifier">V</span><span class="symbol">&gt;</span> <a href="./index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">,</span>&nbsp;<span class="identifier">V</span><span class="symbol">&gt;</span><span class="symbol">.</span><span class="identifier">value</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support$value(org.echo.mobile.framework.support.Result((org.echo.mobile.framework.support.value.E, org.echo.mobile.framework.support.value.V)), kotlin.Function1((org.echo.mobile.framework.support.value.V, kotlin.Unit)))/v">v</span><span class="symbol">:</span>&nbsp;<span class="symbol">(</span><span class="identifier">V</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="./index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">,</span>&nbsp;<span class="identifier">V</span><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

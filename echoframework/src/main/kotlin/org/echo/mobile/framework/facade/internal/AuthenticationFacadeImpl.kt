@@ -1,6 +1,9 @@
 package org.echo.mobile.framework.facade.internal
 
+import com.google.common.primitives.UnsignedLong
+import org.echo.mobile.bitcoinj.Sha256Hash
 import org.echo.mobile.framework.Callback
+import org.echo.mobile.framework.ECHO_ASSET_ID
 import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
 import org.echo.mobile.framework.core.logger.internal.LoggerCoreComponent
 import org.echo.mobile.framework.exception.AccountNotFoundException
@@ -21,12 +24,14 @@ import org.echo.mobile.framework.processResult
 import org.echo.mobile.framework.service.DatabaseApiService
 import org.echo.mobile.framework.service.NetworkBroadcastApiService
 import org.echo.mobile.framework.service.RegistrationApiService
+import org.echo.mobile.framework.support.Int64
 import org.echo.mobile.framework.support.concurrent.future.FutureTask
 import org.echo.mobile.framework.support.concurrent.future.completeCallback
 import org.echo.mobile.framework.support.dematerialize
 import org.echo.mobile.framework.support.error
 import org.echo.mobile.framework.support.map
 import org.echo.mobile.framework.support.value
+import org.spongycastle.util.encoders.Hex
 
 /**
  * Implementation of [AuthenticationFacade]
@@ -40,20 +45,21 @@ class AuthenticationFacadeImpl(
     private val networkBroadcastApiService: NetworkBroadcastApiService,
     private val registrationApiService: RegistrationApiService,
     private val cryptoCoreComponent: CryptoCoreComponent,
-    private val notificationsHelper: NotificationsHelper<RegistrationResult>
-) : BaseTransactionsFacade(databaseApiService, cryptoCoreComponent), AuthenticationFacade {
+    private val notificationsHelper: NotificationsHelper<RegistrationResult>,
+    private val transactionExpirationDelay: Long
+) : BaseTransactionsFacade(databaseApiService, cryptoCoreComponent, transactionExpirationDelay), AuthenticationFacade {
 
-    override fun isOwnedBy(name: String, wif: String, callback: Callback<FullAccount>) {
-        databaseApiService.getFullAccounts(listOf(name), false)
-            .map { accountsMap -> accountsMap[name] }
+    override fun isOwnedBy(nameOrId: String, wif: String, callback: Callback<FullAccount>) {
+        databaseApiService.getFullAccounts(listOf(nameOrId), false)
+            .map { accountsMap -> accountsMap[nameOrId] }
             .value { account ->
                 try {
                     val isOwner = checkOwner(account, wif)
 
                     if (isOwner) callback.onSuccess(account!!)
 
-                    LOGGER.log("No account found owned by $name with specified password")
-                    callback.onError(AccountNotFoundException("No account found owned by $name with specified password"))
+                    LOGGER.log("No account found owned by $nameOrId with specified password")
+                    callback.onError(AccountNotFoundException("No account found owned by $nameOrId with specified password"))
                 } catch (exception: Exception) {
                     LOGGER.log("Error during account'sowner checking")
                     callback.onError(AccountNotFoundException("Error during account'sowner checking"))
@@ -77,44 +83,87 @@ class AuthenticationFacadeImpl(
         val account =
             databaseApiService.getFullAccounts(listOf(accountId), false).dematerialize()
 
-        operation.newOptionsOption.field?.votingAccount =
-            account[accountId]?.account!!.options.votingAccount
-
         operation.newOptionsOption.field?.delegatingAccount =
             account[accountId]?.account!!.options.delegatingAccount
 
-        val blockData = databaseApiService.getBlockData()
-        val chainId = getChainId()
+        operation.newOptionsOption.field?.delegateShare =
+            account[accountId]?.account!!.options.delegateShare
 
         val privateKey = cryptoCoreComponent.decodeFromWif(oldWif)
-        val fees = getFees(listOf(operation))
-
-        val transaction = Transaction(blockData, listOf(operation), chainId).apply {
-            setFees(fees)
-            addPrivateKey(privateKey)
-        }
+        val transaction = configureTransaction(operation, privateKey, ECHO_ASSET_ID)
 
         networkBroadcastApiService.broadcastTransaction(transaction).dematerialize()
     }
 
-    override fun register(userName: String, wif: String, callback: Callback<Boolean>) {
+    override fun register(
+        userName: String,
+        wif: String,
+        evmAddress: String?,
+        callback: Callback<Boolean>
+    ) {
         try {
+            val registrationTask = registrationApiService.requestRegistrationTask().dematerialize()
+            val nonce = solveTask(
+                registrationTask.blockId,
+                registrationTask.randNum,
+                registrationTask.difficulty
+            )
+
             val privateKeyRaw = cryptoCoreComponent.decodeFromWif(wif)
             val publicKeyRaw = cryptoCoreComponent.deriveEdDSAPublicKeyFromPrivate(privateKeyRaw)
 
             val active =
                 cryptoCoreComponent.getEdDSAAddressFromPublicKey(publicKeyRaw)
 
-            val callId = registrationApiService.register(
+            val callId = registrationApiService.submitRegistrationSolution(
                 userName,
                 active,
-                active
-            ).dematerialize().toString()
+                active,
+                evmAddress,
+                nonce,
+                registrationTask.randNum
+            ).dematerialize()
 
-            retrieveTransactionResult(callId, callback)
+            if (callId == -1) {
+                callback.onError(NotFoundException("Result of operation not found."))
+            } else {
+                retrieveTransactionResult(callId.toString(), callback)
+            }
         } catch (ex: Exception) {
             callback.onError(LocalException("Can't register account", cause = ex))
         }
+    }
+
+    private fun solveTask(blockId: String, randNum: UnsignedLong, difficulty: Int): UnsignedLong {
+        var nonce = UnsignedLong.ZERO
+        val block = Hex.decode(blockId)
+        val rand = Int64.serialize(randNum)
+        var hash = Sha256Hash.hash(
+            block + rand + Int64.serialize(nonce)
+        )
+
+        val (index, value) = getSolutionPair(difficulty)
+        while (true) {
+            if (hash.take(index)
+                    .all { it.toInt() == 0 } && hash[index] > 0 && hash[index] < value
+            ) break
+
+            nonce = nonce.plus(UnsignedLong.ONE)
+            hash = Sha256Hash.hash(
+                block + rand + Int64.serialize(nonce)
+            )
+        }
+
+        return nonce
+    }
+
+    private fun getSolutionPair(difficulty: Int): Pair<Int, Int> {
+        val index = difficulty / 8
+        val rest = difficulty % 8
+
+        val a = 1 shl (rest - 1)
+
+        return Pair(index, a)
     }
 
     private fun checkOwner(account: FullAccount?, wif: String): Boolean {

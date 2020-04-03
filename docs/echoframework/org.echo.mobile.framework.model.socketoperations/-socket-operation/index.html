@@ -1,0 +1,439 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>SocketOperation - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.model.socketoperations</a>&nbsp;/&nbsp;<a href="./index.html">SocketOperation</a><br/>
+<br/>
+<h1>SocketOperation</h1>
+<code><span class="keyword">abstract</span> <span class="keyword">class </span><span class="identifier">SocketOperation</span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-json-serializable/index.html"><span class="identifier">JsonSerializable</span></a><span class="symbol">, </span><a href="../../org.echo.mobile.framework.model/-json-deserializable/index.html"><span class="identifier">JsonDeserializable</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span></code>
+<p>Represents blockchain call
+Source</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<p>Represents blockchain call
+Source</p>
+<code><span class="identifier">SocketOperation</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.socketoperations.SocketOperation$<init>(org.echo.mobile.framework.model.socketoperations.SocketMethodType, kotlin.Int, java.lang.Class((org.echo.mobile.framework.model.socketoperations.SocketOperation.T)), org.echo.mobile.framework.Callback((org.echo.mobile.framework.model.socketoperations.SocketOperation.T)))/method">method</span><span class="symbol">:</span>&nbsp;<a href="../-socket-method-type/index.html"><span class="identifier">SocketMethodType</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.socketoperations.SocketOperation$<init>(org.echo.mobile.framework.model.socketoperations.SocketMethodType, kotlin.Int, java.lang.Class((org.echo.mobile.framework.model.socketoperations.SocketOperation.T)), org.echo.mobile.framework.Callback((org.echo.mobile.framework.model.socketoperations.SocketOperation.T)))/callId">callId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.socketoperations.SocketOperation$<init>(org.echo.mobile.framework.model.socketoperations.SocketMethodType, kotlin.Int, java.lang.Class((org.echo.mobile.framework.model.socketoperations.SocketOperation.T)), org.echo.mobile.framework.Callback((org.echo.mobile.framework.model.socketoperations.SocketOperation.T)))/type">type</span><span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/lang/Class.html"><span class="identifier">Class</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.socketoperations.SocketOperation$<init>(org.echo.mobile.framework.model.socketoperations.SocketMethodType, kotlin.Int, java.lang.Class((org.echo.mobile.framework.model.socketoperations.SocketOperation.T)), org.echo.mobile.framework.Callback((org.echo.mobile.framework.model.socketoperations.SocketOperation.T)))/callback">callback</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="api-id.html">apiId</a></h4>
+</td>
+<td>
+<p>Blockchain api id, which contains operation</p>
+<code><span class="keyword">abstract</span> <span class="keyword">val </span><span class="identifier">apiId</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="callback.html">callback</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">callback</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="call-id.html">callId</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">callId</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="method.html">method</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">method</span><span class="symbol">: </span><a href="../-socket-method-type/index.html"><span class="identifier">SocketMethodType</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="type.html">type</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">type</span><span class="symbol">: </span><a href="https://docs.oracle.com/javase/6/docs/api/java/lang/Class.html"><span class="identifier">Class</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="create-parameters.html">createParameters</a></h4>
+</td>
+<td>
+<p>Creates json of call parameters</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">createParameters</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">JsonElement</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="to-json-object.html">toJsonObject</a></h4>
+</td>
+<td>
+<p>Converts entity to json object representation</p>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">toJsonObject</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">JsonElement</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="to-json-string.html">toJsonString</a></h4>
+</td>
+<td>
+<p>Converts entity to json string representation</p>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">toJsonString</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Companion Object Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-r-e-s-u-l-t_-k-e-y.html">RESULT_KEY</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">RESULT_KEY</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Inheritors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="../-access-socket-operation/index.html">AccessSocketOperation</a></h4>
+</td>
+<td>
+<p>Represents blockchain call for access to blockchain apis</p>
+<code><span class="keyword">class </span><span class="identifier">AccessSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-account-balances-socket-operation/index.html">AccountBalancesSocketOperation</a></h4>
+</td>
+<td>
+<p>This function fetches all relevant <a href="../../org.echo.mobile.framework.model/-account/index.html">Account</a> objects for the given accounts, and
+subscribes to updates to the given accounts. If any of the strings in <a href="../-account-balances-socket-operation/name-or-id.html">nameOrId</a> cannot be
+tied to an account, that input will be ignored. All other accounts will be retrieved and
+subscribed.</p>
+<code><span class="keyword">class </span><span class="identifier">AccountBalancesSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-asset-amount/index.html"><span class="identifier">AssetAmount</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-block-data-socket-operation/index.html">BlockDataSocketOperation</a></h4>
+</td>
+<td>
+<p>Returns the block chain’s rapidly-changing properties. The returned object contains information
+that changes every block interval such as the head block number, the next witness, etc.</p>
+<code><span class="keyword">class </span><span class="identifier">BlockDataSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-dynamic-global-properties/index.html"><span class="identifier">DynamicGlobalProperties</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-cancel-all-subscriptions-socket-operation/index.html">CancelAllSubscriptionsSocketOperation</a></h4>
+</td>
+<td>
+<p>Stop receiving any notifications.
+This unsubscribes from all subscribed markets and objects.</p>
+<code><span class="keyword">class </span><span class="identifier">CancelAllSubscriptionsSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-check-e-r-c20-token-socket-operation/index.html">CheckERC20TokenSocketOperation</a></h4>
+</td>
+<td>
+<p>Checks whether <a href="#">contractId</a> is ERC20 token</p>
+<code><span class="keyword">class </span><span class="identifier">CheckERC20TokenSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-custom-socket-operation/index.html">CustomSocketOperation</a></h4>
+</td>
+<td>
+<p>Represents custom call operation to blockchain API</p>
+<code><span class="keyword">class </span><span class="identifier">CustomSocketOperation</span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-full-accounts-socket-operation/index.html">FullAccountsSocketOperation</a></h4>
+</td>
+<td>
+<p>This function fetches all relevant <a href="../../org.echo.mobile.framework.model/-account/index.html">Account</a> objects for the given accounts, and
+subscribes to updates to the given accounts. If any of the strings in <a href="../-full-accounts-socket-operation/names-or-ids.html">namesOrIds</a> cannot be
+tied to an account, that input will be ignored. All other accounts will be retrieved and
+subscribed.</p>
+<code><span class="keyword">class </span><span class="identifier">FullAccountsSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html"><span class="identifier">Map</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">,</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-full-account/index.html"><span class="identifier">FullAccount</span></a><span class="symbol">&gt;</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-get-account-deposits-socket-operation/index.html">GetAccountDepositsSocketOperation</a></h4>
+</td>
+<td>
+<p>Retrieves ethereum deposits by <a href="../-get-account-deposits-socket-operation/account-id.html">accountId</a></p>
+<code><span class="keyword">class </span><span class="identifier">GetAccountDepositsSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-deposit/index.html"><span class="identifier">Deposit</span></a><span class="symbol">?</span><span class="symbol">&gt;</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-get-account-history-socket-operation/index.html">GetAccountHistorySocketOperation</a></h4>
+</td>
+<td>
+<p>Get operations relevant to the specified account.</p>
+<code><span class="keyword">class </span><span class="identifier">GetAccountHistorySocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-history-response/index.html"><span class="identifier">HistoryResponse</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-get-account-withdrawals-socket-operation/index.html">GetAccountWithdrawalsSocketOperation</a></h4>
+</td>
+<td>
+<p>Retrieves ethereum withdrawals by <a href="../-get-account-withdrawals-socket-operation/account-id.html">accountId</a></p>
+<code><span class="keyword">class </span><span class="identifier">GetAccountWithdrawalsSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-withdraw/index.html"><span class="identifier">Withdraw</span></a><span class="symbol">?</span><span class="symbol">&gt;</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-get-assets-socket-operation/index.html">GetAssetsSocketOperation</a></h4>
+</td>
+<td>
+<p>Get a list of assets by id.</p>
+<code><span class="keyword">class </span><span class="identifier">GetAssetsSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-asset/index.html"><span class="identifier">Asset</span></a><span class="symbol">&gt;</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-get-bitcoin-address-socket-operation/index.html">GetBitcoinAddressSocketOperation</a></h4>
+</td>
+<td>
+<p>Retrieves bitcoin address for required account</p>
+<code><span class="keyword">class </span><span class="identifier">GetBitcoinAddressSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-btc-address/index.html"><span class="identifier">BtcAddress</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-get-block-socket-operation/index.html">GetBlockSocketOperation</a></h4>
+</td>
+<td>
+<p>Retrieve a full, signed block.</p>
+<code><span class="keyword">class </span><span class="identifier">GetBlockSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-block/index.html"><span class="identifier">Block</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-get-chain-id-socket-operation/index.html">GetChainIdSocketOperation</a></h4>
+</td>
+<td>
+<p>Get the chain id.</p>
+<code><span class="keyword">class </span><span class="identifier">GetChainIdSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-get-contract-logs-socket-operation/index.html">GetContractLogsSocketOperation</a></h4>
+</td>
+<td>
+<p>Retrieves emitted logs of contract</p>
+<code><span class="keyword">class </span><span class="identifier">GetContractLogsSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-get-contract-result-socket-operation/index.html">GetContractResultSocketOperation</a></h4>
+</td>
+<td>
+<p>Retrieves result of called contract operation</p>
+<code><span class="keyword">class </span><span class="identifier">GetContractResultSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model.contract/-contract-result/index.html"><span class="identifier">ContractResult</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-get-contract-socket-operation/index.html">GetContractSocketOperation</a></h4>
+</td>
+<td>
+<p>Retrieves full information about contract.</p>
+<code><span class="keyword">class </span><span class="identifier">GetContractSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model.contract/-contract-struct/index.html"><span class="identifier">ContractStruct</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-get-contracts-socket-operation/index.html">GetContractsSocketOperation</a></h4>
+</td>
+<td>
+<p>Retrieves information about selected contracts.</p>
+<code><span class="keyword">class </span><span class="identifier">GetContractsSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model.contract/-contract-info/index.html"><span class="identifier">ContractInfo</span></a><span class="symbol">&gt;</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-get-e-r-c20-deposits-socket-operation/index.html">GetERC20DepositsSocketOperation</a></h4>
+</td>
+<td>
+<p>Retrieves erc20 deposits for <a href="../-get-e-r-c20-deposits-socket-operation/account-id.html">accountId</a></p>
+<code><span class="keyword">class </span><span class="identifier">GetERC20DepositsSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-e-r-c20-deposit/index.html"><span class="identifier">ERC20Deposit</span></a><span class="symbol">&gt;</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-get-e-r-c20-token-socket-operation/index.html">GetERC20TokenSocketOperation</a></h4>
+</td>
+<td>
+<p>Retrieves information about erc20 token by <a href="#">contactAddress</a></p>
+<code><span class="keyword">class </span><span class="identifier">GetERC20TokenSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-e-r-c20-token/index.html"><span class="identifier">ERC20Token</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-get-e-r-c20-withdrawals-socket-operation/index.html">GetERC20WithdrawalsSocketOperation</a></h4>
+</td>
+<td>
+<p>Retrieves erc20 withdrawals by <a href="../-get-e-r-c20-withdrawals-socket-operation/account-id.html">accountId</a></p>
+<code><span class="keyword">class </span><span class="identifier">GetERC20WithdrawalsSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-e-r-c20-withdrawal/index.html"><span class="identifier">ERC20Withdrawal</span></a><span class="symbol">&gt;</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-get-ethereum-address-socket-operation/index.html">GetEthereumAddressSocketOperation</a></h4>
+</td>
+<td>
+<p>Retrieves ethereum address for required account</p>
+<code><span class="keyword">class </span><span class="identifier">GetEthereumAddressSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-eth-address/index.html"><span class="identifier">EthAddress</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-get-global-properties-socket-operation/index.html">GetGlobalPropertiesSocketOperation</a></h4>
+</td>
+<td>
+<p>Get blockchain current global properties object</p>
+<code><span class="keyword">class </span><span class="identifier">GetGlobalPropertiesSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-global-properties/index.html"><span class="identifier">GlobalProperties</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-get-key-references-socket-operation/index.html">GetKeyReferencesSocketOperation</a></h4>
+</td>
+<td>
+<p>This function fetches all relevant <a href="../../org.echo.mobile.framework.model/-account/index.html">Account</a> objects for the given public <a href="../-get-key-references-socket-operation/keys.html">keys</a>.</p>
+<code><span class="keyword">class </span><span class="identifier">GetKeyReferencesSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html"><span class="identifier">Map</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">&gt;</span><span class="symbol">&gt;</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-get-objects-socket-operation/index.html">GetObjectsSocketOperation</a></h4>
+</td>
+<td>
+<p>Get the objects corresponding to the provided IDs.
+If any of the provided IDs does not map to an object, a null variant is returned in its position.</p>
+<code><span class="keyword">class </span><span class="identifier">GetObjectsSocketOperation</span><span class="symbol">&lt;</span><span class="identifier">T</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-graphene-object/index.html"><span class="identifier">GrapheneObject</span></a><span class="symbol">&gt;</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-list-assets-socket-operation/index.html">ListAssetsSocketOperation</a></h4>
+</td>
+<td>
+<p>Get a list of assets by symbol</p>
+<code><span class="keyword">class </span><span class="identifier">ListAssetsSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-asset/index.html"><span class="identifier">Asset</span></a><span class="symbol">&gt;</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-login-socket-operation/index.html">LoginSocketOperation</a></h4>
+</td>
+<td>
+<p>Represents blockchain call for access to blockchain</p>
+<code><span class="keyword">class </span><span class="identifier">LoginSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-lookup-assets-symbols-socket-operation/index.html">LookupAssetsSymbolsSocketOperation</a></h4>
+</td>
+<td>
+<p>Get a list of assets by symbol</p>
+<code><span class="keyword">class </span><span class="identifier">LookupAssetsSymbolsSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-asset/index.html"><span class="identifier">Asset</span></a><span class="symbol">&gt;</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-query-contract-socket-operation/index.html">QueryContractSocketOperation</a></h4>
+</td>
+<td>
+<p>Calls contract operation without chaining blockchain state. Retrieves constant information.</p>
+<code><span class="keyword">class </span><span class="identifier">QueryContractSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-request-registration-task-socket-operation/index.html">RequestRegistrationTaskSocketOperation</a></h4>
+</td>
+<td>
+<p>Retrieves registration task</p>
+<code><span class="keyword">class </span><span class="identifier">RequestRegistrationTaskSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-registration-task/index.html"><span class="identifier">RegistrationTask</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-required-contract-fees-socket-operation/index.html">RequiredContractFeesSocketOperation</a></h4>
+</td>
+<td>
+<p>Represents blockchain call. Returns list of fees required for contract call</p>
+<code><span class="keyword">class </span><span class="identifier">RequiredContractFeesSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model.contract/-contract-fee/index.html"><span class="identifier">ContractFee</span></a><span class="symbol">&gt;</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-required-fees-socket-operation/index.html">RequiredFeesSocketOperation</a></h4>
+</td>
+<td>
+<p>Represents blockchain call. Returns list of <a href="../../org.echo.mobile.framework.model/-asset-amount/index.html">AssetAmount</a> for <a href="../-required-fees-socket-operation/operations.html">operations</a></p>
+<code><span class="keyword">class </span><span class="identifier">RequiredFeesSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-asset-amount/index.html"><span class="identifier">AssetAmount</span></a><span class="symbol">&gt;</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-set-subscribe-callback-socket-operation/index.html">SetSubscribeCallbackSocketOperation</a></h4>
+</td>
+<td>
+<p>Register global subscription callback to object.
+Every notification initiated by the full node will carry a particular id as defined by the
+user with the identifier parameter.</p>
+<code><span class="keyword">class </span><span class="identifier">SetSubscribeCallbackSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-submit-registration-solution-socket-operation/index.html">SubmitRegistrationSolutionSocketOperation</a></h4>
+</td>
+<td>
+<p>Tries to submit registration task to blockchain with predefined <a href="#">randNum</a> and solved <a href="#">nonce</a></p>
+<code><span class="keyword">class </span><span class="identifier">SubmitRegistrationSolutionSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-subscribe-contract-logs-socket-operation/index.html">SubscribeContractLogsSocketOperation</a></h4>
+</td>
+<td>
+<p>Register subscription callback to contract logs.
+Every notification initiated by the full node will carry a particular id as defined by the
+user with the identifier parameter.</p>
+<code><span class="keyword">class </span><span class="identifier">SubscribeContractLogsSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-subscribe-contracts-socket-operation/index.html">SubscribeContractsSocketOperation</a></h4>
+</td>
+<td>
+<p>Register subscription callback to contracts changes (history or object changes).
+Every notification initiated by the full node will carry a particular id as defined by the
+user with the identifier parameter.</p>
+<code><span class="keyword">class </span><span class="identifier">SubscribeContractsSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-transaction-socket-operation/index.html">TransactionSocketOperation</a></h4>
+</td>
+<td>
+<p>Broadcast a transaction to the network.
+The <a href="../-transaction-socket-operation/transaction.html">transaction</a> will be checked for validity in the local database prior to broadcasting. If it
+fails to apply locally, an error will be thrown and the transaction will not be broadcast.</p>
+<code><span class="keyword">class </span><span class="identifier">TransactionSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-transaction-with-callback-socket-operation/index.html">TransactionWithCallbackSocketOperation</a></h4>
+</td>
+<td>
+<p>Broadcast a transaction to the network.
+The <a href="../-transaction-with-callback-socket-operation/transaction.html">transaction</a> will be checked for validity in the local database prior to broadcasting. If it
+fails to apply locally, an error will be thrown and the transaction will not be broadcast.</p>
+<code><span class="keyword">class </span><span class="identifier">TransactionWithCallbackSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

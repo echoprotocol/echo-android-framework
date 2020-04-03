@@ -8,14 +8,18 @@ import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.BaseOperation
 import org.echo.mobile.framework.model.Block
 import org.echo.mobile.framework.model.BlockData
+import org.echo.mobile.framework.model.BtcAddress
+import org.echo.mobile.framework.model.Deposit
 import org.echo.mobile.framework.model.DynamicGlobalProperties
+import org.echo.mobile.framework.model.ERC20Deposit
+import org.echo.mobile.framework.model.ERC20Token
+import org.echo.mobile.framework.model.ERC20Withdrawal
 import org.echo.mobile.framework.model.EthAddress
-import org.echo.mobile.framework.model.EthDeposit
-import org.echo.mobile.framework.model.EthWithdraw
 import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.GrapheneObject
-import org.echo.mobile.framework.model.Log
+import org.echo.mobile.framework.model.SidechainType
+import org.echo.mobile.framework.model.Withdraw
 import org.echo.mobile.framework.model.contract.ContractFee
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
@@ -31,7 +35,7 @@ import org.echo.mobile.framework.support.Result
  */
 interface DatabaseApiService : ApiService, AccountsService, GlobalsService,
     AuthorityAndValidationService, BlocksAndTransactionsService, ContractsService, AssetsService,
-    SubscriptionService, ObjectsService, CustomOperationService
+    SubscriptionService, ObjectsService, CustomOperationService, SidechainService
 
 /**
  * Encapsulates logic, associated with data from account from blockchain database API
@@ -85,14 +89,27 @@ interface AccountsService {
     fun getEthereumAddress(accountId: String, callback: Callback<EthAddress>)
 
     /**
-     * Retrieves list of account's [accountId] deposits [EthDeposit]
+     * Fetches addresses list [EthAddress] for required account [accountId]
      */
-    fun getAccountDeposits(accountId: String, callback: Callback<List<EthDeposit>>)
+    fun getBitcoinAddress(accountId: String, callback: Callback<BtcAddress>)
 
     /**
-     * Retrieves list of account's [accountId] withdrawals [EthWithdraw]
+     * Retrieves list of account's [accountId] deposits [Deposit]
      */
-    fun getAccountWithdrawals(accountId: String, callback: Callback<List<EthWithdraw>>)
+    fun getAccountDeposits(
+        accountId: String,
+        sidechainType: SidechainType?,
+        callback: Callback<List<Deposit?>>
+    )
+
+    /**
+     * Retrieves list of account's [accountId] withdrawals [Withdraw]
+     */
+    fun getAccountWithdrawals(
+        accountId: String,
+        sidechainType: SidechainType?,
+        callback: Callback<List<Withdraw?>>
+    )
 }
 
 /**
@@ -244,6 +261,7 @@ interface ContractsService {
         contractId: String,
         registrarNameOrId: String,
         assetId: String,
+        amount: String,
         byteCode: String
     ): Result<LocalException, String>
 
@@ -259,13 +277,15 @@ interface ContractsService {
      *
      * @param contractId   Contract id for fetching logs
      * @param fromBlock    Number of the earliest block to retrieve
-     * @param toBlock      Number of the most recent block to retrieve
+     * @param toBlock      End request block
+     *
+     * @return Id of call to network
      */
     fun getContractLogs(
         contractId: String,
         fromBlock: String,
         toBlock: String
-    ): Result<LocalException, List<Log>>
+    ): Result<LocalException, Int>
 
     /**
      * Returns contracts by ids
@@ -303,14 +323,10 @@ interface SubscriptionService {
      * Subscribes to listening contract logs
      *
      * @param contractId   Contract id for fetching logs
-     * @param fromBlock    Number of the earliest block to retrieve
-     * @param limit        Limit of the logs count
      */
     fun subscribeContractLogs(
-        contractId: String,
-        fromBlock: String,
-        limit: String
-    ): Result<LocalException, List<Log>>
+        contractId: String
+    ): Result<LocalException, Boolean>
 
     /**
      * Subscribes to listening contracts changes
@@ -318,6 +334,69 @@ interface SubscriptionService {
      * @param contractIds Ids of contracts for listening
      */
     fun subscribeContracts(contractIds: List<String>): Result<LocalException, Boolean>
+}
+
+/**
+ * Encapsulates logic, associated with echo sidechain information
+ */
+interface SidechainService {
+
+    /**
+     * Fetches addresses list [EthAddress] for required account [accountId]
+     */
+    fun getEthereumAddress(accountId: String, callback: Callback<EthAddress>)
+
+    /**
+     * Fetches addresses list [EthAddress] for required account [accountId]
+     */
+    fun getBitcoinAddress(accountId: String, callback: Callback<BtcAddress>)
+
+    /**
+     * Retrieves list of account's [accountId] deposits [Deposit]
+     */
+    fun getAccountDeposits(
+        accountId: String,
+        sidechainType: SidechainType?,
+        callback: Callback<List<Deposit?>>
+    )
+
+    /**
+     * Retrieves list of account's [accountId] withdrawals [Withdraw]
+     */
+    fun getAccountWithdrawals(
+        accountId: String,
+        sidechainType: SidechainType?,
+        callback: Callback<List<Withdraw?>>
+    )
+
+    /**
+     * Fetches addresses list [EthAddress] for required account [accountId]
+     */
+    fun getERC20Token(address: String, callback: Callback<ERC20Token>)
+
+    /**
+     * Retrieves [ERC20Token] by [address]
+     */
+    fun getERC20Token(address: String): Result<LocalException, ERC20Token>
+
+    /**
+     * Checks whether [contractId] iw ERC20 token
+     */
+    fun checkERC20Token(contractId: String, callback: Callback<Boolean>)
+
+    /**
+     * Retrieves erc20 token deposits for [accountNameOrId]
+     */
+    fun getERC20AccountDeposits(accountNameOrId: String, callback: Callback<List<ERC20Deposit>>)
+
+    /**
+     * Retrieves erc20 token withdrawals for [accountNameOrId]
+     */
+    fun getERC20AccountWithdrawals(
+        accountNameOrId: String,
+        callback: Callback<List<ERC20Withdrawal>>
+    )
+
 }
 
 /**

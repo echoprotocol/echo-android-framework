@@ -1,0 +1,59 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>CustomOperation - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.model.socketoperations</a>&nbsp;/&nbsp;<a href="./index.html">CustomOperation</a><br/>
+<br/>
+<h1>CustomOperation</h1>
+<code><span class="keyword">abstract</span> <span class="keyword">class </span><span class="identifier">CustomOperation</span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-json-deserializable/index.html"><span class="identifier">JsonDeserializable</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span></code>
+<p>Represents operation data for custom call to blockchain API</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<p>Represents operation data for custom call to blockchain API</p>
+<code><span class="identifier">CustomOperation</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.socketoperations.CustomOperation$<init>(org.echo.mobile.framework.model.socketoperations.SocketMethodType, java.lang.Class((org.echo.mobile.framework.model.socketoperations.CustomOperation.T)))/method">method</span><span class="symbol">:</span>&nbsp;<a href="../-socket-method-type/index.html"><span class="identifier">SocketMethodType</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.socketoperations.CustomOperation$<init>(org.echo.mobile.framework.model.socketoperations.SocketMethodType, java.lang.Class((org.echo.mobile.framework.model.socketoperations.CustomOperation.T)))/type">type</span><span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/lang/Class.html"><span class="identifier">Class</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="method.html">method</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">method</span><span class="symbol">: </span><a href="../-socket-method-type/index.html"><span class="identifier">SocketMethodType</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="type.html">type</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">type</span><span class="symbol">: </span><a href="https://docs.oracle.com/javase/6/docs/api/java/lang/Class.html"><span class="identifier">Class</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="create-parameters.html">createParameters</a></h4>
+</td>
+<td>
+<p>Creates json of call parameters</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">createParameters</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">JsonElement</span></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

@@ -317,7 +317,7 @@ class DatabaseApiServiceTest {
             DatabaseApiServiceImpl(socketCoreComponent, cryptoCoreComponent, Echodevnet())
 
         databaseApiService.callContractNoChangingState(
-            "", "", "", ""
+            "", "", "", "0", ""
         )
             .value { result ->
                 assertNotNull(result)
@@ -334,7 +334,7 @@ class DatabaseApiServiceTest {
             DatabaseApiServiceImpl(socketCoreComponent, cryptoCoreComponent, Echodevnet())
 
         databaseApiService.callContractNoChangingState(
-            "", "", "", ""
+            "", "", "", "0", ""
         )
             .value { fail() }
             .error { error ->

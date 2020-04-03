@@ -1,0 +1,126 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>Block - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.model</a>&nbsp;/&nbsp;<a href="./index.html">Block</a><br/>
+<br/>
+<h1>Block</h1>
+<code><span class="keyword">class </span><span class="identifier">Block</span></code>
+<p>Represents block model in blockchain</p>
+<p><strong>Author</strong><br/>
+Daria Pechkovskaya</p>
+<p><strong>Author</strong><br/>
+Dmitriy Bushuev</p>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-block-deserializer/index.html">BlockDeserializer</a></h4>
+</td>
+<td>
+<p>Json deserializer for <a href="./index.html">Block</a> class</p>
+<code><span class="keyword">class </span><span class="identifier">BlockDeserializer</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">JsonDeserializer</span><span class="symbol">&lt;</span><a href="./index.html"><span class="identifier">Block</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<p>Represents block model in blockchain</p>
+<code><span class="identifier">Block</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.Block$<init>(kotlin.String, kotlin.String, kotlin.String, org.echo.mobile.framework.model.Account, org.echo.mobile.framework.model.Account, kotlin.String, kotlin.String, kotlin.String, kotlin.collections.List((org.echo.mobile.framework.model.Transaction)), kotlin.collections.List((kotlin.String)), kotlin.collections.List((org.echo.mobile.framework.model.PrevSignature)))/previous">previous</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.Block$<init>(kotlin.String, kotlin.String, kotlin.String, org.echo.mobile.framework.model.Account, org.echo.mobile.framework.model.Account, kotlin.String, kotlin.String, kotlin.String, kotlin.collections.List((org.echo.mobile.framework.model.Transaction)), kotlin.collections.List((kotlin.String)), kotlin.collections.List((org.echo.mobile.framework.model.PrevSignature)))/round">round</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.Block$<init>(kotlin.String, kotlin.String, kotlin.String, org.echo.mobile.framework.model.Account, org.echo.mobile.framework.model.Account, kotlin.String, kotlin.String, kotlin.String, kotlin.collections.List((org.echo.mobile.framework.model.Transaction)), kotlin.collections.List((kotlin.String)), kotlin.collections.List((org.echo.mobile.framework.model.PrevSignature)))/timestamp">timestamp</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.Block$<init>(kotlin.String, kotlin.String, kotlin.String, org.echo.mobile.framework.model.Account, org.echo.mobile.framework.model.Account, kotlin.String, kotlin.String, kotlin.String, kotlin.collections.List((org.echo.mobile.framework.model.Transaction)), kotlin.collections.List((kotlin.String)), kotlin.collections.List((org.echo.mobile.framework.model.PrevSignature)))/account">account</span><span class="symbol">:</span>&nbsp;<a href="../-account/index.html"><span class="identifier">Account</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.Block$<init>(kotlin.String, kotlin.String, kotlin.String, org.echo.mobile.framework.model.Account, org.echo.mobile.framework.model.Account, kotlin.String, kotlin.String, kotlin.String, kotlin.collections.List((org.echo.mobile.framework.model.Transaction)), kotlin.collections.List((kotlin.String)), kotlin.collections.List((org.echo.mobile.framework.model.PrevSignature)))/delagate">delagate</span><span class="symbol">:</span>&nbsp;<a href="../-account/index.html"><span class="identifier">Account</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.Block$<init>(kotlin.String, kotlin.String, kotlin.String, org.echo.mobile.framework.model.Account, org.echo.mobile.framework.model.Account, kotlin.String, kotlin.String, kotlin.String, kotlin.collections.List((org.echo.mobile.framework.model.Transaction)), kotlin.collections.List((kotlin.String)), kotlin.collections.List((org.echo.mobile.framework.model.PrevSignature)))/transactionMerkleRoot">transactionMerkleRoot</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.Block$<init>(kotlin.String, kotlin.String, kotlin.String, org.echo.mobile.framework.model.Account, org.echo.mobile.framework.model.Account, kotlin.String, kotlin.String, kotlin.String, kotlin.collections.List((org.echo.mobile.framework.model.Transaction)), kotlin.collections.List((kotlin.String)), kotlin.collections.List((org.echo.mobile.framework.model.PrevSignature)))/rand">rand</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.Block$<init>(kotlin.String, kotlin.String, kotlin.String, org.echo.mobile.framework.model.Account, org.echo.mobile.framework.model.Account, kotlin.String, kotlin.String, kotlin.String, kotlin.collections.List((org.echo.mobile.framework.model.Transaction)), kotlin.collections.List((kotlin.String)), kotlin.collections.List((org.echo.mobile.framework.model.PrevSignature)))/edSignature">edSignature</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.Block$<init>(kotlin.String, kotlin.String, kotlin.String, org.echo.mobile.framework.model.Account, org.echo.mobile.framework.model.Account, kotlin.String, kotlin.String, kotlin.String, kotlin.collections.List((org.echo.mobile.framework.model.Transaction)), kotlin.collections.List((kotlin.String)), kotlin.collections.List((org.echo.mobile.framework.model.PrevSignature)))/transactions">transactions</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../-transaction/index.html"><span class="identifier">Transaction</span></a><span class="symbol">&gt;</span><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.Block$<init>(kotlin.String, kotlin.String, kotlin.String, org.echo.mobile.framework.model.Account, org.echo.mobile.framework.model.Account, kotlin.String, kotlin.String, kotlin.String, kotlin.collections.List((org.echo.mobile.framework.model.Transaction)), kotlin.collections.List((kotlin.String)), kotlin.collections.List((org.echo.mobile.framework.model.PrevSignature)))/vmRoot">vmRoot</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">&gt;</span><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.Block$<init>(kotlin.String, kotlin.String, kotlin.String, org.echo.mobile.framework.model.Account, org.echo.mobile.framework.model.Account, kotlin.String, kotlin.String, kotlin.String, kotlin.collections.List((org.echo.mobile.framework.model.Transaction)), kotlin.collections.List((kotlin.String)), kotlin.collections.List((org.echo.mobile.framework.model.PrevSignature)))/prevSignatures">prevSignatures</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../-prev-signature/index.html"><span class="identifier">PrevSignature</span></a><span class="symbol">&gt;</span><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="account.html">account</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">account</span><span class="symbol">: </span><a href="../-account/index.html"><span class="identifier">Account</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="delagate.html">delagate</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">delagate</span><span class="symbol">: </span><a href="../-account/index.html"><span class="identifier">Account</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="ed-signature.html">edSignature</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">edSignature</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="previous.html">previous</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">previous</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="prev-signatures.html">prevSignatures</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">prevSignatures</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../-prev-signature/index.html"><span class="identifier">PrevSignature</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="rand.html">rand</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">rand</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="round.html">round</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">round</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="timestamp.html">timestamp</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">timestamp</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="transaction-merkle-root.html">transactionMerkleRoot</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">transactionMerkleRoot</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="transactions.html">transactions</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">transactions</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../-transaction/index.html"><span class="identifier">Transaction</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="vm-root.html">vmRoot</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">vmRoot</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

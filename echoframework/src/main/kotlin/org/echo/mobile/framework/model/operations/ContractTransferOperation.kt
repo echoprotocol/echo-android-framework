@@ -10,10 +10,11 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonSerializationContext
 import com.google.gson.JsonSerializer
-import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.BaseOperation
+import org.echo.mobile.framework.model.GrapheneObject
 import org.echo.mobile.framework.model.contract.Contract
+import org.echo.mobile.framework.support.serialize
 import java.lang.reflect.Type
 
 /**
@@ -25,26 +26,27 @@ class ContractTransferOperation
 /**
  *  Contract transfer operation constructor.
  *
- *  @param fee          Fee to pay.
- *  @param from         Contract to transfer asset from.
- *  @param to           Account or contract to transfer asset to.
- *  @param amount       The amount of asset to transfer from from to to.
+ *  @param fee         Fee to pay.
+ *  @param caller      Contract to transfer asset from.
+ *  @param callee      Account or contract to transfer asset to.
+ *  @param value       The amount of asset to transfer from from to to.
+ *  @param method      Called method
  */
 @JvmOverloads
 constructor(
     override var fee: AssetAmount = AssetAmount(UnsignedLong.ZERO),
-    val from: Contract,
-    var to: Account,
-    val amount: AssetAmount
-
-) : BaseOperation(OperationType.CONTRACT_TRANSFER_OPERATION) {
+    val caller: Contract,
+    var callee: GrapheneObject,
+    val method: String,
+    val value: AssetAmount
+) : BaseOperation(OperationType.CONTRACT_INTERNAL_CALL_OPERATION) {
 
     override fun toBytes(): ByteArray {
-        val feeBytes = fee.toBytes()
-        val fromBytes = from.toBytes()
-        val toBytes = to.toBytes()
-        val amountBytes = amount.toBytes()
-        return Bytes.concat(feeBytes, fromBytes, toBytes, amountBytes)
+        val fromBytes = caller.toBytes()
+        val toBytes = callee.toBytes()
+        val methodBytes = method.serialize()
+        val amountBytes = value.toBytes()
+        return Bytes.concat(fromBytes, toBytes, methodBytes, amountBytes)
     }
 
     override fun toJsonString(): String? {
@@ -59,17 +61,19 @@ constructor(
             add(this@ContractTransferOperation.id)
             add(JsonObject().apply {
                 add(KEY_FEE, fee.toJsonObject())
-                addProperty(KEY_FROM, from.getObjectId())
-                addProperty(KEY_TO, to.getObjectId())
-                add(KEY_AMOUNT, amount.toJsonObject())
+                addProperty(KEY_CALLER, caller.getObjectId())
+                addProperty(KEY_CALLEE, callee.getObjectId())
+                add(KEY_VALUE, value.toJsonObject())
+                addProperty(KEY_METHOD, method)
             })
         }
     }
 
     companion object {
-        private const val KEY_FROM = "from"
-        private const val KEY_TO = "to"
-        private const val KEY_AMOUNT = "amount"
+        private const val KEY_CALLER = "caller"
+        private const val KEY_CALLEE = "callee"
+        private const val KEY_VALUE = "value"
+        private const val KEY_METHOD = "method"
     }
 
     /**
@@ -105,19 +109,22 @@ constructor(
             val jsonObject = json.asJsonObject
 
             val amount = context.deserialize<AssetAmount>(
-                jsonObject.get(KEY_AMOUNT),
+                jsonObject.get(KEY_VALUE),
                 AssetAmount::class.java
             )
-            val fee = context.deserialize<AssetAmount>(
-                jsonObject.get(KEY_FEE),
-                AssetAmount::class.java
-            )
+            val method = jsonObject.get(KEY_METHOD).asString
 
             val from =
-                Contract(jsonObject.get(KEY_FROM).asString)
-            val to = Account(jsonObject.get(KEY_TO).asString)
+                Contract(jsonObject.get(KEY_CALLER).asString)
+            val to = GrapheneObject(jsonObject.get(KEY_CALLEE).asString)
 
-            return ContractTransferOperation(fee, from, to, amount)
+            return ContractTransferOperation(
+                AssetAmount(UnsignedLong.ZERO),
+                from,
+                to,
+                method,
+                amount
+            )
         }
     }
 }

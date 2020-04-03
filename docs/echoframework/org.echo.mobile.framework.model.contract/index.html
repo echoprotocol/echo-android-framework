@@ -1,0 +1,194 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>org.echo.mobile.framework.model.contract - echoframework</title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">echoframework</a>&nbsp;/&nbsp;<a href="./index.html">org.echo.mobile.framework.model.contract</a><br/>
+<br/>
+<h2>Package org.echo.mobile.framework.model.contract</h2>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-contract/index.html">Contract</a></h4>
+</td>
+<td>
+<p>Represents contract_object from blockchain</p>
+<code><span class="keyword">class </span><span class="identifier">Contract</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.model/-graphene-object/index.html"><span class="identifier">GrapheneObject</span></a><span class="symbol">, </span><a href="../org.echo.mobile.framework.model/-graphene-serializable.html"><span class="identifier">GrapheneSerializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-contract-balance/index.html">ContractBalance</a></h4>
+</td>
+<td>
+<p>Represents contract balance model from blockchain</p>
+<code><span class="keyword">class </span><span class="identifier">ContractBalance</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.model/-graphene-object/index.html"><span class="identifier">GrapheneObject</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-contract-code-builder/index.html">ContractCodeBuilder</a></h4>
+</td>
+<td>
+<p>Builds method of contract with parameters in SHA3 encryption</p>
+<code><span class="keyword">class </span><span class="identifier">ContractCodeBuilder</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">Builder</span><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-contract-code-converter/index.html">ContractCodeConverter</a></h4>
+</td>
+<td>
+<p>Converts <a href="-contract-method-parameter/index.html">ContractMethodParameter</a> to hash string by type</p>
+<code><span class="keyword">class </span><span class="identifier">ContractCodeConverter</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.support/-converter/index.html"><span class="identifier">Converter</span></a><span class="symbol">&lt;</span><a href="-contract-method-parameter/index.html"><span class="identifier">ContractMethodParameter</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-contract-fee/index.html">ContractFee</a></h4>
+</td>
+<td>
+<p>Represents model of contract call fee</p>
+<code><span class="keyword">class </span><span class="identifier">ContractFee</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-contract-info/index.html">ContractInfo</a></h4>
+</td>
+<td>
+<p>Represents info object about contract from blockchain</p>
+<code><span class="keyword">class </span><span class="identifier">ContractInfo</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../org.echo.mobile.framework.model/-graphene-object/index.html"><span class="identifier">GrapheneObject</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-contract-log/index.html">ContractLog</a></h4>
+</td>
+<td>
+<p>Base wrapper class for contract result types</p>
+<code><span class="keyword">sealed</span> <span class="keyword">class </span><span class="identifier">ContractLog</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-contract-method/index.html">ContractMethod</a></h4>
+</td>
+<td>
+<p>Represents contract method</p>
+<code><span class="keyword">class </span><span class="identifier">ContractMethod</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-contract-method-parameter/index.html">ContractMethodParameter</a></h4>
+</td>
+<td>
+<p>Model of method parameter for contract</p>
+<code><span class="keyword">class </span><span class="identifier">ContractMethodParameter</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/io/Serializable.html"><span class="identifier">Serializable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-contract-result/index.html">ContractResult</a></h4>
+</td>
+<td>
+<p>Contains classes, describing result of contract operation</p>
+<code><span class="keyword">class </span><span class="identifier">ContractResult</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-contract-result-log/index.html">ContractResultLog</a></h4>
+</td>
+<td>
+<p>Describes log of contract operation result</p>
+<code><span class="keyword">class </span><span class="identifier">ContractResultLog</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-contract-resultx86/index.html">ContractResultx86</a></h4>
+</td>
+<td>
+<p>Model of contract operation result for x86 VM</p>
+<code><span class="keyword">class </span><span class="identifier">ContractResultx86</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-contract-struct/index.html">ContractStruct</a></h4>
+</td>
+<td>
+<p>Represents contract_struct from blockchain</p>
+<code><span class="keyword">class </span><span class="identifier">ContractStruct</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-contract-type/index.html">ContractType</a></h4>
+</td>
+<td>
+<p>Contains all possible contract types in blockchain</p>
+<code><span class="keyword">enum</span> <span class="keyword">class </span><span class="identifier">ContractType</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-exec-res/index.html">ExecRes</a></h4>
+</td>
+<td>
+<p>Information about operation executing</p>
+<code><span class="keyword">class </span><span class="identifier">ExecRes</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-log/index.html">Log</a></h4>
+</td>
+<td>
+<p>Represent log model in Graphene Blockchain</p>
+<code><span class="keyword">class </span><span class="identifier">Log</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-regular-contract-result/index.html">RegularContractResult</a></h4>
+</td>
+<td>
+<p>Model of contract operation result</p>
+<code><span class="keyword">class </span><span class="identifier">RegularContractResult</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-tr-receipt/index.html">TrReceipt</a></h4>
+</td>
+<td>
+<p>Information about transaction</p>
+<code><span class="keyword">class </span><span class="identifier">TrReceipt</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="process-type.html">processType</a></h4>
+</td>
+<td>
+<p>Parses log according to contract type</p>
+<code><span class="keyword">fun </span><a href="-log/index.html"><span class="identifier">Log</span></a><span class="symbol">.</span><span class="identifier">processType</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="-contract-log/index.html"><span class="identifier">ContractLog</span></a><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="to-regular.html">toRegular</a></h4>
+</td>
+<td>
+<p>Converts <a href="-contract-result/index.html">ContractResult</a> to <a href="-regular-contract-result/index.html">RegularContractResult</a> if possible,else returns null</p>
+<code><span class="keyword">fun </span><a href="-contract-result/index.html"><span class="identifier">ContractResult</span></a><span class="symbol">.</span><span class="identifier">toRegular</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="-regular-contract-result/index.html"><span class="identifier">RegularContractResult</span></a><span class="symbol">?</span></code>
+<p>Converts <a href="-log/index.html">Log</a> to <a href="-contract-log/-regular-contract-log/index.html">ContractLog.RegularContractLog</a> if possible,else returns null</p>
+<code><span class="keyword">fun </span><a href="-log/index.html"><span class="identifier">Log</span></a><span class="symbol">.</span><span class="identifier">toRegular</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">RegularContractLog</span><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="to-x86.html">toX86</a></h4>
+</td>
+<td>
+<p>Converts <a href="-contract-result/index.html">ContractResult</a> to <a href="-contract-resultx86/index.html">ContractResultx86</a> if possible,else returns null</p>
+<code><span class="keyword">fun </span><a href="-contract-result/index.html"><span class="identifier">ContractResult</span></a><span class="symbol">.</span><span class="identifier">toX86</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="-contract-resultx86/index.html"><span class="identifier">ContractResultx86</span></a><span class="symbol">?</span></code>
+<p>Converts <a href="-log/index.html">Log</a> to <a href="-contract-log/-contract-logx86/index.html">ContractLog.ContractLogx86</a> if possible,else returns null</p>
+<code><span class="keyword">fun </span><a href="-log/index.html"><span class="identifier">Log</span></a><span class="symbol">.</span><span class="identifier">toX86</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">ContractLogx86</span><span class="symbol">?</span></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

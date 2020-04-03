@@ -1,3 +1,239 @@
+# Changelog 4.2.0 - 2020-04-02
+
+## Added
+
+* Standalone methods for sidechain fees calculation
+* Getting erc20 token by id
+* evmAddress field in SubmitRegistrationSolutionSocketOperation and AccountCreateOperation
+* btcAssetId in GlobalProperties
+* EVM_ADDRESS object type
+* parent_op_id in ContractBalance
+
+## Changed
+
+* Transaction expiration time calculation
+
+# Changelog 4.1.0 - 2020-01-24
+
+## Added
+
+### New sidechain operations
+* SIDECHAIN_ETH_SEND_DEPOSIT_OPERATION
+* SIDECHAIN_ETH_SEND_WITHDRAW_OPERATION
+* SIDECHAIN_ETH_UPDATE_CONTRACT_ADDRESS_OPERATION
+* SIDECHAIN_ERC20_SEND_DEPOSIT_TOKEN_OPERATION
+* SIDECHAIN_ERC20_SEND_WITHDRAW_TOKEN_OPERATION
+* SIDECHAIN_BTC_APPROVE_AGGREGATE_OPERATION
+
+## Changed
+
+### GetContractLogsSocketOperation
+* Getting result through notice subscription
+
+### SubscribeContractLogsSocketOperation
+* New format
+
+### BlockRewardOperation
+* Field fixed
+
+
+# Changelog 4.0.0 - 2019-12-03
+
+## Added
+
+### ERC20 Sidechaijn
+* SidechainERC20BurnSocketOperation
+* SidechainERC20DepositSocketOperation
+* SidechainERC20IssueSocketOperation
+* SidechainERC20RegisterTokenOperation
+* GetERC20WithdrawalsSocketOperation
+* SidechainERC20RegisterTokenOperation
+* GetERC20TokenSocketOperation
+* GetERC20DepositsSocketOperation
+
+### BTC Sidechain
+* WithdrawBitcoinOperation
+* GenerateBitcoinAddressOperation
+* GetBitcoinAddressSocketOperation
+
+
+# Changelog 3.7.0 - 2019-11-15
+
+## Removed
+* networkFeePercentage from Account object
+* accountsRegisteredThisInterval from DynamicGlobalProperties object
+* nextAvailableVoteId from GlobalProperties object
+* maximumCommitteeCount, reservePercentOfFee, networkPercentOfFee, maxPredicateOpcode, accountsPerFeeScale, accountFeeScaleBitshifts from GlobalPropertiesParameters
+* blockResult from ObjectTypes
+
+## Changed
+
+### GetContractLogsSocketOperation
+* Limit changed to toBlock
+* Fixed operation JSON
+
+### GetAccountDepositsSocketOperation
+* Added type(SidechainType)
+* Operation returns array of Deposit
+
+### GetAccountWithdrawalsSocketOperation
+* Added type(SidechainType)
+* Operation returns array of Withdraw
+
+## Added
+
+### QueryContractSocketOperation
+* Added amount field. Fixed operation JSON
+
+### SidechainType
+* It contains .eth and .btc value
+
+### BtcDeposit object
+
+### BtcWithdrawal object
+
+### Deposit.
+* It contains EthDeposit or BtcDeposit
+
+### Withdraw.
+* It contains EthWithdrawal or BtcWithdrawal
+
+
+# Changelog 3.6.0 - 2019-10-18
+
+## Removed
+
+### DynamicGlobalProperties
+* lastRandQuantity
+
+### OperationType
+* contractTransferOperation
+
+### AccountOptions
+* votingAccount
+* numCommittee
+* votes
+
+## Added
+
+### SubmitRegistrationSolutionSocketOperation
+
+### OperationType
+* committee_member_activate_operation
+* committee_member_deactivate_operation
+* committee_frozen_balance_deposit_operation
+* committee_frozen_balance_withdraw_operation
+* contract_internal_create_operation
+* contract_internal_call_operation
+* contract_selfdestruct_operation
+* sidechain_btc_create_intermediate_deposit_operation
+
+### Log
+* blockNum
+* trxNum
+* opNum
+
+### Account
+* accumulatedReward
+
+### ObjectType
+* committee_frozen_balance_object
+
+## Updated
+
+### SubscribeContractLogsSocketOperation
+* Updated input parameters
+
+### GetContractLogsSocketOperation
+* Updated input parameters
+
+### GlobalProperties
+* Updated activeCommitteeMembers field type
+
+### Registration
+* Now registration goes through task solving
+
+# Changelog 3.5.1 - 2019-10-21
+
+## Fixed
+Fixed framework login flow
+
+# Changelog 3.5.0 - 2019-10-15
+
+## Removed
+
+### DynamicGlobalProperties
+* currentAslot
+* recentlyMissedCount
+
+### GlobalProperties
+* blockInterval
+
+### ObjectType
+* budgetRecord
+
+### Statistics
+* pendingFees
+
+### ContractResultEVM
+* gasRefunded
+
+### OperationType
+* accountTransferOperation
+* sidechainChangeConfigOperation
+
+## Added
+
+### AccountOptions
+* delegateShare
+
+### DynamicGlobalProperties
+* lastRandQuantity
+
+### ObjectType
+* frozenBalance
+* btcAddress
+* btcIntermediateDeposit
+* btcDeposit
+* btcWithdraw
+* btcAggregating
+
+### SidechainConfig
+* waitingETHBlocks
+
+## ContractLogEnum
+* Added enum which represent evm or x86 contract log
+* ContractLogx86
+
+### OperationType
+* balanceFreezeOperation
+* balanceUnfreezeOperation
+* sidechainERC20IssueOperation
+* sidechainERC20BurnOperation
+* sidechainBTCCreateAddressOperatio
+* sidechainBTCIntermediateDepositOperatio
+* sidechainBTCDepositOperatio
+* sidechainBTCWithdrawOperatio
+* sidechainBTCApproveWithdrawOperatio
+* sidechainBTCAggregateOperatio
+* blockRewardOperation
+
+## Updated
+
+### Signatures
+* signer changed to producer
+
+### ContractLogsSocketOperation
+* Fixed returns parameter to ContractLog
+
+### SubscribeContractLogsSocketOperation
+* Fixed returns parameter to Boolean
+* Removed fromBlock and toBlock fields
+
+### Tests
+* Updated all tests and constants
+
+
 # CHANGELOG 3.4.0
 
 ## Removed

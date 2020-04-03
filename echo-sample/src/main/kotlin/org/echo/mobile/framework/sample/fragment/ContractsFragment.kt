@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import kotlinx.android.synthetic.main.fragment_contracts.*
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.ECHO_ASSET_ID
 import org.echo.mobile.framework.exception.LocalException
@@ -112,6 +113,7 @@ class ContractsFragment : BaseFragment() {
             lib?.queryContract(
                 etNameQuery.text.toString(),
                 ECHO_ASSET_ID,
+                "0",
                 etContractQueryId.text.toString(),
                 etMethodNameQuery.text.toString(),
                 parseContractParams(etMethodParamsQuery.text.toString()),

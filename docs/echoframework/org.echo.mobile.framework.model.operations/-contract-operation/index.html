@@ -1,0 +1,158 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>ContractOperation - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.model.operations</a>&nbsp;/&nbsp;<a href="./index.html">ContractOperation</a><br/>
+<br/>
+<h1>ContractOperation</h1>
+<code><span class="keyword">abstract</span> <span class="keyword">class </span><span class="identifier">ContractOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-base-operation/index.html"><span class="identifier">BaseOperation</span></a></code>
+<p>Base implementation of contract operation</p>
+<p><strong>Author</strong><br/>
+Dmitriy Bushuev</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<p>Base implementation of contract operation</p>
+<code><span class="identifier">ContractOperation</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.operations.ContractOperation$<init>(org.echo.mobile.framework.model.Account, org.echo.mobile.framework.model.AssetAmount, kotlin.String, org.echo.mobile.framework.model.AssetAmount, org.echo.mobile.framework.model.operations.OperationType)/registrar">registrar</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-account/index.html"><span class="identifier">Account</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.operations.ContractOperation$<init>(org.echo.mobile.framework.model.Account, org.echo.mobile.framework.model.AssetAmount, kotlin.String, org.echo.mobile.framework.model.AssetAmount, org.echo.mobile.framework.model.operations.OperationType)/value">value</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-asset-amount/index.html"><span class="identifier">AssetAmount</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.operations.ContractOperation$<init>(org.echo.mobile.framework.model.Account, org.echo.mobile.framework.model.AssetAmount, kotlin.String, org.echo.mobile.framework.model.AssetAmount, org.echo.mobile.framework.model.operations.OperationType)/code">code</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.operations.ContractOperation$<init>(org.echo.mobile.framework.model.Account, org.echo.mobile.framework.model.AssetAmount, kotlin.String, org.echo.mobile.framework.model.AssetAmount, org.echo.mobile.framework.model.operations.OperationType)/fee">fee</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-asset-amount/index.html"><span class="identifier">AssetAmount</span></a>&nbsp;<span class="symbol">=</span>&nbsp;AssetAmount(UnsignedLong.ZERO)<span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.operations.ContractOperation$<init>(org.echo.mobile.framework.model.Account, org.echo.mobile.framework.model.AssetAmount, kotlin.String, org.echo.mobile.framework.model.AssetAmount, org.echo.mobile.framework.model.operations.OperationType)/operationType">operationType</span><span class="symbol">:</span>&nbsp;<a href="../-operation-type/index.html"><span class="identifier">OperationType</span></a><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="code.html">code</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">code</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="contract-result.html">contractResult</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">contractResult</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.model.contract/-contract-result/index.html"><span class="identifier">ContractResult</span></a><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="fee.html">fee</a></h4>
+</td>
+<td>
+<p>Required amount of fee <a href="../../org.echo.mobile.framework.model/-asset-amount/index.html">AssetAmount</a> to operation</p>
+<code><span class="keyword">open</span> <span class="keyword">var </span><span class="identifier">fee</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.model/-asset-amount/index.html"><span class="identifier">AssetAmount</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="registrar.html">registrar</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">registrar</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.model/-account/index.html"><span class="identifier">Account</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="value.html">value</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">value</span><span class="symbol">: </span><a href="../../org.echo.mobile.framework.model/-asset-amount/index.html"><span class="identifier">AssetAmount</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="to-json-string.html">toJsonString</a></h4>
+</td>
+<td>
+<p>Converts entity to json string representation</p>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">toJsonString</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="to-string.html">toString</a></h4>
+</td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">toString</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Companion Object Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-k-e-y_-a-c-c-u-r-a-c-y.html">KEY_ACCURACY</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_ACCURACY</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-k-e-y_-c-o-d-e.html">KEY_CODE</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_CODE</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-k-e-y_-r-e-c-e-i-v-e-r.html">KEY_RECEIVER</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_RECEIVER</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-k-e-y_-r-e-g-i-s-t-r-a-r.html">KEY_REGISTRAR</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_REGISTRAR</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-k-e-y_-s-u-p-p-o-r-t-e-d_-a-s-s-e-t.html">KEY_SUPPORTED_ASSET</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_SUPPORTED_ASSET</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-k-e-y_-v-a-l-u-e.html">KEY_VALUE</a></h4>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">KEY_VALUE</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Inheritors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="../-contract-call-operation/index.html">ContractCallOperation</a></h4>
+</td>
+<td>
+<p>Represents blockchain operation for calling contract w2ith changing state</p>
+<code><span class="keyword">class </span><span class="identifier">ContractCallOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">ContractOperation</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-contract-create-operation/index.html">ContractCreateOperation</a></h4>
+</td>
+<td>
+<p>Represents blockchain operation for creating new smart contract</p>
+<code><span class="keyword">class </span><span class="identifier">ContractCreateOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">ContractOperation</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

@@ -24,7 +24,7 @@ class GlobalProperties {
     var parameters: Parameters? = null
 
     @SerializedName("active_committee_members")
-    val activeCommitteeMembers: List<String>? = null
+    val activeCommitteeMembers: List<List<String>>? = null
 
     @SerializedName("active_witnesses")
     val activeWitnesses: List<String>? = null
@@ -44,22 +44,14 @@ class Parameters {
     val maximumProposalLifetime: String? = null
     @SerializedName("witness_pay_per_block")
     val witnessPayPerBlock: String? = null
-    @SerializedName("block_interval")
-    val blockInterval: String? = null
     @SerializedName("maximum_time_until_expiration")
     val maximumTimeUntilExpiration: String? = null
-    @SerializedName("max_predicate_opcode")
-    val maxPredicateOpcode: String? = null
     @SerializedName("echorand_config")
     val echorandConfig: EchorandConfig? = null
-    @SerializedName("reserve_percent_of_fee")
-    val reservePercentOfFee: String? = null
     @SerializedName("max_authority_depth")
     val maxAuthorityDepth: String? = null
     @SerializedName("committee_proposal_review_period")
     val committeeProposalReviewPeriod: String? = null
-    @SerializedName("account_fee_scale_bitshifts")
-    val accountFeeScaleBitshifts: String? = null
     @SerializedName("sidechain_config")
     val sidechainConfig: SidechainConfig? = null
     @SerializedName("gas_price")
@@ -72,18 +64,12 @@ class Parameters {
     val workerBudgetPerDay: String? = null
     @SerializedName("maximum_authority_membership")
     val maximumAuthorityMembership: String? = null
-    @SerializedName("maximum_committee_count")
-    val maximumCommitteeCount: String? = null
-    @SerializedName("accounts_per_fee_scale")
-    val accountsPerFeeScale: String? = null
     @SerializedName("extensions")
     val extensions: Array<String>? = null
     @SerializedName("current_fees")
     val currentFees: CurrentFees? = null
     @SerializedName("maintenance_interval")
     val maintenanceInterval: String? = null
-    @SerializedName("network_percent_of_fee")
-    val networkPercentOfFee: String? = null
 }
 
 /**
@@ -210,6 +196,10 @@ class SidechainConfig {
     var ethUpdateAddressMethod: Method? = null
     @SerializedName("ETH_asset_id")
     var ethAssetId: String? = null
+    @SerializedName("BTC_asset_id")
+    var btcAssetId: String? = null
+    @SerializedName("waiting_eth_blocks")
+    var waitingETHBlocks: String? = null
     @SerializedName("eth_deposit_topic")
     var ethDepositTopic: String? = null
     @SerializedName("eth_gen_address_topic")

@@ -153,7 +153,7 @@ class ContractAddressInputValueType : InputValueType {
     override var name: String = "address"
 
     companion object {
-        const val PREFIX = "1.14."
+        const val PREFIX = "1.11."
         const val CONTRACT_ADDRESS_SIZE = 40
         const val CONTRACT_ADDRESS_PREFIX = "01"
     }

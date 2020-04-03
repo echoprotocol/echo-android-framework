@@ -5,6 +5,7 @@ import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 import org.echo.mobile.framework.model.eddsa.EdAuthority
 import java.lang.reflect.Type
 
@@ -34,7 +35,8 @@ class Account : GrapheneObject, GrapheneSerializable {
     lateinit var registrar: String
 
     @Expose
-    var networkFeePercentage: Long = 0
+    @SerializedName("accumulated_reward")
+    var accumulatedReward: Long = 0
 
     /**
      * Requires a user account in the string representation, that is in the 1.2.x format.
@@ -71,7 +73,6 @@ class Account : GrapheneObject, GrapheneSerializable {
 
             return createAccountFromJson(jsonAccount).apply {
                 registrar = jsonAccount.get(KEY_REGISTRAR).asString
-                networkFeePercentage = jsonAccount.get(KEY_NETWORK_FEE_PERCENTAGE).asLong
                 active = getAuthority(context!!, jsonAccount, KEY_ACTIVE)
                 edKey = jsonAccount.get(KEY_ECHORAND_KEY).asString
                 options = getOptions(context, jsonAccount)
@@ -107,7 +108,6 @@ class Account : GrapheneObject, GrapheneSerializable {
         const val PROXY_TO_SELF = "1.2.5"
 
         const val KEY_REGISTRAR = "registrar"
-        const val KEY_NETWORK_FEE_PERCENTAGE = "network_fee_percentage"
         const val KEY_NAME = "name"
         const val KEY_ACTIVE = "active"
         const val KEY_ECHORAND_KEY = "echorand_key"

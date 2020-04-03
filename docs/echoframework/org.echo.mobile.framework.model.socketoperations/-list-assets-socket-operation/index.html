@@ -1,0 +1,86 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>ListAssetsSocketOperation - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.model.socketoperations</a>&nbsp;/&nbsp;<a href="./index.html">ListAssetsSocketOperation</a><br/>
+<br/>
+<h1>ListAssetsSocketOperation</h1>
+<code><span class="keyword">class </span><span class="identifier">ListAssetsSocketOperation</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-socket-operation/index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-asset/index.html"><span class="identifier">Asset</span></a><span class="symbol">&gt;</span><span class="symbol">&gt;</span></code>
+<p>Get a list of assets by symbol</p>
+<h3>Parameters</h3>
+<p><a name="lowerBound"></a>
+<code>lowerBound</code> - Asset symbol</p>
+<p><a name="limit"></a>
+<code>limit</code> - Assets count limit</p>
+<p><strong>Return</strong><br/>
+List of required assets</p>
+<p><strong>Author</strong><br/>
+Bushuev Dmitriy</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<p>Get a list of assets by symbol</p>
+<code><span class="identifier">ListAssetsSocketOperation</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.socketoperations.ListAssetsSocketOperation$<init>(kotlin.Int, kotlin.String, kotlin.Int, kotlin.Int, org.echo.mobile.framework.model.socketoperations.SocketMethodType, org.echo.mobile.framework.Callback((kotlin.collections.List((org.echo.mobile.framework.model.Asset)))))/apiId">apiId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.socketoperations.ListAssetsSocketOperation$<init>(kotlin.Int, kotlin.String, kotlin.Int, kotlin.Int, org.echo.mobile.framework.model.socketoperations.SocketMethodType, org.echo.mobile.framework.Callback((kotlin.collections.List((org.echo.mobile.framework.model.Asset)))))/lowerBound">lowerBound</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.socketoperations.ListAssetsSocketOperation$<init>(kotlin.Int, kotlin.String, kotlin.Int, kotlin.Int, org.echo.mobile.framework.model.socketoperations.SocketMethodType, org.echo.mobile.framework.Callback((kotlin.collections.List((org.echo.mobile.framework.model.Asset)))))/limit">limit</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.socketoperations.ListAssetsSocketOperation$<init>(kotlin.Int, kotlin.String, kotlin.Int, kotlin.Int, org.echo.mobile.framework.model.socketoperations.SocketMethodType, org.echo.mobile.framework.Callback((kotlin.collections.List((org.echo.mobile.framework.model.Asset)))))/callId">callId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.socketoperations.ListAssetsSocketOperation$<init>(kotlin.Int, kotlin.String, kotlin.Int, kotlin.Int, org.echo.mobile.framework.model.socketoperations.SocketMethodType, org.echo.mobile.framework.Callback((kotlin.collections.List((org.echo.mobile.framework.model.Asset)))))/method">method</span><span class="symbol">:</span>&nbsp;<a href="../-socket-method-type/index.html"><span class="identifier">SocketMethodType</span></a>&nbsp;<span class="symbol">=</span>&nbsp;SocketMethodType.CALL<span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.model.socketoperations.ListAssetsSocketOperation$<init>(kotlin.Int, kotlin.String, kotlin.Int, kotlin.Int, org.echo.mobile.framework.model.socketoperations.SocketMethodType, org.echo.mobile.framework.Callback((kotlin.collections.List((org.echo.mobile.framework.model.Asset)))))/callback">callback</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-asset/index.html"><span class="identifier">Asset</span></a><span class="symbol">&gt;</span><span class="symbol">&gt;</span><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="api-id.html">apiId</a></h4>
+</td>
+<td>
+<p>Blockchain api id, which contains operation</p>
+<code><span class="keyword">val </span><span class="identifier">apiId</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="limit.html">limit</a></h4>
+</td>
+<td>
+<p>Assets count limit</p>
+<code><span class="keyword">val </span><span class="identifier">limit</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="lower-bound.html">lowerBound</a></h4>
+</td>
+<td>
+<p>Asset symbol</p>
+<code><span class="keyword">val </span><span class="identifier">lowerBound</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="create-parameters.html">createParameters</a></h4>
+</td>
+<td>
+<p>Creates json of call parameters</p>
+<code><span class="keyword">fun </span><span class="identifier">createParameters</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">JsonElement</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="from-json.html">fromJson</a></h4>
+</td>
+<td>
+<p>Converts json string to entity</p>
+<code><span class="keyword">fun </span><span class="identifier">fromJson</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.model.socketoperations.ListAssetsSocketOperation$fromJson(kotlin.String)/json">json</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework.model/-asset/index.html"><span class="identifier">Asset</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

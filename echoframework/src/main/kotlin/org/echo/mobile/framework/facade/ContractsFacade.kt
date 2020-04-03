@@ -1,8 +1,8 @@
 package org.echo.mobile.framework.facade
 
 import org.echo.mobile.framework.Callback
-import org.echo.mobile.framework.model.Log
 import org.echo.mobile.framework.model.contract.ContractInfo
+import org.echo.mobile.framework.model.contract.ContractLog
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
 import org.echo.mobile.framework.model.contract.input.InputValue
@@ -109,6 +109,7 @@ interface ContractsFacade {
      * @param userNameOrId Name or id of account that calls the contract
      * @param contractId   Id of called contract
      * @param assetId      Asset of contract
+     * @param amount       Value in [assetId]
      * @param methodName   Name of calling method
      * @param methodParams Parameters of called method
      * @param callback     Listener of operation results.
@@ -116,6 +117,7 @@ interface ContractsFacade {
     fun queryContract(
         userNameOrId: String,
         assetId: String,
+        amount: String,
         contractId: String,
         methodName: String,
         methodParams: List<InputValue>,
@@ -128,12 +130,14 @@ interface ContractsFacade {
      * @param userNameOrId Name or id of account that calls the contract
      * @param contractId   Id of called contract
      * @param assetId      Asset of contract
+     * @param amount       Value in [assetId]
      * @param code         Valid code for contract query
      * @param callback     Listener of operation results.
      */
     fun queryContract(
         userNameOrId: String,
         assetId: String,
+        amount: String,
         contractId: String,
         code: String,
         callback: Callback<String>
@@ -149,16 +153,20 @@ interface ContractsFacade {
     /**
      * Return list of contract logs
      *
-     * @param contractId   Contract id for fetching logs
-     * @param fromBlock    Number of the earliest block to retrieve
-     * @param toBlock      Number of the most recent block to retrieve
-     * @param callback     Listener of operation results.
+     * @param contractId            Contract id for fetching logs
+     * @param fromBlock             Number of the earliest block to retrieve
+     * @param toBlock               Last request block
+     * @param broadcastCallback     Callback for result of operation deploying
+     * @param resultCallback        Callback for retrieving result of operation.
+     *                              Retrieves list contract logs if exists,
+     *                              if not exists - empty list
      */
     fun getContractLogs(
         contractId: String,
         fromBlock: String,
         toBlock: String,
-        callback: Callback<List<Log>>
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: Callback<List<ContractLog>>? = null
     )
 
     /**

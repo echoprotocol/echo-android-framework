@@ -13,7 +13,7 @@ import com.google.gson.JsonSerializer
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.BaseOperation
-import org.echo.mobile.framework.model.EthDeposit
+import org.echo.mobile.framework.model.Deposit
 import java.lang.reflect.Type
 
 /**
@@ -24,9 +24,9 @@ import java.lang.reflect.Type
 class SidechainIssueSocketOperation @JvmOverloads constructor(
     var account: Account,
     var value: AssetAmount,
-    var deposit: EthDeposit,
+    var deposit: Deposit,
     override var fee: AssetAmount = AssetAmount(UnsignedLong.ZERO)
-) : BaseOperation(OperationType.SIDECHAIN_ETH_ISSUE_OPERATION) {
+) : BaseOperation(OperationType.SIDECHAIN_ISSUE_OPERATION) {
 
     override fun toBytes(): ByteArray = byteArrayOf()
 
@@ -34,7 +34,7 @@ class SidechainIssueSocketOperation @JvmOverloads constructor(
         val gsonBuilder = GsonBuilder()
         gsonBuilder.registerTypeAdapter(
             SidechainIssueSocketOperation::class.java,
-            SidechainIssueSocketOperation.SidechainIssueSerializer()
+            SidechainIssueSerializer()
         )
         return gsonBuilder.create().toJson(this)
     }
@@ -97,7 +97,7 @@ class SidechainIssueSocketOperation @JvmOverloads constructor(
             return SidechainIssueSocketOperation(
                 account,
                 amount,
-                EthDeposit(depositId),
+                Deposit.Undefined(depositId),
                 fee
             )
         }

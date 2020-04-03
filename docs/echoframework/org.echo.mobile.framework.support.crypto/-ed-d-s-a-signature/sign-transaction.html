@@ -1,0 +1,21 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>EdDSASignature.signTransaction - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.support.crypto</a>&nbsp;/&nbsp;<a href="index.html">EdDSASignature</a>&nbsp;/&nbsp;<a href="./sign-transaction.html">signTransaction</a><br/>
+<br/>
+<h1>signTransaction</h1>
+<a name="org.echo.mobile.framework.support.crypto.EdDSASignature$signTransaction(org.echo.mobile.framework.model.Transaction)"></a>
+<code><span class="identifier">@JvmStatic</span> <span class="keyword">fun </span><span class="identifier">signTransaction</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support.crypto.EdDSASignature$signTransaction(org.echo.mobile.framework.model.Transaction)/transaction">transaction</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-transaction/index.html"><span class="identifier">Transaction</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://docs.oracle.com/javase/6/docs/api/java/util/ArrayList.html"><span class="identifier">ArrayList</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html"><span class="identifier">ByteArray</span></a><span class="symbol">&gt;</span></code>
+<p>Obtains a signature of transaction. Please note that due to the fact that it uses
+deterministic EdDSA signatures, we are slightly modifying the expiration time of
+the transaction while we look for a signature that will be accepted by
+the graphene network.</p>
+<p>This should then be called before any other serialization method.</p>
+<p><strong>Return</strong><br/>
+: A valid signature of the transaction.</p>
+</BODY>
+</HTML>

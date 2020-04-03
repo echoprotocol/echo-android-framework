@@ -1,0 +1,82 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>org.echo.mobile.framework.support.concurrent.future - echoframework</title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">echoframework</a>&nbsp;/&nbsp;<a href="./index.html">org.echo.mobile.framework.support.concurrent.future</a><br/>
+<br/>
+<h2>Package org.echo.mobile.framework.support.concurrent.future</h2>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-cancellable/index.html">Cancellable</a></h4>
+</td>
+<td>
+<p>Describe base functionality of simple cancellable process wrapper</p>
+<code><span class="keyword">interface </span><span class="identifier">Cancellable</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-cancellable-future/index.html">CancellableFuture</a></h4>
+</td>
+<td>
+<p>Representation of the result of asynchronous computation</p>
+<code><span class="keyword">interface </span><span class="identifier">CancellableFuture</span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-cancellable/index.html"><span class="identifier">Cancellable</span></a><span class="symbol">, </span><a href="https://docs.oracle.com/javase/6/docs/api/java/util/concurrent/Future.html"><span class="identifier">Future</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-cancellable-task/index.html">CancellableTask</a></h4>
+</td>
+<td>
+<p>Base realization of <a href="-cancellable/index.html">Cancellable</a></p>
+<code><span class="keyword">open</span> <span class="keyword">class </span><span class="identifier">CancellableTask</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-cancellable/index.html"><span class="identifier">Cancellable</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-future-callback/index.html">FutureCallback</a></h4>
+</td>
+<td>
+<p>Callback, using when the result of future needed as soon as it's completed or failed</p>
+<code><span class="keyword">interface </span><span class="identifier">FutureCallback</span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-future-task/index.html">FutureTask</a></h4>
+</td>
+<td>
+<p>Realization of cancellable future</p>
+<code><span class="keyword">class </span><span class="identifier">FutureTask</span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-cancellable-task/index.html"><span class="identifier">CancellableTask</span></a><span class="symbol">, </span><a href="-cancellable-future/index.html"><span class="identifier">CancellableFuture</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="complete-callback.html">completeCallback</a></h4>
+</td>
+<td>
+<p>Creates <a href="../org.echo.mobile.framework/-callback/index.html">Callback</a> that completes future in it's methods with optional block call</p>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span> <a href="-future-task/index.html"><span class="identifier">FutureTask</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span><span class="symbol">.</span><span class="identifier">completeCallback</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support.concurrent.future$completeCallback(org.echo.mobile.framework.support.concurrent.future.FutureTask((org.echo.mobile.framework.support.concurrent.future.completeCallback.T)), kotlin.Function1((org.echo.mobile.framework.support.concurrent.future.completeCallback.T, kotlin.Unit)), kotlin.Function1((org.echo.mobile.framework.exception.LocalException, kotlin.Unit)))/successBlock">successBlock</span><span class="symbol">:</span>&nbsp;<span class="symbol">(</span><span class="identifier">T</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a>&nbsp;<span class="symbol">=</span>&nbsp;{}<span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.support.concurrent.future$completeCallback(org.echo.mobile.framework.support.concurrent.future.FutureTask((org.echo.mobile.framework.support.concurrent.future.completeCallback.T)), kotlin.Function1((org.echo.mobile.framework.support.concurrent.future.completeCallback.T, kotlin.Unit)), kotlin.Function1((org.echo.mobile.framework.exception.LocalException, kotlin.Unit)))/errorBlock">errorBlock</span><span class="symbol">:</span>&nbsp;<span class="symbol">(</span><a href="../org.echo.mobile.framework.exception/-local-exception/index.html"><span class="identifier">LocalException</span></a><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a>&nbsp;<span class="symbol">=</span>&nbsp;{}<span class="symbol">)</span><span class="symbol">: </span><a href="../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="wrap-result.html">wrapResult</a></h4>
+</td>
+<td>
+<p>Wraps future task result in <a href="../org.echo.mobile.framework.support/-result/index.html">Result</a></p>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">, </span><span class="identifier">T</span><span class="symbol">&gt;</span> <a href="-future-task/index.html"><span class="identifier">FutureTask</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span><span class="symbol">.</span><span class="identifier">wrapResult</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="../org.echo.mobile.framework.support/-result/index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">,</span>&nbsp;<span class="identifier">T</span><span class="symbol">&gt;</span></code>
+<p>Wraps future task result in <a href="../org.echo.mobile.framework.support/-result/index.html">Result</a> with <a href="wrap-result.html#org.echo.mobile.framework.support.concurrent.future$wrapResult(org.echo.mobile.framework.support.concurrent.future.FutureTask((org.echo.mobile.framework.support.concurrent.future.wrapResult.T)), kotlin.Long, java.util.concurrent.TimeUnit)/timeout">timeout</a></p>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">, </span><span class="identifier">T</span><span class="symbol">&gt;</span> <a href="-future-task/index.html"><span class="identifier">FutureTask</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span><span class="symbol">.</span><span class="identifier">wrapResult</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support.concurrent.future$wrapResult(org.echo.mobile.framework.support.concurrent.future.FutureTask((org.echo.mobile.framework.support.concurrent.future.wrapResult.T)), kotlin.Long, java.util.concurrent.TimeUnit)/timeout">timeout</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html"><span class="identifier">Long</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.support.concurrent.future$wrapResult(org.echo.mobile.framework.support.concurrent.future.FutureTask((org.echo.mobile.framework.support.concurrent.future.wrapResult.T)), kotlin.Long, java.util.concurrent.TimeUnit)/unit">unit</span><span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/util/concurrent/TimeUnit.html"><span class="identifier">TimeUnit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="../org.echo.mobile.framework.support/-result/index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">,</span>&nbsp;<span class="identifier">T</span><span class="symbol">&gt;</span></code>
+<p>Wraps future task result in <a href="../org.echo.mobile.framework.support/-result/index.html">Result</a> with default value if operation succeeds with null</p>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">, </span><span class="identifier">T</span><span class="symbol">&gt;</span> <a href="-future-task/index.html"><span class="identifier">FutureTask</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span><span class="symbol">.</span><span class="identifier">wrapResult</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support.concurrent.future$wrapResult(org.echo.mobile.framework.support.concurrent.future.FutureTask((org.echo.mobile.framework.support.concurrent.future.wrapResult.T)), org.echo.mobile.framework.support.concurrent.future.wrapResult.T)/default">default</span><span class="symbol">:</span>&nbsp;<span class="identifier">T</span><span class="symbol">)</span><span class="symbol">: </span><a href="../org.echo.mobile.framework.support/-result/index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">,</span>&nbsp;<span class="identifier">T</span><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

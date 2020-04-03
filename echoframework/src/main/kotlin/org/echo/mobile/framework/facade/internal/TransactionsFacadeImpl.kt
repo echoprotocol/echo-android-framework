@@ -22,8 +22,9 @@ import org.echo.mobile.framework.support.dematerialize
 class TransactionsFacadeImpl(
     private val databaseApiService: DatabaseApiService,
     private val networkBroadcastApiService: NetworkBroadcastApiService,
-    private val cryptoCoreComponent: CryptoCoreComponent
-) : BaseTransactionsFacade(databaseApiService, cryptoCoreComponent), TransactionsFacade {
+    private val cryptoCoreComponent: CryptoCoreComponent,
+    private val transactionExpirationDelay: Long
+) : BaseTransactionsFacade(databaseApiService, cryptoCoreComponent, transactionExpirationDelay), TransactionsFacade {
 
     override fun sendTransferOperation(
         nameOrId: String,

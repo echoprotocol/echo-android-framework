@@ -4,8 +4,9 @@ import org.echo.mobile.framework.AccountListener
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.model.Block
 import org.echo.mobile.framework.model.DynamicGlobalProperties
-import org.echo.mobile.framework.model.Log
+import org.echo.mobile.framework.model.contract.Log
 import org.echo.mobile.framework.model.contract.ContractBalance
+import org.echo.mobile.framework.model.contract.ContractLog
 import org.echo.mobile.framework.service.UpdateListener
 
 /**
@@ -54,9 +55,7 @@ interface SubscriptionFacade {
      */
     fun subscribeOnContractLogs(
         contractId: String,
-        fromBlock: String,
-        limit: String,
-        listener: UpdateListener<List<Log>>,
+        listener: UpdateListener<List<ContractLog>>,
         callback: Callback<Boolean>
     )
 

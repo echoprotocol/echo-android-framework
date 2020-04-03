@@ -1,0 +1,90 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>AccountSubscriptionManagerImpl - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.service.internal.subscription</a>&nbsp;/&nbsp;<a href="./index.html">AccountSubscriptionManagerImpl</a><br/>
+<br/>
+<h1>AccountSubscriptionManagerImpl</h1>
+<code><span class="keyword">class </span><span class="identifier">AccountSubscriptionManagerImpl</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.service/-account-subscription-manager/index.html"><span class="identifier">AccountSubscriptionManager</span></a></code>
+<p>Implementation of <a href="../../org.echo.mobile.framework.service/-account-subscription-manager/index.html">AccountSubscriptionManager</a></p>
+<p><strong>Author</strong><br/>
+Dmitriy Bushuev</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="../../org.echo.mobile.framework.service/-account-subscription-manager/index.html">AccountSubscriptionManager</a></p>
+<code><span class="identifier">AccountSubscriptionManagerImpl</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.internal.subscription.AccountSubscriptionManagerImpl$<init>(org.echo.mobile.framework.model.network.Network)/network">network</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model.network/-network/index.html"><span class="identifier">Network</span></a><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="clear.html">clear</a></h4>
+</td>
+<td>
+<p>Removes all listeners</p>
+<code><span class="keyword">fun </span><span class="identifier">clear</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="contains-listeners.html">containsListeners</a></h4>
+</td>
+<td>
+<p>Checks if manager contains any listeners</p>
+<code><span class="keyword">fun </span><span class="identifier">containsListeners</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="notify.html">notify</a></h4>
+</td>
+<td>
+<p>Notifies listeners, connected with input account</p>
+<code><span class="keyword">fun </span><span class="identifier">notify</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.internal.subscription.AccountSubscriptionManagerImpl$notify(org.echo.mobile.framework.model.FullAccount)/account">account</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model/-full-account/index.html"><span class="identifier">FullAccount</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="process-event.html">processEvent</a></h4>
+</td>
+<td>
+<p>Searches for account object id that has active subscriptions</p>
+<code><span class="keyword">fun </span><span class="identifier">processEvent</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.internal.subscription.AccountSubscriptionManagerImpl$processEvent(kotlin.String)/event">event</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="registered.html">registered</a></h4>
+</td>
+<td>
+<p>Check, whether listeners already registered by this id</p>
+<code><span class="keyword">fun </span><span class="identifier">registered</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.internal.subscription.AccountSubscriptionManagerImpl$registered(kotlin.String)/id">id</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="register-listener.html">registerListener</a></h4>
+</td>
+<td>
+<p>Registers required listener by account id</p>
+<code><span class="keyword">fun </span><span class="identifier">registerListener</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.internal.subscription.AccountSubscriptionManagerImpl$registerListener(kotlin.String, org.echo.mobile.framework.AccountListener)/id">id</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="org.echo.mobile.framework.service.internal.subscription.AccountSubscriptionManagerImpl$registerListener(kotlin.String, org.echo.mobile.framework.AccountListener)/listener">listener</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-account-listener/index.html"><span class="identifier">AccountListener</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="remove-listeners.html">removeListeners</a></h4>
+</td>
+<td>
+<p>Removes listener by id</p>
+<code><span class="keyword">fun </span><span class="identifier">removeListeners</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.service.internal.subscription.AccountSubscriptionManagerImpl$removeListeners(kotlin.String)/id">id</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html"><span class="identifier">MutableList</span></a><span class="symbol">&lt;</span><a href="../../org.echo.mobile.framework/-account-listener/index.html"><span class="identifier">AccountListener</span></a><span class="symbol">&gt;</span><span class="symbol">?</span></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

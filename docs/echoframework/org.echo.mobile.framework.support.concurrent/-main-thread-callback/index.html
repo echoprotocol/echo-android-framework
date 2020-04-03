@@ -1,0 +1,65 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>MainThreadCallback - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.support.concurrent</a>&nbsp;/&nbsp;<a href="./index.html">MainThreadCallback</a><br/>
+<br/>
+<h1>MainThreadCallback</h1>
+<code><span class="keyword">class </span><span class="identifier">MainThreadCallback</span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span></code>
+<p>Executes callback events on main (UI) thread</p>
+<p><strong>Author</strong><br/>
+Dmitriy Bushuev</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<p>Executes callback events on main (UI) thread</p>
+<code><span class="identifier">MainThreadCallback</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support.concurrent.MainThreadCallback$<init>(org.echo.mobile.framework.Callback((org.echo.mobile.framework.support.concurrent.MainThreadCallback.T)))/delegate">delegate</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="on-error.html">onError</a></h4>
+</td>
+<td>
+<p>Calls when operation is failed</p>
+<code><span class="keyword">fun </span><span class="identifier">onError</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support.concurrent.MainThreadCallback$onError(org.echo.mobile.framework.exception.LocalException)/error">error</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.exception/-local-exception/index.html"><span class="identifier">LocalException</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="on-success.html">onSuccess</a></h4>
+</td>
+<td>
+<p>Calls when operation is successful</p>
+<code><span class="keyword">fun </span><span class="identifier">onSuccess</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.support.concurrent.MainThreadCallback$onSuccess(org.echo.mobile.framework.support.concurrent.MainThreadCallback.T)/result">result</span><span class="symbol">:</span>&nbsp;<span class="identifier">T</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Extension Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="../../org.echo.mobile.framework/process-result.html">processResult</a></h4>
+</td>
+<td>
+<p>Wrap input code block in <a href="../../org.echo.mobile.framework.support/-result/index.html">Result</a> and and calls corresponding callback methods after finish</p>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span> <a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span><span class="symbol">.</span><span class="identifier">processResult</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework$processResult(org.echo.mobile.framework.Callback((org.echo.mobile.framework.processResult.T)), kotlin.Function0((org.echo.mobile.framework.processResult.T)))/block">block</span><span class="symbol">:</span>&nbsp;<span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<span class="identifier">T</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Calls corresponding callback methods on <a href="../../org.echo.mobile.framework/process-result.html#org.echo.mobile.framework$processResult(org.echo.mobile.framework.Callback((org.echo.mobile.framework.processResult.T)), org.echo.mobile.framework.support.Result((org.echo.mobile.framework.processResult.E, org.echo.mobile.framework.processResult.T)))/targetResult">targetResult</a> processing results</p>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">, </span><span class="identifier">T</span><span class="symbol">&gt;</span> <a href="../../org.echo.mobile.framework/-callback/index.html"><span class="identifier">Callback</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span><span class="symbol">.</span><span class="identifier">processResult</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework$processResult(org.echo.mobile.framework.Callback((org.echo.mobile.framework.processResult.T)), org.echo.mobile.framework.support.Result((org.echo.mobile.framework.processResult.E, org.echo.mobile.framework.processResult.T)))/targetResult">targetResult</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.support/-result/index.html"><span class="identifier">Result</span></a><span class="symbol">&lt;</span><span class="identifier">E</span><span class="symbol">,</span>&nbsp;<span class="identifier">T</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

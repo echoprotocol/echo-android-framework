@@ -4,13 +4,13 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonParser
 import org.echo.mobile.framework.Callback
+import org.echo.mobile.framework.model.AssetAmount
 
 /**
  * Calls contract operation without chaining blockchain state. Retrieves constant information.
  *
  * @param contractId Id of called contract
  * @param registrarId Id of account which call contract
- * @param assetId Id of contract asset
  * @param code Called code of operation on contract
  *
  * @author Daria Pechkovskaya
@@ -19,7 +19,7 @@ class QueryContractSocketOperation(
     override val apiId: Int,
     private val contractId: String,
     private val registrarId: String,
-    private val assetId: String,
+    private val amount: AssetAmount,
     private val code: String,
     callId: Int,
     method: SocketMethodType = SocketMethodType.CALL,
@@ -38,7 +38,7 @@ class QueryContractSocketOperation(
             add(JsonArray().apply {
                 add(contractId)
                 add(registrarId)
-                add(assetId)
+                add(amount.toJsonObject())
                 add(code)
             })
         }

@@ -1,0 +1,106 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>org.echo.mobile.bitcoinj - echoframework</title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">echoframework</a>&nbsp;/&nbsp;<a href="./index.html">org.echo.mobile.bitcoinj</a><br/>
+<br/>
+<h2>Package org.echo.mobile.bitcoinj</h2>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-base58/index.html">Base58</a></h4>
+</td>
+<td>
+<p>Base58 is a way to encode Bitcoin addresses (or arbitrary data) as alphanumeric strings.</p>
+<code><span class="keyword">object </span><span class="identifier">Base58</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-sha256-hash/index.html">Sha256Hash</a></h4>
+</td>
+<td>
+<p>A Sha256Hash just wraps a byte[] so that equals and hashcode work correctly, allowing it to be used as keys in a
+map. It also checks that the length is correct and provides a bit more type safety.</p>
+<code><span class="keyword">class </span><span class="identifier">Sha256Hash</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/io/Serializable.html"><span class="identifier">Serializable</span></a><span class="symbol">, </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-comparable/index.html"><span class="identifier">Comparable</span></a><span class="symbol">&lt;</span><a href="-sha256-hash/index.html"><span class="identifier">Sha256Hash</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Exceptions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-address-format-exception/index.html">AddressFormatException</a></h4>
+</td>
+<td>
+<p>This exception is thrown by <a href="-base58/index.html">Base58</a> when illegal character occurred in address</p>
+<code><span class="keyword">class </span><span class="identifier">AddressFormatException</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-illegal-argument-exception/index.html"><span class="identifier">IllegalArgumentException</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Extensions for External Classes</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="java.math.-big-integer/index.html">java.math.BigInteger</a></h4>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<h4><a href="kotlin.-byte-array/index.html">kotlin.ByteArray</a></h4>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<h4><a href="kotlin.-int/index.html">kotlin.Int</a></h4>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<h4><a href="kotlin.-long/index.html">kotlin.Long</a></h4>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<h4><a href="kotlin.-short/index.html">kotlin.Short</a></h4>
+</td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-h-e-x.html">HEX</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">HEX</span><span class="symbol">: </span><span class="identifier">BaseEncoding</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="is-android-runtime.html">isAndroidRuntime</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">isAndroidRuntime</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

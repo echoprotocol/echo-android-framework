@@ -1,0 +1,93 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>SocketCoreComponent - echoframework</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">echoframework</a>&nbsp;/&nbsp;<a href="../index.html">org.echo.mobile.framework.core.socket</a>&nbsp;/&nbsp;<a href="./index.html">SocketCoreComponent</a><br/>
+<br/>
+<h1>SocketCoreComponent</h1>
+<code><span class="keyword">interface </span><span class="identifier">SocketCoreComponent</span></code>
+<p>Encapsulates logic, associated with socket API calls to Graphene blockchain</p>
+<p><strong>Author</strong><br/>
+Dmitriy Bushuev</p>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="current-id.html">currentId</a></h4>
+</td>
+<td>
+<code><span class="keyword">abstract</span> <span class="keyword">val </span><span class="identifier">currentId</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="socket-state.html">socketState</a></h4>
+</td>
+<td>
+<code><span class="keyword">abstract</span> <span class="keyword">val </span><span class="identifier">socketState</span><span class="symbol">: </span><a href="../-socket-state/index.html"><span class="identifier">SocketState</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="connect.html">connect</a></h4>
+</td>
+<td>
+<p>Connects to socket by url</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">connect</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.core.socket.SocketCoreComponent$connect(kotlin.String)/url">url</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="disconnect.html">disconnect</a></h4>
+</td>
+<td>
+<p>Disconnects from socket, removes all listeners</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">disconnect</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="emit.html">emit</a></h4>
+</td>
+<td>
+<p>Send operation to blockchain</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">emit</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.core.socket.SocketCoreComponent$emit(org.echo.mobile.framework.model.socketoperations.SocketOperation((kotlin.Any)))/operation">operation</span><span class="symbol">:</span>&nbsp;<a href="../../org.echo.mobile.framework.model.socketoperations/-socket-operation/index.html"><span class="identifier">SocketOperation</span></a><span class="symbol">&lt;</span><span class="identifier">*</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="off.html">off</a></h4>
+</td>
+<td>
+<p>Removes listener from socket messenger</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">off</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.core.socket.SocketCoreComponent$off(org.echo.mobile.framework.core.socket.SocketMessengerListener)/listener">listener</span><span class="symbol">:</span>&nbsp;<a href="../-socket-messenger-listener/index.html"><span class="identifier">SocketMessengerListener</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="on.html">on</a></h4>
+</td>
+<td>
+<p>Adds listener to socket messenger</p>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">on</span><span class="symbol">(</span><span class="identifier" id="org.echo.mobile.framework.core.socket.SocketCoreComponent$on(org.echo.mobile.framework.core.socket.SocketMessengerListener)/listener">listener</span><span class="symbol">:</span>&nbsp;<a href="../-socket-messenger-listener/index.html"><span class="identifier">SocketMessengerListener</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Inheritors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="../../org.echo.mobile.framework.core.socket.internal/-socket-core-component-impl/index.html">SocketCoreComponentImpl</a></h4>
+</td>
+<td>
+<p>Implementation of <a href="./index.html">SocketCoreComponent</a></p>
+<code><span class="keyword">class </span><span class="identifier">SocketCoreComponentImpl</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">SocketCoreComponent</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

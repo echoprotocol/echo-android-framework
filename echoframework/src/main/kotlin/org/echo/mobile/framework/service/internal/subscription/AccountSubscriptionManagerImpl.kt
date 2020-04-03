@@ -47,48 +47,6 @@ class AccountSubscriptionManagerImpl(private val network: Network) :
     /**
      * Searches for account object id that has active subscriptions
      *
-     * Example:
-     * {
-     *  "method":"notice",
-     *  "params":
-     *  [
-     *      4,
-     *       [
-     *          [
-     *              {
-     *                  "id":"2.6.22620",
-     *                  "owner":"1.2.22620"
-     *              },
-     *              {
-     *                  "id":"1.6.68"
-     *              },
-     *              {
-     *                  "id":"2.1.0"
-     *              },
-     *              {
-     *                  "id":"2.6.23215",
-     *                  "owner":"1.2.23215"
-     *              },
-     *              {
-     *                  "id":"2.8.25373"
-     *              },
-     *              {
-     *                  "id":"2.5.24777",
-     *                  "owner":"1.2.23215"
-     *              },
-     *              {
-     *                  "id":"2.5.23882",
-     *                  "owner":"1.2.22620"
-     *              },
-     *              {
-     *                  "id":"1.6.74",
-     *                  "witness_account":"1.2.22574"
-     *              }
-     *          ]
-     *       ]
-     *  ]
-     *  }
-     *
      *  Steps:
      *      1) Find not empty array with depth = 3 in params array.
      *         To receive result all events should be in example's form

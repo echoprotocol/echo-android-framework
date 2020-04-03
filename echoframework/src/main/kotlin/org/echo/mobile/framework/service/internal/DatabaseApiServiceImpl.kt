@@ -1,5 +1,6 @@
 package org.echo.mobile.framework.service.internal
 
+import com.google.common.primitives.UnsignedLong
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.ILLEGAL_ID
 import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
@@ -11,15 +12,19 @@ import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.BaseOperation
 import org.echo.mobile.framework.model.Block
 import org.echo.mobile.framework.model.BlockData
+import org.echo.mobile.framework.model.BtcAddress
+import org.echo.mobile.framework.model.Deposit
 import org.echo.mobile.framework.model.DynamicGlobalProperties
+import org.echo.mobile.framework.model.ERC20Deposit
+import org.echo.mobile.framework.model.ERC20Token
+import org.echo.mobile.framework.model.ERC20Withdrawal
 import org.echo.mobile.framework.model.EthAddress
-import org.echo.mobile.framework.model.EthDeposit
-import org.echo.mobile.framework.model.EthWithdraw
 import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.GrapheneObject
-import org.echo.mobile.framework.model.Log
+import org.echo.mobile.framework.model.SidechainType
 import org.echo.mobile.framework.model.Transaction
+import org.echo.mobile.framework.model.Withdraw
 import org.echo.mobile.framework.model.contract.ContractFee
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
@@ -27,18 +32,23 @@ import org.echo.mobile.framework.model.contract.ContractStruct
 import org.echo.mobile.framework.model.network.Network
 import org.echo.mobile.framework.model.socketoperations.BlockDataSocketOperation
 import org.echo.mobile.framework.model.socketoperations.CancelAllSubscriptionsSocketOperation
+import org.echo.mobile.framework.model.socketoperations.CheckERC20TokenSocketOperation
 import org.echo.mobile.framework.model.socketoperations.CustomOperation
 import org.echo.mobile.framework.model.socketoperations.CustomSocketOperation
 import org.echo.mobile.framework.model.socketoperations.FullAccountsSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetAccountDepositsSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetAccountWithdrawalsSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetAssetsSocketOperation
+import org.echo.mobile.framework.model.socketoperations.GetBitcoinAddressSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetBlockSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetChainIdSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetContractLogsSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetContractResultSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetContractSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetContractsSocketOperation
+import org.echo.mobile.framework.model.socketoperations.GetERC20DepositsSocketOperation
+import org.echo.mobile.framework.model.socketoperations.GetERC20TokenSocketOperation
+import org.echo.mobile.framework.model.socketoperations.GetERC20WithdrawalsSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetEthereumAddressSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetGlobalPropertiesSocketOperation
 import org.echo.mobile.framework.model.socketoperations.GetKeyReferencesSocketOperation
@@ -177,6 +187,73 @@ class DatabaseApiServiceImpl(
         val operation = GetEthereumAddressSocketOperation(
             id,
             accountId,
+            socketCoreComponent.currentId,
+            callback
+        )
+
+        socketCoreComponent.emit(operation)
+    }
+
+    override fun getBitcoinAddress(accountId: String, callback: Callback<BtcAddress>) {
+        val operation = GetBitcoinAddressSocketOperation(
+            id,
+            accountId,
+            socketCoreComponent.currentId,
+            callback
+        )
+
+        socketCoreComponent.emit(operation)
+    }
+
+    override fun getERC20Token(address: String, callback: Callback<ERC20Token>) {
+        val operation = GetERC20TokenSocketOperation(
+            id,
+            address,
+            socketCoreComponent.currentId,
+            callback
+        )
+
+        socketCoreComponent.emit(operation)
+    }
+
+    override fun getERC20Token(address: String): Result<LocalException, ERC20Token> {
+        val future = FutureTask<ERC20Token>()
+        getERC20Token(address, future.completeCallback())
+        return future.wrapResult()
+    }
+
+    override fun checkERC20Token(contractId: String, callback: Callback<Boolean>) {
+        val operation = CheckERC20TokenSocketOperation(
+            id,
+            contractId,
+            socketCoreComponent.currentId,
+            callback
+        )
+
+        socketCoreComponent.emit(operation)
+    }
+
+    override fun getERC20AccountDeposits(
+        accountNameOrId: String,
+        callback: Callback<List<ERC20Deposit>>
+    ) {
+        val operation = GetERC20DepositsSocketOperation(
+            id,
+            accountNameOrId,
+            socketCoreComponent.currentId,
+            callback
+        )
+
+        socketCoreComponent.emit(operation)
+    }
+
+    override fun getERC20AccountWithdrawals(
+        accountNameOrId: String,
+        callback: Callback<List<ERC20Withdrawal>>
+    ) {
+        val operation = GetERC20WithdrawalsSocketOperation(
+            id,
+            accountNameOrId,
             socketCoreComponent.currentId,
             callback
         )
@@ -388,7 +465,13 @@ class DatabaseApiServiceImpl(
     }
 
     override fun listAssets(lowerBound: String, limit: Int, callback: Callback<List<Asset>>) {
-        val operation = ListAssetsSocketOperation(id, lowerBound, limit, callback = callback)
+        val operation = ListAssetsSocketOperation(
+            id,
+            lowerBound,
+            limit,
+            socketCoreComponent.currentId,
+            callback = callback
+        )
 
         socketCoreComponent.emit(operation)
     }
@@ -433,6 +516,7 @@ class DatabaseApiServiceImpl(
         contractId: String,
         registrarNameOrId: String,
         assetId: String,
+        amount: String,
         byteCode: String
     ): Result<LocalException, String> {
         val future = FutureTask<String>()
@@ -440,7 +524,7 @@ class DatabaseApiServiceImpl(
             id,
             contractId,
             registrarNameOrId,
-            assetId,
+            AssetAmount(UnsignedLong.valueOf(amount), Asset(assetId)),
             byteCode,
             callId = socketCoreComponent.currentId,
             callback = future.completeCallback()
@@ -467,8 +551,8 @@ class DatabaseApiServiceImpl(
         contractId: String,
         fromBlock: String,
         toBlock: String
-    ): Result<LocalException, List<Log>> {
-        val futureTask = FutureTask<List<Log>>()
+    ): Result<LocalException, Int> {
+        val futureTask = FutureTask<Int>()
         val operation = GetContractLogsSocketOperation(
             id,
             contractId, fromBlock, toBlock,
@@ -507,16 +591,12 @@ class DatabaseApiServiceImpl(
     }
 
     override fun subscribeContractLogs(
-        contractId: String,
-        fromBlock: String,
-        limit: String
-    ): Result<LocalException, List<Log>> {
-        val future = FutureTask<List<Log>>()
+        contractId: String
+    ): Result<LocalException, Boolean> {
+        val future = FutureTask<Boolean>()
         val operation = SubscribeContractLogsSocketOperation(
             id,
             contractId,
-            fromBlock,
-            limit,
             callId = socketCoreComponent.currentId,
             callback = future.completeCallback()
         )
@@ -543,10 +623,15 @@ class DatabaseApiServiceImpl(
         socketCoreComponent.emit(createSubscriptionOperation(clearFilter, callback))
     }
 
-    override fun getAccountDeposits(accountId: String, callback: Callback<List<EthDeposit>>) {
+    override fun getAccountDeposits(
+        accountId: String,
+        sidechainType: SidechainType?,
+        callback: Callback<List<Deposit?>>
+    ) {
         val operation = GetAccountDepositsSocketOperation(
             id,
             accountId,
+            sidechainType,
             socketCoreComponent.currentId,
             callback
         )
@@ -554,10 +639,15 @@ class DatabaseApiServiceImpl(
         socketCoreComponent.emit(operation)
     }
 
-    override fun getAccountWithdrawals(accountId: String, callback: Callback<List<EthWithdraw>>) {
+    override fun getAccountWithdrawals(
+        accountId: String,
+        sidechainType: SidechainType?,
+        callback: Callback<List<Withdraw?>>
+    ) {
         val operation = GetAccountWithdrawalsSocketOperation(
             id,
             accountId,
+            sidechainType,
             socketCoreComponent.currentId,
             callback
         )

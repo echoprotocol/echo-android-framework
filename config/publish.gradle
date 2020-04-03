@@ -1,4 +1,3 @@
-apply plugin: 'org.jetbrains.dokka-android'
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'com.github.dcendents.android-maven'
 
@@ -15,7 +14,7 @@ ext {
     gitUrl = 'https://github.com/echoprotocol/echo-android-framework'
     siteUrl = 'https://echo.org'
 
-    libraryVersion = '3.4.0'
+    libraryVersion = '4.2.0'
 
     firstDeveloperId = 'd.bushuev'
     firstDeveloperName = 'Dmitriy Bushuev'
@@ -91,11 +90,11 @@ task sourcesJar(type: Jar) {
     from "$projectDir/src/main/kotlin"
 }
 
-task javadocJar(type: Jar, dependsOn: dokkaJavadoc) {
+task javadocJar(type: Jar, dependsOn: dokka) {
     group = JavaBasePlugin.DOCUMENTATION_GROUP
     description = "Assembles framework docs with Dokka"
     classifier = "javadoc"
-    from(dokkaJavadoc)
+    from(dokka)
 }
 
 artifacts {
