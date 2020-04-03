@@ -25,7 +25,7 @@
 * SIDECHAIN_ERC20_SEND_WITHDRAW_TOKEN_OPERATION
 * SIDECHAIN_BTC_APPROVE_AGGREGATE_OPERATION
 
-## ChangedИ
+## Changed
 
 ### GetContractLogsSocketOperation
 * Getting result through notice subscription
