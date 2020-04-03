@@ -196,6 +196,8 @@ class SidechainConfig {
     var ethUpdateAddressMethod: Method? = null
     @SerializedName("ETH_asset_id")
     var ethAssetId: String? = null
+    @SerializedName("BTC_asset_id")
+    var btcAssetId: String? = null
     @SerializedName("waiting_eth_blocks")
     var waitingETHBlocks: String? = null
     @SerializedName("eth_deposit_topic")

@@ -19,6 +19,8 @@ class ContractBalance(id: String) : GrapheneObject(id) {
 
     var sequence: String? = null
 
+    var parentOpId: String? = null
+
     var next: ContractBalance? = null
 
     /**
@@ -49,6 +51,7 @@ class ContractBalance(id: String) : GrapheneObject(id) {
                 contract = Contract(jsonOptions.get(KEY_CONTRACT).asString)
                 operationId = jsonOptions.get(KEY_OPERATION_ID).asString
                 sequence = jsonOptions.get(KEY_SEQUENCE).asString
+                parentOpId = jsonOptions.get(KEY_PARENT_OPERATION_ID)?.asString
                 next = ContractBalance(jsonOptions.get(KEY_NEXT).asString)
             }
         }
@@ -57,6 +60,7 @@ class ContractBalance(id: String) : GrapheneObject(id) {
     companion object {
         const val KEY_CONTRACT = "contract"
         const val KEY_OPERATION_ID = "operation_id"
+        const val KEY_PARENT_OPERATION_ID = "parent_op_id"
         const val KEY_SEQUENCE = "sequence"
         const val KEY_NEXT = "next"
     }

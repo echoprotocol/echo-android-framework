@@ -2,6 +2,7 @@ package org.echo.mobile.framework.facade.internal
 
 import com.google.common.primitives.UnsignedLong
 import org.echo.mobile.framework.Callback
+import org.echo.mobile.framework.ECHO_ASSET_ID
 import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
 import org.echo.mobile.framework.exception.AccountNotFoundException
 import org.echo.mobile.framework.exception.LocalException
@@ -31,9 +32,10 @@ class EthereumSidechainFacadeImpl(
     private val databaseApiService: DatabaseApiService,
     private val networkBroadcastApiService: NetworkBroadcastApiService,
     private val cryptoCoreComponent: CryptoCoreComponent,
-    private val notifiedTransactionsHelper: NotificationsHelper<TransactionResult>
+    private val notifiedTransactionsHelper: NotificationsHelper<TransactionResult>,
+    private val transactionExpirationDelay: Long
 ) :
-    BaseTransactionsFacade(databaseApiService, cryptoCoreComponent), EthereumSidechainFacade {
+    BaseTransactionsFacade(databaseApiService, cryptoCoreComponent, transactionExpirationDelay), EthereumSidechainFacade {
 
     override fun generateEthereumAddress(
         accountNameOrId: String,
@@ -89,17 +91,9 @@ class EthereumSidechainFacadeImpl(
     }
 
     private fun generateAddress(account: Account, privateKey: ByteArray): String {
-        val blockData = databaseApiService.getBlockData()
-        val chainId = getChainId()
-
         val operation = GenerateEthereumAddressOperation(Account(account.getObjectId()))
 
-        val fees = getFees(listOf(operation))
-
-        val transaction = Transaction(blockData, listOf(operation), chainId).apply {
-            setFees(fees)
-            addPrivateKey(privateKey)
-        }
+        val transaction = configureTransaction(operation, privateKey, ECHO_ASSET_ID)
 
         return networkBroadcastApiService.broadcastTransactionWithCallback(transaction)
             .dematerialize().toString()
@@ -115,21 +109,14 @@ class EthereumSidechainFacadeImpl(
         val processedAddress =
             ethAddress.replace(EthAddressValidator.ADDRESS_PREFIX, "").toLowerCase()
 
-        val blockData = databaseApiService.getBlockData()
-        val chainId = getChainId()
-
         val operation =
             WithdrawEthereumOperation(
                 Account(account.getObjectId()),
                 processedAddress,
                 UnsignedLong.valueOf(value)
             )
-        val fees = getFees(listOf(operation), feeAsset)
 
-        val transaction = Transaction(blockData, listOf(operation), chainId).apply {
-            setFees(fees)
-            addPrivateKey(privateKey)
-        }
+        val transaction = configureTransaction(operation, privateKey, feeAsset)
 
         return networkBroadcastApiService.broadcastTransactionWithCallback(transaction)
             .dematerialize().toString()

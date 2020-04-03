@@ -1,6 +1,6 @@
 ext {
 
-    kotlinVersion = "1.3.31"
+    kotlinVersion = "1.3.71"
 
     //Libraries
     googleGsonVersion = '2.8.5'

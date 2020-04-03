@@ -33,7 +33,8 @@ enum class ObjectType(private val space: Int, private val type: Int) {
     BTC_DEPOSIT_OBJECT(ObjectType.PROTOCOL_SPACE, 21),
     BTC_WITHDRAW_OBJECT(ObjectType.PROTOCOL_SPACE, 22),
     BTC_AGGREGATING_OBJECT(ObjectType.PROTOCOL_SPACE, 23),
-    OBJECT_TYPE_COUNT(ObjectType.PROTOCOL_SPACE, 24);
+    EVM_ADDRESS(ObjectType.PROTOCOL_SPACE, 24),
+    OBJECT_TYPE_COUNT(ObjectType.PROTOCOL_SPACE, 25);
 
     /**
      * This method is used to return the generic object type in the form space.type.0.

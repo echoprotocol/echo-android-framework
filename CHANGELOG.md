@@ -1,3 +1,18 @@
+# Changelog 4.2.0 - 2020-04-02
+
+## Added
+
+* Standalone methods for sidechain fees calculation
+* Getting erc20 token by id
+* evmAddress field in SubmitRegistrationSolutionSocketOperation and AccountCreateOperation
+* btcAssetId in GlobalProperties
+* EVM_ADDRESS object type
+* parent_op_id in ContractBalance
+
+## Changed
+
+* Transaction expiration time calculation
+
 # Changelog 4.1.0 - 2020-01-24
 
 ## Added

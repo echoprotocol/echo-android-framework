@@ -15,6 +15,7 @@ import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.BaseOperation
 import org.echo.mobile.framework.model.Optional
 import org.echo.mobile.framework.model.eddsa.EdAuthority
+import org.spongycastle.util.encoders.Hex
 import java.lang.reflect.Type
 
 /**
@@ -39,6 +40,7 @@ class AccountCreateOperation
     var registrar: Account,
     active: EdAuthority,
     private val edKey: String,
+    private val evmAddress: String?,
     options: AccountOptions,
     override var fee: AssetAmount = AssetAmount(UnsignedLong.ZERO)
 ) : BaseOperation(OperationType.ACCOUNT_CREATE_OPERATION) {
@@ -79,6 +81,7 @@ class AccountCreateOperation
             if (active.isSet) add(KEY_ACTIVE, active.toJsonObject())
 
             addProperty(KEY_ACTIVE, edKey)
+            evmAddress?.let { addProperty(KEY_EVM_ADDRESS_KEY, evmAddress) }
 
             if (options.isSet) add(KEY_OPTIONS, options.toJsonObject())
 
@@ -95,6 +98,12 @@ class AccountCreateOperation
         val registrar = registrar.toBytes()
         val activeBytes = active.toBytes()
         val edKeyBytes = edKey.toByteArray()
+
+        val evmAddressBytes = evmAddress?.let {
+            val addressHex = Hex.decode(evmAddress)
+            byteArrayOf(addressHex.count().toByte()) + addressHex
+        } ?: byteArrayOf()
+
         val newOptionsBytes = options.toBytes()
         val extensionBytes = extensions.toBytes()
         return Bytes.concat(
@@ -103,6 +112,7 @@ class AccountCreateOperation
             nameBytes,
             activeBytes,
             edKeyBytes,
+            evmAddressBytes,
             newOptionsBytes,
             extensionBytes
         )
@@ -131,6 +141,7 @@ class AccountCreateOperation
                     EdAuthority::class.java
                 )
             val edKey = jsonObject.get(KEY_ED_KEY).asString
+            val evmAddress = jsonObject.get(KEY_EVM_ADDRESS_KEY)?.asString
 
             //Deserializing AccountOptions object
             val options = context.deserialize<AccountOptions>(
@@ -147,6 +158,7 @@ class AccountCreateOperation
                 registrar,
                 active,
                 edKey,
+                evmAddress,
                 options,
                 fee
             )
@@ -159,6 +171,7 @@ class AccountCreateOperation
         const val KEY_REGISTRAR = "registrar"
         const val KEY_ACTIVE = "active"
         const val KEY_ED_KEY = "echorand_key"
+        const val KEY_EVM_ADDRESS_KEY = "evm_address"
         const val KEY_OPTIONS = "options"
         const val KEY_EXTENSIONS = "extensions"
     }
