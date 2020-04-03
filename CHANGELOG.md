@@ -7,6 +7,7 @@
 * evmAddress field in SubmitRegistrationSolutionSocketOperation and AccountCreateOperation
 * btcAssetId in GlobalProperties
 * EVM_ADDRESS object type
+* parent_op_id in ContractBalance
 
 ## Changed
 
