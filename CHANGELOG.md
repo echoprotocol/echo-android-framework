@@ -2,7 +2,7 @@
 
 ## Added
 
-* Standalone metheds for sidechain fees calculation
+* Standalone methods for sidechain fees calculation
 * Getting erc20 token by id
 * evmAddress field in SubmitRegistrationSolutionSocketOperation and AccountCreateOperation
 * btcAssetId in GlobalProperties
