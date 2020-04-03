@@ -161,12 +161,18 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             networkBroadcastApiService,
             registrationService,
             settings.cryptoComponent,
-            registrationNotificationsHelper
+            registrationNotificationsHelper,
+            settings.transactionExpirationDelaySeconds
         )
 
         val feeRatioProvider = FeeRatioProvider(settings.feeRatio)
 
-        feeFacade = FeeFacadeImpl(databaseApiService, settings.cryptoComponent, feeRatioProvider)
+        feeFacade = FeeFacadeImpl(
+            databaseApiService,
+            settings.cryptoComponent,
+            feeRatioProvider,
+            settings.transactionExpirationDelaySeconds
+        )
         informationFacade = InformationFacadeImpl(
             databaseApiService,
             accountHistoryApiService
@@ -179,7 +185,8 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         transactionsFacade = TransactionsFacadeImpl(
             databaseApiService,
             networkBroadcastApiService,
-            settings.cryptoComponent
+            settings.cryptoComponent,
+            settings.transactionExpirationDelaySeconds
         )
 
         val transactionSubscriptionManager = TransactionSubscriptionManagerImpl(settings.network)
@@ -196,7 +203,8 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             databaseApiService,
             networkBroadcastApiService,
             settings.cryptoComponent,
-            notifiedTransactionsHelper
+            notifiedTransactionsHelper,
+            settings.transactionExpirationDelaySeconds
         )
         contractsFacade = ContractsFacadeImpl(
             databaseApiService,
@@ -204,7 +212,8 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             settings.cryptoComponent,
             notifiedTransactionsHelper,
             notifiedContractLogsHelper,
-            feeRatioProvider
+            feeRatioProvider,
+            settings.transactionExpirationDelaySeconds
         )
 
         val notifiedEthAddressHelper =
@@ -213,20 +222,23 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             databaseApiService,
             networkBroadcastApiService,
             settings.cryptoComponent,
-            notifiedEthAddressHelper
+            notifiedEthAddressHelper,
+            settings.transactionExpirationDelaySeconds
         )
         bitcoinSidechainFacade = BitcoinSidechainFacadeImpl(
             databaseApiService,
             networkBroadcastApiService,
             settings.cryptoComponent,
-            notifiedEthAddressHelper
+            notifiedEthAddressHelper,
+            settings.transactionExpirationDelaySeconds
         )
         commonSidechainFacade = CommonSidechainFacadeImpl(databaseApiService)
         erc20SidechainFacade = ERC20SidechainFacadeImpl(
             databaseApiService,
             networkBroadcastApiService,
             settings.cryptoComponent,
-            notifiedEthAddressHelper
+            notifiedEthAddressHelper,
+            settings.transactionExpirationDelaySeconds
         )
     }
 
@@ -259,11 +271,17 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
         )
     })
 
-    override fun register(userName: String, wif: String, callback: Callback<Boolean>) =
+    override fun register(
+        userName: String,
+        wif: String,
+        evmAddress: String?,
+        callback: Callback<Boolean>
+    ) =
         dispatch(Runnable {
             authenticationFacade.register(
                 userName,
                 wif,
+                evmAddress,
                 callback.wrapOriginal()
             )
         })
@@ -323,6 +341,56 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             amount,
             byteCode,
             assetId,
+            feeAsset,
+            callback.wrapOriginal()
+        )
+    })
+
+    override fun getFeeForWithdrawErc20Operation(
+        accountNameOrId: String,
+        ethAddress: String,
+        ethTokenId: String,
+        value: String,
+        feeAsset: String,
+        callback: Callback<AssetAmount>
+    ) = dispatch(Runnable {
+        feeFacade.getFeeForWithdrawErc20Operation(
+            accountNameOrId,
+            ethAddress,
+            ethTokenId,
+            value,
+            feeAsset,
+            callback.wrapOriginal()
+        )
+    })
+
+    override fun getFeeForWithdrawEthereumOperation(
+        accountNameOrId: String,
+        ethAddress: String,
+        value: String,
+        feeAsset: String,
+        callback: Callback<AssetAmount>
+    ) = dispatch(Runnable {
+        feeFacade.getFeeForWithdrawEthereumOperation(
+            accountNameOrId,
+            ethAddress,
+            value,
+            feeAsset,
+            callback.wrapOriginal()
+        )
+    })
+
+    override fun getFeeForWithdrawBtcOperation(
+        accountNameOrId: String,
+        btcAddress: String,
+        value: String,
+        feeAsset: String,
+        callback: Callback<AssetAmount>
+    ) = dispatch(Runnable {
+        feeFacade.getFeeForWithdrawBtcOperation(
+            accountNameOrId,
+            btcAddress,
+            value,
             feeAsset,
             callback.wrapOriginal()
         )
@@ -824,10 +892,17 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             )
         })
 
-    override fun getERC20Token(address: String, callback: Callback<ERC20Token>) =
+    override fun getERC20TokenByAddress(address: String, callback: Callback<ERC20Token>) =
         dispatch(Runnable {
-            erc20SidechainFacade.getERC20Token(
+            erc20SidechainFacade.getERC20TokenByAddress(
                 address, callback
+            )
+        })
+
+    override fun getERC20TokenByTokenId(tokenId: String, callback: Callback<ERC20Token>) =
+        dispatch(Runnable {
+            erc20SidechainFacade.getERC20TokenByTokenId(
+                tokenId, callback
             )
         })
 

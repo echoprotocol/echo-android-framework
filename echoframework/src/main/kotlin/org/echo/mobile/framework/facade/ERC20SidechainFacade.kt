@@ -46,8 +46,16 @@ interface ERC20SidechainFacade {
     /**
      * Retrieves corresponding [ERC20Token] for required address [address]
      */
-    fun getERC20Token(
+    fun getERC20TokenByAddress(
         address: String,
+        callback: Callback<ERC20Token>
+    )
+
+    /**
+     * Retrieves corresponding [ERC20Token] for required address [tokenId]
+     */
+    fun getERC20TokenByTokenId(
+        tokenId: String,
         callback: Callback<ERC20Token>
     )
 

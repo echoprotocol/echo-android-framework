@@ -2,6 +2,7 @@ package org.echo.mobile.framework.facade.internal
 
 import com.google.common.primitives.UnsignedLong
 import org.echo.mobile.framework.Callback
+import org.echo.mobile.framework.ECHO_ASSET_ID
 import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
 import org.echo.mobile.framework.exception.AccountNotFoundException
 import org.echo.mobile.framework.exception.LocalException
@@ -31,9 +32,11 @@ class BitcoinSidechainFacadeImpl(
     private val databaseApiService: DatabaseApiService,
     private val networkBroadcastApiService: NetworkBroadcastApiService,
     private val cryptoCoreComponent: CryptoCoreComponent,
-    private val notifiedTransactionsHelper: NotificationsHelper<TransactionResult>
+    private val notifiedTransactionsHelper: NotificationsHelper<TransactionResult>,
+    private val transactionExpirationDelay: Long
 ) :
-    BaseTransactionsFacade(databaseApiService, cryptoCoreComponent), BitcoinSidechainFacade {
+    BaseTransactionsFacade(databaseApiService, cryptoCoreComponent, transactionExpirationDelay),
+    BitcoinSidechainFacade {
 
     override fun generateBitcoinAddress(
         accountNameOrId: String,
@@ -124,21 +127,14 @@ class BitcoinSidechainFacadeImpl(
         value: String,
         feeAsset: String
     ): String {
-        val blockData = databaseApiService.getBlockData()
-        val chainId = getChainId()
-
         val operation =
             WithdrawBitcoinOperation(
                 Account(account.getObjectId()),
                 btcAddress,
                 UnsignedLong.valueOf(value)
             )
-        val fees = getFees(listOf(operation), feeAsset)
 
-        val transaction = Transaction(blockData, listOf(operation), chainId).apply {
-            setFees(fees)
-            addPrivateKey(privateKey)
-        }
+        val transaction = configureTransaction(operation, privateKey, feeAsset)
 
         return networkBroadcastApiService.broadcastTransactionWithCallback(transaction)
             .dematerialize().toString()
@@ -149,21 +145,13 @@ class BitcoinSidechainFacadeImpl(
         backupAddress: String,
         privateKey: ByteArray
     ): String {
-        val blockData = databaseApiService.getBlockData()
-        val chainId = getChainId()
-
         val operation =
             GenerateBitcoinAddressOperation(
                 Account(account.getObjectId()),
                 backupAddress
             )
 
-        val fees = getFees(listOf(operation))
-
-        val transaction = Transaction(blockData, listOf(operation), chainId).apply {
-            setFees(fees)
-            addPrivateKey(privateKey)
-        }
+        val transaction = configureTransaction(operation, privateKey, ECHO_ASSET_ID)
 
         return networkBroadcastApiService.broadcastTransactionWithCallback(transaction)
             .dematerialize().toString()

@@ -5,8 +5,8 @@ $dokka.location:org.echo.mobile.bitcoinj$reverseBytes(kotlin.ByteArray)org.echo
 $dokka.location:org.echo.mobile.bitcoinj$revert(kotlin.Int)org.echo.mobile.bitcoinj/kotlin.-int/revert.html
 $dokka.location:org.echo.mobile.bitcoinj$revert(kotlin.Long)org.echo.mobile.bitcoinj/kotlin.-long/revert.html
 $dokka.location:org.echo.mobile.bitcoinj$revert(kotlin.Short)org.echo.mobile.bitcoinj/kotlin.-short/revert.html
-$dokka.location:org.echo.mobile.framework.support$format(java.util.Date)org.echo.mobile.framework.support/java.util.-date/format.html
 $dokka.location:org.echo.mobile.framework.support$format(java.util.Date, kotlin.String)org.echo.mobile.framework.support/java.util.-date/format.html
+$dokka.location:org.echo.mobile.framework.support$format(java.util.Date, kotlin.String, kotlin.String)org.echo.mobile.framework.support/java.util.-date/format.html
 $dokka.location:org.echo.mobile.framework.support$hexToBytes(kotlin.String)org.echo.mobile.framework.support/kotlin.-string/hex-to-bytes.html
 $dokka.location:org.echo.mobile.framework.support$hexlify(kotlin.String)org.echo.mobile.framework.support/kotlin.-string/hexlify.html
 $dokka.location:org.echo.mobile.framework.support$parse(kotlin.String, kotlin.String, java.util.TimeZone, java.util.Locale, java.util.Date, kotlin.Function1((java.lang.Exception, kotlin.Unit)))org.echo.mobile.framework.support/kotlin.-string/parse.html

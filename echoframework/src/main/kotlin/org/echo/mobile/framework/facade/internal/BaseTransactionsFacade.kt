@@ -23,7 +23,8 @@ import org.echo.mobile.framework.support.value
  */
 abstract class BaseTransactionsFacade(
     private val databaseApiService: DatabaseApiService,
-    private val cryptoCoreComponent: CryptoCoreComponent
+    private val cryptoCoreComponent: CryptoCoreComponent,
+    private val transactionExpirationDelay: Long
 ) {
 
     protected fun getChainId(): String = databaseApiService.getChainId().dematerialize()
@@ -75,7 +76,7 @@ abstract class BaseTransactionsFacade(
     }
 
     protected fun configureTransaction(
-        transfer: BaseOperation, privateKey: ByteArray, asset: String, feeAsset: String?
+        transfer: BaseOperation, privateKey: ByteArray, asset: String, feeAsset: String? = null
     ): Transaction {
         val blockData = databaseApiService.getBlockData()
         val chainId = getChainId()
@@ -84,7 +85,8 @@ abstract class BaseTransactionsFacade(
         return Transaction(
             blockData,
             listOf(transfer),
-            chainId
+            chainId,
+            transactionExpirationDelay
         ).apply {
             setFees(fees)
             addPrivateKey(privateKey)

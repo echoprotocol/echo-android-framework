@@ -40,6 +40,11 @@ interface AuthenticationFacade {
      *
      * Returns true/false according to registration result
      */
-    fun register(userName: String, wif: String, callback: Callback<Boolean>)
+    fun register(
+        userName: String,
+        wif: String,
+        evmAddress: String? = null,
+        callback: Callback<Boolean>
+    )
 
 }

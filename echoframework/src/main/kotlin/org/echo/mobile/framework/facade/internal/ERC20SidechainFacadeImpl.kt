@@ -32,9 +32,11 @@ class ERC20SidechainFacadeImpl(
     private val databaseApiService: DatabaseApiService,
     private val networkBroadcastApiService: NetworkBroadcastApiService,
     private val cryptoCoreComponent: CryptoCoreComponent,
-    private val notifiedTransactionsHelper: NotificationsHelper<TransactionResult>
+    private val notifiedTransactionsHelper: NotificationsHelper<TransactionResult>,
+    private val transactionExpirationDelay: Long
 ) :
-    BaseTransactionsFacade(databaseApiService, cryptoCoreComponent), ERC20SidechainFacade {
+    BaseTransactionsFacade(databaseApiService, cryptoCoreComponent, transactionExpirationDelay),
+    ERC20SidechainFacade {
 
     override fun registerERC20Token(
         accountNameOrId: String,
@@ -95,7 +97,7 @@ class ERC20SidechainFacadeImpl(
         }
     }
 
-    override fun getERC20Token(address: String, callback: Callback<ERC20Token>) {
+    override fun getERC20TokenByAddress(address: String, callback: Callback<ERC20Token>) {
         if (!EthAddressValidator.isAddressValid(address)) {
             callback.onError(LocalException("Invalid ERC20 token address"))
         } else {
@@ -116,6 +118,21 @@ class ERC20SidechainFacadeImpl(
         }
     }
 
+    override fun getERC20TokenByTokenId(tokenId: String, callback: Callback<ERC20Token>) {
+        databaseApiService.getERC20Token(tokenId).fold({ token ->
+            val account = try {
+                findAccount(token.owner?.getObjectId())
+            } catch (exception: LocalException) {
+                callback.onError(exception)
+                return@fold
+            }
+            token.owner = account
+            callback.onSuccess(token)
+        }, { error ->
+            callback.onError(error)
+        })
+    }
+
     override fun checkERC20Token(contractId: String, callback: Callback<Boolean>) {
         databaseApiService.checkERC20Token(contractId, callback)
     }
@@ -124,16 +141,26 @@ class ERC20SidechainFacadeImpl(
         accountNameOrId: String,
         callback: Callback<List<ERC20Deposit>>
     ) {
-        val account = findAccount(accountNameOrId)
-        databaseApiService.getERC20AccountDeposits(account.getObjectId(), callback)
+        try {
+            val account = findAccount(accountNameOrId)
+            databaseApiService.getERC20AccountDeposits(account.getObjectId(), callback)
+        } catch (exception: Exception) {
+            callback.onError(exception as? LocalException ?: LocalException(exception))
+            return
+        }
     }
 
     override fun getERC20AccountWithdrawals(
         accountNameOrId: String,
         callback: Callback<List<ERC20Withdrawal>>
     ) {
-        val account = findAccount(accountNameOrId)
-        databaseApiService.getERC20AccountWithdrawals(account.getObjectId(), callback)
+        try {
+            val account = findAccount(accountNameOrId)
+            databaseApiService.getERC20AccountWithdrawals(account.getObjectId(), callback)
+        } catch (exception: Exception) {
+            callback.onError(exception as? LocalException ?: LocalException(exception))
+            return
+        }
     }
 
     private fun register(
@@ -148,9 +175,6 @@ class ERC20SidechainFacadeImpl(
         val processedAddress =
             ethAddress.replace(EthAddressValidator.ADDRESS_PREFIX, "").toLowerCase()
 
-        val blockData = databaseApiService.getBlockData()
-        val chainId = getChainId()
-
         val operation =
             SidechainERC20RegisterTokenOperation(
                 Account(account.getObjectId()),
@@ -159,12 +183,8 @@ class ERC20SidechainFacadeImpl(
                 symbol,
                 UnsignedLong.valueOf(decimals)
             )
-        val fees = getFees(listOf(operation), feeAsset)
 
-        val transaction = Transaction(blockData, listOf(operation), chainId).apply {
-            setFees(fees)
-            addPrivateKey(privateKey)
-        }
+        val transaction = configureTransaction(operation, privateKey, feeAsset)
 
         return networkBroadcastApiService.broadcastTransactionWithCallback(transaction)
             .dematerialize().toString()
@@ -181,9 +201,6 @@ class ERC20SidechainFacadeImpl(
         val processedAddress =
             ethAddress.replace(EthAddressValidator.ADDRESS_PREFIX, "").toLowerCase()
 
-        val blockData = databaseApiService.getBlockData()
-        val chainId = getChainId()
-
         val operation =
             WithdrawERC20Operation(
                 Account(account.getObjectId()),
@@ -191,12 +208,8 @@ class ERC20SidechainFacadeImpl(
                 ERC20Token(ethTokenId),
                 value
             )
-        val fees = getFees(listOf(operation), feeAsset)
 
-        val transaction = Transaction(blockData, listOf(operation), chainId).apply {
-            setFees(fees)
-            addPrivateKey(privateKey)
-        }
+        val transaction = configureTransaction(operation, privateKey, feeAsset)
 
         return networkBroadcastApiService.broadcastTransactionWithCallback(transaction)
             .dematerialize().toString()

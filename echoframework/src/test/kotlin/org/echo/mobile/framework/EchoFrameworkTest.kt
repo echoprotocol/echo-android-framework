@@ -4,25 +4,7 @@ import com.google.common.primitives.UnsignedLong
 import org.echo.mobile.framework.core.crypto.internal.CryptoCoreComponentImpl
 import org.echo.mobile.framework.core.crypto.internal.eddsa.key.IrohaKeyPairCryptoAdapter
 import org.echo.mobile.framework.exception.LocalException
-import org.echo.mobile.framework.model.Account
-import org.echo.mobile.framework.model.Asset
-import org.echo.mobile.framework.model.AssetAmount
-import org.echo.mobile.framework.model.AssetOptions
-import org.echo.mobile.framework.model.Balance
-import org.echo.mobile.framework.model.Block
-import org.echo.mobile.framework.model.BlockData
-import org.echo.mobile.framework.model.BtcAddress
-import org.echo.mobile.framework.model.Deposit
-import org.echo.mobile.framework.model.DynamicGlobalProperties
-import org.echo.mobile.framework.model.ERC20Deposit
-import org.echo.mobile.framework.model.ERC20Token
-import org.echo.mobile.framework.model.ERC20Withdrawal
-import org.echo.mobile.framework.model.EthAddress
-import org.echo.mobile.framework.model.FullAccount
-import org.echo.mobile.framework.model.GlobalProperties
-import org.echo.mobile.framework.model.HistoryResponse
-import org.echo.mobile.framework.model.Price
-import org.echo.mobile.framework.model.Withdraw
+import org.echo.mobile.framework.model.*
 import org.echo.mobile.framework.model.contract.ContractBalance
 import org.echo.mobile.framework.model.contract.ContractFee
 import org.echo.mobile.framework.model.contract.ContractInfo
@@ -34,6 +16,7 @@ import org.echo.mobile.framework.model.contract.input.ContractInputEncoder
 import org.echo.mobile.framework.model.contract.input.InputValue
 import org.echo.mobile.framework.model.contract.input.StringInputValueType
 import org.echo.mobile.framework.model.contract.toRegular
+import org.echo.mobile.framework.model.contract.toX86
 import org.echo.mobile.framework.model.network.Echodevnet
 import org.echo.mobile.framework.service.UpdateListener
 import org.echo.mobile.framework.support.Api
@@ -64,7 +47,7 @@ class EchoFrameworkTest {
     private fun initFramework(ratio: BigDecimal = BigDecimal.ONE): EchoFramework {
         return EchoFramework.create(
             Settings.Configurator()
-                .setUrl("wss://testnet.echo-dev.io/ws")
+                .setUrl("wss://devnet.echo-dev.io/ws")
                 .setNetworkType(Echodevnet())
                 .setReturnOnMainThread(false)
                 .setApis(
@@ -78,12 +61,12 @@ class EchoFrameworkTest {
         )
     }
 
-    private val legalContractParamsId = "1.11.260" //259 //256
-    private val legalTokenId = "1.11.72"
-    private val accountId = "1.2.916"
+    private val legalContractParamsId = "1.11.2" //259 //256
+    private val legalTokenId = "1.11.1"
+    private val accountId = "1.2.17"
     private val login = "dima1"
     private val wif = "5J3UbadSyzzcQQ7HEfTr2brhJJpHhx3NsMzrvgzfysBesutNRCm"
-    private val secondAccountId = "1.2.917"
+    private val secondAccountId = "1.2.18"
     private val secondLogin = "daria1"
     private val secondWif = "5J3UbadSyzzcQQ7HEfTr2brhJJpHhx3NsMzrvgzfysBesutNRCm"
     private val legalAssetId = "1.3.0"
@@ -322,7 +305,7 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
-        framework.getAccount("dima1", futureAccount.completeCallback())
+        framework.getAccount("daria1", futureAccount.completeCallback())
 
         val account = futureAccount.get()
         assertTrue(account != null)
@@ -652,6 +635,36 @@ class EchoFrameworkTest {
 //        assertNotNull(result ?: false)
 //    }
 
+    @Test
+    fun withdrawBitcoinFeeTest() {
+        val framework = initFramework()
+
+        val future = FutureTask<AssetAmount>()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        framework.getFeeForWithdrawBtcOperation(
+            "dima1",
+            "n38ykjakJ92huEXDAi1gp65AD7FjrhpAza",
+            "1",
+            "1.3.0",
+            object : Callback<AssetAmount> {
+                override fun onSuccess(result: AssetAmount) {
+                    future.setComplete(result)
+                }
+
+                override fun onError(error: LocalException) {
+                    error.printStackTrace()
+                    future.setComplete(error)
+                }
+
+            }
+        )
+
+        val result = future.get()
+        assertNotNull(result ?: false)
+    }
+
 //    @Test
 //    fun withdrawEthereumWithWifTest() {
 //        val framework = initFramework()
@@ -754,15 +767,32 @@ class EchoFrameworkTest {
 //    }
 
     @Test
-    fun getERC20TokenTest() {
+    fun getERC20TokenByAddressTest() {
         val framework = initFramework()
 
         val future = FutureTask<ERC20Token>()
 
         if (connect(framework) == false) Assert.fail("Connection error")
 
-        framework.getERC20Token(
+        framework.getERC20TokenByAddress(
             "0x724d1b69a7ba352f11d73fdbdeb7ff869cb22e19",
+            future.completeCallback()
+        )
+
+        val result = future.get()
+        assertNotNull(result ?: false)
+    }
+
+    @Test
+    fun getERC20TokenByIdTest() {
+        val framework = initFramework()
+
+        val future = FutureTask<ERC20Token>()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        framework.getERC20TokenByTokenId(
+            "1.16.0",
             future.completeCallback()
         )
 
@@ -779,7 +809,7 @@ class EchoFrameworkTest {
         if (connect(framework) == false) Assert.fail("Connection error")
 
         framework.checkERC20Token(
-            "1.11.261",
+            "1.11.3",
             future.completeCallback()
         )
 
@@ -813,7 +843,7 @@ class EchoFrameworkTest {
         if (connect(framework) == false) Assert.fail("Connection error")
 
         framework.getERC20AccountDeposits(
-            "1.2.41",
+            accountId,
             future.completeCallback()
         )
 
@@ -830,7 +860,7 @@ class EchoFrameworkTest {
         if (connect(framework) == false) Assert.fail("Connection error")
 
         framework.getERC20AccountWithdrawals(
-            "1.2.41",
+            accountId,
             future.completeCallback()
         )
 
@@ -905,6 +935,36 @@ class EchoFrameworkTest {
 //        assertNotNull(result ?: false)
 //    }
 
+    @Test
+    fun withdrawEthereumFeeTest() {
+        val framework = initFramework()
+
+        val futureResult = FutureTask<AssetAmount>()
+
+        if (connect(framework) == false) fail("Connection error")
+
+        framework.getFeeForWithdrawEthereumOperation(
+            "dima1",
+            "0x46Ba2677a1c982B329A81f60Cf90fBA2E8CA9fA8",
+            "1",
+            "1.3.0",
+            object : Callback<AssetAmount> {
+                override fun onSuccess(result: AssetAmount) {
+                    futureResult.setComplete(result)
+                }
+
+                override fun onError(error: LocalException) {
+                    error.printStackTrace()
+                    futureResult.setComplete(error)
+                }
+
+            }
+        )
+
+        val result = futureResult.get()
+        assertNotNull(result ?: false)
+    }
+
 //    @Test
 //    fun registrationByWifTest() {
 //        val framework = initFramework()
@@ -917,8 +977,9 @@ class EchoFrameworkTest {
 //        val wif = cryptoCoreComponent.encodeToWif(randomPrivateKey)
 //
 //        framework.register(
-//            "dima4", wif,
-//            object : Callback<Boolean> {
+//            userName = "daria4",
+//            wif = wif,
+//            callback = object : Callback<Boolean> {
 //                override fun onSuccess(result: Boolean) {
 //                    futureRegistration.setComplete(true)
 //                }
@@ -972,8 +1033,8 @@ class EchoFrameworkTest {
         if (connect(framework) == false) Assert.fail("Connection error")
 
         framework.register(
-            "init1", "5KjC8BiryoxUNz3dEY2ZWQK5ssmD84JgRGemVWwxfNgiPoxcaVa",
-            object : Callback<Boolean> {
+            userName = "init1", wif = "5KjC8BiryoxUNz3dEY2ZWQK5ssmD84JgRGemVWwxfNgiPoxcaVa",
+            callback = object : Callback<Boolean> {
                 override fun onSuccess(result: Boolean) {
                     futureChangePassword.setComplete(true)
                 }
@@ -1481,7 +1542,7 @@ class EchoFrameworkTest {
         framework.issueAsset(
             "dima1",
             "5J3UbadSyzzcQQ7HEfTr2brhJJpHhx3NsMzrvgzfysBesutNRCm",
-            asset = "1.3.5",
+            asset = "1.3.3",
             amount = "1",
             destinationIdOrName = "dima1",
             callback = futureIssue.completeCallback()
@@ -1504,7 +1565,7 @@ class EchoFrameworkTest {
             "5J3UbadSyzzcQQ7HEfTr2brhJJpHhx3NsMzrvgzfysBesutNRCm",
             assetId = "1.3.0",
             feeAsset = "1.3.0",
-            byteCode = legalTokenBytecode,
+            byteCode = legalContractParamsBytecode,
             broadcastCallback = broadcastFuture.completeCallback(),
             resultCallback = future.completeCallback()
         )
@@ -1811,7 +1872,7 @@ class EchoFrameworkTest {
         val future = FutureTask<ContractResult>()
 
         framework.getContractResult(
-            historyId = "1.12.591",
+            historyId = "1.12.1",
             callback = future.completeCallback()
         )
 
@@ -1822,25 +1883,24 @@ class EchoFrameworkTest {
         assertNotNull(contractResult?.toRegular())
     }
 
-    //change on newer versions
-//    @Test
-//    fun getContractResultx86Test() {
-//        val framework = initFramework()
-//
-//        if (connect(framework) == false) Assert.fail("Connection error")
-//
-//        val future = FutureTask<ContractResult>()
-//
-//        framework.getContractResult(
-//            historyId = validContractPrefix + "0",
-//            callback = future.completeCallback()
-//        )
-//
-//        val contractResult = future.get()
-//        assertNotNull(contractResult)
-//
-//        contractResult?.toX86()
-//    }
+    @Test
+    fun getContractResultx86Test() {
+        val framework = initFramework()
+
+        if (connect(framework) == false) Assert.fail("Connection error")
+
+        val future = FutureTask<ContractResult>()
+
+        framework.getContractResult(
+            historyId = "1.12.1",
+            callback = future.completeCallback()
+        )
+
+        val contractResult = future.get()
+        assertNotNull(contractResult)
+
+        contractResult?.toX86()
+    }
 
     @Test
     fun getContractLogsTest() {
@@ -1987,7 +2047,7 @@ class EchoFrameworkTest {
 
         val future = FutureTask<Block>()
 
-        framework.databaseApiService.getBlock("1266", future.completeCallback())
+        framework.databaseApiService.getBlock("1", future.completeCallback())
 
         assertNotNull(future.get())
     }
@@ -2110,7 +2170,7 @@ class EchoFrameworkTest {
 
     private fun configureAsset(): Asset {
         val asset = Asset("").apply {
-            symbol = "DIMASASSET"
+            symbol = "DIMASASSETT"
             precision = 4
             issuer = Account(accountId)
 //            setBtsOptions(
