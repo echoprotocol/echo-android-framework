@@ -1,3 +1,8 @@
+# Changelog 4.2.1 - 2020-22-04
+
+## Fixed
+* PArsing logic of WithdrawERC20Operation
+
 # Changelog 4.2.0 - 2020-04-02
 
 ## Added

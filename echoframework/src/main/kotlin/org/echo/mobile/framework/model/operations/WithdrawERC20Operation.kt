@@ -29,7 +29,7 @@ import java.lang.reflect.Type
 class WithdrawERC20Operation constructor(
     var account: Account,
     val ethAddress: String,
-    val erc20Token: ERC20Token,
+    var erc20Token: ERC20Token,
     val value: String,
     override var fee: AssetAmount = AssetAmount(UnsignedLong.ZERO)
 ) : BaseOperation(OperationType.SIDECHAIN_ERC20_WITHDRAW_TOKEN_OPERATION) {
@@ -100,7 +100,7 @@ class WithdrawERC20Operation constructor(
 
             val account = Account(jsonObject.get(ACCOUNT_ID_KEY).asString)
             val ethAddress = jsonObject.get(ETH_ADDRESS_KEY).asString
-            val erc20Token = ERC20Token(jsonObject.get(ETH_ADDRESS_KEY).asString)
+            val erc20Token = ERC20Token(jsonObject.get(ERC_TOKEN_KEY).asString)
             val value = jsonObject.getAsJsonPrimitive(VALUE_KEY).asString
 
             return WithdrawERC20Operation(account, ethAddress, erc20Token, value, fee)

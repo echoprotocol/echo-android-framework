@@ -40,6 +40,7 @@ import org.echo.mobile.framework.model.operations.SidechainERC20RegisterTokenOpe
 import org.echo.mobile.framework.model.operations.SidechainIssueSocketOperation
 import org.echo.mobile.framework.model.operations.TransferOperation
 import org.echo.mobile.framework.model.operations.WithdrawBitcoinOperation
+import org.echo.mobile.framework.model.operations.WithdrawERC20Operation
 import org.echo.mobile.framework.model.operations.WithdrawEthereumOperation
 import org.echo.mobile.framework.processResult
 import org.echo.mobile.framework.service.AccountHistoryApiService
@@ -310,6 +311,11 @@ class InformationFacadeImpl(
                 OperationType.SIDECHAIN_ERC20_DEPOSIT_TOKEN_OPERATION ->
                     processSidechainERC20DepositTokenOperation(
                         operation as SidechainERC20DepositSocketOperation,
+                        accountsRegistry
+                    )
+                OperationType.SIDECHAIN_ERC20_WITHDRAW_TOKEN_OPERATION ->
+                    processSidechainERC20WithdrawTokenOperation(
+                        operation as WithdrawERC20Operation,
                         accountsRegistry
                     )
 
@@ -644,6 +650,27 @@ class InformationFacadeImpl(
                     operation.erc20Withdrawal = it
                 }
             }
+
+        val tokenId = operation.erc20Token.getObjectId()
+        databaseApiService.getObjects(listOf(tokenId), Erc20TokenMapper())
+            .value { deposits ->
+                deposits.find { it.getObjectId() == tokenId }?.let {
+                    operation.erc20Token = it
+                }
+            }
+    }
+
+    private fun processSidechainERC20WithdrawTokenOperation(
+        operation: WithdrawERC20Operation,
+        accountRegistry: MutableMap<String, Account>
+    ) {
+        val account = operation.account.getObjectId()
+
+        fillAccounts(listOf(account), accountRegistry)
+
+        accountRegistry[account]?.let { notNullAccount ->
+            operation.account = notNullAccount
+        }
 
         val tokenId = operation.erc20Token.getObjectId()
         databaseApiService.getObjects(listOf(tokenId), Erc20TokenMapper())
