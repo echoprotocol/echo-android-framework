@@ -17,6 +17,7 @@ sealed class Deposit(
     id: String
 ) : GrapheneObject(id) {
     val account: String = ""
+
     @SerializedName("is_approved")
     val isApproved: Boolean = false
     val approves: List<String> = listOf()
@@ -32,7 +33,8 @@ sealed class Deposit(
     class EthDeposit(
         id: String,
         @SerializedName("deposit_id") val depositId: String,
-        val value: String = ""
+        val value: String = "",
+        @SerializedName("transaction_hash") val transactionHash: String = ""
     ) : Deposit(id)
 
     /**

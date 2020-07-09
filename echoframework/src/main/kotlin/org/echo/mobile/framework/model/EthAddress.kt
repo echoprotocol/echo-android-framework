@@ -12,5 +12,6 @@ data class EthAddress(
     @SerializedName("account") val accountId: String,
     @SerializedName("eth_addr") val address: String,
     @SerializedName("is_approved") val isApproved: Boolean,
+    @SerializedName("transaction_hash") val transactionHash: String,
     val approves: List<String>
 )
