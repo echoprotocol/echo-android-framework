@@ -61,12 +61,12 @@ class EchoFrameworkTest {
         )
     }
 
-    private val legalContractParamsId = "1.11.2" //259 //256
-    private val legalTokenId = "1.11.1"
-    private val accountId = "1.2.17"
+    private val legalContractParamsId = "1.11.94" //259 //256
+    private val legalTokenId = "1.11.95"
+    private val accountId = "1.2.44"
     private val login = "dima1"
     private val wif = "5J3UbadSyzzcQQ7HEfTr2brhJJpHhx3NsMzrvgzfysBesutNRCm"
-    private val secondAccountId = "1.2.18"
+    private val secondAccountId = "1.2.45"
     private val secondLogin = "daria1"
     private val secondWif = "5J3UbadSyzzcQQ7HEfTr2brhJJpHhx3NsMzrvgzfysBesutNRCm"
     private val legalAssetId = "1.3.0"
@@ -527,7 +527,7 @@ class EchoFrameworkTest {
         if (connect(framework) == false) Assert.fail("Connection error")
 
         framework.getEthereumAddress(
-            "dima1",
+            "vsharaev1",
             object : Callback<EthAddress> {
                 override fun onSuccess(result: EthAddress) {
                     futureEthereum.setComplete(result)
@@ -1542,7 +1542,7 @@ class EchoFrameworkTest {
         framework.issueAsset(
             "dima1",
             "5J3UbadSyzzcQQ7HEfTr2brhJJpHhx3NsMzrvgzfysBesutNRCm",
-            asset = "1.3.3",
+            asset = "1.3.4",
             amount = "1",
             destinationIdOrName = "dima1",
             callback = futureIssue.completeCallback()
@@ -1872,7 +1872,7 @@ class EchoFrameworkTest {
         val future = FutureTask<ContractResult>()
 
         framework.getContractResult(
-            historyId = "1.12.1",
+            historyId = "1.12.197",
             callback = future.completeCallback()
         )
 

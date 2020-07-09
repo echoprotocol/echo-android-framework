@@ -1,7 +1,21 @@
+## Changelog 4.2.2 - 2020-07-09
+Integration with chain version 0.19
+
+### Added
+* transactionId field to BtcWithdraw
+* transactionHash field to EthWithdraw, EthAddress
+
+### Removed
+* edSignature field from Block object
+
+### Changed
+* ObjectType enum
+
+
 # Changelog 4.2.1 - 2020-22-04
 
 ## Fixed
-* PArsing logic of WithdrawERC20Operation
+* Parsing logic of WithdrawERC20Operation
 
 # Changelog 4.2.0 - 2020-04-02
 
