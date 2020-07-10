@@ -244,14 +244,18 @@ class BytesInputValueType : InputValueType {
         val currOffset = encodingContext!!.dynamicParametersOffset
 
         val length = source.toByteArray().count()
+        encodingContext!!.appendDynamicDataPart(appendStringPattern(source))
 
-        with(encodingContext!!) {
-            appendDynamicDataPart(appendStringPattern(source))
-            dynamicParametersOffset =
-                encodingContext!!.dynamicParametersOffset + length + INPUT_SLICE_SIZE
+        if (currOffset == 0L) {
+            encodingContext!!.dynamicParametersOffset =
+                (encodingContext!!.paramsCount * INPUT_SLICE_SIZE).toLong()
         }
 
-        return appendNumericPattern(convertToByteCode(currOffset))
+        val updatedOffset = encodingContext!!.dynamicParametersOffset
+
+        encodingContext!!.dynamicParametersOffset + length + INPUT_SLICE_SIZE
+
+        return appendNumericPattern(convertToByteCode(updatedOffset))
     }
 
 }
@@ -266,13 +270,19 @@ class StringInputValueType : InputValueType {
     override var name: String = "string"
 
     override fun encode(source: String): String {
-        val curOffset = encodingContext!!.dynamicParametersOffset
-        encodingContext!!.dynamicParametersOffset = encodingContext!!.dynamicParametersOffset +
-                getStringHash(source).length
+        val currOffset = encodingContext!!.dynamicParametersOffset
+        if (currOffset == 0L) {
+            encodingContext!!.dynamicParametersOffset =
+                (encodingContext!!.paramsCount * INPUT_SLICE_SIZE).toLong()
+        }
 
         appendStringParameters(source)
 
-        return appendNumericPattern(convertToByteCode(curOffset))
+        val updatedOffset = encodingContext!!.dynamicParametersOffset
+
+        encodingContext!!.dynamicParametersOffset = updatedOffset + getStringHash(source).length
+
+        return appendNumericPattern(convertToByteCode(updatedOffset))
     }
 
     private fun appendStringParameters(source: String) {
@@ -298,8 +308,16 @@ class DynamicArrayInputValueType(private val itemType: InputValueType) : InputVa
         val parameters = source.toArrayParameters()
         val count = parameters.size
 
+        if (currOffset == 0L) {
+            encodingContext!!.dynamicParametersOffset =
+                (encodingContext!!.paramsCount * INPUT_SLICE_SIZE).toLong()
+        }
+
+        val updatedOffset = encodingContext!!.dynamicParametersOffset
+
         encodingContext!!.dynamicParametersOffset =
-            currOffset + count * INPUT_SLICE_SIZE + INPUT_SLICE_SIZE
+            updatedOffset + count * INPUT_SLICE_SIZE + INPUT_SLICE_SIZE
+
 
         var encodedParameters = ""
         encodedParameters += appendNumericPattern(count.toString())
@@ -310,7 +328,7 @@ class DynamicArrayInputValueType(private val itemType: InputValueType) : InputVa
 
         encodingContext!!.appendDynamicDataPart(encodedParameters)
 
-        return appendNumericPattern(convertToByteCode(currOffset))
+        return appendNumericPattern(convertToByteCode(updatedOffset))
     }
 
 }
@@ -333,8 +351,16 @@ class DynamicStringArrayValueType : InputValueType {
 
         val count = parameters.size
 
+        if (currOffset == 0L) {
+            encodingContext!!.dynamicParametersOffset =
+                (encodingContext!!.paramsCount * INPUT_SLICE_SIZE).toLong()
+        }
+
+        val updatedOffset = encodingContext!!.dynamicParametersOffset
+
         encodingContext!!.dynamicParametersOffset =
-            currOffset + count * INPUT_SLICE_SIZE + INPUT_SLICE_SIZE
+            updatedOffset + count * INPUT_SLICE_SIZE + INPUT_SLICE_SIZE
+
 
         var encodedParameters = ""
         encodedParameters += appendNumericPattern(count.toString())
@@ -345,7 +371,7 @@ class DynamicStringArrayValueType : InputValueType {
 
         encodingContext!!.appendDynamicDataPart(encodedParameters)
 
-        return appendNumericPattern(convertToByteCode(currOffset))
+        return appendNumericPattern(convertToByteCode(updatedOffset))
     }
 
 }
@@ -367,8 +393,16 @@ class FixedArrayInputValueType(private val size: Int, private val itemType: Inpu
 
         val parameters = source.toArrayParameters()
 
+        if (currOffset == 0L) {
+            encodingContext!!.dynamicParametersOffset =
+                (encodingContext!!.paramsCount * INPUT_SLICE_SIZE).toLong()
+        }
+
+        val updatedOffset = encodingContext!!.dynamicParametersOffset
+
         encodingContext!!.dynamicParametersOffset =
-            currOffset + size * INPUT_SLICE_SIZE + INPUT_SLICE_SIZE
+            updatedOffset + size * INPUT_SLICE_SIZE + INPUT_SLICE_SIZE
+
 
         var encodedParameters = ""
         encodedParameters += appendNumericPattern(size.toString())
@@ -379,7 +413,7 @@ class FixedArrayInputValueType(private val size: Int, private val itemType: Inpu
 
         encodingContext!!.appendDynamicDataPart(encodedParameters)
 
-        return appendNumericPattern(convertToByteCode(currOffset))
+        return appendNumericPattern(convertToByteCode(updatedOffset))
     }
 
 }
