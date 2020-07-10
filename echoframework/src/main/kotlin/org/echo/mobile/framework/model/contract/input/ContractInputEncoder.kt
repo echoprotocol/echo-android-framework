@@ -53,7 +53,7 @@ class ContractInputEncoder {
         override val paramsCount: Int
     ) : EncodingContext {
 
-        override var dynamicParametersOffset: Long = (paramsCount * INPUT_SLICE_SIZE).toLong()
+        override var dynamicParametersOffset: Long = 0L
 
         var dynamicParams: String = ""
 
