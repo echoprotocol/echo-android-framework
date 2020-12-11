@@ -19,6 +19,7 @@ sealed class Withdraw(
 
     val account: String = ""
     val value: String = ""
+
     @SerializedName("is_approved")
     val isApproved: Boolean = false
 
@@ -35,7 +36,8 @@ sealed class Withdraw(
     class EthWithdraw(
         id: String,
         @SerializedName("eth_addr") val address: String = "",
-        val approves: List<String> = listOf()
+        val approves: List<String> = listOf(),
+        @SerializedName("transaction_hash") val transactionHash: String
     ) : Withdraw(id)
 
     /**
@@ -45,7 +47,8 @@ sealed class Withdraw(
      */
     class BtcWithdraw(
         id: String,
-        @SerializedName("btc_addr") val address: String = ""
+        @SerializedName("btc_addr") val address: String = "",
+        @SerializedName("transaction_id") val transactionId: String = ""
     ) : Withdraw(id)
 
 }

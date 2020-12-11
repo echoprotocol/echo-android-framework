@@ -17,7 +17,8 @@ class ERC20Withdrawal(
     val value: String = "",
     @SerializedName("is_approved") val isApproved: Boolean = false,
     val approves: List<String> = listOf(),
-    @SerializedName("erc20_token") val erc20Token: String = ""
+    @SerializedName("erc20_token") val erc20Token: String = "",
+    @SerializedName("transaction_hash") val transactionHash: String = ""
 ) : GrapheneObject(id)
 
 /**

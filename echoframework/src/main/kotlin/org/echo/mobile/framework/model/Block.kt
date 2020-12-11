@@ -22,7 +22,6 @@ class Block(
     var delagate: Account,
     var transactionMerkleRoot: String,
     var rand: String,
-    var edSignature: String,
     var transactions: List<Transaction>,
     var vmRoot: List<String>,
     var prevSignatures: List<PrevSignature>
@@ -47,7 +46,6 @@ class Block(
             val round = jsonObject.get(KEY_ROUND).asString
             val rand = jsonObject.get(KEY_RAND).asString
             val transactionMerkleRoot = jsonObject.get(KEY_TRANSACTION_MERKLE_ROOT).asString
-            val edSignature = jsonObject.get(KEY_ED_SIGNATURE).asString
             val account = Account(jsonObject.get(KEY_ACCOUNT).asString)
             val delegate = Account(jsonObject.get(KEY_DELEGATE).asString)
 
@@ -84,7 +82,6 @@ class Block(
                 delegate,
                 transactionMerkleRoot,
                 rand,
-                edSignature,
                 transactions,
                 vmRoot,
                 prevSignatures
@@ -103,7 +100,6 @@ class Block(
         private const val KEY_PREV_SIGNATURES = "prev_signatures"
         private const val KEY_ROUND = "round"
         private const val KEY_RAND = "rand"
-        private const val KEY_ED_SIGNATURE = "ed_signature"
     }
 
 }
