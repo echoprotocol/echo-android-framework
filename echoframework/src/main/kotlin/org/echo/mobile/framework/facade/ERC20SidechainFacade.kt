@@ -4,7 +4,7 @@ import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.model.ERC20Deposit
 import org.echo.mobile.framework.model.ERC20Token
 import org.echo.mobile.framework.model.ERC20Withdrawal
-import org.echo.mobile.framework.model.TransactionResult
+import org.echo.mobile.framework.model.socketoperations.TransactionResultCallback
 
 /**
  * Encapsulates logic, associated with erc20 sidechain functionality
@@ -25,7 +25,7 @@ interface ERC20SidechainFacade {
         decimals: String,
         feeAsset: String,
         broadcastCallback: Callback<Boolean>,
-        resultCallback: Callback<TransactionResult>?
+        resultCallback: TransactionResultCallback
     )
 
     /**
@@ -40,7 +40,7 @@ interface ERC20SidechainFacade {
         value: String,
         feeAsset: String,
         broadcastCallback: Callback<Boolean>,
-        resultCallback: Callback<TransactionResult>?
+        resultCallback: TransactionResultCallback
     )
 
     /**

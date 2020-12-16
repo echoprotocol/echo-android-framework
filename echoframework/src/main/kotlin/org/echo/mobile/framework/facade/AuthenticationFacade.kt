@@ -2,6 +2,7 @@ package org.echo.mobile.framework.facade
 
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.model.FullAccount
+import org.echo.mobile.framework.model.socketoperations.TransactionResultCallback
 
 /**
  * Encapsulates logic, associated with user authentication and account configuration processes
@@ -26,13 +27,15 @@ interface AuthenticationFacade {
      * @param name Account name
      * @param oldWif Current account's wif
      * @param newWif New wif that user wants to apply
-     * @param callback Listener of operation results
+     * @param broadcastCallback Listener of operation success
+     * @param resultCallback Listener of operation results
      */
     fun changeKeys(
-        name: String,
-        oldWif: String,
-        newWif: String,
-        callback: Callback<Any>
+            name: String,
+            oldWif: String,
+            newWif: String,
+            broadcastCallback: Callback<Boolean>,
+            resultCallback: TransactionResultCallback
     )
 
     /**
@@ -41,10 +44,10 @@ interface AuthenticationFacade {
      * Returns true/false according to registration result
      */
     fun register(
-        userName: String,
-        wif: String,
-        evmAddress: String? = null,
-        callback: Callback<Boolean>
+            userName: String,
+            wif: String,
+            evmAddress: String? = null,
+            callback: Callback<Boolean>
     )
 
 }

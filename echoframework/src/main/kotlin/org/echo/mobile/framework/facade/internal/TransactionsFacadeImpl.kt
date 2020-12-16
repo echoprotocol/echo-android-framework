@@ -3,14 +3,14 @@ package org.echo.mobile.framework.facade.internal
 import com.google.common.primitives.UnsignedLong
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
+import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.facade.TransactionsFacade
 import org.echo.mobile.framework.model.Asset
 import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.operations.TransferOperationBuilder
-import org.echo.mobile.framework.processResult
+import org.echo.mobile.framework.model.socketoperations.TransactionResultCallback
 import org.echo.mobile.framework.service.DatabaseApiService
 import org.echo.mobile.framework.service.NetworkBroadcastApiService
-import org.echo.mobile.framework.support.dematerialize
 
 /**
  * Implementation of [TransactionsFacade]
@@ -20,36 +20,43 @@ import org.echo.mobile.framework.support.dematerialize
  * @author Dmitriy Bushuev
  */
 class TransactionsFacadeImpl(
-    private val databaseApiService: DatabaseApiService,
-    private val networkBroadcastApiService: NetworkBroadcastApiService,
-    private val cryptoCoreComponent: CryptoCoreComponent,
-    private val transactionExpirationDelay: Long
-) : BaseTransactionsFacade(databaseApiService, cryptoCoreComponent, transactionExpirationDelay), TransactionsFacade {
+        private val databaseApiService: DatabaseApiService,
+        private val networkBroadcastApiService: NetworkBroadcastApiService,
+        private val cryptoCoreComponent: CryptoCoreComponent,
+        private val transactionExpirationDelay: Long
+) : BaseTransactionsFacade(databaseApiService, cryptoCoreComponent, transactionExpirationDelay),
+        TransactionsFacade {
 
     override fun sendTransferOperation(
-        nameOrId: String,
-        wif: String,
-        toNameOrId: String,
-        amount: String,
-        asset: String,
-        feeAsset: String?,
-        callback: Callback<Boolean>
-    ) = callback.processResult {
-        val (fromAccount, toAccount) = getParticipantsPair(nameOrId, toNameOrId)
+            nameOrId: String,
+            wif: String,
+            toNameOrId: String,
+            amount: String,
+            asset: String,
+            feeAsset: String?,
+            broadcastCallback: Callback<Boolean>,
+            resultCallback: TransactionResultCallback
+    ) {
+        try {
+            val (fromAccount, toAccount) = getParticipantsPair(nameOrId, toNameOrId)
 
-        checkOwnerAccount(wif, fromAccount)
+            checkOwnerAccount(wif, fromAccount)
 
-        val privateKey = cryptoCoreComponent.decodeFromWif(wif)
+            val privateKey = cryptoCoreComponent.decodeFromWif(wif)
 
-        val transfer = TransferOperationBuilder()
-            .setFrom(fromAccount)
-            .setTo(toAccount)
-            .setAmount(AssetAmount(UnsignedLong.valueOf(amount.toLong()), Asset(asset)))
-            .build()
+            val transfer = TransferOperationBuilder()
+                    .setFrom(fromAccount)
+                    .setTo(toAccount)
+                    .setAmount(AssetAmount(UnsignedLong.valueOf(amount.toLong()), Asset(asset)))
+                    .build()
 
-        val transaction = configureTransaction(transfer, privateKey, asset, feeAsset)
+            val transaction = configureTransaction(transfer, privateKey, asset, feeAsset)
 
-        networkBroadcastApiService.broadcastTransaction(transaction).dematerialize()
+            val broadCastTransaction = networkBroadcastApiService.broadcastTransaction(transaction)
+            broadcastCallback.onSuccess(true)
+            resultCallback.processResult (broadCastTransaction)
+        } catch (ex: Exception) {
+            broadcastCallback.onError(ex as? LocalException ?: LocalException(ex))
+        }
     }
-
 }

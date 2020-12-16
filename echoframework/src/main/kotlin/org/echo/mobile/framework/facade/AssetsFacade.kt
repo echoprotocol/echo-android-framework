@@ -2,6 +2,7 @@ package org.echo.mobile.framework.facade
 
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.model.Asset
+import org.echo.mobile.framework.model.socketoperations.TransactionResultCallback
 
 /**
  * Encapsulates logic, associated with echo blockchain assets use cases
@@ -14,14 +15,14 @@ interface AssetsFacade {
      * Creates [asset] with required parameters using [name] account's [wif] for transaction signing
      *
      * @param broadcastCallback Callback for result of operation broadcast
-     * @param resultCallback Callback for retrieving result of operation  (not required)
+     * @param resultCallback Callback for retrieving result of operation
      */
     fun createAsset(
         name: String,
         wif: String,
         asset: Asset,
         broadcastCallback: Callback<Boolean>,
-        resultCallback: Callback<String>? = null
+        resultCallback: TransactionResultCallback
     )
 
     /**
@@ -34,7 +35,8 @@ interface AssetsFacade {
         asset: String,
         amount: String,
         destinationIdOrName: String,
-        callback: Callback<Boolean>
+        broadcastCallback: Callback<Boolean>,
+        resultCallback: TransactionResultCallback
     )
 
     /**

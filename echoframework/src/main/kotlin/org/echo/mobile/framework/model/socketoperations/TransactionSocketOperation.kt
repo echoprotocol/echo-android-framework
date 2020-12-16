@@ -43,7 +43,7 @@ class TransactionSocketOperation(
         return transactionJson
     }
 
-    override fun fromJson(json: String): Boolean? {
+    override fun fromJson(json: String): Boolean {
         return json.toJsonObject()?.has(RESULT_KEY) ?: false
     }
 

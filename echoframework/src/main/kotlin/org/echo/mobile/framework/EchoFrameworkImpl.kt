@@ -44,7 +44,6 @@ import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.HistoryResponse
 import org.echo.mobile.framework.model.SidechainType
-import org.echo.mobile.framework.model.TransactionResult
 import org.echo.mobile.framework.model.Withdraw
 import org.echo.mobile.framework.model.contract.ContractBalance
 import org.echo.mobile.framework.model.contract.ContractFee
@@ -53,6 +52,7 @@ import org.echo.mobile.framework.model.contract.ContractLog
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
 import org.echo.mobile.framework.model.contract.input.InputValue
+import org.echo.mobile.framework.model.socketoperations.TransactionResultCallback
 import org.echo.mobile.framework.service.AccountHistoryApiService
 import org.echo.mobile.framework.service.CryptoApiService
 import org.echo.mobile.framework.service.DatabaseApiService
@@ -124,889 +124,889 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
 
         val mapperCoreComponent = MapperCoreComponentImpl()
         val socketCoreComponent =
-            SocketCoreComponentImpl(settings.socketMessenger, mapperCoreComponent)
+                SocketCoreComponentImpl(settings.socketMessenger, mapperCoreComponent)
 
         accountHistoryApiService = AccountHistoryApiServiceImpl(
-            socketCoreComponent,
-            settings.network
+                socketCoreComponent,
+                settings.network
         )
         databaseApiService =
-            DatabaseApiServiceImpl(socketCoreComponent, settings.cryptoComponent, settings.network)
+                DatabaseApiServiceImpl(socketCoreComponent, settings.cryptoComponent, settings.network)
         networkBroadcastApiService =
-            NetworkBroadcastApiServiceImpl(socketCoreComponent, settings.cryptoComponent)
+                NetworkBroadcastApiServiceImpl(socketCoreComponent, settings.cryptoComponent)
         cryptoApiService = CryptoApiServiceImpl(socketCoreComponent)
         loginService = LoginApiServiceImpl(socketCoreComponent)
         registrationService = RegistrationApiServiceImpl(socketCoreComponent)
 
         initializerFacade = InitializerFacadeImpl(
-            socketCoreComponent,
-            settings.url,
-            settings.apis,
-            loginService,
-            databaseApiService,
-            cryptoApiService,
-            accountHistoryApiService,
-            networkBroadcastApiService,
-            registrationService
+                socketCoreComponent,
+                settings.url,
+                settings.apis,
+                loginService,
+                databaseApiService,
+                cryptoApiService,
+                accountHistoryApiService,
+                networkBroadcastApiService,
+                registrationService
         )
 
         val regularSubscriptionManager = RegistrationSubscriptionManagerImpl()
         val registrationNotificationsHelper = NotificationsHelper(
-            socketCoreComponent,
-            regularSubscriptionManager
+                socketCoreComponent,
+                regularSubscriptionManager
         )
 
         authenticationFacade = AuthenticationFacadeImpl(
-            databaseApiService,
-            networkBroadcastApiService,
-            registrationService,
-            settings.cryptoComponent,
-            registrationNotificationsHelper,
-            settings.transactionExpirationDelaySeconds
+                databaseApiService,
+                networkBroadcastApiService,
+                registrationService,
+                settings.cryptoComponent,
+                registrationNotificationsHelper,
+                settings.transactionExpirationDelaySeconds
         )
 
         val feeRatioProvider = FeeRatioProvider(settings.feeRatio)
 
         feeFacade = FeeFacadeImpl(
-            databaseApiService,
-            settings.cryptoComponent,
-            feeRatioProvider,
-            settings.transactionExpirationDelaySeconds
+                databaseApiService,
+                settings.cryptoComponent,
+                feeRatioProvider,
+                settings.transactionExpirationDelaySeconds
         )
         informationFacade = InformationFacadeImpl(
-            databaseApiService,
-            accountHistoryApiService
+                databaseApiService,
+                accountHistoryApiService
         )
         subscriptionFacade = SubscriptionFacadeImpl(
-            socketCoreComponent,
-            databaseApiService,
-            settings.network
-        )
-        transactionsFacade = TransactionsFacadeImpl(
-            databaseApiService,
-            networkBroadcastApiService,
-            settings.cryptoComponent,
-            settings.transactionExpirationDelaySeconds
+                socketCoreComponent,
+                databaseApiService,
+                settings.network
         )
 
         val transactionSubscriptionManager = TransactionSubscriptionManagerImpl(settings.network)
 
         val notifiedTransactionsHelper =
-            NotificationsHelper(socketCoreComponent, transactionSubscriptionManager)
+                NotificationsHelper(socketCoreComponent, transactionSubscriptionManager)
+
+        transactionsFacade = TransactionsFacadeImpl(
+                databaseApiService,
+                networkBroadcastApiService,
+                settings.cryptoComponent,
+                settings.transactionExpirationDelaySeconds
+        )
 
         val contractLogsSubscriptionManager = ContractLogsSubscriptionManagerImpl()
 
         val notifiedContractLogsHelper =
-            NotificationsHelper(socketCoreComponent, contractLogsSubscriptionManager)
+                NotificationsHelper(socketCoreComponent, contractLogsSubscriptionManager)
 
         assetsFacade = AssetsFacadeImpl(
-            databaseApiService,
-            networkBroadcastApiService,
-            settings.cryptoComponent,
-            notifiedTransactionsHelper,
-            settings.transactionExpirationDelaySeconds
+                databaseApiService,
+                networkBroadcastApiService,
+                settings.cryptoComponent,
+                settings.transactionExpirationDelaySeconds
         )
         contractsFacade = ContractsFacadeImpl(
-            databaseApiService,
-            networkBroadcastApiService,
-            settings.cryptoComponent,
-            notifiedTransactionsHelper,
-            notifiedContractLogsHelper,
-            feeRatioProvider,
-            settings.transactionExpirationDelaySeconds
+                databaseApiService,
+                networkBroadcastApiService,
+                settings.cryptoComponent,
+                notifiedTransactionsHelper,
+                notifiedContractLogsHelper,
+                feeRatioProvider,
+                settings.transactionExpirationDelaySeconds
         )
-
-        val notifiedEthAddressHelper =
-            NotificationsHelper(socketCoreComponent, transactionSubscriptionManager)
         ethereumSidechainFacade = EthereumSidechainFacadeImpl(
-            databaseApiService,
-            networkBroadcastApiService,
-            settings.cryptoComponent,
-            notifiedEthAddressHelper,
-            settings.transactionExpirationDelaySeconds
+                databaseApiService,
+                networkBroadcastApiService,
+                settings.cryptoComponent,
+                settings.transactionExpirationDelaySeconds
         )
         bitcoinSidechainFacade = BitcoinSidechainFacadeImpl(
-            databaseApiService,
-            networkBroadcastApiService,
-            settings.cryptoComponent,
-            notifiedEthAddressHelper,
-            settings.transactionExpirationDelaySeconds
+                databaseApiService,
+                networkBroadcastApiService,
+                settings.cryptoComponent,
+                settings.transactionExpirationDelaySeconds
         )
         commonSidechainFacade = CommonSidechainFacadeImpl(databaseApiService)
         erc20SidechainFacade = ERC20SidechainFacadeImpl(
-            databaseApiService,
-            networkBroadcastApiService,
-            settings.cryptoComponent,
-            notifiedEthAddressHelper,
-            settings.transactionExpirationDelaySeconds
+                databaseApiService,
+                networkBroadcastApiService,
+                settings.cryptoComponent,
+                settings.transactionExpirationDelaySeconds
         )
     }
 
     override fun start(callback: Callback<Any>) =
-        dispatch(Runnable { initializerFacade.connect(callback.wrapOriginal()) })
+            dispatch(Runnable { initializerFacade.connect(callback.wrapOriginal()) })
 
     override fun stop() =
-        dispatch(Runnable { initializerFacade.disconnect() })
+            dispatch(Runnable { initializerFacade.disconnect() })
 
     override fun isOwnedBy(nameOrId: String, wif: String, callback: Callback<FullAccount>) =
-        dispatch(Runnable {
-            authenticationFacade.isOwnedBy(
-                nameOrId,
-                wif,
-                callback.wrapOriginal()
-            )
-        })
+            dispatch(Runnable {
+                authenticationFacade.isOwnedBy(
+                        nameOrId,
+                        wif,
+                        callback.wrapOriginal()
+                )
+            })
 
     override fun changeKeys(
-        name: String,
-        oldWif: String,
-        newWif: String,
-        callback: Callback<Any>
+            name: String,
+            oldWif: String,
+            newWif: String,
+            broadcastCallback: Callback<Boolean>,
+            resultCallback: TransactionResultCallback
     ) = dispatch(Runnable {
         authenticationFacade.changeKeys(
-            name,
-            oldWif,
-            newWif,
-            callback.wrapOriginal()
+                name,
+                oldWif,
+                newWif,
+                broadcastCallback.wrapOriginal(),
+                resultCallback
         )
     })
 
     override fun register(
-        userName: String,
-        wif: String,
-        evmAddress: String?,
-        callback: Callback<Boolean>
+            userName: String,
+            wif: String,
+            evmAddress: String?,
+            callback: Callback<Boolean>
     ) =
-        dispatch(Runnable {
-            authenticationFacade.register(
-                userName,
-                wif,
-                evmAddress,
-                callback.wrapOriginal()
-            )
-        })
+            dispatch(Runnable {
+                authenticationFacade.register(
+                        userName,
+                        wif,
+                        evmAddress,
+                        callback.wrapOriginal()
+                )
+            })
 
     override fun getFeeForTransferOperation(
-        fromNameOrId: String,
-        wif: String,
-        toNameOrId: String,
-        amount: String,
-        asset: String,
-        feeAsset: String?,
-        callback: Callback<String>
+            fromNameOrId: String,
+            wif: String,
+            toNameOrId: String,
+            amount: String,
+            asset: String,
+            feeAsset: String?,
+            callback: Callback<String>
     ) = dispatch(Runnable {
         feeFacade.getFeeForTransferOperation(
-            fromNameOrId,
-            wif,
-            toNameOrId,
-            amount,
-            asset,
-            feeAsset,
-            callback.wrapOriginal()
+                fromNameOrId,
+                wif,
+                toNameOrId,
+                amount,
+                asset,
+                feeAsset,
+                callback.wrapOriginal()
         )
     })
 
     override fun getFeeForContractOperation(
-        userNameOrId: String,
-        contractId: String,
-        amount: String,
-        methodName: String,
-        methodParams: List<InputValue>,
-        assetId: String,
-        feeAsset: String?,
-        callback: Callback<ContractFee>
+            userNameOrId: String,
+            contractId: String,
+            amount: String,
+            methodName: String,
+            methodParams: List<InputValue>,
+            assetId: String,
+            feeAsset: String?,
+            callback: Callback<ContractFee>
     ) = dispatch(Runnable {
         feeFacade.getFeeForContractOperation(
-            userNameOrId,
-            contractId,
-            amount,
-            methodName,
-            methodParams,
-            assetId,
-            feeAsset,
-            callback.wrapOriginal()
+                userNameOrId,
+                contractId,
+                amount,
+                methodName,
+                methodParams,
+                assetId,
+                feeAsset,
+                callback.wrapOriginal()
         )
     })
 
     override fun getFeeForContractCreateOperation(
-        userNameOrId: String,
-        amount: String,
-        byteCode: String,
-        assetId: String,
-        feeAsset: String?,
-        callback: Callback<AssetAmount>
+            userNameOrId: String,
+            amount: String,
+            byteCode: String,
+            assetId: String,
+            feeAsset: String?,
+            callback: Callback<AssetAmount>
     ) = dispatch(Runnable {
         feeFacade.getFeeForContractCreateOperation(
-            userNameOrId,
-            amount,
-            byteCode,
-            assetId,
-            feeAsset,
-            callback.wrapOriginal()
+                userNameOrId,
+                amount,
+                byteCode,
+                assetId,
+                feeAsset,
+                callback.wrapOriginal()
         )
     })
 
     override fun getFeeForWithdrawErc20Operation(
-        accountNameOrId: String,
-        ethAddress: String,
-        ethTokenId: String,
-        value: String,
-        feeAsset: String,
-        callback: Callback<AssetAmount>
+            accountNameOrId: String,
+            ethAddress: String,
+            ethTokenId: String,
+            value: String,
+            feeAsset: String,
+            callback: Callback<AssetAmount>
     ) = dispatch(Runnable {
         feeFacade.getFeeForWithdrawErc20Operation(
-            accountNameOrId,
-            ethAddress,
-            ethTokenId,
-            value,
-            feeAsset,
-            callback.wrapOriginal()
+                accountNameOrId,
+                ethAddress,
+                ethTokenId,
+                value,
+                feeAsset,
+                callback.wrapOriginal()
         )
     })
 
     override fun getFeeForWithdrawEthereumOperation(
-        accountNameOrId: String,
-        ethAddress: String,
-        value: String,
-        feeAsset: String,
-        callback: Callback<AssetAmount>
+            accountNameOrId: String,
+            ethAddress: String,
+            value: String,
+            feeAsset: String,
+            callback: Callback<AssetAmount>
     ) = dispatch(Runnable {
         feeFacade.getFeeForWithdrawEthereumOperation(
-            accountNameOrId,
-            ethAddress,
-            value,
-            feeAsset,
-            callback.wrapOriginal()
+                accountNameOrId,
+                ethAddress,
+                value,
+                feeAsset,
+                callback.wrapOriginal()
         )
     })
 
     override fun getFeeForWithdrawBtcOperation(
-        accountNameOrId: String,
-        btcAddress: String,
-        value: String,
-        feeAsset: String,
-        callback: Callback<AssetAmount>
+            accountNameOrId: String,
+            btcAddress: String,
+            value: String,
+            feeAsset: String,
+            callback: Callback<AssetAmount>
     ) = dispatch(Runnable {
         feeFacade.getFeeForWithdrawBtcOperation(
-            accountNameOrId,
-            btcAddress,
-            value,
-            feeAsset,
-            callback.wrapOriginal()
+                accountNameOrId,
+                btcAddress,
+                value,
+                feeAsset,
+                callback.wrapOriginal()
         )
     })
 
     override fun getFeeForContractOperation(
-        userNameOrId: String,
-        contractId: String,
-        amount: String,
-        code: String,
-        assetId: String,
-        feeAsset: String?,
-        callback: Callback<ContractFee>
+            userNameOrId: String,
+            contractId: String,
+            amount: String,
+            code: String,
+            assetId: String,
+            feeAsset: String?,
+            callback: Callback<ContractFee>
     ) = dispatch(Runnable {
         feeFacade.getFeeForContractOperation(
-            userNameOrId,
-            contractId,
-            amount,
-            code,
-            assetId,
-            feeAsset,
-            callback.wrapOriginal()
+                userNameOrId,
+                contractId,
+                amount,
+                code,
+                assetId,
+                feeAsset,
+                callback.wrapOriginal()
         )
     })
 
     override fun getAccount(nameOrId: String, callback: Callback<FullAccount>) =
-        dispatch(Runnable {
-            informationFacade.getAccount(nameOrId, callback.wrapOriginal())
-        })
+            dispatch(Runnable {
+                informationFacade.getAccount(nameOrId, callback.wrapOriginal())
+            })
 
     override fun getAccountsByWif(wif: String, callback: Callback<List<FullAccount>>) =
-        dispatch(Runnable {
-            informationFacade.getAccountsByWif(wif, callback.wrapOriginal())
-        })
+            dispatch(Runnable {
+                informationFacade.getAccountsByWif(wif, callback.wrapOriginal())
+            })
 
     override fun checkAccountReserved(
-        nameOrId: String,
-        callback: Callback<Boolean>
+            nameOrId: String,
+            callback: Callback<Boolean>
     ) =
-        dispatch(Runnable {
-            informationFacade.checkAccountReserved(nameOrId, callback.wrapOriginal())
-        })
+            dispatch(Runnable {
+                informationFacade.checkAccountReserved(nameOrId, callback.wrapOriginal())
+            })
 
     override fun getBalance(
-        nameOrId: String,
-        asset: String,
-        callback: Callback<Balance>
+            nameOrId: String,
+            asset: String,
+            callback: Callback<Balance>
     ) =
-        dispatch(Runnable {
-            informationFacade.getBalance(nameOrId, asset, callback.wrapOriginal())
-        })
+            dispatch(Runnable {
+                informationFacade.getBalance(nameOrId, asset, callback.wrapOriginal())
+            })
 
     override fun getGlobalProperties(callback: Callback<GlobalProperties>) =
-        dispatch(Runnable {
-            informationFacade.getGlobalProperties(callback.wrapOriginal())
-        })
+            dispatch(Runnable {
+                informationFacade.getGlobalProperties(callback.wrapOriginal())
+            })
 
     override fun subscribeOnAccount(
-        nameOrId: String,
-        listener: AccountListener,
-        callback: Callback<Boolean>
+            nameOrId: String,
+            listener: AccountListener,
+            callback: Callback<Boolean>
     ) = dispatch(Runnable {
         subscriptionFacade.subscribeOnAccount(
-            nameOrId,
-            listener.wrapOriginal(),
-            callback.wrapOriginal()
+                nameOrId,
+                listener.wrapOriginal(),
+                callback.wrapOriginal()
         )
     })
 
     override fun subscribeOnBlock(
-        listener: UpdateListener<Block>,
-        callback: Callback<Boolean>
+            listener: UpdateListener<Block>,
+            callback: Callback<Boolean>
     ) =
-        dispatch(Runnable {
-            subscriptionFacade.subscribeOnBlock(
-                listener.wrapOriginal(),
-                callback.wrapOriginal()
-            )
-        })
+            dispatch(Runnable {
+                subscriptionFacade.subscribeOnBlock(
+                        listener.wrapOriginal(),
+                        callback.wrapOriginal()
+                )
+            })
 
     override fun subscribeOnBlockchainData(
-        listener: UpdateListener<DynamicGlobalProperties>,
-        callback: Callback<Boolean>
+            listener: UpdateListener<DynamicGlobalProperties>,
+            callback: Callback<Boolean>
     ) = dispatch(Runnable {
         subscriptionFacade.subscribeOnBlockchainData(
-            listener.wrapOriginal(),
-            callback.wrapOriginal()
+                listener.wrapOriginal(),
+                callback.wrapOriginal()
         )
     })
 
     override fun subscribeOnContractLogs(
-        contractId: String,
-        listener: UpdateListener<List<ContractLog>>,
-        callback: Callback<Boolean>
+            contractId: String,
+            listener: UpdateListener<List<ContractLog>>,
+            callback: Callback<Boolean>
     ) = dispatch(Runnable {
         subscriptionFacade.subscribeOnContractLogs(contractId, listener, callback)
     })
 
     override fun subscribeOnContracts(
-        contractIds: List<String>,
-        listener: UpdateListener<Map<String, List<ContractBalance>>>,
-        callback: Callback<Boolean>
+            contractIds: List<String>,
+            listener: UpdateListener<Map<String, List<ContractBalance>>>,
+            callback: Callback<Boolean>
     ) = dispatch(Runnable {
         subscriptionFacade.subscribeOnContracts(contractIds, listener, callback)
     })
 
     override fun unsubscribeFromContractLogs(
-        contractId: String,
-        callback: Callback<Boolean>
+            contractId: String,
+            callback: Callback<Boolean>
     ) =
-        dispatch(Runnable {
-            subscriptionFacade.unsubscribeFromContractLogs(
-                contractId,
-                callback.wrapOriginal()
-            )
-        })
+            dispatch(Runnable {
+                subscriptionFacade.unsubscribeFromContractLogs(
+                        contractId,
+                        callback.wrapOriginal()
+                )
+            })
 
     override fun unsubscribeFromContracts(
-        listener: UpdateListener<Map<String, List<ContractBalance>>>,
-        callback: Callback<Boolean>
+            listener: UpdateListener<Map<String, List<ContractBalance>>>,
+            callback: Callback<Boolean>
     ) =
-        dispatch(Runnable {
-            subscriptionFacade.unsubscribeFromContracts(
-                listener,
-                callback.wrapOriginal()
-            )
-        })
+            dispatch(Runnable {
+                subscriptionFacade.unsubscribeFromContracts(
+                        listener,
+                        callback.wrapOriginal()
+                )
+            })
 
     override fun unsubscribeFromBlockchainData(callback: Callback<Boolean>) =
-        dispatch(Runnable {
-            subscriptionFacade.unsubscribeFromBlockchainData(callback)
-        })
+            dispatch(Runnable {
+                subscriptionFacade.unsubscribeFromBlockchainData(callback)
+            })
 
     override fun unsubscribeFromBlock(callback: Callback<Boolean>) =
-        dispatch(Runnable {
-            subscriptionFacade.unsubscribeFromBlock(callback)
-        })
+            dispatch(Runnable {
+                subscriptionFacade.unsubscribeFromBlock(callback)
+            })
 
     override fun createAsset(
-        name: String,
-        wif: String,
-        asset: Asset,
-        broadcastCallback: Callback<Boolean>,
-        resultCallback: Callback<String>?
+            name: String,
+            wif: String,
+            asset: Asset,
+            broadcastCallback: Callback<Boolean>,
+            resultCallback: TransactionResultCallback
     ) = dispatch(Runnable {
         assetsFacade.createAsset(
-            name, wif,
-            asset,
-            broadcastCallback.wrapOriginal(), resultCallback?.wrapOriginal()
+                name, wif,
+                asset,
+                broadcastCallback.wrapOriginal(), resultCallback
         )
     })
 
     override fun issueAsset(
-        issuerNameOrId: String,
-        wif: String,
-        asset: String,
-        amount: String,
-        destinationIdOrName: String,
-        callback: Callback<Boolean>
+            issuerNameOrId: String,
+            wif: String,
+            asset: String,
+            amount: String,
+            destinationIdOrName: String,
+            broadcastCallback: Callback<Boolean>,
+            resultCallback: TransactionResultCallback
     ) = dispatch(Runnable {
         assetsFacade.issueAsset(
-            issuerNameOrId,
-            wif,
-            asset,
-            amount,
-            destinationIdOrName,
-            callback
+                issuerNameOrId,
+                wif,
+                asset,
+                amount,
+                destinationIdOrName,
+                broadcastCallback,
+                resultCallback
         )
     })
 
     override fun listAssets(
-        lowerBound: String,
-        limit: Int,
-        callback: Callback<List<Asset>>
+            lowerBound: String,
+            limit: Int,
+            callback: Callback<List<Asset>>
     ) =
-        dispatch(Runnable {
-            assetsFacade.listAssets(lowerBound, limit, callback)
-        })
+            dispatch(Runnable {
+                assetsFacade.listAssets(lowerBound, limit, callback)
+            })
 
     override fun getAssets(
-        assetIds: List<String>,
-        callback: Callback<List<Asset>>
+            assetIds: List<String>,
+            callback: Callback<List<Asset>>
     ) =
-        dispatch(Runnable {
-            assetsFacade.getAssets(assetIds, callback)
-        })
+            dispatch(Runnable {
+                assetsFacade.getAssets(assetIds, callback)
+            })
 
     override fun lookupAssetsSymbols(symbolsOrIds: List<String>, callback: Callback<List<Asset>>) =
-        dispatch(Runnable {
-            assetsFacade.lookupAssetsSymbols(symbolsOrIds, callback)
-        })
+            dispatch(Runnable {
+                assetsFacade.lookupAssetsSymbols(symbolsOrIds, callback)
+            })
 
     override fun unsubscribeFromAccount(
-        nameOrId: String,
-        callback: Callback<Boolean>
+            nameOrId: String,
+            callback: Callback<Boolean>
     ) =
-        dispatch(Runnable {
-            subscriptionFacade.unsubscribeFromAccount(
-                nameOrId,
-                callback.wrapOriginal()
-            )
-        })
+            dispatch(Runnable {
+                subscriptionFacade.unsubscribeFromAccount(
+                        nameOrId,
+                        callback.wrapOriginal()
+                )
+            })
 
     override fun unsubscribeAll(callback: Callback<Boolean>) =
-        dispatch(Runnable {
-            subscriptionFacade.unsubscribeAll(callback.wrapOriginal())
-        })
+            dispatch(Runnable {
+                subscriptionFacade.unsubscribeAll(callback.wrapOriginal())
+            })
 
     override fun sendTransferOperation(
-        nameOrId: String,
-        wif: String,
-        toNameOrId: String,
-        amount: String,
-        asset: String,
-        feeAsset: String?,
-        callback: Callback<Boolean>
+            nameOrId: String,
+            wif: String,
+            toNameOrId: String,
+            amount: String,
+            asset: String,
+            feeAsset: String?,
+            broadcastCallback: Callback<Boolean>,
+            resultCallback: TransactionResultCallback
     ) {
         transactionsFacade.sendTransferOperation(
-            nameOrId,
-            wif,
-            toNameOrId,
-            amount,
-            asset,
-            feeAsset,
-            callback.wrapOriginal()
+                nameOrId,
+                wif,
+                toNameOrId,
+                amount,
+                asset,
+                feeAsset,
+                broadcastCallback.wrapOriginal(),
+                resultCallback
         )
     }
 
     override fun getAccountHistory(
-        nameOrId: String,
-        transactionStartId: String,
-        transactionStopId: String,
-        limit: Int,
-        callback: Callback<HistoryResponse>
+            nameOrId: String,
+            transactionStartId: String,
+            transactionStopId: String,
+            limit: Int,
+            callback: Callback<HistoryResponse>
     ) = dispatch(Runnable {
         informationFacade.getAccountHistory(
-            nameOrId,
-            transactionStartId,
-            transactionStopId,
-            limit,
-            callback.wrapOriginal()
+                nameOrId,
+                transactionStartId,
+                transactionStopId,
+                limit,
+                callback.wrapOriginal()
         )
     })
 
     override fun createContract(
-        registrarNameOrId: String,
-        wif: String,
-        value: String,
-        assetId: String,
-        feeAsset: String?,
-        byteCode: String,
-        params: List<InputValue>,
-        broadcastCallback: Callback<Boolean>,
-        resultCallback: Callback<String>?
+            registrarNameOrId: String,
+            wif: String,
+            value: String,
+            assetId: String,
+            feeAsset: String?,
+            byteCode: String,
+            params: List<InputValue>,
+            broadcastCallback: Callback<Boolean>,
+            resultCallback: Callback<String>?
     ) = dispatch(Runnable {
         contractsFacade.createContract(
-            registrarNameOrId,
-            wif,
-            value,
-            assetId,
-            feeAsset,
-            byteCode,
-            params,
-            broadcastCallback.wrapOriginal(),
-            resultCallback?.wrapOriginal()
+                registrarNameOrId,
+                wif,
+                value,
+                assetId,
+                feeAsset,
+                byteCode,
+                params,
+                broadcastCallback.wrapOriginal(),
+                resultCallback?.wrapOriginal()
         )
     })
 
     override fun callContract(
-        userNameOrId: String,
-        wif: String,
-        assetId: String,
-        feeAsset: String?,
-        contractId: String,
-        methodName: String,
-        methodParams: List<InputValue>,
-        value: String,
-        broadcastCallback: Callback<Boolean>,
-        resultCallback: Callback<String>?
+            userNameOrId: String,
+            wif: String,
+            assetId: String,
+            feeAsset: String?,
+            contractId: String,
+            methodName: String,
+            methodParams: List<InputValue>,
+            value: String,
+            broadcastCallback: Callback<Boolean>,
+            resultCallback: Callback<String>?
     ) = dispatch(Runnable {
         contractsFacade.callContract(
-            userNameOrId,
-            wif,
-            assetId,
-            feeAsset,
-            contractId,
-            methodName,
-            methodParams,
-            value,
-            broadcastCallback.wrapOriginal(),
-            resultCallback?.wrapOriginal()
+                userNameOrId,
+                wif,
+                assetId,
+                feeAsset,
+                contractId,
+                methodName,
+                methodParams,
+                value,
+                broadcastCallback.wrapOriginal(),
+                resultCallback?.wrapOriginal()
         )
     })
 
     override fun callContract(
-        userNameOrId: String,
-        wif: String,
-        assetId: String,
-        feeAsset: String?,
-        contractId: String,
-        code: String,
-        value: String,
-        broadcastCallback: Callback<Boolean>,
-        resultCallback: Callback<String>?
+            userNameOrId: String,
+            wif: String,
+            assetId: String,
+            feeAsset: String?,
+            contractId: String,
+            code: String,
+            value: String,
+            broadcastCallback: Callback<Boolean>,
+            resultCallback: Callback<String>?
     ) = dispatch(Runnable {
         contractsFacade.callContract(
-            userNameOrId,
-            wif,
-            assetId,
-            feeAsset,
-            contractId,
-            code,
-            value,
-            broadcastCallback.wrapOriginal(),
-            resultCallback?.wrapOriginal()
+                userNameOrId,
+                wif,
+                assetId,
+                feeAsset,
+                contractId,
+                code,
+                value,
+                broadcastCallback.wrapOriginal(),
+                resultCallback?.wrapOriginal()
         )
     })
 
     override fun queryContract(
-        userNameOrId: String,
-        assetId: String,
-        amount: String,
-        contractId: String,
-        methodName: String,
-        methodParams: List<InputValue>,
-        callback: Callback<String>
+            userNameOrId: String,
+            assetId: String,
+            amount: String,
+            contractId: String,
+            methodName: String,
+            methodParams: List<InputValue>,
+            callback: Callback<String>
     ) = dispatch(Runnable {
         contractsFacade.queryContract(
-            userNameOrId,
-            assetId,
-            amount,
-            contractId,
-            methodName,
-            methodParams,
-            callback
+                userNameOrId,
+                assetId,
+                amount,
+                contractId,
+                methodName,
+                methodParams,
+                callback
         )
     })
 
     override fun queryContract(
-        userNameOrId: String,
-        assetId: String,
-        amount: String,
-        contractId: String,
-        code: String,
-        callback: Callback<String>
+            userNameOrId: String,
+            assetId: String,
+            amount: String,
+            contractId: String,
+            code: String,
+            callback: Callback<String>
     ) = dispatch(Runnable {
         contractsFacade.queryContract(
-            userNameOrId,
-            assetId,
-            amount,
-            contractId,
-            code,
-            callback
+                userNameOrId,
+                assetId,
+                amount,
+                contractId,
+                code,
+                callback
         )
     })
 
     override fun getContractResult(
-        historyId: String,
-        callback: Callback<ContractResult>
+            historyId: String,
+            callback: Callback<ContractResult>
     ) = dispatch(Runnable {
         contractsFacade.getContractResult(
-            historyId,
-            callback
+                historyId,
+                callback
         )
     })
 
     override fun getContractLogs(
-        contractId: String,
-        fromBlock: String,
-        toBlock: String,
-        broadcastCallback: Callback<Boolean>,
-        resultCallback: Callback<List<ContractLog>>?
+            contractId: String,
+            fromBlock: String,
+            toBlock: String,
+            broadcastCallback: Callback<Boolean>,
+            resultCallback: Callback<List<ContractLog>>?
     ) = dispatch(Runnable {
         contractsFacade.getContractLogs(
-            contractId, fromBlock, toBlock, broadcastCallback, resultCallback
+                contractId, fromBlock, toBlock, broadcastCallback, resultCallback
         )
     })
 
     override fun generateEthereumAddress(
-        accountNameOrId: String,
-        wif: String,
-        broadcastCallback: Callback<Boolean>,
-        resultCallback: Callback<TransactionResult>?
+            accountNameOrId: String,
+            wif: String,
+            broadcastCallback: Callback<Boolean>,
+            resultCallback: TransactionResultCallback
     ) =
-        dispatch(Runnable {
-            ethereumSidechainFacade.generateEthereumAddress(
-                accountNameOrId, wif, broadcastCallback, resultCallback
-            )
-        })
+            dispatch(Runnable {
+                ethereumSidechainFacade.generateEthereumAddress(
+                        accountNameOrId, wif, broadcastCallback, resultCallback
+                )
+            })
 
     override fun ethWithdraw(
-        accountNameOrId: String,
-        wif: String,
-        ethAddress: String,
-        value: String,
-        feeAsset: String,
-        broadcastCallback: Callback<Boolean>,
-        resultCallback: Callback<TransactionResult>?
+            accountNameOrId: String,
+            wif: String,
+            ethAddress: String,
+            value: String,
+            feeAsset: String,
+            broadcastCallback: Callback<Boolean>,
+            resultCallback: TransactionResultCallback
     ) =
-        dispatch(Runnable {
-            ethereumSidechainFacade.ethWithdraw(
-                accountNameOrId,
-                wif,
-                ethAddress,
-                value,
-                feeAsset,
-                broadcastCallback,
-                resultCallback
-            )
-        })
+            dispatch(Runnable {
+                ethereumSidechainFacade.ethWithdraw(
+                        accountNameOrId,
+                        wif,
+                        ethAddress,
+                        value,
+                        feeAsset,
+                        broadcastCallback,
+                        resultCallback
+                )
+            })
 
     override fun btcWithdraw(
-        accountNameOrId: String,
-        wif: String,
-        btcAddress: String,
-        value: String,
-        feeAsset: String,
-        broadcastCallback: Callback<Boolean>,
-        resultCallback: Callback<TransactionResult>?
+            accountNameOrId: String,
+            wif: String,
+            btcAddress: String,
+            value: String,
+            feeAsset: String,
+            broadcastCallback: Callback<Boolean>,
+            resultCallback: TransactionResultCallback
     ) =
-        dispatch(Runnable {
-            bitcoinSidechainFacade.btcWithdraw(
-                accountNameOrId,
-                wif,
-                btcAddress,
-                value,
-                feeAsset,
-                broadcastCallback,
-                resultCallback
-            )
-        })
+            dispatch(Runnable {
+                bitcoinSidechainFacade.btcWithdraw(
+                        accountNameOrId,
+                        wif,
+                        btcAddress,
+                        value,
+                        feeAsset,
+                        broadcastCallback,
+                        resultCallback
+                )
+            })
 
     override fun getEthereumAddress(
-        accountNameOrId: String,
-        callback: Callback<EthAddress>
+            accountNameOrId: String,
+            callback: Callback<EthAddress>
     ) =
-        dispatch(Runnable {
-            ethereumSidechainFacade.getEthereumAddress(accountNameOrId, callback)
-        })
+            dispatch(Runnable {
+                ethereumSidechainFacade.getEthereumAddress(accountNameOrId, callback)
+            })
 
     override fun getAccountDeposits(
-        accountNameOrId: String,
-        sidechainType: SidechainType?,
-        callback: Callback<List<Deposit?>>
+            accountNameOrId: String,
+            sidechainType: SidechainType?,
+            callback: Callback<List<Deposit?>>
     ) =
-        dispatch(Runnable {
-            commonSidechainFacade.getAccountDeposits(accountNameOrId, sidechainType, callback)
-        })
+            dispatch(Runnable {
+                commonSidechainFacade.getAccountDeposits(accountNameOrId, sidechainType, callback)
+            })
 
     override fun getAccountWithdrawals(
-        accountNameOrId: String,
-        sidechainType: SidechainType?,
-        callback: Callback<List<Withdraw?>>
+            accountNameOrId: String,
+            sidechainType: SidechainType?,
+            callback: Callback<List<Withdraw?>>
     ) =
-        dispatch(Runnable {
-            commonSidechainFacade.getAccountWithdrawals(accountNameOrId, sidechainType, callback)
-        })
+            dispatch(Runnable {
+                commonSidechainFacade.getAccountWithdrawals(accountNameOrId, sidechainType, callback)
+            })
 
     override fun generateBitcoinAddress(
-        accountNameOrId: String,
-        wif: String,
-        backupAddress: String,
-        broadcastCallback: Callback<Boolean>,
-        resultCallback: Callback<TransactionResult>?
+            accountNameOrId: String,
+            wif: String,
+            backupAddress: String,
+            broadcastCallback: Callback<Boolean>,
+            resultCallback: TransactionResultCallback
     ) =
-        dispatch(Runnable {
-            bitcoinSidechainFacade.generateBitcoinAddress(
-                accountNameOrId, wif, backupAddress, broadcastCallback, resultCallback
-            )
-        })
+            dispatch(Runnable {
+                bitcoinSidechainFacade.generateBitcoinAddress(
+                        accountNameOrId, wif, backupAddress, broadcastCallback, resultCallback
+                )
+            })
 
     override fun getBitcoinAddress(accountNameOrId: String, callback: Callback<BtcAddress>) =
-        dispatch(Runnable {
-            bitcoinSidechainFacade.getBitcoinAddress(accountNameOrId, callback)
-        })
+            dispatch(Runnable {
+                bitcoinSidechainFacade.getBitcoinAddress(accountNameOrId, callback)
+            })
 
     override fun registerERC20Token(
-        accountNameOrId: String,
-        wif: String,
-        ethAddress: String,
-        name: String,
-        symbol: String,
-        decimals: String,
-        feeAsset: String,
-        broadcastCallback: Callback<Boolean>,
-        resultCallback: Callback<TransactionResult>?
+            accountNameOrId: String,
+            wif: String,
+            ethAddress: String,
+            name: String,
+            symbol: String,
+            decimals: String,
+            feeAsset: String,
+            broadcastCallback: Callback<Boolean>,
+            resultCallback: TransactionResultCallback
     ) =
-        dispatch(Runnable {
-            erc20SidechainFacade.registerERC20Token(
-                accountNameOrId,
-                wif,
-                ethAddress,
-                name,
-                symbol,
-                decimals,
-                feeAsset,
-                broadcastCallback,
-                resultCallback
-            )
-        })
+            dispatch(Runnable {
+                erc20SidechainFacade.registerERC20Token(
+                        accountNameOrId,
+                        wif,
+                        ethAddress,
+                        name,
+                        symbol,
+                        decimals,
+                        feeAsset,
+                        broadcastCallback,
+                        resultCallback
+                )
+            })
 
     override fun getERC20TokenByAddress(address: String, callback: Callback<ERC20Token>) =
-        dispatch(Runnable {
-            erc20SidechainFacade.getERC20TokenByAddress(
-                address, callback
-            )
-        })
+            dispatch(Runnable {
+                erc20SidechainFacade.getERC20TokenByAddress(
+                        address, callback
+                )
+            })
 
     override fun getERC20TokenByTokenId(tokenId: String, callback: Callback<ERC20Token>) =
-        dispatch(Runnable {
-            erc20SidechainFacade.getERC20TokenByTokenId(
-                tokenId, callback
-            )
-        })
+            dispatch(Runnable {
+                erc20SidechainFacade.getERC20TokenByTokenId(
+                        tokenId, callback
+                )
+            })
 
     override fun checkERC20Token(contractId: String, callback: Callback<Boolean>) =
-        dispatch(Runnable {
-            erc20SidechainFacade.checkERC20Token(
-                contractId, callback
-            )
-        })
+            dispatch(Runnable {
+                erc20SidechainFacade.checkERC20Token(
+                        contractId, callback
+                )
+            })
 
     override fun getERC20AccountDeposits(
-        accountNameOrId: String,
-        callback: Callback<List<ERC20Deposit>>
+            accountNameOrId: String,
+            callback: Callback<List<ERC20Deposit>>
     ) =
-        dispatch(Runnable {
-            erc20SidechainFacade.getERC20AccountDeposits(
-                accountNameOrId, callback
-            )
-        })
+            dispatch(Runnable {
+                erc20SidechainFacade.getERC20AccountDeposits(
+                        accountNameOrId, callback
+                )
+            })
 
     override fun getERC20AccountWithdrawals(
-        accountNameOrId: String,
-        callback: Callback<List<ERC20Withdrawal>>
+            accountNameOrId: String,
+            callback: Callback<List<ERC20Withdrawal>>
     ) =
-        dispatch(Runnable {
-            erc20SidechainFacade.getERC20AccountWithdrawals(
-                accountNameOrId, callback
-            )
-        })
+            dispatch(Runnable {
+                erc20SidechainFacade.getERC20AccountWithdrawals(
+                        accountNameOrId, callback
+                )
+            })
 
     override fun erc20Withdraw(
-        accountNameOrId: String,
-        wif: String,
-        ethAddress: String,
-        ethTokenId: String,
-        value: String,
-        feeAsset: String,
-        broadcastCallback: Callback<Boolean>,
-        resultCallback: Callback<TransactionResult>?
+            accountNameOrId: String,
+            wif: String,
+            ethAddress: String,
+            ethTokenId: String,
+            value: String,
+            feeAsset: String,
+            broadcastCallback: Callback<Boolean>,
+            resultCallback: TransactionResultCallback
     ) =
-        dispatch(Runnable {
-            erc20SidechainFacade.erc20Withdraw(
-                accountNameOrId,
-                wif,
-                ethAddress,
-                ethTokenId,
-                value,
-                feeAsset,
-                broadcastCallback,
-                resultCallback
-            )
-        })
+            dispatch(Runnable {
+                erc20SidechainFacade.erc20Withdraw(
+                        accountNameOrId,
+                        wif,
+                        ethAddress,
+                        ethTokenId,
+                        value,
+                        feeAsset,
+                        broadcastCallback,
+                        resultCallback
+                )
+            })
 
     override fun getContracts(
-        contractIds: List<String>,
-        callback: Callback<List<ContractInfo>>
+            contractIds: List<String>,
+            callback: Callback<List<ContractInfo>>
     ) =
-        dispatch(Runnable {
-            contractsFacade.getContracts(
-                contractIds,
-                callback
-            )
-        })
+            dispatch(Runnable {
+                contractsFacade.getContracts(
+                        contractIds,
+                        callback
+                )
+            })
 
     override fun getContract(
-        contractId: String,
-        callback: Callback<ContractStruct>
+            contractId: String,
+            callback: Callback<ContractStruct>
     ) =
-        dispatch(Runnable {
-            contractsFacade.getContract(
-                contractId,
-                callback
-            )
-        })
+            dispatch(Runnable {
+                contractsFacade.getContract(
+                        contractId,
+                        callback
+                )
+            })
 
     private fun <T> Callback<T>.wrapOriginal(): Callback<T> =
-        if (!returnOnMainThread) {
-            this
-        } else {
-            MainThreadCallback(this)
-        }
+            if (!returnOnMainThread) {
+                this
+            } else {
+                MainThreadCallback(this)
+            }
 
     private fun AccountListener.wrapOriginal(): AccountListener =
-        if (!returnOnMainThread) {
-            this
-        } else {
-            MainThreadAccountListener(
+            if (!returnOnMainThread) {
                 this
-            )
-        }
+            } else {
+                MainThreadAccountListener(
+                        this
+                )
+            }
 
     private fun <T> UpdateListener<T>.wrapOriginal(): UpdateListener<T> =
-        if (!returnOnMainThread) {
-            this
-        } else {
-            MainThreadUpdateListener(
+            if (!returnOnMainThread) {
                 this
-            )
-        }
+            } else {
+                MainThreadUpdateListener(
+                        this
+                )
+            }
 
     private fun dispatch(
-        job: Runnable
+            job: Runnable
     ) = dispatcher.dispatch(
-        job
+            job
     )
 
 }

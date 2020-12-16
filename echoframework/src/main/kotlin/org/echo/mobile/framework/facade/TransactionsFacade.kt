@@ -1,6 +1,7 @@
 package org.echo.mobile.framework.facade
 
 import org.echo.mobile.framework.Callback
+import org.echo.mobile.framework.model.socketoperations.TransactionResultCallback
 
 /**
  * Encapsulates logic, associated with various blockchain transactions processes
@@ -18,17 +19,16 @@ interface TransactionsFacade {
      * @param amount     Value amount of transfer operation
      * @param asset      Specific asset type id
      * @param feeAsset   Specific asset type id for calculating fee. If null - [asset] will be used
-     * @param callback   Listener of operation results.
-     *                   Retrieves true if transfer succeed,  otherwise - false
      */
     fun sendTransferOperation(
-        nameOrId: String,
-        wif: String,
-        toNameOrId: String,
-        amount: String,
-        asset: String,
-        feeAsset: String?,
-        callback: Callback<Boolean>
+            nameOrId: String,
+            wif: String,
+            toNameOrId: String,
+            amount: String,
+            asset: String,
+            feeAsset: String?,
+            broadcastCallback: Callback<Boolean>,
+            resultCallback: TransactionResultCallback
     )
 
 }

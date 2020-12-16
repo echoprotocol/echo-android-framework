@@ -2,7 +2,7 @@ package org.echo.mobile.framework.facade
 
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.model.BtcAddress
-import org.echo.mobile.framework.model.TransactionResult
+import org.echo.mobile.framework.model.socketoperations.TransactionResultCallback
 
 /**
  * Encapsulates logic, associated with bitcoin sidechain functionality
@@ -25,7 +25,7 @@ interface BitcoinSidechainFacade {
         wif: String,
         backupAddress: String,
         broadcastCallback: Callback<Boolean>,
-        resultCallback: Callback<TransactionResult>?
+        resultCallback: TransactionResultCallback
     )
 
     /**
@@ -47,7 +47,7 @@ interface BitcoinSidechainFacade {
         value: String,
         feeAsset: String,
         broadcastCallback: Callback<Boolean>,
-        resultCallback: Callback<TransactionResult>?
+        resultCallback: TransactionResultCallback
     )
 
 }
