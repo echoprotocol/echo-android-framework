@@ -49,25 +49,25 @@ class AuthorizationFragment : BaseFragment() {
                 })
         }
 
-        btnChangePassword.setOnClickListener {
-            progressListener?.toggle(true)
-            lib?.changeKeys(etName.text.toString(),
-                etPassword.text.toString(),
-                etNewPassword.text.toString(),
-                object : Callback<Any> {
-                    override fun onSuccess(result: Any) {
-                        clear()
-                        progressListener?.toggle(false)
-                        updateStatus("Password changed successfully")
-                    }
-
-                    override fun onError(error: LocalException) {
-                        error.printStackTrace()
-                        progressListener?.toggle(false)
-                        updateStatus("Error ${error.message ?: "empty"}")
-                    }
-                })
-        }
+//        btnChangePassword.setOnClickListener {
+//            progressListener?.toggle(true)
+//            lib?.changeKeys(etName.text.toString(),
+//                etPassword.text.toString(),
+//                etNewPassword.text.toString(),
+//                object : Callback<Any> {
+//                    override fun onSuccess(result: Any) {
+//                        clear()
+//                        progressListener?.toggle(false)
+//                        updateStatus("Password changed successfully")
+//                    }
+//
+//                    override fun onError(error: LocalException) {
+//                        error.printStackTrace()
+//                        progressListener?.toggle(false)
+//                        updateStatus("Error ${error.message ?: "empty"}")
+//                    }
+//                })
+//        }
 
     }
 

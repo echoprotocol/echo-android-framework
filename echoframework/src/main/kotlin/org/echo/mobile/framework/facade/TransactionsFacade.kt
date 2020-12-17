@@ -1,7 +1,8 @@
 package org.echo.mobile.framework.facade
 
 import org.echo.mobile.framework.Callback
-import org.echo.mobile.framework.model.socketoperations.TransactionResultCallback
+import org.echo.mobile.framework.model.TransactionResult
+import org.echo.mobile.framework.model.socketoperations.ResultCallback
 
 /**
  * Encapsulates logic, associated with various blockchain transactions processes
@@ -28,7 +29,7 @@ interface TransactionsFacade {
             asset: String,
             feeAsset: String?,
             broadcastCallback: Callback<Boolean>,
-            resultCallback: TransactionResultCallback
+            resultCallback: ResultCallback<TransactionResult>
     )
 
 }

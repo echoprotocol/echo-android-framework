@@ -29,22 +29,7 @@ import org.echo.mobile.framework.facade.internal.InitializerFacadeImpl
 import org.echo.mobile.framework.facade.internal.NotificationsHelper
 import org.echo.mobile.framework.facade.internal.SubscriptionFacadeImpl
 import org.echo.mobile.framework.facade.internal.TransactionsFacadeImpl
-import org.echo.mobile.framework.model.Asset
-import org.echo.mobile.framework.model.AssetAmount
-import org.echo.mobile.framework.model.Balance
-import org.echo.mobile.framework.model.Block
-import org.echo.mobile.framework.model.BtcAddress
-import org.echo.mobile.framework.model.Deposit
-import org.echo.mobile.framework.model.DynamicGlobalProperties
-import org.echo.mobile.framework.model.ERC20Deposit
-import org.echo.mobile.framework.model.ERC20Token
-import org.echo.mobile.framework.model.ERC20Withdrawal
-import org.echo.mobile.framework.model.EthAddress
-import org.echo.mobile.framework.model.FullAccount
-import org.echo.mobile.framework.model.GlobalProperties
-import org.echo.mobile.framework.model.HistoryResponse
-import org.echo.mobile.framework.model.SidechainType
-import org.echo.mobile.framework.model.Withdraw
+import org.echo.mobile.framework.model.*
 import org.echo.mobile.framework.model.contract.ContractBalance
 import org.echo.mobile.framework.model.contract.ContractFee
 import org.echo.mobile.framework.model.contract.ContractInfo
@@ -52,7 +37,7 @@ import org.echo.mobile.framework.model.contract.ContractLog
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
 import org.echo.mobile.framework.model.contract.input.InputValue
-import org.echo.mobile.framework.model.socketoperations.TransactionResultCallback
+import org.echo.mobile.framework.model.socketoperations.ResultCallback
 import org.echo.mobile.framework.service.AccountHistoryApiService
 import org.echo.mobile.framework.service.CryptoApiService
 import org.echo.mobile.framework.service.DatabaseApiService
@@ -156,12 +141,18 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
                 regularSubscriptionManager
         )
 
+        val transactionSubscriptionManager = TransactionSubscriptionManagerImpl(settings.network)
+
+        val notifiedTransactionsHelper =
+                NotificationsHelper(socketCoreComponent, transactionSubscriptionManager)
+
         authenticationFacade = AuthenticationFacadeImpl(
                 databaseApiService,
                 networkBroadcastApiService,
                 registrationService,
                 settings.cryptoComponent,
                 registrationNotificationsHelper,
+                notifiedTransactionsHelper,
                 settings.transactionExpirationDelaySeconds
         )
 
@@ -183,15 +174,11 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
                 settings.network
         )
 
-        val transactionSubscriptionManager = TransactionSubscriptionManagerImpl(settings.network)
-
-        val notifiedTransactionsHelper =
-                NotificationsHelper(socketCoreComponent, transactionSubscriptionManager)
-
         transactionsFacade = TransactionsFacadeImpl(
                 databaseApiService,
                 networkBroadcastApiService,
                 settings.cryptoComponent,
+                notifiedTransactionsHelper,
                 settings.transactionExpirationDelaySeconds
         )
 
@@ -204,6 +191,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
                 databaseApiService,
                 networkBroadcastApiService,
                 settings.cryptoComponent,
+                notifiedTransactionsHelper,
                 settings.transactionExpirationDelaySeconds
         )
         contractsFacade = ContractsFacadeImpl(
@@ -215,16 +203,21 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
                 feeRatioProvider,
                 settings.transactionExpirationDelaySeconds
         )
+
+        val notifiedWalletHelper =
+                NotificationsHelper(socketCoreComponent, transactionSubscriptionManager)
         ethereumSidechainFacade = EthereumSidechainFacadeImpl(
                 databaseApiService,
                 networkBroadcastApiService,
                 settings.cryptoComponent,
+                notifiedWalletHelper,
                 settings.transactionExpirationDelaySeconds
         )
         bitcoinSidechainFacade = BitcoinSidechainFacadeImpl(
                 databaseApiService,
                 networkBroadcastApiService,
                 settings.cryptoComponent,
+                notifiedWalletHelper,
                 settings.transactionExpirationDelaySeconds
         )
         commonSidechainFacade = CommonSidechainFacadeImpl(databaseApiService)
@@ -232,6 +225,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
                 databaseApiService,
                 networkBroadcastApiService,
                 settings.cryptoComponent,
+                notifiedWalletHelper,
                 settings.transactionExpirationDelaySeconds
         )
     }
@@ -256,7 +250,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             oldWif: String,
             newWif: String,
             broadcastCallback: Callback<Boolean>,
-            resultCallback: TransactionResultCallback
+            resultCallback: ResultCallback<TransactionResult>
     ) = dispatch(Runnable {
         authenticationFacade.changeKeys(
                 name,
@@ -271,14 +265,16 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             userName: String,
             wif: String,
             evmAddress: String?,
-            callback: Callback<Boolean>
+            broadcastCallback: Callback<Boolean>,
+            resultCallback: ResultCallback<RegistrationResult>
     ) =
             dispatch(Runnable {
                 authenticationFacade.register(
                         userName,
                         wif,
                         evmAddress,
-                        callback.wrapOriginal()
+                        broadcastCallback.wrapOriginal(),
+                        resultCallback
                 )
             })
 
@@ -530,7 +526,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             wif: String,
             asset: Asset,
             broadcastCallback: Callback<Boolean>,
-            resultCallback: TransactionResultCallback
+            resultCallback: ResultCallback<TransactionResult>
     ) = dispatch(Runnable {
         assetsFacade.createAsset(
                 name, wif,
@@ -546,7 +542,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             amount: String,
             destinationIdOrName: String,
             broadcastCallback: Callback<Boolean>,
-            resultCallback: TransactionResultCallback
+            resultCallback: ResultCallback<TransactionResult>
     ) = dispatch(Runnable {
         assetsFacade.issueAsset(
                 issuerNameOrId,
@@ -605,7 +601,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             asset: String,
             feeAsset: String?,
             broadcastCallback: Callback<Boolean>,
-            resultCallback: TransactionResultCallback
+            resultCallback: ResultCallback<TransactionResult>
     ) {
         transactionsFacade.sendTransferOperation(
                 nameOrId,
@@ -773,7 +769,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             accountNameOrId: String,
             wif: String,
             broadcastCallback: Callback<Boolean>,
-            resultCallback: TransactionResultCallback
+            resultCallback: ResultCallback<TransactionResult>
     ) =
             dispatch(Runnable {
                 ethereumSidechainFacade.generateEthereumAddress(
@@ -788,7 +784,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             value: String,
             feeAsset: String,
             broadcastCallback: Callback<Boolean>,
-            resultCallback: TransactionResultCallback
+            resultCallback: ResultCallback<TransactionResult>
     ) =
             dispatch(Runnable {
                 ethereumSidechainFacade.ethWithdraw(
@@ -809,7 +805,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             value: String,
             feeAsset: String,
             broadcastCallback: Callback<Boolean>,
-            resultCallback: TransactionResultCallback
+            resultCallback: ResultCallback<TransactionResult>
     ) =
             dispatch(Runnable {
                 bitcoinSidechainFacade.btcWithdraw(
@@ -854,7 +850,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             wif: String,
             backupAddress: String,
             broadcastCallback: Callback<Boolean>,
-            resultCallback: TransactionResultCallback
+            resultCallback: ResultCallback<TransactionResult>
     ) =
             dispatch(Runnable {
                 bitcoinSidechainFacade.generateBitcoinAddress(
@@ -876,7 +872,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             decimals: String,
             feeAsset: String,
             broadcastCallback: Callback<Boolean>,
-            resultCallback: TransactionResultCallback
+            resultCallback: ResultCallback<TransactionResult>
     ) =
             dispatch(Runnable {
                 erc20SidechainFacade.registerERC20Token(
@@ -903,6 +899,13 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             dispatch(Runnable {
                 erc20SidechainFacade.getERC20TokenByTokenId(
                         tokenId, callback
+                )
+            })
+
+    override fun getERC20TokenByContractId(contractId: String, callback: Callback<ERC20Token>) =
+            dispatch(Runnable {
+                erc20SidechainFacade.getERC20TokenByContractId(
+                        contractId, callback
                 )
             })
 
@@ -941,7 +944,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
             value: String,
             feeAsset: String,
             broadcastCallback: Callback<Boolean>,
-            resultCallback: TransactionResultCallback
+            resultCallback: ResultCallback<TransactionResult>
     ) =
             dispatch(Runnable {
                 erc20SidechainFacade.erc20Withdraw(

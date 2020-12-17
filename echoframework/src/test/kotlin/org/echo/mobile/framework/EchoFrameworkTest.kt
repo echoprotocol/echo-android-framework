@@ -11,7 +11,7 @@ import org.echo.mobile.framework.model.contract.input.ContractInputEncoder
 import org.echo.mobile.framework.model.contract.input.InputValue
 import org.echo.mobile.framework.model.contract.input.StringInputValueType
 import org.echo.mobile.framework.model.network.Echodevnet
-import org.echo.mobile.framework.model.socketoperations.TransactionResultCallback
+import org.echo.mobile.framework.model.socketoperations.ResultCallback
 import org.echo.mobile.framework.service.UpdateListener
 import org.echo.mobile.framework.support.*
 import org.echo.mobile.framework.support.concurrent.future.FutureTask
@@ -50,7 +50,7 @@ class EchoFrameworkTest {
     private val legalContractParamsId = "1.11.94" //259 //256
     private val legalTokenId = "1.11.95"
     private val accountId = "1.2.22"
-    private val login = "pas3"
+    private val login = "pas7"
     private val wif = "5JikeywbQTU56X1AbtNi3jPR6e2xqSbXog9CZaa3jk7EURymhf9"
     private val secondAccountId = "1.2.45"
     private val secondLogin = "daria2"
@@ -397,8 +397,6 @@ class EchoFrameworkTest {
         val framework = initFramework()
 
         val futureChangePassword = FutureTask<Boolean>()
-        val futureChangePasswordResult = FutureTask<Int>()
-
         if (connect(framework) == false) fail("Connection error")
 
         val oldWif = "5J3UbadSyzzcQQ7HEfTr2brhJJpHhx3NsMzrvgzfysBesutNRCm"
@@ -409,11 +407,19 @@ class EchoFrameworkTest {
                 oldWif,
                 newWif,
                 futureChangePassword.completeCallback(),
-                TransactionResultCallback { }
+                ResultCallback(object : Callback<TransactionResult> {
+                    override fun onSuccess(result: TransactionResult) {
+                        println(result.toString())
+                    }
+
+                    override fun onError(error: LocalException) {
+                        fail(error.message)
+                    }
+
+                })
         )
 
         assertTrue(futureChangePassword.get() ?: false)
-        println(futureChangePasswordResult.get())
     }
 
     @Test
@@ -421,6 +427,7 @@ class EchoFrameworkTest {
         val framework = initFramework()
 
         val futureChangePassword = FutureTask<Boolean>()
+        val futureResult = FutureTask<Boolean>()
 
         if (connect(framework) == false) fail("Connection error")
 
@@ -438,13 +445,22 @@ class EchoFrameworkTest {
                     }
 
                 },
-                TransactionResultCallback { result ->
-                    result.value { println(it) }
-                    result.error { fail(it.message) }
-                }
+                ResultCallback(object : Callback<TransactionResult> {
+                    override fun onSuccess(result: TransactionResult) {
+                        println(result.toString())
+                        futureResult.setComplete(true)
+                    }
+
+                    override fun onError(error: LocalException) {
+                        error.printStackTrace()
+                        futureResult.setComplete(error)
+                    }
+
+                })
         )
 
         assertNotNull(futureChangePassword.get() ?: false)
+        assertNotNull(futureResult.get() ?: false)
     }
 
     @Test
@@ -452,13 +468,14 @@ class EchoFrameworkTest {
         val framework = initFramework()
 
         val futureChangePassword = FutureTask<Boolean>()
+        val futureResult = FutureTask<Boolean>()
 
         if (connect(framework) == false) fail("Connection error")
 
         framework.generateBitcoinAddress(
                 login,
                 wif,
-                "2N3oefVeg6stiTb5Kh3ozCSkaqmx91FDbsm",
+                "mkHS9ne12qx9pS9VojpwU5xtRd4T7X7ZUt",
                 object : Callback<Boolean> {
                     override fun onSuccess(result: Boolean) {
                         futureChangePassword.setComplete(result)
@@ -470,13 +487,21 @@ class EchoFrameworkTest {
                     }
 
                 },
-                TransactionResultCallback { result ->
-                    result.value { println(it) }
-                    result.error { fail(it.message) }
-                }
+                ResultCallback(object : Callback<TransactionResult> {
+                    override fun onSuccess(result: TransactionResult) {
+                        println(result.toString())
+                        futureResult.setComplete(true)
+                    }
+
+                    override fun onError(error: LocalException) {
+                        futureResult.setComplete(false)
+                    }
+
+                })
         )
 
         assertNotNull(futureChangePassword.get() ?: false)
+        assertNotNull(futureResult.get() ?: false)
     }
 
     @Test
@@ -488,9 +513,10 @@ class EchoFrameworkTest {
         if (connect(framework) == false) fail("Connection error")
 
         framework.getEthereumAddress(
-                "pas1",
+                login,
                 object : Callback<EthAddress> {
                     override fun onSuccess(result: EthAddress) {
+                        println(result)
                         futureEthereum.setComplete(result)
                     }
 
@@ -697,12 +723,13 @@ class EchoFrameworkTest {
         val framework = initFramework()
 
         val futureChangePassword = FutureTask<Boolean>()
+        val futureResult = FutureTask<Boolean>()
 
         if (connect(framework) == false) fail("Connection error")
 
         framework.registerERC20Token(
-                "dima1",
-                "5J3UbadSyzzcQQ7HEfTr2brhJJpHhx3NsMzrvgzfysBesutNRCm",
+                login,
+                wif,
                 "0x724d1b69a7ba352f11d73fdbdeb7ff869cb22e19",
                 "DIMASIKERC",
                 "DMSSSERC",
@@ -719,11 +746,21 @@ class EchoFrameworkTest {
                     }
 
                 },
-                TransactionResultCallback { result ->
-                    result.value { println(it) }
-                    result.error { fail(it.message) }
-                }
+                ResultCallback(object : Callback<TransactionResult> {
+                    override fun onSuccess(result: TransactionResult) {
+                        println(result.toString())
+                        futureResult.setComplete(true)
+                    }
+
+                    override fun onError(error: LocalException) {
+                        futureResult.setComplete(false)
+                    }
+
+                })
         )
+
+        assertNotNull(futureChangePassword.get() ?: false)
+        assertNotNull(futureResult.get() ?: false)
     }
 
     @Test
@@ -855,10 +892,16 @@ class EchoFrameworkTest {
                     }
 
                 },
-                TransactionResultCallback { result ->
-                    result.value { println(it) }
-                    result.error { fail(it.message) }
-                }
+                ResultCallback(object : Callback<TransactionResult> {
+                    override fun onSuccess(result: TransactionResult) {
+                        println(result.toString())
+                    }
+
+                    override fun onError(error: LocalException) {
+                        fail(error.message)
+                    }
+
+                })
         )
 
         val result = future.get()
@@ -933,6 +976,7 @@ class EchoFrameworkTest {
         val framework = initFramework()
 
         val futureRegistration = FutureTask<Boolean>()
+        val futureCompletion = FutureTask<Boolean>()
 
         if (connect(framework) == false) fail("Connection error")
 
@@ -940,9 +984,9 @@ class EchoFrameworkTest {
 //        val wif = cryptoCoreComponent.encodeToWif(randomPrivateKey)
 
         framework.register(
-                userName = login,
+                userName = "dude2",
                 wif = wif,
-                callback = object : Callback<Boolean> {
+                broadcastCallback = object : Callback<Boolean> {
                     override fun onSuccess(result: Boolean) {
                         futureRegistration.setComplete(true)
                     }
@@ -951,11 +995,26 @@ class EchoFrameworkTest {
                         futureRegistration.setComplete(false)
                     }
 
-                })
+                },
+                resultCallback = ResultCallback(object : Callback<RegistrationResult> {
+                    override fun onSuccess(result: RegistrationResult) {
+                        println(result.txId)
+                        futureCompletion.setComplete(true)
+                    }
 
+                    override fun onError(error: LocalException) {
+                        futureCompletion.setComplete(false)
+                    }
+
+                }))
+
+        val completed = futureCompletion.get() ?: false
+
+        assertTrue(completed)
         val registered = futureRegistration.get() ?: false
 
         assertTrue(registered)
+
     }
 
 //    @Test
@@ -991,24 +1050,41 @@ class EchoFrameworkTest {
     fun registrationFailureTest() {
         val framework = initFramework()
 
-        val futureChangePassword = FutureTask<Boolean>()
+        val futureRegistration = FutureTask<Boolean>()
+        val futureCompletion = FutureTask<Boolean>()
 
         if (connect(framework) == false) fail("Connection error")
 
         framework.register(
                 userName = "init1", wif = "5KjC8BiryoxUNz3dEY2ZWQK5ssmD84JgRGemVWwxfNgiPoxcaVa",
-                callback = object : Callback<Boolean> {
+                broadcastCallback = object : Callback<Boolean> {
                     override fun onSuccess(result: Boolean) {
-                        futureChangePassword.setComplete(true)
+                        futureRegistration.setComplete(true)
                     }
 
                     override fun onError(error: LocalException) {
-                        futureChangePassword.setComplete(false)
+                        futureRegistration.setComplete(false)
                     }
 
-                })
+                },
+                resultCallback = ResultCallback(object : Callback<RegistrationResult> {
+                    override fun onSuccess(result: RegistrationResult) {
+                        println(result.txId)
+                        futureCompletion.setComplete(true)
+                    }
 
-        assertFalse(futureChangePassword.get() ?: false)
+                    override fun onError(error: LocalException) {
+                        futureCompletion.setComplete(false)
+                    }
+
+                }))
+
+        val completed = futureCompletion.get() ?: false
+
+        assertTrue(completed)
+        val registered = futureRegistration.get() ?: false
+
+        assertTrue(registered)
     }
 
     @Test
@@ -1030,7 +1106,17 @@ class EchoFrameworkTest {
 
         thread {
             Thread.sleep(3000)
-            sendAmount(framework, EmptyCallback(), TransactionResultCallback {})
+            sendAmount(framework, EmptyCallback(),
+                    ResultCallback(object : Callback<TransactionResult> {
+                        override fun onSuccess(result: TransactionResult) {
+                            println(result.toString())
+                        }
+
+                        override fun onError(error: LocalException) {
+                            fail(error.message)
+                        }
+
+                    }))
         }
 
         assertNotNull(futureSubscriptionById.get(1, TimeUnit.MINUTES))
@@ -1055,7 +1141,17 @@ class EchoFrameworkTest {
 
         thread {
             Thread.sleep(3000)
-            sendAmount(framework, EmptyCallback(), TransactionResultCallback {})
+            sendAmount(framework, EmptyCallback(),
+                    ResultCallback(object : Callback<TransactionResult> {
+                        override fun onSuccess(result: TransactionResult) {
+                            println(result.toString())
+                        }
+
+                        override fun onError(error: LocalException) {
+                            fail(error.message)
+                        }
+
+                    }))
         }
 
         assertNotNull(futureSubscriptionByName.get(1, TimeUnit.MINUTES))
@@ -1064,7 +1160,7 @@ class EchoFrameworkTest {
 
     private fun sendAmount(framework: EchoFramework,
                            broadcastCallback: Callback<Boolean>,
-                           resultCallback: TransactionResultCallback) {
+                           resultCallback: ResultCallback<TransactionResult>) {
         framework.sendTransferOperation(
                 login,
                 wif,
@@ -1102,7 +1198,17 @@ class EchoFrameworkTest {
 
         thread {
             Thread.sleep(3000)
-            sendAmount(framework, EmptyCallback(), TransactionResultCallback {})
+            sendAmount(framework, EmptyCallback(),
+                    ResultCallback(object : Callback<TransactionResult> {
+                        override fun onSuccess(result: TransactionResult) {
+                            println(result.toString())
+                        }
+
+                        override fun onError(error: LocalException) {
+                            fail(error.message)
+                        }
+
+                    }))
 
             Thread.sleep(30000)
             futureSubscriptionBlockchainData.cancel()
@@ -1132,7 +1238,17 @@ class EchoFrameworkTest {
 
         thread {
             Thread.sleep(3000)
-            sendAmount(framework, EmptyCallback(), TransactionResultCallback {})
+            sendAmount(framework, EmptyCallback(),
+                    ResultCallback(object : Callback<TransactionResult> {
+                        override fun onSuccess(result: TransactionResult) {
+                            println(result.toString())
+                        }
+
+                        override fun onError(error: LocalException) {
+                            fail(error.message)
+                        }
+
+                    }))
 
             Thread.sleep(50000)
             futureSubscriptionBlock.cancel()
@@ -1288,9 +1404,17 @@ class EchoFrameworkTest {
                 asset = "1.3.0",
                 feeAsset = "1.3.0",
                 broadcastCallback = futureTransfer.completeCallback(),
-                resultCallback = TransactionResultCallback {
-                    println(it.toString())
-                }
+                resultCallback =
+                ResultCallback(object : Callback<TransactionResult> {
+                    override fun onSuccess(result: TransactionResult) {
+                        println(result.toString())
+                    }
+
+                    override fun onError(error: LocalException) {
+                        fail(error.message)
+                    }
+
+                })
         )
 
         println(futureTransfer.get())
@@ -1487,6 +1611,7 @@ class EchoFrameworkTest {
         if (connect(framework) == false) fail("Connection error")
 
         val broadcastFuture = FutureTask<Boolean>()
+        val resultFuture = FutureTask<Boolean>()
 
         val asset = configureAsset()
 
@@ -1495,13 +1620,21 @@ class EchoFrameworkTest {
                 wif,
                 asset,
                 broadcastFuture.completeCallback(),
-                TransactionResultCallback { result ->
-                    result.value { println(it) }
-                    result.error { fail(it.message) }
-                }
+                ResultCallback(object : Callback<TransactionResult> {
+                    override fun onSuccess(result: TransactionResult) {
+                        println(result.toString())
+                        resultFuture.setComplete(true)
+                    }
+
+                    override fun onError(error: LocalException) {
+                        resultFuture.setComplete(false)
+                    }
+
+                })
         )
 
         assertTrue(broadcastFuture.get() ?: false)
+        assertTrue(resultFuture.get() ?: false)
     }
 
     @Test
@@ -1519,10 +1652,17 @@ class EchoFrameworkTest {
                 amount = "1",
                 destinationIdOrName = secondLogin,
                 broadcastCallback = futureIssue.completeCallback(),
-                resultCallback = TransactionResultCallback { result ->
-                    result.value { assertTrue(it) }
-                    result.error { fail(it.message) }
-                }
+                resultCallback =
+                ResultCallback(object : Callback<TransactionResult> {
+                    override fun onSuccess(result: TransactionResult) {
+                        println(result.toString())
+                    }
+
+                    override fun onError(error: LocalException) {
+                        fail(error.message)
+                    }
+
+                })
         )
 
         assertTrue(futureIssue.get() ?: false)

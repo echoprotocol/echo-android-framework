@@ -2,7 +2,9 @@ package org.echo.mobile.framework.facade
 
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.model.FullAccount
-import org.echo.mobile.framework.model.socketoperations.TransactionResultCallback
+import org.echo.mobile.framework.model.RegistrationResult
+import org.echo.mobile.framework.model.TransactionResult
+import org.echo.mobile.framework.model.socketoperations.ResultCallback
 
 /**
  * Encapsulates logic, associated with user authentication and account configuration processes
@@ -35,7 +37,7 @@ interface AuthenticationFacade {
             oldWif: String,
             newWif: String,
             broadcastCallback: Callback<Boolean>,
-            resultCallback: TransactionResultCallback
+            resultCallback: ResultCallback<TransactionResult>
     )
 
     /**
@@ -47,7 +49,8 @@ interface AuthenticationFacade {
             userName: String,
             wif: String,
             evmAddress: String? = null,
-            callback: Callback<Boolean>
+            broadcastCallback: Callback<Boolean>,
+            resultCallback: ResultCallback<RegistrationResult>
     )
 
 }

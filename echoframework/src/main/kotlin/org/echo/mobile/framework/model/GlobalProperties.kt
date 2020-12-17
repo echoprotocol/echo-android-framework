@@ -50,10 +50,14 @@ class Parameters {
     val echorandConfig: EchorandConfig? = null
     @SerializedName("max_authority_depth")
     val maxAuthorityDepth: String? = null
+    @SerializedName("balance_unfreezing_time")
+    val balanceUnfreezingTime: String? = null
     @SerializedName("committee_proposal_review_period")
     val committeeProposalReviewPeriod: String? = null
     @SerializedName("sidechain_config")
     val sidechainConfig: SidechainConfig? = null
+    @SerializedName("economy_config")
+    val economyConfig: EconomyConfig? = null
     @SerializedName("gas_price")
     val gasPrice: GasPrice? = null
     @SerializedName("maximum_transaction_size")
@@ -212,6 +216,22 @@ class SidechainConfig {
     var erc20WithdrawTopic: String? = null
     @SerializedName("gas_price")
     var gasPrice: String? = null
+}
+
+/**
+ * Describes all economy configs
+ */
+class EconomyConfig {
+    @SerializedName("blocks_in_interval")
+    var blockInInterval: String? = null
+    @SerializedName("maintenances_in_interval")
+    var maintenancesInInterval: String? = null
+    @SerializedName("block_emission_amount")
+    var blockEmissionAmount: String? = null
+    @SerializedName("block_producer_reward_ratio")
+    var blockProducerRewardRatio: String? = null
+    @SerializedName("pool_divider")
+    var poolDivider: String? = null
 }
 
 /**

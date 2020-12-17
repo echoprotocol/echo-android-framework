@@ -2,7 +2,8 @@ package org.echo.mobile.framework.facade
 
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.model.Asset
-import org.echo.mobile.framework.model.socketoperations.TransactionResultCallback
+import org.echo.mobile.framework.model.TransactionResult
+import org.echo.mobile.framework.model.socketoperations.ResultCallback
 
 /**
  * Encapsulates logic, associated with echo blockchain assets use cases
@@ -22,7 +23,7 @@ interface AssetsFacade {
         wif: String,
         asset: Asset,
         broadcastCallback: Callback<Boolean>,
-        resultCallback: TransactionResultCallback
+        resultCallback: ResultCallback<TransactionResult>
     )
 
     /**
@@ -36,7 +37,7 @@ interface AssetsFacade {
         amount: String,
         destinationIdOrName: String,
         broadcastCallback: Callback<Boolean>,
-        resultCallback: TransactionResultCallback
+        resultCallback: ResultCallback<TransactionResult>
     )
 
     /**

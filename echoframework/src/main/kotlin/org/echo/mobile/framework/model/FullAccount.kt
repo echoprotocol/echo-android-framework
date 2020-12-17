@@ -14,7 +14,7 @@ import java.lang.reflect.Type
  *
  * @author Daria Pechkovskaya
  */
-data class FullAccount(
+class FullAccount(
     @Expose var account: Account? = null,
     @SerializedName("registrar_name") @Expose var registrarName: String? = null,
     @Expose var balances: List<Balance>? = null,

@@ -15,7 +15,7 @@ import org.echo.mobile.framework.model.eddsa.EdAddress
 import org.echo.mobile.framework.model.eddsa.EdAuthority
 import org.echo.mobile.framework.model.operations.AccountUpdateOperation
 import org.echo.mobile.framework.model.operations.AccountUpdateOperationBuilder
-import org.echo.mobile.framework.model.socketoperations.TransactionResultCallback
+import org.echo.mobile.framework.model.socketoperations.ResultCallback
 import org.echo.mobile.framework.service.DatabaseApiService
 import org.echo.mobile.framework.service.NetworkBroadcastApiService
 import org.echo.mobile.framework.service.RegistrationApiService
@@ -36,7 +36,8 @@ class AuthenticationFacadeImpl(
         private val networkBroadcastApiService: NetworkBroadcastApiService,
         private val registrationApiService: RegistrationApiService,
         private val cryptoCoreComponent: CryptoCoreComponent,
-        private val notificationsHelper: NotificationsHelper<RegistrationResult>,
+        private val registrationNotificationsHelper: NotificationsHelper<RegistrationResult>,
+        private val transactionNotificationsHelper: NotificationsHelper<TransactionResult>,
         private val transactionExpirationDelay: Long
 ) : BaseTransactionsFacade(databaseApiService, cryptoCoreComponent, transactionExpirationDelay),
         AuthenticationFacade {
@@ -67,7 +68,7 @@ class AuthenticationFacadeImpl(
             oldWif: String,
             newWif: String,
             broadcastCallback: Callback<Boolean>,
-            resultCallback: TransactionResultCallback
+            resultCallback: ResultCallback<TransactionResult>
     ) {
         try {
             val accountId = getAccountIdByWif(name, oldWif)
@@ -87,9 +88,12 @@ class AuthenticationFacadeImpl(
             val transaction = configureTransaction(operation, privateKey, ECHO_ASSET_ID)
 
             val broadcastTransaction = networkBroadcastApiService
-                    .broadcastTransaction(transaction)
+                    .broadcastTransactionWithCallback(transaction)
             broadcastCallback.onSuccess(true)
-            resultCallback.processResult(broadcastTransaction)
+            retrieveTransactionResult(
+                    broadcastTransaction.dematerialize().toString(),
+                    resultCallback.get()
+            )
         } catch (ex: Exception) {
             broadcastCallback.onError(ex as? LocalException ?: LocalException(ex))
         }
@@ -99,7 +103,8 @@ class AuthenticationFacadeImpl(
             userName: String,
             wif: String,
             evmAddress: String?,
-            callback: Callback<Boolean>
+            broadcastCallback: Callback<Boolean>,
+            resultCallback: ResultCallback<RegistrationResult>
     ) {
         try {
             val registrationTask = registrationApiService.requestRegistrationTask().dematerialize()
@@ -125,12 +130,16 @@ class AuthenticationFacadeImpl(
             ).dematerialize()
 
             if (callId == -1) {
-                callback.onError(NotFoundException("Result of operation not found."))
+                broadcastCallback.onError(NotFoundException("Result of operation not found."))
             } else {
-                retrieveTransactionResult(callId.toString(), callback)
+                broadcastCallback.onSuccess(true)
+                retrieveRegistrationResult(
+                        callId.toString(),
+                        resultCallback.get()
+                )
             }
         } catch (ex: Exception) {
-            callback.onError(LocalException("Can't register account", cause = ex))
+            broadcastCallback.onError(LocalException("Can't register account", cause = ex))
         }
     }
 
@@ -176,20 +185,44 @@ class AuthenticationFacadeImpl(
         return account?.account?.isEqualsByKey(address) ?: false
     }
 
+    private fun retrieveRegistrationResult(
+            callId: String,
+            callback: Callback<RegistrationResult>
+    ) {
+        try {
+            val future = FutureTask<RegistrationResult>()
+            registrationNotificationsHelper.subscribeOnResult(
+                    callId,
+                    future.completeCallback()
+            )
+
+            val result = future.get()
+                    ?: throw NotFoundException("Result of operation not found.")
+
+            callback.onSuccess(result)
+        } catch (ex: Exception) {
+            callback.onError(ex as? LocalException ?: LocalException(ex))
+        }
+    }
+
     private fun retrieveTransactionResult(
             callId: String,
-            callback: Callback<Boolean>
+            callback: Callback<TransactionResult>
     ) {
-        val future = FutureTask<RegistrationResult>()
-        notificationsHelper.subscribeOnResult(
-                callId,
-                future.completeCallback()
-        )
+        try {
+            val future = FutureTask<TransactionResult>()
+            transactionNotificationsHelper.subscribeOnResult(
+                    callId,
+                    future.completeCallback()
+            )
 
-        future.get()
-                ?: throw NotFoundException("Result of operation not found.")
+            val result = future.get()
+                    ?: throw NotFoundException("Result of operation not found.")
 
-        callback.onSuccess(true)
+            callback.onSuccess(result)
+        } catch (ex: Exception) {
+            callback.onError(ex as? LocalException ?: LocalException(ex))
+        }
     }
 
     private fun getAccountIdByWif(name: String, wif: String): String {
