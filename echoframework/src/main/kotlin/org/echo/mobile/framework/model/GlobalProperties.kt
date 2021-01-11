@@ -224,8 +224,6 @@ class SidechainConfig {
 class EconomyConfig {
     @SerializedName("blocks_in_interval")
     var blockInInterval: String? = null
-    @SerializedName("maintenances_in_interval")
-    var maintenancesInInterval: String? = null
     @SerializedName("block_emission_amount")
     var blockEmissionAmount: String? = null
     @SerializedName("block_producer_reward_ratio")

@@ -429,7 +429,7 @@ class EchoFrameworkImpl internal constructor(settings: Settings) : EchoFramework
     override fun getBalance(
             nameOrId: String,
             asset: String,
-            callback: Callback<Balance>
+            callback: Callback<AccountBalance>
     ) =
             dispatch(Runnable {
                 informationFacade.getBalance(nameOrId, asset, callback.wrapOriginal())

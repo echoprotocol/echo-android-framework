@@ -24,28 +24,28 @@ import java.security.Security
 class NetworkBroadcastApiServiceTest {
 
     private val cryptoCoreComponent =
-        CryptoCoreComponentImpl(NaCLKeyPairCryptoAdapter())
+            CryptoCoreComponentImpl(NaCLKeyPairCryptoAdapter())
 
     private lateinit var transaction: Transaction
 
     @Before
     fun setUp() {
         val transfer = TransferOperationBuilder()
-            .setFrom(Account("1.2.18"))
-            .setTo(Account("1.2.18"))
-            .setAmount(AssetAmount(UnsignedLong.ONE, Asset("1.3.0")))
-            .build()
+                .setFrom(Account("1.2.18"))
+                .setTo(Account("1.2.18"))
+                .setAmount(AssetAmount(UnsignedLong.ONE, Asset("1.3.0")))
+                .build()
 
         val blockData = BlockData(1, 1, 1)
         val chainId = Hex.toHexString("chainId".toByteArray())
 
         val privateKey =
-            cryptoCoreComponent.getEdDSAPrivateKey()
+                cryptoCoreComponent.getEdDSAPrivateKey()
 
         transaction = Transaction(
-            blockData,
-            listOf(transfer),
-            chainId
+                blockData,
+                listOf(transfer),
+                chainId
         ).apply { addPrivateKey(privateKey) }
 
         Security.addProvider(EdDSASecurityProvider())
@@ -56,11 +56,11 @@ class NetworkBroadcastApiServiceTest {
         val socketCoreComponent = ServiceSocketCoreComponentMock(true)
 
         val networkBroadcastApiService =
-            NetworkBroadcastApiServiceImpl(socketCoreComponent, cryptoCoreComponent)
+                NetworkBroadcastApiServiceImpl(socketCoreComponent, cryptoCoreComponent)
 
         networkBroadcastApiService.broadcastTransaction(transaction)
-            .value { /*assertTrue(it)*/ }
-            .error { fail() }
+                .value { assertTrue(it) }
+                .error { fail() }
     }
 
     @Test
@@ -68,11 +68,11 @@ class NetworkBroadcastApiServiceTest {
         val socketCoreComponent = ServiceSocketCoreComponentMock(false)
 
         val networkBroadcastApiService =
-            NetworkBroadcastApiServiceImpl(socketCoreComponent, cryptoCoreComponent)
+                NetworkBroadcastApiServiceImpl(socketCoreComponent, cryptoCoreComponent)
 
         networkBroadcastApiService.broadcastTransaction(transaction)
-            .value { /*assertFalse(it)*/ }
-            .error { fail() }
+                .value { assertFalse(it) }
+                .error { fail() }
     }
 
     @Test
@@ -80,14 +80,14 @@ class NetworkBroadcastApiServiceTest {
         val socketCoreComponent = ServiceSocketCoreComponentMock(null)
 
         val networkBroadcastApiService =
-            NetworkBroadcastApiServiceImpl(socketCoreComponent, cryptoCoreComponent)
+                NetworkBroadcastApiServiceImpl(socketCoreComponent, cryptoCoreComponent)
 
         networkBroadcastApiService.broadcastTransaction(transaction)
-            .value { fail() }
-            .error {
-                assertNotNull(it)
-                assertTrue(it is LocalException)
-            }
+                .value { fail() }
+                .error {
+                    assertNotNull(it)
+                    assertTrue(it is LocalException)
+                }
     }
 
 }

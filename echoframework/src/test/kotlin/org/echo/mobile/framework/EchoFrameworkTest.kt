@@ -338,11 +338,11 @@ class EchoFrameworkTest {
     fun getBalanceTest() {
         val framework = initFramework()
 
-        val futureBalanceExistent = FutureTask<Balance>()
+        val futureBalanceExistent = FutureTask<AccountBalance>()
 
         if (connect(framework) == false) fail("Connection error")
 
-        framework.getBalance("pas1", "1.3.0", futureBalanceExistent.completeCallback())
+        framework.getBalance(login, "1.3.0", futureBalanceExistent.completeCallback())
 
         assertTrue(futureBalanceExistent.get() != null)
     }
@@ -353,7 +353,7 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) fail("Connection error")
 
-        val futureBalanceNonexistent = FutureTask<Balance>()
+        val futureBalanceNonexistent = FutureTask<AccountBalance>()
 
         framework.getBalance(
                 login,
@@ -2311,5 +2311,4 @@ class EchoFrameworkTest {
 
         return asset
     }
-
 }

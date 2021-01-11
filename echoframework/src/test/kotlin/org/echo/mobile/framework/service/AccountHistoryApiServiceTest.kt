@@ -9,14 +9,13 @@ import org.echo.mobile.framework.model.AssetAmount
 import org.echo.mobile.framework.model.HistoricalTransfer
 import org.echo.mobile.framework.model.HistoryResponse
 import org.echo.mobile.framework.model.network.Echodevnet
-import org.echo.mobile.framework.model.operations.TransferOperation
+import org.echo.mobile.framework.model.operations.*
 import org.echo.mobile.framework.service.internal.AccountHistoryApiServiceImpl
 import org.echo.mobile.framework.support.error
 import org.echo.mobile.framework.support.value
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import java.util.Date
 
 /**
  * Test cases for [AccountHistoryApiService]
@@ -30,15 +29,24 @@ class AccountHistoryApiServiceTest {
     @Before
     fun setUp() {
         response = HistoryResponse(
-            listOf(
-                HistoricalTransfer(
-                    "testId", TransferOperation(
-                        Account("1.2.18"), Account("1.2.119"), AssetAmount(
-                            UnsignedLong.ONE, Asset("1.3.0")
-                        )
-                    ), Date()
+                listOf(
+                        HistoricalTransfer(id = "1.6.1",
+                                operation = BalanceClaimOperation(
+                                        Account("1.2.18"),"0","0",
+                                        AssetAmount(
+                                                UnsignedLong.valueOf("100000000"),
+                                                Asset("1.3.0")
+                                        ),
+                                        AssetAmount(
+                                                UnsignedLong.ZERO, Asset("1.3.0")
+                                        )
+                                )).apply {
+                            blockNum = 4L
+                            trxInBlock = 0L
+                            opInTrx = 0L
+                            virtualOp = 27L
+                        }
                 )
-            )
         )
     }
 
@@ -47,11 +55,12 @@ class AccountHistoryApiServiceTest {
         val socketCoreComponent = ServiceSocketCoreComponentMock(response)
 
         val accountHistoryApiService =
-            AccountHistoryApiServiceImpl(socketCoreComponent, Echodevnet())
+                AccountHistoryApiServiceImpl(socketCoreComponent, Echodevnet())
 
         val historyCallback = object : Callback<HistoryResponse> {
 
             override fun onSuccess(result: HistoryResponse) {
+                println(response)
                 Assert.assertFalse(result.transactions.isEmpty())
                 Assert.assertTrue(result.transactions.size == 1)
             }
@@ -70,7 +79,7 @@ class AccountHistoryApiServiceTest {
         val socketCoreComponent = ServiceSocketCoreComponentMock(null)
 
         val accountHistoryApiService =
-            AccountHistoryApiServiceImpl(socketCoreComponent, Echodevnet())
+                AccountHistoryApiServiceImpl(socketCoreComponent, Echodevnet())
 
         val historyCallback = object : Callback<HistoryResponse> {
 
@@ -88,14 +97,14 @@ class AccountHistoryApiServiceTest {
     }
 
     private fun getHistory(
-        historyService: AccountHistoryApiService,
-        historyCallback: Callback<HistoryResponse>
+            historyService: AccountHistoryApiService,
+            historyCallback: Callback<HistoryResponse>
     ) = historyService.getAccountHistory(
-        "1.2.18",
-        "1.11.1",
-        "1.11.11",
-        10,
-        historyCallback
+            "1.2.18",
+            "1.11.1",
+            "1.11.11",
+            10,
+            historyCallback
     )
 
 
@@ -104,19 +113,19 @@ class AccountHistoryApiServiceTest {
         val socketCoreComponent = ServiceSocketCoreComponentMock(response)
 
         val accountHistoryApiService =
-            AccountHistoryApiServiceImpl(socketCoreComponent, Echodevnet())
+                AccountHistoryApiServiceImpl(socketCoreComponent, Echodevnet())
 
         accountHistoryApiService.getAccountHistory(
-            "1.2.18",
-            "1.11.1",
-            "1.11.11",
-            10
+                "1.2.18",
+                "1.11.1",
+                "1.11.11",
+                10
         )
-            .value { history ->
-                Assert.assertFalse(history.transactions.isEmpty())
-                Assert.assertTrue(history.transactions.size == 1)
-            }
-            .error { Assert.fail() }
+                .value { history ->
+                    Assert.assertFalse(history.transactions.isEmpty())
+                    Assert.assertTrue(history.transactions.size == 1)
+                }
+                .error { Assert.fail() }
     }
 
 }

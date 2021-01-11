@@ -3,23 +3,7 @@ package org.echo.mobile.framework.service
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.core.mapper.ObjectMapper
 import org.echo.mobile.framework.exception.LocalException
-import org.echo.mobile.framework.model.Asset
-import org.echo.mobile.framework.model.AssetAmount
-import org.echo.mobile.framework.model.BaseOperation
-import org.echo.mobile.framework.model.Block
-import org.echo.mobile.framework.model.BlockData
-import org.echo.mobile.framework.model.BtcAddress
-import org.echo.mobile.framework.model.Deposit
-import org.echo.mobile.framework.model.DynamicGlobalProperties
-import org.echo.mobile.framework.model.ERC20Deposit
-import org.echo.mobile.framework.model.ERC20Token
-import org.echo.mobile.framework.model.ERC20Withdrawal
-import org.echo.mobile.framework.model.EthAddress
-import org.echo.mobile.framework.model.FullAccount
-import org.echo.mobile.framework.model.GlobalProperties
-import org.echo.mobile.framework.model.GrapheneObject
-import org.echo.mobile.framework.model.SidechainType
-import org.echo.mobile.framework.model.Withdraw
+import org.echo.mobile.framework.model.*
 import org.echo.mobile.framework.model.contract.ContractFee
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
@@ -34,8 +18,8 @@ import org.echo.mobile.framework.support.Result
  * @author Dmitriy Bushuev
  */
 interface DatabaseApiService : ApiService, AccountsService, GlobalsService,
-    AuthorityAndValidationService, BlocksAndTransactionsService, ContractsService, AssetsService,
-    SubscriptionService, ObjectsService, CustomOperationService, SidechainService
+        AuthorityAndValidationService, BlocksAndTransactionsService, ContractsService, AssetsService,
+        SubscriptionService, ObjectsService, CustomOperationService, SidechainService
 
 /**
  * Encapsulates logic, associated with data from account from blockchain database API
@@ -52,9 +36,9 @@ interface AccountsService {
      * @param callback Async listening result
      */
     fun getFullAccounts(
-        namesOrIds: List<String>,
-        subscribe: Boolean,
-        callback: Callback<Map<String, FullAccount>>
+            namesOrIds: List<String>,
+            subscribe: Boolean,
+            callback: Callback<Map<String, FullAccount>>
     )
 
     /**
@@ -65,8 +49,8 @@ interface AccountsService {
      * @return Synchronized return result
      */
     fun getFullAccounts(
-        namesOrIds: List<String>,
-        subscribe: Boolean
+            namesOrIds: List<String>,
+            subscribe: Boolean
     ): Result<Exception, Map<String, FullAccount>>
 
     /**
@@ -97,18 +81,18 @@ interface AccountsService {
      * Retrieves list of account's [accountId] deposits [Deposit]
      */
     fun getAccountDeposits(
-        accountId: String,
-        sidechainType: SidechainType?,
-        callback: Callback<List<Deposit?>>
+            accountId: String,
+            sidechainType: SidechainType?,
+            callback: Callback<List<Deposit?>>
     )
 
     /**
      * Retrieves list of account's [accountId] withdrawals [Withdraw]
      */
     fun getAccountWithdrawals(
-        accountId: String,
-        sidechainType: SidechainType?,
-        callback: Callback<List<Withdraw?>>
+            accountId: String,
+            sidechainType: SidechainType?,
+            callback: Callback<List<Withdraw?>>
     )
 }
 
@@ -160,8 +144,8 @@ interface AuthorityAndValidationService {
      * @return [AssetAmount] fees for each operation
      */
     fun getRequiredFees(
-        operations: List<BaseOperation>,
-        asset: Asset
+            operations: List<BaseOperation>,
+            asset: Asset
     ): Result<Exception, List<AssetAmount>>
 
     /**
@@ -173,8 +157,8 @@ interface AuthorityAndValidationService {
      * @return [AssetAmount] fees for each operation
      */
     fun getRequiredContractFees(
-        operations: List<BaseOperation>,
-        asset: Asset
+            operations: List<BaseOperation>,
+            asset: Asset
     ): Result<Exception, List<ContractFee>>
 }
 
@@ -258,11 +242,11 @@ interface ContractsService {
      * @param byteCode Code calling to contract
      */
     fun callContractNoChangingState(
-        contractId: String,
-        registrarNameOrId: String,
-        assetId: String,
-        amount: String,
-        byteCode: String
+            contractId: String,
+            registrarNameOrId: String,
+            assetId: String,
+            amount: String,
+            byteCode: String
     ): Result<LocalException, String>
 
     /**
@@ -282,9 +266,9 @@ interface ContractsService {
      * @return Id of call to network
      */
     fun getContractLogs(
-        contractId: String,
-        fromBlock: String,
-        toBlock: String
+            contractId: String,
+            fromBlock: String,
+            toBlock: String
     ): Result<LocalException, Int>
 
     /**
@@ -325,7 +309,7 @@ interface SubscriptionService {
      * @param contractId   Contract id for fetching logs
      */
     fun subscribeContractLogs(
-        contractId: String
+            contractId: String
     ): Result<LocalException, Boolean>
 
     /**
@@ -355,18 +339,18 @@ interface SidechainService {
      * Retrieves list of account's [accountId] deposits [Deposit]
      */
     fun getAccountDeposits(
-        accountId: String,
-        sidechainType: SidechainType?,
-        callback: Callback<List<Deposit?>>
+            accountId: String,
+            sidechainType: SidechainType?,
+            callback: Callback<List<Deposit?>>
     )
 
     /**
      * Retrieves list of account's [accountId] withdrawals [Withdraw]
      */
     fun getAccountWithdrawals(
-        accountId: String,
-        sidechainType: SidechainType?,
-        callback: Callback<List<Withdraw?>>
+            accountId: String,
+            sidechainType: SidechainType?,
+            callback: Callback<List<Withdraw?>>
     )
 
     /**
@@ -393,8 +377,24 @@ interface SidechainService {
      * Retrieves erc20 token withdrawals for [accountNameOrId]
      */
     fun getERC20AccountWithdrawals(
-        accountNameOrId: String,
-        callback: Callback<List<ERC20Withdrawal>>
+            accountNameOrId: String,
+            callback: Callback<List<ERC20Withdrawal>>
+    )
+
+    /**
+     * Retrieves [BalanceObject] for [publicKeys]
+     */
+    fun getBalanceObjects(
+            publicKeys: List<String>,
+            callback: Callback<BalanceObject>
+    )
+
+    /**
+     * Retrieves [FrozenBalanceObject] for [accountId]
+     */
+    fun getFrozenBalances(
+            accountId: String,
+            callback: Callback<FrozenBalanceObject>
     )
 
 }
@@ -410,8 +410,8 @@ interface ObjectsService {
      * @param mapper Maps object data by [ObjectMapper]
      */
     fun <T : GrapheneObject> getObjects(
-        ids: List<String>,
-        mapper: ObjectMapper<T>
+            ids: List<String>,
+            mapper: ObjectMapper<T>
     ): Result<Exception, List<T>>
 
 }
