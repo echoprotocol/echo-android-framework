@@ -20,15 +20,16 @@ import java.util.Date
  * @author Daria Pechkovskaya
  */
 class DynamicGlobalProperties(
-    id: String,
-    @SerializedName(KEY_HEAD_BLOCK_NUMBER) @Expose val headBlockNumber: Long = 0,
-    @SerializedName(KEY_HEAD_BLOCK_ID) @Expose val headBlockId: String,
-    var date: Date?,
-    var nextMaintenanceDate: Date?,
-    @SerializedName(KEY_LAST_BUDGET_TIME) @Expose val lastBudgetTime: String,
-    @SerializedName(KEY_COMMITTEE_BUDGET) @Expose val committeeBudget: Long = 0,
-    @SerializedName(KEY_DYNAMIC_FLAGS) @Expose val dynamicFlags: Int = 0,
-    @SerializedName(KEY_LAST_IRREVERSIBLE_BLOCK_NUM) @Expose val lastIrreversibleBlockNum: Long = 0
+        id: String,
+        @SerializedName(KEY_HEAD_BLOCK_NUMBER) @Expose val headBlockNumber: Long = 0,
+        @SerializedName(KEY_HEAD_BLOCK_ID) @Expose val headBlockId: String,
+        var date: Date?,
+        var nextMaintenanceDate: Date?,
+        @SerializedName(KEY_LAST_BUDGET_TIME) @Expose val lastBudgetTime: String,
+        @SerializedName(KEY_COMMITTEE_BUDGET) @Expose val committeeBudget: Long = 0,
+        @SerializedName(KEY_DYNAMIC_FLAGS) @Expose val dynamicFlags: Int = 0,
+        @SerializedName(KEY_LAST_IRREVERSIBLE_BLOCK_NUM) @Expose val lastIrreversibleBlockNum: Long = 0,
+        @SerializedName(KEY_LAST_BLOCK_OF_PREVIOUS_INTERVAL) @Expose val lastBlockOfPreviousInterval: Int = 0
 ) : GrapheneObject(id), Serializable {
 
     companion object {
@@ -40,6 +41,7 @@ class DynamicGlobalProperties(
         const val KEY_COMMITTEE_BUDGET = "committee_budget"
         const val KEY_DYNAMIC_FLAGS = "dynamic_flags"
         const val KEY_LAST_IRREVERSIBLE_BLOCK_NUM = "last_irreversible_block_num"
+        const val KEY_LAST_BLOCK_OF_PREVIOUS_INTERVAL = "last_block_of_previous_interval"
     }
 
     /**
@@ -49,9 +51,9 @@ class DynamicGlobalProperties(
     class Deserializer : JsonDeserializer<DynamicGlobalProperties> {
 
         override fun deserialize(
-            jsonElement: JsonElement?,
-            typeOfT: Type?,
-            context: JsonDeserializationContext?
+                jsonElement: JsonElement?,
+                typeOfT: Type?,
+                context: JsonDeserializationContext?
         ): DynamicGlobalProperties? {
 
             if (jsonElement == null || !jsonElement.isJsonObject) {
@@ -61,20 +63,20 @@ class DynamicGlobalProperties(
             val jsonObject = jsonElement.asJsonObject
 
             val dynamicGlobalProperties = Gson().fromJson<DynamicGlobalProperties>(
-                jsonElement,
-                DynamicGlobalProperties::class.java
+                    jsonElement,
+                    DynamicGlobalProperties::class.java
             )
 
             dynamicGlobalProperties.date = jsonObject.get(KEY_TIME)
-                .asString.parse(catch = { LOGGER.log("Error during parsing DGP date", it) })
+                    .asString.parse(catch = { LOGGER.log("Error during parsing DGP date", it) })
 
             dynamicGlobalProperties.nextMaintenanceDate =
-                jsonObject.get(KEY_NEXT_MAINTENANCE_TIME)
-                    .asString.parse {
-                    LOGGER.log(
-                        "Error during parsing DGP next maintenance date", it
-                    )
-                }
+                    jsonObject.get(KEY_NEXT_MAINTENANCE_TIME)
+                            .asString.parse {
+                                LOGGER.log(
+                                        "Error during parsing DGP next maintenance date", it
+                                )
+                            }
 
 
             return dynamicGlobalProperties

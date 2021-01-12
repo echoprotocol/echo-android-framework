@@ -8,10 +8,10 @@ import com.google.gson.annotations.SerializedName
  *
  * @author Daria Pechkovskaya
  */
-class RegistrationResult (
-    @SerializedName("block_num")
-    val blockNum: String,
+class RegistrationResult(
+        @SerializedName("block_num")
+        val blockNum: String,
 
-    @SerializedName("tx_id")
-    val txId: String
-)
+        @SerializedName("tx_id")
+        val txId: String
+) : BaseResult

@@ -15,10 +15,10 @@ import java.lang.reflect.Type
  * @author Daria Pechkovskaya
  */
 class FullAccount(
-    @Expose var account: Account? = null,
-    @SerializedName("registrar_name") @Expose var registrarName: String? = null,
-    @Expose var balances: List<Balance>? = null,
-    @Expose var assets: List<Asset>? = null
+        @Expose var account: Account? = null,
+        @SerializedName("registrar_name") @Expose var registrarName: String? = null,
+        @Expose var accountBalances: List<AccountBalance>? = null,
+        @Expose var assets: List<Asset>? = null
 ) {
 
     /**
@@ -60,9 +60,9 @@ class FullAccount(
         private fun parseBalances(
             operationObject: JsonObject,
             deserializer: JsonDeserializationContext?
-        ) = deserializer?.deserialize<List<Balance>>(
+        ) = deserializer?.deserialize<List<AccountBalance>>(
             operationObject.get(BALANCES_KEY),
-            object : TypeToken<List<Balance>>() {}.type
+            object : TypeToken<List<AccountBalance>>() {}.type
         )
 
         private fun parseAssets(

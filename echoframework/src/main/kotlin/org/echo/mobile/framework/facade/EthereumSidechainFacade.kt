@@ -3,6 +3,7 @@ package org.echo.mobile.framework.facade
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.model.EthAddress
 import org.echo.mobile.framework.model.TransactionResult
+import org.echo.mobile.framework.model.socketoperations.ResultCallback
 
 /**
  * Encapsulates logic, associated with ethereum sidechain functionality
@@ -24,7 +25,7 @@ interface EthereumSidechainFacade {
         accountNameOrId: String,
         wif: String,
         broadcastCallback: Callback<Boolean>,
-        resultCallback: Callback<TransactionResult>?
+        resultCallback: ResultCallback<TransactionResult>
     )
 
     /**
@@ -38,7 +39,7 @@ interface EthereumSidechainFacade {
         value: String,
         feeAsset: String,
         broadcastCallback: Callback<Boolean>,
-        resultCallback: Callback<TransactionResult>?
+        resultCallback: ResultCallback<TransactionResult>
     )
 
     /**

@@ -5,6 +5,7 @@ import org.echo.mobile.framework.model.ERC20Deposit
 import org.echo.mobile.framework.model.ERC20Token
 import org.echo.mobile.framework.model.ERC20Withdrawal
 import org.echo.mobile.framework.model.TransactionResult
+import org.echo.mobile.framework.model.socketoperations.ResultCallback
 
 /**
  * Encapsulates logic, associated with erc20 sidechain functionality
@@ -25,7 +26,7 @@ interface ERC20SidechainFacade {
         decimals: String,
         feeAsset: String,
         broadcastCallback: Callback<Boolean>,
-        resultCallback: Callback<TransactionResult>?
+        resultCallback: ResultCallback<TransactionResult>
     )
 
     /**
@@ -40,7 +41,7 @@ interface ERC20SidechainFacade {
         value: String,
         feeAsset: String,
         broadcastCallback: Callback<Boolean>,
-        resultCallback: Callback<TransactionResult>?
+        resultCallback: ResultCallback<TransactionResult>
     )
 
     /**
@@ -56,6 +57,14 @@ interface ERC20SidechainFacade {
      */
     fun getERC20TokenByTokenId(
         tokenId: String,
+        callback: Callback<ERC20Token>
+    )
+
+    /**
+     * Retrieves corresponding [ERC20Token] for required address [contractId]
+     */
+    fun getERC20TokenByContractId(
+            contractId: String,
         callback: Callback<ERC20Token>
     )
 

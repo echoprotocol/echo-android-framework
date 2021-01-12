@@ -9,16 +9,16 @@ import com.google.gson.annotations.SerializedName
  * @author Daria Pechkovskaya
  */
 data class TransactionResult(
-    @Expose
-    val id: String,
+        @Expose
+        val id: String,
 
-    @SerializedName("block_num")
-    val blockNum: String,
+        @SerializedName("block_num")
+        val blockNum: String,
 
-    @SerializedName("trx_num")
-    val trxNum: Long,
+        @SerializedName("trx_num")
+        val trxNum: Long,
 
-    @Expose
-    val trx: TransactionOperationsResult
-)
+        @Expose
+        val trx: TransactionOperationsResult
+) : BaseResult
 

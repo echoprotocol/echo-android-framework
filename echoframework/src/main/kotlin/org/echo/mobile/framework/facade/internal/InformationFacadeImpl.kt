@@ -6,42 +6,8 @@ import org.echo.mobile.framework.exception.AccountNotFoundException
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.exception.NotFoundException
 import org.echo.mobile.framework.facade.InformationFacade
-import org.echo.mobile.framework.model.Account
-import org.echo.mobile.framework.model.Asset
-import org.echo.mobile.framework.model.Balance
-import org.echo.mobile.framework.model.BaseOperation
-import org.echo.mobile.framework.model.Block
-import org.echo.mobile.framework.model.DepositMapper
-import org.echo.mobile.framework.model.Erc20DepositMapper
-import org.echo.mobile.framework.model.Erc20TokenMapper
-import org.echo.mobile.framework.model.Erc20WithdrawalMapper
-import org.echo.mobile.framework.model.FullAccount
-import org.echo.mobile.framework.model.operations.GenerateBitcoinAddressOperation
-import org.echo.mobile.framework.model.GlobalProperties
-import org.echo.mobile.framework.model.HistoricalTransfer
-import org.echo.mobile.framework.model.HistoryResponse
-import org.echo.mobile.framework.model.HistoryResult
-import org.echo.mobile.framework.model.WithdrawMapper
-import org.echo.mobile.framework.model.operations.AccountCreateOperation
-import org.echo.mobile.framework.model.operations.AccountUpdateOperation
-import org.echo.mobile.framework.model.operations.ContractCallOperation
-import org.echo.mobile.framework.model.operations.ContractCreateOperation
-import org.echo.mobile.framework.model.operations.ContractOperation
-import org.echo.mobile.framework.model.operations.ContractTransferOperation
-import org.echo.mobile.framework.model.operations.CreateAssetOperation
-import org.echo.mobile.framework.model.operations.GenerateEthereumAddressOperation
-import org.echo.mobile.framework.model.operations.IssueAssetOperation
-import org.echo.mobile.framework.model.operations.OperationType
-import org.echo.mobile.framework.model.operations.SidechainBurnSocketOperation
-import org.echo.mobile.framework.model.operations.SidechainERC20BurnSocketOperation
-import org.echo.mobile.framework.model.operations.SidechainERC20DepositSocketOperation
-import org.echo.mobile.framework.model.operations.SidechainERC20IssueSocketOperation
-import org.echo.mobile.framework.model.operations.SidechainERC20RegisterTokenOperation
-import org.echo.mobile.framework.model.operations.SidechainIssueSocketOperation
-import org.echo.mobile.framework.model.operations.TransferOperation
-import org.echo.mobile.framework.model.operations.WithdrawBitcoinOperation
-import org.echo.mobile.framework.model.operations.WithdrawERC20Operation
-import org.echo.mobile.framework.model.operations.WithdrawEthereumOperation
+import org.echo.mobile.framework.model.*
+import org.echo.mobile.framework.model.operations.*
 import org.echo.mobile.framework.processResult
 import org.echo.mobile.framework.service.AccountHistoryApiService
 import org.echo.mobile.framework.service.DatabaseApiService
@@ -64,81 +30,81 @@ import org.echo.mobile.framework.support.value
  * @author Dmitriy Bushuev
  */
 class InformationFacadeImpl(
-    private val databaseApiService: DatabaseApiService,
-    private val accountHistoryApiService: AccountHistoryApiService
+        private val databaseApiService: DatabaseApiService,
+        private val accountHistoryApiService: AccountHistoryApiService
 ) : InformationFacade {
 
     override fun getAccount(nameOrId: String, callback: Callback<FullAccount>) =
-        findAccount(nameOrId,
-            { fullAccount ->
-                fullAccount?.let { notNullAccount ->
-                    callback.onSuccess(notNullAccount)
-                } ?: callback.onError(AccountNotFoundException("Account not found."))
-            },
-            { error ->
-                callback.onError(LocalException(error.message, error))
-            })
+            findAccount(nameOrId,
+                    { fullAccount ->
+                        fullAccount?.let { notNullAccount ->
+                            callback.onSuccess(notNullAccount)
+                        } ?: callback.onError(AccountNotFoundException("Account not found."))
+                    },
+                    { error ->
+                        callback.onError(LocalException(error.message, error))
+                    })
 
     override fun getAccountsByWif(wif: String, callback: Callback<List<FullAccount>>) {
         databaseApiService.getAccountsByWif(listOf(wif))
-            .value { accountsMap -> callback.onSuccess(accountsMap[wif]?.toList() ?: listOf()) }
-            .error { error -> callback.onError(error) }
+                .value { accountsMap -> callback.onSuccess(accountsMap[wif]?.toList() ?: listOf()) }
+                .error { error -> callback.onError(error) }
     }
 
     override fun checkAccountReserved(nameOrId: String, callback: Callback<Boolean>) =
-        findAccount(nameOrId,
-            { fullAccount ->
-                fullAccount?.let {
-                    callback.onSuccess(true)
-                } ?: callback.onSuccess(false)
-            },
-            { error ->
-                callback.onError(LocalException(error.message, error))
-            })
+            findAccount(nameOrId,
+                    { fullAccount ->
+                        fullAccount?.let {
+                            callback.onSuccess(true)
+                        } ?: callback.onSuccess(false)
+                    },
+                    { error ->
+                        callback.onError(LocalException(error.message, error))
+                    })
 
-    override fun getBalance(nameOrId: String, asset: String, callback: Callback<Balance>) =
-        findAccount(nameOrId,
-            { fullAccount ->
-                findBalance(fullAccount, asset)
-                    .value { balance ->
-                        callback.onSuccess(balance)
-                    }
-                    .error { balanceError ->
-                        LOGGER.log(
-                            "Unable to find account balances for required asset = $asset",
-                            balanceError
-                        )
-                        callback.onError(balanceError)
-                    }
-            },
-            { error ->
-                callback.onError(LocalException(error.message, error))
-            })
+    override fun getBalance(nameOrId: String, asset: String, callback: Callback<AccountBalance>) =
+            findAccount(nameOrId,
+                    { fullAccount ->
+                        findBalance(fullAccount, asset)
+                                .value { balance ->
+                                    callback.onSuccess(balance)
+                                }
+                                .error { balanceError ->
+                                    LOGGER.log(
+                                            "Unable to find account balances for required asset = $asset",
+                                            balanceError
+                                    )
+                                    callback.onError(balanceError)
+                                }
+                    },
+                    { error ->
+                        callback.onError(LocalException(error.message, error))
+                    })
 
     override fun getGlobalProperties(callback: Callback<GlobalProperties>) =
-        databaseApiService.getGlobalProperties(callback)
+            databaseApiService.getGlobalProperties(callback)
 
     private fun findAccount(
-        nameOrId: String,
-        success: (FullAccount?) -> Unit,
-        failure: (Exception) -> Unit
+            nameOrId: String,
+            success: (FullAccount?) -> Unit,
+            failure: (Exception) -> Unit
     ) {
         databaseApiService.getFullAccounts(listOf(nameOrId), false)
-            .map { accountMap -> accountMap[nameOrId] }
-            .value { account -> success(account) }
-            .error { error -> failure(error) }
+                .map { accountMap -> accountMap[nameOrId] }
+                .value { account -> success(account) }
+                .error { error -> failure(error) }
     }
 
     private fun findBalance(
-        account: FullAccount?,
-        asset: String
-    ): Result<LocalException, Balance> = account?.let { notNullAccount ->
-        val accountBalances = notNullAccount.balances
+            account: FullAccount?,
+            asset: String
+    ): Result<LocalException, AccountBalance> = account?.let { notNullAccount ->
+        val accountBalances = notNullAccount.accountBalances
         if (accountBalances?.isEmpty() == false) {
             accountBalances.firstOrNull { balance -> balance.asset?.getObjectId() == asset }?.let { balance ->
                 Value(balance)
             } ?: Error(
-                NotFoundException("Account balance with asset type = $asset is not found")
+                    NotFoundException("Account balance with asset type = $asset is not found")
             )
         } else {
             Error(LocalException("Account balances are empty."))
@@ -146,27 +112,27 @@ class InformationFacadeImpl(
     } ?: Error(AccountNotFoundException("Account not found."))
 
     override fun getAccountHistory(
-        nameOrId: String,
-        transactionStartId: String,
-        transactionStopId: String,
-        limit: Int,
-        callback: Callback<HistoryResponse>
+            nameOrId: String,
+            transactionStartId: String,
+            transactionStopId: String,
+            limit: Int,
+            callback: Callback<HistoryResponse>
     ) {
         var accountId: String = nameOrId
 
         getAccount(nameOrId)
-            .value { account -> accountId = account.account!!.getObjectId() }
-            .error { error ->
-                LOGGER.log("Unable to find account $nameOrId for history request", error)
-                callback.onError(error)
-                return
-            }
+                .value { account -> accountId = account.account!!.getObjectId() }
+                .error { error ->
+                    LOGGER.log("Unable to find account $nameOrId for history request", error)
+                    callback.onError(error)
+                    return
+                }
 
         callback.processResult(accountHistoryApiService.getAccountHistory(
-            accountId,
-            transactionStartId,
-            transactionStopId,
-            limit
+                accountId,
+                transactionStartId,
+                transactionStopId,
+                limit
         ).map { history ->
             fillTransactionInformation(history)
         })
@@ -191,9 +157,9 @@ class InformationFacadeImpl(
         for (transaction in history.transactions) {
             if (!blocks.containsKey(transaction.blockNum)) {
                 databaseApiService.getBlock(transaction.blockNum.toString())
-                    .value { block ->
-                        blocks[transaction.blockNum] = block
-                    }
+                        .value { block ->
+                            blocks[transaction.blockNum] = block
+                        }
             }
 
             transaction.timestamp = blocks[transaction.blockNum]?.timestamp?.parse(default = null)
@@ -210,113 +176,136 @@ class InformationFacadeImpl(
             when (operation.type) {
                 OperationType.ACCOUNT_UPDATE_OPERATION ->
                     processAccountUpdateOperation(
-                        operation as AccountUpdateOperation,
-                        accountsRegistry
+                            operation as AccountUpdateOperation,
+                            accountsRegistry
                     )
 
                 OperationType.TRANSFER_OPERATION ->
                     processTransferOperation(
-                        operation as TransferOperation,
-                        accountsRegistry,
-                        assetsRegistry
+                            operation as TransferOperation,
+                            accountsRegistry,
+                            assetsRegistry
                     )
 
                 OperationType.ASSET_CREATE_OPERATION ->
                     processAssetCreateOperation(
-                        operation as CreateAssetOperation,
-                        accountsRegistry,
-                        assetsRegistry
+                            operation as CreateAssetOperation,
+                            accountsRegistry,
+                            assetsRegistry
                     )
 
                 OperationType.ASSET_ISSUE_OPERATION ->
                     processAssetIssueOperation(
-                        operation as IssueAssetOperation,
-                        accountsRegistry,
-                        assetsRegistry
+                            operation as IssueAssetOperation,
+                            accountsRegistry,
+                            assetsRegistry
                     )
 
                 OperationType.ACCOUNT_CREATE_OPERATION ->
                     processAccountCreateOperation(
-                        operation as AccountCreateOperation,
-                        accountsRegistry
+                            operation as AccountCreateOperation,
+                            accountsRegistry
                     )
 
                 OperationType.CONTRACT_CREATE_OPERATION ->
                     processContractOperation(
-                        operation as ContractCreateOperation,
-                        transaction.result,
-                        accountsRegistry,
-                        assetsRegistry
+                            operation as ContractCreateOperation,
+                            transaction.result,
+                            accountsRegistry,
+                            assetsRegistry
                     )
 
                 OperationType.CONTRACT_CALL_OPERATION ->
                     processContractOperation(
-                        operation as ContractCallOperation,
-                        transaction.result,
-                        accountsRegistry,
-                        assetsRegistry
+                            operation as ContractCallOperation,
+                            transaction.result,
+                            accountsRegistry,
+                            assetsRegistry
                     )
                 OperationType.CONTRACT_INTERNAL_CALL_OPERATION ->
                     processContractTransferOperation(
-                        operation as ContractTransferOperation,
-                        assetsRegistry
+                            operation as ContractTransferOperation,
+                            assetsRegistry
                     )
                 OperationType.SIDECHAIN_ETH_CREATE_ADDRESS_OPERATION ->
                     processGenerateEthAddressOperation(
-                        operation as GenerateEthereumAddressOperation,
-                        accountsRegistry
+                            operation as GenerateEthereumAddressOperation,
+                            accountsRegistry
                     )
                 OperationType.SIDECHAIN_BTC_CREATE_ADDRESS_OPERATION ->
                     processGenerateBtcAddressOperation(
-                        operation as GenerateBitcoinAddressOperation,
-                        accountsRegistry
+                            operation as GenerateBitcoinAddressOperation,
+                            accountsRegistry
                     )
                 OperationType.SIDECHAIN_ETH_WITHDRAW_OPERATION ->
                     processWithdrawEthOperation(
-                        operation as WithdrawEthereumOperation,
-                        accountsRegistry
+                            operation as WithdrawEthereumOperation,
+                            accountsRegistry
                     )
                 OperationType.SIDECHAIN_BTC_WITHDRAW_OPERATION ->
                     processWithdrawBtcOperation(
-                        operation as WithdrawBitcoinOperation,
-                        accountsRegistry
+                            operation as WithdrawBitcoinOperation,
+                            accountsRegistry
                     )
                 OperationType.SIDECHAIN_ISSUE_OPERATION ->
                     processSidechainIssueOperation(
-                        operation as SidechainIssueSocketOperation,
-                        accountsRegistry,
-                        assetsRegistry
+                            operation as SidechainIssueSocketOperation,
+                            accountsRegistry,
+                            assetsRegistry
                     )
                 OperationType.SIDECHAIN_BURN_OPERATION ->
                     processSidechainBurnOperation(
-                        operation as SidechainBurnSocketOperation,
-                        accountsRegistry,
-                        assetsRegistry
+                            operation as SidechainBurnSocketOperation,
+                            accountsRegistry,
+                            assetsRegistry
+                    )
+                OperationType.BALANCE_CLAIM_OPERATION ->
+                    processBalanceClaimOperation(
+                            operation as BalanceClaimOperation,
+                            accountsRegistry,
+                            assetsRegistry
+                    )
+                OperationType.BALANCE_FREEZE_OPERATION ->
+                    processBalanceFreezeOperation(
+                            operation as BalanceFreezeOperation,
+                            accountsRegistry,
+                            assetsRegistry
+                    )
+                OperationType.BALANCE_UNFREEZE_OPERATION ->
+                    processBalanceUnfreezeOperation(
+                            operation as BalanceUnfreezeOperation,
+                            accountsRegistry,
+                            assetsRegistry
+                    )
+                OperationType.REQUEST_BALANCE_UNFREEZE_OPERATION ->
+                    processRequestBalanceUnfreezeOperation(
+                            operation as RequestBalanceUnfreezeOperation,
+                            accountsRegistry
                     )
                 OperationType.SIDECHAIN_ERC20_REGISTER_TOKEN_OPERATION ->
                     processSidechainERC20RegisterTokenOperation(
-                        operation as SidechainERC20RegisterTokenOperation,
-                        accountsRegistry
+                            operation as SidechainERC20RegisterTokenOperation,
+                            accountsRegistry
                     )
                 OperationType.SIDECHAIN_ERC20_ISSUE_OPERATION ->
                     processSidechainERC20IssueTokenOperation(
-                        operation as SidechainERC20IssueSocketOperation,
-                        accountsRegistry
+                            operation as SidechainERC20IssueSocketOperation,
+                            accountsRegistry
                     )
                 OperationType.SIDECHAIN_ERC20_BURN_OPERATION ->
                     processSidechainERC20BurnTokenOperation(
-                        operation as SidechainERC20BurnSocketOperation,
-                        accountsRegistry
+                            operation as SidechainERC20BurnSocketOperation,
+                            accountsRegistry
                     )
                 OperationType.SIDECHAIN_ERC20_DEPOSIT_TOKEN_OPERATION ->
                     processSidechainERC20DepositTokenOperation(
-                        operation as SidechainERC20DepositSocketOperation,
-                        accountsRegistry
+                            operation as SidechainERC20DepositSocketOperation,
+                            accountsRegistry
                     )
                 OperationType.SIDECHAIN_ERC20_WITHDRAW_TOKEN_OPERATION ->
                     processSidechainERC20WithdrawTokenOperation(
-                        operation as WithdrawERC20Operation,
-                        accountsRegistry
+                            operation as WithdrawERC20Operation,
+                            accountsRegistry
                     )
 
                 else -> {
@@ -330,8 +319,8 @@ class InformationFacadeImpl(
     }
 
     private fun processAccountUpdateOperation(
-        operation: AccountUpdateOperation,
-        accountRegistry: MutableMap<String, Account>
+            operation: AccountUpdateOperation,
+            accountRegistry: MutableMap<String, Account>
     ) {
         val accountId = operation.account.getObjectId()
 
@@ -343,9 +332,9 @@ class InformationFacadeImpl(
     }
 
     private fun processTransferOperation(
-        operation: TransferOperation,
-        accountRegistry: MutableMap<String, Account>,
-        assetsRegistry: MutableList<Asset>
+            operation: TransferOperation,
+            accountRegistry: MutableMap<String, Account>,
+            assetsRegistry: MutableList<Asset>
     ) {
         val transferAssetId = operation.transferAmount.asset.getObjectId()
 
@@ -367,9 +356,9 @@ class InformationFacadeImpl(
     }
 
     private fun processAssetCreateOperation(
-        operation: CreateAssetOperation,
-        accountRegistry: MutableMap<String, Account>,
-        assetsRegistry: MutableList<Asset>
+            operation: CreateAssetOperation,
+            accountRegistry: MutableMap<String, Account>,
+            assetsRegistry: MutableList<Asset>
     ) {
         val createdAssetSymbol = operation.asset.symbol
 
@@ -389,9 +378,9 @@ class InformationFacadeImpl(
     }
 
     private fun processAssetIssueOperation(
-        operation: IssueAssetOperation,
-        accountRegistry: MutableMap<String, Account>,
-        assetsRegistry: MutableList<Asset>
+            operation: IssueAssetOperation,
+            accountRegistry: MutableMap<String, Account>,
+            assetsRegistry: MutableList<Asset>
     ) {
         val issueAssetId = operation.assetToIssue.asset.getObjectId()
 
@@ -413,8 +402,8 @@ class InformationFacadeImpl(
     }
 
     private fun processAccountCreateOperation(
-        operation: AccountCreateOperation,
-        accountRegistry: MutableMap<String, Account>
+            operation: AccountCreateOperation,
+            accountRegistry: MutableMap<String, Account>
     ) {
         val registrar = operation.registrar.getObjectId()
 
@@ -426,10 +415,10 @@ class InformationFacadeImpl(
     }
 
     private fun processContractOperation(
-        operation: ContractOperation,
-        historyResult: HistoryResult?,
-        accountRegistry: MutableMap<String, Account>,
-        assetsRegistry: MutableList<Asset>
+            operation: ContractOperation,
+            historyResult: HistoryResult?,
+            accountRegistry: MutableMap<String, Account>,
+            assetsRegistry: MutableList<Asset>
     ) {
         val assetId = operation.value.asset.getObjectId()
 
@@ -447,15 +436,15 @@ class InformationFacadeImpl(
 
         historyResult?.objectId?.let { resultId ->
             databaseApiService.getContractResult(resultId)
-                .value { contractResult ->
-                    operation.contractResult = contractResult
-                }
+                    .value { contractResult ->
+                        operation.contractResult = contractResult
+                    }
         }
     }
 
     private fun processContractTransferOperation(
-        operation: ContractTransferOperation,
-        assetsRegistry: MutableList<Asset>
+            operation: ContractTransferOperation,
+            assetsRegistry: MutableList<Asset>
     ) {
         val assetId = operation.value.asset.getObjectId()
 
@@ -465,8 +454,8 @@ class InformationFacadeImpl(
     }
 
     private fun processGenerateEthAddressOperation(
-        operation: GenerateEthereumAddressOperation,
-        accountRegistry: MutableMap<String, Account>
+            operation: GenerateEthereumAddressOperation,
+            accountRegistry: MutableMap<String, Account>
     ) {
         val account = operation.account.getObjectId()
 
@@ -478,8 +467,8 @@ class InformationFacadeImpl(
     }
 
     private fun processGenerateBtcAddressOperation(
-        operation: GenerateBitcoinAddressOperation,
-        accountRegistry: MutableMap<String, Account>
+            operation: GenerateBitcoinAddressOperation,
+            accountRegistry: MutableMap<String, Account>
     ) {
         val account = operation.account.getObjectId()
 
@@ -491,8 +480,8 @@ class InformationFacadeImpl(
     }
 
     private fun processWithdrawEthOperation(
-        operation: WithdrawEthereumOperation,
-        accountRegistry: MutableMap<String, Account>
+            operation: WithdrawEthereumOperation,
+            accountRegistry: MutableMap<String, Account>
     ) {
         val account = operation.account.getObjectId()
 
@@ -504,8 +493,8 @@ class InformationFacadeImpl(
     }
 
     private fun processWithdrawBtcOperation(
-        operation: WithdrawBitcoinOperation,
-        accountRegistry: MutableMap<String, Account>
+            operation: WithdrawBitcoinOperation,
+            accountRegistry: MutableMap<String, Account>
     ) {
         val account = operation.account.getObjectId()
 
@@ -517,9 +506,9 @@ class InformationFacadeImpl(
     }
 
     private fun processSidechainIssueOperation(
-        operation: SidechainIssueSocketOperation,
-        accountRegistry: MutableMap<String, Account>,
-        assetsRegistry: MutableList<Asset>
+            operation: SidechainIssueSocketOperation,
+            accountRegistry: MutableMap<String, Account>,
+            assetsRegistry: MutableList<Asset>
     ) {
         val account = operation.account.getObjectId()
 
@@ -537,17 +526,17 @@ class InformationFacadeImpl(
 
         val withdrawId = operation.deposit.getObjectId()
         databaseApiService.getObjects(listOf(withdrawId), DepositMapper())
-            .value { deposits ->
-                deposits.find { it.getObjectId() == withdrawId }?.let {
-                    operation.deposit = it
+                .value { deposits ->
+                    deposits.find { it.getObjectId() == withdrawId }?.let {
+                        operation.deposit = it
+                    }
                 }
-            }
     }
 
     private fun processSidechainBurnOperation(
-        operation: SidechainBurnSocketOperation,
-        accountRegistry: MutableMap<String, Account>,
-        assetsRegistry: MutableList<Asset>
+            operation: SidechainBurnSocketOperation,
+            accountRegistry: MutableMap<String, Account>,
+            assetsRegistry: MutableList<Asset>
     ) {
         val account = operation.account.getObjectId()
 
@@ -565,16 +554,85 @@ class InformationFacadeImpl(
 
         val withdrawId = operation.withdraw.getObjectId()
         databaseApiService.getObjects(listOf(withdrawId), WithdrawMapper())
-            .value { withdraws ->
-                withdraws.find { it.getObjectId() == withdrawId }?.let {
-                    operation.withdraw = it
+                .value { withdraws ->
+                    withdraws.find { it.getObjectId() == withdrawId }?.let {
+                        operation.withdraw = it
+                    }
                 }
-            }
+    }
+
+    private fun processBalanceClaimOperation(
+            operation: BalanceClaimOperation,
+            accountRegistry: MutableMap<String, Account>,
+            assetsRegistry: MutableList<Asset>) {
+        val accountId = operation.depositToAccount.getObjectId()
+
+        fillAccounts(listOf(accountId), accountRegistry)
+
+        accountRegistry[accountId]?.let { notNullAccount ->
+            operation.depositToAccount = notNullAccount
+        }
+
+        val assetId = operation.totalClaimed.asset.getObjectId()
+
+        getAsset(assetId, assetsRegistry)?.let { notNullAsset ->
+            operation.totalClaimed.asset = notNullAsset
+        }
+    }
+
+    private fun processBalanceFreezeOperation(
+            operation: BalanceFreezeOperation,
+            accountRegistry: MutableMap<String, Account>,
+            assetsRegistry: MutableList<Asset>) {
+        val accountId = operation.account.getObjectId()
+
+        fillAccounts(listOf(accountId), accountRegistry)
+
+        accountRegistry[accountId]?.let { notNullAccount ->
+            operation.account = notNullAccount
+        }
+
+        val assetId = operation.amount.asset.getObjectId()
+
+        getAsset(assetId, assetsRegistry)?.let { notNullAsset ->
+            operation.amount.asset = notNullAsset
+        }
+    }
+
+    private fun processBalanceUnfreezeOperation(
+            operation: BalanceUnfreezeOperation,
+            accountRegistry: MutableMap<String, Account>,
+            assetsRegistry: MutableList<Asset>) {
+        val accountId = operation.account.getObjectId()
+
+        fillAccounts(listOf(accountId), accountRegistry)
+
+        accountRegistry[accountId]?.let { notNullAccount ->
+            operation.account = notNullAccount
+        }
+
+        val assetId = operation.amount.asset.getObjectId()
+
+        getAsset(assetId, assetsRegistry)?.let { notNullAsset ->
+            operation.amount.asset = notNullAsset
+        }
+    }
+
+    private fun processRequestBalanceUnfreezeOperation(
+            operation: RequestBalanceUnfreezeOperation,
+            accountRegistry: MutableMap<String, Account>) {
+        val accountId = operation.account.getObjectId()
+
+        fillAccounts(listOf(accountId), accountRegistry)
+
+        accountRegistry[accountId]?.let { notNullAccount ->
+            operation.account = notNullAccount
+        }
     }
 
     private fun processSidechainERC20RegisterTokenOperation(
-        operation: SidechainERC20RegisterTokenOperation,
-        accountRegistry: MutableMap<String, Account>
+            operation: SidechainERC20RegisterTokenOperation,
+            accountRegistry: MutableMap<String, Account>
     ) {
         val account = operation.account.getObjectId()
 
@@ -586,8 +644,8 @@ class InformationFacadeImpl(
     }
 
     private fun processSidechainERC20IssueTokenOperation(
-        operation: SidechainERC20IssueSocketOperation,
-        accountRegistry: MutableMap<String, Account>
+            operation: SidechainERC20IssueSocketOperation,
+            accountRegistry: MutableMap<String, Account>
     ) {
         val account = operation.account.getObjectId()
 
@@ -599,24 +657,24 @@ class InformationFacadeImpl(
 
         val depositId = operation.erc20Deposit.getObjectId()
         databaseApiService.getObjects(listOf(depositId), Erc20DepositMapper())
-            .value { deposits ->
-                deposits.find { it.getObjectId() == depositId }?.let {
-                    operation.erc20Deposit = it
+                .value { deposits ->
+                    deposits.find { it.getObjectId() == depositId }?.let {
+                        operation.erc20Deposit = it
+                    }
                 }
-            }
 
         val tokenId = operation.erc20Token.getObjectId()
         databaseApiService.getObjects(listOf(tokenId), Erc20TokenMapper())
-            .value { deposits ->
-                deposits.find { it.getObjectId() == tokenId }?.let {
-                    operation.erc20Token = it
+                .value { deposits ->
+                    deposits.find { it.getObjectId() == tokenId }?.let {
+                        operation.erc20Token = it
+                    }
                 }
-            }
     }
 
     private fun processSidechainERC20DepositTokenOperation(
-        operation: SidechainERC20DepositSocketOperation,
-        accountRegistry: MutableMap<String, Account>
+            operation: SidechainERC20DepositSocketOperation,
+            accountRegistry: MutableMap<String, Account>
     ) {
         val account = operation.account.getObjectId()
         val commetteeMember = operation.committeeMember.getObjectId()
@@ -632,8 +690,8 @@ class InformationFacadeImpl(
     }
 
     private fun processSidechainERC20BurnTokenOperation(
-        operation: SidechainERC20BurnSocketOperation,
-        accountRegistry: MutableMap<String, Account>
+            operation: SidechainERC20BurnSocketOperation,
+            accountRegistry: MutableMap<String, Account>
     ) {
         val account = operation.account.getObjectId()
 
@@ -645,24 +703,24 @@ class InformationFacadeImpl(
 
         val depositId = operation.erc20Withdrawal.getObjectId()
         databaseApiService.getObjects(listOf(depositId), Erc20WithdrawalMapper())
-            .value { deposits ->
-                deposits.find { it.getObjectId() == depositId }?.let {
-                    operation.erc20Withdrawal = it
+                .value { deposits ->
+                    deposits.find { it.getObjectId() == depositId }?.let {
+                        operation.erc20Withdrawal = it
+                    }
                 }
-            }
 
         val tokenId = operation.erc20Token.getObjectId()
         databaseApiService.getObjects(listOf(tokenId), Erc20TokenMapper())
-            .value { deposits ->
-                deposits.find { it.getObjectId() == tokenId }?.let {
-                    operation.erc20Token = it
+                .value { deposits ->
+                    deposits.find { it.getObjectId() == tokenId }?.let {
+                        operation.erc20Token = it
+                    }
                 }
-            }
     }
 
     private fun processSidechainERC20WithdrawTokenOperation(
-        operation: WithdrawERC20Operation,
-        accountRegistry: MutableMap<String, Account>
+            operation: WithdrawERC20Operation,
+            accountRegistry: MutableMap<String, Account>
     ) {
         val account = operation.account.getObjectId()
 
@@ -674,11 +732,11 @@ class InformationFacadeImpl(
 
         val tokenId = operation.erc20Token.getObjectId()
         databaseApiService.getObjects(listOf(tokenId), Erc20TokenMapper())
-            .value { deposits ->
-                deposits.find { it.getObjectId() == tokenId }?.let {
-                    operation.erc20Token = it
+                .value { deposits ->
+                    deposits.find { it.getObjectId() == tokenId }?.let {
+                        operation.erc20Token = it
+                    }
                 }
-            }
     }
 
     private fun fillFeeAssets(operation: BaseOperation, assetsRegistry: MutableList<Asset>) {
@@ -697,12 +755,12 @@ class InformationFacadeImpl(
         }
 
         databaseApiService.getAssets(listOf(assetId))
-            .value { assets ->
-                assets.find { it.getObjectId() == assetId }?.let { notNullAsset ->
-                    assetsRegistry.add(notNullAsset)
-                    return notNullAsset
+                .value { assets ->
+                    assets.find { it.getObjectId() == assetId }?.let { notNullAsset ->
+                        assetsRegistry.add(notNullAsset)
+                        return notNullAsset
+                    }
                 }
-            }
         return null
     }
 
@@ -714,12 +772,12 @@ class InformationFacadeImpl(
         }
 
         databaseApiService.lookupAssetsSymbols(listOf(symbol))
-            .value { assets ->
-                assets.find { it.symbol == symbol }?.let { notNullAsset ->
-                    assetsRegistry.add(notNullAsset)
-                    return notNullAsset
+                .value { assets ->
+                    assets.find { it.symbol == symbol }?.let { notNullAsset ->
+                        assetsRegistry.add(notNullAsset)
+                        return notNullAsset
+                    }
                 }
-            }
         return null
     }
 
@@ -729,13 +787,13 @@ class InformationFacadeImpl(
         }
 
         databaseApiService.getFullAccounts(ids, false)
-            .value { accountsMap ->
-                accountsMap.forEach { (key, value) ->
-                    value.account?.let { account ->
-                        accountsRegistry[key] = account
+                .value { accountsMap ->
+                    accountsMap.forEach { (key, value) ->
+                        value.account?.let { account ->
+                            accountsRegistry[key] = account
+                        }
                     }
                 }
-            }
     }
 
     companion object {

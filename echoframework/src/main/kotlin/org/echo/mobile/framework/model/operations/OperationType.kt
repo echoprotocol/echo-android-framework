@@ -12,7 +12,7 @@ import org.echo.mobile.framework.support.Converter
  * @author Daria Pechkovskaya
  */
 enum class OperationType {
-    TRANSFER_OPERATION,
+    TRANSFER_OPERATION,  //0
     TRANSFER_TO_ADDRESS_OPERATION,
     OVERRIDE_TRANSFER_OPERATION,
     ACCOUNT_CREATE_OPERATION,
@@ -22,7 +22,7 @@ enum class OperationType {
     ASSET_CREATE_OPERATION,
     ASSET_UPDATE_OPERATION,
     ASSET_UPDATE_BITASSET_OPERATION,
-    ASSET_UPDATE_FEED_PRODUCERS_OPERATION,
+    ASSET_UPDATE_FEED_PRODUCERS_OPERATION, //10
     ASSET_ISSUE_OPERATION,
     ASSET_RESERVE_OPERATION,
     ASSET_FUND_FEE_POOL_OPERATION,
@@ -32,7 +32,7 @@ enum class OperationType {
     PROPOSAL_UPDATE_OPERATION,
     PROPOSAL_DELETE_OPERATION,
     COMMITTEE_MEMBER_CREATE_OPERATION,
-    COMMITTEE_MEMBER_UPDATE_OPERATION,
+    COMMITTEE_MEMBER_UPDATE_OPERATION, //20
     COMMITTEE_MEMBER_UPDATE_GLOBAL_PARAMETERS_OPERATION,
     COMMITTEE_MEMBER_ACTIVATE_OPERATION,
     COMMITTEE_MEMBER_DEACTIVATE_OPERATION,
@@ -42,7 +42,8 @@ enum class OperationType {
     VESTING_BALANCE_WITHDRAW_OPERATION,
     BALANCE_CLAIM_OPERATION,
     BALANCE_FREEZE_OPERATION,
-    BALANCE_UNFREEZE_OPERATION,
+    BALANCE_UNFREEZE_OPERATION, //30
+    REQUEST_BALANCE_UNFREEZE_OPERATION,
     CONTRACT_CREATE_OPERATION,
     CONTRACT_CALL_OPERATION,
     CONTRACT_INTERNAL_CREATE_OPERATION, // VIRTUAL
@@ -51,7 +52,7 @@ enum class OperationType {
     CONTRACT_UPDATE_OPERATION,
     CONTRACT_FUND_POOL_OPERATION,
     CONTRACT_WHITELIST_OPERATION,
-    SIDECHAIN_ETH_CREATE_ADDRESS_OPERATION,
+    SIDECHAIN_ETH_CREATE_ADDRESS_OPERATION, //40
     SIDECHAIN_ETH_APPROVE_ADDRESS_OPERATION,
     SIDECHAIN_ETH_DEPOSIT_OPERATION,
     SIDECHAIN_ETH_SEND_DEPOSIT_OPERATION,
@@ -61,22 +62,29 @@ enum class OperationType {
     SIDECHAIN_ETH_UPDATE_CONTRACT_ADDRESS_OPERATION,
     SIDECHAIN_ISSUE_OPERATION,          // VIRTUAL
     SIDECHAIN_BURN_OPERATION,          // VIRTUAL
+    SIDECHAIN_ERC20_REGISTER_CONTRACT_OPERATION, //50
     SIDECHAIN_ERC20_REGISTER_TOKEN_OPERATION,
     SIDECHAIN_ERC20_DEPOSIT_TOKEN_OPERATION,
-    SIDECHAIN_ERC20_SEND_DEPOSIT_TOKEN_OPERATION,
+    SIDECHAIN_ERC20_SEND_DEPOSIT_OPERATION,
     SIDECHAIN_ERC20_WITHDRAW_TOKEN_OPERATION,
-    SIDECHAIN_ERC20_SEND_WITHDRAW_TOKEN_OPERATION,
+    SIDECHAIN_ERC20_SEND_WITHDRAW_OPERATION,
     SIDECHAIN_ERC20_APPROVE_TOKEN_WITHDRAW_OPERATION,
     SIDECHAIN_ERC20_ISSUE_OPERATION, // VIRTUAL
     SIDECHAIN_ERC20_BURN_OPERATION, // VIRTUAL
-    SIDECHAIN_BTC_CREATE_ADDRESS_OPERATION,
+    SIDECHAIN_ERC20_TRANSFER_ASSET_OPERATION,
+    SIDECHAIN_BTC_CREATE_ADDRESS_OPERATION, //60
     SIDECHAIN_BTC_CREATE_INTERMEDIATE_DEPOSIT_OPERATION,
     SIDECHAIN_BTC_INTERMEDIATE_DEPOSIT_OPERATION,
     SIDECHAIN_BTC_DEPOSIT_OPERATION,
     SIDECHAIN_BTC_WITHDRAW_OPERATION,
     SIDECHAIN_BTC_AGGREGATE_OPERATION,
     SIDECHAIN_BTC_APPROVE_AGGREGATE_OPERATION,
-    BLOCK_REWARD_OPERATION          // VIRTUAL
+    SIDECHAIN_BTC_BLOCK_PROCESS_OPERATION,
+    BLOCK_REWARD_OPERATION,          // VIRTUAL //70
+    EVM_ADDRESS_REGISTER_OPERATION,
+    DID_CREATE_OPERATION,
+    DID_DELETE_OPERATION,
+    DID_UPDATE_OPERATION,
 }
 
 /**
@@ -88,28 +96,35 @@ class OperationTypeToClassConverter : Converter<Int, Class<*>?> {
 
     companion object {
         private val operationTypeRegistry = hashMapOf(
-            OperationType.ACCOUNT_UPDATE_OPERATION.ordinal to AccountUpdateOperation::class.java,
-            OperationType.TRANSFER_OPERATION.ordinal to TransferOperation::class.java,
-            OperationType.ASSET_CREATE_OPERATION.ordinal to CreateAssetOperation::class.java,
-            OperationType.ASSET_ISSUE_OPERATION.ordinal to IssueAssetOperation::class.java,
-            OperationType.TRANSFER_OPERATION.ordinal to TransferOperation::class.java,
-            OperationType.ACCOUNT_CREATE_OPERATION.ordinal to AccountCreateOperation::class.java,
-            OperationType.CONTRACT_CREATE_OPERATION.ordinal to ContractCreateOperation::class.java,
-            OperationType.CONTRACT_CALL_OPERATION.ordinal to ContractCallOperation::class.java,
-            OperationType.CONTRACT_INTERNAL_CALL_OPERATION.ordinal to ContractTransferOperation::class.java,
-            OperationType.SIDECHAIN_ETH_CREATE_ADDRESS_OPERATION.ordinal to GenerateEthereumAddressOperation::class.java,
-            OperationType.SIDECHAIN_ETH_WITHDRAW_OPERATION.ordinal to WithdrawEthereumOperation::class.java,
-            OperationType.SIDECHAIN_ISSUE_OPERATION.ordinal to SidechainIssueSocketOperation::class.java,
-            OperationType.SIDECHAIN_BURN_OPERATION.ordinal to SidechainBurnSocketOperation::class.java,
-            OperationType.SIDECHAIN_BTC_CREATE_ADDRESS_OPERATION.ordinal to GenerateBitcoinAddressOperation::class.java,
-            OperationType.BLOCK_REWARD_OPERATION.ordinal to BlockRewardOperation::class.java,
-            OperationType.SIDECHAIN_BTC_WITHDRAW_OPERATION.ordinal to WithdrawBitcoinOperation::class.java,
-            OperationType.BLOCK_REWARD_OPERATION.ordinal to BlockRewardOperation::class.java,
-            OperationType.SIDECHAIN_ERC20_REGISTER_TOKEN_OPERATION.ordinal to SidechainERC20RegisterTokenOperation::class.java,
-            OperationType.SIDECHAIN_ERC20_WITHDRAW_TOKEN_OPERATION.ordinal to WithdrawERC20Operation::class.java,
-            OperationType.SIDECHAIN_ERC20_ISSUE_OPERATION.ordinal to SidechainERC20IssueSocketOperation::class.java,
-            OperationType.SIDECHAIN_ERC20_BURN_OPERATION.ordinal to SidechainERC20BurnSocketOperation::class.java,
-            OperationType.SIDECHAIN_ERC20_DEPOSIT_TOKEN_OPERATION.ordinal to SidechainERC20DepositSocketOperation::class.java
+                OperationType.ACCOUNT_CREATE_OPERATION.ordinal to AccountCreateOperation::class.java,
+                OperationType.ACCOUNT_UPDATE_OPERATION.ordinal to AccountUpdateOperation::class.java,
+                OperationType.TRANSFER_OPERATION.ordinal to TransferOperation::class.java,
+                OperationType.ASSET_CREATE_OPERATION.ordinal to CreateAssetOperation::class.java,
+                OperationType.ASSET_ISSUE_OPERATION.ordinal to IssueAssetOperation::class.java,
+                OperationType.BALANCE_CLAIM_OPERATION.ordinal to BalanceClaimOperation::class.java,
+                OperationType.BALANCE_FREEZE_OPERATION.ordinal to BalanceFreezeOperation::class.java,
+                OperationType.BALANCE_UNFREEZE_OPERATION.ordinal to BalanceUnfreezeOperation::class.java,
+                OperationType.REQUEST_BALANCE_UNFREEZE_OPERATION.ordinal to RequestBalanceUnfreezeOperation::class.java,
+                OperationType.TRANSFER_OPERATION.ordinal to TransferOperation::class.java,
+                OperationType.CONTRACT_CREATE_OPERATION.ordinal to ContractCreateOperation::class.java,
+                OperationType.CONTRACT_CALL_OPERATION.ordinal to ContractCallOperation::class.java,
+                OperationType.CONTRACT_INTERNAL_CALL_OPERATION.ordinal to ContractTransferOperation::class.java,
+                OperationType.SIDECHAIN_ETH_CREATE_ADDRESS_OPERATION.ordinal to GenerateEthereumAddressOperation::class.java,
+                OperationType.SIDECHAIN_ETH_DEPOSIT_OPERATION.ordinal to WithdrawEthereumOperation::class.java,
+                OperationType.SIDECHAIN_ETH_WITHDRAW_OPERATION.ordinal to WithdrawEthereumOperation::class.java,
+                OperationType.SIDECHAIN_ETH_APPROVE_ADDRESS_OPERATION.ordinal to WithdrawEthereumOperation::class.java,
+                OperationType.SIDECHAIN_ISSUE_OPERATION.ordinal to SidechainIssueSocketOperation::class.java,
+                OperationType.SIDECHAIN_BURN_OPERATION.ordinal to SidechainBurnSocketOperation::class.java,
+                OperationType.SIDECHAIN_BTC_CREATE_ADDRESS_OPERATION.ordinal to GenerateBitcoinAddressOperation::class.java,
+                OperationType.SIDECHAIN_BTC_CREATE_INTERMEDIATE_DEPOSIT_OPERATION.ordinal to GenerateBitcoinAddressOperation::class.java,
+                OperationType.SIDECHAIN_BTC_WITHDRAW_OPERATION.ordinal to WithdrawBitcoinOperation::class.java,
+                OperationType.BLOCK_REWARD_OPERATION.ordinal to BlockRewardOperation::class.java,
+                OperationType.BLOCK_REWARD_OPERATION.ordinal to BlockRewardOperation::class.java,
+                OperationType.SIDECHAIN_ERC20_REGISTER_TOKEN_OPERATION.ordinal to SidechainERC20RegisterTokenOperation::class.java,
+                OperationType.SIDECHAIN_ERC20_WITHDRAW_TOKEN_OPERATION.ordinal to WithdrawERC20Operation::class.java,
+                OperationType.SIDECHAIN_ERC20_ISSUE_OPERATION.ordinal to SidechainERC20IssueSocketOperation::class.java,
+                OperationType.SIDECHAIN_ERC20_BURN_OPERATION.ordinal to SidechainERC20BurnSocketOperation::class.java,
+                OperationType.SIDECHAIN_ERC20_DEPOSIT_TOKEN_OPERATION.ordinal to SidechainERC20DepositSocketOperation::class.java
         )
     }
 
