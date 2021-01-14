@@ -47,13 +47,13 @@ class EchoFrameworkTest {
         )
     }
 
-    private val legalContractParamsId = "1.11.94" //259 //256
-    private val legalTokenId = "1.11.95"
+    private val legalContractParamsId = "1.11.0" //259 //256
+    private val legalTokenId = "1.11.0"
     private val accountId = "1.2.22"
-    private val login = "pas7"
+    private val login = "pas10"
     private val wif = "5JikeywbQTU56X1AbtNi3jPR6e2xqSbXog9CZaa3jk7EURymhf9"
     private val secondAccountId = "1.2.45"
-    private val secondLogin = "daria2"
+    private val secondLogin = "pas11"
     private val secondWif = "5KdiTokRk18PTHCNVVKjxkkGsgtQXs4yoywwwMk7msf6HUJ3TKg"
     private val legalAssetId = "1.3.0"
 
@@ -292,7 +292,7 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) fail("Connection error")
 
-        framework.getAccount("pas1", futureAccount.completeCallback())
+        framework.getAccount(login, futureAccount.completeCallback())
 
         val account = futureAccount.get()
         assertTrue(account != null)
@@ -307,7 +307,7 @@ class EchoFrameworkTest {
         if (connect(framework) == false) fail("Connection error")
 
         framework.getAccountsByWif(
-                "5JikeywbQTU56X1AbtNi3jPR6e2xqSbXog9CZaa3jk7EURymhf9",
+                wif,
                 futureAccounts.completeCallback()
         )
 
@@ -323,7 +323,7 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) fail("Connection error")
 
-        framework.checkAccountReserved("init1", futureCheckReserved.completeCallback())
+        framework.checkAccountReserved(login, futureCheckReserved.completeCallback())
 
         assertTrue(futureCheckReserved.get() ?: false)
 
@@ -399,11 +399,11 @@ class EchoFrameworkTest {
         val futureChangePassword = FutureTask<Boolean>()
         if (connect(framework) == false) fail("Connection error")
 
-        val oldWif = "5J3UbadSyzzcQQ7HEfTr2brhJJpHhx3NsMzrvgzfysBesutNRCm"
-        val newWif = "5J3UbadSyzzcQQ7HEfTr2brhJJpHhx3NsMzrvgzfysBesutNRCm"
+        val oldWif = wif
+        val newWif = wif
 
         framework.changeKeys(
-                "dima1",
+                login,
                 oldWif,
                 newWif,
                 futureChangePassword.completeCallback(),
@@ -427,40 +427,38 @@ class EchoFrameworkTest {
         val framework = initFramework()
 
         val futureChangePassword = FutureTask<Boolean>()
-        val futureResult = FutureTask<Boolean>()
+        val futureResult = FutureTask<TransactionResult>()
 
         if (connect(framework) == false) fail("Connection error")
 
         framework.generateEthereumAddress(
-                login,
-                wif,
+                secondLogin,
+                secondWif,
                 object : Callback<Boolean> {
                     override fun onSuccess(result: Boolean) {
                         futureChangePassword.setComplete(result)
                     }
 
                     override fun onError(error: LocalException) {
-                        error.printStackTrace()
                         futureChangePassword.setComplete(error)
                     }
 
                 },
-                ResultCallback(object : Callback<TransactionResult> {
+                ResultCallback(object: Callback<TransactionResult>{
                     override fun onSuccess(result: TransactionResult) {
-                        println(result.toString())
-                        futureResult.setComplete(true)
+                        futureResult.setComplete(result)
                     }
 
                     override fun onError(error: LocalException) {
-                        error.printStackTrace()
                         futureResult.setComplete(error)
                     }
 
                 })
         )
 
-        assertNotNull(futureChangePassword.get() ?: false)
-        assertNotNull(futureResult.get() ?: false)
+        assertTrue(futureChangePassword.get()?: false)
+        println(futureResult.get().toString())
+        assertNotNull(futureResult.get())
     }
 
     @Test
@@ -473,8 +471,8 @@ class EchoFrameworkTest {
         if (connect(framework) == false) fail("Connection error")
 
         framework.generateBitcoinAddress(
-                login,
-                wif,
+                secondLogin,
+                secondWif,
                 "mkHS9ne12qx9pS9VojpwU5xtRd4T7X7ZUt",
                 object : Callback<Boolean> {
                     override fun onSuccess(result: Boolean) {
@@ -495,12 +493,12 @@ class EchoFrameworkTest {
 
                     override fun onError(error: LocalException) {
                         futureResult.setComplete(false)
+                        futureChangePassword.setComplete(error)
                     }
 
                 })
         )
 
-        assertNotNull(futureChangePassword.get() ?: false)
         assertNotNull(futureResult.get() ?: false)
     }
 
@@ -513,7 +511,7 @@ class EchoFrameworkTest {
         if (connect(framework) == false) fail("Connection error")
 
         framework.getEthereumAddress(
-                login,
+                secondLogin,
                 object : Callback<EthAddress> {
                     override fun onSuccess(result: EthAddress) {
                         println(result)
@@ -806,7 +804,7 @@ class EchoFrameworkTest {
         if (connect(framework) == false) fail("Connection error")
 
         framework.checkERC20Token(
-                "1.11.3",
+                legalContractParamsId,
                 future.completeCallback()
         )
 
@@ -823,8 +821,17 @@ class EchoFrameworkTest {
         if (connect(framework) == false) fail("Connection error")
 
         framework.checkERC20Token(
-                legalContractParamsId,
-                future.completeCallback()
+                "9999",
+                object : Callback<Boolean> {
+                    override fun onSuccess(result: Boolean) {
+                        future.setComplete(result)
+                    }
+
+                    override fun onError(error: LocalException) {
+                        future.setComplete(false)
+                    }
+
+                }
         )
 
         val result = future.get() ?: false
@@ -869,15 +876,14 @@ class EchoFrameworkTest {
     fun withdrawERC20TokenTest() {
         val framework = initFramework()
 
-        val future = FutureTask<TransactionResult>()
         val futureComplete = FutureTask<Boolean>()
 
-        if (connect(framework) == false) Assert.fail("Connection error")
+        if (connect(framework) == false) fail("Connection error")
 
         framework.erc20Withdraw(
                 login,
                 wif,
-                "0x87C188D9e00e76f4d3003606258695435809fC66",
+                "0x724d1b69a7ba352f11d73fdbdeb7ff869cb22e19",
                 "1.16.0",
                 "1",
                 "1.3.0",
@@ -887,7 +893,6 @@ class EchoFrameworkTest {
                     }
 
                     override fun onError(error: LocalException) {
-                        error.printStackTrace()
                         futureComplete.setComplete(error)
                     }
 
@@ -895,17 +900,19 @@ class EchoFrameworkTest {
                 ResultCallback(object : Callback<TransactionResult> {
                     override fun onSuccess(result: TransactionResult) {
                         println(result.toString())
+                        futureComplete.setComplete(true)
                     }
 
                     override fun onError(error: LocalException) {
                         fail(error.message)
+                        futureComplete.setComplete(error)
                     }
 
                 })
         )
 
-        val result = future.get()
-        assertNotNull(result ?: false)
+        val result = futureComplete.get()
+        assertTrue(result ?: false)
     }
 
 //    @Test
@@ -950,8 +957,8 @@ class EchoFrameworkTest {
         if (connect(framework) == false) fail("Connection error")
 
         framework.getFeeForWithdrawEthereumOperation(
-                "dima1",
-                "0x46Ba2677a1c982B329A81f60Cf90fBA2E8CA9fA8",
+                login,
+                "0x724d1b69a7ba352f11d73fdbdeb7ff869cb22e19",
                 "1",
                 "1.3.0",
                 object : Callback<AssetAmount> {
@@ -971,51 +978,51 @@ class EchoFrameworkTest {
         assertNotNull(result ?: false)
     }
 
-    @Test
-    fun registrationByWifTest() {
-        val framework = initFramework()
-
-        val futureRegistration = FutureTask<Boolean>()
-        val futureCompletion = FutureTask<Boolean>()
-
-        if (connect(framework) == false) fail("Connection error")
-
-        val randomPrivateKey = cryptoCoreComponent.getEdDSAPrivateKey()
-//        val wif = cryptoCoreComponent.encodeToWif(randomPrivateKey)
-
-        framework.register(
-                userName = "dude2",
-                wif = wif,
-                broadcastCallback = object : Callback<Boolean> {
-                    override fun onSuccess(result: Boolean) {
-                        futureRegistration.setComplete(true)
-                    }
-
-                    override fun onError(error: LocalException) {
-                        futureRegistration.setComplete(false)
-                    }
-
-                },
-                resultCallback = ResultCallback(object : Callback<RegistrationResult> {
-                    override fun onSuccess(result: RegistrationResult) {
-                        println(result.txId)
-                        futureCompletion.setComplete(true)
-                    }
-
-                    override fun onError(error: LocalException) {
-                        futureCompletion.setComplete(false)
-                    }
-
-                }))
-
-        val completed = futureCompletion.get() ?: false
-
-        assertTrue(completed)
-        val registered = futureRegistration.get() ?: false
-
-        assertTrue(registered)
-
-    }
+//    @Test
+//    fun registrationByWifTest() {
+//        val framework = initFramework()
+//
+//        val futureRegistration = FutureTask<Boolean>()
+//        val futureCompletion = FutureTask<Boolean>()
+//
+//        if (connect(framework) == false) fail("Connection error")
+//
+//        val randomPrivateKey = cryptoCoreComponent.getEdDSAPrivateKey()
+////        val wif = cryptoCoreComponent.encodeToWif(randomPrivateKey)
+//
+//        framework.register(
+//                userName = secondLogin,
+//                wif = secondWif,
+//                broadcastCallback = object : Callback<Boolean> {
+//                    override fun onSuccess(result: Boolean) {
+//                        futureRegistration.setComplete(true)
+//                    }
+//
+//                    override fun onError(error: LocalException) {
+//                        futureRegistration.setComplete(false)
+//                    }
+//
+//                },
+//                resultCallback = ResultCallback(object : Callback<RegistrationResult> {
+//                    override fun onSuccess(result: RegistrationResult) {
+//                        println(result.txId)
+//                        futureCompletion.setComplete(true)
+//                    }
+//
+//                    override fun onError(error: LocalException) {
+//                        futureCompletion.setComplete(false)
+//                    }
+//
+//                }))
+//
+//        val completed = futureCompletion.get() ?: false
+//
+//        assertTrue(completed)
+//        val registered = futureRegistration.get() ?: false
+//
+//        assertTrue(registered)
+//
+//    }
 
 //    @Test
 //    fun registrationByWifTest() {
@@ -1056,14 +1063,15 @@ class EchoFrameworkTest {
         if (connect(framework) == false) fail("Connection error")
 
         framework.register(
-                userName = "init1", wif = "5KjC8BiryoxUNz3dEY2ZWQK5ssmD84JgRGemVWwxfNgiPoxcaVa",
+                userName = "-", wif = "5KjC8BiryoxUNz3dEY2ZWQK5ssmD84JgRGemVWwxfNgiPoxcaVa",
                 broadcastCallback = object : Callback<Boolean> {
                     override fun onSuccess(result: Boolean) {
-                        futureRegistration.setComplete(true)
+                        futureRegistration.setComplete(result)
                     }
 
                     override fun onError(error: LocalException) {
                         futureRegistration.setComplete(false)
+                        futureCompletion.setComplete(false)
                     }
 
                 },
@@ -1081,10 +1089,10 @@ class EchoFrameworkTest {
 
         val completed = futureCompletion.get() ?: false
 
-        assertTrue(completed)
+        assertFalse(completed)
         val registered = futureRegistration.get() ?: false
 
-        assertTrue(registered)
+        assertFalse(registered)
     }
 
     @Test
@@ -1093,16 +1101,24 @@ class EchoFrameworkTest {
 
         if (connect(framework) == false) fail("Connection error")
 
-        val futureSubscriptionById = FutureTask<FullAccount>()
-        val futureSubscriptionResult = FutureTask<Boolean>()
-
-        framework.subscribeOnAccount(secondAccountId, object : AccountListener {
+        val futureSubscriptionById = FutureTask<Boolean>()
+        framework.subscribeOnAccount("init2", object : AccountListener {
 
             override fun onChange(updatedAccount: FullAccount) {
-                futureSubscriptionById.setComplete(updatedAccount)
             }
 
-        }, futureSubscriptionResult.completeCallback())
+        },
+                object : Callback<Boolean> {
+                    override fun onSuccess(result: Boolean) {
+                        futureSubscriptionById.setComplete(true)
+                    }
+
+                    override fun onError(error: LocalException) {
+                        futureSubscriptionById.setComplete(error)
+                    }
+                })
+
+        val resultFuture = FutureTask<TransactionResult>()
 
         thread {
             Thread.sleep(3000)
@@ -1110,17 +1126,18 @@ class EchoFrameworkTest {
                     ResultCallback(object : Callback<TransactionResult> {
                         override fun onSuccess(result: TransactionResult) {
                             println(result.toString())
+                            resultFuture.setComplete(result)
                         }
 
                         override fun onError(error: LocalException) {
-                            fail(error.message)
+                            resultFuture.setComplete(error)
                         }
 
                     }))
         }
 
-        assertNotNull(futureSubscriptionById.get(1, TimeUnit.MINUTES))
-        assertTrue(futureSubscriptionResult.get(1, TimeUnit.MINUTES) ?: false)
+        assertTrue(futureSubscriptionById.get(1, TimeUnit.MINUTES) == true)
+        assertNotNull(resultFuture.get(1, TimeUnit.MINUTES))
     }
 
     @Test
@@ -1314,22 +1331,24 @@ class EchoFrameworkTest {
                 callback = future.completeCallback()
         )
 
+        val emptyCallback = FutureTask<Boolean>()
+
         thread {
             Thread.sleep(1000)
             callContractWithEmptyParams(
                     legalContractParamsId,
                     "logTestArray",
                     framework,
-                    EmptyCallback()
+                    emptyCallback.completeCallback()
             )
         }
 
         val contractResult = future.get(1, TimeUnit.MINUTES)
         assertNotNull(contractResult)
 
-        val updateResult = futureSubscription.get(1, TimeUnit.MINUTES)
+        val updateResult = emptyCallback.get(1, TimeUnit.MINUTES)
         assertNotNull(updateResult)
-        assert(updateResult!!.isNotEmpty())
+        assertTrue(updateResult ?: false)
     }
 
     @Test
@@ -1348,8 +1367,22 @@ class EchoFrameworkTest {
                         futureSubscription.setComplete(data)
                     }
                 },
-                callback = future.completeCallback()
+                callback = object : Callback<Boolean> {
+                    override fun onSuccess(result: Boolean) {
+                        future.setComplete(true)
+                    }
+
+                    override fun onError(error: LocalException) {
+                        future.setComplete(false)
+                        futureSubscription.setComplete(error)
+                    }
+
+                }
         )
+
+        assertTrue(future.get() ?: false)
+
+        val withEmptyCallback = FutureTask<Boolean>()
 
         thread {
             Thread.sleep(1000)
@@ -1357,16 +1390,16 @@ class EchoFrameworkTest {
                     legalContractParamsId,
                     "logTest",
                     framework,
-                    EmptyCallback()
+                    withEmptyCallback.completeCallback()
             )
         }
 
         val contractResult = future.get()
         assertNotNull(contractResult)
 
-        val updateResult = futureSubscription.get(100, TimeUnit.SECONDS)
+        val updateResult = withEmptyCallback.get()
         assertNotNull(updateResult)
-        assert(updateResult!!.isNotEmpty())
+        assertTrue(withEmptyCallback.get() ?: false)
     }
 
     private fun callContractWithEmptyParams(
@@ -1376,8 +1409,8 @@ class EchoFrameworkTest {
             sentCallback: Callback<Boolean>
     ) {
         framework.callContract(
-                userNameOrId = "dima1",
-                wif = "5J3UbadSyzzcQQ7HEfTr2brhJJpHhx3NsMzrvgzfysBesutNRCm",
+                userNameOrId = login,
+                wif = wif,
                 assetId = legalAssetId,
                 feeAsset = legalAssetId,
                 contractId = contractId,
@@ -1392,7 +1425,6 @@ class EchoFrameworkTest {
         val framework = initFramework()
 
         val futureTransfer = FutureTask<Boolean>()
-        val futureTransferResult = FutureTask<Int>()
 
         if (connect(framework) == false) fail("Connection error")
 
@@ -1419,7 +1451,6 @@ class EchoFrameworkTest {
 
         println(futureTransfer.get())
         assertTrue(futureTransfer.get() == true)
-//        assertTrue(futureTransferResult.get() ?: false)
     }
 
     @Test
@@ -1431,9 +1462,9 @@ class EchoFrameworkTest {
         val futureFee = FutureTask<String>()
 
         framework.getFeeForTransferOperation(
-                "daria1",
-                "5J3UbadSyzzcQQ7HEfTr2brhJJpHhx3NsMzrvgzfysBesutNRCm",
-                "dima1",
+                login,
+                wif,
+                "init2",
                 amount = "10000",
                 asset = "1.3.0",
                 feeAsset = "1.3.0",
@@ -1678,8 +1709,8 @@ class EchoFrameworkTest {
         val future = FutureTask<String>()
 
         framework.createContract(
-                "dima1",
-                "5J3UbadSyzzcQQ7HEfTr2brhJJpHhx3NsMzrvgzfysBesutNRCm",
+                login,
+                wif,
                 assetId = "1.3.0",
                 feeAsset = "1.3.0",
                 byteCode = legalContractParamsBytecode,
@@ -1703,8 +1734,8 @@ class EchoFrameworkTest {
         val future = FutureTask<String>()
 
         framework.callContract(
-                "daria1",
-                "5J3UbadSyzzcQQ7HEfTr2brhJJpHhx3NsMzrvgzfysBesutNRCm",
+                login,
+                wif,
                 assetId = "1.3.0",
                 feeAsset = "1.3.0",
                 contractId = legalContractParamsId,
@@ -1728,8 +1759,8 @@ class EchoFrameworkTest {
         val future = FutureTask<String>()
 
         framework.callContract(
-                "daria1",
-                "5J3UbadSyzzcQQ7HEfTr2brhJJpHhx3NsMzrvgzfysBesutNRCm",
+                login,
+                wif,
                 assetId = legalAssetId,
                 feeAsset = legalAssetId,
                 contractId = legalContractParamsId,
@@ -1755,8 +1786,8 @@ class EchoFrameworkTest {
         val contractCode = ContractInputEncoder().encode("logTest", listOf())
 
         framework.callContract(
-                "daria1",
-                "5J3UbadSyzzcQQ7HEfTr2brhJJpHhx3NsMzrvgzfysBesutNRCm",
+                login,
+                wif,
                 assetId = legalAssetId,
                 feeAsset = legalAssetId,
                 contractId = legalContractParamsId,
@@ -1789,8 +1820,8 @@ class EchoFrameworkTest {
         val future = FutureTask<String>()
 
         framework.callContract(
-                "daria1",
-                "5J3UbadSyzzcQQ7HEfTr2brhJJpHhx3NsMzrvgzfysBesutNRCm",
+                login,
+                wif,
                 assetId = legalAssetId,
                 feeAsset = legalAssetId,
                 contractId = legalContractParamsId,
@@ -1816,8 +1847,8 @@ class EchoFrameworkTest {
         val future = FutureTask<String>()
 
         framework.callContract(
-                "daria1",
-                "5J3UbadSyzzcQQ7HEfTr2brhJJpHhx3NsMzrvgzfysBesutNRCm",
+                login,
+                wif,
                 "1.3.0",
                 "1.3.0",
                 legalContractParamsId,
@@ -1844,7 +1875,7 @@ class EchoFrameworkTest {
         val address = accountId
 
         framework.callContract(
-                "daria1", "5J3UbadSyzzcQQ7HEfTr2brhJJpHhx3NsMzrvgzfysBesutNRCm",
+                login, wif,
                 assetId = legalAssetId,
                 feeAsset = legalAssetId,
                 contractId = legalContractParamsId,
@@ -1868,7 +1899,7 @@ class EchoFrameworkTest {
         val future = FutureTask<String>()
 
         framework.callContract(
-                "daria1", "5J3UbadSyzzcQQ7HEfTr2brhJJpHhx3NsMzrvgzfysBesutNRCm",
+                login, wif,
                 assetId = legalAssetId,
                 feeAsset = legalAssetId,
                 contractId = legalContractParamsId,
@@ -1919,7 +1950,7 @@ class EchoFrameworkTest {
         val future = FutureTask<String>()
 
         framework.queryContract(
-                "daria1",
+                login,
                 legalAssetId,
                 amount = "0",
                 contractId = legalTokenId,
@@ -1934,7 +1965,6 @@ class EchoFrameworkTest {
         )
 
         assertNotNull(future.get())
-        assert(future.get()!!.isNotEmpty())
     }
 
     @Test
@@ -1946,7 +1976,7 @@ class EchoFrameworkTest {
         val future = FutureTask<String>()
 
         framework.queryContract(
-                "daria1",
+                login,
                 legalAssetId,
                 "0",
                 contractId = legalTokenId,
@@ -1955,7 +1985,6 @@ class EchoFrameworkTest {
         )
 
         assertNotNull(future.get())
-        assert(future.get()!!.isNotEmpty())
     }
 
     @Test(expected = LocalException::class)
@@ -1989,12 +2018,12 @@ class EchoFrameworkTest {
         val future = FutureTask<ContractResult>()
 
         framework.getContractResult(
-                historyId = "1.12.197",
+                historyId = "1.12.0",
                 callback = future.completeCallback()
         )
 
         val contractResult = future.get()
-        var converted = contractResult?.toRegular()
+        contractResult?.toRegular()
         assertNotNull(contractResult)
 
         assertNotNull(contractResult?.toRegular())
@@ -2040,7 +2069,6 @@ class EchoFrameworkTest {
 
         val contractResult = future.get(1, TimeUnit.MINUTES)
         assertNotNull(contractResult)
-        assert(contractResult!!.isNotEmpty())
     }
 
     @Test(expected = LocalException::class)
@@ -2079,8 +2107,26 @@ class EchoFrameworkTest {
         assertNotNull(contractResult.first())
     }
 
+//    @Test
+//    fun getRegularContractTest() {
+//        val framework = initFramework()
+//
+//        if (connect(framework) == false) fail("Connection error")
+//
+//        val future = FutureTask<ContractStruct>()
+//
+//        framework.getContract(
+//                legalContractParamsId,
+//                future.completeCallback()
+//        )
+//
+//        val contractResult = future.get()
+//        assertNotNull(contractResult)
+//    }
+
+    //change in newer versions
     @Test
-    fun getRegularContractTest() {
+    fun getx86ContractTest() {
         val framework = initFramework()
 
         if (connect(framework) == false) fail("Connection error")
@@ -2088,31 +2134,13 @@ class EchoFrameworkTest {
         val future = FutureTask<ContractStruct>()
 
         framework.getContract(
-                legalContractParamsId,
+                "1.11.0",
                 future.completeCallback()
         )
 
         val contractResult = future.get()
         assertNotNull(contractResult)
     }
-
-    //change in newer versions
-//    @Test
-//    fun getx86ContractTest() {
-//        val framework = initFramework()
-//
-//        if (connect(framework) == false) Assert.fail("Connection error")
-//
-//        val future = FutureTask<ContractStruct>()
-//
-//        framework.getContract(
-//            "1.14.1",
-//            future.completeCallback()
-//        )
-//
-//        val contractResult = future.get()
-//        assertNotNull(contractResult)
-//    }
 
     @Test(expected = LocalException::class)
     fun getContractFailureTest() {
@@ -2204,7 +2232,7 @@ class EchoFrameworkTest {
 
         val future = FutureTask<List<Deposit?>>()
 
-        framework.getAccountDeposits("dima1", null, future.completeCallback())
+        framework.getAccountDeposits(login, null, future.completeCallback())
 
         val deposits = future.get()
         assertNotNull(deposits)
@@ -2218,7 +2246,7 @@ class EchoFrameworkTest {
 
         val future = FutureTask<List<Withdraw?>>()
 
-        framework.getAccountWithdrawals("dima1", null, future.completeCallback())
+        framework.getAccountWithdrawals(login, null, future.completeCallback())
 
         val deposits = future.get()
         assertNotNull(deposits)
