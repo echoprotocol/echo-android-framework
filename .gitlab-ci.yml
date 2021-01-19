@@ -32,6 +32,7 @@ build_release:
 
 unit_test:
   stage: test
+  allow_failure: true
   only:
     - release
     - master
