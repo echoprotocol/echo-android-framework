@@ -8,13 +8,12 @@ import org.echo.mobile.framework.exception.AccountNotFoundException
 import org.echo.mobile.framework.exception.LocalException
 import org.echo.mobile.framework.exception.NotFoundException
 import org.echo.mobile.framework.facade.BitcoinSidechainFacade
-import org.echo.mobile.framework.facade.EthereumSidechainFacade
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.BtcAddress
-import org.echo.mobile.framework.model.operations.GenerateBitcoinAddressOperation
-import org.echo.mobile.framework.model.Transaction
 import org.echo.mobile.framework.model.TransactionResult
+import org.echo.mobile.framework.model.operations.GenerateBitcoinAddressOperation
 import org.echo.mobile.framework.model.operations.WithdrawBitcoinOperation
+import org.echo.mobile.framework.model.socketoperations.ResultCallback
 import org.echo.mobile.framework.service.DatabaseApiService
 import org.echo.mobile.framework.service.NetworkBroadcastApiService
 import org.echo.mobile.framework.support.concurrent.future.FutureTask
@@ -22,28 +21,28 @@ import org.echo.mobile.framework.support.concurrent.future.completeCallback
 import org.echo.mobile.framework.support.dematerialize
 
 /**
- * Implementation of [EthereumSidechainFacade]
+ * Implementation of [BitcoinSidechainFacade]
  *
  * Wraps logic for sidechain processing
  *
  * @author Dmitriy Bushuev
  */
 class BitcoinSidechainFacadeImpl(
-    private val databaseApiService: DatabaseApiService,
-    private val networkBroadcastApiService: NetworkBroadcastApiService,
-    private val cryptoCoreComponent: CryptoCoreComponent,
-    private val notifiedTransactionsHelper: NotificationsHelper<TransactionResult>,
-    private val transactionExpirationDelay: Long
+        private val databaseApiService: DatabaseApiService,
+        private val networkBroadcastApiService: NetworkBroadcastApiService,
+        private val cryptoCoreComponent: CryptoCoreComponent,
+        private val notifiedTransactionsHelper: NotificationsHelper<TransactionResult>,
+        private val transactionExpirationDelay: Long
 ) :
-    BaseTransactionsFacade(databaseApiService, cryptoCoreComponent, transactionExpirationDelay),
-    BitcoinSidechainFacade {
+        BaseTransactionsFacade(databaseApiService, cryptoCoreComponent, transactionExpirationDelay),
+        BitcoinSidechainFacade {
 
     override fun generateBitcoinAddress(
-        accountNameOrId: String,
-        wif: String,
-        backupAddress: String,
-        broadcastCallback: Callback<Boolean>,
-        resultCallback: Callback<TransactionResult>?
+            accountNameOrId: String,
+            wif: String,
+            backupAddress: String,
+            broadcastCallback: Callback<Boolean>,
+            resultCallback: ResultCallback<TransactionResult>
     ) {
         val callId: String
         try {
@@ -54,29 +53,27 @@ class BitcoinSidechainFacadeImpl(
             callId = generateAddress(account, backupAddress, privateKey)
 
             broadcastCallback.onSuccess(true)
-        } catch (exception: Exception) {
-            broadcastCallback.onError(exception as? LocalException ?: LocalException(exception))
+        } catch (ex: java.lang.Exception) {
+            broadcastCallback.onError(ex as? LocalException ?: LocalException(ex))
             return
         }
 
-        resultCallback?.let {
-            retrieveTransactionResult(callId, it)
-        }
+        retrieveTransactionResult(callId, resultCallback.get())
     }
 
     private fun retrieveTransactionResult(
-        callId: String,
-        callback: Callback<TransactionResult>
+            callId: String,
+            callback: Callback<TransactionResult>
     ) {
         try {
             val future = FutureTask<TransactionResult>()
             notifiedTransactionsHelper.subscribeOnResult(
-                callId,
-                future.completeCallback()
+                    callId,
+                    future.completeCallback()
             )
 
             val result = future.get()
-                ?: throw NotFoundException("Result of operation not found.")
+                    ?: throw NotFoundException("Result of operation not found.")
 
             callback.onSuccess(result)
         } catch (ex: Exception) {
@@ -84,22 +81,23 @@ class BitcoinSidechainFacadeImpl(
         }
     }
 
+
     override fun getBitcoinAddress(
-        accountNameOrId: String,
-        callback: Callback<BtcAddress>
+            accountNameOrId: String,
+            callback: Callback<BtcAddress>
     ) {
         val id = findAccount(accountNameOrId).getObjectId()
         databaseApiService.getBitcoinAddress(id, callback)
     }
 
     override fun btcWithdraw(
-        accountNameOrId: String,
-        wif: String,
-        btcAddress: String,
-        value: String,
-        feeAsset: String,
-        broadcastCallback: Callback<Boolean>,
-        resultCallback: Callback<TransactionResult>?
+            accountNameOrId: String,
+            wif: String,
+            btcAddress: String,
+            value: String,
+            feeAsset: String,
+            broadcastCallback: Callback<Boolean>,
+            resultCallback: ResultCallback<TransactionResult>
     ) {
         val callId: String
         try {
@@ -115,53 +113,51 @@ class BitcoinSidechainFacadeImpl(
             return
         }
 
-        resultCallback?.let {
-            retrieveTransactionResult(callId, it)
-        }
+        retrieveTransactionResult(callId, resultCallback.get())
     }
 
     private fun withdraw(
-        btcAddress: String,
-        account: Account,
-        privateKey: ByteArray,
-        value: String,
-        feeAsset: String
+            btcAddress: String,
+            account: Account,
+            privateKey: ByteArray,
+            value: String,
+            feeAsset: String
     ): String {
         val operation =
-            WithdrawBitcoinOperation(
-                Account(account.getObjectId()),
-                btcAddress,
-                UnsignedLong.valueOf(value)
-            )
+                WithdrawBitcoinOperation(
+                        Account(account.getObjectId()),
+                        btcAddress,
+                        UnsignedLong.valueOf(value)
+                )
 
         val transaction = configureTransaction(operation, privateKey, feeAsset)
 
         return networkBroadcastApiService.broadcastTransactionWithCallback(transaction)
-            .dematerialize().toString()
+                .dematerialize().toString()
     }
 
     private fun generateAddress(
-        account: Account,
-        backupAddress: String,
-        privateKey: ByteArray
+            account: Account,
+            backupAddress: String,
+            privateKey: ByteArray
     ): String {
         val operation =
-            GenerateBitcoinAddressOperation(
-                Account(account.getObjectId()),
-                backupAddress
-            )
+                GenerateBitcoinAddressOperation(
+                        Account(account.getObjectId()),
+                        backupAddress
+                )
 
         val transaction = configureTransaction(operation, privateKey, ECHO_ASSET_ID)
 
         return networkBroadcastApiService.broadcastTransactionWithCallback(transaction)
-            .dematerialize().toString()
+                .dematerialize().toString()
     }
 
     private fun findAccount(nameOrId: String): Account {
         val accountsMap =
-            databaseApiService.getFullAccounts(listOf(nameOrId), false).dematerialize()
+                databaseApiService.getFullAccounts(listOf(nameOrId), false).dematerialize()
         return accountsMap[nameOrId]?.account
-            ?: throw AccountNotFoundException("Unable to find required account $nameOrId")
+                ?: throw AccountNotFoundException("Unable to find required account $nameOrId")
     }
 
 }

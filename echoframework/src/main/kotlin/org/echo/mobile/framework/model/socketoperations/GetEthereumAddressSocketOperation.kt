@@ -25,6 +25,9 @@ class GetEthereumAddressSocketOperation(
     EthAddress::class.java,
     callback
 ) {
+    init {
+
+    }
 
     override fun createParameters(): JsonElement =
         JsonArray().apply {

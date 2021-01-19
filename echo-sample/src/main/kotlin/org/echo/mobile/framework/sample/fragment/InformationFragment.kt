@@ -6,9 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import org.echo.mobile.framework.Callback
-import org.echo.mobile.framework.ECHO_ASSET_ID
 import org.echo.mobile.framework.exception.LocalException
-import org.echo.mobile.framework.model.Balance
+import org.echo.mobile.framework.model.AccountBalance
 import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.HistoryResponse
 import org.echo.mobile.framework.sample.R
@@ -86,8 +85,8 @@ class InformationFragment : BaseFragment() {
             lib?.getBalance(
                 etNameBalances.text.toString(),
                 etAsset.text.toString(),
-                object : Callback<Balance> {
-                    override fun onSuccess(result: Balance) {
+                object : Callback<AccountBalance> {
+                    override fun onSuccess(result: AccountBalance) {
                         progressListener?.toggle(false)
                         updateStatus(result.toString(), true)
                     }

@@ -1,7 +1,7 @@
 package org.echo.mobile.framework.facade
 
 import org.echo.mobile.framework.Callback
-import org.echo.mobile.framework.model.Balance
+import org.echo.mobile.framework.model.AccountBalance
 import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.GlobalProperties
 import org.echo.mobile.framework.model.HistoryResponse
@@ -46,7 +46,7 @@ interface InformationFacade {
      * @param asset    Specific asset type id
      * @param callback Listener of operation results
      */
-    fun getBalance(nameOrId: String, asset: String, callback: Callback<Balance>)
+    fun getBalance(nameOrId: String, asset: String, callback: Callback<AccountBalance>)
 
     /**
      * Retrieves account history with defining setting parameters

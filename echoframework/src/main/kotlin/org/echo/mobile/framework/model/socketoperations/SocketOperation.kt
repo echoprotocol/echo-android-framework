@@ -64,7 +64,9 @@ enum class SocketOperationKeys(val key: String) {
     CHECK_ERC20_TOKEN("check_erc20_token"),
     GET_ERC20_TOKEN_DEPOSITS("get_erc20_account_deposits"),
     GET_ERC20_TOKEN_WITHDRAWALS("get_erc20_account_withdrawals"),
-    REQUEST_REGISTRATION_TASK("request_registration_task");
+    REQUEST_REGISTRATION_TASK("request_registration_task"),
+    GET_BALANCE_OBJECTS("get_balance_objects"),
+    GET_FROZEN_BALANCES("get_frozen_balances");
 
     override fun toString(): String = this.key
 }
@@ -83,10 +85,10 @@ enum class OperationCodingKeys(val key: String) {
  * <a href="http://docs.bitshares.org/api/rpc.html">Source</a>
  */
 abstract class SocketOperation<T>(
-    val method: SocketMethodType,
-    val callId: Int,
-    val type: Class<T>,
-    val callback: Callback<T>
+        val method: SocketMethodType,
+        val callId: Int,
+        val type: Class<T>,
+        val callback: Callback<T>
 ) : JsonSerializable, JsonDeserializable<T> {
 
     /**
@@ -101,14 +103,14 @@ abstract class SocketOperation<T>(
     abstract val apiId: Int
 
     override fun toJsonString(): String? =
-        toJsonObject().toString()
+            toJsonObject().toString()
 
     override fun toJsonObject(): JsonElement =
-        JsonObject().apply {
-            addProperty(OperationCodingKeys.ID.key, callId)
-            addProperty(OperationCodingKeys.METHOD.key, method.key)
-            add(OperationCodingKeys.PARAMS.key, createParameters())
-        }
+            JsonObject().apply {
+                addProperty(OperationCodingKeys.ID.key, callId)
+                addProperty(OperationCodingKeys.METHOD.key, method.key)
+                add(OperationCodingKeys.PARAMS.key, createParameters())
+            }
 
     companion object {
         const val RESULT_KEY = "result"

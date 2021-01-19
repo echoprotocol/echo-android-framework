@@ -14,23 +14,23 @@ import java.math.BigInteger
  *
  * @author Dmitriy Bushuev
  */
-data class Balance(
-    @Expose var id: String,
-    @Expose var owner: String,
-    @SerializedName(ASSET_TYPE_KEY) @Expose var asset: Asset?,
-    @Expose var balance: BigInteger
+data class AccountBalance(
+        @Expose var id: String,
+        @Expose var owner: String,
+        @SerializedName(ASSET_TYPE_KEY) @Expose var asset: Asset?,
+        @Expose var balance: BigInteger
 ) {
 
     /**
-     * Deserializer used to build a [Balance] instance from JSON
+     * Deserializer used to build a [AccountBalance] instance from JSON
      */
-    class BalanceDeserializer : JsonDeserializer<Balance> {
+    class BalanceDeserializer : JsonDeserializer<AccountBalance> {
 
         override fun deserialize(
-            json: JsonElement?,
-            typeOfT: Type?,
-            context: JsonDeserializationContext?
-        ): Balance? {
+                json: JsonElement?,
+                typeOfT: Type?,
+                context: JsonDeserializationContext?
+        ): AccountBalance? {
 
             if (json == null || !json.isJsonObject) return null
 
@@ -41,11 +41,11 @@ data class Balance(
             val asset = parseAsset(balanceObject)
             val balance = balanceObject[BALANCE_KEY].asLong.toBigInteger()
 
-            return Balance(id, owner, asset, balance)
+            return AccountBalance(id, owner, asset, balance)
         }
 
         private fun parseAsset(
-            operationObject: JsonObject
+                operationObject: JsonObject
         ): Asset? {
             val assetsJson = operationObject[ASSET_TYPE_KEY].asString
             return Asset(assetsJson)

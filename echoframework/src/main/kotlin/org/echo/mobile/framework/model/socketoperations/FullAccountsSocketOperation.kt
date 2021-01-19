@@ -7,7 +7,7 @@ import com.google.gson.JsonParser
 import org.echo.mobile.framework.Callback
 import org.echo.mobile.framework.model.Account
 import org.echo.mobile.framework.model.AccountOptions
-import org.echo.mobile.framework.model.Balance
+import org.echo.mobile.framework.model.AccountBalance
 import org.echo.mobile.framework.model.FullAccount
 import org.echo.mobile.framework.model.eddsa.EdAuthority
 import org.echo.mobile.framework.model.network.Network
@@ -89,7 +89,7 @@ class FullAccountsSocketOperation(
         registerTypeAdapter(EdAuthority::class.java, EdAuthority.Deserializer())
         registerTypeAdapter(Account::class.java, Account.Deserializer())
         registerTypeAdapter(FullAccount::class.java, FullAccount.FullAccountDeserializer())
-        registerTypeAdapter(Balance::class.java, Balance.BalanceDeserializer())
+        registerTypeAdapter(AccountBalance::class.java, AccountBalance.BalanceDeserializer())
         registerTypeAdapter(
             AccountOptions::class.java,
             AccountOptions.Deserializer(network)

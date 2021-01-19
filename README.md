@@ -9,7 +9,7 @@ Pure Kotlin Echo framework for Android mobile development. Can be used to work w
 This framework can be obtained through gradle dependency:
 
 ```
-implementation 'org.echo.mobile:echoframework:4.2.2'
+implementation 'org.echo.mobile:echoframework:5.1.1'
 ```
 
 Or maven dependency:
@@ -18,7 +18,7 @@ Or maven dependency:
 <dependency>
   <groupId>org.echo.mobile</groupId>
   <artifactId>echoframework</artifactId>
-  <version>4.2.2</version>
+  <version>5.1.1</version>
   <type>pom</type>
 </dependency>
 ```
@@ -128,7 +128,7 @@ fun subscribeOnAccount() {
 
 ```kotlin
 fun changeWif() {
-    echo.changePassword(
+    echo.changeKeys(
                "account name or id",
                "old wif",
                "new wif",
@@ -136,7 +136,12 @@ fun changeWif() {
                    override fun onSuccess(result: Boolean) {}
                
                    override fun onError(error: LocalException) {}
-               }
+               },
+               ResultCallback(object: Callback<TransactionResult> {
+                   override fun onSuccess(result: TransactionResult) {}
+
+                   override fun onError(error: LocalException) {}
+               })
             )
 }
 ```
@@ -166,16 +171,21 @@ fun feeForTransfer() {
 ```kotlin
 fun send() {
     echo.sendTransferOperation(fromNameOrId = "some name",
-                               password = "some wif",
-                               toNameOrId = "some name",
-                               amount = "300",
-                               asset = "1.3.0",
-                               feeAsset = "1.3.0",
-                               object : Callback<Boolean> {
+                                password = "some wif",
+                                toNameOrId = "some name",
+                                amount = "300",
+                                asset = "1.3.0",
+                                feeAsset = "1.3.0",
+                                object : Callback<Boolean> {
                                     override fun onSuccess(result: Boolean) {}
                                 
                                     override fun onError(error: LocalException) {}
-                               }
+                                },
+                                ResultCallback(object: Callback<TransactionResult> {
+                                    override fun onSuccess(result: TransactionResult) {}
+
+                                    override fun onError(error: LocalException) {}
+                                })
             )
 }
 ```
@@ -223,11 +233,11 @@ fun createAsset() {
     
                     override fun onError(error: LocalException) {}
                 },
-                resultCallback = object : Callback<String> {
-                     override fun onSuccess(result: String) {}
-                    
-                     override fun onError(error: LocalException) {}
-                }
+                ResultCallback(object: Callback<TransactionResult> {
+                    override fun onSuccess(result: TransactionResult) {}
+
+                    override fun onError(error: LocalException) {}
+                })
              )        
 }
 ```
@@ -246,7 +256,12 @@ fun issueAsset() {
                      override fun onSuccess(result: Boolean) {}
                  
                      override fun onError(error: LocalException) {}
-                 }
+                },
+                ResultCallback(object: Callback<TransactionResult> {
+                    override fun onSuccess(result: TransactionResult) {}
+
+                    override fun onError(error: LocalException) {}
+                })
             )
 }
 ```
@@ -275,7 +290,7 @@ fun createContract() {
              override fun onSuccess(result: String) {}
             
              override fun onError(error: LocalException) {}
-        }
+        }                       // optional
     )
 }
 ```
@@ -302,7 +317,7 @@ fun callContract() {
                     override fun onSuccess(result: String) {}
                             
                     override fun onError(error: LocalException) {}
-                }
+                }                       //optional
             )
 }
 ```

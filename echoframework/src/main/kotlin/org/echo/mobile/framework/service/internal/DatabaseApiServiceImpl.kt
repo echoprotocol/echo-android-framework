@@ -7,60 +7,13 @@ import org.echo.mobile.framework.core.crypto.CryptoCoreComponent
 import org.echo.mobile.framework.core.mapper.ObjectMapper
 import org.echo.mobile.framework.core.socket.SocketCoreComponent
 import org.echo.mobile.framework.exception.LocalException
-import org.echo.mobile.framework.model.Asset
-import org.echo.mobile.framework.model.AssetAmount
-import org.echo.mobile.framework.model.BaseOperation
-import org.echo.mobile.framework.model.Block
-import org.echo.mobile.framework.model.BlockData
-import org.echo.mobile.framework.model.BtcAddress
-import org.echo.mobile.framework.model.Deposit
-import org.echo.mobile.framework.model.DynamicGlobalProperties
-import org.echo.mobile.framework.model.ERC20Deposit
-import org.echo.mobile.framework.model.ERC20Token
-import org.echo.mobile.framework.model.ERC20Withdrawal
-import org.echo.mobile.framework.model.EthAddress
-import org.echo.mobile.framework.model.FullAccount
-import org.echo.mobile.framework.model.GlobalProperties
-import org.echo.mobile.framework.model.GrapheneObject
-import org.echo.mobile.framework.model.SidechainType
-import org.echo.mobile.framework.model.Transaction
-import org.echo.mobile.framework.model.Withdraw
+import org.echo.mobile.framework.model.*
 import org.echo.mobile.framework.model.contract.ContractFee
 import org.echo.mobile.framework.model.contract.ContractInfo
 import org.echo.mobile.framework.model.contract.ContractResult
 import org.echo.mobile.framework.model.contract.ContractStruct
 import org.echo.mobile.framework.model.network.Network
-import org.echo.mobile.framework.model.socketoperations.BlockDataSocketOperation
-import org.echo.mobile.framework.model.socketoperations.CancelAllSubscriptionsSocketOperation
-import org.echo.mobile.framework.model.socketoperations.CheckERC20TokenSocketOperation
-import org.echo.mobile.framework.model.socketoperations.CustomOperation
-import org.echo.mobile.framework.model.socketoperations.CustomSocketOperation
-import org.echo.mobile.framework.model.socketoperations.FullAccountsSocketOperation
-import org.echo.mobile.framework.model.socketoperations.GetAccountDepositsSocketOperation
-import org.echo.mobile.framework.model.socketoperations.GetAccountWithdrawalsSocketOperation
-import org.echo.mobile.framework.model.socketoperations.GetAssetsSocketOperation
-import org.echo.mobile.framework.model.socketoperations.GetBitcoinAddressSocketOperation
-import org.echo.mobile.framework.model.socketoperations.GetBlockSocketOperation
-import org.echo.mobile.framework.model.socketoperations.GetChainIdSocketOperation
-import org.echo.mobile.framework.model.socketoperations.GetContractLogsSocketOperation
-import org.echo.mobile.framework.model.socketoperations.GetContractResultSocketOperation
-import org.echo.mobile.framework.model.socketoperations.GetContractSocketOperation
-import org.echo.mobile.framework.model.socketoperations.GetContractsSocketOperation
-import org.echo.mobile.framework.model.socketoperations.GetERC20DepositsSocketOperation
-import org.echo.mobile.framework.model.socketoperations.GetERC20TokenSocketOperation
-import org.echo.mobile.framework.model.socketoperations.GetERC20WithdrawalsSocketOperation
-import org.echo.mobile.framework.model.socketoperations.GetEthereumAddressSocketOperation
-import org.echo.mobile.framework.model.socketoperations.GetGlobalPropertiesSocketOperation
-import org.echo.mobile.framework.model.socketoperations.GetKeyReferencesSocketOperation
-import org.echo.mobile.framework.model.socketoperations.GetObjectsSocketOperation
-import org.echo.mobile.framework.model.socketoperations.ListAssetsSocketOperation
-import org.echo.mobile.framework.model.socketoperations.LookupAssetsSymbolsSocketOperation
-import org.echo.mobile.framework.model.socketoperations.QueryContractSocketOperation
-import org.echo.mobile.framework.model.socketoperations.RequiredContractFeesSocketOperation
-import org.echo.mobile.framework.model.socketoperations.RequiredFeesSocketOperation
-import org.echo.mobile.framework.model.socketoperations.SetSubscribeCallbackSocketOperation
-import org.echo.mobile.framework.model.socketoperations.SubscribeContractLogsSocketOperation
-import org.echo.mobile.framework.model.socketoperations.SubscribeContractsSocketOperation
+import org.echo.mobile.framework.model.socketoperations.*
 import org.echo.mobile.framework.service.DatabaseApiService
 import org.echo.mobile.framework.support.Result
 import org.echo.mobile.framework.support.concurrent.future.FutureTask
@@ -261,6 +214,34 @@ class DatabaseApiServiceImpl(
         socketCoreComponent.emit(operation)
     }
 
+    override fun getBalanceObjects(
+        publicKeys: List<String>,
+        callback: Callback<BalanceObject>
+    ) {
+        val operation = GetBalanceObjectsSocketOperation(
+            id,
+            publicKeys,
+            socketCoreComponent.currentId,
+            callback
+        )
+
+        socketCoreComponent.emit(operation)
+    }
+
+    override fun getFrozenBalances(
+        accountId: String,
+        callback: Callback<FrozenBalanceObject>
+    ) {
+        val operation = GetFrozenBalanceObjectsSocketOperation(
+            id,
+            accountId,
+            socketCoreComponent.currentId,
+            callback
+        )
+
+        socketCoreComponent.emit(operation)
+    }
+
     private fun accountsByWifMap(
         wifs: List<String>,
         keys: List<String>,
@@ -315,7 +296,7 @@ class DatabaseApiServiceImpl(
 
         accounts.forEach { fullAccount ->
             val balanceAssets =
-                fullAccount.balances?.map { it.asset!!.getObjectId() } ?: emptyList()
+                fullAccount.accountBalances?.map { it.asset!!.getObjectId() } ?: emptyList()
             val accountAssets = fullAccount.assets?.map { it.getObjectId() } ?: emptyList()
 
             requiredAssets.addAll(balanceAssets)
@@ -336,7 +317,7 @@ class DatabaseApiServiceImpl(
         }
 
         accounts.values.forEach { fullAccount ->
-            fullAccount.balances?.forEach { balance ->
+            fullAccount.accountBalances?.forEach { balance ->
                 balance.asset =
                     assets.find { asset -> asset.getObjectId() == balance.asset?.getObjectId() }
                         ?: balance.asset
