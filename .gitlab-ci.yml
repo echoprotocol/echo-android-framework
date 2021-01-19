@@ -45,6 +45,7 @@ unit_test:
 
 code_analysis:
   stage: checkstyle
+  allow_failure: true
   script:
     - ./gradlew :echoframework:lint :echoframework:analyzeCode --stacktrace
   artifacts:
@@ -53,6 +54,7 @@ code_analysis:
       - echoframework/build/reports/detekt
 
 pages:
+  allow_failure: true
   stage: docgen
   only:
     - release
